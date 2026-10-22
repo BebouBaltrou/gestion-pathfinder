@@ -53,7 +53,6 @@ pub fn appliquer(ctx: &egui::Context) {
     v.widgets.hovered.fg_stroke = Stroke::new(1.5_f32, OR_PALE);
     v.widgets.active.fg_stroke = Stroke::new(1.5_f32, OR_PALE);
     v.widgets.open.fg_stroke = Stroke::new(1.5_f32, OR_PALE);
-    v.disabled_alpha = 0.7;
     ctx.set_visuals(v);
 
     ctx.style_mut(|s| {
