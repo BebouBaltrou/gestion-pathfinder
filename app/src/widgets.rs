@@ -97,16 +97,16 @@ pub fn badge(ui: &mut egui::Ui, texte: &str, c: Color32) {
 
 /// Champ de saisie de montant avec validation visuelle.
 pub fn champ_montant(ui: &mut egui::Ui, texte: &mut String, largeur: f32) -> Option<Montant> {
-    let valeur = Montant::depuis_texte(texte);
+    let invalide = Montant::depuis_texte(texte).is_none() && !texte.trim().is_empty();
     let mut edit = egui::TextEdit::singleline(texte)
         .hint_text("ex. 12, 12,5 ou 4 po 7 pa")
         .desired_width(largeur);
-    if valeur.is_none() && !texte.trim().is_empty() {
+    if invalide {
         edit = edit.text_color(theme::ROUGE);
     }
     ui.add(edit)
         .on_hover_text("Saisie en po : « 12 », « 12,5 » (= 12 po 5 pa), « 4 po 7 pa » ou « 7 pa »");
-    valeur
+    Montant::depuis_texte(texte)
 }
 
 /// Champ entier positif saisi comme texte (vide = None).
@@ -116,19 +116,16 @@ pub fn champ_entier(
     indice: &str,
     largeur: f32,
 ) -> Option<u32> {
-    let v = texte
-        .trim()
-        .replace([' ', '\u{a0}'], "")
-        .parse::<u32>()
-        .ok();
+    let lire = |t: &str| t.trim().replace([' ', '\u{a0}'], "").parse::<u32>().ok();
+    let invalide = lire(texte).is_none() && !texte.trim().is_empty();
     let mut edit = egui::TextEdit::singleline(texte)
         .hint_text(indice)
         .desired_width(largeur);
-    if v.is_none() && !texte.trim().is_empty() {
+    if invalide {
         edit = edit.text_color(theme::ROUGE);
     }
     ui.add(edit);
-    v
+    lire(texte)
 }
 
 pub fn texte_doux(ui: &mut egui::Ui, t: impl Into<String>) {
