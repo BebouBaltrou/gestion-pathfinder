@@ -8529,8 +8529,8 @@
     "section": "Arène"
    },
    "lecture_appliquee": "Composition sans jardin (conforme à la VO et au total imprimé).",
-   "statut": "Ouvert",
-   "decision": null
+   "statut": "Valide",
+   "decision": "Validé le 22/10/2026"
   },
   {
    "code": "PC-09",
@@ -8541,8 +8541,8 @@
     "section": "Caravaniers"
    },
    "lecture_appliquee": "2 conducteurs d'attelage (conforme à la VO et au total imprimé).",
-   "statut": "Ouvert",
-   "decision": null
+   "statut": "Valide",
+   "decision": "Validé le 22/10/2026"
   },
   {
    "code": "PC-10",
@@ -8553,8 +8553,8 @@
     "section": "Durée"
    },
    "lecture_appliquee": "Arrondi au jour supérieur (14 jours).",
-   "statut": "Ouvert",
-   "decision": null
+   "statut": "Valide",
+   "decision": "Validé le 22/10/2026"
   },
   {
    "code": "PC-11",
@@ -8565,8 +8565,8 @@
     "section": "Fourchette de population des communautés"
    },
    "lecture_appliquee": "Lieu-dit.",
-   "statut": "Ouvert",
-   "decision": null
+   "statut": "Valide",
+   "decision": "Validé le 22/10/2026"
   },
   {
    "code": "PC-12",
@@ -8577,8 +8577,8 @@
     "section": "Recettes"
    },
    "lecture_appliquee": "Arrondi inférieur (ex. +5 → +2).",
-   "statut": "Ouvert",
-   "decision": null
+   "statut": "Valide",
+   "decision": "Validé le 22/10/2026 ; option pour annuler la division par 2 des équipes sans bâtiment"
   }
  ]
 }

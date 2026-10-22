@@ -1,0 +1,33 @@
+name: Compilation Windows
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+      - uses: Swatinem/rust-cache@v2
+      - name: Formatage
+        run: cargo fmt --all -- --check
+      - name: Analyse (clippy)
+        run: cargo clippy --all-targets -- -D warnings
+      - name: Tests
+        run: cargo test --all
+      - name: Compilation release
+        run: cargo build --release --all-targets
+      - name: Exécutables
+        uses: actions/upload-artifact@v4
+        with:
+          name: gestion-intermede-windows
+          path: |
+            target/release/examples/verifier_referentiel.exe
+          if-no-files-found: error

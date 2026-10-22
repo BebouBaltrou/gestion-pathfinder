@@ -106,13 +106,16 @@ points = [
     pc("PC-07", "Labyrinthe : 370 po imprimés pour 15 Marchandises + 15 Travail (600 po calculés).", src(102, "Labyrinthe"),
        "Garder 370 po (texte imprimé, identique en VO), avec avertissement d'incohérence.", V, "Validé le 22/10/2026"),
     pc("PC-08", "Arène : la VF liste « 1 jardin » absent de la VO ; le total imprimé (109 M, 20 I, 96 T, 1 Mg) l'exclut.",
-       src(111, "Arène"), "Composition sans jardin (conforme à la VO et au total imprimé).", "Ouvert"),
+       src(111, "Arène"), "Composition sans jardin (conforme à la VO et au total imprimé).", "Valide", "Validé le 22/10/2026"),
     pc("PC-09", "Caravaniers : la VF indique 1 conducteur d'attelage, la VO 2 ; le total imprimé (6 M, 3 I, 7 T) en compte 2.",
-       src(118, "Caravaniers"), "2 conducteurs d'attelage (conforme à la VO et au total imprimé).", "Ouvert"),
+       src(118, "Caravaniers"), "2 conducteurs d'attelage (conforme à la VO et au total imprimé).", "Valide", "Validé le 22/10/2026"),
     pc("PC-10", "Accélération : comment arrondir une durée divisée qui ne tombe pas juste (ex. 40 jours ÷ 3) ?",
-       src(95, "Durée"), "Arrondi au jour supérieur (14 jours).", "Ouvert"),
+       src(95, "Durée"), "Arrondi au jour supérieur (14 jours).", "Valide", "Validé le 22/10/2026"),
     pc("PC-11", "Population de 20 exactement : lieu-dit (« moins de 20 ») ou hameau (« 21-60 ») ?",
-       {"livre": GDM, "page": None, "section": "Fourchette de population des communautés"}, "Lieu-dit.", "Ouvert"),
+       {"livre": GDM, "page": None, "section": "Fourchette de population des communautés"}, "Lieu-dit.", "Valide", "Validé le 22/10/2026"),
+    pc("PC-12", "Quand des recettes sont divisées par 2 (équipe sans bâtiment, salle brisée), comment arrondir un bonus impair ?",
+       src(94, "Recettes"), "Arrondi inférieur (ex. +5 → +2).", V,
+       "Validé le 22/10/2026 ; option pour annuler la division par 2 des équipes sans bâtiment"),
 ]
 
 out = {

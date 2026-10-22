@@ -13,6 +13,9 @@ pub struct OptionsRegles {
     /// Personnalisé : le salaire d'un gestionnaire affecté à plusieurs établissements
     /// n'est compté qu'une fois par jour (PC-06).
     pub salaire_gestionnaire_unique: bool,
+    /// Officiel (GC p. 94) : une équipe sans bâtiment pour travailler voit ses recettes divisées
+    /// par 2. Désactivé = personnalisé, l'équipe garde son bonus entier.
+    pub moitie_equipe_sans_batiment: bool,
     /// Afficher les avertissements liés aux points à confirmer.
     pub afficher_avertissements: bool,
 }
@@ -24,6 +27,7 @@ impl Default for OptionsRegles {
             construction_parallele_autorisee: true,
             production_pendant_amelioration: false,
             salaire_gestionnaire_unique: true,
+            moitie_equipe_sans_batiment: true,
             afficher_avertissements: true,
         }
     }

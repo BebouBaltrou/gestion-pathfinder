@@ -148,7 +148,13 @@ mod tests {
 
     #[test]
     fn statut_a_confirmer_pour_point_ouvert() {
-        let r = crate::referentiel_officiel();
+        let mut r = crate::referentiel_officiel();
+        // Tous les points sont validés aujourd'hui : on rouvre PC-11 pour le test.
+        r.points_a_confirmer
+            .iter_mut()
+            .find(|p| p.code == "PC-11")
+            .unwrap()
+            .statut = domaine::fiches::StatutPoint::Ouvert;
         let p = Personnalisations::default();
         let cat = Catalogue::new(&r, &p);
         // PC-11 (population de 20) est ouvert → catégorie lieu-dit « à confirmer »

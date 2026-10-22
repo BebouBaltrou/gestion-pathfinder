@@ -19,8 +19,10 @@ pub struct Contribution<'a> {
     pub unite: &'a Unite,
     /// Ressources admises par les *autres* unités du même bâtiment (pour « TypesDuBatiment », PC-05).
     pub types_du_batiment: BTreeSet<Ressource>,
-    /// Bonus divisé par 2 : équipe sans bâtiment (GC p. 94) ou salle brisée (GC p. 92).
-    pub moitie: bool,
+    /// Équipe sans bâtiment pour travailler : recettes ÷ 2 (GC p. 94), sauf option contraire.
+    pub sans_batiment: bool,
+    /// Salle brisée : recettes ÷ 2 (GC p. 92).
+    pub brisee: bool,
     /// Points affectés à chaque ressource. Somme = bonus effectif.
     pub affectation: Vec<(Ressource, u32)>,
 }
@@ -81,13 +83,16 @@ pub fn admises(u: &Unite, types_du_batiment: &BTreeSet<Ressource>) -> BTreeSet<R
     }
 }
 
-pub fn bonus_effectif(c: &Contribution) -> u32 {
-    let b = c.unite.recettes.as_ref().map(|r| r.bonus).unwrap_or(0);
-    if c.moitie {
-        b / 2 // arrondi inférieur : non précisé par le Guide de campagne, point à confirmer PC-12
-    } else {
-        b
+/// Bonus après réductions. Chaque division par 2 arrondit à l'inférieur (PC-12, validé).
+pub fn bonus_effectif(c: &Contribution, options: &OptionsRegles) -> u32 {
+    let mut b = c.unite.recettes.as_ref().map(|r| r.bonus).unwrap_or(0);
+    if c.sans_batiment && options.moitie_equipe_sans_batiment {
+        b /= 2;
     }
+    if c.brisee {
+        b /= 2;
+    }
+    b
 }
 
 /// Détail d'un test, prêt à afficher et à historiser.
@@ -115,7 +120,7 @@ pub fn tests_du_jour(
             return Err(ErreurRepartition::SansRecettes(c.libelle.clone()));
         }
         let ok = admises(c.unite, &c.types_du_batiment);
-        let attendu = bonus_effectif(c);
+        let attendu = bonus_effectif(c, options);
         let utiles: Vec<_> = c.affectation.iter().filter(|(_, p)| *p > 0).collect();
         if options.repartition_stricte && utiles.len() > 1 {
             return Err(ErreurRepartition::PlusieursTypes(c.libelle.clone()));
@@ -195,7 +200,8 @@ mod tests {
             libelle: format!("Auberge — {id}"),
             unite: r.salle(id).unwrap(),
             types_du_batiment: BTreeSet::new(),
-            moitie: false,
+            sans_batiment: false,
+            brisee: false,
             affectation: aff,
         }
     }
@@ -242,7 +248,8 @@ mod tests {
             libelle: "Labo".into(),
             unite: r.salle("laboratoire-d-alchimie").unwrap(),
             types_du_batiment: BTreeSet::new(),
-            moitie: false,
+            sans_batiment: false,
+            brisee: false,
             affectation: vec![(Ressource::Po, 5), (Ressource::Marchandises, 5)],
         }];
         let jets = BTreeMap::new();
@@ -278,7 +285,8 @@ mod tests {
             libelle: "Soldats".into(),
             unite: r.equipe("soldats").unwrap(),
             types_du_batiment: BTreeSet::new(),
-            moitie: true,
+            sans_batiment: true,
+            brisee: false,
             affectation: vec![(Ressource::Travail, 2)],
         };
         assert_eq!(
@@ -286,12 +294,31 @@ mod tests {
             2
         );
 
+        // Option : malus des équipes sans bâtiment désactivé → bonus entier (+5)
+        let sans_malus = OptionsRegles {
+            moitie_equipe_sans_batiment: false,
+            ..OptionsRegles::default()
+        };
+        let s2 = Contribution {
+            libelle: "Soldats".into(),
+            unite: r.equipe("soldats").unwrap(),
+            types_du_batiment: BTreeSet::new(),
+            sans_batiment: true,
+            brisee: false,
+            affectation: vec![(Ressource::Travail, 5)],
+        };
+        assert_eq!(
+            tests_du_jour(&[s2], &BTreeMap::new(), &sans_malus).unwrap()[0].total_bonus,
+            5
+        );
+
         // Étalage : seulement un type que le bâtiment génère déjà (PC-05)
         let e = Contribution {
             libelle: "Étalage".into(),
             unite: r.salle("etalage").unwrap(),
             types_du_batiment: BTreeSet::from([Ressource::Po, Ressource::Influence]),
-            moitie: false,
+            sans_batiment: false,
+            brisee: false,
             affectation: vec![(Ressource::Magie, 5)],
         };
         assert!(tests_du_jour(&[e], &BTreeMap::new(), &opt).is_err());
