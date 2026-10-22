@@ -472,14 +472,29 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
         if bilan_brut.capitaux_nets.unites() > 0 {
             ui.add_space(4.0);
             ui.label(
-                RichText::new("Capitaux produits à garder")
-                    .color(theme::OR)
-                    .strong(),
+                RichText::new(if regles_test.capitaux_produits_gratuits {
+                    "Capitaux produits encaissés"
+                } else {
+                    "Capitaux produits à payer (Coût produit)"
+                })
+                .color(theme::OR)
+                .strong(),
             );
-            widgets::texte_doux(
-                ui,
-                "Chaque unité gardée se paie au Coût produit (Table 2-1, GC p. 78) ; vous pouvez en garder moins.",
-            );
+            if regles_test.capitaux_produits_gratuits {
+                ui.horizontal_wrapped(|ui| {
+                    widgets::badge_statut(ui, domaine::Statut::Personnalise);
+                    widgets::texte_doux(
+                        ui,
+                        "Option des Paramètres : encaissés sans payer. Vous pouvez quand même en garder moins.",
+                    );
+                });
+            } else {
+                widgets::texte_doux(
+                    ui,
+                    "Le test donne le droit de produire ces capitaux ; chaque unité gardée se paie au \
+                     Coût produit (Table 2-1, GC p. 78-79 et 94). Vous pouvez en garder moins.",
+                );
+            }
             ui.checkbox(&mut s.conserver_tout, "tout garder");
             ui.horizontal_wrapped(|ui| {
                 for t in TypeCapital::TOUS {
@@ -495,17 +510,23 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
                     }
                     widgets::texte_doux(
                         ui,
-                        format!(
-                            "/ {max} ({} po l'unité)",
-                            r.valeur(res).map(|x| x.cout_produit_po).unwrap_or(0)
-                        ),
+                        if regles_test.capitaux_produits_gratuits {
+                            format!("/ {max}")
+                        } else {
+                            format!(
+                                "/ {max} ({} po l'unité)",
+                                r.valeur(res).map(|x| x.cout_produit_po).unwrap_or(0)
+                            )
+                        },
                     );
                 }
             });
-            ui.horizontal(|ui| {
-                ui.label("Payés par");
-                payeur = choix_payeur(ui, "payeur_rec", &mut s.payeur_pj, &etat, l);
-            });
+            if !regles_test.capitaux_produits_gratuits {
+                ui.horizontal(|ui| {
+                    ui.label("Payés par");
+                    payeur = choix_payeur(ui, "payeur_rec", &mut s.payeur_pj, &etat, l);
+                });
+            }
         }
     });
     demande.payeur = Some(payeur);

@@ -329,6 +329,9 @@ pub struct ReglesTest {
     pub repartition_stricte: bool,
     pub moitie_equipe_sans_batiment: bool,
     pub production_pendant_amelioration: bool,
+    /// Personnalisé (provisoire) : capitaux produits encaissés sans payer le Coût produit.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub capitaux_produits_gratuits: bool,
 }
 
 /// Jet d'un jour : d20 saisi, ou « faire 10 » (`None`).

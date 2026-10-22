@@ -460,10 +460,14 @@ impl Etat {
                 )));
             }
         }
-        let cout_conserves = TypeCapital::TOUS
-            .iter()
-            .map(|t| cout_production(r, *t, d.conserves.get(*t)))
-            .sum();
+        let cout_conserves = if d.regles.capitaux_produits_gratuits {
+            Montant::ZERO
+        } else {
+            TypeCapital::TOUS
+                .iter()
+                .map(|t| cout_production(r, *t, d.conserves.get(*t)))
+                .sum()
+        };
         Ok(BilanRecettes {
             du,
             au,
@@ -531,6 +535,7 @@ impl ReglesTest {
             repartition_stricte: false,
             moitie_equipe_sans_batiment: true,
             production_pendant_amelioration: false,
+            capitaux_produits_gratuits: false,
         }
     }
 
@@ -539,6 +544,7 @@ impl ReglesTest {
             repartition_stricte: o.repartition_stricte,
             moitie_equipe_sans_batiment: o.moitie_equipe_sans_batiment,
             production_pendant_amelioration: o.production_pendant_amelioration,
+            capitaux_produits_gratuits: o.capitaux_produits_gratuits,
         }
     }
 
@@ -547,6 +553,7 @@ impl ReglesTest {
             repartition_stricte: self.repartition_stricte,
             moitie_equipe_sans_batiment: self.moitie_equipe_sans_batiment,
             production_pendant_amelioration: self.production_pendant_amelioration,
+            capitaux_produits_gratuits: self.capitaux_produits_gratuits,
             ..OptionsRegles::default()
         }
     }
@@ -721,6 +728,13 @@ mod tests {
         assert_eq!(
             etat.localite(m.l).unwrap().tresorerie,
             Montant::po(100 - cout)
+        );
+        // option personnalisée : capitaux produits gratuits
+        let mut g = d.clone();
+        g.regles.capitaux_produits_gratuits = true;
+        assert_eq!(
+            m.etat().calculer_recettes(&g, &m.r).unwrap().cout_conserves,
+            Montant::ZERO
         );
         // garder plus que produit : refusé
         *d.conserves.get_mut(t) = 99;

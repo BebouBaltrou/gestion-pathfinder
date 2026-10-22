@@ -15,6 +15,14 @@ Ce fichier est tenu à jour à chaque étape.
 - **Extensions des modèles** (ameublement, fortification) : ignorées à la création d'un
   bâtiment depuis un modèle (l'application le signale).
 
+## Question ouverte
+
+- **Coût produit des capitaux obtenus par les bâtiments et organisations** : le livre le
+  demande (GC p. 79 pour le travail qualifié du PJ ; p. 94, section « Recettes » : « Le
+  personnage doit tout de même payer les coûts occasionnés par ce type d'acquisition de
+  capitaux (voir page 77) »). L'utilisateur pense que cela ne concerne que le travail du PJ.
+  Option provisoire « capitaux produits encaissés gratuitement » ajoutée le 22/10/2026.
+
 ## Lectures appliquées à l'étape 6 (à valider à l'usage)
 
 - **Usure des capitaux** (GC p. 82) appliquée jour par jour : −1 à chaque type en réserve au
