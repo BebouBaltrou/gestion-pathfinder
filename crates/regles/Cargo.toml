@@ -6,7 +6,11 @@ version.workspace = true
 license.workspace = true
 
 [dependencies]
+serde = { version = "1", features = ["derive"], optional = true }
 domaine = { path = "../domaine" }
+
+[features]
+serde = ["dep:serde", "domaine/serde"]
 
 [[example]]
 name = "verifier_referentiel"

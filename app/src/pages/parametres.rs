@@ -1,0 +1,178 @@
+//! Paramètres de la campagne : règles personnalisées et calendrier.
+
+use crate::app::App;
+use crate::{theme, widgets};
+use campagne::calendrier::{DateGolarion, RegleBissextile, JOURS_SEMAINE, MOIS};
+use domaine::Statut;
+use eframe::egui::{self, RichText};
+
+fn option(
+    ui: &mut egui::Ui,
+    valeur: &mut bool,
+    titre: &str,
+    aide: &str,
+    statut_si_active: Statut,
+) -> bool {
+    let mut change = false;
+    widgets::carte(ui, |ui| {
+        ui.set_width(ui.available_width());
+        ui.horizontal(|ui| {
+            change = ui.checkbox(valeur, RichText::new(titre).strong()).changed();
+            let s = if *valeur {
+                statut_si_active
+            } else {
+                oppose(statut_si_active)
+            };
+            widgets::badge_statut(ui, s);
+        });
+        widgets::texte_doux(ui, aide);
+    });
+    change
+}
+
+fn oppose(s: Statut) -> Statut {
+    match s {
+        Statut::Officiel => Statut::Personnalise,
+        _ => Statut::Officiel,
+    }
+}
+
+pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
+    let Some(c) = app.campagne.as_mut() else {
+        return;
+    };
+    widgets::titre_page(ui, "Paramètres", &format!("Campagne « {} »", c.nom));
+    let mut change = false;
+
+    widgets::titre_section(ui, "Règles");
+    let o = &mut c.options;
+    change |= option(
+        ui,
+        &mut o.repartition_stricte,
+        "Répartition stricte des bonus",
+        "Chaque salle ou équipe donne tout son bonus à un seul type de capital par jour. \
+         Désactivé : règle officielle, le bonus peut être réparti entre les types admis (Guide de campagne p. 94).",
+        Statut::Personnalise,
+    );
+    change |= option(
+        ui,
+        &mut o.moitie_equipe_sans_batiment,
+        "Équipes sans bâtiment : recettes divisées par 2",
+        "Règle officielle (Guide de campagne p. 94), arrondi inférieur (PC-12). \
+         Désactivé : l'équipe garde son bonus entier.",
+        Statut::Officiel,
+    );
+    change |= option(
+        ui,
+        &mut o.construction_parallele_autorisee,
+        "Construction parallèle des salles d'un même étage",
+        "Le livre ne dit rien sur la durée de travaux simultanés : option personnalisée.",
+        Statut::Personnalise,
+    );
+    change |= option(
+        ui,
+        &mut o.production_pendant_amelioration,
+        "Production pendant l'amélioration d'une salle",
+        "Une salle en travaux d'amélioration continue de produire ses recettes.",
+        Statut::Personnalise,
+    );
+    change |= option(
+        ui,
+        &mut o.salaire_gestionnaire_unique,
+        "Salaire d'un gestionnaire compté une fois par jour",
+        "Un gestionnaire affecté à plusieurs établissements n'est payé qu'une fois (PC-06).",
+        Statut::Personnalise,
+    );
+    widgets::carte(ui, |ui| {
+        ui.set_width(ui.available_width());
+        change |= ui
+            .checkbox(
+                &mut o.afficher_avertissements,
+                RichText::new("Afficher les avertissements").strong(),
+            )
+            .changed();
+        widgets::texte_doux(ui, "Signale dans les calculs les données liées à un point à confirmer ou incohérentes (ex. Labyrinthe).");
+    });
+
+    ui.add_space(10.0);
+    widgets::titre_section(ui, "Calendrier");
+    widgets::carte(ui, |ui| {
+        ui.set_width(ui.available_width());
+        let cal = &mut c.calendrier;
+        let mut d: DateGolarion = cal.origine;
+        ui.horizontal(|ui| {
+            ui.label("Le jour 1 de la campagne est le");
+            egui::ComboBox::from_id_salt("jour_semaine")
+                .selected_text(JOURS_SEMAINE[cal.jour_semaine_origine as usize % 7])
+                .show_ui(ui, |ui| {
+                    for (i, j) in JOURS_SEMAINE.iter().enumerate() {
+                        change |= ui
+                            .selectable_value(&mut cal.jour_semaine_origine, i as u8, *j)
+                            .changed();
+                    }
+                });
+            change |= ui
+                .add(egui::DragValue::new(&mut d.jour).range(1..=31))
+                .changed();
+            egui::ComboBox::from_id_salt("mois")
+                .selected_text(MOIS[(d.mois - 1) as usize].0)
+                .show_ui(ui, |ui| {
+                    for (i, (m, _)) in MOIS.iter().enumerate() {
+                        change |= ui
+                            .selectable_value(&mut d.mois, (i + 1) as u8, *m)
+                            .changed();
+                    }
+                });
+            change |= ui
+                .add(egui::DragValue::new(&mut d.annee).range(1..=9999))
+                .changed();
+            ui.label("AR");
+        });
+        let max = cal.jours_du_mois(d.annee, d.mois);
+        if d.jour > max {
+            d.jour = max;
+        }
+        cal.origine = d;
+        ui.horizontal(|ui| {
+            ui.label("Années bissextiles");
+            let texte = match cal.bissextile {
+                RegleBissextile::Aucune => "aucune",
+                RegleBissextile::TousLes4Ans => "tous les 4 ans (PF2)",
+                RegleBissextile::TousLes8Ans => "tous les 8 ans (PF1)",
+            };
+            egui::ComboBox::from_id_salt("bissextile")
+                .selected_text(texte)
+                .show_ui(ui, |ui| {
+                    change |= ui
+                        .selectable_value(
+                            &mut cal.bissextile,
+                            RegleBissextile::TousLes4Ans,
+                            "tous les 4 ans (PF2)",
+                        )
+                        .changed();
+                    change |= ui
+                        .selectable_value(
+                            &mut cal.bissextile,
+                            RegleBissextile::TousLes8Ans,
+                            "tous les 8 ans (PF1)",
+                        )
+                        .changed();
+                    change |= ui
+                        .selectable_value(&mut cal.bissextile, RegleBissextile::Aucune, "aucune")
+                        .changed();
+                });
+            widgets::badge(ui, "PC-13", theme::ORANGE);
+        });
+        widgets::texte_doux(
+            ui,
+            "Mois et jours de la semaine : calendrier de Golarion (VF). Aucune source ne fixe le jour de la semaine \
+             d'une date donnée : choisissez celui du jour 1.",
+        );
+    });
+    let apercu = c.date_courante(&app.r);
+    widgets::texte_doux(ui, format!("Aujourd'hui : {apercu}"));
+
+    if change {
+        app.enregistrer();
+    }
+}

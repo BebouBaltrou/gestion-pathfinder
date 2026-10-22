@@ -2,6 +2,7 @@ use std::fmt;
 
 /// Les quatre capitaux d'intermède (Guide de campagne p. 78).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum TypeCapital {
     Marchandises,
     Influence,
@@ -20,6 +21,7 @@ impl TypeCapital {
 
 /// Ce qu'un test de capital peut produire : des po ou un capital.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum Ressource {
     Po,
     Marchandises,
@@ -79,6 +81,7 @@ impl fmt::Display for TypeCapital {
 
 /// Quantités de capitaux (coût de création d'une salle, d'une équipe, d'un modèle…).
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct CoutCapitaux {
     pub marchandises: u32,
     pub influence: u32,

@@ -1,4 +1,4 @@
-name: Compilation Windows
+name: Compilation
 
 on:
   push:
@@ -8,8 +8,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  windows:
-    runs-on: windows-latest
+  coeur:
+    name: Cœur (tests)
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
@@ -17,17 +18,34 @@ jobs:
           components: clippy, rustfmt
       - uses: Swatinem/rust-cache@v2
       - name: Formatage
-        run: cargo fmt --all -- --check
+        run: |
+          cargo fmt --all -- --check
+          rustfmt --check --edition 2021 app/src/main.rs
       - name: Analyse (clippy)
-        run: cargo clippy --all-targets -- -D warnings
-      - name: Tests
-        run: cargo test --all
-      - name: Compilation release
-        run: cargo build --release --all-targets
-      - name: Exécutables
+        run: cargo clippy --workspace --all-targets --all-features -- -D warnings
+      - name: Tests (avec la sauvegarde JSON)
+        run: cargo test --workspace --all-features
+
+  windows:
+    name: Application Windows
+    needs: coeur
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: |
+            . -> target
+            app -> target
+      - name: Tests du cœur
+        run: cargo test --workspace --all-features
+      - name: Compilation de l'application
+        working-directory: app
+        run: cargo build --release
+      - name: Exécutable
         uses: actions/upload-artifact@v4
         with:
-          name: gestion-intermede-windows
-          path: |
-            target/release/examples/verifier_referentiel.exe
+          name: gestion-pathfinder-windows
+          path: app/target/release/gestion-pathfinder.exe
           if-no-files-found: error

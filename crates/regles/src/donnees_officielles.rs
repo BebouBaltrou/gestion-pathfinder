@@ -76,6 +76,7 @@ pub fn referentiel_officiel() -> Referentiel {
     sources: vec![
         LivreSource { code: "GC".to_string(), titre: "Guide de campagne (Pathfinder JdR) — VF de Ultimate Campaign".to_string(), editeur: "Black Book Editions / Paizo".to_string(), url: "https://www.pathfinder-fr.org/Wiki/Pathfinder-RPG.Interm%c3%a8des.ashx".to_string() },
         LivreSource { code: "GDM".to_string(), titre: "Guide du maître (Pathfinder JdR) — VF de GameMastery Guide".to_string(), editeur: "Black Book Editions / Paizo".to_string(), url: "https://www.pathfinder-fr.org/Wiki/Pathfinder-RPG.Villes.ashx".to_string() },
+        LivreSource { code: "PFFR".to_string(), titre: "Wiki Pathfinder-FR — Calendrier de Golarion".to_string(), editeur: "Pathfinder-FR".to_string(), url: "https://www.pathfinder-fr.org/Wiki/Golarion.Calendrier.ashx".to_string() },
     ],
     capitaux: vec![
         ValeurCapital { ressource: Ressource::Marchandises, cout_achat_po: 20, cout_produit_po: 10, source: s("GC", Some(78), "Table 2-1 : Valeurs des capitaux") },
@@ -311,6 +312,7 @@ pub fn referentiel_officiel() -> Referentiel {
         PointAConfirmer { code: "PC-10".to_string(), question: "Accélération : comment arrondir une durée divisée qui ne tombe pas juste (ex. 40 jours ÷ 3) ?".to_string(), source: s("GC", Some(95), "Durée"), lecture_appliquee: "Arrondi au jour supérieur (14 jours).".to_string(), statut: StatutPoint::Valide, decision: Some("Validé le 22/10/2026".to_string()) },
         PointAConfirmer { code: "PC-11".to_string(), question: "Population de 20 exactement : lieu-dit (« moins de 20 ») ou hameau (« 21-60 ») ?".to_string(), source: s("GDM", None, "Fourchette de population des communautés"), lecture_appliquee: "Lieu-dit.".to_string(), statut: StatutPoint::Valide, decision: Some("Validé le 22/10/2026".to_string()) },
         PointAConfirmer { code: "PC-12".to_string(), question: "Quand des recettes sont divisées par 2 (équipe sans bâtiment, salle brisée), comment arrondir un bonus impair ?".to_string(), source: s("GC", Some(94), "Recettes"), lecture_appliquee: "Arrondi inférieur (ex. +5 → +2).".to_string(), statut: StatutPoint::Valide, decision: Some("Validé le 22/10/2026 ; option pour annuler la division par 2 des équipes sans bâtiment".to_string()) },
+        PointAConfirmer { code: "PC-13".to_string(), question: "Calendrier (hors règles d'intermède) : fréquence des années bissextiles — tous les 8 ans (PF1) ou tous les 4 ans (PF2, rectification rétroactive) ?".to_string(), source: s("PFFR", None, "Calendrier de Golarion"), lecture_appliquee: "Tous les 4 ans (années divisibles par 4), réglable par campagne dans les paramètres.".to_string(), statut: StatutPoint::Ouvert, decision: None },
     ],
     }
 }

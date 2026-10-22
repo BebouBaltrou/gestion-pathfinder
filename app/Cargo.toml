@@ -1,0 +1,19 @@
+[package]
+name = "gestion-pathfinder"
+description = "Gestion d'intermède Pathfinder 1 (Guide de campagne) — application Windows"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+# Espace de travail séparé : l'interface dépend de crates.io (eframe), le cœur non.
+[workspace]
+
+[dependencies]
+domaine = { path = "../crates/domaine", features = ["serde"] }
+regles = { path = "../crates/regles", features = ["serde"] }
+campagne = { path = "../crates/campagne", features = ["serde"] }
+eframe = "0.31"
+
+[profile.release]
+opt-level = 3
+lto = "thin"

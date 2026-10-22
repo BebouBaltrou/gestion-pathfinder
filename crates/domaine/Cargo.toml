@@ -6,4 +6,8 @@ version.workspace = true
 license.workspace = true
 
 [dependencies]
-# Aucune dépendance : crate pur. serde sera ajouté avec la persistance (étape 3).
+serde = { version = "1", features = ["derive"], optional = true }
+
+[features]
+# Sauvegarde : dérive Serialize/Deserialize sur les types du domaine.
+serde = ["dep:serde"]

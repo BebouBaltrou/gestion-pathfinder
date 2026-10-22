@@ -1,0 +1,480 @@
+//! Une campagne : journal d'événements + état recalculé, avec annuler/rétablir.
+//!
+//! L'état n'est jamais modifié directement : toute action passe par [`Campagne::executer`],
+//! qui valide l'événement, l'ajoute au journal et met l'état à jour.
+
+pub mod calendrier;
+pub mod etat;
+pub mod evenements;
+#[cfg(feature = "serde")]
+pub mod fichier;
+pub mod modele;
+
+use calendrier::Calendrier;
+use etat::{Consequence, Erreur, Etat};
+use evenements::{Entree, Evenement};
+use modele::*;
+use regles::options::OptionsRegles;
+use regles::Referentiel;
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub struct Campagne {
+    pub nom: String,
+    pub calendrier: Calendrier,
+    pub options: OptionsRegles,
+    /// Journal complet, y compris les entrées annulées (au-delà de `curseur`).
+    pub journal: Vec<Entree>,
+    /// Nombre d'entrées actives : `journal[..curseur]`.
+    pub curseur: usize,
+    #[cfg_attr(feature = "serde", serde(skip))]
+    etat: Option<Etat>,
+}
+
+impl Campagne {
+    pub fn nouvelle(nom: &str) -> Self {
+        Campagne {
+            nom: nom.to_string(),
+            calendrier: Calendrier::default(),
+            options: OptionsRegles::default(),
+            journal: Vec::new(),
+            curseur: 0,
+            etat: Some(Etat::nouveau()),
+        }
+    }
+
+    /// État courant (recalculé à partir du journal si nécessaire).
+    pub fn etat(&mut self, r: &Referentiel) -> &Etat {
+        if self.etat.is_none() {
+            self.etat = Some(Self::rejouer(&self.journal[..self.curseur], r));
+        }
+        self.etat.as_ref().expect("état calculé")
+    }
+
+    fn rejouer(entrees: &[Entree], r: &Referentiel) -> Etat {
+        let mut e = Etat::nouveau();
+        for x in entrees {
+            // Un journal enregistré n'est composé que d'événements déjà validés.
+            let _ = e.appliquer(&x.evenement, r);
+        }
+        e
+    }
+
+    /// Valide puis enregistre un événement. Les entrées annulées non rétablies sont abandonnées.
+    pub fn executer(&mut self, ev: Evenement, r: &Referentiel) -> Result<Vec<Consequence>, Erreur> {
+        let mut etat = self.etat(r).clone();
+        let jour = etat.jour;
+        let consequences = etat.appliquer(&ev, r)?;
+        self.journal.truncate(self.curseur);
+        let numero = self.journal.last().map(|e| e.numero + 1).unwrap_or(1);
+        self.journal.push(Entree {
+            numero,
+            jour,
+            evenement: ev,
+        });
+        self.curseur = self.journal.len();
+        self.etat = Some(etat);
+        Ok(consequences)
+    }
+
+    pub fn peut_annuler(&self) -> bool {
+        self.curseur > 0
+    }
+    pub fn peut_retablir(&self) -> bool {
+        self.curseur < self.journal.len()
+    }
+
+    pub fn annuler(&mut self) -> Option<&Entree> {
+        if !self.peut_annuler() {
+            return None;
+        }
+        self.curseur -= 1;
+        self.etat = None;
+        self.journal.get(self.curseur)
+    }
+
+    pub fn retablir(&mut self) -> Option<&Entree> {
+        if !self.peut_retablir() {
+            return None;
+        }
+        self.curseur += 1;
+        self.etat = None;
+        self.journal.get(self.curseur - 1)
+    }
+
+    /// Entrées actives, de la plus récente à la plus ancienne.
+    pub fn historique(&self) -> impl Iterator<Item = &Entree> {
+        self.journal[..self.curseur].iter().rev()
+    }
+
+    // ---- identifiants : jamais réutilisés tant que l'entrée annulée peut être rétablie ----
+    fn max_id(&self, f: impl Fn(&Evenement) -> Option<u32>) -> u32 {
+        self.journal
+            .iter()
+            .filter_map(|e| f(&e.evenement))
+            .max()
+            .unwrap_or(0)
+    }
+    pub fn nouvel_id_personnage(&self) -> IdPersonnage {
+        IdPersonnage(
+            1 + self.max_id(|e| match e {
+                Evenement::PersonnageCree { id, .. } => Some(id.0),
+                _ => None,
+            }),
+        )
+    }
+    pub fn nouvel_id_localite(&self) -> IdLocalite {
+        IdLocalite(
+            1 + self.max_id(|e| match e {
+                Evenement::LocaliteCreee { id, .. } => Some(id.0),
+                _ => None,
+            }),
+        )
+    }
+    pub fn nouvel_id_transfert(&self) -> IdTransfert {
+        IdTransfert(
+            1 + self.max_id(|e| match e {
+                Evenement::TransfertEnvoye { id, .. } => Some(id.0),
+                _ => None,
+            }),
+        )
+    }
+
+    /// Date du jour courant : « jour 12 — juredi 12 Abadius 4712 AR ».
+    pub fn date_courante(&mut self, r: &Referentiel) -> String {
+        let j = self.etat(r).jour;
+        format!("Jour {j} — {}", self.calendrier.libelle(j))
+    }
+
+    /// Description lisible d'une entrée, avec les noms connus dans l'état courant.
+    pub fn decrire(&mut self, e: &Evenement, r: &Referentiel) -> String {
+        let etat = self.etat(r).clone();
+        let pj = |id: &IdPersonnage| {
+            etat.personnages
+                .get(id)
+                .map(|p| p.nom.clone())
+                .unwrap_or(id.to_string())
+        };
+        let lo = |id: &IdLocalite| {
+            etat.localites
+                .get(id)
+                .map(|l| l.nom.clone())
+                .unwrap_or(id.to_string())
+        };
+        use Evenement::*;
+        match e {
+            PersonnageCree {
+                nom,
+                compte_initial,
+                ..
+            } => format!("Création du personnage {nom} (compte : {compte_initial})"),
+            PersonnageModifie { id, .. } => format!("Modification du personnage {}", pj(id)),
+            PersonnageDeplace { id, vers } => match vers {
+                Some(l) => format!("{} se rend à {}", pj(id), lo(l)),
+                None => format!("{} quitte toute localité", pj(id)),
+            },
+            LocaliteCreee { nom, genre, .. } => format!("Création de la localité {nom} ({genre})"),
+            LocaliteModifiee { id, .. } => format!("Modification de la localité {}", lo(id)),
+            InjectionPo {
+                pj: p,
+                localite,
+                montant,
+            } => {
+                format!(
+                    "Injection de {montant} du compte de {} vers {}",
+                    pj(p),
+                    lo(localite)
+                )
+            }
+            RetraitPo {
+                localite,
+                pj: p,
+                montant,
+            } => {
+                format!(
+                    "Retrait de {montant} de {} vers le compte de {}",
+                    lo(localite),
+                    pj(p)
+                )
+            }
+            AjustementCompte {
+                pj: p,
+                delta,
+                motif,
+            } => format!("Compte de {} : {delta} ({motif})", pj(p)),
+            AjustementLocalite {
+                localite,
+                delta_po,
+                ajout,
+                retrait,
+                motif,
+            } => {
+                let mut parts = Vec::new();
+                if delta_po.pa != 0 {
+                    parts.push(format!("{delta_po}"));
+                }
+                if ajout.unites() > 0 {
+                    parts.push(format!("+ {ajout}"));
+                }
+                if retrait.unites() > 0 {
+                    parts.push(format!("− {retrait}"));
+                }
+                format!(
+                    "Ajustement de {} : {} ({motif})",
+                    lo(localite),
+                    parts.join(", ")
+                )
+            }
+            TransfertEnvoye {
+                de,
+                vers,
+                lot,
+                duree_jours,
+                ..
+            } => {
+                format!(
+                    "Transfert de {lot} de {} vers {} ({duree_jours} j)",
+                    lo(de),
+                    lo(vers)
+                )
+            }
+            JoursAvances { nombre } => format!("{nombre} jour(s) écoulé(s)"),
+            Note { texte } => format!("Note : {texte}"),
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use domaine::{CoutCapitaux, Montant, TypeCapital};
+
+    fn base() -> (Campagne, Referentiel, IdPersonnage, IdLocalite, IdLocalite) {
+        let r = regles::referentiel_officiel();
+        let mut c = Campagne::nouvelle("Test");
+        let pj = c.nouvel_id_personnage();
+        c.executer(
+            Evenement::PersonnageCree {
+                id: pj,
+                nom: "Valeros".into(),
+                compte_initial: Montant::po(500),
+                prestige: Some(5),
+            },
+            &r,
+        )
+        .unwrap();
+        let a = c.nouvel_id_localite();
+        c.executer(
+            Evenement::LocaliteCreee {
+                id: a,
+                nom: "Pointesable".into(),
+                genre: "ville".into(),
+                population: Some(1240),
+                categorie: CategorieLocalite::Officielle {
+                    id: "petite-bourgade".into(),
+                },
+                notes: String::new(),
+            },
+            &r,
+        )
+        .unwrap();
+        let b = c.nouvel_id_localite();
+        c.executer(
+            Evenement::LocaliteCreee {
+                id: b,
+                nom: "Fort Ilsur".into(),
+                genre: "avant-poste".into(),
+                population: None,
+                categorie: CategorieLocalite::Personnalisee {
+                    nom: "Avant-poste".into(),
+                    limite_depense_jour: 3,
+                },
+                notes: String::new(),
+            },
+            &r,
+        )
+        .unwrap();
+        (c, r, pj, a, b)
+    }
+
+    #[test]
+    fn injection_retrait_et_soldes() {
+        let (mut c, r, pj, a, _) = base();
+        c.executer(
+            Evenement::InjectionPo {
+                pj,
+                localite: a,
+                montant: Montant::po(120),
+            },
+            &r,
+        )
+        .unwrap();
+        assert_eq!(c.etat(&r).pj(pj).unwrap().compte, Montant::po(380));
+        assert_eq!(c.etat(&r).localite(a).unwrap().tresorerie, Montant::po(120));
+        let e = c.executer(
+            Evenement::RetraitPo {
+                localite: a,
+                pj,
+                montant: Montant::po(200),
+            },
+            &r,
+        );
+        assert!(matches!(e, Err(Erreur::TresorerieInsuffisante { .. })));
+        c.executer(
+            Evenement::RetraitPo {
+                localite: a,
+                pj,
+                montant: Montant::pa(15),
+            },
+            &r,
+        )
+        .unwrap();
+        assert_eq!(
+            c.etat(&r).localite(a).unwrap().tresorerie,
+            Montant::pa(1185)
+        );
+        assert_eq!(c.journal.len(), 5); // l'opération refusée n'est pas journalisée
+    }
+
+    #[test]
+    fn limites_officielle_et_personnalisee() {
+        let (mut c, r, _, a, b) = base();
+        assert_eq!(c.etat(&r).limite_depense(a, &r), Some(15));
+        assert_eq!(c.etat(&r).limite_depense(b, &r), Some(3));
+    }
+
+    #[test]
+    fn transfert_avec_delai_et_influence_interdite() {
+        let (mut c, r, _, a, b) = base();
+        let ajout = CoutCapitaux {
+            marchandises: 6,
+            influence: 2,
+            travail: 0,
+            magie: 0,
+        };
+        c.executer(
+            Evenement::AjustementLocalite {
+                localite: a,
+                delta_po: Montant::ZERO,
+                ajout,
+                retrait: CoutCapitaux::default(),
+                motif: "récompense".into(),
+            },
+            &r,
+        )
+        .unwrap();
+        let t = c.nouvel_id_transfert();
+        let inf = Evenement::TransfertEnvoye {
+            id: t,
+            de: a,
+            vers: b,
+            lot: Lot::Capital(TypeCapital::Influence, 1),
+            duree_jours: 2,
+        };
+        assert_eq!(c.executer(inf, &r), Err(Erreur::InfluenceNonTransferable));
+        c.executer(
+            Evenement::TransfertEnvoye {
+                id: t,
+                de: a,
+                vers: b,
+                lot: Lot::Capital(TypeCapital::Marchandises, 4),
+                duree_jours: 3,
+            },
+            &r,
+        )
+        .unwrap();
+        assert_eq!(c.etat(&r).localite(a).unwrap().capitaux.marchandises, 2);
+        assert_eq!(c.etat(&r).localite(b).unwrap().capitaux.marchandises, 0);
+        assert_eq!(c.etat(&r).transferts.len(), 1);
+        c.executer(Evenement::JoursAvances { nombre: 2 }, &r)
+            .unwrap();
+        assert_eq!(c.etat(&r).localite(b).unwrap().capitaux.marchandises, 0);
+        let arr = c
+            .executer(Evenement::JoursAvances { nombre: 1 }, &r)
+            .unwrap();
+        assert_eq!(arr.len(), 1);
+        assert_eq!(c.etat(&r).localite(b).unwrap().capitaux.marchandises, 4);
+        assert_eq!(c.etat(&r).jour, 4);
+    }
+
+    #[test]
+    fn capitaux_jamais_negatifs_mais_po_oui() {
+        let (mut c, r, _, a, _) = base();
+        let retrait = CoutCapitaux {
+            magie: 1,
+            ..CoutCapitaux::default()
+        };
+        let e = c.executer(
+            Evenement::AjustementLocalite {
+                localite: a,
+                delta_po: Montant::ZERO,
+                ajout: CoutCapitaux::default(),
+                retrait,
+                motif: "x".into(),
+            },
+            &r,
+        );
+        assert!(matches!(e, Err(Erreur::CapitalInsuffisant { .. })));
+        c.executer(
+            Evenement::AjustementLocalite {
+                localite: a,
+                delta_po: Montant::po(-7),
+                ajout: CoutCapitaux::default(),
+                retrait: CoutCapitaux::default(),
+                motif: "salaire".into(),
+            },
+            &r,
+        )
+        .unwrap();
+        assert!(c.etat(&r).localite(a).unwrap().tresorerie.est_negatif());
+    }
+
+    #[test]
+    fn annuler_retablir_et_ids_non_reutilises() {
+        let (mut c, r, pj, a, _) = base();
+        c.executer(
+            Evenement::InjectionPo {
+                pj,
+                localite: a,
+                montant: Montant::po(100),
+            },
+            &r,
+        )
+        .unwrap();
+        c.annuler();
+        assert_eq!(c.etat(&r).pj(pj).unwrap().compte, Montant::po(500));
+        assert!(c.peut_retablir());
+        c.retablir();
+        assert_eq!(c.etat(&r).pj(pj).unwrap().compte, Montant::po(400));
+        // annuler la création de la 2e localité puis en créer une nouvelle : nouvel id
+        c.annuler();
+        c.annuler();
+        let id = c.nouvel_id_localite();
+        assert_eq!(id, IdLocalite(3));
+        c.executer(
+            Evenement::Note {
+                texte: "branche".into(),
+            },
+            &r,
+        )
+        .unwrap();
+        // la nouvelle branche abandonne les entrées annulées : PJ, Pointesable, note
+        assert!(!c.peut_retablir());
+        assert_eq!(c.historique().count(), 3);
+    }
+
+    #[test]
+    fn descriptions_lisibles() {
+        let (mut c, r, pj, a, _) = base();
+        let ev = Evenement::InjectionPo {
+            pj,
+            localite: a,
+            montant: Montant::pa(47),
+        };
+        assert_eq!(
+            c.decrire(&ev, &r),
+            "Injection de 4 po 7 pa du compte de Valeros vers Pointesable"
+        );
+        assert_eq!(c.date_courante(&r), "Jour 1 — lunedi 1 Abadius 4712 AR");
+    }
+}

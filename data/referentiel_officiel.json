@@ -12,6 +12,12 @@
    "titre": "Guide du maître (Pathfinder JdR) — VF de GameMastery Guide",
    "editeur": "Black Book Editions / Paizo",
    "url": "https://www.pathfinder-fr.org/Wiki/Pathfinder-RPG.Villes.ashx"
+  },
+  {
+   "code": "PFFR",
+   "titre": "Wiki Pathfinder-FR — Calendrier de Golarion",
+   "editeur": "Pathfinder-FR",
+   "url": "https://www.pathfinder-fr.org/Wiki/Golarion.Calendrier.ashx"
   }
  ],
  "capitaux": [
@@ -8579,6 +8585,18 @@
    "lecture_appliquee": "Arrondi inférieur (ex. +5 → +2).",
    "statut": "Valide",
    "decision": "Validé le 22/10/2026 ; option pour annuler la division par 2 des équipes sans bâtiment"
+  },
+  {
+   "code": "PC-13",
+   "question": "Calendrier (hors règles d'intermède) : fréquence des années bissextiles — tous les 8 ans (PF1) ou tous les 4 ans (PF2, rectification rétroactive) ?",
+   "source": {
+    "livre": "PFFR",
+    "page": null,
+    "section": "Calendrier de Golarion"
+   },
+   "lecture_appliquee": "Tous les 4 ans (années divisibles par 4), réglable par campagne dans les paramètres.",
+   "statut": "Ouvert",
+   "decision": null
   }
  ]
 }

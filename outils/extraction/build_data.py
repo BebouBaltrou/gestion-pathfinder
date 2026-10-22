@@ -116,6 +116,9 @@ points = [
     pc("PC-12", "Quand des recettes sont divisées par 2 (équipe sans bâtiment, salle brisée), comment arrondir un bonus impair ?",
        src(94, "Recettes"), "Arrondi inférieur (ex. +5 → +2).", V,
        "Validé le 22/10/2026 ; option pour annuler la division par 2 des équipes sans bâtiment"),
+    pc("PC-13", "Calendrier (hors règles d'intermède) : fréquence des années bissextiles — tous les 8 ans (PF1) ou tous les 4 ans (PF2, rectification rétroactive) ?",
+       {"livre": "PFFR", "page": None, "section": "Calendrier de Golarion"},
+       "Tous les 4 ans (années divisibles par 4), réglable par campagne dans les paramètres.", "Ouvert"),
 ]
 
 out = {
@@ -125,6 +128,8 @@ out = {
          "url": "https://www.pathfinder-fr.org/Wiki/Pathfinder-RPG.Interm%c3%a8des.ashx"},
         {"code": GDM, "titre": "Guide du maître (Pathfinder JdR) — VF de GameMastery Guide", "editeur": "Black Book Editions / Paizo",
          "url": "https://www.pathfinder-fr.org/Wiki/Pathfinder-RPG.Villes.ashx"},
+        {"code": "PFFR", "titre": "Wiki Pathfinder-FR — Calendrier de Golarion", "editeur": "Pathfinder-FR",
+         "url": "https://www.pathfinder-fr.org/Wiki/Golarion.Calendrier.ashx"},
     ],
     "capitaux": capitaux, "communautes": communautes, "salles": salles, "extensions": extensions,
     "equipes": equipes, "gestionnaires": gestionnaires, "modeles_batiments": batiments,

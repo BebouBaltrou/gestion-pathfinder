@@ -2,6 +2,8 @@
 //! section « Règles personnalisées décidées »). Chacune est désactivable.
 
 #[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde", serde(default))]
 pub struct OptionsRegles {
     /// Personnalisé : une salle ou une équipe donne tout son bonus à un seul type de capital par
     /// jour. Désactivé = règle officielle (répartition libre entre types admis, p. 94).
