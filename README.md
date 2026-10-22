@@ -4,7 +4,7 @@ Application Windows locale de gestion des localités, bâtiments, salles, organi
 équipes et gestionnaires selon les règles d'intermède du **Guide de campagne**
 (VF de *Ultimate Campaign*).
 
-## État : étape 5 — organisations, équipes, gestionnaires
+## État : étape 6 — recettes, usure, prestige
 
 | Étape | Contenu | État |
 | --- | --- | --- |
@@ -13,7 +13,7 @@ Application Windows locale de gestion des localités, bâtiments, salles, organi
 | 3 | Campagnes, localités, trésoreries, comptes des PJ, transferts, historique, interface | fait |
 | 4 | Bâtiments, étages, salles, construction (limite de dépense, accélération, achat, améliorations, modèles) | fait (extensions des modèles à venir) |
 | 5 | Organisations, équipes (appartenance, lieu de travail, recrutement, délocalisation), gestionnaires et salaires | fait |
-| 6 | Tests de capital et génération de capitaux | à venir |
+| 6 | Tests de capitaux (recettes), absence, usure des capitaux et des entreprises | fait |
 | 7 | Simulation, export, tableau de bord | à venir |
 
 ## Structure
@@ -34,7 +34,7 @@ Les campagnes sont enregistrées dans `%APPDATA%\GestionPathfinder\campagnes` (J
 ## Commandes
 
 ```
-cargo test                                            # 43 tests, dont les exemples chiffrés du livre
+cargo test                                            # 47 tests, dont les exemples chiffrés du livre
 cargo run -p regles --example verifier_referentiel    # contenu + avertissements
 ```
 

@@ -12,12 +12,19 @@ Ce fichier est tenu à jour à chaque étape.
 - **Extensions des modèles** (ameublement, fortification) : ignorées à la création d'un
   bâtiment depuis un modèle (l'application le signale).
 
-## Décisions pour l'étape 6 (tests de capitaux et phase d'entretien)
+## Lectures appliquées à l'étape 6 (à valider à l'usage)
 
-- **Usure des capitaux et des entreprises** (GC p. 82-83) à intégrer. Un gestionnaire fait
-  passer l'usure des capitaux de 1 tous les 7 jours à 1 tous les 14 jours (GC p. 89).
-  Option à prévoir dans les paramètres : **désactiver complètement l'usure lorsqu'un
-  gestionnaire est présent** (règle personnalisée). Décidé le 22/10/2026.
+- **Usure des capitaux** (GC p. 82) appliquée jour par jour : −1 à chaque type en réserve au
+  7e jour consécutif sans PJ (14e avec un gestionnaire payé ; aucune avec l'option
+  personnalisée décidée le 22/10/2026).
+- **Gestionnaire payé** : actif, et la trésorerie qui le paie n'est pas négative. Il protège
+  la localité qui le paie et celles de ses bâtiments et organisations.
+- **Usure des entreprises** : au retour après 30 jours ou plus sans gestionnaire payé, test de
+  prestige DD = jours − 10, seulement s'il y a une salle construite ou une équipe recrutée.
+  L'application note le résultat ; la perte de contrôle est laissée au MJ.
+- **Réduction d'absence des recettes** (GC p. 84) : jours sans aucun PJ dans la localité
+  pendant la période traitée, par tranches de 7.
+- Les po des recettes sont créditées avant le paiement des capitaux gardés.
 
 ## Décisions déjà appliquées (étape 5)
 
