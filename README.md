@@ -4,13 +4,13 @@ Application Windows locale de gestion des localités, bâtiments, salles, organi
 équipes et gestionnaires selon les règles d'intermède du **Guide de campagne**
 (VF de *Ultimate Campaign*).
 
-## État : étape 2 — référentiel et moteur de règles
+## État : étape 3 — campagnes, localités, personnages, interface
 
 | Étape | Contenu | État |
 | --- | --- | --- |
 | 1 | Document des règles et points à confirmer | fait |
-| 2 | Référentiel officiel + moteur de calcul (ce dépôt) | fait |
-| 3 | Localités, trésorerie, compte des PJ, historique (persistance) | à venir |
+| 2 | Référentiel officiel + moteur de calcul | fait |
+| 3 | Campagnes, localités, trésoreries, comptes des PJ, transferts, historique, interface | fait |
 | 4 | Bâtiments, étages, salles, construction | à venir |
 | 5 | Organisations, équipes, gestionnaires | à venir |
 | 6 | Tests de capital et génération de capitaux | à venir |
@@ -21,12 +21,15 @@ Application Windows locale de gestion des localités, bâtiments, salles, organi
 ```
 crates/domaine   types purs : capitaux, monnaie (en pa), sources, statuts, fiches
 crates/regles    référentiel officiel, personnalisations, calculs, contrôles
+crates/campagne  journal d'événements, état, annuler/rétablir, calendrier, sauvegarde JSON
+app/             application Windows (egui/eframe), espace de travail séparé
 data/            referentiel_officiel.json : source de vérité des données officielles
 outils/extraction  scripts de relevé depuis le PDF et de génération du code Rust
 ```
 
-Le cœur n'a **aucune dépendance externe** : il compile hors ligne. L'interface
-(egui/eframe) et la persistance (serde, SQLite) seront ajoutées dans un crate `app`.
+Le cœur ne dépend que de serde (optionnel). L'application `app/` dépend d'eframe ;
+GitHub Actions compile l'exécutable Windows à chaque envoi (artefact `gestion-pathfinder-windows`).
+Les campagnes sont enregistrées dans `%APPDATA%\GestionPathfinder\campagnes` (JSON, copie `.bak`).
 
 ## Commandes
 
