@@ -161,8 +161,21 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
             "Une équipe participe si son organisation ou le bâtiment où elle travaille est coché.",
         );
     });
+    let sans_type: Vec<&UniteProductrice> =
+        unites.iter().filter(|u| u.admises.is_empty()).collect();
+    if !sans_type.is_empty() {
+        let noms: Vec<&str> = sans_type.iter().map(|u| u.libelle.as_str()).collect();
+        widgets::texte_doux(
+            ui,
+            format!(
+                "Sans type de revenu coché, donc écartées : {} (cochez « Génère » dans les pages Bâtiments ou Organisations)",
+                noms.join(", ")
+            ),
+        );
+    }
     let actives: Vec<&UniteProductrice> = unites
         .iter()
+        .filter(|u| !u.admises.is_empty())
         .filter(|u| match u.cle {
             CleUnite::Salle(_) => u.batiment.is_some_and(|b| s.batiments.contains(&b)),
             CleUnite::Equipe(_) => {
@@ -178,10 +191,12 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
     // ---------- répartition ----------
     let stricte = regles_test.repartition_stricte;
     for u in &actives {
-        let ok = s
-            .affectations
-            .get(&u.cle)
-            .is_some_and(|a| valide(a, u, stricte));
+        // (ré)initialise seulement si rien n'est saisi ou si un type n'est plus coché :
+        // une somme incomplète en cours de saisie est conservée (signalée en rouge)
+        let ok = s.affectations.get(&u.cle).is_some_and(|a| {
+            a.iter().all(|(r, p)| *p == 0 || u.admises.contains(r))
+                && (!stricte || a.iter().filter(|(_, p)| *p > 0).count() <= 1)
+        });
         if !ok {
             let precedente = etat
                 .repartitions

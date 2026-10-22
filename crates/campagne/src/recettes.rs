@@ -231,7 +231,10 @@ impl Etat {
                 libelle: c.libelle.clone(),
                 reference: c.unite.id.clone(),
                 bonus: regles::repartition::bonus_effectif(&c, &regles.options()),
-                admises: regles::repartition::admises(c.unite, &c.types_du_batiment),
+                admises: regles::repartition::admises(c.unite, &c.types_du_batiment)
+                    .into_iter()
+                    .filter(|x| self.ressources_cochees(cle).contains(x))
+                    .collect(),
             })
         })
     }
@@ -246,6 +249,22 @@ impl Etat {
     ) -> Option<u32> {
         let c = self.contribution(cle, l, r, regles).ok()?;
         Some(regles::repartition::bonus_effectif(&c, &regles.options()))
+    }
+
+    /// Types de revenu cochés pour l'unité (pages Bâtiments et Organisations).
+    pub fn ressources_cochees(&self, cle: CleUnite) -> Vec<Ressource> {
+        match cle {
+            CleUnite::Salle(s) => self
+                .salles
+                .get(&s)
+                .map(|x| x.ressources.clone())
+                .unwrap_or_default(),
+            CleUnite::Equipe(e) => self
+                .equipes
+                .get(&e)
+                .map(|x| x.ressources.clone())
+                .unwrap_or_default(),
+        }
     }
 
     fn revenus_actifs(&self, cle: CleUnite) -> bool {
@@ -366,6 +385,13 @@ impl Etat {
                 return Err(Erreur::Recettes("une unité figure deux fois".into()));
             }
             let mut c = self.contribution(*cle, d.localite, r, &d.regles)?;
+            let cochees = self.ressources_cochees(*cle);
+            if let Some((x, _)) = aff.iter().find(|(x, p)| *p > 0 && !cochees.contains(x)) {
+                return Err(Erreur::Recettes(format!(
+                    "{} : {x} n'est pas coché comme type de revenu",
+                    c.libelle
+                )));
+            }
             c.affectation = aff.clone();
             contributions.push(c);
         }

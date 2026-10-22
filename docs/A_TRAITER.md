@@ -9,6 +9,9 @@ Ce fichier est tenu à jour à chaque étape.
   recruter des équipes composées d'employés dont le niveau est inférieur ou égal à sa valeur
   de Prestige ». Le niveau des équipes ne figure pas dans le référentiel : la règle n'est pas
   vérifiée. Mis en attente le 22/10/2026.
+- **Effectifs des équipes et des organisations** : compter le nombre de personnes (taille
+  des équipes : nombre indiqué, de 50 % à 150 % selon GC p. 95) et le total par organisation.
+  Demandé le 22/10/2026.
 - **Extensions des modèles** (ameublement, fortification) : ignorées à la création d'un
   bâtiment depuis un modèle (l'application le signale).
 
