@@ -118,7 +118,8 @@ points = [
        "Validé le 22/10/2026 ; option pour annuler la division par 2 des équipes sans bâtiment"),
     pc("PC-13", "Calendrier (hors règles d'intermède) : fréquence des années bissextiles — tous les 8 ans (PF1) ou tous les 4 ans (PF2, rectification rétroactive) ?",
        {"livre": "PFFR", "page": None, "section": "Calendrier de Golarion"},
-       "Tous les 4 ans (années divisibles par 4), réglable par campagne dans les paramètres.", "Ouvert"),
+       "Tous les 4 ans (années divisibles par 4) par défaut ; option « tous les 8 ans » dans les paramètres.", V,
+       "Validé le 22/10/2026"),
 ]
 
 out = {

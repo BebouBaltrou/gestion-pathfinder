@@ -8594,9 +8594,9 @@
     "page": null,
     "section": "Calendrier de Golarion"
    },
-   "lecture_appliquee": "Tous les 4 ans (années divisibles par 4), réglable par campagne dans les paramètres.",
-   "statut": "Ouvert",
-   "decision": null
+   "lecture_appliquee": "Tous les 4 ans (années divisibles par 4) par défaut ; option « tous les 8 ans » dans les paramètres.",
+   "statut": "Valide",
+   "decision": "Validé le 22/10/2026"
   }
  ]
 }

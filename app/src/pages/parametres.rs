@@ -157,11 +157,8 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
                             "tous les 8 ans (PF1)",
                         )
                         .changed();
-                    change |= ui
-                        .selectable_value(&mut cal.bissextile, RegleBissextile::Aucune, "aucune")
-                        .changed();
                 });
-            widgets::badge(ui, "PC-13", theme::ORANGE);
+            widgets::badge(ui, "PC-13", theme::VERT);
         });
         widgets::texte_doux(
             ui,
