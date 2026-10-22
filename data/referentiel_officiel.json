@@ -8597,6 +8597,18 @@
    "lecture_appliquee": "Tous les 4 ans (années divisibles par 4) par défaut ; option « tous les 8 ans » dans les paramètres.",
    "statut": "Valide",
    "decision": "Validé le 22/10/2026"
+  },
+  {
+   "code": "PC-14",
+   "question": "Limite des dépenses : le livre la fixe pour ce que « votre personnage peut dépenser chaque jour dans une communauté » ; avec plusieurs PJ dans la même localité, chacun a-t-il sa propre limite ?",
+   "source": {
+    "livre": "GC",
+    "page": 81,
+    "section": "Limites des dépenses"
+   },
+   "lecture_appliquee": "Une seule limite par localité et par jour, tous chantiers confondus (cahier des charges).",
+   "statut": "Ouvert",
+   "decision": null
   }
  ]
 }

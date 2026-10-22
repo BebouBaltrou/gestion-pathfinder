@@ -4,6 +4,7 @@
 //! qui valide l'événement, l'ajoute au journal et met l'état à jour.
 
 pub mod calendrier;
+pub mod construction;
 pub mod etat;
 pub mod evenements;
 #[cfg(feature = "serde")]
@@ -109,11 +110,43 @@ impl Campagne {
 
     // ---- identifiants : jamais réutilisés tant que l'entrée annulée peut être rétablie ----
     fn max_id(&self, f: impl Fn(&Evenement) -> Option<u32>) -> u32 {
-        self.journal
-            .iter()
-            .filter_map(|e| f(&e.evenement))
-            .max()
-            .unwrap_or(0)
+        fn tous<'a>(e: &'a Evenement, out: &mut Vec<&'a Evenement>) {
+            out.push(e);
+            if let Evenement::Groupe { evenements, .. } = e {
+                for x in evenements {
+                    tous(x, out);
+                }
+            }
+        }
+        let mut evs = Vec::new();
+        for e in &self.journal {
+            tous(&e.evenement, &mut evs);
+        }
+        evs.into_iter().filter_map(f).max().unwrap_or(0)
+    }
+    pub fn nouvel_id_batiment(&self) -> IdBatiment {
+        IdBatiment(
+            1 + self.max_id(|e| match e {
+                Evenement::BatimentCree { id, .. } => Some(id.0),
+                _ => None,
+            }),
+        )
+    }
+    pub fn nouvel_id_etage(&self) -> IdEtage {
+        IdEtage(
+            1 + self.max_id(|e| match e {
+                Evenement::EtageAjoute { id, .. } => Some(id.0),
+                _ => None,
+            }),
+        )
+    }
+    pub fn nouvel_id_salle(&self) -> IdSalle {
+        IdSalle(
+            1 + self.max_id(|e| match e {
+                Evenement::SalleAjoutee { id, .. } => Some(id.0),
+                _ => None,
+            }),
+        )
     }
     pub fn nouvel_id_personnage(&self) -> IdPersonnage {
         IdPersonnage(
@@ -161,6 +194,19 @@ impl Campagne {
                 .map(|l| l.nom.clone())
                 .unwrap_or(id.to_string())
         };
+        let bat = |id: &IdBatiment| {
+            etat.batiments
+                .get(id)
+                .map(|b| b.nom.clone())
+                .unwrap_or(id.to_string())
+        };
+        let sal = |id: &IdSalle| {
+            etat.salles
+                .get(id)
+                .map(|s| etat.nom_salle(s, r))
+                .unwrap_or(id.to_string())
+        };
+        let ref_salle = |id: &String| r.salle(id).map(|u| u.nom.clone()).unwrap_or(id.clone());
         use Evenement::*;
         match e {
             PersonnageCree {
@@ -239,6 +285,72 @@ impl Campagne {
                 )
             }
             JoursAvances { nombre } => format!("{nombre} jour(s) écoulé(s)"),
+            BatimentCree {
+                nom,
+                localite,
+                modele,
+                ..
+            } => {
+                let m = modele
+                    .as_ref()
+                    .and_then(|m| r.modele_batiment(m))
+                    .map(|m| format!(" (modèle {})", m.nom))
+                    .unwrap_or_default();
+                format!("Création du bâtiment {nom} à {}{m}", lo(localite))
+            }
+            BatimentModifie { nom, .. } => format!("Modification du bâtiment {nom}"),
+            EtageAjoute { batiment, nom, .. } => {
+                format!("Étage « {nom} » ajouté à {}", bat(batiment))
+            }
+            EtageModifie { batiment, nom, .. } => {
+                format!("Étage « {nom} » de {} modifié", bat(batiment))
+            }
+            SalleAjoutee {
+                batiment,
+                reference,
+                deja_construite,
+                ..
+            } => format!(
+                "Salle {} ajoutée à {}{}",
+                ref_salle(reference),
+                bat(batiment),
+                if *deja_construite {
+                    " (déjà construite)"
+                } else {
+                    ""
+                }
+            ),
+            SalleModifiee { id, .. } => format!("Salle {} modifiée", sal(id)),
+            SalleRetiree { id } => format!("Salle {} retirée", sal(id)),
+            ConstructionLancee { salle, facteur } => {
+                let acc = if *facteur > 1 {
+                    format!(" (accélération ×{facteur})")
+                } else {
+                    String::new()
+                };
+                format!("Construction de {} lancée{acc}", sal(salle))
+            }
+            SalleAchetee { salle } => format!("{} achetée terminée", sal(salle)),
+            AmeliorationLancee {
+                salle,
+                vers,
+                facteur,
+            } => {
+                let acc = if *facteur > 1 {
+                    format!(" (accélération ×{facteur})")
+                } else {
+                    String::new()
+                };
+                format!(
+                    "Amélioration de {} en {} lancée{acc}",
+                    sal(salle),
+                    ref_salle(vers)
+                )
+            }
+            Groupe {
+                libelle,
+                evenements,
+            } => format!("{libelle} ({} opérations)", evenements.len()),
             Note { texte } => format!("Note : {texte}"),
         }
     }

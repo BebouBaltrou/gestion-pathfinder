@@ -89,3 +89,124 @@ pub struct Transfert {
     pub jour_depart: u32,
     pub jour_arrivee: u32,
 }
+
+// ---------------------------------------------------------------- bâtiments
+
+identifiant!(IdBatiment, "B-");
+identifiant!(IdEtage, "E-");
+identifiant!(IdSalle, "S-");
+
+/// Construction des salles d'un même étage (option personnalisée, le livre ne précise rien).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub enum ModeChantier {
+    /// Toutes les salles en travaux avancent en même temps.
+    Parallele,
+    /// Une seule salle à la fois, dans l'ordre de l'étage.
+    Sequentiel,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub struct Etage {
+    pub id: IdEtage,
+    pub nom: String,
+    pub mode: ModeChantier,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub enum NatureChantier {
+    Construction,
+    /// Amélioration vers une autre salle du référentiel (GC p. 95).
+    Amelioration {
+        vers: String,
+    },
+}
+
+/// Travaux en cours sur une salle : capitaux à dépenser et durée à écouler (GC p. 85).
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub struct Chantier {
+    pub nature: NatureChantier,
+    /// Coût total, accélération comprise.
+    pub cout: CoutCapitaux,
+    pub depense: CoutCapitaux,
+    /// Durée totale en jours, accélération comprise.
+    pub duree: u32,
+    pub jours_ecoules: u32,
+    /// Facteur d'accélération 1 à 4 (GC p. 95).
+    pub facteur: u32,
+    pub jour_debut: u32,
+}
+
+impl Chantier {
+    pub fn reste(&self) -> CoutCapitaux {
+        let mut r = CoutCapitaux::default();
+        for c in TypeCapital::TOUS {
+            *r.get_mut(c) = self.cout.get(c).saturating_sub(self.depense.get(c));
+        }
+        r
+    }
+    pub fn termine(&self) -> bool {
+        self.reste().unites() == 0 && self.jours_ecoules >= self.duree
+    }
+    /// Jours restants au mieux : temps restant, ou capitaux restants ÷ limite quotidienne.
+    pub fn jours_restants_estimes(&self, limite: u32) -> u32 {
+        let temps = self.duree.saturating_sub(self.jours_ecoules);
+        let capitaux = if limite == 0 {
+            if self.reste().unites() > 0 {
+                u32::MAX
+            } else {
+                0
+            }
+        } else {
+            self.reste().unites().div_ceil(limite)
+        };
+        temps.max(capitaux)
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub enum StatutSalle {
+    AConstruire,
+    EnTravaux(Chantier),
+    Construite,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub struct SalleBatie {
+    pub id: IdSalle,
+    pub batiment: IdBatiment,
+    pub etage: IdEtage,
+    /// Id de la salle dans le référentiel (« bar », « forge »…).
+    pub reference: String,
+    /// Nom donné par l'utilisateur (facultatif).
+    pub nom: Option<String>,
+    pub statut: StatutSalle,
+    /// Ressources que la salle contribue à générer, cochées parmi celles qu'elle admet.
+    pub ressources: Vec<domaine::Ressource>,
+    /// Génération de recettes activée.
+    pub revenus_actifs: bool,
+    /// Salle brisée : moitié des recettes (GC p. 92).
+    pub brisee: bool,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub struct Batiment {
+    pub id: IdBatiment,
+    pub localite: IdLocalite,
+    pub nom: String,
+    /// Classement libre (auberge, temple, entrepôt…).
+    pub classement: String,
+    pub notes: String,
+    /// Étages dans l'ordre (rez-de-chaussée d'abord).
+    pub etages: Vec<Etage>,
+    /// Étages construits l'un après l'autre (sinon en même temps). Option personnalisée.
+    pub etages_successifs: bool,
+    /// Modèle du référentiel d'origine, s'il y en a un.
+    pub modele: Option<String>,
+}

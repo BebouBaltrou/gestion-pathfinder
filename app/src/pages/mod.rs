@@ -1,3 +1,4 @@
+pub mod batiments;
 pub mod campagnes;
 pub mod historique;
 pub mod localites;

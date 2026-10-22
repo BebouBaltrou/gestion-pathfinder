@@ -77,6 +77,74 @@ pub enum Evenement {
     JoursAvances {
         nombre: u32,
     },
+    // ---- bâtiments ----
+    BatimentCree {
+        id: IdBatiment,
+        localite: IdLocalite,
+        nom: String,
+        classement: String,
+        notes: String,
+        etages_successifs: bool,
+        modele: Option<String>,
+    },
+    BatimentModifie {
+        id: IdBatiment,
+        nom: String,
+        classement: String,
+        notes: String,
+        etages_successifs: bool,
+    },
+    EtageAjoute {
+        batiment: IdBatiment,
+        id: IdEtage,
+        nom: String,
+        mode: ModeChantier,
+    },
+    EtageModifie {
+        batiment: IdBatiment,
+        id: IdEtage,
+        nom: String,
+        mode: ModeChantier,
+    },
+    /// Ajoute une salle à un étage, à construire ou déjà construite.
+    SalleAjoutee {
+        id: IdSalle,
+        batiment: IdBatiment,
+        etage: IdEtage,
+        reference: String,
+        nom: Option<String>,
+        deja_construite: bool,
+    },
+    SalleModifiee {
+        id: IdSalle,
+        etage: IdEtage,
+        nom: Option<String>,
+        ressources: Vec<domaine::Ressource>,
+        revenus_actifs: bool,
+        brisee: bool,
+    },
+    SalleRetiree {
+        id: IdSalle,
+    },
+    /// Lance la construction (facteur 1 à 4 : accélération en Travail, GC p. 95).
+    ConstructionLancee {
+        salle: IdSalle,
+        facteur: u32,
+    },
+    /// Achète la salle terminée au prix imprimé, payé par la trésorerie de la localité.
+    SalleAchetee {
+        salle: IdSalle,
+    },
+    AmeliorationLancee {
+        salle: IdSalle,
+        vers: String,
+        facteur: u32,
+    },
+    /// Plusieurs événements appliqués d'un bloc (ex. bâtiment créé depuis un modèle).
+    Groupe {
+        libelle: String,
+        evenements: Vec<Evenement>,
+    },
     Note {
         texte: String,
     },

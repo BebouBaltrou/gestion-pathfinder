@@ -11,6 +11,7 @@ use std::path::PathBuf;
 pub enum Page {
     TableauDeBord,
     Localites,
+    Batiments,
     Personnages,
     Historique,
     Referentiel,
@@ -20,9 +21,10 @@ pub enum Page {
 }
 
 impl Page {
-    const NAVIGATION: [(Page, &'static str, &'static str); 8] = [
+    const NAVIGATION: [(Page, &'static str, &'static str); 9] = [
         (Page::TableauDeBord, "🏠", "Tableau de bord"),
         (Page::Localites, "🏰", "Localités"),
+        (Page::Batiments, "🏛", "Bâtiments"),
         (Page::Personnages, "👤", "Personnages"),
         (Page::Historique, "📜", "Historique"),
         (Page::Referentiel, "📖", "Référentiel"),
@@ -45,6 +47,7 @@ pub struct App {
     pub page: Page,
     pub message: Option<(Message, f64)>,
     pub ui_localites: pages::localites::Etat,
+    pub ui_batiments: pages::batiments::Etat,
     pub ui_personnages: pages::personnages::Etat,
     pub ui_referentiel: pages::referentiel::Etat,
     pub ui_campagnes: pages::campagnes::Etat,
@@ -72,6 +75,7 @@ impl App {
             page: Page::Campagnes,
             message: None,
             ui_localites: Default::default(),
+            ui_batiments: Default::default(),
             ui_personnages: Default::default(),
             ui_referentiel: Default::default(),
             ui_campagnes: Default::default(),
@@ -166,13 +170,20 @@ impl App {
             Ok(consequences) => {
                 let mut msg = succes.to_string();
                 let etat = c.etat(&self.r).clone();
-                for campagne::etat::Consequence::TransfertArrive(t) in consequences {
-                    let nom = etat
-                        .localites
-                        .get(&t.vers)
-                        .map(|l| l.nom.clone())
-                        .unwrap_or_default();
-                    msg.push_str(&format!(" — arrivée de {} à {nom}", t.lot));
+                for c in consequences {
+                    match c {
+                        campagne::etat::Consequence::TransfertArrive(t) => {
+                            let nom = etat
+                                .localites
+                                .get(&t.vers)
+                                .map(|l| l.nom.clone())
+                                .unwrap_or_default();
+                            msg.push_str(&format!(" — arrivée de {} à {nom}", t.lot));
+                        }
+                        campagne::etat::Consequence::SalleTerminee { nom, batiment, .. } => {
+                            msg.push_str(&format!(" — {nom} terminée ({batiment})"));
+                        }
+                    }
                 }
                 self.ok(msg);
                 self.enregistrer();
@@ -389,6 +400,7 @@ impl eframe::App for App {
                     .show(ui, |ui| match self.page {
                         Page::TableauDeBord => pages::tableau::afficher(self, ui),
                         Page::Localites => pages::localites::afficher(self, ui),
+                        Page::Batiments => pages::batiments::afficher(self, ui),
                         Page::Personnages => pages::personnages::afficher(self, ui),
                         Page::Historique => pages::historique::afficher(self, ui),
                         Page::Referentiel => pages::referentiel::afficher(self, ui),

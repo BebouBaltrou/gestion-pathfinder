@@ -31,6 +31,26 @@ pub enum Erreur {
     InfluenceNonTransferable,
     TransfertVersElleMeme,
     CategorieInconnue(String),
+    BatimentInconnu(IdBatiment),
+    EtageInconnu(IdEtage),
+    SalleInconnue(IdSalle),
+    SalleReferentielInconnue(String),
+    AucunPjPresent(String),
+    StatutIncompatible {
+        salle: String,
+        attendu: &'static str,
+    },
+    SansCoutFixe(String),
+    AmeliorationImpossible {
+        de: String,
+        vers: String,
+    },
+    RessourceNonAdmise {
+        salle: String,
+        ressource: domaine::Ressource,
+    },
+    FacteurInvalide(u32),
+    EtageNonVide(String),
 }
 
 impl std::fmt::Display for Erreur {
@@ -76,6 +96,32 @@ impl std::fmt::Display for Erreur {
                 f.write_str("la localité d'origine et la destination sont identiques")
             }
             Erreur::CategorieInconnue(id) => write!(f, "catégorie de communauté inconnue ({id})"),
+            Erreur::BatimentInconnu(id) => write!(f, "bâtiment inconnu ({id})"),
+            Erreur::EtageInconnu(id) => write!(f, "étage inconnu ({id})"),
+            Erreur::SalleInconnue(id) => write!(f, "salle inconnue ({id})"),
+            Erreur::SalleReferentielInconnue(id) => {
+                write!(f, "salle absente du référentiel ({id})")
+            }
+            Erreur::AucunPjPresent(l) => write!(
+                f,
+                "aucun personnage n'est présent à {l} : un PJ doit se trouver dans la communauté \
+                 au début des travaux (Guide de campagne p. 95)"
+            ),
+            Erreur::StatutIncompatible { salle, attendu } => {
+                write!(f, "{salle} doit être {attendu}")
+            }
+            Erreur::SansCoutFixe(s) => write!(
+                f,
+                "{s} n'a pas de coût fixe : voir sa description dans le livre"
+            ),
+            Erreur::AmeliorationImpossible { de, vers } => {
+                write!(f, "{de} ne s'améliore pas en {vers} selon le référentiel")
+            }
+            Erreur::RessourceNonAdmise { salle, ressource } => {
+                write!(f, "{salle} ne peut pas produire de {ressource}")
+            }
+            Erreur::FacteurInvalide(k) => write!(f, "accélération invalide (×{k}) : 1, 2, 3 ou 4"),
+            Erreur::EtageNonVide(e) => write!(f, "l'étage {e} contient des salles"),
         }
     }
 }
@@ -87,12 +133,20 @@ pub struct Etat {
     pub personnages: BTreeMap<IdPersonnage, Personnage>,
     pub localites: BTreeMap<IdLocalite, Localite>,
     pub transferts: Vec<Transfert>,
+    pub batiments: BTreeMap<IdBatiment, Batiment>,
+    /// Salles de tous les bâtiments ; l'ordre des id donne l'ordre dans l'étage.
+    pub salles: BTreeMap<IdSalle, SalleBatie>,
 }
 
 /// Effet notable d'un événement, pour l'historique (ex. arrivée d'un transfert).
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Consequence {
     TransfertArrive(Transfert),
+    SalleTerminee {
+        salle: IdSalle,
+        nom: String,
+        batiment: String,
+    },
 }
 
 impl Etat {
@@ -116,7 +170,7 @@ impl Etat {
             .get_mut(&id)
             .ok_or(Erreur::PersonnageInconnu(id))
     }
-    fn localite_mut(&mut self, id: IdLocalite) -> Result<&mut Localite, Erreur> {
+    pub(crate) fn localite_mut(&mut self, id: IdLocalite) -> Result<&mut Localite, Erreur> {
         self.localites
             .get_mut(&id)
             .ok_or(Erreur::LocaliteInconnue(id))
@@ -127,7 +181,7 @@ impl Etat {
         self.transferts.iter().filter(move |t| t.vers == id)
     }
 
-    fn retirer_capitaux(l: &mut Localite, retrait: &CoutCapitaux) -> Result<(), Erreur> {
+    pub(crate) fn retirer_capitaux(l: &mut Localite, retrait: &CoutCapitaux) -> Result<(), Erreur> {
         for c in TypeCapital::TOUS {
             let (dispo, dem) = (l.capitaux.get(c), retrait.get(c));
             if dem > dispo {
@@ -166,7 +220,7 @@ impl Etat {
         Ok(c)
     }
 
-    fn appliquer_sur_place(
+    pub(crate) fn appliquer_sur_place(
         &mut self,
         ev: &Evenement,
         r: &regles::Referentiel,
@@ -374,16 +428,36 @@ impl Etat {
                 }
             }
             JoursAvances { nombre } => {
-                self.jour += nombre;
-                let (arrives, restants): (Vec<_>, Vec<_>) = std::mem::take(&mut self.transferts)
-                    .into_iter()
-                    .partition(|t| t.jour_arrivee <= self.jour);
-                self.transferts = restants;
-                for t in arrives {
-                    self.livrer(&t)?;
-                    out.push(Consequence::TransfertArrive(t));
+                // Jour par jour : arrivées des transferts, puis avancement des chantiers.
+                for _ in 0..*nombre {
+                    self.jour += 1;
+                    let (arrives, restants): (Vec<_>, Vec<_>) =
+                        std::mem::take(&mut self.transferts)
+                            .into_iter()
+                            .partition(|t| t.jour_arrivee <= self.jour);
+                    self.transferts = restants;
+                    for t in arrives {
+                        self.livrer(&t)?;
+                        out.push(Consequence::TransfertArrive(t));
+                    }
+                    out.extend(self.avancer_chantiers(r));
                 }
             }
+            Groupe { evenements, .. } => {
+                for e in evenements {
+                    out.extend(self.appliquer_sur_place(e, r)?);
+                }
+            }
+            BatimentCree { .. }
+            | BatimentModifie { .. }
+            | EtageAjoute { .. }
+            | EtageModifie { .. }
+            | SalleAjoutee { .. }
+            | SalleModifiee { .. }
+            | SalleRetiree { .. }
+            | ConstructionLancee { .. }
+            | SalleAchetee { .. }
+            | AmeliorationLancee { .. } => self.appliquer_batiment(ev, r)?,
             Note { .. } => {}
         }
         Ok(out)
