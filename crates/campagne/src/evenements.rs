@@ -163,6 +163,94 @@ pub enum Evenement {
         libelle: String,
         evenements: Vec<Evenement>,
     },
+    // ---- organisations, équipes, gestionnaires ----
+    OrganisationCreee {
+        id: IdOrganisation,
+        localite: IdLocalite,
+        nom: String,
+        classement: String,
+        notes: String,
+        modele: Option<String>,
+    },
+    OrganisationModifiee {
+        id: IdOrganisation,
+        nom: String,
+        classement: String,
+        notes: String,
+    },
+    /// Ajoute une équipe à une organisation, dans la localité de l'organisation.
+    EquipeAjoutee {
+        id: IdEquipe,
+        organisation: IdOrganisation,
+        reference: String,
+        nom: Option<String>,
+        lieu: Option<IdBatiment>,
+        deja_recrutee: bool,
+    },
+    EquipeModifiee {
+        id: IdEquipe,
+        nom: Option<String>,
+        ressources: Vec<domaine::Ressource>,
+        revenus_actifs: bool,
+    },
+    /// Change l'appartenance et/ou le lieu de travail d'une équipe (même localité).
+    EquipeAffectee {
+        id: IdEquipe,
+        organisation: IdOrganisation,
+        lieu: Option<IdBatiment>,
+    },
+    EquipeRetiree {
+        id: IdEquipe,
+    },
+    /// Lance le recrutement (facteur 1 à 4 : accélération en Influence, GC p. 95).
+    RecrutementLance {
+        equipe: IdEquipe,
+        facteur: u32,
+    },
+    /// Équipe acquise d'un coup : prix saisi (par défaut le prix imprimé), payeur au choix.
+    EquipeAchetee {
+        equipe: IdEquipe,
+        payeur: Option<Payeur>,
+        prix: Option<Montant>,
+    },
+    AmeliorationEquipeLancee {
+        equipe: IdEquipe,
+        vers: String,
+        facteur: u32,
+    },
+    /// Délocalisation (GC p. 95) : prix payé (la moitié du prix de recrutement selon le livre),
+    /// jours de préparation (1d6 par groupe, jet saisi) et de voyage (choisis par le joueur).
+    DelocalisationLancee {
+        equipe: IdEquipe,
+        vers: IdLocalite,
+        preparation: u32,
+        voyage: u32,
+        payeur: Payeur,
+        prix: Montant,
+    },
+    GestionnaireEmbauche {
+        id: IdGestionnaire,
+        reference: Option<String>,
+        nom: String,
+        salaire: Montant,
+        localite: IdLocalite,
+    },
+    GestionnaireModifie {
+        id: IdGestionnaire,
+        nom: String,
+        salaire: Montant,
+        localite: IdLocalite,
+        affectations: Vec<Affectation>,
+        actif: bool,
+    },
+    GestionnaireRenvoye {
+        id: IdGestionnaire,
+    },
+    /// Réglage du salaire d'un gestionnaire affecté à plusieurs établissements :
+    /// `false` = payé une fois par jour (défaut, PC-06), `true` = une fois par affectation.
+    ReglageSalaireGestionnaire {
+        par_affectation: bool,
+    },
     /// Réglage de la limite des dépenses (PC-14) : `false` = une limite par localité (défaut),
     /// `true` = une limite par PJ présent, additionnées. Journalisé pour que le changement
     /// ne s'applique qu'à partir de ce jour et reste annulable.

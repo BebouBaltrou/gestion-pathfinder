@@ -12,6 +12,8 @@ pub enum Page {
     TableauDeBord,
     Localites,
     Batiments,
+    Organisations,
+    Gestionnaires,
     Personnages,
     Historique,
     Referentiel,
@@ -21,10 +23,12 @@ pub enum Page {
 }
 
 impl Page {
-    const NAVIGATION: [(Page, &'static str, &'static str); 9] = [
+    const NAVIGATION: [(Page, &'static str, &'static str); 11] = [
         (Page::TableauDeBord, "🏠", "Tableau de bord"),
         (Page::Localites, "🏰", "Localités"),
         (Page::Batiments, "🏛", "Bâtiments"),
+        (Page::Organisations, "⚔", "Organisations"),
+        (Page::Gestionnaires, "🗝", "Gestionnaires"),
         (Page::Personnages, "👤", "Personnages"),
         (Page::Historique, "📜", "Historique"),
         (Page::Referentiel, "📖", "Référentiel"),
@@ -48,6 +52,8 @@ pub struct App {
     pub message: Option<(Message, f64)>,
     pub ui_localites: pages::localites::Etat,
     pub ui_batiments: pages::batiments::Etat,
+    pub ui_organisations: pages::organisations::Etat,
+    pub ui_gestionnaires: pages::gestionnaires::Etat,
     pub ui_personnages: pages::personnages::Etat,
     pub ui_referentiel: pages::referentiel::Etat,
     pub ui_campagnes: pages::campagnes::Etat,
@@ -76,6 +82,8 @@ impl App {
             message: None,
             ui_localites: Default::default(),
             ui_batiments: Default::default(),
+            ui_organisations: Default::default(),
+            ui_gestionnaires: Default::default(),
             ui_personnages: Default::default(),
             ui_referentiel: Default::default(),
             ui_campagnes: Default::default(),
@@ -169,6 +177,7 @@ impl App {
         match c.executer(ev, &self.r) {
             Ok(consequences) => {
                 let mut msg = succes.to_string();
+                let mut negatif = false;
                 let etat = c.etat(&self.r).clone();
                 for c in consequences {
                     match c {
@@ -183,9 +192,28 @@ impl App {
                         campagne::etat::Consequence::SalleTerminee { nom, batiment, .. } => {
                             msg.push_str(&format!(" — {nom} terminée ({batiment})"));
                         }
+                        campagne::etat::Consequence::EquipeRecrutee {
+                            nom, organisation, ..
+                        } => {
+                            msg.push_str(&format!(" — {nom} recrutée ({organisation})"));
+                        }
+                        campagne::etat::Consequence::EquipeArrivee { nom, localite, .. } => {
+                            msg.push_str(&format!(" — {nom} arrivée à {localite}"));
+                        }
+                        campagne::etat::Consequence::TresorerieNegative { localite } => {
+                            negatif = true;
+                            msg.push_str(&format!(
+                                " — ⚠ trésorerie de {localite} négative (salaires)"
+                            ));
+                        }
                     }
                 }
-                self.ok(msg);
+                if negatif {
+                    // affiché en rouge pour attirer l'attention (ce n'est pas un refus)
+                    self.erreur(msg);
+                } else {
+                    self.ok(msg);
+                }
                 self.enregistrer();
                 true
             }
@@ -401,6 +429,8 @@ impl eframe::App for App {
                         Page::TableauDeBord => pages::tableau::afficher(self, ui),
                         Page::Localites => pages::localites::afficher(self, ui),
                         Page::Batiments => pages::batiments::afficher(self, ui),
+                        Page::Organisations => pages::organisations::afficher(self, ui),
+                        Page::Gestionnaires => pages::gestionnaires::afficher(self, ui),
                         Page::Personnages => pages::personnages::afficher(self, ui),
                         Page::Historique => pages::historique::afficher(self, ui),
                         Page::Referentiel => pages::referentiel::afficher(self, ui),

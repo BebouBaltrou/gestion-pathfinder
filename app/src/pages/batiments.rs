@@ -36,7 +36,7 @@ pub struct Etat {
 
 /// Façon d'obtenir le bâtiment créé depuis un modèle.
 #[derive(Default, Clone, Copy, PartialEq, Eq)]
-enum Acquisition {
+pub(crate) enum Acquisition {
     /// Les salles restent « à construire » ; rien n'est lancé.
     #[default]
     Plan,
@@ -51,7 +51,7 @@ enum Acquisition {
 }
 
 impl Acquisition {
-    const TOUTES: [Acquisition; 5] = [
+    pub(crate) const TOUTES: [Acquisition; 5] = [
         Acquisition::Plan,
         Acquisition::Possede,
         Acquisition::Construire,
@@ -70,7 +70,7 @@ impl Acquisition {
 }
 
 /// Choix de qui paie : trésorerie de la localité ou compte d'un PJ.
-fn choix_payeur(
+pub(crate) fn choix_payeur(
     ui: &mut egui::Ui,
     id: &str,
     s: &mut Option<IdPersonnage>,
@@ -541,12 +541,43 @@ fn detail(
             etat.duree_restante_batiment(b, &r)
         ));
         ui.horizontal(|ui| {
-            ui.label("Recettes (bonus maximum par type) :");
+            ui.label("Recettes des salles (bonus maximum par type) :");
             ligne_bonus(
                 ui,
                 &etat.bonus_par_ressource(etat.salles_batiment(b.id), &r, pendant_amelioration),
             );
         });
+        let equipes: Vec<String> = etat
+            .equipes_batiment(b.id)
+            .map(|e| {
+                let o = etat
+                    .organisations
+                    .get(&e.organisation)
+                    .map(|o| o.nom.clone())
+                    .unwrap_or_default();
+                format!("{} ({o})", etat.nom_equipe(e, &r))
+            })
+            .collect();
+        widgets::texte_doux(
+            ui,
+            if equipes.is_empty() {
+                "Aucune équipe n'y travaille (page Organisations pour en affecter)".to_string()
+            } else {
+                format!("Équipes qui y travaillent : {}", equipes.join(", "))
+            },
+        );
+        let g: Vec<String> = etat
+            .gestionnaires_de(Affectation::Batiment(b.id))
+            .map(|g| g.nom.clone())
+            .collect();
+        widgets::texte_doux(
+            ui,
+            if g.is_empty() {
+                "Aucun gestionnaire".to_string()
+            } else {
+                format!("Gestionnaire(s) : {}", g.join(", "))
+            },
+        );
         let mut succ = b.etages_successifs;
         if ui
             .checkbox(&mut succ, "Étages construits l'un après l'autre")
@@ -975,17 +1006,22 @@ fn detail(
     action
 }
 
-fn choix_facteur(ui: &mut egui::Ui, id: &str, facteur: &mut u32) {
+pub(crate) fn choix_facteur(ui: &mut egui::Ui, id: &str, facteur: &mut u32) {
+    choix_facteur_capital(ui, id, facteur, "Travail");
+}
+
+/// Accélération ×1 à ×4 du capital indiqué (Travail : salles ; Influence : équipes).
+pub(crate) fn choix_facteur_capital(ui: &mut egui::Ui, id: &str, facteur: &mut u32, capital: &str) {
     egui::ComboBox::from_id_salt(id)
         .selected_text(if *facteur <= 1 {
             "aucune".to_string()
         } else {
-            format!("×{f} Travail, durée ÷{f}", f = *facteur)
+            format!("×{f} {capital}, durée ÷{f}", f = *facteur)
         })
         .show_ui(ui, |ui| {
             ui.selectable_value(facteur, 1, "aucune");
             for k in 2..=4 {
-                ui.selectable_value(facteur, k, format!("×{k} Travail, durée ÷{k}"));
+                ui.selectable_value(facteur, k, format!("×{k} {capital}, durée ÷{k}"));
             }
         })
         .response

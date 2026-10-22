@@ -44,6 +44,8 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
     widgets::titre_page(ui, "Paramètres", &format!("Campagne « {} »", c.nom));
     let mut change = false;
     let mut par_pj = c.etat(&app.r).limite_par_pj;
+    let par_affectation = c.etat(&app.r).salaire_par_affectation;
+    let mut nouveau_par_affectation: Option<bool> = None;
     let par_pj_avant = par_pj;
 
     widgets::titre_section(ui, "Règles");
@@ -78,13 +80,17 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
         "Une salle en travaux d'amélioration continue de produire ses recettes.",
         Statut::Personnalise,
     );
-    change |= option(
+    let mut salaire_unique = !par_affectation;
+    if option(
         ui,
-        &mut o.salaire_gestionnaire_unique,
+        &mut salaire_unique,
         "Salaire d'un gestionnaire compté une fois par jour",
-        "Un gestionnaire affecté à plusieurs établissements n'est payé qu'une fois (PC-06).",
+        "Un gestionnaire affecté à plusieurs établissements n'est payé qu'une fois (PC-06). \
+         Désactivé : il est payé une fois par affectation. S'applique à partir d'aujourd'hui (annulable).",
         Statut::Personnalise,
-    );
+    ) {
+        nouveau_par_affectation = Some(!salaire_unique);
+    }
     widgets::carte(ui, |ui| {
         ui.set_width(ui.available_width());
         ui.horizontal(|ui| {
@@ -198,6 +204,16 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
 
     if change {
         app.enregistrer();
+    }
+    if let Some(par_affectation) = nouveau_par_affectation {
+        app.executer(
+            campagne::evenements::Evenement::ReglageSalaireGestionnaire { par_affectation },
+            if par_affectation {
+                "Salaire des gestionnaires : une fois par affectation"
+            } else {
+                "Salaire des gestionnaires : une fois par jour"
+            },
+        );
     }
     if par_pj != par_pj_avant {
         let msg = if par_pj {

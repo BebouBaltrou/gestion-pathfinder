@@ -10,6 +10,7 @@ pub mod evenements;
 #[cfg(feature = "serde")]
 pub mod fichier;
 pub mod modele;
+pub mod organisation;
 
 use calendrier::Calendrier;
 use etat::{Consequence, Erreur, Etat};
@@ -164,6 +165,30 @@ impl Campagne {
             }),
         )
     }
+    pub fn nouvel_id_organisation(&self) -> IdOrganisation {
+        IdOrganisation(
+            1 + self.max_id(|e| match e {
+                Evenement::OrganisationCreee { id, .. } => Some(id.0),
+                _ => None,
+            }),
+        )
+    }
+    pub fn nouvel_id_equipe(&self) -> IdEquipe {
+        IdEquipe(
+            1 + self.max_id(|e| match e {
+                Evenement::EquipeAjoutee { id, .. } => Some(id.0),
+                _ => None,
+            }),
+        )
+    }
+    pub fn nouvel_id_gestionnaire(&self) -> IdGestionnaire {
+        IdGestionnaire(
+            1 + self.max_id(|e| match e {
+                Evenement::GestionnaireEmbauche { id, .. } => Some(id.0),
+                _ => None,
+            }),
+        )
+    }
     pub fn nouvel_id_transfert(&self) -> IdTransfert {
         IdTransfert(
             1 + self.max_id(|e| match e {
@@ -210,6 +235,25 @@ impl Campagne {
             Payeur::Localite(l) => format!("la trésorerie de {}", lo(l)),
             Payeur::Personnage(x) => format!("le compte de {}", pj(x)),
         };
+        let org = |id: &IdOrganisation| {
+            etat.organisations
+                .get(id)
+                .map(|o| o.nom.clone())
+                .unwrap_or(id.to_string())
+        };
+        let eq = |id: &IdEquipe| {
+            etat.equipes
+                .get(id)
+                .map(|e| etat.nom_equipe(e, r))
+                .unwrap_or(id.to_string())
+        };
+        let ges = |id: &IdGestionnaire| {
+            etat.gestionnaires
+                .get(id)
+                .map(|g| g.nom.clone())
+                .unwrap_or(id.to_string())
+        };
+        let ref_equipe = |id: &String| r.equipe(id).map(|u| u.nom.clone()).unwrap_or(id.clone());
         let ref_salle = |id: &String| r.salle(id).map(|u| u.nom.clone()).unwrap_or(id.clone());
         use Evenement::*;
         match e {
@@ -380,6 +424,89 @@ impl Campagne {
                 libelle,
                 evenements,
             } => format!("{libelle} ({} opérations)", evenements.len()),
+            OrganisationCreee { nom, localite, .. } => {
+                format!("Création de l'organisation {nom} ({})", lo(localite))
+            }
+            OrganisationModifiee { nom, .. } => format!("Modification de l'organisation {nom}"),
+            EquipeAjoutee {
+                organisation,
+                reference,
+                deja_recrutee,
+                ..
+            } => format!(
+                "Équipe {} ajoutée à {}{}",
+                ref_equipe(reference),
+                org(organisation),
+                if *deja_recrutee { " (déjà recrutée)" } else { "" }
+            ),
+            EquipeModifiee { id, .. } => format!("Équipe {} modifiée", eq(id)),
+            EquipeAffectee {
+                id,
+                organisation,
+                lieu,
+            } => format!(
+                "{} : membre de {}, travaille {}",
+                eq(id),
+                org(organisation),
+                match lieu {
+                    Some(b) => format!("à {}", bat(b)),
+                    None => "sans bâtiment".to_string(),
+                }
+            ),
+            EquipeRetiree { id } => format!("Équipe {} retirée", eq(id)),
+            RecrutementLance { equipe, facteur } => {
+                let acc = if *facteur > 1 {
+                    format!(" (accélération ×{facteur})")
+                } else {
+                    String::new()
+                };
+                format!("Recrutement de {} lancé{acc}", eq(equipe))
+            }
+            EquipeAchetee {
+                equipe,
+                payeur,
+                prix,
+            } => {
+                let p = prix.map(|m| format!(" pour {m}")).unwrap_or_default();
+                let q = payeur
+                    .map(|x| format!(", payée par {}", qui(&x)))
+                    .unwrap_or_default();
+                format!("{} acquise d'un coup{p}{q}", eq(equipe))
+            }
+            AmeliorationEquipeLancee { equipe, vers, .. } => {
+                format!("Amélioration de {} en {} lancée", eq(equipe), ref_equipe(vers))
+            }
+            DelocalisationLancee {
+                equipe,
+                vers,
+                preparation,
+                voyage,
+                payeur,
+                prix,
+            } => format!(
+                "Délocalisation de {} vers {} ({preparation} j de préparation, {voyage} j de voyage, {prix} payés par {})",
+                eq(equipe),
+                lo(vers),
+                qui(payeur)
+            ),
+            GestionnaireEmbauche {
+                nom,
+                salaire,
+                localite,
+                ..
+            } => format!(
+                "Embauche du gestionnaire {nom} ({salaire}/jour, payé par {})",
+                lo(localite)
+            ),
+            GestionnaireModifie { nom, .. } => format!("Gestionnaire {nom} modifié"),
+            GestionnaireRenvoye { id } => format!("Gestionnaire {} renvoyé", ges(id)),
+            ReglageSalaireGestionnaire { par_affectation } => {
+                if *par_affectation {
+                    "Salaire des gestionnaires : une fois par affectation".to_string()
+                } else {
+                    "Salaire des gestionnaires : une fois par jour".to_string()
+                }
+            }
             ReglageLimiteDepense { par_pj } => {
                 if *par_pj {
                     "Limite des dépenses : une par PJ présent".to_string()

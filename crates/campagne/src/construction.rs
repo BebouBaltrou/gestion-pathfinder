@@ -4,7 +4,8 @@
 //!   écoulée (GC p. 85, « Construction de bâtiments »).
 //! - Chaque jour, les capitaux sont puisés dans les réserves de la localité, dans la limite
 //!   des dépenses quotidiennes (GC p. 81), Magie comprise (PC-01). La limite est appliquée à la
-//!   localité entière (point à confirmer PC-14 : le livre la formule par personnage).
+//!   localité entière par défaut, ou par PJ présent en option (PC-14). Les recrutements
+//!   d'équipes de la localité partagent cette limite et ces réserves.
 //! - Étage en mode séquentiel : une seule salle en travaux avance à la fois (option
 //!   personnalisée). Étages successifs : un étage n'avance que si les étages inférieurs n'ont
 //!   plus de travaux en cours (option personnalisée).
@@ -33,23 +34,25 @@ pub fn ressources_admises(
 }
 
 /// Coche par défaut : toutes les ressources d'une liste explicite, rien sinon.
-fn ressources_par_defaut(u: &Unite) -> Vec<Ressource> {
+pub(crate) fn ressources_par_defaut(u: &Unite) -> Vec<Ressource> {
     match u.recettes.as_ref().map(|r| &r.admissibles) {
         Some(Admissibles::Liste { ressources }) => ressources.clone(),
         _ => Vec::new(),
     }
 }
 
-/// Durée et coût d'un chantier avec accélération : durée ÷ k, Travail × k (GC p. 95 ; arrondi PC-10).
-fn chantier(
+/// Durée et coût d'un chantier avec accélération : durée ÷ k, capital accéléré × k (Travail
+/// pour une salle, Influence pour une équipe ; GC p. 95 ; arrondi PC-10).
+pub(crate) fn chantier_accelere(
     nature: NatureChantier,
     cout: CoutCapitaux,
     duree: u32,
     facteur: u32,
     jour: u32,
+    accelere: TypeCapital,
 ) -> Chantier {
     let mut c = cout;
-    c.travail *= facteur;
+    *c.get_mut(accelere) *= facteur;
     Chantier {
         nature,
         cout: c,
@@ -59,6 +62,18 @@ fn chantier(
         facteur,
         jour_debut: jour,
     }
+}
+
+/// Dépense d'un jour sur un chantier (dans la limite du budget et des réserves), puis +1 jour.
+pub(crate) fn depenser_un_jour(ch: &mut Chantier, stock: &mut CoutCapitaux, budget: &mut u32) {
+    let reste = ch.reste();
+    for c in TypeCapital::TOUS {
+        let n = reste.get(c).min(stock.get(c)).min(*budget);
+        *ch.depense.get_mut(c) += n;
+        *stock.get_mut(c) -= n;
+        *budget -= n;
+    }
+    ch.jours_ecoules += 1;
 }
 
 impl Etat {
@@ -112,7 +127,7 @@ impl Etat {
             .collect()
     }
 
-    fn pj_present(&self, l: IdLocalite) -> bool {
+    pub(crate) fn pj_present(&self, l: IdLocalite) -> bool {
         self.personnages.values().any(|p| p.localite == Some(l))
     }
 
@@ -307,12 +322,13 @@ impl Etat {
                     return Err(Erreur::SansCoutFixe(nom));
                 };
                 let jour = self.jour;
-                self.salle_mut(*salle)?.statut = StatutSalle::EnTravaux(chantier(
+                self.salle_mut(*salle)?.statut = StatutSalle::EnTravaux(chantier_accelere(
                     NatureChantier::Construction,
                     cout,
                     duree,
                     *facteur,
                     jour,
+                    TypeCapital::Travail,
                 ));
             }
             SalleAchetee {
@@ -380,12 +396,13 @@ impl Etat {
                 let diff = regles::calculs::cout_amelioration(de, cible)
                     .map_err(|_| Erreur::SansCoutFixe(nom))?;
                 let jour = self.jour;
-                self.salle_mut(*salle)?.statut = StatutSalle::EnTravaux(chantier(
+                self.salle_mut(*salle)?.statut = StatutSalle::EnTravaux(chantier_accelere(
                     NatureChantier::Amelioration { vers: vers.clone() },
                     diff.capitaux,
                     diff.duree_jours,
                     *facteur,
                     jour,
+                    TypeCapital::Travail,
                 ));
             }
             _ => unreachable!("événement non lié aux bâtiments"),
@@ -434,14 +451,7 @@ impl Etat {
                 let StatutSalle::EnTravaux(ch) = &mut salle.statut else {
                     continue;
                 };
-                let reste = ch.reste();
-                for c in TypeCapital::TOUS {
-                    let n = reste.get(c).min(stock.get(c)).min(budget);
-                    *ch.depense.get_mut(c) += n;
-                    *stock.get_mut(c) -= n;
-                    budget -= n;
-                }
-                ch.jours_ecoules += 1;
+                depenser_un_jour(ch, &mut stock, &mut budget);
                 let termine = ch.termine();
                 let nature = ch.nature.clone();
                 self.localites.get_mut(&l).expect("localité").capitaux = stock;
@@ -468,6 +478,8 @@ impl Etat {
                     });
                 }
             }
+            // Recrutements des équipes de la localité : même réserve, même limite quotidienne.
+            out.extend(self.avancer_recrutements(l, &mut budget, r));
         }
         out
     }

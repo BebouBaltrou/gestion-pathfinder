@@ -78,7 +78,19 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
                     ui.horizontal(|ui| {
                         ui.label("Trésorerie :");
                         widgets::montant(ui, l.tresorerie, 17.0);
+                        let salaires = etat.salaires_localite(l.id);
+                        if salaires.pa > 0 {
+                            widgets::texte_doux(ui, format!("(salaires : −{salaires}/jour)"));
+                        }
                     });
+                    let n_bat = etat.batiments_localite(l.id).count();
+                    let n_org = etat.organisations_localite(l.id).count();
+                    if n_bat + n_org > 0 {
+                        widgets::texte_doux(
+                            ui,
+                            format!("{n_bat} bâtiment(s) · {n_org} organisation(s)"),
+                        );
+                    }
                     widgets::capitaux(ui, &l.capitaux, false);
                     let en_route: Vec<_> = etat.en_route_vers(l.id).collect();
                     for t in en_route {

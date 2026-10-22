@@ -218,3 +218,95 @@ pub struct Batiment {
     /// Modèle du référentiel d'origine, s'il y en a un.
     pub modele: Option<String>,
 }
+
+// ------------------------------------------------------------------ organisations
+
+identifiant!(IdOrganisation, "O-");
+identifiant!(IdEquipe, "Q-");
+identifiant!(IdGestionnaire, "G-");
+
+/// Organisation : un ensemble d'équipes d'employés (GC p. 92-93). L'appartenance d'une équipe
+/// (son organisation) est distincte de son lieu de travail (un bâtiment, ou aucun).
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub struct Organisation {
+    pub id: IdOrganisation,
+    /// Communauté de rattachement (siège) ; les équipes peuvent être délocalisées ailleurs.
+    pub localite: IdLocalite,
+    pub nom: String,
+    pub classement: String,
+    pub notes: String,
+    pub modele: Option<String>,
+}
+
+/// Délocalisation d'une équipe (GC p. 95 « Délocaliser une organisation ») : préparation
+/// (1d6 jours par groupe, moitié des avantages), puis voyage (aucun avantage).
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub struct Delocalisation {
+    pub vers: IdLocalite,
+    pub preparation: u32,
+    pub voyage: u32,
+    pub jours_ecoules: u32,
+}
+
+impl Delocalisation {
+    pub fn en_voyage(&self) -> bool {
+        self.jours_ecoules >= self.preparation
+    }
+    pub fn jours_restants(&self) -> u32 {
+        (self.preparation + self.voyage).saturating_sub(self.jours_ecoules)
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub enum StatutEquipe {
+    ARecruter,
+    /// Recrutement ou amélioration en cours (même mécanique que les chantiers des salles).
+    EnRecrutement(Chantier),
+    Recrutee,
+    EnDelocalisation(Delocalisation),
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub struct Equipe {
+    pub id: IdEquipe,
+    /// Appartenance.
+    pub organisation: IdOrganisation,
+    /// Équipe du référentiel.
+    pub reference: String,
+    pub nom: Option<String>,
+    /// Communauté où l'équipe se trouve.
+    pub localite: IdLocalite,
+    /// Lieu de travail : un bâtiment de la même communauté, ou aucun (recettes ÷ 2, GC p. 94).
+    pub lieu: Option<IdBatiment>,
+    pub statut: StatutEquipe,
+    pub ressources: Vec<domaine::Ressource>,
+    pub revenus_actifs: bool,
+}
+
+/// Ce dont un gestionnaire s'occupe.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub enum Affectation {
+    Batiment(IdBatiment),
+    Organisation(IdOrganisation),
+}
+
+/// Gestionnaire employé (GC p. 89) : payé chaque jour en po par la trésorerie de sa localité.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub struct GestionnaireEmploye {
+    pub id: IdGestionnaire,
+    /// Exemple du référentiel dont il est tiré, le cas échéant.
+    pub reference: Option<String>,
+    pub nom: String,
+    pub salaire: Montant,
+    /// Localité dont la trésorerie paie le salaire.
+    pub localite: IdLocalite,
+    pub affectations: Vec<Affectation>,
+    /// Inactif : n'est plus payé (congé, en attente).
+    pub actif: bool,
+}

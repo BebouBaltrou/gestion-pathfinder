@@ -12,8 +12,8 @@ pub struct OptionsRegles {
     pub construction_parallele_autorisee: bool,
     /// Personnalisé : une salle en travaux d'amélioration continue de produire.
     pub production_pendant_amelioration: bool,
-    /// Personnalisé : le salaire d'un gestionnaire affecté à plusieurs établissements
-    /// n'est compté qu'une fois par jour (PC-06).
+    /// Obsolète, conservé pour relire les anciennes sauvegardes : ce réglage est désormais
+    /// journalisé (événement `ReglageSalaireGestionnaire` de la campagne, PC-06).
     pub salaire_gestionnaire_unique: bool,
     /// Officiel (GC p. 94) : une équipe sans bâtiment pour travailler voit ses recettes divisées
     /// par 2. Désactivé = personnalisé, l'équipe garde son bonus entier.

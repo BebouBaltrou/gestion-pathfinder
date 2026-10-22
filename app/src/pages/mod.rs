@@ -1,7 +1,9 @@
 pub mod batiments;
 pub mod campagnes;
+pub mod gestionnaires;
 pub mod historique;
 pub mod localites;
+pub mod organisations;
 pub mod parametres;
 pub mod personnages;
 pub mod points;

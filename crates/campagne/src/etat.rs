@@ -51,6 +51,17 @@ pub enum Erreur {
     },
     FacteurInvalide(u32),
     EtageNonVide(String),
+    OrganisationInconnue(IdOrganisation),
+    EquipeInconnue(IdEquipe),
+    GestionnaireInconnu(IdGestionnaire),
+    EquipeReferentielInconnue(String),
+    /// Le lieu de travail doit se trouver dans la localité de l'équipe.
+    LieuHorsLocalite {
+        equipe: String,
+        batiment: String,
+    },
+    OrganisationNonVide(String),
+    DelocalisationVersElleMeme,
 }
 
 impl std::fmt::Display for Erreur {
@@ -122,6 +133,20 @@ impl std::fmt::Display for Erreur {
             }
             Erreur::FacteurInvalide(k) => write!(f, "accélération invalide (×{k}) : 1, 2, 3 ou 4"),
             Erreur::EtageNonVide(e) => write!(f, "l'étage {e} contient des salles"),
+            Erreur::OrganisationInconnue(id) => write!(f, "organisation inconnue ({id})"),
+            Erreur::EquipeInconnue(id) => write!(f, "équipe inconnue ({id})"),
+            Erreur::GestionnaireInconnu(id) => write!(f, "gestionnaire inconnu ({id})"),
+            Erreur::EquipeReferentielInconnue(id) => {
+                write!(f, "équipe absente du référentiel ({id})")
+            }
+            Erreur::LieuHorsLocalite { equipe, batiment } => write!(
+                f,
+                "{batiment} ne se trouve pas dans la localité de {equipe} : délocalisez d'abord l'équipe"
+            ),
+            Erreur::OrganisationNonVide(o) => write!(f, "l'organisation {o} contient encore des équipes"),
+            Erreur::DelocalisationVersElleMeme => {
+                f.write_str("l'équipe se trouve déjà dans cette localité")
+            }
         }
     }
 }
@@ -136,6 +161,11 @@ pub struct Etat {
     pub batiments: BTreeMap<IdBatiment, Batiment>,
     /// Salles de tous les bâtiments ; l'ordre des id donne l'ordre dans l'étage.
     pub salles: BTreeMap<IdSalle, SalleBatie>,
+    pub organisations: BTreeMap<IdOrganisation, Organisation>,
+    pub equipes: BTreeMap<IdEquipe, Equipe>,
+    pub gestionnaires: BTreeMap<IdGestionnaire, GestionnaireEmploye>,
+    /// Salaire d'un gestionnaire versé une fois par affectation (réglage ; défaut : une fois par jour).
+    pub salaire_par_affectation: bool,
     /// Limite des dépenses par PJ présent plutôt que par localité (PC-14, option).
     pub limite_par_pj: bool,
 }
@@ -148,6 +178,20 @@ pub enum Consequence {
         salle: IdSalle,
         nom: String,
         batiment: String,
+    },
+    EquipeRecrutee {
+        equipe: IdEquipe,
+        nom: String,
+        organisation: String,
+    },
+    EquipeArrivee {
+        equipe: IdEquipe,
+        nom: String,
+        localite: String,
+    },
+    /// La trésorerie d'une localité vient de passer sous zéro (salaires).
+    TresorerieNegative {
+        localite: String,
     },
 }
 
@@ -472,6 +516,8 @@ impl Etat {
                         out.push(Consequence::TransfertArrive(t));
                     }
                     out.extend(self.avancer_chantiers(r));
+                    out.extend(self.avancer_delocalisations(r));
+                    out.extend(self.payer_salaires());
                 }
             }
             Groupe { evenements, .. } => {
@@ -511,6 +557,22 @@ impl Etat {
                 l.capitaux = l.capitaux + *capitaux;
             }
             ReglageLimiteDepense { par_pj } => self.limite_par_pj = *par_pj,
+            ReglageSalaireGestionnaire { par_affectation } => {
+                self.salaire_par_affectation = *par_affectation
+            }
+            OrganisationCreee { .. }
+            | OrganisationModifiee { .. }
+            | EquipeAjoutee { .. }
+            | EquipeModifiee { .. }
+            | EquipeAffectee { .. }
+            | EquipeRetiree { .. }
+            | RecrutementLance { .. }
+            | EquipeAchetee { .. }
+            | AmeliorationEquipeLancee { .. }
+            | DelocalisationLancee { .. }
+            | GestionnaireEmbauche { .. }
+            | GestionnaireModifie { .. }
+            | GestionnaireRenvoye { .. } => self.appliquer_organisation(ev, r)?,
             Note { .. } => {}
         }
         Ok(out)
