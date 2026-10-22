@@ -522,7 +522,14 @@ fn detail(
         });
         widgets::texte_doux(
             ui,
-            format!("📍 {localite} — limite des dépenses : {limite} unités/jour (PC-14)"),
+            format!(
+                "📍 {localite} — limite des dépenses : {limite} unités/jour ({})",
+                if etat.limite_par_pj {
+                    "par PJ présent, additionnées"
+                } else {
+                    "une par localité"
+                }
+            ),
         );
         let reste = etat.cout_restant(etat.salles_batiment(b.id), &r);
         ui.horizontal(|ui| {

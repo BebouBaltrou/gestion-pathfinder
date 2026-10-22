@@ -839,6 +839,43 @@ mod tests {
     }
 
     #[test]
+    fn limite_par_pj_option() {
+        // Lieu-dit : 2 unités par jour et par personnage
+        let mut m = monde("lieu-dit");
+        let l = m.l;
+        let id2 = m.c.nouvel_id_personnage();
+        m.ev(Evenement::PersonnageCree {
+            id: id2,
+            nom: "Seconde".into(),
+            compte_initial: Montant::ZERO,
+            prestige: None,
+        })
+        .unwrap();
+        m.ev(Evenement::PersonnageDeplace {
+            id: id2,
+            vers: Some(l),
+        })
+        .unwrap();
+        assert_eq!(m.c.etat(&m.r).limite_depense(l, &m.r), Some(2));
+        m.ev(Evenement::ReglageLimiteDepense { par_pj: true })
+            .unwrap();
+        assert_eq!(m.c.etat(&m.r).limite_depense(l, &m.r), Some(4));
+        let bar = m.ajouter("bar");
+        m.ev(Evenement::ConstructionLancee {
+            salle: bar,
+            facteur: 1,
+        })
+        .unwrap();
+        m.ev(Evenement::JoursAvances { nombre: 1 }).unwrap();
+        assert_eq!(m.chantier(bar).depense.unites(), 4);
+        // annuler le réglage revient à la limite par localité
+        for _ in 0..4 {
+            m.c.annuler(); // jours, lancement, salle, réglage
+        }
+        assert_eq!(m.c.etat(&m.r).limite_depense(l, &m.r), Some(2));
+    }
+
+    #[test]
     fn achats_payes_par_le_pj() {
         let mut m = monde("petite-bourgade");
         let (pj, l) = (m.pj, m.l);

@@ -123,7 +123,9 @@ points = [
     pc("PC-14", "Limite des dépenses : le livre la fixe pour ce que « votre personnage peut dépenser chaque jour dans une communauté » ; "
        "avec plusieurs PJ dans la même localité, chacun a-t-il sa propre limite ?",
        src(81, "Limites des dépenses"),
-       "Une seule limite par localité et par jour, tous chantiers confondus (cahier des charges).", "Ouvert"),
+       "Une seule limite par localité et par jour, tous chantiers confondus, par défaut ; option « une limite par PJ présent » "
+       "dans les paramètres (limites additionnées).", V,
+       "Validé le 22/10/2026"),
 ]
 
 out = {

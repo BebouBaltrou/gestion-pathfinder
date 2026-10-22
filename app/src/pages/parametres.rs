@@ -43,6 +43,8 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
     };
     widgets::titre_page(ui, "Paramètres", &format!("Campagne « {} »", c.nom));
     let mut change = false;
+    let mut par_pj = c.etat(&app.r).limite_par_pj;
+    let par_pj_avant = par_pj;
 
     widgets::titre_section(ui, "Règles");
     let o = &mut c.options;
@@ -83,6 +85,31 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
         "Un gestionnaire affecté à plusieurs établissements n'est payé qu'une fois (PC-06).",
         Statut::Personnalise,
     );
+    widgets::carte(ui, |ui| {
+        ui.set_width(ui.available_width());
+        ui.horizontal(|ui| {
+            ui.checkbox(
+                &mut par_pj,
+                RichText::new("Limite des dépenses : une par PJ présent").strong(),
+            );
+            widgets::badge_statut(
+                ui,
+                if par_pj {
+                    Statut::Officiel
+                } else {
+                    Statut::Personnalise
+                },
+            );
+            widgets::badge(ui, "PC-14", theme::VERT);
+        });
+        widgets::texte_doux(
+            ui,
+            "Désactivé (par défaut) : une seule limite par localité et par jour, tous chantiers confondus. \
+             Activé : lecture du livre (« ce que votre personnage peut dépenser », GC p. 81), chaque PJ présent \
+             ajoute sa limite ; sans PJ présent, une limite reste disponible pour les chantiers en cours. \
+             Le changement s'applique à partir d'aujourd'hui et peut être annulé (Ctrl+Z).",
+        );
+    });
     widgets::carte(ui, |ui| {
         ui.set_width(ui.available_width());
         change |= ui
@@ -171,5 +198,16 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
 
     if change {
         app.enregistrer();
+    }
+    if par_pj != par_pj_avant {
+        let msg = if par_pj {
+            "Limite des dépenses : une par PJ présent"
+        } else {
+            "Limite des dépenses : une par localité"
+        };
+        app.executer(
+            campagne::evenements::Evenement::ReglageLimiteDepense { par_pj },
+            msg,
+        );
     }
 }

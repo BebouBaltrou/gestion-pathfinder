@@ -136,6 +136,8 @@ pub struct Etat {
     pub batiments: BTreeMap<IdBatiment, Batiment>,
     /// Salles de tous les bâtiments ; l'ordre des id donne l'ordre dans l'étage.
     pub salles: BTreeMap<IdSalle, SalleBatie>,
+    /// Limite des dépenses par PJ présent plutôt que par localité (PC-14, option).
+    pub limite_par_pj: bool,
 }
 
 /// Effet notable d'un événement, pour l'historique (ex. arrivée d'un transfert).
@@ -508,6 +510,7 @@ impl Etat {
                 let l = self.localite_mut(*localite)?;
                 l.capitaux = l.capitaux + *capitaux;
             }
+            ReglageLimiteDepense { par_pj } => self.limite_par_pj = *par_pj,
             Note { .. } => {}
         }
         Ok(out)
@@ -523,7 +526,28 @@ impl Etat {
     }
 
     /// Limite de dépense quotidienne de la localité (GC p. 81), officielle ou personnalisée.
+    /// Limite quotidienne des dépenses de la localité (GC p. 81). Par défaut une seule limite
+    /// par localité ; avec l'option « par PJ », la limite est multipliée par le nombre de PJ
+    /// présents (au moins 1, pour que les chantiers continuent en leur absence).
     pub fn limite_depense(&self, id: IdLocalite, r: &regles::Referentiel) -> Option<u32> {
+        let base = self.limite_depense_base(id, r)?;
+        Some(if self.limite_par_pj {
+            base * self.pj_presents(id).max(1)
+        } else {
+            base
+        })
+    }
+
+    /// Nombre de PJ présents dans la localité.
+    pub fn pj_presents(&self, id: IdLocalite) -> u32 {
+        self.personnages
+            .values()
+            .filter(|p| p.localite == Some(id))
+            .count() as u32
+    }
+
+    /// Limite imprimée (ou personnalisée) de la catégorie de la localité, pour un personnage.
+    pub fn limite_depense_base(&self, id: IdLocalite, r: &regles::Referentiel) -> Option<u32> {
         match &self.localites.get(&id)?.categorie {
             CategorieLocalite::Officielle { id } => r.communaute(id).map(|c| c.limite_depense_jour),
             CategorieLocalite::Personnalisee {

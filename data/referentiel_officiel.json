@@ -8606,9 +8606,9 @@
     "page": 81,
     "section": "Limites des dépenses"
    },
-   "lecture_appliquee": "Une seule limite par localité et par jour, tous chantiers confondus (cahier des charges).",
-   "statut": "Ouvert",
-   "decision": null
+   "lecture_appliquee": "Une seule limite par localité et par jour, tous chantiers confondus, par défaut ; option « une limite par PJ présent » dans les paramètres (limites additionnées).",
+   "statut": "Valide",
+   "decision": "Validé le 22/10/2026"
   }
  ]
 }

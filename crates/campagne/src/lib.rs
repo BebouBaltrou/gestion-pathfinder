@@ -380,6 +380,13 @@ impl Campagne {
                 libelle,
                 evenements,
             } => format!("{libelle} ({} opérations)", evenements.len()),
+            ReglageLimiteDepense { par_pj } => {
+                if *par_pj {
+                    "Limite des dépenses : une par PJ présent".to_string()
+                } else {
+                    "Limite des dépenses : une par localité".to_string()
+                }
+            }
             Note { texte } => format!("Note : {texte}"),
         }
     }

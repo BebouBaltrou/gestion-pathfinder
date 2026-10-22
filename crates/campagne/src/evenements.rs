@@ -163,6 +163,12 @@ pub enum Evenement {
         libelle: String,
         evenements: Vec<Evenement>,
     },
+    /// Réglage de la limite des dépenses (PC-14) : `false` = une limite par localité (défaut),
+    /// `true` = une limite par PJ présent, additionnées. Journalisé pour que le changement
+    /// ne s'applique qu'à partir de ce jour et reste annulable.
+    ReglageLimiteDepense {
+        par_pj: bool,
+    },
     Note {
         texte: String,
     },
