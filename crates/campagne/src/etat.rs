@@ -165,11 +165,40 @@ impl Etat {
     pub fn localite(&self, id: IdLocalite) -> Result<&Localite, Erreur> {
         self.localites.get(&id).ok_or(Erreur::LocaliteInconnue(id))
     }
-    fn pj_mut(&mut self, id: IdPersonnage) -> Result<&mut Personnage, Erreur> {
+    pub(crate) fn pj_mut(&mut self, id: IdPersonnage) -> Result<&mut Personnage, Erreur> {
         self.personnages
             .get_mut(&id)
             .ok_or(Erreur::PersonnageInconnu(id))
     }
+    /// Retire des po d'une trésorerie ou d'un compte de PJ ; refusé si le solde ne suffit pas.
+    pub(crate) fn debiter(&mut self, payeur: Payeur, montant: Montant) -> Result<(), Erreur> {
+        match payeur {
+            Payeur::Localite(id) => {
+                let l = self.localite_mut(id)?;
+                if l.tresorerie < montant {
+                    return Err(Erreur::TresorerieInsuffisante {
+                        localite: l.nom.clone(),
+                        disponible: l.tresorerie,
+                        demande: montant,
+                    });
+                }
+                l.tresorerie = l.tresorerie - montant;
+            }
+            Payeur::Personnage(id) => {
+                let p = self.pj_mut(id)?;
+                if p.compte < montant {
+                    return Err(Erreur::CompteInsuffisant {
+                        pj: p.nom.clone(),
+                        disponible: p.compte,
+                        demande: montant,
+                    });
+                }
+                p.compte = p.compte - montant;
+            }
+        }
+        Ok(())
+    }
+
     pub(crate) fn localite_mut(&mut self, id: IdLocalite) -> Result<&mut Localite, Erreur> {
         self.localites
             .get_mut(&id)
@@ -458,6 +487,27 @@ impl Etat {
             | ConstructionLancee { .. }
             | SalleAchetee { .. }
             | AmeliorationLancee { .. } => self.appliquer_batiment(ev, r)?,
+            Paiement {
+                payeur, montant, ..
+            } => {
+                if montant.pa <= 0 {
+                    return Err(Erreur::MontantNonPositif);
+                }
+                self.debiter(*payeur, *montant)?;
+            }
+            CapitauxAchetes {
+                localite,
+                payeur,
+                capitaux,
+            } => {
+                if capitaux.unites() == 0 {
+                    return Err(Erreur::MontantNonPositif);
+                }
+                let prix = Montant::po(regles::calculs::valeur_achat(r, capitaux) as i64);
+                self.debiter(*payeur, prix)?;
+                let l = self.localite_mut(*localite)?;
+                l.capitaux = l.capitaux + *capitaux;
+            }
             Note { .. } => {}
         }
         Ok(out)

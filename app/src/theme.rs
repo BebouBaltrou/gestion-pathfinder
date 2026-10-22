@@ -5,11 +5,11 @@ use eframe::egui::{self, Color32, FontFamily, FontId, Stroke, TextStyle};
 pub const OR: Color32 = Color32::from_rgb(214, 170, 92);
 pub const OR_PALE: Color32 = Color32::from_rgb(236, 214, 168);
 pub const TEXTE: Color32 = Color32::from_rgb(228, 222, 210);
-pub const TEXTE_DOUX: Color32 = Color32::from_rgb(160, 152, 138);
+pub const TEXTE_DOUX: Color32 = Color32::from_rgb(194, 186, 170);
 pub const FOND: Color32 = Color32::from_rgb(24, 22, 20);
 pub const PANNEAU: Color32 = Color32::from_rgb(32, 29, 26);
 pub const CARTE: Color32 = Color32::from_rgb(42, 38, 34);
-pub const BORDURE: Color32 = Color32::from_rgb(70, 62, 52);
+pub const BORDURE: Color32 = Color32::from_rgb(92, 82, 68);
 pub const ROUGE: Color32 = Color32::from_rgb(226, 92, 80);
 pub const VERT: Color32 = Color32::from_rgb(126, 190, 120);
 pub const BLEU: Color32 = Color32::from_rgb(120, 170, 220);
@@ -45,6 +45,15 @@ pub fn appliquer(ctx: &egui::Context) {
     v.widgets.hovered.bg_stroke = Stroke::new(1.0_f32, OR);
     v.widgets.active.weak_bg_fill = Color32::from_rgb(96, 78, 50);
     v.widgets.active.bg_fill = Color32::from_rgb(96, 78, 50);
+    // contours visibles pour les cases, champs et listes ; texte clair partout
+    let contour = Stroke::new(1.0_f32, Color32::from_rgb(128, 114, 92));
+    v.widgets.inactive.bg_stroke = contour;
+    v.widgets.inactive.fg_stroke = Stroke::new(1.5_f32, TEXTE);
+    v.widgets.noninteractive.fg_stroke = Stroke::new(1.0_f32, TEXTE);
+    v.widgets.hovered.fg_stroke = Stroke::new(1.5_f32, OR_PALE);
+    v.widgets.active.fg_stroke = Stroke::new(1.5_f32, OR_PALE);
+    v.widgets.open.fg_stroke = Stroke::new(1.5_f32, OR_PALE);
+    v.disabled_alpha = 0.7;
     ctx.set_visuals(v);
 
     ctx.style_mut(|s| {

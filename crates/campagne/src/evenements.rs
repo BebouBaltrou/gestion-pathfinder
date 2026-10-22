@@ -131,9 +131,27 @@ pub enum Evenement {
         salle: IdSalle,
         facteur: u32,
     },
-    /// Achète la salle terminée au prix imprimé, payé par la trésorerie de la localité.
+    /// Achète la salle terminée. `prix` : prix saisi (par défaut le prix imprimé) ;
+    /// `payeur` : par défaut la trésorerie de la localité du bâtiment.
     SalleAchetee {
         salle: IdSalle,
+        #[cfg_attr(feature = "serde", serde(default))]
+        payeur: Option<Payeur>,
+        #[cfg_attr(feature = "serde", serde(default))]
+        prix: Option<Montant>,
+    },
+    /// Paiement en po (ex. bâtiment acheté directement, prix saisi par le joueur).
+    Paiement {
+        payeur: Payeur,
+        montant: Montant,
+        motif: String,
+    },
+    /// Achat de capitaux à leur valeur d'achat (Table 2-1, GC p. 78), versés dans les
+    /// réserves de la localité.
+    CapitauxAchetes {
+        localite: IdLocalite,
+        payeur: Payeur,
+        capitaux: CoutCapitaux,
     },
     AmeliorationLancee {
         salle: IdSalle,

@@ -63,7 +63,7 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
     ui.horizontal_wrapped(|ui| {
         for l in etat.localites.values() {
             widgets::carte(ui, |ui| {
-                ui.set_width(300.0);
+                ui.set_width(480.0);
                 ui.vertical(|ui| {
                     ui.horizontal(|ui| {
                         ui.label(

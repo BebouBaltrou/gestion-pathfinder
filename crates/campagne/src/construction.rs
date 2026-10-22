@@ -315,7 +315,11 @@ impl Etat {
                     jour,
                 ));
             }
-            SalleAchetee { salle } => {
+            SalleAchetee {
+                salle,
+                payeur,
+                prix,
+            } => {
                 let s = self.salle(*salle)?.clone();
                 let nom = self.nom_salle(&s, r);
                 if s.statut != StatutSalle::AConstruire {
@@ -327,17 +331,18 @@ impl Etat {
                 let u = r
                     .salle(&s.reference)
                     .ok_or_else(|| Erreur::SalleReferentielInconnue(s.reference.clone()))?;
-                let prix = Montant::po(u.prix_po.ok_or(Erreur::SansCoutFixe(nom))? as i64);
-                let loc = self.batiment(s.batiment)?.localite;
-                let l = self.localite_mut(loc)?;
-                if l.tresorerie < prix {
-                    return Err(Erreur::TresorerieInsuffisante {
-                        localite: l.nom.clone(),
-                        disponible: l.tresorerie,
-                        demande: prix,
-                    });
+                let prix = match prix {
+                    Some(p) => *p,
+                    None => Montant::po(u.prix_po.ok_or(Erreur::SansCoutFixe(nom))? as i64),
+                };
+                if prix.est_negatif() {
+                    return Err(Erreur::MontantNonPositif);
                 }
-                l.tresorerie = l.tresorerie - prix;
+                let loc = self.batiment(s.batiment)?.localite;
+                let payeur = payeur.unwrap_or(Payeur::Localite(loc));
+                if prix.pa > 0 {
+                    self.debiter(payeur, prix)?;
+                }
                 self.salle_mut(*salle)?.statut = StatutSalle::Construite;
             }
             AmeliorationLancee {
@@ -834,10 +839,67 @@ mod tests {
     }
 
     #[test]
+    fn achats_payes_par_le_pj() {
+        let mut m = monde("petite-bourgade");
+        let (pj, l) = (m.pj, m.l);
+        m.ev(Evenement::AjustementCompte {
+            pj,
+            delta: Montant::po(500),
+            motif: "trésor".into(),
+        })
+        .unwrap();
+        // Bâtiment déjà payé ailleurs : prix saisi par le joueur, payé par le PJ
+        let bar = m.ajouter("bar");
+        m.ev(Evenement::SalleAchetee {
+            salle: bar,
+            payeur: Some(Payeur::Personnage(pj)),
+            prix: Some(Montant::po(150)),
+        })
+        .unwrap();
+        assert_eq!(m.statut(bar), StatutSalle::Construite);
+        // 2 Marchandises + 1 Magie = 2×20 + 100 = 140 po (Table 2-1)
+        let avant = m.c.etat(&m.r).localite(l).unwrap().capitaux;
+        m.ev(Evenement::CapitauxAchetes {
+            localite: l,
+            payeur: Payeur::Personnage(pj),
+            capitaux: CoutCapitaux {
+                marchandises: 2,
+                magie: 1,
+                ..Default::default()
+            },
+        })
+        .unwrap();
+        let etat = m.c.etat(&m.r).clone();
+        assert_eq!(etat.personnages[&pj].compte, Montant::po(210));
+        let apres = etat.localite(l).unwrap().capitaux;
+        assert_eq!(
+            (
+                apres.marchandises - avant.marchandises,
+                apres.magie - avant.magie
+            ),
+            (2, 1)
+        );
+        // Solde insuffisant : refusé
+        assert!(matches!(
+            m.ev(Evenement::Paiement {
+                payeur: Payeur::Personnage(pj),
+                montant: Montant::po(1000),
+                motif: "trop cher".into(),
+            }),
+            Err(Erreur::CompteInsuffisant { .. })
+        ));
+    }
+
+    #[test]
     fn achat_direct() {
         let mut m = monde("petite-bourgade");
         let bar = m.ajouter("bar");
-        m.ev(Evenement::SalleAchetee { salle: bar }).unwrap();
+        m.ev(Evenement::SalleAchetee {
+            salle: bar,
+            payeur: None,
+            prix: None,
+        })
+        .unwrap();
         assert_eq!(m.statut(bar), StatutSalle::Construite);
         let l = m.l;
         assert_eq!(

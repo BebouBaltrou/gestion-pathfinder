@@ -27,6 +27,81 @@ pub struct Etat {
     // accélération et amélioration choisies
     facteur: u32,
     amelioration: Option<String>,
+    // acquisition à la création, prix saisi et payeur (None = trésorerie de la localité)
+    acquisition: Acquisition,
+    prix: String,
+    seulement_manquants: bool,
+    payeur_pj: Option<IdPersonnage>,
+}
+
+/// Façon d'obtenir le bâtiment créé depuis un modèle.
+#[derive(Default, Clone, Copy, PartialEq, Eq)]
+enum Acquisition {
+    /// Les salles restent « à construire » ; rien n'est lancé.
+    #[default]
+    Plan,
+    /// Déjà possédé au départ : construit, gratuit.
+    Possede,
+    /// Construction lancée avec les capitaux en réserve dans la localité.
+    Construire,
+    /// Capitaux achetés en po (Table 2-1, GC p. 78), puis construction lancée.
+    AcheterCapitaux,
+    /// Bâtiment acheté terminé : aucune durée, prix en po saisi par le joueur.
+    AcheterBatiment,
+}
+
+impl Acquisition {
+    const TOUTES: [Acquisition; 5] = [
+        Acquisition::Plan,
+        Acquisition::Possede,
+        Acquisition::Construire,
+        Acquisition::AcheterCapitaux,
+        Acquisition::AcheterBatiment,
+    ];
+    fn libelle(self) -> &'static str {
+        match self {
+            Acquisition::Plan => "Seulement le plan (salles à construire, rien n'est lancé)",
+            Acquisition::Possede => "Déjà possédé (gratuit, déjà construit)",
+            Acquisition::Construire => "Construire avec les capitaux de la localité",
+            Acquisition::AcheterCapitaux => "Acheter les capitaux en po, puis construire",
+            Acquisition::AcheterBatiment => "Acheter le bâtiment terminé (prix en po, sans durée)",
+        }
+    }
+}
+
+/// Choix de qui paie : trésorerie de la localité ou compte d'un PJ.
+fn choix_payeur(
+    ui: &mut egui::Ui,
+    id: &str,
+    s: &mut Option<IdPersonnage>,
+    etat: &EtatCampagne,
+    localite: IdLocalite,
+) -> Payeur {
+    if s.is_some_and(|p| !etat.personnages.contains_key(&p)) {
+        *s = None;
+    }
+    let tresor = etat
+        .localites
+        .get(&localite)
+        .map(|l| format!("Trésorerie de {} ({})", l.nom, l.tresorerie))
+        .unwrap_or_default();
+    let texte = match s.and_then(|p| etat.personnages.get(&p)) {
+        Some(p) => format!("Compte de {} ({})", p.nom, p.compte),
+        None => tresor.clone(),
+    };
+    egui::ComboBox::from_id_salt(id)
+        .selected_text(texte)
+        .width(280.0)
+        .show_ui(ui, |ui| {
+            ui.selectable_value(s, None, tresor);
+            for p in etat.personnages.values() {
+                ui.selectable_value(s, Some(p.id), format!("Compte de {} ({})", p.nom, p.compte));
+            }
+        });
+    match s {
+        Some(p) => Payeur::Personnage(*p),
+        None => Payeur::Localite(localite),
+    }
 }
 
 type Action = Option<(Evenement, String)>;
@@ -221,19 +296,146 @@ fn creation(
                 );
                 ui.end_row();
             });
-        if let Some(m) = s.modele.as_ref().and_then(|m| r.modele_batiment(m)) {
+        let modele = s
+            .modele
+            .as_ref()
+            .and_then(|m| r.modele_batiment(m))
+            .cloned();
+        let mut paiement: Option<(Payeur, domaine::Montant)> = None;
+        let mut achat_capitaux: Option<(Payeur, CoutCapitaux)> = None;
+        let mut ok_paiement = true;
+        if let (Some(m), Some(l)) = (&modele, s.localite) {
             widgets::texte_doux(ui, format!("Salles : {}", m.composition_imprimee));
-            widgets::texte_doux(ui, "Toutes les salles sont créées « à construire » au rez-de-chaussée ; réorganisez-les ensuite.");
+            ui.add_space(4.0);
+            ui.label(RichText::new("Acquisition").color(theme::OR).strong());
+            for a in Acquisition::TOUTES {
+                ui.radio_value(&mut s.acquisition, a, a.libelle());
+            }
+            let besoin = {
+                let mut c = m.cout;
+                if matches!(
+                    s.acquisition,
+                    Acquisition::Construire | Acquisition::AcheterCapitaux
+                ) {
+                    c.travail *= s.facteur.max(1);
+                }
+                c
+            };
+            ui.add_space(4.0);
+            match s.acquisition {
+                Acquisition::Plan => widgets::texte_doux(ui, "Les salles sont posées « à construire » au rez-de-chaussée ; lancez-les ensuite salle par salle."),
+                Acquisition::Possede => widgets::texte_doux(ui, "Toutes les salles sont créées construites, sans rien payer."),
+                Acquisition::Construire | Acquisition::AcheterCapitaux => {
+                    ui.horizontal(|ui| {
+                        ui.label("Accélération");
+                        choix_facteur(ui, "facteur_creation", &mut s.facteur);
+                    });
+                    ui.horizontal(|ui| {
+                        ui.label("Capitaux nécessaires :");
+                        widgets::capitaux(ui, &besoin, true);
+                    });
+                    widgets::texte_doux(ui, "Un PJ doit être présent dans la localité. Chaque jour, les chantiers puisent dans les réserves, dans la limite de dépense.");
+                    if s.acquisition == Acquisition::AcheterCapitaux {
+                        ui.checkbox(&mut s.seulement_manquants, "N'acheter que ce qui manque dans les réserves");
+                        let reserves = etat.localites.get(&l).map(|x| x.capitaux).unwrap_or_default();
+                        let mut a_acheter = besoin;
+                        if s.seulement_manquants {
+                            for t in domaine::TypeCapital::TOUS {
+                                *a_acheter.get_mut(t) = besoin.get(t).saturating_sub(reserves.get(t));
+                            }
+                        }
+                        let prix = regles::calculs::valeur_achat(&r, &a_acheter);
+                        ui.horizontal(|ui| {
+                            ui.label("À acheter :");
+                            widgets::capitaux(ui, &a_acheter, true);
+                            ui.label(RichText::new(format!("= {prix} po")).color(theme::OR_PALE).strong());
+                        });
+                        ui.horizontal(|ui| {
+                            ui.label("Payé par");
+                            let p = choix_payeur(ui, "payeur_creation", &mut s.payeur_pj, etat, l);
+                            if a_acheter.unites() > 0 {
+                                achat_capitaux = Some((p, a_acheter));
+                            }
+                        });
+                        widgets::texte_doux(ui, "Valeurs d'achat : Table 2-1, Guide de campagne p. 78.");
+                    }
+                }
+                Acquisition::AcheterBatiment => {
+                    ui.horizontal(|ui| {
+                        ui.label("Prix payé");
+                        let m_saisi = widgets::champ_montant(ui, &mut s.prix, 140.0);
+                        widgets::texte_doux(ui, format!("prix du livre : {} po (vide = ce prix)", m.prix_po));
+                        let montant = if s.prix.trim().is_empty() {
+                            Some(domaine::Montant::po(m.prix_po as i64))
+                        } else {
+                            m_saisi.filter(|x| !x.est_negatif())
+                        };
+                        ok_paiement = montant.is_some();
+                        if let Some(x) = montant {
+                            paiement = Some((Payeur::Localite(l), x));
+                        }
+                    });
+                    ui.horizontal(|ui| {
+                        ui.label("Payé par");
+                        let p = choix_payeur(ui, "payeur_creation", &mut s.payeur_pj, etat, l);
+                        if let Some((q, _)) = paiement.as_mut() {
+                            *q = p;
+                        }
+                    });
+                }
+            }
         }
         ui.add_space(4.0);
-        let ok = !s.nom.trim().is_empty() && s.localite.is_some();
+        let ok = !s.nom.trim().is_empty() && s.localite.is_some() && ok_paiement;
         if widgets::bouton_principal(ui, "Créer le bâtiment", ok) {
             let (b, e, sa) = ids;
             let l = s.localite.expect("choisie");
             let nom = s.nom.trim().to_string();
-            let (evs, ignores) = match s.modele.as_ref().and_then(|m| r.modele_batiment(m)) {
+            let (evs, ignores) = match &modele {
                 Some(m) => {
                     let (mut evs, ig) = evenements_depuis_modele(m, b, l, &nom, e, sa);
+                    let salles: Vec<IdSalle> = evs
+                        .iter()
+                        .filter_map(|x| match x {
+                            Evenement::SalleAjoutee { id, .. } => Some(*id),
+                            _ => None,
+                        })
+                        .collect();
+                    match s.acquisition {
+                        Acquisition::Plan => {}
+                        Acquisition::Possede | Acquisition::AcheterBatiment => {
+                            for x in evs.iter_mut() {
+                                if let Evenement::SalleAjoutee {
+                                    deja_construite, ..
+                                } = x
+                                {
+                                    *deja_construite = true;
+                                }
+                            }
+                            if let Some((payeur, montant)) = paiement.filter(|(_, x)| x.pa > 0) {
+                                evs.push(Evenement::Paiement {
+                                    payeur,
+                                    montant,
+                                    motif: format!("achat du bâtiment {nom}"),
+                                });
+                            }
+                        }
+                        Acquisition::Construire | Acquisition::AcheterCapitaux => {
+                            if let Some((payeur, capitaux)) = achat_capitaux {
+                                evs.push(Evenement::CapitauxAchetes {
+                                    localite: l,
+                                    payeur,
+                                    capitaux,
+                                });
+                            }
+                            for id in salles {
+                                evs.push(Evenement::ConstructionLancee {
+                                    salle: id,
+                                    facteur: s.facteur.max(1),
+                                });
+                            }
+                        }
+                    }
                     if !s.classement.trim().is_empty() {
                         if let Some(Evenement::BatimentCree { classement, .. }) = evs.first_mut() {
                             *classement = s.classement.trim().into();
@@ -359,25 +561,14 @@ fn detail(
     ui.add_space(6.0);
 
     let s = &mut app.ui_batiments;
-    ui.horizontal(|ui| {
+    let mut payeur = Payeur::Localite(b.localite);
+    ui.horizontal_wrapped(|ui| {
         ui.label("Accélération des prochains chantiers");
-        egui::ComboBox::from_id_salt("facteur")
-            .selected_text(if s.facteur <= 1 {
-                "aucune".to_string()
-            } else {
-                format!("×{} Travail, durée ÷{}", s.facteur, s.facteur)
-            })
-            .show_ui(ui, |ui| {
-                ui.selectable_value(&mut s.facteur, 1, "aucune");
-                for k in 2..=4 {
-                    ui.selectable_value(&mut s.facteur, k, format!("×{k} Travail, durée ÷{k}"));
-                }
-            });
-    })
-    .response
-    .on_hover_text(
-        "Guide de campagne p. 95 (Influence pour les équipes). Arrondi au jour supérieur (PC-10).",
-    );
+        choix_facteur(ui, "facteur", &mut s.facteur);
+        ui.separator();
+        ui.label("Achats payés par");
+        payeur = choix_payeur(ui, "payeur_detail", &mut s.payeur_pj, etat, b.localite);
+    });
 
     // ---------- étages ----------
     for etage in &b.etages {
@@ -549,14 +740,32 @@ fn detail(
                         if let Some(p) = u.prix_po {
                             if ui
                                 .button(format!("Acheter terminée ({p} po)"))
-                                .on_hover_text("Payé par la trésorerie de la localité")
+                                .on_hover_text("Payé par le choix « Achats payés par » ci-dessus")
                                 .clicked()
                             {
                                 action = Some((
-                                    Evenement::SalleAchetee { salle: sb.id },
+                                    Evenement::SalleAchetee {
+                                        salle: sb.id,
+                                        payeur: Some(payeur),
+                                        prix: None,
+                                    },
                                     format!("{nom} achetée"),
                                 ));
                             }
+                        }
+                        if ui
+                            .button("Déjà possédée")
+                            .on_hover_text("Marque la salle construite sans rien payer")
+                            .clicked()
+                        {
+                            action = Some((
+                                Evenement::SalleAchetee {
+                                    salle: sb.id,
+                                    payeur: None,
+                                    prix: Some(domaine::Montant::ZERO),
+                                },
+                                format!("{nom} marquée comme possédée"),
+                            ));
                         }
                         if ui.small_button("Retirer").clicked() {
                             action = Some((
@@ -757,4 +966,23 @@ fn detail(
     });
     let _ = ids.0;
     action
+}
+
+fn choix_facteur(ui: &mut egui::Ui, id: &str, facteur: &mut u32) {
+    egui::ComboBox::from_id_salt(id)
+        .selected_text(if *facteur <= 1 {
+            "aucune".to_string()
+        } else {
+            format!("×{f} Travail, durée ÷{f}", f = *facteur)
+        })
+        .show_ui(ui, |ui| {
+            ui.selectable_value(facteur, 1, "aucune");
+            for k in 2..=4 {
+                ui.selectable_value(facteur, k, format!("×{k} Travail, durée ÷{k}"));
+            }
+        })
+        .response
+        .on_hover_text(
+            "Guide de campagne p. 95 (Influence pour les équipes). Arrondi au jour supérieur (PC-10).",
+        );
 }

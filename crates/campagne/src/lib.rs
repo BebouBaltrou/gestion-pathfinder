@@ -206,6 +206,10 @@ impl Campagne {
                 .map(|s| etat.nom_salle(s, r))
                 .unwrap_or(id.to_string())
         };
+        let qui = |p: &Payeur| match p {
+            Payeur::Localite(l) => format!("la trésorerie de {}", lo(l)),
+            Payeur::Personnage(x) => format!("le compte de {}", pj(x)),
+        };
         let ref_salle = |id: &String| r.salle(id).map(|u| u.nom.clone()).unwrap_or(id.clone());
         use Evenement::*;
         match e {
@@ -330,7 +334,32 @@ impl Campagne {
                 };
                 format!("Construction de {} lancée{acc}", sal(salle))
             }
-            SalleAchetee { salle } => format!("{} achetée terminée", sal(salle)),
+            SalleAchetee {
+                salle,
+                payeur,
+                prix,
+            } => {
+                let p = prix.map(|m| format!(" pour {m}")).unwrap_or_default();
+                let qui = payeur
+                    .map(|x| format!(", payée par {}", qui(&x)))
+                    .unwrap_or_default();
+                format!("{} achetée terminée{p}{qui}", sal(salle))
+            }
+            Paiement {
+                payeur,
+                montant,
+                motif,
+            } => format!("Paiement de {montant} par {} : {motif}", qui(payeur)),
+            CapitauxAchetes {
+                localite,
+                payeur,
+                capitaux,
+            } => format!(
+                "Achat de {capitaux} pour {} ({} po, payés par {})",
+                lo(localite),
+                regles::calculs::valeur_achat(r, capitaux),
+                qui(payeur)
+            ),
             AmeliorationLancee {
                 salle,
                 vers,

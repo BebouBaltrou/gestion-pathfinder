@@ -134,14 +134,16 @@ pub fn texte_doux(ui: &mut egui::Ui, t: impl Into<String>) {
 
 /// Bouton principal (doré).
 pub fn bouton_principal(ui: &mut egui::Ui, texte: &str, actif: bool) -> bool {
-    ui.add_enabled(
-        actif,
+    let bouton = if actif {
         egui::Button::new(
             RichText::new(texte)
                 .color(Color32::from_rgb(30, 24, 16))
                 .strong(),
         )
-        .fill(theme::OR),
-    )
-    .clicked()
+        .fill(theme::OR)
+    } else {
+        // désactivé : texte clair sur fond neutre (pas de texte sombre sur fond sombre)
+        egui::Button::new(RichText::new(texte).color(theme::TEXTE_DOUX))
+    };
+    ui.add_enabled(actif, bouton).clicked()
 }

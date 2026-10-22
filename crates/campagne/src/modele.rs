@@ -61,6 +61,14 @@ pub struct Personnage {
 }
 
 /// Ce qui est transféré : des po ou un capital. L'Influence ne peut pas être déplacée
+/// Qui paie un achat en po : la trésorerie d'une localité ou le compte d'un PJ.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub enum Payeur {
+    Localite(IdLocalite),
+    Personnage(IdPersonnage),
+}
+
 /// (GC p. 81 « Déplacer des capitaux » ; décision de l'utilisateur).
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
