@@ -68,6 +68,14 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
     );
     change |= option(
         ui,
+        &mut o.delocalisation_jet_unique,
+        "Délocalisation d'une organisation entière avec un seul jet",
+        "Un seul jet de 1d6 pour la préparation de toutes les équipes de l'organisation. \
+         Désactivé : règle officielle, 1d6 jours par groupe d'employés (Guide de campagne p. 95).",
+        Statut::Personnalise,
+    );
+    change |= option(
+        ui,
         &mut o.construction_parallele_autorisee,
         "Construction parallèle des salles d'un même étage",
         "Le livre ne dit rien sur la durée de travaux simultanés : option personnalisée.",

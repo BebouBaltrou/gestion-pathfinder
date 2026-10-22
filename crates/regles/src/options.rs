@@ -18,6 +18,9 @@ pub struct OptionsRegles {
     /// Officiel (GC p. 94) : une équipe sans bâtiment pour travailler voit ses recettes divisées
     /// par 2. Désactivé = personnalisé, l'équipe garde son bonus entier.
     pub moitie_equipe_sans_batiment: bool,
+    /// Personnalisé : délocalisation d'une organisation entière avec un seul jet de 1d6 pour la
+    /// préparation, au lieu d'un jet par groupe d'employés (GC p. 95).
+    pub delocalisation_jet_unique: bool,
     /// Afficher les avertissements liés aux points à confirmer.
     pub afficher_avertissements: bool,
 }
@@ -30,6 +33,7 @@ impl Default for OptionsRegles {
             production_pendant_amelioration: false,
             salaire_gestionnaire_unique: true,
             moitie_equipe_sans_batiment: true,
+            delocalisation_jet_unique: false,
             afficher_avertissements: true,
         }
     }

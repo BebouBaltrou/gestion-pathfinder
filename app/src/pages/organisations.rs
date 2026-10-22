@@ -38,6 +38,7 @@ pub struct Etat {
     deloc_prep: String,
     deloc_voyage: String,
     deloc_prix: String,
+    deloc_org: bool,
 }
 
 type Action = Option<(Evenement, String)>;
@@ -110,6 +111,7 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
     let opts = (
         c.options.production_pendant_amelioration,
         c.options.moitie_equipe_sans_batiment,
+        c.options.delocalisation_jet_unique,
     );
     widgets::titre_page(
         ui,
@@ -464,7 +466,7 @@ fn detail(
     etat: &EtatCampagne,
     o: &Organisation,
     nouvelle_equipe: IdEquipe,
-    (pendant_amelioration, moitie_sans_batiment): (bool, bool),
+    (pendant_amelioration, moitie_sans_batiment, jet_unique): (bool, bool, bool),
 ) -> Action {
     let mut action: Action = None;
     let r = app.r.clone();
@@ -876,6 +878,133 @@ fn detail(
                 });
             }
         });
+    }
+
+    // délocalisation de toute l'organisation (règle personnalisée : un seul jet)
+    let recrutees: Vec<&Equipe> = equipes
+        .iter()
+        .filter(|e| e.statut == StatutEquipe::Recrutee)
+        .collect();
+    if jet_unique && recrutees.len() > 1 {
+        ui.add_space(6.0);
+        if !s.deloc_org {
+            if ui
+                .button(format!(
+                    "Délocaliser toute l'organisation ({} équipes recrutées)…",
+                    recrutees.len()
+                ))
+                .clicked()
+            {
+                s.deloc_org = true;
+                s.deloc = None;
+                s.deloc_vers = None;
+                s.deloc_prep.clear();
+                s.deloc_voyage.clear();
+                let total: i64 = recrutees
+                    .iter()
+                    .filter_map(|e| r.equipe(&e.reference).and_then(|u| u.prix_po))
+                    .map(|p| p as i64 * 5)
+                    .sum();
+                s.deloc_prix = Montant::pa(total).to_string();
+            }
+        } else {
+            widgets::carte(ui, |ui| {
+                ui.set_width(ui.available_width());
+                ui.horizontal(|ui| {
+                    widgets::titre_section(ui, "Délocaliser toute l'organisation");
+                    widgets::badge_statut(ui, domaine::Statut::Personnalise);
+                });
+                widgets::texte_doux(
+                    ui,
+                    "Règle personnalisée : un seul jet de 1d6 pour la préparation de toutes les équipes recrutées. \
+                     Prix proposé : la moitié de leurs prix de recrutement (GC p. 95).",
+                );
+                egui::Grid::new("deloc_org")
+                    .num_columns(2)
+                    .spacing([10.0, 6.0])
+                    .show(ui, |ui| {
+                        ui.label("Vers");
+                        egui::ComboBox::from_id_salt("deloc_org_vers")
+                            .selected_text(
+                                s.deloc_vers
+                                    .and_then(|l| etat.localites.get(&l))
+                                    .map(|l| l.nom.clone())
+                                    .unwrap_or("Choisir…".into()),
+                            )
+                            .show_ui(ui, |ui| {
+                                for l in etat.localites.values() {
+                                    ui.selectable_value(&mut s.deloc_vers, Some(l.id), &l.nom);
+                                }
+                            });
+                        ui.end_row();
+                        ui.label("Préparation (jet de 1d6)");
+                        widgets::champ_entier(ui, &mut s.deloc_prep, "1 à 6", 80.0);
+                        ui.end_row();
+                        ui.label("Voyage (jours)");
+                        widgets::champ_entier(ui, &mut s.deloc_voyage, "ex. 4", 80.0);
+                        ui.end_row();
+                        ui.label("Prix total");
+                        widgets::champ_montant(ui, &mut s.deloc_prix, 140.0);
+                        ui.end_row();
+                    });
+                let prep = s
+                    .deloc_prep
+                    .trim()
+                    .parse::<u32>()
+                    .ok()
+                    .filter(|x| (1..=6).contains(x));
+                let voyage = s.deloc_voyage.trim().parse::<u32>().ok();
+                let prix = if s.deloc_prix.trim().is_empty() {
+                    Some(Montant::ZERO)
+                } else {
+                    Montant::depuis_texte(&s.deloc_prix).filter(|m| !m.est_negatif())
+                };
+                // les équipes déjà dans la localité de destination ne bougent pas
+                let a_deplacer: Vec<&&Equipe> = recrutees
+                    .iter()
+                    .filter(|e| Some(e.localite) != s.deloc_vers)
+                    .collect();
+                ui.horizontal(|ui| {
+                    let ok = s.deloc_vers.is_some()
+                        && prep.is_some()
+                        && voyage.is_some()
+                        && prix.is_some()
+                        && !a_deplacer.is_empty();
+                    if widgets::bouton_principal(ui, "Lancer la délocalisation", ok) {
+                        let vers = s.deloc_vers.expect("choisie");
+                        let evs = a_deplacer
+                            .iter()
+                            .enumerate()
+                            .map(|(i, e)| Evenement::DelocalisationLancee {
+                                equipe: e.id,
+                                vers,
+                                preparation: prep.expect("saisie"),
+                                voyage: voyage.expect("saisi"),
+                                payeur,
+                                // le prix total est porté par la première équipe
+                                prix: if i == 0 {
+                                    prix.expect("saisi")
+                                } else {
+                                    Montant::ZERO
+                                },
+                            })
+                            .collect();
+                        action = Some((
+                            Evenement::Groupe {
+                                libelle: format!("Délocalisation de l'organisation {}", o.nom),
+                                evenements: evs,
+                            },
+                            format!("Délocalisation de {} lancée", o.nom),
+                        ));
+                        s.deloc_org = false;
+                    }
+                    if ui.button("Annuler").clicked() {
+                        s.deloc_org = false;
+                    }
+                    widgets::texte_doux(ui, "Payé par le choix « Achats payés par » ci-dessus.");
+                });
+            });
+        }
     }
 
     // ajout d'une équipe
