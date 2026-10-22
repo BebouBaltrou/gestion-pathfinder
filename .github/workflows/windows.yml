@@ -12,7 +12,7 @@ jobs:
     name: Cœur (tests)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy, rustfmt
@@ -22,27 +22,24 @@ jobs:
           cargo fmt --all -- --check
           rustfmt --check --edition 2021 app/src/main.rs
       - name: Analyse (clippy)
-        run: cargo clippy --workspace --all-targets --all-features -- -D warnings
+        run: outils/ci/annoter.sh cargo clippy --workspace --all-targets --all-features -- -D warnings
       - name: Tests (avec la sauvegarde JSON)
-        run: cargo test --workspace --all-features
+        run: outils/ci/annoter.sh cargo test --workspace --all-features
 
   windows:
     name: Application Windows
-    needs: coeur
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: |
             . -> target
             app -> target
-      - name: Tests du cœur
-        run: cargo test --workspace --all-features
       - name: Compilation de l'application
-        working-directory: app
-        run: cargo build --release
+        shell: bash
+        run: outils/ci/annoter.sh cargo build --release --manifest-path app/Cargo.toml
       - name: Exécutable
         uses: actions/upload-artifact@v4
         with:
