@@ -1,0 +1,8584 @@
+{
+ "format": 1,
+ "sources": [
+  {
+   "code": "GC",
+   "titre": "Guide de campagne (Pathfinder JdR) — VF de Ultimate Campaign",
+   "editeur": "Black Book Editions / Paizo",
+   "url": "https://www.pathfinder-fr.org/Wiki/Pathfinder-RPG.Interm%c3%a8des.ashx"
+  },
+  {
+   "code": "GDM",
+   "titre": "Guide du maître (Pathfinder JdR) — VF de GameMastery Guide",
+   "editeur": "Black Book Editions / Paizo",
+   "url": "https://www.pathfinder-fr.org/Wiki/Pathfinder-RPG.Villes.ashx"
+  }
+ ],
+ "capitaux": [
+  {
+   "ressource": "Marchandises",
+   "cout_achat_po": 20,
+   "cout_produit_po": 10,
+   "source": {
+    "livre": "GC",
+    "page": 78,
+    "section": "Table 2-1 : Valeurs des capitaux"
+   }
+  },
+  {
+   "ressource": "Influence",
+   "cout_achat_po": 30,
+   "cout_produit_po": 15,
+   "source": {
+    "livre": "GC",
+    "page": 78,
+    "section": "Table 2-1 : Valeurs des capitaux"
+   }
+  },
+  {
+   "ressource": "Travail",
+   "cout_achat_po": 20,
+   "cout_produit_po": 10,
+   "source": {
+    "livre": "GC",
+    "page": 78,
+    "section": "Table 2-1 : Valeurs des capitaux"
+   }
+  },
+  {
+   "ressource": "Magie",
+   "cout_achat_po": 100,
+   "cout_produit_po": 50,
+   "source": {
+    "livre": "GC",
+    "page": 78,
+    "section": "Table 2-1 : Valeurs des capitaux"
+   }
+  }
+ ],
+ "communautes": [
+  {
+   "id": "lieu-dit",
+   "nom": "Lieu-dit",
+   "population_min": 0,
+   "population_max": 20,
+   "limite_depense_jour": 2,
+   "source_population": {
+    "livre": "GDM",
+    "page": null,
+    "section": "Le profil d’une communauté — Fourchette de population des communautés"
+   },
+   "source_limite": {
+    "livre": "GC",
+    "page": 81,
+    "section": "Limites des dépenses"
+   },
+   "point_a_confirmer": "PC-11"
+  },
+  {
+   "id": "hameau",
+   "nom": "Hameau",
+   "population_min": 21,
+   "population_max": 60,
+   "limite_depense_jour": 4,
+   "source_population": {
+    "livre": "GDM",
+    "page": null,
+    "section": "Le profil d’une communauté — Fourchette de population des communautés"
+   },
+   "source_limite": {
+    "livre": "GC",
+    "page": 81,
+    "section": "Limites des dépenses"
+   },
+   "point_a_confirmer": null
+  },
+  {
+   "id": "village",
+   "nom": "Village",
+   "population_min": 61,
+   "population_max": 200,
+   "limite_depense_jour": 10,
+   "source_population": {
+    "livre": "GDM",
+    "page": null,
+    "section": "Le profil d’une communauté — Fourchette de population des communautés"
+   },
+   "source_limite": {
+    "livre": "GC",
+    "page": 81,
+    "section": "Limites des dépenses"
+   },
+   "point_a_confirmer": null
+  },
+  {
+   "id": "petite-bourgade",
+   "nom": "Petite bourgade",
+   "population_min": 201,
+   "population_max": 2000,
+   "limite_depense_jour": 15,
+   "source_population": {
+    "livre": "GDM",
+    "page": null,
+    "section": "Le profil d’une communauté — Fourchette de population des communautés"
+   },
+   "source_limite": {
+    "livre": "GC",
+    "page": 81,
+    "section": "Limites des dépenses"
+   },
+   "point_a_confirmer": null
+  },
+  {
+   "id": "grosse-bourgade",
+   "nom": "Grosse bourgade",
+   "population_min": 2001,
+   "population_max": 5000,
+   "limite_depense_jour": 25,
+   "source_population": {
+    "livre": "GDM",
+    "page": null,
+    "section": "Le profil d’une communauté — Fourchette de population des communautés"
+   },
+   "source_limite": {
+    "livre": "GC",
+    "page": 81,
+    "section": "Limites des dépenses"
+   },
+   "point_a_confirmer": null
+  },
+  {
+   "id": "petite-ville",
+   "nom": "Petite ville",
+   "population_min": 5001,
+   "population_max": 10000,
+   "limite_depense_jour": 35,
+   "source_population": {
+    "livre": "GDM",
+    "page": null,
+    "section": "Le profil d’une communauté — Fourchette de population des communautés"
+   },
+   "source_limite": {
+    "livre": "GC",
+    "page": 81,
+    "section": "Limites des dépenses"
+   },
+   "point_a_confirmer": null
+  },
+  {
+   "id": "grande-ville",
+   "nom": "Grande ville",
+   "population_min": 10001,
+   "population_max": 25000,
+   "limite_depense_jour": 50,
+   "source_population": {
+    "livre": "GDM",
+    "page": null,
+    "section": "Le profil d’une communauté — Fourchette de population des communautés"
+   },
+   "source_limite": {
+    "livre": "GC",
+    "page": 81,
+    "section": "Limites des dépenses"
+   },
+   "point_a_confirmer": null
+  },
+  {
+   "id": "metropole",
+   "nom": "Métropole",
+   "population_min": 25001,
+   "population_max": null,
+   "limite_depense_jour": 65,
+   "source_population": {
+    "livre": "GDM",
+    "page": null,
+    "section": "Le profil d’une communauté — Fourchette de population des communautés"
+   },
+   "source_limite": {
+    "livre": "GC",
+    "page": 81,
+    "section": "Limites des dépenses"
+   },
+   "point_a_confirmer": "PC-02"
+  }
+ ],
+ "salles": [
+  {
+   "id": "abri-pour-animaux",
+   "nom": "Abri pour animaux",
+   "source": {
+    "livre": "GC",
+    "page": 96,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 18,
+    "influence": 3,
+    "travail": 17,
+    "magie": 0
+   },
+   "prix_po": 790,
+   "duree_jours": 40,
+   "recettes": {
+    "bonus": 12,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence"
+     ]
+    },
+    "texte": "+12 po ou Influence"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 40,
+    "max": 60
+   },
+   "amelioration_de": [
+    "enclos",
+    "stabulation"
+   ],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "acces-aux-egouts",
+   "nom": "Accès aux égouts",
+   "source": {
+    "livre": "GC",
+    "page": 96,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 2,
+    "influence": 1,
+    "travail": 2,
+    "magie": 0
+   },
+   "prix_po": 110,
+   "duree_jours": 4,
+   "recettes": null,
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 4,
+    "max": 6
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "armurerie",
+   "nom": "Armurerie",
+   "source": {
+    "livre": "GC",
+    "page": 97,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 9,
+    "influence": 3,
+    "travail": 6,
+    "magie": 0
+   },
+   "prix_po": 390,
+   "duree_jours": 16,
+   "recettes": null,
+   "avantages": "permet d’équiper les membres d’un dortoir ou d’un poste de garde, réduit le temps nécessaire pour enfiler une armure",
+   "taille": {
+    "type": "Cases",
+    "min": 5,
+    "max": 15
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "atelier-de-couture",
+   "nom": "Atelier de couture",
+   "source": {
+    "livre": "GC",
+    "page": 97,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 8,
+    "influence": 0,
+    "travail": 7,
+    "magie": 0
+   },
+   "prix_po": 300,
+   "duree_jours": 16,
+   "recettes": {
+    "bonus": 10,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises",
+      "Influence"
+     ]
+    },
+    "texte": "+10 po, Marchandises ou Influence"
+   },
+   "avantages": "compte comme des outils d’artisan de qualité supérieure pour une compétence d’Artisanat",
+   "taille": {
+    "type": "Cases",
+    "min": 6,
+    "max": 12
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "atelier-d-artisan",
+   "nom": "Atelier d’artisan",
+   "source": {
+    "livre": "GC",
+    "page": 97,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 9,
+    "influence": 0,
+    "travail": 9,
+    "magie": 0
+   },
+   "prix_po": 360,
+   "duree_jours": 20,
+   "recettes": {
+    "bonus": 10,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises",
+      "Influence"
+     ]
+    },
+    "texte": "+10 po, Marchandises ou Influence"
+   },
+   "avantages": "compte comme des outils de maître artisan pour une compétence d’Artisanat",
+   "taille": {
+    "type": "Cases",
+    "min": 8,
+    "max": 16
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "atelier-de-mecanique",
+   "nom": "Atelier de mécanique",
+   "source": {
+    "livre": "GC",
+    "page": 97,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 9,
+    "influence": 0,
+    "travail": 9,
+    "magie": 0
+   },
+   "prix_po": 360,
+   "duree_jours": 20,
+   "recettes": {
+    "bonus": 10,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises",
+      "Travail"
+     ]
+    },
+    "texte": "+10 po, Marchandises ou Travail"
+   },
+   "avantages": "compte comme des outils d’artisan de qualité supérieure pour pratiquer l’Artisanat (mécanique)",
+   "taille": {
+    "type": "Cases",
+    "min": 8,
+    "max": 16
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "atelier-de-tanneur",
+   "nom": "Atelier de tanneur",
+   "source": {
+    "livre": "GC",
+    "page": 97,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 7,
+    "influence": 1,
+    "travail": 7,
+    "magie": 0
+   },
+   "prix_po": 310,
+   "duree_jours": 16,
+   "recettes": {
+    "bonus": 10,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises"
+     ]
+    },
+    "texte": "+10 po ou Marchandises"
+   },
+   "avantages": "compte comme des outils d’artisan de qualité supérieure pour les compétences de travail du cuir",
+   "taille": {
+    "type": "Cases",
+    "min": 4,
+    "max": 10
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "auditorium",
+   "nom": "Auditorium",
+   "source": {
+    "livre": "GC",
+    "page": 97,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 19,
+    "influence": 1,
+    "travail": 25,
+    "magie": 0
+   },
+   "prix_po": 910,
+   "duree_jours": 40,
+   "recettes": {
+    "bonus": 15,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence"
+     ]
+    },
+    "texte": "+15 po ou Influence"
+   },
+   "avantages": "bonus aux tests de Représentation",
+   "taille": {
+    "type": "Cases",
+    "min": 40,
+    "max": 100
+   },
+   "amelioration_de": [
+    "salle-de-bal"
+   ],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "autel",
+   "nom": "Autel",
+   "source": {
+    "livre": "GC",
+    "page": 97,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 2,
+    "influence": 1,
+    "travail": 2,
+    "magie": 1
+   },
+   "prix_po": 210,
+   "duree_jours": 4,
+   "recettes": {
+    "bonus": 3,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Influence"
+     ]
+    },
+    "texte": "+3 Influence"
+   },
+   "avantages": "compte comme une installation permanente vouée à la divinité du personnage dans le cadre d’une consécration ou de sorts similaires.",
+   "taille": {
+    "type": "Cases",
+    "min": 2,
+    "max": 8
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "bar",
+   "nom": "Bar",
+   "source": {
+    "livre": "GC",
+    "page": 98,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 6,
+    "influence": 1,
+    "travail": 5,
+    "magie": 0
+   },
+   "prix_po": 250,
+   "duree_jours": 16,
+   "recettes": {
+    "bonus": 10,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence"
+     ]
+    },
+    "texte": "+10 po ou Influence"
+   },
+   "avantages": "bonus aux tests de Diplomatie pour recueillir des informations",
+   "taille": {
+    "type": "Cases",
+    "min": 10,
+    "max": 20
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "bibliotheque",
+   "nom": "Bibliothèque",
+   "source": {
+    "livre": "GC",
+    "page": 98,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 8,
+    "influence": 2,
+    "travail": 7,
+    "magie": 1
+   },
+   "prix_po": 460,
+   "duree_jours": 16,
+   "recettes": {
+    "bonus": 8,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence"
+     ]
+    },
+    "texte": "+8 po ou Influence"
+   },
+   "avantages": "bonus aux tests d’une compétence de Connaissances",
+   "taille": {
+    "type": "Cases",
+    "min": 4,
+    "max": 12
+   },
+   "amelioration_de": [],
+   "amelioration_en": [
+    "bibliotheque-magique"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "bibliotheque-magique",
+   "nom": "Bibliothèque magique",
+   "source": {
+    "livre": "GC",
+    "page": 98,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 9,
+    "influence": 3,
+    "travail": 8,
+    "magie": 3
+   },
+   "prix_po": 730,
+   "duree_jours": 20,
+   "recettes": {
+    "bonus": 12,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence",
+      "Magie"
+     ]
+    },
+    "texte": "+12 po, Influence ou Magie"
+   },
+   "avantages": "bonus aux tests de Connaissances (mystères), d’Art de la magie et de recherche de sorts.",
+   "taille": {
+    "type": "Cases",
+    "min": 4,
+    "max": 12
+   },
+   "amelioration_de": [
+    "bibliotheque"
+   ],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "brasserie",
+   "nom": "Brasserie",
+   "source": {
+    "livre": "GC",
+    "page": 98,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 9,
+    "influence": 2,
+    "travail": 7,
+    "magie": 0
+   },
+   "prix_po": 380,
+   "duree_jours": 24,
+   "recettes": {
+    "bonus": 10,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence"
+     ]
+    },
+    "texte": "+10 po ou Influence"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 12,
+    "max": 24
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "breteche",
+   "nom": "Bretèche",
+   "source": {
+    "livre": "GC",
+    "page": 98,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 15,
+    "influence": 3,
+    "travail": 12,
+    "magie": 0
+   },
+   "prix_po": 630,
+   "duree_jours": 40,
+   "recettes": null,
+   "avantages": "les défenseurs obtiennent un bonus à l’initiative et aux tests de Perception",
+   "taille": {
+    "type": "Cases",
+    "min": 8,
+    "max": 12
+   },
+   "amelioration_de": [
+    "salle-a-machicoulis",
+    "poste-de-garde"
+   ],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "bureau",
+   "nom": "Bureau",
+   "source": {
+    "livre": "GC",
+    "page": 99,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 3,
+    "influence": 0,
+    "travail": 3,
+    "magie": 0
+   },
+   "prix_po": 120,
+   "duree_jours": 8,
+   "recettes": null,
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 2,
+    "max": 5
+   },
+   "amelioration_de": [
+    "remise"
+   ],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "cabanon",
+   "nom": "Cabanon",
+   "source": {
+    "livre": "GC",
+    "page": 99,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 3,
+    "influence": 0,
+    "travail": 2,
+    "magie": 0
+   },
+   "prix_po": 100,
+   "duree_jours": 3,
+   "recettes": null,
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 2,
+    "max": 4
+   },
+   "amelioration_de": [],
+   "amelioration_en": [
+    "latrines",
+    "remise"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "cellule",
+   "nom": "Cellule",
+   "source": {
+    "livre": "GC",
+    "page": 99,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 5,
+    "influence": 0,
+    "travail": 4,
+    "magie": 0
+   },
+   "prix_po": 180,
+   "duree_jours": 16,
+   "recettes": null,
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 1,
+    "max": 9
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "chambre-a-coucher",
+   "nom": "Chambre à coucher",
+   "source": {
+    "livre": "GC",
+    "page": 99,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 8,
+    "influence": 0,
+    "travail": 7,
+    "magie": 0
+   },
+   "prix_po": 300,
+   "duree_jours": 20,
+   "recettes": {
+    "bonus": 3,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence"
+     ]
+    },
+    "texte": "+3 po ou Influence"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 4,
+    "max": 8
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "chambre-de-divination",
+   "nom": "Chambre de divination",
+   "source": {
+    "livre": "GC",
+    "page": 99,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 6,
+    "influence": 1,
+    "travail": 5,
+    "magie": 3
+   },
+   "prix_po": 550,
+   "duree_jours": 16,
+   "recettes": {
+    "bonus": 2,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence"
+     ]
+    },
+    "texte": "+2 po ou Influence"
+   },
+   "avantages": "augmente le DD des effets de scrutation",
+   "taille": {
+    "type": "Cases",
+    "min": 4,
+    "max": 16
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "chambre-de-torture",
+   "nom": "Chambre de torture",
+   "source": {
+    "livre": "GC",
+    "page": 99,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 7,
+    "influence": 3,
+    "travail": 5,
+    "magie": 0
+   },
+   "prix_po": 330,
+   "duree_jours": 20,
+   "recettes": null,
+   "avantages": "bonus aux tests d’Intimidation",
+   "taille": {
+    "type": "Cases",
+    "min": 6,
+    "max": 16
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "chambre-d-invocation",
+   "nom": "Chambre d’invocation",
+   "source": {
+    "livre": "GC",
+    "page": 99,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 11,
+    "influence": 4,
+    "travail": 10,
+    "magie": 5
+   },
+   "prix_po": 1040,
+   "duree_jours": 28,
+   "recettes": {
+    "bonus": 3,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Magie"
+     ]
+    },
+    "texte": "+3 Magie"
+   },
+   "avantages": "bonus aux tests de Charisme, Diplomatie, Intimidation et Connaissances (plans)",
+   "taille": {
+    "type": "Cases",
+    "min": 6,
+    "max": 16
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "chambre-forte",
+   "nom": "Chambre-forte",
+   "source": {
+    "livre": "GC",
+    "page": 99,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 8,
+    "influence": 0,
+    "travail": 7,
+    "magie": 0
+   },
+   "prix_po": 300,
+   "duree_jours": 16,
+   "recettes": null,
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 4,
+    "max": 8
+   },
+   "amelioration_de": [
+    "reliquaire",
+    "remise"
+   ],
+   "amelioration_en": [
+    "piece-secrete"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "champ",
+   "nom": "Champ",
+   "source": {
+    "livre": "GC",
+    "page": 99,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 15,
+    "influence": 0,
+    "travail": 15,
+    "magie": 0
+   },
+   "prix_po": 600,
+   "duree_jours": 20,
+   "recettes": {
+    "bonus": 10,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises"
+     ]
+    },
+    "texte": "+10 po ou Marchandises"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 60,
+    "max": 100
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "clocher",
+   "nom": "Clocher",
+   "source": {
+    "livre": "GC",
+    "page": 100,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 11,
+    "influence": 3,
+    "travail": 7,
+    "magie": 0
+   },
+   "prix_po": 450,
+   "duree_jours": 28,
+   "recettes": {
+    "bonus": 3,
+    "admissibles": {
+     "type": "TypesDuBatiment"
+    },
+    "texte": "+3 capitaux (d’un type que le bâtiment génère déjà)"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 9,
+    "max": 25
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "confessionnal",
+   "nom": "Confessionnal",
+   "source": {
+    "livre": "GC",
+    "page": 100,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 2,
+    "influence": 0,
+    "travail": 3,
+    "magie": 0
+   },
+   "prix_po": 100,
+   "duree_jours": 4,
+   "recettes": null,
+   "avantages": "bonus aux tests de Discrétion",
+   "taille": {
+    "type": "Cases",
+    "min": 2,
+    "max": 4
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "cour",
+   "nom": "Cour",
+   "source": {
+    "livre": "GC",
+    "page": 100,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 4,
+    "influence": 0,
+    "travail": 5,
+    "magie": 0
+   },
+   "prix_po": 180,
+   "duree_jours": 24,
+   "recettes": {
+    "bonus": 5,
+    "admissibles": {
+     "type": "TypesDuBatiment"
+    },
+    "texte": "+5 capitaux (d’un type que le bâtiment génère déjà)"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 20,
+    "max": 40
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "creche",
+   "nom": "Crèche",
+   "source": {
+    "livre": "GC",
+    "page": 100,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 6,
+    "influence": 1,
+    "travail": 5,
+    "magie": 0
+   },
+   "prix_po": 250,
+   "duree_jours": 14,
+   "recettes": {
+    "bonus": 6,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence"
+     ]
+    },
+    "texte": "+6 po ou Influence"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 8,
+    "max": 16
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "crypte",
+   "nom": "Crypte",
+   "source": {
+    "livre": "GC",
+    "page": 100,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 5,
+    "influence": 3,
+    "travail": 5,
+    "magie": 2
+   },
+   "prix_po": 490,
+   "duree_jours": 16,
+   "recettes": {
+    "bonus": 5,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence",
+      "Magie"
+     ]
+    },
+    "texte": "+5 po, Influence ou Magie"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 8,
+    "max": 30
+   },
+   "amelioration_de": [
+    "site-funeraire"
+   ],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "cuisine",
+   "nom": "Cuisine",
+   "source": {
+    "livre": "GC",
+    "page": 100,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 4,
+    "influence": 0,
+    "travail": 4,
+    "magie": 0
+   },
+   "prix_po": 160,
+   "duree_jours": 12,
+   "recettes": {
+    "bonus": 4,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises"
+     ]
+    },
+    "texte": "+4 po ou Marchandises"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 2,
+    "max": 6
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "dojo",
+   "nom": "Dojo",
+   "source": {
+    "livre": "GC",
+    "page": 100,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 7,
+    "influence": 1,
+    "travail": 7,
+    "magie": 0
+   },
+   "prix_po": 310,
+   "duree_jours": 20,
+   "recettes": {
+    "bonus": 8,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence",
+      "Travail"
+     ]
+    },
+    "texte": "+8 po, Influence ou Travail"
+   },
+   "avantages": "compte comme un lieu d’entraînement ou de réapprentissage approprié",
+   "taille": {
+    "type": "Cases",
+    "min": 15,
+    "max": 30
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "dome-d-observation",
+   "nom": "Dôme d’observation",
+   "source": {
+    "livre": "GC",
+    "page": 100,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 8,
+    "influence": 0,
+    "travail": 9,
+    "magie": 1
+   },
+   "prix_po": 440,
+   "duree_jours": 20,
+   "recettes": {
+    "bonus": 5,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence",
+      "Magie"
+     ]
+    },
+    "texte": "+5 po, Influence ou Magie"
+   },
+   "avantages": "bonus aux tests de Connaissances (géographie), Connaissances (nature) et Connaissances (plans)",
+   "taille": {
+    "type": "Cases",
+    "min": 10,
+    "max": 20
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "dortoir",
+   "nom": "Dortoir",
+   "source": {
+    "livre": "GC",
+    "page": 100,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 7,
+    "influence": 4,
+    "travail": 7,
+    "magie": 0
+   },
+   "prix_po": 400,
+   "duree_jours": 24,
+   "recettes": {
+    "bonus": 8,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Travail"
+     ]
+    },
+    "texte": "+8 po ou Travail"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 15,
+    "max": 35
+   },
+   "amelioration_de": [],
+   "amelioration_en": [
+    "logement"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "ecloserie",
+   "nom": "Écloserie",
+   "source": {
+    "livre": "GC",
+    "page": 101,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 4,
+    "influence": 1,
+    "travail": 3,
+    "magie": 0
+   },
+   "prix_po": 170,
+   "duree_jours": 10,
+   "recettes": {
+    "bonus": 5,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises"
+     ]
+    },
+    "texte": "+5 po ou Marchandises"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 2,
+    "max": 6
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "enclos",
+   "nom": "Enclos",
+   "source": {
+    "livre": "GC",
+    "page": 101,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 6,
+    "influence": 1,
+    "travail": 5,
+    "magie": 0
+   },
+   "prix_po": 250,
+   "duree_jours": 16,
+   "recettes": {
+    "bonus": 8,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises",
+      "Travail"
+     ]
+    },
+    "texte": "+8 po, Marchandises ou Travail"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 4,
+    "max": 16
+   },
+   "amelioration_de": [],
+   "amelioration_en": [
+    "abri-pour-animaux"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "etalage",
+   "nom": "Étalage",
+   "source": {
+    "livre": "GC",
+    "page": 101,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 5,
+    "influence": 1,
+    "travail": 3,
+    "magie": 0
+   },
+   "prix_po": 190,
+   "duree_jours": 12,
+   "recettes": {
+    "bonus": 5,
+    "admissibles": {
+     "type": "TypesDuBatiment"
+    },
+    "texte": "+5 capitaux (d’un type que le bâtiment produit déjà)"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 2,
+    "max": 4
+   },
+   "amelioration_de": [
+    "societe-de-facade"
+   ],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "forge",
+   "nom": "Forge",
+   "source": {
+    "livre": "GC",
+    "page": 101,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 9,
+    "influence": 1,
+    "travail": 8,
+    "magie": 0
+   },
+   "prix_po": 370,
+   "duree_jours": 20,
+   "recettes": {
+    "bonus": 10,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises"
+     ]
+    },
+    "texte": "+10 po ou Marchandises"
+   },
+   "avantages": "compte comme des outils d’artisan de qualité supérieure pour les compétences de forge.",
+   "taille": {
+    "type": "Cases",
+    "min": 8,
+    "max": 16
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "fosse",
+   "nom": "Fosse",
+   "source": {
+    "livre": "GC",
+    "page": 101,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 1,
+    "influence": 0,
+    "travail": 1,
+    "magie": 0
+   },
+   "prix_po": 40,
+   "duree_jours": 2,
+   "recettes": {
+    "bonus": 1,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Travail"
+     ]
+    },
+    "texte": "+1 po ou Travail"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 1,
+    "max": 5
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "imprimerie",
+   "nom": "Imprimerie",
+   "source": {
+    "livre": "GC",
+    "page": 101,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 9,
+    "influence": 2,
+    "travail": 7,
+    "magie": 0
+   },
+   "prix_po": 380,
+   "duree_jours": 20,
+   "recettes": {
+    "bonus": 8,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises",
+      "Influence",
+      "Travail"
+     ]
+    },
+    "texte": "+8 po, Marchandises, Influence ou Travail"
+   },
+   "avantages": "compte comme des outils d’artisan de qualité supérieure pour les compétences liées à l’écrit et à l’imprimerie",
+   "taille": {
+    "type": "Cases",
+    "min": 5,
+    "max": 16
+   },
+   "amelioration_de": [
+    "scriptorium"
+   ],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "infirmerie",
+   "nom": "Infirmerie",
+   "source": {
+    "livre": "GC",
+    "page": 102,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 6,
+    "influence": 1,
+    "travail": 6,
+    "magie": 1
+   },
+   "prix_po": 370,
+   "duree_jours": 16,
+   "recettes": {
+    "bonus": 8,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence"
+     ]
+    },
+    "texte": "+8 po ou Influence"
+   },
+   "avantages": "compte comme une trousse de premiers secours (voir description)",
+   "taille": {
+    "type": "Cases",
+    "min": 4,
+    "max": 12
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "issue-de-secours",
+   "nom": "Issue de secours",
+   "source": {
+    "livre": "GC",
+    "page": 102,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 9,
+    "influence": 0,
+    "travail": 9,
+    "magie": 0
+   },
+   "prix_po": 360,
+   "duree_jours": 16,
+   "recettes": null,
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 6,
+    "max": 12
+   },
+   "amelioration_de": [
+    "piece-secrete"
+   ],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "jardin",
+   "nom": "Jardin",
+   "source": {
+    "livre": "GC",
+    "page": 102,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 5,
+    "influence": 0,
+    "travail": 4,
+    "magie": 0
+   },
+   "prix_po": 180,
+   "duree_jours": 12,
+   "recettes": {
+    "bonus": 8,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises"
+     ]
+    },
+    "texte": "+8 po ou Marchandises"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 10,
+    "max": 20
+   },
+   "amelioration_de": [],
+   "amelioration_en": [
+    "serre"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "laboratoire-d-alchimie",
+   "nom": "Laboratoire d’alchimie",
+   "source": {
+    "livre": "GC",
+    "page": 102,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 8,
+    "influence": 1,
+    "travail": 5,
+    "magie": 1
+   },
+   "prix_po": 390,
+   "duree_jours": 16,
+   "recettes": {
+    "bonus": 10,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises",
+      "Magie"
+     ]
+    },
+    "texte": "+10 po, Marchandises ou Magie"
+   },
+   "avantages": "compte comme un laboratoire d’alchimie (équipement)",
+   "taille": {
+    "type": "Cases",
+    "min": 8,
+    "max": 16
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "labyrinthe",
+   "nom": "Labyrinthe",
+   "source": {
+    "livre": "GC",
+    "page": 102,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 15,
+    "influence": 0,
+    "travail": 15,
+    "magie": 0
+   },
+   "prix_po": 370,
+   "duree_jours": 30,
+   "recettes": {
+    "bonus": 5,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence"
+     ]
+    },
+    "texte": "+5 po ou Influence"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 40,
+    "max": 100
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": "PC-07"
+  },
+  {
+   "id": "latrines",
+   "nom": "Latrines",
+   "source": {
+    "livre": "GC",
+    "page": 102,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 3,
+    "influence": 0,
+    "travail": 3,
+    "magie": 0
+   },
+   "prix_po": 120,
+   "duree_jours": 4,
+   "recettes": null,
+   "avantages": "bonus aux jets de Vigueur effectués pour éviter de tomber malade.",
+   "taille": {
+    "type": "Cases",
+    "min": 1,
+    "max": 4
+   },
+   "amelioration_de": [
+    "cabanon"
+   ],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "lavoir",
+   "nom": "Lavoir",
+   "source": {
+    "livre": "GC",
+    "page": 102,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 3,
+    "influence": 0,
+    "travail": 3,
+    "magie": 0
+   },
+   "prix_po": 120,
+   "duree_jours": 8,
+   "recettes": {
+    "bonus": 3,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises"
+     ]
+    },
+    "texte": "+3 po ou Marchandises"
+   },
+   "avantages": "bonus aux jets de Vigueur effectués pour éviter de tomber malade.",
+   "taille": {
+    "type": "Cases",
+    "min": 2,
+    "max": 6
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "logement",
+   "nom": "Logement",
+   "source": {
+    "livre": "GC",
+    "page": 102,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 10,
+    "influence": 1,
+    "travail": 10,
+    "magie": 0
+   },
+   "prix_po": 430,
+   "duree_jours": 30,
+   "recettes": {
+    "bonus": 12,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po"
+     ]
+    },
+    "texte": "+12 po"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 20,
+    "max": 35
+   },
+   "amelioration_de": [
+    "dortoir"
+   ],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "meule",
+   "nom": "Meule",
+   "source": {
+    "livre": "GC",
+    "page": 102,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 8,
+    "influence": 0,
+    "travail": 7,
+    "magie": 0
+   },
+   "prix_po": 300,
+   "duree_jours": 20,
+   "recettes": {
+    "bonus": 8,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises"
+     ]
+    },
+    "texte": "+8 po ou Marchandises"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 20,
+    "max": 30
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "mur-defensif",
+   "nom": "Mur défensif",
+   "source": {
+    "livre": "GC",
+    "page": 103,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 5,
+    "influence": 2,
+    "travail": 5,
+    "magie": 0
+   },
+   "prix_po": 260,
+   "duree_jours": 12,
+   "recettes": null,
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 20,
+    "max": 40
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "peage",
+   "nom": "Péage",
+   "source": {
+    "livre": "GC",
+    "page": 103,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 2,
+    "influence": 1,
+    "travail": 2,
+    "magie": 0
+   },
+   "prix_po": 110,
+   "duree_jours": 6,
+   "recettes": {
+    "bonus": 4,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises"
+     ]
+    },
+    "texte": "+4 po ou Marchandises"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 1,
+    "max": 5
+   },
+   "amelioration_de": [],
+   "amelioration_en": [
+    "poste-de-garde"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "piece-secrete",
+   "nom": "Pièce secrète",
+   "source": {
+    "livre": "GC",
+    "page": 103,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 5,
+    "influence": 0,
+    "travail": 6,
+    "magie": 0
+   },
+   "prix_po": 220,
+   "duree_jours": 16,
+   "recettes": null,
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 6,
+    "max": 10
+   },
+   "amelioration_de": [
+    "chambre-forte"
+   ],
+   "amelioration_en": [
+    "issue-de-secours"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "pont-levis",
+   "nom": "Pont-levis",
+   "source": {
+    "livre": "GC",
+    "page": 103,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 8,
+    "influence": 2,
+    "travail": 5,
+    "magie": 0
+   },
+   "prix_po": 320,
+   "duree_jours": 6,
+   "recettes": null,
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 4,
+    "max": 8
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "poste-de-garde",
+   "nom": "Poste de garde",
+   "source": {
+    "livre": "GC",
+    "page": 103,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 7,
+    "influence": 2,
+    "travail": 6,
+    "magie": 0
+   },
+   "prix_po": 320,
+   "duree_jours": 20,
+   "recettes": {
+    "bonus": 4,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises"
+     ]
+    },
+    "texte": "+4 po ou Marchandises"
+   },
+   "avantages": "les défenseurs gagnent un bonus aux tests d’initiative et de Perception",
+   "taille": {
+    "type": "Cases",
+    "min": 6,
+    "max": 10
+   },
+   "amelioration_de": [
+    "peage"
+   ],
+   "amelioration_en": [
+    "breteche"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "poste-de-travail",
+   "nom": "Poste de travail",
+   "source": {
+    "livre": "GC",
+    "page": 104,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 8,
+    "influence": 0,
+    "travail": 7,
+    "magie": 0
+   },
+   "prix_po": 300,
+   "duree_jours": 16,
+   "recettes": {
+    "bonus": 8,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises",
+      "Influence"
+     ]
+    },
+    "texte": "+8 po, Marchandises ou Influence"
+   },
+   "avantages": "compte comme des outils d’artisan de qualité supérieure pour une compétence d’Artisanat ou de Profession",
+   "taille": {
+    "type": "Cases",
+    "min": 8,
+    "max": 16
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "quai",
+   "nom": "Quai",
+   "source": {
+    "livre": "GC",
+    "page": 104,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 7,
+    "influence": 2,
+    "travail": 6,
+    "magie": 0
+   },
+   "prix_po": 320,
+   "duree_jours": 20,
+   "recettes": {
+    "bonus": 12,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises",
+      "Influence",
+      "Travail"
+     ]
+    },
+    "texte": "+12 po, Marchandises, Influence ou Travail"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 10,
+    "max": 30
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "reliquaire",
+   "nom": "Reliquaire",
+   "source": {
+    "livre": "GC",
+    "page": 104,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 4,
+    "influence": 0,
+    "travail": 4,
+    "magie": 1
+   },
+   "prix_po": 260,
+   "duree_jours": 12,
+   "recettes": {
+    "bonus": 5,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence"
+     ]
+    },
+    "texte": "+5 po ou Influence"
+   },
+   "avantages": "bonus aux tests de Connaissances (religion) en rapport avec ce qu’il contient",
+   "taille": {
+    "type": "Cases",
+    "min": 1,
+    "max": 4
+   },
+   "amelioration_de": [],
+   "amelioration_en": [
+    "chambre-forte"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "remise",
+   "nom": "Remise",
+   "source": {
+    "livre": "GC",
+    "page": 104,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 3,
+    "influence": 0,
+    "travail": 3,
+    "magie": 0
+   },
+   "prix_po": 120,
+   "duree_jours": 8,
+   "recettes": {
+    "bonus": 2,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po"
+     ]
+    },
+    "texte": "+2 po"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 4,
+    "max": 8
+   },
+   "amelioration_de": [
+    "societe-de-facade",
+    "cabanon"
+   ],
+   "amelioration_en": [
+    "bureau",
+    "chambre-forte"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "salle-a-machicoulis",
+   "nom": "Salle à mâchicoulis",
+   "source": {
+    "livre": "GC",
+    "page": 104,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 4,
+    "influence": 0,
+    "travail": 4,
+    "magie": 0
+   },
+   "prix_po": 160,
+   "duree_jours": 10,
+   "recettes": null,
+   "avantages": "les défenseurs bénéficient d’un abri amélioré.",
+   "taille": {
+    "type": "Cases",
+    "min": 4,
+    "max": 8
+   },
+   "amelioration_de": [],
+   "amelioration_en": [
+    "breteche"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "salle-commune",
+   "nom": "Salle commune",
+   "source": {
+    "livre": "GC",
+    "page": 104,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 7,
+    "influence": 0,
+    "travail": 8,
+    "magie": 0
+   },
+   "prix_po": 300,
+   "duree_jours": 16,
+   "recettes": {
+    "bonus": 7,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence"
+     ]
+    },
+    "texte": "+7 po ou Influence"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 10,
+    "max": 30
+   },
+   "amelioration_de": [],
+   "amelioration_en": [
+    "salle-de-bal",
+    "salle-de-ceremonie",
+    "salle-du-trone"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "salle-de-bain",
+   "nom": "Salle de bain",
+   "source": {
+    "livre": "GC",
+    "page": 104,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 3,
+    "influence": 1,
+    "travail": 2,
+    "magie": 0
+   },
+   "prix_po": 130,
+   "duree_jours": 8,
+   "recettes": {
+    "bonus": 3,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence"
+     ]
+    },
+    "texte": "+3 po ou Influence"
+   },
+   "avantages": "bonus aux jets de Vigueur contre les maladies",
+   "taille": {
+    "type": "Cases",
+    "min": 3,
+    "max": 6
+   },
+   "amelioration_de": [
+    "sauna"
+   ],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "salle-de-bal",
+   "nom": "Salle de bal",
+   "source": {
+    "livre": "GC",
+    "page": 104,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 19,
+    "influence": 0,
+    "travail": 19,
+    "magie": 0
+   },
+   "prix_po": 760,
+   "duree_jours": 40,
+   "recettes": {
+    "bonus": 10,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence"
+     ]
+    },
+    "texte": "+10 po ou Influence"
+   },
+   "avantages": "bonus aux tests de Représentation",
+   "taille": {
+    "type": "Cases",
+    "min": 40,
+    "max": 60
+   },
+   "amelioration_de": [
+    "salle-commune"
+   ],
+   "amelioration_en": [
+    "auditorium"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "salle-de-ceremonie",
+   "nom": "Salle de cérémonie",
+   "source": {
+    "livre": "GC",
+    "page": 105,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 16,
+    "influence": 2,
+    "travail": 15,
+    "magie": 5
+   },
+   "prix_po": 1180,
+   "duree_jours": 40,
+   "recettes": {
+    "bonus": 10,
+    "admissibles": {
+     "type": "Toutes"
+    },
+    "texte": "+10 Capitaux"
+   },
+   "avantages": "bonus aux tests de Bluff, Diplomatie et Intimidation (voir ci-dessous)",
+   "taille": {
+    "type": "Cases",
+    "min": 40,
+    "max": 100
+   },
+   "amelioration_de": [
+    "salle-commune"
+   ],
+   "amelioration_en": [
+    "salle-du-trone"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "salle-de-classe",
+   "nom": "Salle de classe",
+   "source": {
+    "livre": "GC",
+    "page": 105,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 6,
+    "influence": 1,
+    "travail": 5,
+    "magie": 0
+   },
+   "prix_po": 250,
+   "duree_jours": 14,
+   "recettes": {
+    "bonus": 8,
+    "admissibles": {
+     "type": "Toutes"
+    },
+    "texte": "+8 Capitaux"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 5,
+    "max": 20
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "salle-de-combat",
+   "nom": "Salle de combat",
+   "source": {
+    "livre": "GC",
+    "page": 105,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 18,
+    "influence": 4,
+    "travail": 16,
+    "magie": 0
+   },
+   "prix_po": 800,
+   "duree_jours": 40,
+   "recettes": {
+    "bonus": 15,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence"
+     ]
+    },
+    "texte": "+15 po ou Influence"
+   },
+   "avantages": "un combattant gagne un bonus aux tests d’Intimidation et de combat de spectacle",
+   "taille": {
+    "type": "Cases",
+    "min": 40,
+    "max": 100
+   },
+   "amelioration_de": [],
+   "amelioration_en": [
+    "terrain-de-sport"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "salle-de-guerre",
+   "nom": "Salle de guerre",
+   "source": {
+    "livre": "GC",
+    "page": 105,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 8,
+    "influence": 0,
+    "travail": 7,
+    "magie": 0
+   },
+   "prix_po": 300,
+   "duree_jours": 16,
+   "recettes": null,
+   "avantages": "bonus aux tests de compétence et de combat de masse pendant la préparation du conflit",
+   "taille": {
+    "type": "Cases",
+    "min": 4,
+    "max": 12
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "salle-de-jeux",
+   "nom": "Salle de jeux",
+   "source": {
+    "livre": "GC",
+    "page": 105,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 8,
+    "influence": 0,
+    "travail": 7,
+    "magie": 0
+   },
+   "prix_po": 300,
+   "duree_jours": 16,
+   "recettes": {
+    "bonus": 10,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po"
+     ]
+    },
+    "texte": "+10 po (voir description)"
+   },
+   "avantages": "Criminalité +1, Danger +10 (voir description)",
+   "taille": {
+    "type": "Cases",
+    "min": 10,
+    "max": 20
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "salle-des-trophees",
+   "nom": "Salle des trophées",
+   "source": {
+    "livre": "GC",
+    "page": 105,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 6,
+    "influence": 1,
+    "travail": 5,
+    "magie": 0
+   },
+   "prix_po": 250,
+   "duree_jours": 16,
+   "recettes": {
+    "bonus": 5,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence"
+     ]
+    },
+    "texte": "+5 po ou Influence"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 4,
+    "max": 20
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "salle-du-trone",
+   "nom": "Salle du trône",
+   "source": {
+    "livre": "GC",
+    "page": 106,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 25,
+    "influence": 5,
+    "travail": 25,
+    "magie": 5
+   },
+   "prix_po": 1650,
+   "duree_jours": 40,
+   "recettes": {
+    "bonus": 15,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Influence"
+     ]
+    },
+    "texte": "+15 Influence"
+   },
+   "avantages": "bonus aux tests de Bluff, Diplomatie, Intimidation, Représentation et Connaissances (folklore local)",
+   "taille": {
+    "type": "Cases",
+    "min": 40,
+    "max": 80
+   },
+   "amelioration_de": [
+    "salle-de-ceremonie",
+    "salle-commune"
+   ],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "salle-piegee",
+   "nom": "Salle piégée",
+   "source": {
+    "livre": "GC",
+    "page": 106,
+    "section": "Les salles"
+   },
+   "cout": null,
+   "prix_po": null,
+   "duree_jours": null,
+   "recettes": null,
+   "avantages": "voir description",
+   "taille": {
+    "type": "Cases",
+    "min": 1,
+    "max": 4
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "salon",
+   "nom": "Salon",
+   "source": {
+    "livre": "GC",
+    "page": 106,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 12,
+    "influence": 0,
+    "travail": 12,
+    "magie": 0
+   },
+   "prix_po": 480,
+   "duree_jours": 24,
+   "recettes": {
+    "bonus": 4,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Influence"
+     ]
+    },
+    "texte": "+4 Influence"
+   },
+   "avantages": "bonus aux tests de Bluff, Diplomatie, Intimidation, Connaissances (folklore local) et Représentation",
+   "taille": {
+    "type": "Cases",
+    "min": 6,
+    "max": 10
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "sanctuaire",
+   "nom": "Sanctuaire",
+   "source": {
+    "livre": "GC",
+    "page": 106,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 2,
+    "influence": 1,
+    "travail": 1,
+    "magie": 1
+   },
+   "prix_po": 190,
+   "duree_jours": 6,
+   "recettes": null,
+   "avantages": "bonus à un jet de Volonté",
+   "taille": {
+    "type": "Cases",
+    "min": 1,
+    "max": 4
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "sauna",
+   "nom": "Sauna",
+   "source": {
+    "livre": "GC",
+    "page": 106,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 3,
+    "influence": 0,
+    "travail": 3,
+    "magie": 0
+   },
+   "prix_po": 120,
+   "duree_jours": 8,
+   "recettes": {
+    "bonus": 3,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence"
+     ]
+    },
+    "texte": "+3 po ou Influence"
+   },
+   "avantages": "bonus aux jets de sauvegarde pour récupérer d’une maladie ou pour éliminer des niveaux négatifs subis",
+   "taille": {
+    "type": "Cases",
+    "min": 2,
+    "max": 5
+   },
+   "amelioration_de": [],
+   "amelioration_en": [
+    "salle-de-bain"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "scriptorium",
+   "nom": "Scriptorium",
+   "source": {
+    "livre": "GC",
+    "page": 107,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 7,
+    "influence": 2,
+    "travail": 6,
+    "magie": 0
+   },
+   "prix_po": 320,
+   "duree_jours": 16,
+   "recettes": {
+    "bonus": 5,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises",
+      "Influence",
+      "Travail",
+      "Magie"
+     ]
+    },
+    "texte": "+5 po, Marchandises, Influence, Travail ou Magie"
+   },
+   "avantages": "compte comme des outils d’artisan de qualité supérieure pour les compétences d’écriture",
+   "taille": {
+    "type": "Cases",
+    "min": 5,
+    "max": 16
+   },
+   "amelioration_de": [],
+   "amelioration_en": [
+    "imprimerie"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "serre",
+   "nom": "Serre",
+   "source": {
+    "livre": "GC",
+    "page": 107,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 8,
+    "influence": 0,
+    "travail": 7,
+    "magie": 0
+   },
+   "prix_po": 300,
+   "duree_jours": 16,
+   "recettes": {
+    "bonus": 12,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises",
+      "Influence"
+     ]
+    },
+    "texte": "+12 po, Marchandises ou Influence"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 10,
+    "max": 20
+   },
+   "amelioration_de": [
+    "jardin"
+   ],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "site-funeraire",
+   "nom": "Site funéraire",
+   "source": {
+    "livre": "GC",
+    "page": 107,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 4,
+    "influence": 3,
+    "travail": 4,
+    "magie": 1
+   },
+   "prix_po": 350,
+   "duree_jours": 8,
+   "recettes": {
+    "bonus": 4,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence"
+     ]
+    },
+    "texte": "+4 po ou Influence"
+   },
+   "avantages": "permet de créer des morts-vivants ou de prévenir leur apparition",
+   "taille": {
+    "type": "Cases",
+    "min": 20,
+    "max": 30
+   },
+   "amelioration_de": [],
+   "amelioration_en": [
+    "crypte"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "societe-de-facade",
+   "nom": "Société de façade",
+   "source": {
+    "livre": "GC",
+    "page": 107,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 4,
+    "influence": 1,
+    "travail": 4,
+    "magie": 0
+   },
+   "prix_po": 190,
+   "duree_jours": 12,
+   "recettes": {
+    "bonus": 2,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises"
+     ]
+    },
+    "texte": "+2 po ou Marchandises"
+   },
+   "avantages": "augmentation du DD des tests de Perception et de Psychologie",
+   "taille": {
+    "type": "Cases",
+    "min": 10,
+    "max": 20
+   },
+   "amelioration_de": [],
+   "amelioration_en": [
+    "remise",
+    "etalage"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "stabulation",
+   "nom": "Stabulation",
+   "source": {
+    "livre": "GC",
+    "page": 107,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 6,
+    "influence": 1,
+    "travail": 5,
+    "magie": 0
+   },
+   "prix_po": 250,
+   "duree_jours": 16,
+   "recettes": {
+    "bonus": 8,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises",
+      "Travail"
+     ]
+    },
+    "texte": "+8 po, Marchandises ou Travail"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 6,
+    "max": 16
+   },
+   "amelioration_de": [],
+   "amelioration_en": [
+    "abri-pour-animaux"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "statue",
+   "nom": "Statue",
+   "source": {
+    "livre": "GC",
+    "page": 107,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 1,
+    "influence": 0,
+    "travail": 2,
+    "magie": 0
+   },
+   "prix_po": 60,
+   "duree_jours": 2,
+   "recettes": {
+    "bonus": 1,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence"
+     ]
+    },
+    "texte": "+1 po ou Influence"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 1,
+    "max": 9
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "terrain-de-sport",
+   "nom": "Terrain de sport",
+   "source": {
+    "livre": "GC",
+    "page": 107,
+    "section": "Les salles"
+   },
+   "cout": {
+    "marchandises": 17,
+    "influence": 3,
+    "travail": 18,
+    "magie": 0
+   },
+   "prix_po": 790,
+   "duree_jours": 20,
+   "recettes": {
+    "bonus": 10,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence"
+     ]
+    },
+    "texte": "+10 po ou Influence"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Cases",
+    "min": 40,
+    "max": 100
+   },
+   "amelioration_de": [
+    "salle-de-combat"
+   ],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  }
+ ],
+ "extensions": [
+  {
+   "id": "fortification",
+   "nom": "Fortification",
+   "source": {
+    "livre": "GC",
+    "page": 108,
+    "section": "Extensions de salle"
+   },
+   "cout": {
+    "marchandises": 8,
+    "influence": 0,
+    "travail": 7,
+    "magie": 0
+   },
+   "prix_po": 300,
+   "duree_jours": 30,
+   "recettes": null,
+   "avantages": "augmente la solidité d’une salle",
+   "taille": {
+    "type": "Texte",
+    "texte": "comme la salle d’origine"
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "ameublement",
+   "nom": "Ameublement",
+   "source": {
+    "livre": "GC",
+    "page": 108,
+    "section": "Extensions de salle"
+   },
+   "cout": {
+    "marchandises": 9,
+    "influence": 0,
+    "travail": 6,
+    "magie": 0
+   },
+   "prix_po": 300,
+   "duree_jours": 20,
+   "recettes": {
+    "bonus": 5,
+    "admissibles": {
+     "type": "SalleHote"
+    },
+    "texte": "+5 au test de la salle effectué pour produire des capitaux"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Texte",
+    "texte": "comme la salle d’origine"
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "piege",
+   "nom": "Piège",
+   "source": {
+    "livre": "GC",
+    "page": 108,
+    "section": "Extensions de salle"
+   },
+   "cout": null,
+   "prix_po": null,
+   "duree_jours": null,
+   "recettes": null,
+   "avantages": null,
+   "taille": null,
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  }
+ ],
+ "equipes": [
+  {
+   "id": "acolyte",
+   "nom": "Acolyte",
+   "source": {
+    "livre": "GC",
+    "page": 108,
+    "section": "Employés"
+   },
+   "cout": {
+    "marchandises": 2,
+    "influence": 2,
+    "travail": 2,
+    "magie": 3
+   },
+   "prix_po": 440,
+   "duree_jours": 3,
+   "recettes": {
+    "bonus": 4,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence",
+      "Magie"
+     ]
+    },
+    "texte": "+4 po, Influence ou Magie"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Personnes",
+    "nombre": 1
+   },
+   "amelioration_de": [],
+   "amelioration_en": [
+    "cure",
+    "sage"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "apprenti-mage",
+   "nom": "Apprenti-mage",
+   "source": {
+    "livre": "GC",
+    "page": 108,
+    "section": "Employés"
+   },
+   "cout": {
+    "marchandises": 2,
+    "influence": 2,
+    "travail": 1,
+    "magie": 4
+   },
+   "prix_po": 520,
+   "duree_jours": 3,
+   "recettes": {
+    "bonus": 4,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence",
+      "Magie"
+     ]
+    },
+    "texte": "+4 po, Influence ou Magie"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Personnes",
+    "nombre": 1
+   },
+   "amelioration_de": [],
+   "amelioration_en": [
+    "mage",
+    "sage"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "archers",
+   "nom": "Archers",
+   "source": {
+    "livre": "GC",
+    "page": 108,
+    "section": "Employés"
+   },
+   "cout": {
+    "marchandises": 4,
+    "influence": 3,
+    "travail": 7,
+    "magie": 0
+   },
+   "prix_po": 310,
+   "duree_jours": 4,
+   "recettes": {
+    "bonus": 6,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence",
+      "Travail"
+     ]
+    },
+    "texte": "+6 po, Influence ou Travail"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Personnes",
+    "nombre": 5
+   },
+   "amelioration_de": [
+    "soldats"
+   ],
+   "amelioration_en": [
+    "archers-d-elite"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "bureaucrates",
+   "nom": "Bureaucrates",
+   "source": {
+    "livre": "GC",
+    "page": 108,
+    "section": "Employés"
+   },
+   "cout": {
+    "marchandises": 2,
+    "influence": 4,
+    "travail": 2,
+    "magie": 0
+   },
+   "prix_po": 200,
+   "duree_jours": 2,
+   "recettes": {
+    "bonus": 4,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence"
+     ]
+    },
+    "texte": "+4 po ou Influence"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Personnes",
+    "nombre": 5
+   },
+   "amelioration_de": [
+    "fraudeurs",
+    "soldats"
+   ],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "cavaliers",
+   "nom": "Cavaliers",
+   "source": {
+    "livre": "GC",
+    "page": 108,
+    "section": "Employés"
+   },
+   "cout": {
+    "marchandises": 8,
+    "influence": 3,
+    "travail": 8,
+    "magie": 0
+   },
+   "prix_po": 410,
+   "duree_jours": 6,
+   "recettes": {
+    "bonus": 7,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence",
+      "Travail"
+     ]
+    },
+    "texte": "+7 po, Influence ou Travail"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Personnes",
+    "nombre": 5
+   },
+   "amelioration_de": [
+    "soldats-d-elite",
+    "soldats"
+   ],
+   "amelioration_en": [
+    "archers-montes"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "archers-montes",
+   "nom": "Archers montés",
+   "source": {
+    "livre": "GC",
+    "page": 109,
+    "section": "Employés"
+   },
+   "cout": {
+    "marchandises": 9,
+    "influence": 3,
+    "travail": 10,
+    "magie": 0
+   },
+   "prix_po": 470,
+   "duree_jours": 7,
+   "recettes": {
+    "bonus": 8,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence",
+      "Travail"
+     ]
+    },
+    "texte": "+8 po, Influence ou Travail"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Personnes",
+    "nombre": 5
+   },
+   "amelioration_de": [
+    "cavaliers",
+    "archers-d-elite"
+   ],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "artisans",
+   "nom": "Artisans",
+   "source": {
+    "livre": "GC",
+    "page": 109,
+    "section": "Employés"
+   },
+   "cout": {
+    "marchandises": 3,
+    "influence": 2,
+    "travail": 4,
+    "magie": 0
+   },
+   "prix_po": 200,
+   "duree_jours": 2,
+   "recettes": {
+    "bonus": 4,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises",
+      "Travail"
+     ]
+    },
+    "texte": "+4 po, Marchandises ou Travail"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Personnes",
+    "nombre": 3
+   },
+   "amelioration_de": [],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "tire-laine",
+   "nom": "Tire-laine",
+   "source": {
+    "livre": "GC",
+    "page": 109,
+    "section": "Employés"
+   },
+   "cout": {
+    "marchandises": 0,
+    "influence": 3,
+    "travail": 1,
+    "magie": 0
+   },
+   "prix_po": 110,
+   "duree_jours": 1,
+   "recettes": {
+    "bonus": 3,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises",
+      "Travail"
+     ]
+    },
+    "texte": "+3 po, Marchandises ou Travail"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Personnes",
+    "nombre": 5
+   },
+   "amelioration_de": [],
+   "amelioration_en": [
+    "cambrioleurs"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "conducteur-d-attelage",
+   "nom": "Conducteur d’attelage",
+   "source": {
+    "livre": "GC",
+    "page": 109,
+    "section": "Employés"
+   },
+   "cout": {
+    "marchandises": 2,
+    "influence": 1,
+    "travail": 1,
+    "magie": 0
+   },
+   "prix_po": 90,
+   "duree_jours": 0,
+   "recettes": {
+    "bonus": 2,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises",
+      "Travail"
+     ]
+    },
+    "texte": "+2 po, Marchandises ou Travail"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Personnes",
+    "nombre": 1
+   },
+   "amelioration_de": [
+    "travailleurs"
+   ],
+   "amelioration_en": [
+    "laquais"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "archers-d-elite",
+   "nom": "Archers d’élite",
+   "source": {
+    "livre": "GC",
+    "page": 109,
+    "section": "Employés"
+   },
+   "cout": {
+    "marchandises": 5,
+    "influence": 4,
+    "travail": 8,
+    "magie": 0
+   },
+   "prix_po": 380,
+   "duree_jours": 6,
+   "recettes": {
+    "bonus": 7,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence",
+      "Travail"
+     ]
+    },
+    "texte": "+7 po, Influence ou Travail"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Personnes",
+    "nombre": 5
+   },
+   "amelioration_de": [
+    "archers",
+    "soldats-d-elite"
+   ],
+   "amelioration_en": [
+    "archers-montes"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "gardes-d-elite",
+   "nom": "Gardes d’élite",
+   "source": {
+    "livre": "GC",
+    "page": 109,
+    "section": "Employés"
+   },
+   "cout": {
+    "marchandises": 3,
+    "influence": 1,
+    "travail": 4,
+    "magie": 0
+   },
+   "prix_po": 170,
+   "duree_jours": 2,
+   "recettes": {
+    "bonus": 4,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence",
+      "Travail"
+     ]
+    },
+    "texte": "+4 po, Influence ou Travail"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Personnes",
+    "nombre": 5
+   },
+   "amelioration_de": [
+    "gardes"
+   ],
+   "amelioration_en": [
+    "soldats-d-elite"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "soldats-d-elite",
+   "nom": "Soldats d’élite",
+   "source": {
+    "livre": "GC",
+    "page": 110,
+    "section": "Employés"
+   },
+   "cout": {
+    "marchandises": 5,
+    "influence": 3,
+    "travail": 7,
+    "magie": 0
+   },
+   "prix_po": 330,
+   "duree_jours": 5,
+   "recettes": {
+    "bonus": 6,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence",
+      "Travail"
+     ]
+    },
+    "texte": "+6 po, Influence ou Travail"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Personnes",
+    "nombre": 5
+   },
+   "amelioration_de": [
+    "gardes-d-elite",
+    "soldats"
+   ],
+   "amelioration_en": [
+    "cavaliers",
+    "archers-d-elite"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "gardes",
+   "nom": "Gardes",
+   "source": {
+    "livre": "GC",
+    "page": 110,
+    "section": "Employés"
+   },
+   "cout": {
+    "marchandises": 2,
+    "influence": 0,
+    "travail": 3,
+    "magie": 0
+   },
+   "prix_po": 100,
+   "duree_jours": 1,
+   "recettes": {
+    "bonus": 2,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence",
+      "Travail"
+     ]
+    },
+    "texte": "+2 po, Influence ou Travail"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Personnes",
+    "nombre": 5
+   },
+   "amelioration_de": [
+    "travailleurs"
+   ],
+   "amelioration_en": [
+    "gardes-d-elite",
+    "soldats"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "travailleurs",
+   "nom": "Travailleurs",
+   "source": {
+    "livre": "GC",
+    "page": 110,
+    "section": "Employés"
+   },
+   "cout": {
+    "marchandises": 0,
+    "influence": 1,
+    "travail": 2,
+    "magie": 0
+   },
+   "prix_po": 70,
+   "duree_jours": 0,
+   "recettes": {
+    "bonus": 2,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Travail"
+     ]
+    },
+    "texte": "+2 po ou Travail"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Personnes",
+    "nombre": 5
+   },
+   "amelioration_de": [],
+   "amelioration_en": [
+    "conducteur-d-attelage",
+    "gardes",
+    "laquais",
+    "marins",
+    "fraudeurs"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "laquais",
+   "nom": "Laquais",
+   "source": {
+    "livre": "GC",
+    "page": 110,
+    "section": "Employés"
+   },
+   "cout": {
+    "marchandises": 1,
+    "influence": 2,
+    "travail": 2,
+    "magie": 0
+   },
+   "prix_po": 120,
+   "duree_jours": 1,
+   "recettes": {
+    "bonus": 2,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Influence",
+      "Travail"
+     ]
+    },
+    "texte": "+2 Influence ou Travail"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Personnes",
+    "nombre": 5
+   },
+   "amelioration_de": [
+    "conducteur-d-attelage",
+    "travailleurs"
+   ],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "mage",
+   "nom": "Mage",
+   "source": {
+    "livre": "GC",
+    "page": 110,
+    "section": "Employés"
+   },
+   "cout": {
+    "marchandises": 3,
+    "influence": 2,
+    "travail": 2,
+    "magie": 8
+   },
+   "prix_po": 960,
+   "duree_jours": 7,
+   "recettes": {
+    "bonus": 7,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence",
+      "Magie"
+     ]
+    },
+    "texte": "+7 po, Influence ou Magie"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Personnes",
+    "nombre": 1
+   },
+   "amelioration_de": [
+    "apprenti-mage"
+   ],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "cure",
+   "nom": "Curé",
+   "source": {
+    "livre": "GC",
+    "page": 110,
+    "section": "Employés"
+   },
+   "cout": {
+    "marchandises": 3,
+    "influence": 3,
+    "travail": 3,
+    "magie": 6
+   },
+   "prix_po": 810,
+   "duree_jours": 7,
+   "recettes": {
+    "bonus": 7,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence",
+      "Magie"
+     ]
+    },
+    "texte": "+7 po, Influence ou Magie"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Personnes",
+    "nombre": 1
+   },
+   "amelioration_de": [
+    "acolyte"
+   ],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "cambrioleurs",
+   "nom": "Cambrioleurs",
+   "source": {
+    "livre": "GC",
+    "page": 110,
+    "section": "Employés"
+   },
+   "cout": {
+    "marchandises": 1,
+    "influence": 4,
+    "travail": 3,
+    "magie": 0
+   },
+   "prix_po": 200,
+   "duree_jours": 3,
+   "recettes": {
+    "bonus": 4,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises",
+      "Influence"
+     ]
+    },
+    "texte": "+4 po, Marchandises ou Influence"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Personnes",
+    "nombre": 5
+   },
+   "amelioration_de": [
+    "tire-laine"
+   ],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "sage",
+   "nom": "Sage",
+   "source": {
+    "livre": "GC",
+    "page": 110,
+    "section": "Employés"
+   },
+   "cout": {
+    "marchandises": 5,
+    "influence": 2,
+    "travail": 2,
+    "magie": 0
+   },
+   "prix_po": 200,
+   "duree_jours": 4,
+   "recettes": {
+    "bonus": 5,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence"
+     ]
+    },
+    "texte": "+5 po ou Influence"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Personnes",
+    "nombre": 1
+   },
+   "amelioration_de": [
+    "acolyte",
+    "apprenti-mage"
+   ],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "marins",
+   "nom": "Marins",
+   "source": {
+    "livre": "GC",
+    "page": 111,
+    "section": "Employés"
+   },
+   "cout": {
+    "marchandises": 1,
+    "influence": 1,
+    "travail": 2,
+    "magie": 0
+   },
+   "prix_po": 90,
+   "duree_jours": 0,
+   "recettes": {
+    "bonus": 2,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises",
+      "Travail"
+     ]
+    },
+    "texte": "+2 po, Marchandises ou Travail"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Personnes",
+    "nombre": 5
+   },
+   "amelioration_de": [
+    "travailleurs"
+   ],
+   "amelioration_en": [],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "fraudeurs",
+   "nom": "Fraudeurs",
+   "source": {
+    "livre": "GC",
+    "page": 111,
+    "section": "Employés"
+   },
+   "cout": {
+    "marchandises": 0,
+    "influence": 3,
+    "travail": 2,
+    "magie": 0
+   },
+   "prix_po": 130,
+   "duree_jours": 1,
+   "recettes": {
+    "bonus": 2,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Marchandises",
+      "Influence"
+     ]
+    },
+    "texte": "+2 po, Marchandises ou Influence"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Personnes",
+    "nombre": 5
+   },
+   "amelioration_de": [
+    "travailleurs"
+   ],
+   "amelioration_en": [
+    "bureaucrates"
+   ],
+   "point_a_confirmer": null
+  },
+  {
+   "id": "soldats",
+   "nom": "Soldats",
+   "source": {
+    "livre": "GC",
+    "page": 111,
+    "section": "Employés"
+   },
+   "cout": {
+    "marchandises": 3,
+    "influence": 2,
+    "travail": 5,
+    "magie": 0
+   },
+   "prix_po": 220,
+   "duree_jours": 2,
+   "recettes": {
+    "bonus": 5,
+    "admissibles": {
+     "type": "Liste",
+     "ressources": [
+      "Po",
+      "Influence",
+      "Travail"
+     ]
+    },
+    "texte": "+5 po, Influence ou Travail"
+   },
+   "avantages": null,
+   "taille": {
+    "type": "Personnes",
+    "nombre": 5
+   },
+   "amelioration_de": [
+    "gardes"
+   ],
+   "amelioration_en": [
+    "archers",
+    "bureaucrates",
+    "cavaliers",
+    "soldats-d-elite"
+   ],
+   "point_a_confirmer": null
+  }
+ ],
+ "gestionnaires": [
+  {
+   "id": "abbe",
+   "nom": "Abbé",
+   "source": {
+    "livre": "GC",
+    "page": 90,
+    "section": "Exemples de gestionnaires"
+   },
+   "salaire_po_jour": 4,
+   "competences": "Diplomatie, Premiers secours, Connaissances (folklore local), Connaissances (religion), Un abbé est un lanceur de sorts divins formé pour gérer les activités quotidiennes d’un temple ou d’une organisation religieuse, ainsi que celles de ses membres. C’est le plus souvent un adepte, un prêtre, un druide ou un oracle de niveau 3 qui possède une armure légère (ou aucune armure dans le cas d’un adepte) et une arme appropriée à sa foi."
+  },
+  {
+   "id": "aubergiste",
+   "nom": "Aubergiste",
+   "source": {
+    "livre": "GC",
+    "page": 90,
+    "section": "Exemples de gestionnaires"
+   },
+   "salaire_po_jour": 2,
+   "competences": "Estimation, Diplomatie, Connaissances (folklore local), Profession (une au choix), Un aubergiste gère un établissement principalement conçu pour nourrir et loger ses clients. C’est le plus souvent un homme du peuple ou un expert de niveau 3, mais il peut également être un guerrier, un roublard ou un homme d’armes à la retraite. Un aubergiste supervise les activités quotidiennes d’une auberge, d’une taverne, d’un hôtel, d’un restaurant ou d’un club social privé et élitiste."
+  },
+  {
+   "id": "avocat-associe",
+   "nom": "Avocat associé",
+   "source": {
+    "livre": "GC",
+    "page": 90,
+    "section": "Exemples de gestionnaires"
+   },
+   "salaire_po_jour": 4,
+   "competences": "Bluff, Diplomatie, Connaissances (une au choix), Profession (avocat), Un avocat associé est le directeur d’un cabinet d’avocats. C’est le plus souvent un barde, un expert, un roublard, un ensorceleur, un magicien ou un membre d’une autre classe spécialisée de niveau 3 qui s’appuie sur des valeurs de caractéristiques mentales élevées. Un avocat associé répond aux besoins juridiques d’une organisation."
+  },
+  {
+   "id": "capitaine",
+   "nom": "Capitaine",
+   "source": {
+    "livre": "GC",
+    "page": 90,
+    "section": "Exemples de gestionnaires"
+   },
+   "salaire_po_jour": 5,
+   "competences": "Acrobaties, Diplomatie, Connaissances (géographie), Profession (marin), Un capitaine est un maître en matière de navigation maritime capable de gérer l’équipage et les activités d’un navire. C’est le plus souvent un expert, un roublard ou un guerrier de niveau 3. Un capitaine peut gérer une organisation commerciale, une flotte pirate ou une entreprise maritime ou fluviale de transport de passagers."
+  },
+  {
+   "id": "comptable",
+   "nom": "Comptable",
+   "source": {
+    "livre": "GC",
+    "page": 91,
+    "section": "Exemples de gestionnaires"
+   },
+   "salaire_po_jour": 3,
+   "competences": "Estimation, Connaissances (folklore local), Linguistique, Profession (comptable), Un comptable tient à jour les comptes et veille à l’équilibre du budget d’un bâtiment ou d’une organisation. C’est le plus souvent un expert de niveau 3 qui ne sait pas combattre mais il appartenir à n’importe quelle classe qualifiée qui fait bon usage des caractéristiques mentales."
+  },
+  {
+   "id": "contrebandier",
+   "nom": "Contrebandier",
+   "source": {
+    "livre": "GC",
+    "page": 91,
+    "section": "Exemples de gestionnaires"
+   },
+   "salaire_po_jour": 3,
+   "competences": "Estimation, Bluff, Connaissances (folklore local), Escamotage, Un contrebandier est un marchand qui a l’habitude de pratiquer sa profession sans se faire remarquer par les autorités locales. C’est le plus souvent un barde, un expert, un roublard ou un membre d’une classe de niveau 3 spécialisée dans les subterfuges. Un contrebandier peut gérer les activités d’un marché noir, d’une caravane illégale ou d’une flottille de navires de contrebande."
+  },
+  {
+   "id": "gardien",
+   "nom": "Gardien",
+   "source": {
+    "livre": "GC",
+    "page": 91,
+    "section": "Exemples de gestionnaires"
+   },
+   "salaire_po_jour": 2,
+   "competences": "Diplomatie, Intimidation, Connaissances (folklore local), Psychologie, Un gardien supervise le fonctionnement d’une prison, d’un donjon ou d’un endroit où sont détenus des prisonniers. C’est le plus souvent un prêtre, un expert, un guerrier, un inquisiteur, un homme d’armes de niveau 3 ou un membre d’une classe adaptée au combat et à la roublardise. Un gardien répond aux besoins des détenues et des gardes qui travaillent dans la prison et veille au bon fonctionnement du site."
+  },
+  {
+   "id": "intendant",
+   "nom": "Intendant",
+   "source": {
+    "livre": "GC",
+    "page": 91,
+    "section": "Exemples de gestionnaires"
+   },
+   "salaire_po_jour": 2,
+   "competences": "Diplomatie, Connaissances (folklore local), Connaissances (noblesse), Psychologie, Un intendant s’occupe d’un grand bâtiment résidentiel comme un château, un manoir ou une villa de noble. C’est le plus souvent un adepte, un homme du peuple ou un expert de niveau 3. Il gère les activités quotidiennes d’un domaine, coordonne le travail des domestiques, discipline ceux dont le travail n’est pas satisfaisant et veille à ce que les désirs des seigneurs et des dames de la demeure soient toujours satisfaits."
+  },
+  {
+   "id": "lieutenant",
+   "nom": "Lieutenant",
+   "source": {
+    "livre": "GC",
+    "page": 91,
+    "section": "Exemples de gestionnaires"
+   },
+   "salaire_po_jour": 4,
+   "competences": "Diplomatie, Intimidation, Connaissances (ingénierie), Perception"
+  },
+  {
+   "id": "maitre-forgeron",
+   "nom": "Maître-forgeron",
+   "source": {
+    "livre": "GC",
+    "page": 91,
+    "section": "Exemples de gestionnaires"
+   },
+   "salaire_po_jour": 4,
+   "competences": "Estimation, Artisanat (un au choix), Perception, Profession (une au choix), Un maître-forgeron gère une entreprise de fabrication. C’est le plus souvent un barde, un expert, un roublard ou un membre d’une autre classe spécialisée de niveau 3. Un maître-forgeron gère les activités quotidiennes d’un site de production voué à un artisanat en particulier, forme les apprentis et travaille sur les articles les plus exigeants et les plus difficiles à fabriquer."
+  },
+  {
+   "id": "maitre-de-guilde-guilde-d-artisans",
+   "nom": "Maître de guilde (guilde d’artisans)",
+   "source": {
+    "livre": "GC",
+    "page": 91,
+    "section": "Exemples de gestionnaires"
+   },
+   "salaire_po_jour": 3,
+   "competences": "Estimation, Artisanat (un au choix), Diplomatie, Profession (une au choix), Un maître de guilde d’artisans est un expert dans son domaine qui peut diriger un groupe d’artisans de même mentalité. C’est le plus souvent un barde, un expert, un roublard ou un membre d’une autre classe de niveau 3. Un maître de guilde se charge de la gestion quotidienne d’une guilde d’artisans : l’administration de base, la formation des membres de la guilde et la pratique de son artisanat."
+  },
+  {
+   "id": "maitre-de-guilde-guilde-de-voleurs",
+   "nom": "Maître de guilde (guilde de voleurs)",
+   "source": {
+    "livre": "GC",
+    "page": 91,
+    "section": "Exemples de gestionnaires"
+   },
+   "salaire_po_jour": 5,
+   "competences": "Estimation, Bluff, Sabotage, Connaissances (folklore local), Un maître de guilde de voleurs gère les activités d’une organisation criminelle. C’est le plus souvent un barde, un prêtre, un expert, un roublard ou un ensorceleur de niveau 3. Un maître de guilde se charge de la gestion quotidienne d’une guilde de voleurs : l’administration de base, la formation des recrues et la préparation de nouvelles manigances."
+  },
+  {
+   "id": "medecin",
+   "nom": "Médecin",
+   "source": {
+    "livre": "GC",
+    "page": 91,
+    "section": "Exemples de gestionnaires"
+   },
+   "salaire_po_jour": 5,
+   "competences": "Premiers secours, Perception, Psychologie, Survie Un médecin est formé pour traiter toutes sortes de maladie et de blessures. C’est le plus souvent un adepte, un prêtre, un druide ou un oracle de niveau 3. Un expert peut également faire un médecin convenable qui traitera les maladies et soignera les blessures par l’application de moyens ordinaires seulement ou par l’utilisation d’objets magiques. Un médecin est généralement responsable d’un hôpital ou d’une organisation qui délivre des soins médicaux."
+  },
+  {
+   "id": "proviseur",
+   "nom": "Proviseur",
+   "source": {
+    "livre": "GC",
+    "page": 92,
+    "section": "Exemples de gestionnaires"
+   },
+   "salaire_po_jour": 3,
+   "competences": "Diplomatie, Connaissances (deux au choix), Profession (une au choix), Un proviseur gère un lieu d’enseignement tel qu’une école de bardes, une académie de mages ou une Université. C’est le plus souvent un alchimiste, un barde, un expert, un roublard, un ensorceleur, un magicien ou une sorcière de niveau 3. La gestion d’un établissement d’enseignement supérieur consiste à s’occuper de l’administration de base, à enseigner et à effectuer des recherches."
+  },
+  {
+   "id": "regisseur",
+   "nom": "Régisseur",
+   "source": {
+    "livre": "GC",
+    "page": 92,
+    "section": "Exemples de gestionnaires"
+   },
+   "salaire_po_jour": 2,
+   "competences": "Diplomatie, Déguisement, Représentation (deux au choix), Un régisseur supervise les activités d’une organisation artistique ou d’un bâtiment consacré aux pratiques artistiques. C’est le plus souvent un expert de niveau 3, mais il peut également être barde, roublard ou membre d’une classe possédant des compétences adaptées à la pratique des beaux-arts. Un régisseur passe ses journées à superviser les activités d’un théâtre, à former les acteurs et à promouvoir les spectacles de l’établissement."
+  },
+  {
+   "id": "second-de-syndicat-du-crime",
+   "nom": "Second de syndicat du crime",
+   "source": {
+    "livre": "GC",
+    "page": 92,
+    "section": "Exemples de gestionnaires"
+   },
+   "salaire_po_jour": 2,
+   "competences": "Estimation, Bluff, Intimidation, Connaissances (folklore local), Un second de syndicat du crime applique les ordres directs d’un parrain du crime ou d’un individu à la tête d’une organisation criminelle violente. C’est le plus souvent un barde, un prêtre, un expert, un guerrier ou un roublard de niveau 3. Il applique les ordres de son supérieur, poursuit les objectifs de l’organisation et supervise les subordonnés."
+  },
+  {
+   "id": "sensei",
+   "nom": "Sensei",
+   "source": {
+    "livre": "GC",
+    "page": 92,
+    "section": "Exemples de gestionnaires"
+   },
+   "salaire_po_jour": 2,
+   "competences": "Acrobaties, Intimidation, Connaissances (histoire), Perception, Un sensei est en charge d’un dojo ou d’un monastère voué à la pratique des arts martiaux. C’est le plus souvent un moine de niveau 3 mais il peut également posséder plusieurs niveaux dans une classe martiale ou qui s’appuie sur une valeur de Sagesse élevée. Un sensei supervise l’entraînement des élèves et gère les activités quotidiennes de l’établissement."
+  }
+ ],
+ "modeles_batiments": [
+  {
+   "id": "academie",
+   "nom": "Académie",
+   "source": {
+    "livre": "GC",
+    "page": 111,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 120,
+    "influence": 16,
+    "travail": 109,
+    "magie": 3
+   },
+   "prix_po": 5360,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "laboratoire-d-alchimie",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-de-bain",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-a-coucher",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "clocher",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bibliotheque",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "dortoir",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-de-classe",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "salle-commune",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cour",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "serre",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cuisine",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "dome-d-observation",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "scriptorium",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salon",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "statue",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 laboratoire d’alchimie, 2 salles de bain, 1 chambre à coucher, 1 clocher, 1 bibliothèque, 1 dortoir, 2 salles de classe, 1 salle commune, 1 cour, 1 serre, 1 cuisine, 1 latrines, 1 dôme d’observation, 2 bureaux, 1 scriptorium, 1 salon, 1 statue",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "alchimiste",
+   "nom": "Alchimiste",
+   "source": {
+    "livre": "GC",
+    "page": 111,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 48,
+    "influence": 2,
+    "travail": 41,
+    "magie": 1
+   },
+   "prix_po": 1940,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "laboratoire-d-alchimie",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-a-coucher",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "jardin",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cuisine",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salon",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "etalage",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 laboratoire d’alchimie, 1 chambre à coucher, 1 jardin, 1 cuisine, 1 latrines, 1 salon, 1 remise, 1 étalage",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "appartement",
+   "nom": "Appartement",
+   "source": {
+    "livre": "GC",
+    "page": 111,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 41,
+    "influence": 16,
+    "travail": 41,
+    "magie": 0
+   },
+   "prix_po": 2120,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "dortoir",
+     "quantite": 4
+    },
+    {
+     "type": "Unite",
+     "id": "cuisine",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "4 dortoirs, 1 cuisine, 1 latrines, 1 bureau, 1 remise",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "arene",
+   "nom": "Arène",
+   "source": {
+    "livre": "GC",
+    "page": 111,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 109,
+    "influence": 20,
+    "travail": 96,
+    "magie": 1
+   },
+   "prix_po": 4800,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "bar",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-de-bain",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-de-combat",
+     "quantite": 4
+    },
+    {
+     "type": "Unite",
+     "id": "salle-de-jeux",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "infirmerie",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "etalage",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 bar, 1 salle de bain, 1 jardin, 4 salles de combat, 1 salle de jeux, 1 infirmerie, 1 latrines, 1 bureau, 1 remise, 1 étalage",
+   "point_a_confirmer": "PC-08"
+  },
+  {
+   "id": "atelier-de-produits-exotiques",
+   "nom": "Atelier de produits exotiques",
+   "source": {
+    "livre": "GC",
+    "page": 113,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 44,
+    "influence": 1,
+    "travail": 41,
+    "magie": 0
+   },
+   "prix_po": 1730,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "atelier-d-artisan",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-a-coucher",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cuisine",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salon",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "etalage",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 atelier d’artisan, 1 chambre à coucher, 1 cuisine, 1 latrines, 1 salon, 1 remise, 1 étalage",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "auberge",
+   "nom": "Auberge",
+   "source": {
+    "livre": "GC",
+    "page": 113,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 52,
+    "influence": 5,
+    "travail": 47,
+    "magie": 0
+   },
+   "prix_po": 2130,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "bar",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-de-bain",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-a-coucher",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-commune",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cuisine",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "logement",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "stabulation",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "etalage",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 bar, 1 salle de bain, 1 chambre à coucher, 1 salle commune, 1 cuisine, 1 latrines, 1 logement, 1 stabulation, 1 étalage",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "banque",
+   "nom": "Banque",
+   "source": {
+    "livre": "GC",
+    "page": 113,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 39,
+    "influence": 3,
+    "travail": 35,
+    "magie": 0
+   },
+   "prix_po": 1570,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "poste-de-garde",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "piece-secrete",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "etalage",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-forte",
+     "quantite": 2
+    }
+   ],
+   "composition_imprimee": "1 poste de garde, 2 bureaux, 1 pièce secrète, 1 étalage, 2 chambres fortes",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "bibliotheque",
+   "nom": "Bibliothèque",
+   "source": {
+    "livre": "GC",
+    "page": 113,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 29,
+    "influence": 4,
+    "travail": 28,
+    "magie": 2
+   },
+   "prix_po": 1460,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "bibliotheque",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "salle-commune",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "2 bibliothèques, 1 salle commune, 1 bureau, 1 remise",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "boutique",
+   "nom": "Boutique",
+   "source": {
+    "livre": "GC",
+    "page": 113,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 14,
+    "influence": 1,
+    "travail": 12,
+    "magie": 0
+   },
+   "prix_po": 550,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "etalage",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 latrines, 1 bureau, 1 remise, 1 étalage",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "boutique-de-luxe",
+   "nom": "Boutique de luxe",
+   "source": {
+    "livre": "GC",
+    "page": 113,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 28,
+    "influence": 1,
+    "travail": 22,
+    "magie": 0
+   },
+   "prix_po": 1030,
+   "composition": [
+    {
+     "type": "Extension",
+     "id": "ameublement",
+     "quantite": 1,
+     "sur": "étalage"
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "etalage",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-forte",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 ameublement (étalage), 1 bureau, 1 remise, 1 étalage, 1 chambre forte",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "boutique-de-magie",
+   "nom": "Boutique de magie",
+   "source": {
+    "livre": "GC",
+    "page": 113,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 40,
+    "influence": 1,
+    "travail": 33,
+    "magie": 1
+   },
+   "prix_po": 1590,
+   "composition": [
+    {
+     "type": "Extension",
+     "id": "ameublement",
+     "quantite": 1,
+     "sur": "étalage"
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "reliquaire",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "etalage",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-forte",
+     "quantite": 2
+    }
+   ],
+   "composition_imprimee": "1 ameublement (étalage), 1 bureau, 1 reliquaire, 1 remise, 1 étalage, 2 chambres fortes",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "brasserie",
+   "nom": "Brasserie",
+   "source": {
+    "livre": "GC",
+    "page": 113,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 36,
+    "influence": 3,
+    "travail": 32,
+    "magie": 0
+   },
+   "prix_po": 1450,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "bar",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "brasserie",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cuisine",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "poste-de-travail",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 bar, 1 brasserie, 1 cuisine, 1 bureau, 2 remises, 1 poste de travail",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "caserne",
+   "nom": "Caserne",
+   "source": {
+    "livre": "GC",
+    "page": 113,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 80,
+    "influence": 18,
+    "travail": 73,
+    "magie": 1
+   },
+   "prix_po": 3700,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "armurerie",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-a-coucher",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "dortoir",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "salle-commune",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "dojo",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "poste-de-garde",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "infirmerie",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cuisine",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "2 armureries, 1 chambre à coucher, 2 dortoirs, 1 salle commune, 1 dojo, 1 poste de garde, 1 infirmerie, 1 cuisine, 1 latrines, 1 bureau, 1 remise",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "cathedrale",
+   "nom": "Cathédrale",
+   "source": {
+    "livre": "GC",
+    "page": 113,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 91,
+    "influence": 12,
+    "travail": 84,
+    "magie": 11
+   },
+   "prix_po": 4960,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "autel",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-a-coucher",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "clocher",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bibliotheque",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cellule",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-de-ceremonie",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "confessionnal",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cour",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "crypte",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "jardin",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "reliquaire",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "sanctuaire",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salon",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "statue",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 autel, 1 chambre à coucher, 1 clocher, 1 bibliothèque, 1 cellule, 1 salle de cérémonie, 1 confessionnal, 1 cour, 1 crypte, 1 jardin, 1 bureau, 1 reliquaire, 1 sanctuaire, 1 salon, 1 statue, 1 remise",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "chateau",
+   "nom": "Château",
+   "source": {
+    "livre": "GC",
+    "page": 113,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 165,
+    "influence": 31,
+    "travail": 148,
+    "magie": 2
+   },
+   "prix_po": 7390,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "armurerie",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-a-coucher",
+     "quantite": 3
+    },
+    {
+     "type": "Unite",
+     "id": "dortoir",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "cellule",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cour",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "crypte",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "mur-defensif",
+     "quantite": 4
+    },
+    {
+     "type": "Unite",
+     "id": "pont-levis",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "issue-de-secours",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "jardin",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "breteche",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-a-machicoulis",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cuisine",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salon",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "stabulation",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 2
+    }
+   ],
+   "composition_imprimee": "2 armureries, 3 chambres à coucher, 2 dortoirs, 1 cellule, 1 cour, 1 crypte, 4 murs défensifs, 1 pont-levis, 1 issue de secours, 1 jardin, 1 bretèche, 1 salle à mâchicoulis, 1 cuisine, 1 latrines, 1 bureau, 1 salon, 1 stabulation, 2 remises",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "cimetiere",
+   "nom": "Cimetière",
+   "source": {
+    "livre": "GC",
+    "page": 113,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 18,
+    "influence": 12,
+    "travail": 19,
+    "magie": 5
+   },
+   "prix_po": 1600,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "site-funeraire",
+     "quantite": 3
+    },
+    {
+     "type": "Unite",
+     "id": "crypte",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "statue",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "3 sites funéraires, 1 crypte, 1 statue",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "commerce",
+   "nom": "Commerce",
+   "source": {
+    "livre": "GC",
+    "page": 113,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 19,
+    "influence": 1,
+    "travail": 16,
+    "magie": 0
+   },
+   "prix_po": 730,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "etalage",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "poste-de-travail",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 latrines, 1 remise, 1 étalage, 1 poste de travail",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "complexe-de-bureaux",
+   "nom": "Complexe de bureaux",
+   "source": {
+    "livre": "GC",
+    "page": 113,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 55,
+    "influence": 6,
+    "travail": 52,
+    "magie": 1
+   },
+   "prix_po": 2420,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "bibliotheque",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 4
+    },
+    {
+     "type": "Unite",
+     "id": "scriptorium",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "salon",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 2
+    }
+   ],
+   "composition_imprimee": "1 bibliothèque, 1 latrines, 4 bureaux, 2 scriptoriums, 1 salon, 2 remises",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "ecole",
+   "nom": "École",
+   "source": {
+    "livre": "GC",
+    "page": 113,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 58,
+    "influence": 5,
+    "travail": 53,
+    "magie": 0
+   },
+   "prix_po": 2370,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "clocher",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-de-classe",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "salle-commune",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cour",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cuisine",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "poste-de-travail",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 clocher, 2 salles de classe, 1 salle commune, 1 cour, 1 cuisine, 1 latrines, 1 bureau, 2 remises, 1 poste de travail",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "ecole-de-bardes",
+   "nom": "École de bardes",
+   "source": {
+    "livre": "GC",
+    "page": 114,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 107,
+    "influence": 13,
+    "travail": 109,
+    "magie": 1
+   },
+   "prix_po": 4810,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "auditorium",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-de-bain",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-a-coucher",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bibliotheque",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "dortoir",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-de-classe",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "salle-commune",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cour",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cuisine",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "scriptorium",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salon",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "statue",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 auditorium, 2 salles de bain, 1 chambre à coucher, 1 bibliothèque, 1 dortoir, 2 salles de classe, 1 salle commune, 1 cour, 1 cuisine, 1 latrines, 2 bureaux, 1 scriptorium, 1 salon, 1 statue, 1 remise",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "ecole-de-la-magie",
+   "nom": "École de la magie",
+   "source": {
+    "livre": "GC",
+    "page": 114,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 121,
+    "influence": 17,
+    "travail": 110,
+    "magie": 5
+   },
+   "prix_po": 5630,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "laboratoire-d-alchimie",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-de-bain",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-a-coucher",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "clocher",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "dortoir",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-de-classe",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "salle-commune",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cour",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "serre",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cuisine",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bibliotheque-magique",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "dome-d-observation",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "scriptorium",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salon",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "statue",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 laboratoire d’alchimie, 2 salles de bain, 1 chambre à coucher, 1 clocher, 1 dortoir, 2 salles de classe, 1 salle commune, 1 cour, 1 serre, 1 cuisine, 1 latrines, 1 bibliothèque magique, 1 observatoire, 2 bureaux, 1 scriptorium, 1 salon, 1 statue",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "ecole-militaire",
+   "nom": "École militaire",
+   "source": {
+    "livre": "GC",
+    "page": 114,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 142,
+    "influence": 16,
+    "travail": 129,
+    "magie": 2
+   },
+   "prix_po": 6100,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "armurerie",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-de-bain",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-a-coucher",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "clocher",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bibliotheque",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cellule",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-de-classe",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "salle-commune",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cour",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "dojo",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "serre",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "infirmerie",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cuisine",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "logement",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "scriptorium",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salon",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "statue",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-de-guerre",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 armurerie, 1 salle de bain, 1 chambre à coucher, 1 clocher, 1 bibliothèque, 1 cellule, 2 salles de classe, 1 salle commune, 1 cour, 1 dojo, 1 serre, 1 infirmerie, 1 cuisine, 1 latrines, 1 logement, 2 bureaux, 1 scriptorium, 1 salon, 1 statue, 1 remise, 1 salle de guerre",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "ecurie",
+   "nom": "Écurie",
+   "source": {
+    "livre": "GC",
+    "page": 114,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 42,
+    "influence": 3,
+    "travail": 39,
+    "magie": 0
+   },
+   "prix_po": 1710,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "enclos",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "champ",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "stabulation",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 enclos, 1 champ, 1 latrines, 1 bureau, 2 stabulations, 1 remise",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "enclos-a-betail",
+   "nom": "Enclos à bétail",
+   "source": {
+    "livre": "GC",
+    "page": 114,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 42,
+    "influence": 4,
+    "travail": 37,
+    "magie": 0
+   },
+   "prix_po": 1700,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "enclos",
+     "quantite": 4
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "fosse",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "poste-de-travail",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "4 enclos, 1 latrines, 1 bureau, 1 fosse, 1 remise, 1 poste de travail",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "ferme",
+   "nom": "Ferme",
+   "source": {
+    "livre": "GC",
+    "page": 114,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 53,
+    "influence": 1,
+    "travail": 50,
+    "magie": 0
+   },
+   "prix_po": 2090,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "enclos",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-a-coucher",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "champ",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "jardin",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cuisine",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salon",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 enclos, 1 chambre à coucher, 1 champ, 1 jardin, 1 cuisine, 1 latrines, 1 salon",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "forge",
+   "nom": "Forge",
+   "source": {
+    "livre": "GC",
+    "page": 114,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 18,
+    "influence": 1,
+    "travail": 17,
+    "magie": 0
+   },
+   "prix_po": 730,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "forge",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 2
+    }
+   ],
+   "composition_imprimee": "1 forge, 1 bureau, 2 remises",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "fort",
+   "nom": "Fort",
+   "source": {
+    "livre": "GC",
+    "page": 114,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 136,
+    "influence": 25,
+    "travail": 124,
+    "magie": 1
+   },
+   "prix_po": 6050,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "armurerie",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-a-coucher",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "dortoir",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "cellule",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-commune",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cour",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "mur-defensif",
+     "quantite": 3
+    },
+    {
+     "type": "Unite",
+     "id": "dojo",
+     "quantite": 1
+    },
+    {
+     "type": "Extension",
+     "id": "fortification",
+     "quantite": 2,
+     "sur": "dans la salle commune et la bretèche"
+    },
+    {
+     "type": "Unite",
+     "id": "breteche",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "infirmerie",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cuisine",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-de-guerre",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "2 armureries, 1 chambre à coucher, 2 dortoirs, 1 cellule, 1 salle commune, 1 cour, 3 murs défensifs, 1 dojo, 2 fortifications (dans la salle commune et la bretèche), 1 bretèche, 1 infirmerie, 1 cuisine, 1 latrines, 1 bureau, 1 remise, 1 salle de guerre",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "front-de-mer",
+   "nom": "Front de mer",
+   "source": {
+    "livre": "GC",
+    "page": 114,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 63,
+    "influence": 10,
+    "travail": 56,
+    "magie": 0
+   },
+   "prix_po": 2680,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "enclos",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "quai",
+     "quantite": 4
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 4
+    },
+    {
+     "type": "Unite",
+     "id": "poste-de-travail",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "2 enclos, 4 quais, 1 bureau, 4 remises, 1 poste de travail",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "garnison",
+   "nom": "Garnison",
+   "source": {
+    "livre": "GC",
+    "page": 115,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 126,
+    "influence": 32,
+    "travail": 112,
+    "magie": 1
+   },
+   "prix_po": 5820,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "armurerie",
+     "quantite": 4
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-a-coucher",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "dortoir",
+     "quantite": 4
+    },
+    {
+     "type": "Unite",
+     "id": "salle-commune",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "dojo",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "poste-de-garde",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "infirmerie",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cuisine",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 2
+    }
+   ],
+   "composition_imprimee": "4 armureries, 2 chambres à coucher, 4 dortoirs, 1 salle commune, 1 dojo, 1 poste de garde, 1 infirmerie, 1 cuisine, 1 latrines, 2 bureaux, 2 remises",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "grange",
+   "nom": "Grange",
+   "source": {
+    "livre": "GC",
+    "page": 115,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 30,
+    "influence": 0,
+    "travail": 30,
+    "magie": 0
+   },
+   "prix_po": 1200,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 10
+    }
+   ],
+   "composition_imprimee": "10 remises",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "herboriste",
+   "nom": "Herboriste",
+   "source": {
+    "livre": "GC",
+    "page": 115,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 52,
+    "influence": 1,
+    "travail": 48,
+    "magie": 0
+   },
+   "prix_po": 2030,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "atelier-d-artisan",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-a-coucher",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "serre",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cuisine",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salon",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "etalage",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 atelier d’artisan, 1 chambre à coucher, 1 serre, 1 cuisine, 1 latrines, 1 salon, 1 remise, 1 étalage",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "hopital",
+   "nom": "Hôpital",
+   "source": {
+    "livre": "GC",
+    "page": 115,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 45,
+    "influence": 4,
+    "travail": 43,
+    "magie": 2
+   },
+   "prix_po": 2080,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "salle-de-bain",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-commune",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "infirmerie",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "statue",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "etalage",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "poste-de-travail",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 salle de bain, 1 salle commune, 2 infirmeries, 1 latrines, 1 bureau, 1 statue, 1 remise, 1 étalage, 1 poste de travail",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "hotel-de-la-monnaie",
+   "nom": "Hôtel de la monnaie",
+   "source": {
+    "livre": "GC",
+    "page": 115,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 49,
+    "influence": 2,
+    "travail": 45,
+    "magie": 0
+   },
+   "prix_po": 1940,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "atelier-d-artisan",
+     "quantite": 1
+    },
+    {
+     "type": "Extension",
+     "id": "fortification",
+     "quantite": 1,
+     "sur": "chambre forte"
+    },
+    {
+     "type": "Unite",
+     "id": "poste-de-garde",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-forte",
+     "quantite": 2
+    }
+   ],
+   "composition_imprimee": "1 atelier d’artisan, 1 fortification (chambre forte), 1 poste de garde, 1 latrines, 1 bureau, 1 remise, 2 chambres fortes",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "hotel-de-ville",
+   "nom": "Hôtel de ville",
+   "source": {
+    "livre": "GC",
+    "page": 115,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 23,
+    "influence": 2,
+    "travail": 23,
+    "magie": 0
+   },
+   "prix_po": 980,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "salle-commune",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "scriptorium",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 salle commune, 1 latrines, 1 bureau, 1 scriptorium, 1 remise",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "maison",
+   "nom": "Maison",
+   "source": {
+    "livre": "GC",
+    "page": 115,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 32,
+    "influence": 1,
+    "travail": 31,
+    "magie": 0
+   },
+   "prix_po": 1290,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "chambre-a-coucher",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cuisine",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "acces-aux-egouts",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salon",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 chambre à coucher, 1 cuisine, 1 latrines, 1 accès aux égouts, 1 salon, 1 remise",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "maison-de-la-guilde",
+   "nom": "Maison de la guilde",
+   "source": {
+    "livre": "GC",
+    "page": 115,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 67,
+    "influence": 0,
+    "travail": 66,
+    "magie": 0
+   },
+   "prix_po": 2660,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "salle-commune",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cuisine",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "piece-secrete",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salon",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "poste-de-travail",
+     "quantite": 3
+    }
+   ],
+   "composition_imprimee": "1 salle commune, 1 cuisine, 1 latrines, 2 bureaux, 1 pièce secrète, 1 salon, 2 remises, 3 postes de travail",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "manoir",
+   "nom": "Manoir",
+   "source": {
+    "livre": "GC",
+    "page": 115,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 132,
+    "influence": 4,
+    "travail": 120,
+    "magie": 0
+   },
+   "prix_po": 5160,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "bar",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-de-bain",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-a-coucher",
+     "quantite": 4
+    },
+    {
+     "type": "Unite",
+     "id": "issue-de-secours",
+     "quantite": 1
+    },
+    {
+     "type": "Extension",
+     "id": "ameublement",
+     "quantite": 2,
+     "sur": "chambre à coucher et salon"
+    },
+    {
+     "type": "Unite",
+     "id": "cuisine",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "lavoir",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "logement",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "piece-secrete",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salon",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "stabulation",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 2
+    }
+   ],
+   "composition_imprimee": "1 bar, 1 salle de bain, 4 chambres à coucher, 1 issue de secours, 2 ameublements (chambre à coucher et salon), 1 cuisine, 1 lavoir, 1 latrines, 1 logement, 1 bureau, 1 pièce secrète, 2 salons, 1 stabulation, 2 remises",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "marche-noir",
+   "nom": "Marché noir",
+   "source": {
+    "livre": "GC",
+    "page": 116,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 53,
+    "influence": 6,
+    "travail": 48,
+    "magie": 0
+   },
+   "prix_po": 2200,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "armurerie",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cellule",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "issue-de-secours",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "societe-de-facade",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "poste-de-garde",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "piece-secrete",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-forte",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 armurerie, 1 cellule, 1 issue de secours, 1 société de façade, 1 poste de garde, 1 bureau, 1 pièce secrète, 1 remise, 1 chambre forte",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "monastere",
+   "nom": "Monastère",
+   "source": {
+    "livre": "GC",
+    "page": 116,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 58,
+    "influence": 15,
+    "travail": 53,
+    "magie": 6
+   },
+   "prix_po": 3270,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "autel",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-de-bain",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bibliotheque",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "dortoir",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cour",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "crypte",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "jardin",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cuisine",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "lavoir",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "sanctuaire",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "scriptorium",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 autel, 1 salle de bain, 1 bibliothèque, 1 dortoir, 1 cour, 1 crypte, 1 jardin, 1 cuisine, 1 lavoir, 1 latrines, 1 bureau, 2 sanctuaires, 1 scriptorium",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "monument",
+   "nom": "Monument",
+   "source": {
+    "livre": "GC",
+    "page": 116,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 10,
+    "influence": 0,
+    "travail": 8,
+    "magie": 0
+   },
+   "prix_po": 360,
+   "composition": [
+    {
+     "type": "Extension",
+     "id": "ameublement",
+     "quantite": 1,
+     "sur": "statue"
+    },
+    {
+     "type": "Unite",
+     "id": "statue",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 ameublement (statue), 1 statue",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "moulin",
+   "nom": "Moulin",
+   "source": {
+    "livre": "GC",
+    "page": 116,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 17,
+    "influence": 0,
+    "travail": 16,
+    "magie": 0
+   },
+   "prix_po": 660,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "meule",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 2
+    }
+   ],
+   "composition_imprimee": "1 meule, 1 bureau, 2 remises",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "musee",
+   "nom": "Musée",
+   "source": {
+    "livre": "GC",
+    "page": 116,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 47,
+    "influence": 5,
+    "travail": 43,
+    "magie": 1
+   },
+   "prix_po": 2050,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "poste-de-garde",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "reliquaire",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "statue",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "etalage",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-des-trophees",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-forte",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 poste de garde, 1 bureau, 1 reliquaire, 2 statues, 2 remises, 1 étalage, 2 salles des trophées, 1 chambre forte",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "observatoire",
+   "nom": "Observatoire",
+   "source": {
+    "livre": "GC",
+    "page": 116,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 32,
+    "influence": 4,
+    "travail": 31,
+    "magie": 2
+   },
+   "prix_po": 1580,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "bibliotheque",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "dome-d-observation",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "scriptorium",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 bibliothèque, 1 latrines, 1 dôme d’observation, 1 bureau, 1 scriptorium, 1 remise",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "orphelinat",
+   "nom": "Orphelinat",
+   "source": {
+    "livre": "GC",
+    "page": 116,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 63,
+    "influence": 7,
+    "travail": 62,
+    "magie": 1
+   },
+   "prix_po": 2810,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "chambre-a-coucher",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "dortoir",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-de-classe",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-commune",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cour",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "infirmerie",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cuisine",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "lavoir",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "creche",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 2
+    }
+   ],
+   "composition_imprimee": "1 chambre à coucher, 1 dortoir, 1 salle de classe, 1 salle commune, 1 cour, 1 infirmerie, 1 cuisine, 1 lavoir, 1 latrines, 1 crèche, 1 bureau, 2 remises",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "palais",
+   "nom": "Palais",
+   "source": {
+    "livre": "GC",
+    "page": 116,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 453,
+    "influence": 42,
+    "travail": 421,
+    "magie": 9
+   },
+   "prix_po": 19640,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "autel",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-de-bal",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bar",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-de-bain",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-a-coucher",
+     "quantite": 6
+    },
+    {
+     "type": "Unite",
+     "id": "dortoir",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cellule",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-commune",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cour",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "crypte",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "mur-defensif",
+     "quantite": 6
+    },
+    {
+     "type": "Unite",
+     "id": "issue-de-secours",
+     "quantite": 1
+    },
+    {
+     "type": "Extension",
+     "id": "ameublement",
+     "quantite": 6,
+     "sur": "dans la salle de bal, deux chambres à coucher, un bureau, un salon et la salle du trône"
+    },
+    {
+     "type": "Unite",
+     "id": "jardin",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "breteche",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cuisine",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "labyrinthe",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "lavoir",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "logement",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "sanctuaire",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "piece-secrete",
+     "quantite": 3
+    },
+    {
+     "type": "Unite",
+     "id": "salon",
+     "quantite": 3
+    },
+    {
+     "type": "Unite",
+     "id": "terrain-de-sport",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "stabulation",
+     "quantite": 4
+    },
+    {
+     "type": "Unite",
+     "id": "statue",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 6
+    },
+    {
+     "type": "Unite",
+     "id": "salle-du-trone",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-des-trophees",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-forte",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "salle-de-guerre",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 autel, 1 salle de bal, 1 bar, 2 salles de bain, 6 chambres à coucher, 1 dortoir, 1 cellule, 1 salle commune, 2 cours, 1 crypte, 6 murs défensifs, 1 issue de secours, 6 ameublements (dans la salle de bal, deux chambres à coucher, un bureau, un salon et la salle du trône), 1 jardin, 1 bretèche, 2 cuisines, 1 labyrinthe, 1 lavoir, 2 latrines, 2 logements, 2 bureaux, 1 sanctuaire, 3 pièces secrètes, 3 salons, 1 terrain de sport, 4 stabulations, 2 statues, 6 remises, 1 salle du trône, 1 salle des trophées, 2 chambres fortes, 1 salle de guerre",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "palais-de-justice",
+   "nom": "Palais de justice",
+   "source": {
+    "livre": "GC",
+    "page": 117,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 43,
+    "influence": 2,
+    "travail": 41,
+    "magie": 1
+   },
+   "prix_po": 1840,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "bibliotheque",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cellule",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "salle-commune",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "salon",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 bibliothèque, 2 cellules, 1 salle commune, 2 bureaux, 1 salon",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "prison",
+   "nom": "Prison",
+   "source": {
+    "livre": "GC",
+    "page": 117,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 40,
+    "influence": 5,
+    "travail": 33,
+    "magie": 0
+   },
+   "prix_po": 1610,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "cellule",
+     "quantite": 4
+    },
+    {
+     "type": "Unite",
+     "id": "poste-de-garde",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-de-torture",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "4 cellules, 1 poste de garde, 1 bureau, 1 remise, 1 chambre de torture",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "quai",
+   "nom": "Quai",
+   "source": {
+    "livre": "GC",
+    "page": 117,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 22,
+    "influence": 3,
+    "travail": 20,
+    "magie": 0
+   },
+   "prix_po": 930,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "enclos",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "quai",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 2
+    }
+   ],
+   "composition_imprimee": "1 enclos, 1 quai, 1 bureau, 2 remises",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "salle-de-bal",
+   "nom": "Salle de bal",
+   "source": {
+    "livre": "GC",
+    "page": 117,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 53,
+    "influence": 1,
+    "travail": 53,
+    "magie": 0
+   },
+   "prix_po": 2150,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "salle-de-bal",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bar",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-commune",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salon",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 Salle de bal, 1 Bar, 1 Salle commune, 1 Latrines, 1 Bureau, 1 Salon, 1 Remise",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "sanctuaire",
+   "nom": "Sanctuaire",
+   "source": {
+    "livre": "GC",
+    "page": 117,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 3,
+    "influence": 1,
+    "travail": 4,
+    "magie": 1
+   },
+   "prix_po": 270,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "autel",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "statue",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 autel, 1 dstatue",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "tannerie",
+   "nom": "Tannerie",
+   "source": {
+    "livre": "GC",
+    "page": 117,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 20,
+    "influence": 1,
+    "travail": 20,
+    "magie": 0
+   },
+   "prix_po": 830,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "lavoir",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "atelier-de-tanneur",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "fosse",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 lavoir, 1 latrines, 1 atelier de tanneur, 1 bureau, 1 fosse, 1 remise",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "taverne",
+   "nom": "Taverne",
+   "source": {
+    "livre": "GC",
+    "page": 117,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 22,
+    "influence": 1,
+    "travail": 22,
+    "magie": 0
+   },
+   "prix_po": 910,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "bar",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-commune",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 bar, 1 salle commune, 1 latrines, 1 bureau, 1 remise",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "temple",
+   "nom": "Temple",
+   "source": {
+    "livre": "GC",
+    "page": 117,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 28,
+    "influence": 2,
+    "travail": 29,
+    "magie": 2
+   },
+   "prix_po": 1400,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "autel",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-a-coucher",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-commune",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "confessionnal",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "sanctuaire",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "statue",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 autel, 1 chambre à coucher, 1 salle commune, 1 confessionnal, 1 bureau, 1 sanctuaire, 1 statue, 1 remise",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "theatre",
+   "nom": "Théâtre",
+   "source": {
+    "livre": "GC",
+    "page": 117,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 41,
+    "influence": 2,
+    "travail": 46,
+    "magie": 0
+   },
+   "prix_po": 1800,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "auditorium",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "piece-secrete",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "etalage",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 auditorium, 1 latrines, 1 bureau, 1 pièce secrète, 2 remises, 1 étalage",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "tour-de-guet",
+   "nom": "Tour de guet",
+   "source": {
+    "livre": "GC",
+    "page": 117,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 35,
+    "influence": 9,
+    "travail": 25,
+    "magie": 0
+   },
+   "prix_po": 1470,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "armurerie",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "clocher",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "breteche",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 armurerie, 1 clocher, 1 bretèche",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "tour-du-mage",
+   "nom": "Tour du mage",
+   "source": {
+    "livre": "GC",
+    "page": 117,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 88,
+    "influence": 9,
+    "travail": 81,
+    "magie": 11
+   },
+   "prix_po": 4750,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "atelier-d-artisan",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-de-bain",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-a-coucher",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cellule",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-de-ceremonie",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cuisine",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bibliotheque-magique",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "scriptorium",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-de-divination",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salon",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 atelier d’artisan, 1 salle de bain, 1 chambre à coucher, 1 cellule, 1 salle de cérémonie, 1 cuisine, 1 latrines, 1 bibliothèque magique, 1 bureau, 1 scriptorium, 1 chambre de divination, 1 salon, 1 remise",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "universite",
+   "nom": "Université",
+   "source": {
+    "livre": "GC",
+    "page": 117,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 94,
+    "influence": 10,
+    "travail": 88,
+    "magie": 2
+   },
+   "prix_po": 4140,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "salle-de-bain",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "clocher",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bibliotheque",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-de-classe",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "salle-commune",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cour",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "serre",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cuisine",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "dome-d-observation",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "scriptorium",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salon",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "statue",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 salle de bain, 1 clocher, 1 bibliothèque, 2 salles de classe, 1 salle commune, 1 cour, 1 serre, 1 cuisine, 1 latrines, 1 dôme d’observation, 2 bureaux, 1 scriptorium, 1 salon, 1 statue",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "villa-de-noble",
+   "nom": "Villa de noble",
+   "source": {
+    "livre": "GC",
+    "page": 118,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 218,
+    "influence": 16,
+    "travail": 204,
+    "magie": 0
+   },
+   "prix_po": 8920,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "bar",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "salle-de-bain",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-a-coucher",
+     "quantite": 4
+    },
+    {
+     "type": "Unite",
+     "id": "cour",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "mur-defensif",
+     "quantite": 4
+    },
+    {
+     "type": "Unite",
+     "id": "issue-de-secours",
+     "quantite": 1
+    },
+    {
+     "type": "Extension",
+     "id": "ameublement",
+     "quantite": 2,
+     "sur": "chambre à coucher et salon"
+    },
+    {
+     "type": "Unite",
+     "id": "jardin",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "breteche",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cuisine",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "labyrinthe",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "lavoir",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "logement",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "piece-secrete",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "salon",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "stabulation",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "statue",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "salle-des-trophees",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "chambre-forte",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 bar, 1 salle de bain, 4 chambres à coucher, 2 cours, 4 murs défensifs, 1 issue de secours, 2 ameublements (chambre à coucher et salon), 1 jardin, 1 bretèche, 1 cuisine, 1 labyrinthe, 1 lavoir, 1 latrines, 1 logement, 2 bureaux, 2 pièces secrètes, 2 salons, 1 stabulation, 1 statue, 2 remises, 1 salle des trophées, 1 chambre forte",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "zoo",
+   "nom": "Zoo",
+   "source": {
+    "livre": "GC",
+    "page": 118,
+    "section": "Les bâtiments"
+   },
+   "cout": {
+    "marchandises": 200,
+    "influence": 33,
+    "travail": 188,
+    "magie": 0
+   },
+   "prix_po": 8750,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "enclos",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "cour",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "mur-defensif",
+     "quantite": 4
+    },
+    {
+     "type": "Unite",
+     "id": "champ",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "poste-de-garde",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "abri-pour-animaux",
+     "quantite": 6
+    },
+    {
+     "type": "Unite",
+     "id": "ecloserie",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "cuisine",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "latrines",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureau",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "stabulation",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "remise",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "etalage",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "2 enclos, 1 cour, 4 murs défensifs, 1 champ, 1 poste de garde, 6 abris pour animaux, 1 écloserie, 1 cuisine, 1 latrines, 2 bureaux, 1 stabulation, 2 remises, 1 étalage",
+   "point_a_confirmer": null
+  }
+ ],
+ "modeles_organisations": [
+  {
+   "id": "guilde-d-artisans",
+   "nom": "Guilde d’artisans",
+   "source": {
+    "livre": "GC",
+    "page": 118,
+    "section": "Les organisations"
+   },
+   "cout": {
+    "marchandises": 8,
+    "influence": 10,
+    "travail": 14,
+    "magie": 0
+   },
+   "prix_po": 740,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "bureaucrates",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "artisans",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "travailleurs",
+     "quantite": 2
+    }
+   ],
+   "composition_imprimee": "1 bureaucrate, 2 artisans, 2 travailleurs",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "chasseurs-de-primes",
+   "nom": "Chasseurs de primes",
+   "source": {
+    "livre": "GC",
+    "page": 118,
+    "section": "Les organisations"
+   },
+   "cout": {
+    "marchandises": 8,
+    "influence": 8,
+    "travail": 10,
+    "magie": 0
+   },
+   "prix_po": 600,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "archers",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "bureaucrates",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "conducteur-d-attelage",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 archer, 1 bureaucrate, 1 conducteur d’attelage",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "bande-de-gros-bras",
+   "nom": "Bande de gros-bras",
+   "source": {
+    "livre": "GC",
+    "page": 118,
+    "section": "Les organisations"
+   },
+   "cout": {
+    "marchandises": 7,
+    "influence": 8,
+    "travail": 13,
+    "magie": 0
+   },
+   "prix_po": 640,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "cambrioleurs",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "soldats",
+     "quantite": 2
+    }
+   ],
+   "composition_imprimee": "1 cambrioleurs, 2 soldats",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "cabale",
+   "nom": "Cabale",
+   "source": {
+    "livre": "GC",
+    "page": 118,
+    "section": "Les organisations"
+   },
+   "cout": {
+    "marchandises": 16,
+    "influence": 12,
+    "travail": 8,
+    "magie": 24
+   },
+   "prix_po": 3240,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "apprenti-mage",
+     "quantite": 4
+    },
+    {
+     "type": "Unite",
+     "id": "mage",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "sage",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "4 apprentis-mages, 1 mage, 1 sage",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "caravaniers",
+   "nom": "Caravaniers",
+   "source": {
+    "livre": "GC",
+    "page": 118,
+    "section": "Les organisations"
+   },
+   "cout": {
+    "marchandises": 6,
+    "influence": 3,
+    "travail": 7,
+    "magie": 0
+   },
+   "prix_po": 350,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "conducteur-d-attelage",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "gardes",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "travailleurs",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 conducteur d’attelage, 1 garde, 1 travailleur",
+   "point_a_confirmer": "PC-09"
+  },
+  {
+   "id": "culte",
+   "nom": "Culte",
+   "source": {
+    "livre": "GC",
+    "page": 118,
+    "section": "Les organisations"
+   },
+   "cout": {
+    "marchandises": 15,
+    "influence": 11,
+    "travail": 17,
+    "magie": 18
+   },
+   "prix_po": 2770,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "acolyte",
+     "quantite": 4
+    },
+    {
+     "type": "Unite",
+     "id": "gardes",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "cure",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "4 acolytes, 2 gardes, 1 curé",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "suite",
+   "nom": "Suite",
+   "source": {
+    "livre": "GC",
+    "page": 118,
+    "section": "Les organisations"
+   },
+   "cout": {
+    "marchandises": 6,
+    "influence": 9,
+    "travail": 7,
+    "magie": 0
+   },
+   "prix_po": 530,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "bureaucrates",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "conducteur-d-attelage",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "laquais",
+     "quantite": 2
+    }
+   ],
+   "composition_imprimee": "1 bureaucrate, 1 conducteur d’attelage, 2 laquais",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "club-de-combat",
+   "nom": "Club de combat",
+   "source": {
+    "livre": "GC",
+    "page": 118,
+    "section": "Les organisations"
+   },
+   "cout": {
+    "marchandises": 5,
+    "influence": 7,
+    "travail": 10,
+    "magie": 0
+   },
+   "prix_po": 510,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "conducteur-d-attelage",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "gardes",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "travailleurs",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "laquais",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "fraudeurs",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 conducteur d’attelage, 1 garde, 1 travailleur, 1 laquai, 1 fraudeur",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "groupe-de-chasseurs",
+   "nom": "Groupe de chasseurs",
+   "source": {
+    "livre": "GC",
+    "page": 118,
+    "section": "Les organisations"
+   },
+   "cout": {
+    "marchandises": 5,
+    "influence": 6,
+    "travail": 11,
+    "magie": 0
+   },
+   "prix_po": 500,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "archers",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "travailleurs",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "laquais",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 archer, 1 travailleur, 1 laquai",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "compagnie-de-mercenaires",
+   "nom": "Compagnie de mercenaires",
+   "source": {
+    "livre": "GC",
+    "page": 118,
+    "section": "Les organisations"
+   },
+   "cout": {
+    "marchandises": 18,
+    "influence": 13,
+    "travail": 25,
+    "magie": 6
+   },
+   "prix_po": 1850,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "archers-d-elite",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "soldats-d-elite",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "cure",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 archer d’élite, 2 soldats d’élite, 1 curé",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "equipage-de-navire",
+   "nom": "Équipage de navire",
+   "source": {
+    "livre": "GC",
+    "page": 118,
+    "section": "Les organisations"
+   },
+   "cout": {
+    "marchandises": 1,
+    "influence": 2,
+    "travail": 4,
+    "magie": 0
+   },
+   "prix_po": 160,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "travailleurs",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "marins",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 travailleur, 1 marin",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "troupe-de-theatre",
+   "nom": "Troupe de théâtre",
+   "source": {
+    "livre": "GC",
+    "page": 118,
+    "section": "Les organisations"
+   },
+   "cout": {
+    "marchandises": 15,
+    "influence": 17,
+    "travail": 13,
+    "magie": 20
+   },
+   "prix_po": 3070,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "apprenti-mage",
+     "quantite": 5
+    },
+    {
+     "type": "Unite",
+     "id": "bureaucrates",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "artisans",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "travailleurs",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "5 apprentis-mages, 1 bureaucrate, 1 artisan, 1 travailleur",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "guilde-de-voleurs",
+   "nom": "Guilde de voleurs",
+   "source": {
+    "livre": "GC",
+    "page": 118,
+    "section": "Les organisations"
+   },
+   "cout": {
+    "marchandises": 4,
+    "influence": 15,
+    "travail": 12,
+    "magie": 0
+   },
+   "prix_po": 770,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "tire-laine",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "cambrioleurs",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "fraudeurs",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "soldats",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "2 tire-laine, 1 cambrioleur, 1 fraudeur, 1 soldat",
+   "point_a_confirmer": null
+  },
+  {
+   "id": "vagabonds",
+   "nom": "Vagabonds",
+   "source": {
+    "livre": "GC",
+    "page": 118,
+    "section": "Les organisations"
+   },
+   "cout": {
+    "marchandises": 10,
+    "influence": 13,
+    "travail": 13,
+    "magie": 7
+   },
+   "prix_po": 1550,
+   "composition": [
+    {
+     "type": "Unite",
+     "id": "acolyte",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "apprenti-mage",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "tire-laine",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "conducteur-d-attelage",
+     "quantite": 2
+    },
+    {
+     "type": "Unite",
+     "id": "gardes",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "travailleurs",
+     "quantite": 1
+    },
+    {
+     "type": "Unite",
+     "id": "fraudeurs",
+     "quantite": 1
+    }
+   ],
+   "composition_imprimee": "1 acolyte, 1 apprenti-mage, 1 tire-laine, 2 conducteurs d’attelage, 1 garde, 1 travailleur, 1 fraudeur",
+   "point_a_confirmer": null
+  }
+ ],
+ "points_a_confirmer": [
+  {
+   "code": "PC-01",
+   "question": "La Magie compte-t-elle dans la limite des dépenses quotidienne ?",
+   "source": {
+    "livre": "GC",
+    "page": 81,
+    "section": "Limites des dépenses"
+   },
+   "lecture_appliquee": "Oui, comme l'en-tête du tableau (Marchandises, Influence, Travail ou Magie).",
+   "statut": "Valide",
+   "decision": "Validé le 22/10/2026"
+  },
+  {
+   "code": "PC-02",
+   "question": "La « Capitale » du tableau des limites (65) correspond-elle à la Métropole ?",
+   "source": {
+    "livre": "GC",
+    "page": 81,
+    "section": "Limites des dépenses"
+   },
+   "lecture_appliquee": "Oui : Capitale = Métropole.",
+   "statut": "Valide",
+   "decision": "Validé le 22/10/2026"
+  },
+  {
+   "code": "PC-03",
+   "question": "Les po dépensées pour acheter une salle terminée comptent-elles dans la limite ?",
+   "source": {
+    "livre": "GC",
+    "page": 85,
+    "section": "Construction de bâtiments"
+   },
+   "lecture_appliquee": "Non : la limite porte sur les unités de capital.",
+   "statut": "Valide",
+   "decision": "Validé le 22/10/2026"
+  },
+  {
+   "code": "PC-04",
+   "question": "Une salle « +12 » sans type ne produit-elle que des po ?",
+   "source": {
+    "livre": "GC",
+    "page": 94,
+    "section": "Recettes"
+   },
+   "lecture_appliquee": "Oui ; confirmé par le PDF (« +12 po »).",
+   "statut": "Valide",
+   "decision": "Validé le 22/10/2026"
+  },
+  {
+   "code": "PC-05",
+   "question": "Que signifie « un type que le bâtiment génère déjà » (Clocher, Cour, Étalage) ?",
+   "source": {
+    "livre": "GC",
+    "page": 98,
+    "section": "Les salles"
+   },
+   "lecture_appliquee": "Un type admis par une autre salle du même bâtiment.",
+   "statut": "Valide",
+   "decision": "Validé le 22/10/2026"
+  },
+  {
+   "code": "PC-06",
+   "question": "Un gestionnaire peut-il gérer plusieurs établissements pour un seul salaire ?",
+   "source": {
+    "livre": "GC",
+    "page": 89,
+    "section": "Les gestionnaires"
+   },
+   "lecture_appliquee": "Oui : salaire compté une fois par jour (règle de l'utilisateur).",
+   "statut": "Valide",
+   "decision": "Validé le 22/10/2026"
+  },
+  {
+   "code": "PC-07",
+   "question": "Labyrinthe : 370 po imprimés pour 15 Marchandises + 15 Travail (600 po calculés).",
+   "source": {
+    "livre": "GC",
+    "page": 102,
+    "section": "Labyrinthe"
+   },
+   "lecture_appliquee": "Garder 370 po (texte imprimé, identique en VO), avec avertissement d'incohérence.",
+   "statut": "Valide",
+   "decision": "Validé le 22/10/2026"
+  },
+  {
+   "code": "PC-08",
+   "question": "Arène : la VF liste « 1 jardin » absent de la VO ; le total imprimé (109 M, 20 I, 96 T, 1 Mg) l'exclut.",
+   "source": {
+    "livre": "GC",
+    "page": 111,
+    "section": "Arène"
+   },
+   "lecture_appliquee": "Composition sans jardin (conforme à la VO et au total imprimé).",
+   "statut": "Ouvert",
+   "decision": null
+  },
+  {
+   "code": "PC-09",
+   "question": "Caravaniers : la VF indique 1 conducteur d'attelage, la VO 2 ; le total imprimé (6 M, 3 I, 7 T) en compte 2.",
+   "source": {
+    "livre": "GC",
+    "page": 118,
+    "section": "Caravaniers"
+   },
+   "lecture_appliquee": "2 conducteurs d'attelage (conforme à la VO et au total imprimé).",
+   "statut": "Ouvert",
+   "decision": null
+  },
+  {
+   "code": "PC-10",
+   "question": "Accélération : comment arrondir une durée divisée qui ne tombe pas juste (ex. 40 jours ÷ 3) ?",
+   "source": {
+    "livre": "GC",
+    "page": 95,
+    "section": "Durée"
+   },
+   "lecture_appliquee": "Arrondi au jour supérieur (14 jours).",
+   "statut": "Ouvert",
+   "decision": null
+  },
+  {
+   "code": "PC-11",
+   "question": "Population de 20 exactement : lieu-dit (« moins de 20 ») ou hameau (« 21-60 ») ?",
+   "source": {
+    "livre": "GDM",
+    "page": null,
+    "section": "Fourchette de population des communautés"
+   },
+   "lecture_appliquee": "Lieu-dit.",
+   "statut": "Ouvert",
+   "decision": null
+  },
+  {
+   "code": "PC-12",
+   "question": "Quand des recettes sont divisées par 2 (équipe sans bâtiment, salle brisée), comment arrondir un bonus impair ?",
+   "source": {
+    "livre": "GC",
+    "page": 94,
+    "section": "Recettes"
+   },
+   "lecture_appliquee": "Arrondi inférieur (ex. +5 → +2).",
+   "statut": "Ouvert",
+   "decision": null
+  }
+ ]
+}

@@ -1,0 +1,9 @@
+[package]
+name = "domaine"
+description = "Types du domaine : capitaux, monnaie, sources et fiches du référentiel"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+
+[dependencies]
+# Aucune dépendance : crate pur. serde sera ajouté avec la persistance (étape 3).

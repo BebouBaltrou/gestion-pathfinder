@@ -1,0 +1,12 @@
+[package]
+name = "regles"
+description = "Référentiel Ultimate Campaign (officiel + personnalisé) et moteur de calcul"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+
+[dependencies]
+domaine = { path = "../domaine" }
+
+[[example]]
+name = "verifier_referentiel"
