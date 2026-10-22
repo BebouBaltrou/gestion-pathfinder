@@ -62,6 +62,8 @@ pub enum Erreur {
     },
     OrganisationNonVide(String),
     DelocalisationVersElleMeme,
+    /// Phase des recettes refusée (affectation, jets, quantités…).
+    Recettes(String),
 }
 
 impl std::fmt::Display for Erreur {
@@ -144,6 +146,7 @@ impl std::fmt::Display for Erreur {
                 "{batiment} ne se trouve pas dans la localité de {equipe} : délocalisez d'abord l'équipe"
             ),
             Erreur::OrganisationNonVide(o) => write!(f, "l'organisation {o} contient encore des équipes"),
+            Erreur::Recettes(m) => write!(f, "recettes : {m}"),
             Erreur::DelocalisationVersElleMeme => {
                 f.write_str("l'équipe se trouve déjà dans cette localité")
             }
@@ -166,6 +169,21 @@ pub struct Etat {
     pub gestionnaires: BTreeMap<IdGestionnaire, GestionnaireEmploye>,
     /// Salaire d'un gestionnaire versé une fois par affectation (réglage ; défaut : une fois par jour).
     pub salaire_par_affectation: bool,
+    // ---- présence, usure, recettes ----
+    /// Localités où un PJ s'est déjà trouvé (l'entretien ne s'applique qu'à elles, GC p. 82).
+    pub frequentees: std::collections::BTreeSet<IdLocalite>,
+    /// Jours consécutifs sans PJ présent, par localité.
+    pub absence: BTreeMap<IdLocalite, u32>,
+    /// Jours (numéros) sans PJ présent, par localité, pour la réduction des recettes (GC p. 84).
+    pub jours_absents: BTreeMap<IdLocalite, std::collections::BTreeSet<u32>>,
+    /// Dernier jour dont les recettes ont été perçues, par localité.
+    pub derniere_recette: BTreeMap<IdLocalite, u32>,
+    /// Dernière affectation de chaque unité, pour la reproposer.
+    pub repartitions: BTreeMap<CleUnite, Vec<(domaine::Ressource, u32)>>,
+    /// Réglage personnalisé : pas d'usure dans une localité qui a un gestionnaire payé.
+    pub sans_usure_avec_gestionnaire: bool,
+    /// Tests de prestige à faire (retour après 30 jours ou plus) : DD par localité (GC p. 82).
+    pub prestige_en_attente: BTreeMap<IdLocalite, u32>,
     /// Limite des dépenses par PJ présent plutôt que par localité (PC-14, option).
     pub limite_par_pj: bool,
 }
@@ -192,6 +210,15 @@ pub enum Consequence {
     /// La trésorerie d'une localité vient de passer sous zéro (salaires).
     TresorerieNegative {
         localite: String,
+    },
+    /// Usure des capitaux (GC p. 82) : −1 à chaque type en réserve.
+    UsureCapitaux {
+        localite: String,
+    },
+    /// Retour après une longue absence : test de prestige à faire (GC p. 82).
+    TestPrestigeRequis {
+        localite: String,
+        dd: u32,
     },
 }
 
@@ -339,6 +366,9 @@ impl Etat {
                     self.localite(*l)?;
                 }
                 self.pj_mut(*id)?.localite = *vers;
+                if let Some(l) = vers {
+                    out.extend(self.arrivee_pj(*l));
+                }
             }
             LocaliteCreee {
                 id,
@@ -518,6 +548,7 @@ impl Etat {
                     out.extend(self.avancer_chantiers(r));
                     out.extend(self.avancer_delocalisations(r));
                     out.extend(self.payer_salaires());
+                    out.extend(self.suivre_presence());
                 }
             }
             Groupe { evenements, .. } => {
@@ -557,6 +588,13 @@ impl Etat {
                 l.capitaux = l.capitaux + *capitaux;
             }
             ReglageLimiteDepense { par_pj } => self.limite_par_pj = *par_pj,
+            RecettesPercues { .. } => self.percevoir_recettes(ev, r)?,
+            ReglageUsure {
+                sans_usure_avec_gestionnaire,
+            } => self.sans_usure_avec_gestionnaire = *sans_usure_avec_gestionnaire,
+            TestPrestigeResolu { localite, .. } => {
+                self.prestige_en_attente.remove(localite);
+            }
             ReglageSalaireGestionnaire { par_affectation } => {
                 self.salaire_par_affectation = *par_affectation
             }

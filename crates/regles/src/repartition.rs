@@ -23,6 +23,8 @@ pub struct Contribution<'a> {
     pub sans_batiment: bool,
     /// Salle brisée : recettes ÷ 2 (GC p. 92).
     pub brisee: bool,
+    /// Équipe en préparation de délocalisation : moitié des avantages (GC p. 95).
+    pub delocalisation: bool,
     /// Points affectés à chaque ressource. Somme = bonus effectif.
     pub affectation: Vec<(Ressource, u32)>,
 }
@@ -90,6 +92,9 @@ pub fn bonus_effectif(c: &Contribution, options: &OptionsRegles) -> u32 {
         b /= 2;
     }
     if c.brisee {
+        b /= 2;
+    }
+    if c.delocalisation {
         b /= 2;
     }
     b
@@ -202,6 +207,7 @@ mod tests {
             types_du_batiment: BTreeSet::new(),
             sans_batiment: false,
             brisee: false,
+            delocalisation: false,
             affectation: aff,
         }
     }
@@ -250,6 +256,7 @@ mod tests {
             types_du_batiment: BTreeSet::new(),
             sans_batiment: false,
             brisee: false,
+            delocalisation: false,
             affectation: vec![(Ressource::Po, 5), (Ressource::Marchandises, 5)],
         }];
         let jets = BTreeMap::new();
@@ -287,6 +294,7 @@ mod tests {
             types_du_batiment: BTreeSet::new(),
             sans_batiment: true,
             brisee: false,
+            delocalisation: false,
             affectation: vec![(Ressource::Travail, 2)],
         };
         assert_eq!(
@@ -305,6 +313,7 @@ mod tests {
             types_du_batiment: BTreeSet::new(),
             sans_batiment: true,
             brisee: false,
+            delocalisation: false,
             affectation: vec![(Ressource::Travail, 5)],
         };
         assert_eq!(
@@ -319,6 +328,7 @@ mod tests {
             types_du_batiment: BTreeSet::from([Ressource::Po, Ressource::Influence]),
             sans_batiment: false,
             brisee: false,
+            delocalisation: false,
             affectation: vec![(Ressource::Magie, 5)],
         };
         assert!(tests_du_jour(&[e], &BTreeMap::new(), &opt).is_err());

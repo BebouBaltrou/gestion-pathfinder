@@ -310,3 +310,26 @@ pub struct GestionnaireEmploye {
     /// Inactif : n'est plus payé (congé, en attente).
     pub actif: bool,
 }
+
+// ------------------------------------------------------------------ recettes
+
+/// Unité productrice (salle ou équipe), pour les affectations des tests de capitaux.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub enum CleUnite {
+    Salle(IdSalle),
+    Equipe(IdEquipe),
+}
+
+/// Règles en vigueur lors d'un test de capitaux, enregistrées avec lui pour que l'historique
+/// reste identique même si les paramètres changent ensuite.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub struct ReglesTest {
+    pub repartition_stricte: bool,
+    pub moitie_equipe_sans_batiment: bool,
+    pub production_pendant_amelioration: bool,
+}
+
+/// Jet d'un jour : d20 saisi, ou « faire 10 » (`None`).
+pub type JetJour = Option<u8>;

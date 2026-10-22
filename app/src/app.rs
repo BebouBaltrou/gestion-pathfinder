@@ -14,6 +14,7 @@ pub enum Page {
     Batiments,
     Organisations,
     Gestionnaires,
+    Recettes,
     Personnages,
     Historique,
     Referentiel,
@@ -23,12 +24,13 @@ pub enum Page {
 }
 
 impl Page {
-    const NAVIGATION: [(Page, &'static str, &'static str); 11] = [
+    const NAVIGATION: [(Page, &'static str, &'static str); 12] = [
         (Page::TableauDeBord, "🏠", "Tableau de bord"),
         (Page::Localites, "🏰", "Localités"),
         (Page::Batiments, "🏛", "Bâtiments"),
         (Page::Organisations, "⚔", "Organisations"),
         (Page::Gestionnaires, "🗝", "Gestionnaires"),
+        (Page::Recettes, "🎲", "Recettes"),
         (Page::Personnages, "👤", "Personnages"),
         (Page::Historique, "📜", "Historique"),
         (Page::Referentiel, "📖", "Référentiel"),
@@ -54,6 +56,7 @@ pub struct App {
     pub ui_batiments: pages::batiments::Etat,
     pub ui_organisations: pages::organisations::Etat,
     pub ui_gestionnaires: pages::gestionnaires::Etat,
+    pub ui_recettes: pages::recettes::Etat,
     pub ui_personnages: pages::personnages::Etat,
     pub ui_referentiel: pages::referentiel::Etat,
     pub ui_campagnes: pages::campagnes::Etat,
@@ -84,6 +87,7 @@ impl App {
             ui_batiments: Default::default(),
             ui_organisations: Default::default(),
             ui_gestionnaires: Default::default(),
+            ui_recettes: Default::default(),
             ui_personnages: Default::default(),
             ui_referentiel: Default::default(),
             ui_campagnes: Default::default(),
@@ -199,6 +203,18 @@ impl App {
                         }
                         campagne::etat::Consequence::EquipeArrivee { nom, localite, .. } => {
                             msg.push_str(&format!(" — {nom} arrivée à {localite}"));
+                        }
+                        campagne::etat::Consequence::UsureCapitaux { localite } => {
+                            msg.push_str(&format!(
+                                " — usure des capitaux à {localite} (−1 par type, GC p. 82)"
+                            ));
+                        }
+                        campagne::etat::Consequence::TestPrestigeRequis { localite, dd } => {
+                            negatif = true;
+                            msg.push_str(&format!(
+                                " — ⚠ retour à {localite} après une longue absence : test de prestige DD {dd} \
+                                 (tableau de bord)"
+                            ));
                         }
                         campagne::etat::Consequence::TresorerieNegative { localite } => {
                             negatif = true;
@@ -431,6 +447,7 @@ impl eframe::App for App {
                         Page::Batiments => pages::batiments::afficher(self, ui),
                         Page::Organisations => pages::organisations::afficher(self, ui),
                         Page::Gestionnaires => pages::gestionnaires::afficher(self, ui),
+                        Page::Recettes => pages::recettes::afficher(self, ui),
                         Page::Personnages => pages::personnages::afficher(self, ui),
                         Page::Historique => pages::historique::afficher(self, ui),
                         Page::Referentiel => pages::referentiel::afficher(self, ui),

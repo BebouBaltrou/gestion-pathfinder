@@ -251,6 +251,30 @@ pub enum Evenement {
     ReglageSalaireGestionnaire {
         par_affectation: bool,
     },
+    /// Phase des recettes d'une localité (GC p. 84 et 94) sur `jours` jours se terminant
+    /// aujourd'hui : un test par jour et par ressource, avec les affectations des unités.
+    /// `conserves` : capitaux produits que le joueur garde (au plus ce que donnent les tests),
+    /// payés au Coût produit (Table 2-1, GC p. 78) par `payeur` (défaut : la localité).
+    RecettesPercues {
+        localite: IdLocalite,
+        jours: u32,
+        affectations: Vec<(CleUnite, Vec<(domaine::Ressource, u32)>)>,
+        /// Pour chaque ressource testée : un jet par jour (`None` = faire 10).
+        jets: Vec<(domaine::Ressource, Vec<JetJour>)>,
+        conserves: CoutCapitaux,
+        payeur: Option<Payeur>,
+        regles: ReglesTest,
+    },
+    /// Réglage personnalisé : aucune usure des capitaux ni des entreprises dans une localité
+    /// qui a un gestionnaire payé.
+    ReglageUsure {
+        sans_usure_avec_gestionnaire: bool,
+    },
+    /// Test de prestige au retour après une longue absence (GC p. 82) : résultat noté.
+    TestPrestigeResolu {
+        localite: IdLocalite,
+        reussi: bool,
+    },
     /// Réglage de la limite des dépenses (PC-14) : `false` = une limite par localité (défaut),
     /// `true` = une limite par PJ présent, additionnées. Journalisé pour que le changement
     /// ne s'applique qu'à partir de ce jour et reste annulable.

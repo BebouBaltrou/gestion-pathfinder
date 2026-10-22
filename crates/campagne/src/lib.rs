@@ -11,6 +11,7 @@ pub mod evenements;
 pub mod fichier;
 pub mod modele;
 pub mod organisation;
+pub mod recettes;
 
 use calendrier::Calendrier;
 use etat::{Consequence, Erreur, Etat};
@@ -500,6 +501,33 @@ impl Campagne {
             ),
             GestionnaireModifie { nom, .. } => format!("Gestionnaire {nom} modifié"),
             GestionnaireRenvoye { id } => format!("Gestionnaire {} renvoyé", ges(id)),
+            RecettesPercues {
+                localite,
+                jours,
+                conserves,
+                ..
+            } => {
+                let garde = if conserves.unites() > 0 {
+                    format!(", capitaux conservés : {conserves}")
+                } else {
+                    String::new()
+                };
+                format!("Recettes de {} sur {jours} jour(s){garde}", lo(localite))
+            }
+            ReglageUsure {
+                sans_usure_avec_gestionnaire,
+            } => {
+                if *sans_usure_avec_gestionnaire {
+                    "Usure : aucune dans les localités avec un gestionnaire payé".to_string()
+                } else {
+                    "Usure : règle officielle (ralentie par un gestionnaire)".to_string()
+                }
+            }
+            TestPrestigeResolu { localite, reussi } => format!(
+                "Test de prestige à {} : {}",
+                lo(localite),
+                if *reussi { "réussi" } else { "raté" }
+            ),
             ReglageSalaireGestionnaire { par_affectation } => {
                 if *par_affectation {
                     "Salaire des gestionnaires : une fois par affectation".to_string()

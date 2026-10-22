@@ -51,6 +51,39 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
         });
     });
 
+    // ---------- alertes ----------
+    let mut resolution = None;
+    for (l, dd) in &etat.prestige_en_attente {
+        let nom = etat
+            .localites
+            .get(l)
+            .map(|x| x.nom.clone())
+            .unwrap_or_default();
+        ui.add_space(6.0);
+        widgets::carte(ui, |ui| {
+            ui.set_width(ui.available_width());
+            ui.label(
+                RichText::new(format!("⚠ Test de prestige à faire à {nom} : DD {dd}"))
+                    .color(theme::ORANGE)
+                    .strong(),
+            );
+            widgets::texte_doux(
+                ui,
+                "Retour après 30 jours ou plus sans gestionnaire : 1d20 + Prestige contre ce DD. \
+                 En cas d'échec, les entreprises de la localité risquent d'échapper à votre contrôle (GC p. 82) ; \
+                 l'application note le résultat, à vous d'en tirer les conséquences avec le MJ.",
+            );
+            ui.horizontal(|ui| {
+                if ui.button("Réussi").clicked() {
+                    resolution = Some((*l, true));
+                }
+                if ui.button("Raté").clicked() {
+                    resolution = Some((*l, false));
+                }
+            });
+        });
+    }
+
     ui.add_space(10.0);
     widgets::titre_section(ui, "Localités");
     if etat.localites.is_empty() {
@@ -60,6 +93,7 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
         }
     }
     let mut ouvrir = None;
+    let mut aller_recettes = false;
     ui.horizontal_wrapped(|ui| {
         for l in etat.localites.values() {
             widgets::carte(ui, |ui| {
@@ -83,6 +117,28 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
                             widgets::texte_doux(ui, format!("(salaires : −{salaires}/jour)"));
                         }
                     });
+                    let attente = etat.jours_sans_recettes(l.id);
+                    if attente > 0 && etat.a_entreprise(l.id, &app.r) {
+                        ui.horizontal(|ui| {
+                            ui.label(
+                                RichText::new(format!(
+                                    "🎲 {attente} jour(s) de recettes à percevoir"
+                                ))
+                                .color(theme::OR),
+                            );
+                            if ui.small_button("Percevoir").clicked() {
+                                aller_recettes = true;
+                            }
+                        });
+                    }
+                    let absence = etat.absence.get(&l.id).copied().unwrap_or(0);
+                    if absence > 0 && etat.frequentees.contains(&l.id) {
+                        let usure = match etat.periode_usure(l.id) {
+                            Some(p) => format!("prochaine usure dans {} j", p - absence % p),
+                            None => "pas d'usure (gestionnaire)".to_string(),
+                        };
+                        widgets::texte_doux(ui, format!("Aucun PJ depuis {absence} j — {usure}"));
+                    }
                     let n_bat = etat.batiments_localite(l.id).count();
                     let n_org = etat.organisations_localite(l.id).count();
                     if n_bat + n_org > 0 {
@@ -115,6 +171,19 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
             });
         }
     });
+    if aller_recettes {
+        app.page = Page::Recettes;
+    }
+    if let Some((localite, reussi)) = resolution {
+        app.executer(
+            campagne::evenements::Evenement::TestPrestigeResolu { localite, reussi },
+            if reussi {
+                "Test de prestige réussi"
+            } else {
+                "Test de prestige raté : voyez avec le MJ ce qu'il advient des entreprises"
+            },
+        );
+    }
     if let Some(id) = ouvrir {
         app.ui_localites.selection = Some(id);
         app.page = Page::Localites;

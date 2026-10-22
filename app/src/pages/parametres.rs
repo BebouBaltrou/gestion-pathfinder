@@ -46,6 +46,8 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
     let mut par_pj = c.etat(&app.r).limite_par_pj;
     let par_affectation = c.etat(&app.r).salaire_par_affectation;
     let mut nouveau_par_affectation: Option<bool> = None;
+    let sans_usure_avant = c.etat(&app.r).sans_usure_avec_gestionnaire;
+    let mut nouveau_sans_usure: Option<bool> = None;
     let par_pj_avant = par_pj;
 
     widgets::titre_section(ui, "Règles");
@@ -88,6 +90,18 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
         "Une salle en travaux d'amélioration continue de produire ses recettes.",
         Statut::Personnalise,
     );
+    let mut sans_usure = sans_usure_avant;
+    if option(
+        ui,
+        &mut sans_usure,
+        "Aucune usure dans une localité qui a un gestionnaire payé",
+        "Désactivé : règle officielle, un gestionnaire fait passer l'usure des capitaux de 1 tous les 7 jours \
+         à 1 tous les 14 jours et évite le test de prestige au retour (GC p. 82 et 89). \
+         Activé : aucune usure tant qu'un gestionnaire payé s'occupe de la localité. S'applique à partir d'aujourd'hui.",
+        Statut::Personnalise,
+    ) {
+        nouveau_sans_usure = Some(sans_usure);
+    }
     let mut salaire_unique = !par_affectation;
     if option(
         ui,
@@ -212,6 +226,18 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
 
     if change {
         app.enregistrer();
+    }
+    if let Some(sans_usure_avec_gestionnaire) = nouveau_sans_usure {
+        app.executer(
+            campagne::evenements::Evenement::ReglageUsure {
+                sans_usure_avec_gestionnaire,
+            },
+            if sans_usure_avec_gestionnaire {
+                "Usure : aucune avec un gestionnaire payé"
+            } else {
+                "Usure : règle officielle"
+            },
+        );
     }
     if let Some(par_affectation) = nouveau_par_affectation {
         app.executer(
