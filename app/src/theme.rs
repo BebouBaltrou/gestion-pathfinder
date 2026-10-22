@@ -36,13 +36,13 @@ pub fn appliquer(ctx: &egui::Context) {
     v.override_text_color = Some(TEXTE);
     v.hyperlink_color = OR;
     v.selection.bg_fill = Color32::from_rgb(110, 84, 40);
-    v.selection.stroke = Stroke::new(1.0, OR_PALE);
-    v.widgets.noninteractive.bg_stroke = Stroke::new(1.0, BORDURE);
+    v.selection.stroke = Stroke::new(1.0_f32, OR_PALE);
+    v.widgets.noninteractive.bg_stroke = Stroke::new(1.0_f32, BORDURE);
     v.widgets.inactive.weak_bg_fill = Color32::from_rgb(52, 47, 41);
     v.widgets.inactive.bg_fill = Color32::from_rgb(52, 47, 41);
     v.widgets.hovered.weak_bg_fill = Color32::from_rgb(74, 64, 50);
     v.widgets.hovered.bg_fill = Color32::from_rgb(74, 64, 50);
-    v.widgets.hovered.bg_stroke = Stroke::new(1.0, OR);
+    v.widgets.hovered.bg_stroke = Stroke::new(1.0_f32, OR);
     v.widgets.active.weak_bg_fill = Color32::from_rgb(96, 78, 50);
     v.widgets.active.bg_fill = Color32::from_rgb(96, 78, 50);
     ctx.set_visuals(v);

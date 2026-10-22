@@ -28,7 +28,7 @@ impl Montant {
     /// Lit un montant saisi : « 12 », « -3 », « 12,5 » ou « 12.5 » (po, une décimale = pa),
     /// « 4 po 7 pa », « 7 pa », « 12 po ». Renvoie `None` si la saisie est invalide.
     pub fn depuis_texte(s: &str) -> Option<Montant> {
-        let t = s.trim().to_lowercase().replace(' ', " ");
+        let t = s.trim().to_lowercase().replace('\u{a0}', " ");
         if t.is_empty() {
             return None;
         }

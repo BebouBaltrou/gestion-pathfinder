@@ -8,7 +8,7 @@ use eframe::egui::{self, Color32, RichText, Stroke};
 pub fn carte<R>(ui: &mut egui::Ui, contenu: impl FnOnce(&mut egui::Ui) -> R) -> R {
     egui::Frame::new()
         .fill(theme::CARTE)
-        .stroke(Stroke::new(1.0, theme::BORDURE))
+        .stroke(Stroke::new(1.0_f32, theme::BORDURE))
         .corner_radius(6)
         .inner_margin(egui::Margin::same(12))
         .show(ui, contenu)
@@ -49,7 +49,7 @@ pub fn pastille(ui: &mut egui::Ui, r: Ressource, valeur: String) {
     let c = theme::couleur_ressource(r);
     egui::Frame::new()
         .fill(c.gamma_multiply(0.18))
-        .stroke(Stroke::new(1.0, c.gamma_multiply(0.7)))
+        .stroke(Stroke::new(1.0_f32, c.gamma_multiply(0.7)))
         .corner_radius(10)
         .inner_margin(egui::Margin::symmetric(8, 2))
         .show(ui, |ui| {
@@ -87,7 +87,7 @@ pub fn badge_statut(ui: &mut egui::Ui, s: Statut) {
 pub fn badge(ui: &mut egui::Ui, texte: &str, c: Color32) {
     egui::Frame::new()
         .fill(c.gamma_multiply(0.15))
-        .stroke(Stroke::new(1.0, c.gamma_multiply(0.8)))
+        .stroke(Stroke::new(1.0_f32, c.gamma_multiply(0.8)))
         .corner_radius(4)
         .inner_margin(egui::Margin::symmetric(6, 1))
         .show(ui, |ui| {
@@ -116,7 +116,11 @@ pub fn champ_entier(
     indice: &str,
     largeur: f32,
 ) -> Option<u32> {
-    let v = texte.trim().replace([' ', ' '], "").parse::<u32>().ok();
+    let v = texte
+        .trim()
+        .replace([' ', '\u{a0}'], "")
+        .parse::<u32>()
+        .ok();
     let mut edit = egui::TextEdit::singleline(texte)
         .hint_text(indice)
         .desired_width(largeur);
