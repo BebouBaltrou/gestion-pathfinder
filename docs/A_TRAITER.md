@@ -12,6 +12,11 @@ Ce fichier est tenu à jour à chaque étape.
 - **Effectifs des équipes et des organisations** : compter le nombre de personnes (taille
   des équipes : nombre indiqué, de 50 % à 150 % selon GC p. 95) et le total par organisation.
   Demandé le 22/10/2026.
+- **Travail du PJ** (GC p. 79 et 86, « Produire des capitaux ») : travail non qualifié
+  (5 pa ou 1 point de capital) et travail qualifié (test de compétence du PJ, Coût produit).
+  Demandé le 22/10/2026.
+- **Promouvoir une entreprise** (GC p. 86) : capitaux dépensés + test, production
+  supplémentaire pendant 1d6 jours. Demandé le 22/10/2026.
 - **Extensions des modèles** (ameublement, fortification) : ignorées à la création d'un
   bâtiment depuis un modèle (l'application le signale).
 
