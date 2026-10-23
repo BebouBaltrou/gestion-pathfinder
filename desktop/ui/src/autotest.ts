@@ -65,6 +65,11 @@ export async function autotest(): Promise<void> {
       "ajout d'une équipe déjà recrutée",
     );
     verifier((await api.ficheOrganisation(ido))?.equipes[0]?.statut === "recrutee", "équipe recrutée");
+    verifier(
+      (await api.actionGestionnaire({ type: "embaucher", reference: null, nom: "Ameiko", salaire: "3", localite: id })).ok,
+      "embauche d'un gestionnaire",
+    );
+    verifier((await api.pageGestionnaires())?.gestionnaires.length === 1, "page Gestionnaires : liste");
     const vr = await api.vueRecettes({ repartition: [], jets: [], conserves: { marchandises: 0, influence: 0, travail: 0, magie: 0 }, payeur: null });
     verifier(vr?.localite === id && (vr?.joursEnAttente ?? -1) >= 0, "page Recettes : calcul de la localité");
     verifier((await api.simulation("demarrer")).ok, "démarrer une simulation");

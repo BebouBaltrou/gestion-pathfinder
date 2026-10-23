@@ -359,6 +359,35 @@ export type ActionOrganisation =
       prix: string;
     };
 
+// ------------------------------------------------------------------ gestionnaires
+
+export type CibleAffectation = { genre: "batiment" | "organisation"; id: number };
+export type ChoixAffectation = { cible: CibleAffectation; libelle: string };
+
+export type PageGestionnaires = {
+  salaires: { localite: string; salairesJour: Somme; tresorerie: Somme; negative: boolean; joursDAvance: number | null }[];
+  exemples: { id: string; nom: string; libelle: string; salaire: string; competences: string }[];
+  localites: Choix[];
+  gestionnaires: {
+    id: number;
+    nom: string;
+    exemple: string | null;
+    salaireJour: Somme;
+    actif: boolean;
+    localite: number;
+    affectations: ChoixAffectation[];
+    possibles: ChoixAffectation[];
+  }[];
+  noteSalaire: string;
+};
+
+export type ActionGestionnaire =
+  | { type: "embaucher"; reference: string | null; nom: string; salaire: string; localite: number }
+  | { type: "regler"; id: number; actif: boolean; localite: number }
+  | { type: "renvoyer"; id: number }
+  | { type: "affecter"; id: number; cible: CibleAffectation }
+  | { type: "desaffecter"; id: number; cible: CibleAffectation };
+
 // ------------------------------------------------------------------ recettes
 
 export type CleU = { genre: "salle" | "equipe"; id: number };
@@ -485,6 +514,9 @@ export const api = {
   actionOrganisation: (action: ActionOrganisation) => appeler<Retour>("action_organisation", { action }),
   enregistrerModeleOrganisation: (id: number) => appeler<Retour>("enregistrer_modele_organisation", { id }),
   supprimerModeleOrganisation: (id: string) => appeler<Retour>("supprimer_modele_organisation", { id }),
+
+  pageGestionnaires: () => appeler<PageGestionnaires | null>("page_gestionnaires"),
+  actionGestionnaire: (action: ActionGestionnaire) => appeler<Retour>("action_gestionnaire", { action }),
 
   vueRecettes: (entree: EntreeRecettes) => appeler<VueRecettes | null>("vue_recettes", { entree }),
   encaisserRecettes: (entree: EntreeRecettes) => appeler<Retour>("encaisser_recettes", { entree }),

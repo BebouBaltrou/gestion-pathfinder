@@ -72,7 +72,7 @@ essai de bout en bout de la nouvelle application (variable `GESTION_PATHFINDER_A
 
 ## État de la migration vers `desktop/`
 
-Fait : coquille, tableau de bord, campagnes, localités, personnages, bâtiments, recettes, organisations. À faire, dans l'ordre :
+Fait : coquille, tableau de bord, campagnes, localités, personnages, bâtiments, recettes, organisations, gestionnaires. À faire, dans l'ordre :
 Gestionnaires,
 Historique, Paramètres, Référentiel, Points à confirmer, import/export, modèles personnels,
 mode simulation complet. Ensuite : retirer `app/`. Le détail est dans `docs/A_TRAITER.md`.

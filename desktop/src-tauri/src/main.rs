@@ -411,6 +411,28 @@ fn supprimer_modele_organisation(s: S, id: String) -> Retour {
     }
 }
 
+// ---------------------------------------------------------------- gestionnaires
+
+#[tauri::command]
+fn page_gestionnaires(s: S) -> Option<vues::gestionnaires::PageGestionnaires> {
+    let mut x = session(&s);
+    let r = x.r.clone();
+    x.campagne
+        .as_mut()
+        .map(|c| vues::gestionnaires::page_gestionnaires(c, &r))
+}
+
+#[tauri::command]
+fn action_gestionnaire(s: S, action: vues::gestionnaires::ActionGestionnaire) -> Retour {
+    let mut x = session(&s);
+    let r = x.r.clone();
+    let Some(c) = x.campagne.as_mut() else {
+        return Retour::erreur("Aucune campagne ouverte");
+    };
+    let ev = vues::gestionnaires::action(c, &r, action);
+    executer_construit(&mut x, ev)
+}
+
 // ---------------------------------------------------------------- recettes
 
 #[tauri::command]
@@ -539,6 +561,8 @@ fn main() {
             action_organisation,
             enregistrer_modele_organisation,
             supprimer_modele_organisation,
+            page_gestionnaires,
+            action_gestionnaire,
             vue_recettes,
             encaisser_recettes,
             avancer,
