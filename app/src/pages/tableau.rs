@@ -436,6 +436,25 @@ fn travaux(
                 Page::Batiments,
             ));
         }
+        for x in &s.extensions {
+            if let StatutExtension::EnTravaux(ch) = &x.statut {
+                let Some(b) = etat.batiments.get(&s.batiment) else {
+                    continue;
+                };
+                let limite = etat.limite_depense(b.localite, r).unwrap_or(0);
+                let n = r
+                    .extension(&x.reference)
+                    .map(|u| u.nom.clone())
+                    .unwrap_or(x.reference.clone());
+                lignes.push((
+                    format!("🏛 {} — {} : {n}", b.nom, etat.nom_salle(s, r)),
+                    format!("extension, reste {}", ch.reste()),
+                    avance(ch),
+                    ch.jours_restants_estimes(limite),
+                    Page::Batiments,
+                ));
+            }
+        }
     }
     for e in etat.equipes.values() {
         let org = etat

@@ -257,6 +257,7 @@ impl Campagne {
                 .unwrap_or(id.to_string())
         };
         let ref_equipe = |id: &String| r.equipe(id).map(|u| u.nom.clone()).unwrap_or(id.clone());
+        let ref_ext = |id: &String| r.extension(id).map(|u| u.nom.clone()).unwrap_or(id.clone());
         let ref_salle = |id: &String| r.salle(id).map(|u| u.nom.clone()).unwrap_or(id.clone());
         use Evenement::*;
         match e {
@@ -373,6 +374,45 @@ impl Campagne {
             ),
             SalleModifiee { id, .. } => format!("Salle {} modifiée", sal(id)),
             SalleRetiree { id } => format!("Salle {} retirée", sal(id)),
+            ExtensionAjoutee {
+                salle,
+                reference,
+                deja_construite,
+                ..
+            } => format!(
+                "Extension {} ajoutée à {}{}",
+                ref_ext(reference),
+                sal(salle),
+                if *deja_construite { " (déjà faite)" } else { "" }
+            ),
+            ExtensionLancee {
+                salle,
+                reference,
+                facteur,
+            } => {
+                let acc = if *facteur > 1 {
+                    format!(" (accélération ×{facteur})")
+                } else {
+                    String::new()
+                };
+                format!(
+                    "Construction de l'extension {} de {} lancée{acc}",
+                    ref_ext(reference),
+                    sal(salle)
+                )
+            }
+            ExtensionAchetee {
+                salle, reference, ..
+            } => format!(
+                "Extension {} de {} achetée terminée",
+                ref_ext(reference),
+                sal(salle)
+            ),
+            ExtensionRetiree { salle, reference } => format!(
+                "Extension {} retirée de {}",
+                ref_ext(reference),
+                sal(salle)
+            ),
             ConstructionLancee { salle, facteur } => {
                 let acc = if *facteur > 1 {
                     format!(" (accélération ×{facteur})")

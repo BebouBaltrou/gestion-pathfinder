@@ -16,7 +16,9 @@ Ce fichier est tenu à jour à chaque étape.
   organisation, bâtiment, localité et campagne.
 - **Extensions** (GC p. 108) : chantiers sur les salles (fortification, ameublement +5 au test
   de la salle, piège au coût saisi), une de chaque type par salle, permanentes, conservées à
-  l'amélioration ; créées avec les modèles du livre.
+  l'amélioration ; créées avec les modèles du livre (salles repérées d'après le texte du
+  modèle, ex. « deux chambres à coucher »). Lecture à valider : une salle sans recettes propres
+  mais meublée produit les types que le bâtiment génère déjà, avec +5.
 - **Vente** : la moitié du prix d'achat, en po. Sans acheteur (25 % des cas), le joueur garde
   le bien ou l'abandonne.
 

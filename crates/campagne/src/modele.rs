@@ -200,6 +200,30 @@ pub struct SalleBatie {
     pub revenus_actifs: bool,
     /// Salle brisée : moitié des recettes (GC p. 92).
     pub brisee: bool,
+    /// Extensions de la salle (GC p. 108) : une de chaque type au plus, permanentes.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub extensions: Vec<ExtensionSalle>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub enum StatutExtension {
+    AConstruire,
+    EnTravaux(Chantier),
+    Construite,
+}
+
+/// Extension posée sur une salle (fortification, ameublement, piège).
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub struct ExtensionSalle {
+    /// Id de l'extension dans le référentiel.
+    pub reference: String,
+    pub statut: StatutExtension,
+    /// Coût, prix et durée retenus (ceux du livre, ou saisis pour le piège).
+    pub cout: CoutCapitaux,
+    pub prix_po: u32,
+    pub duree: u32,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]

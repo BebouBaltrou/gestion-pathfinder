@@ -126,6 +126,34 @@ pub enum Evenement {
     SalleRetiree {
         id: IdSalle,
     },
+    /// Ajoute une extension à une salle (GC p. 108), à construire ou déjà faite. Pour le piège
+    /// (coût « comme une salle piégée », sans valeur fixe), coût, prix et durée sont saisis.
+    ExtensionAjoutee {
+        salle: IdSalle,
+        reference: String,
+        deja_construite: bool,
+        cout: Option<CoutCapitaux>,
+        prix_po: Option<u32>,
+        duree: Option<u32>,
+    },
+    /// Lance la construction d'une extension prévue (accélération en Travail).
+    ExtensionLancee {
+        salle: IdSalle,
+        reference: String,
+        facteur: u32,
+    },
+    /// Extension achetée terminée (prix saisi, par défaut celui du livre).
+    ExtensionAchetee {
+        salle: IdSalle,
+        reference: String,
+        payeur: Option<Payeur>,
+        prix: Option<Montant>,
+    },
+    /// Retire une extension encore à construire (une extension faite est permanente).
+    ExtensionRetiree {
+        salle: IdSalle,
+        reference: String,
+    },
     /// Lance la construction (facteur 1 à 4 : accélération en Travail, GC p. 95).
     ConstructionLancee {
         salle: IdSalle,

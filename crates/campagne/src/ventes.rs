@@ -82,12 +82,22 @@ impl Etat {
 
     /// Prix et coût des parties construites ou recrutées d'un bien (pour la vente).
     pub fn valeur_actif(&self, a: Actif, r: &Referentiel) -> (Montant, CoutCapitaux) {
-        let salle = |s: &SalleBatie| match s.statut {
-            StatutSalle::Construite => r
-                .salle(&s.reference)
-                .map(|u| (u.prix_po.unwrap_or(0), u.cout.unwrap_or_default()))
-                .unwrap_or_default(),
-            _ => (0, CoutCapitaux::default()),
+        let salle = |s: &SalleBatie| {
+            let (mut p, mut c) = match s.statut {
+                StatutSalle::Construite => r
+                    .salle(&s.reference)
+                    .map(|u| (u.prix_po.unwrap_or(0), u.cout.unwrap_or_default()))
+                    .unwrap_or_default(),
+                _ => (0, CoutCapitaux::default()),
+            };
+            // extensions terminées : leur prix s'ajoute à celui de la salle
+            for x in &s.extensions {
+                if x.statut == StatutExtension::Construite {
+                    p += x.prix_po;
+                    c = c + x.cout;
+                }
+            }
+            (p, c)
         };
         let equipe = |e: &Equipe| match e.statut {
             StatutEquipe::Recrutee | StatutEquipe::EnDelocalisation(_) => r
@@ -323,6 +333,7 @@ mod tests {
         .unwrap();
         let modele = r.modele_batiment("taverne").unwrap();
         let (mut evs, _) = evenements_depuis_modele(
+            &r,
             modele,
             b,
             l,

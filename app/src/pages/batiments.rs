@@ -2,7 +2,7 @@
 
 use crate::app::App;
 use crate::{theme, widgets};
-use campagne::construction::{evenements_depuis_modele, ressources_admises};
+use campagne::construction::evenements_depuis_modele;
 use campagne::etat::Etat as EtatCampagne;
 use campagne::evenements::Evenement;
 use campagne::modele::*;
@@ -33,6 +33,7 @@ pub struct Etat {
     seulement_manquants: bool,
     payeur_pj: Option<IdPersonnage>,
     vente: super::ventes::Formulaire,
+    extension: super::extensions::Formulaire,
 }
 
 /// Façon d'obtenir le bâtiment créé depuis un modèle.
@@ -430,7 +431,7 @@ fn creation(
                 Some(m) => {
                     let (mut evs, ig) = match &perso {
                         Some(p) => (p.evenements(b, l, &nom, e, sa), Vec::new()),
-                        None => evenements_depuis_modele(m, b, l, &nom, e, sa),
+                        None => evenements_depuis_modele(r, m, b, l, &nom, e, sa),
                     };
                     let salles: Vec<IdSalle> = evs
                         .iter()
@@ -443,11 +444,14 @@ fn creation(
                         Acquisition::Plan => {}
                         Acquisition::Possede | Acquisition::AcheterBatiment => {
                             for x in evs.iter_mut() {
-                                if let Evenement::SalleAjoutee {
-                                    deja_construite, ..
-                                } = x
-                                {
-                                    *deja_construite = true;
+                                match x {
+                                    Evenement::SalleAjoutee {
+                                        deja_construite, ..
+                                    }
+                                    | Evenement::ExtensionAjoutee {
+                                        deja_construite, ..
+                                    } => *deja_construite = true,
+                                    _ => {}
                                 }
                             }
                             if let Some((payeur, montant)) = paiement.filter(|(_, x)| x.pa > 0) {
@@ -466,9 +470,25 @@ fn creation(
                                     capitaux,
                                 });
                             }
+                            let extensions: Vec<(IdSalle, String)> = evs
+                                .iter()
+                                .filter_map(|x| match x {
+                                    Evenement::ExtensionAjoutee {
+                                        salle, reference, ..
+                                    } => Some((*salle, reference.clone())),
+                                    _ => None,
+                                })
+                                .collect();
                             for id in salles {
                                 evs.push(Evenement::ConstructionLancee {
                                     salle: id,
+                                    facteur: s.facteur.max(1),
+                                });
+                            }
+                            for (salle, reference) in extensions {
+                                evs.push(Evenement::ExtensionLancee {
+                                    salle,
+                                    reference,
                                     facteur: s.facteur.max(1),
                                 });
                             }
@@ -505,7 +525,7 @@ fn creation(
             let mut msg = format!("Bâtiment « {nom} » créé");
             if !ignores.is_empty() {
                 msg.push_str(&format!(
-                    " — extensions du modèle non gérées pour l'instant : {}",
+                    " — extensions du modèle à placer à la main (salle introuvable) : {}",
                     ignores.join(", ")
                 ));
             }
@@ -772,7 +792,7 @@ fn detail(
                 });
 
                 // ressources cochées, revenus, état brisé
-                let admises = ressources_admises(u, &etat.types_du_batiment(b.id, sb.id, &r));
+                let admises = etat.admises_salle(sb, &r);
                 if !admises.is_empty() {
                     ui.horizontal_wrapped(|ui| {
                         let mut ress = sb.ressources.clone();
@@ -977,6 +997,17 @@ fn detail(
                     ) {
                         action = Some(a);
                     }
+                }
+                if let Some(a) = super::extensions::extensions_salle(
+                    ui,
+                    &mut s.extension,
+                    etat,
+                    &r,
+                    sb,
+                    payeur,
+                    s.facteur,
+                ) {
+                    action = Some(a);
                 }
                 if let Some(a) = super::ventes::reparation(ui, etat, &r, sb, payeur) {
                     action = Some(a);

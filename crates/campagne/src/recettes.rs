@@ -305,16 +305,32 @@ impl Etat {
                 let u = r
                     .salle(&s.reference)
                     .ok_or_else(|| Erreur::SalleReferentielInconnue(s.reference.clone()))?;
-                if u.recettes.is_none() {
-                    return refus(format!("{nom} ne produit aucune recette"));
-                }
+                let extensions = Etat::bonus_extensions(s, r);
+                // Salle sans recettes propres mais meublée : l'ameublement porte le bonus,
+                // sur les types que le bâtiment génère déjà (lecture à valider).
+                let (unite, bonus_extensions, nom) = match (&u.recettes, extensions) {
+                    (Some(_), 0) => (u, 0, nom),
+                    (Some(_), x) => (u, x, format!("{nom} (meublée)")),
+                    (None, x) if x > 0 => (
+                        r.extension("ameublement")
+                            .ok_or_else(|| Erreur::ExtensionInconnue("ameublement".into()))?,
+                        x - r
+                            .extension("ameublement")
+                            .and_then(|e| e.recettes.as_ref())
+                            .map(|e| e.bonus)
+                            .unwrap_or(0),
+                        format!("{nom} (ameublement)"),
+                    ),
+                    (None, _) => return refus(format!("{nom} ne produit aucune recette")),
+                };
                 Ok(Contribution {
                     libelle: nom,
-                    unite: u,
+                    unite,
                     types_du_batiment: self.types_du_batiment(s.batiment, s.id, r),
                     sans_batiment: false,
                     brisee: s.brisee,
                     delocalisation: false,
+                    bonus_extensions,
                     affectation: Vec::new(),
                 })
             }
@@ -355,6 +371,7 @@ impl Etat {
                     sans_batiment: e.lieu.is_none(),
                     brisee: false,
                     delocalisation,
+                    bonus_extensions: 0,
                     affectation: Vec::new(),
                 })
             }

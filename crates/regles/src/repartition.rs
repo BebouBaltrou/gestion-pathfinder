@@ -25,6 +25,8 @@ pub struct Contribution<'a> {
     pub brisee: bool,
     /// Équipe en préparation de délocalisation : moitié des avantages (GC p. 95).
     pub delocalisation: bool,
+    /// Bonus des extensions de la salle (ameublement : +5 au test de la salle, GC p. 108).
+    pub bonus_extensions: u32,
     /// Points affectés à chaque ressource. Somme = bonus effectif.
     pub affectation: Vec<(Ressource, u32)>,
 }
@@ -87,7 +89,7 @@ pub fn admises(u: &Unite, types_du_batiment: &BTreeSet<Ressource>) -> BTreeSet<R
 
 /// Bonus après réductions. Chaque division par 2 arrondit à l'inférieur (PC-12, validé).
 pub fn bonus_effectif(c: &Contribution, options: &OptionsRegles) -> u32 {
-    let mut b = c.unite.recettes.as_ref().map(|r| r.bonus).unwrap_or(0);
+    let mut b = c.unite.recettes.as_ref().map(|r| r.bonus).unwrap_or(0) + c.bonus_extensions;
     if c.sans_batiment && options.moitie_equipe_sans_batiment {
         b /= 2;
     }
@@ -208,6 +210,7 @@ mod tests {
             sans_batiment: false,
             brisee: false,
             delocalisation: false,
+            bonus_extensions: 0,
             affectation: aff,
         }
     }
@@ -257,6 +260,7 @@ mod tests {
             sans_batiment: false,
             brisee: false,
             delocalisation: false,
+            bonus_extensions: 0,
             affectation: vec![(Ressource::Po, 5), (Ressource::Marchandises, 5)],
         }];
         let jets = BTreeMap::new();
@@ -295,6 +299,7 @@ mod tests {
             sans_batiment: true,
             brisee: false,
             delocalisation: false,
+            bonus_extensions: 0,
             affectation: vec![(Ressource::Travail, 2)],
         };
         assert_eq!(
@@ -314,6 +319,7 @@ mod tests {
             sans_batiment: true,
             brisee: false,
             delocalisation: false,
+            bonus_extensions: 0,
             affectation: vec![(Ressource::Travail, 5)],
         };
         assert_eq!(
@@ -329,6 +335,7 @@ mod tests {
             sans_batiment: false,
             brisee: false,
             delocalisation: false,
+            bonus_extensions: 0,
             affectation: vec![(Ressource::Magie, 5)],
         };
         assert!(tests_du_jour(&[e], &BTreeMap::new(), &opt).is_err());

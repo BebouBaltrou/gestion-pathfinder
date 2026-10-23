@@ -51,6 +51,9 @@ pub enum Erreur {
     },
     FacteurInvalide(u32),
     EtageNonVide(String),
+    ExtensionInconnue(String),
+    /// Extension déjà présente, absente, ou dans un état qui ne permet pas l'action.
+    Extension(String),
     OrganisationInconnue(IdOrganisation),
     EquipeInconnue(IdEquipe),
     GestionnaireInconnu(IdGestionnaire),
@@ -137,6 +140,8 @@ impl std::fmt::Display for Erreur {
             }
             Erreur::FacteurInvalide(k) => write!(f, "accélération invalide (×{k}) : 1, 2, 3 ou 4"),
             Erreur::EtageNonVide(e) => write!(f, "l'étage {e} contient des salles"),
+            Erreur::ExtensionInconnue(e) => write!(f, "extension absente du référentiel ({e})"),
+            Erreur::Extension(m) => f.write_str(m),
             Erreur::OrganisationInconnue(id) => write!(f, "organisation inconnue ({id})"),
             Erreur::EquipeInconnue(id) => write!(f, "équipe inconnue ({id})"),
             Erreur::GestionnaireInconnu(id) => write!(f, "gestionnaire inconnu ({id})"),
@@ -577,6 +582,10 @@ impl Etat {
             | SalleRetiree { .. }
             | ConstructionLancee { .. }
             | SalleAchetee { .. }
+            | ExtensionAjoutee { .. }
+            | ExtensionLancee { .. }
+            | ExtensionAchetee { .. }
+            | ExtensionRetiree { .. }
             | AmeliorationLancee { .. } => self.appliquer_batiment(ev, r)?,
             Paiement {
                 payeur, montant, ..

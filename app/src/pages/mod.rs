@@ -1,5 +1,6 @@
 pub mod batiments;
 pub mod campagnes;
+pub mod extensions;
 pub mod gestionnaires;
 pub mod historique;
 pub mod localites;

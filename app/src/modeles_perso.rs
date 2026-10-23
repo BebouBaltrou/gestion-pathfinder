@@ -19,6 +19,19 @@ pub struct EtagePerso {
     pub mode: ModeChantier,
     /// Salles du référentiel (identifiants), dans l'ordre.
     pub salles: Vec<String>,
+    /// Extensions des salles (GC p. 108), repérées par le rang de la salle dans l'étage.
+    #[serde(default)]
+    pub extensions: Vec<ExtensionPerso>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ExtensionPerso {
+    /// Rang de la salle dans `salles`.
+    pub salle: usize,
+    pub reference: String,
+    pub cout: CoutCapitaux,
+    pub prix_po: u32,
+    pub duree: u32,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -110,13 +123,26 @@ impl BatimentPerso {
             etages: b
                 .etages
                 .iter()
-                .map(|e| EtagePerso {
-                    nom: e.nom.clone(),
-                    mode: e.mode,
-                    salles: etat
-                        .salles_etage(e.id)
-                        .map(|s| s.reference.clone())
-                        .collect(),
+                .map(|e| {
+                    let salles: Vec<&SalleBatie> = etat.salles_etage(e.id).collect();
+                    EtagePerso {
+                        nom: e.nom.clone(),
+                        mode: e.mode,
+                        salles: salles.iter().map(|s| s.reference.clone()).collect(),
+                        extensions: salles
+                            .iter()
+                            .enumerate()
+                            .flat_map(|(i, s)| {
+                                s.extensions.iter().map(move |x| ExtensionPerso {
+                                    salle: i,
+                                    reference: x.reference.clone(),
+                                    cout: x.cout,
+                                    prix_po: x.prix_po,
+                                    duree: x.duree,
+                                })
+                            })
+                            .collect(),
+                    }
                 })
                 .collect(),
         }
@@ -134,7 +160,7 @@ impl BatimentPerso {
             .map(|e| format!("{} : {}", e.nom, resume(&e.salles, nom_salle)))
             .collect::<Vec<_>>()
             .join(" ; ");
-        synthese(
+        let mut m = synthese(
             format!("{PREFIXE}{}", self.nom),
             &self.nom,
             &self.toutes(),
@@ -143,7 +169,22 @@ impl BatimentPerso {
                     .map(|u| (u.cout.unwrap_or_default(), u.prix_po.unwrap_or(0)))
             },
             imprimee,
-        )
+        );
+        // les extensions comptent dans le coût et le prix du modèle
+        let nb = self
+            .etages
+            .iter()
+            .map(|e| e.extensions.len())
+            .sum::<usize>();
+        for x in self.etages.iter().flat_map(|e| &e.extensions) {
+            m.cout = m.cout + x.cout;
+            m.prix_po += x.prix_po;
+        }
+        if nb > 0 {
+            m.composition_imprimee
+                .push_str(&format!(" ; {nb} extension(s) de salle"));
+        }
+        m
     }
 
     /// Événements de création : étages et salles à construire, comme dans le modèle.
@@ -172,6 +213,7 @@ impl BatimentPerso {
                 nom: etage.nom.clone(),
                 mode: etage.mode,
             });
+            let debut = s;
             for reference in &etage.salles {
                 evs.push(Evenement::SalleAjoutee {
                     id: IdSalle(s),
@@ -182,6 +224,20 @@ impl BatimentPerso {
                     deja_construite: false,
                 });
                 s += 1;
+            }
+            for x in etage
+                .extensions
+                .iter()
+                .filter(|x| x.salle < etage.salles.len())
+            {
+                evs.push(Evenement::ExtensionAjoutee {
+                    salle: IdSalle(debut + x.salle as u32),
+                    reference: x.reference.clone(),
+                    deja_construite: false,
+                    cout: Some(x.cout),
+                    prix_po: Some(x.prix_po),
+                    duree: Some(x.duree),
+                });
             }
             e += 1;
         }

@@ -127,6 +127,40 @@ impl Etat {
             .collect()
     }
 
+    /// La salle a une extension Ameublement terminée.
+    pub fn ameublement(s: &SalleBatie) -> bool {
+        s.extensions
+            .iter()
+            .any(|e| e.reference == "ameublement" && e.statut == StatutExtension::Construite)
+    }
+
+    /// Bonus apporté par les extensions terminées de la salle (ameublement : +5, GC p. 108).
+    pub fn bonus_extensions(s: &SalleBatie, r: &Referentiel) -> u32 {
+        s.extensions
+            .iter()
+            .filter(|e| e.statut == StatutExtension::Construite)
+            .filter_map(|e| r.extension(&e.reference))
+            .filter_map(|u| u.recettes.as_ref())
+            .map(|x| x.bonus)
+            .sum()
+    }
+
+    /// Types de revenu qu'une salle peut générer : ceux de son profil ; pour une salle sans
+    /// recettes propres mais meublée, ceux que le bâtiment génère déjà (lecture à valider).
+    pub fn admises_salle(&self, s: &SalleBatie, r: &Referentiel) -> BTreeSet<Ressource> {
+        let Some(u) = r.salle(&s.reference) else {
+            return BTreeSet::new();
+        };
+        let types = self.types_du_batiment(s.batiment, s.id, r);
+        if u.recettes.is_some() {
+            ressources_admises(u, &types)
+        } else if Self::bonus_extensions(s, r) > 0 {
+            types
+        } else {
+            BTreeSet::new()
+        }
+    }
+
     pub(crate) fn pj_present(&self, l: IdLocalite) -> bool {
         self.personnages.values().any(|p| p.localite == Some(l))
     }
@@ -262,6 +296,7 @@ impl Etat {
                         ressources: ressources_par_defaut(u),
                         revenus_actifs: true,
                         brisee: false,
+                        extensions: Vec::new(),
                     },
                 );
             }
@@ -281,7 +316,8 @@ impl Etat {
                 let u = r
                     .salle(&s.reference)
                     .ok_or_else(|| Erreur::SalleReferentielInconnue(s.reference.clone()))?;
-                let ok = ressources_admises(u, &self.types_du_batiment(s.batiment, s.id, r));
+                let _ = u;
+                let ok = self.admises_salle(&s, r);
                 if let Some(x) = ressources.iter().find(|x| !ok.contains(x)) {
                     return Err(Erreur::RessourceNonAdmise {
                         salle: self.nom_salle(&s, r),
@@ -405,6 +441,141 @@ impl Etat {
                     TypeCapital::Travail,
                 ));
             }
+            ExtensionAjoutee {
+                salle,
+                reference,
+                deja_construite,
+                cout,
+                prix_po,
+                duree,
+            } => {
+                let s = self.salle(*salle)?.clone();
+                let nom = self.nom_salle(&s, r);
+                let x = r
+                    .extension(reference)
+                    .ok_or_else(|| Erreur::ExtensionInconnue(reference.clone()))?;
+                if s.extensions.iter().any(|e| e.reference == *reference) {
+                    return Err(Erreur::Extension(format!(
+                        "{nom} a déjà l'extension {} (une de chaque type, GC p. 108)",
+                        x.nom
+                    )));
+                }
+                let (Some(c), Some(p), Some(d)) = (
+                    cout.or(x.cout),
+                    prix_po.or(x.prix_po),
+                    duree.or(x.duree_jours),
+                ) else {
+                    return Err(Erreur::Extension(format!(
+                        "{} : coût, prix et durée à saisir (voir la salle piégée, GC p. 106)",
+                        x.nom
+                    )));
+                };
+                self.salle_mut(*salle)?.extensions.push(ExtensionSalle {
+                    reference: reference.clone(),
+                    statut: if *deja_construite {
+                        StatutExtension::Construite
+                    } else {
+                        StatutExtension::AConstruire
+                    },
+                    cout: c,
+                    prix_po: p,
+                    duree: d,
+                });
+            }
+            ExtensionLancee {
+                salle,
+                reference,
+                facteur,
+            } => {
+                if !(1..=4).contains(facteur) {
+                    return Err(Erreur::FacteurInvalide(*facteur));
+                }
+                let s = self.salle(*salle)?.clone();
+                let nom = self.nom_salle(&s, r);
+                if s.statut == StatutSalle::AConstruire {
+                    return Err(Erreur::Extension(format!(
+                        "{nom} doit être construite ou en construction avant son extension"
+                    )));
+                }
+                let x = s
+                    .extensions
+                    .iter()
+                    .find(|e| e.reference == *reference)
+                    .cloned()
+                    .ok_or_else(|| Erreur::Extension(format!("{nom} n'a pas cette extension")))?;
+                if x.statut != StatutExtension::AConstruire {
+                    return Err(Erreur::Extension(format!(
+                        "l'extension de {nom} n'est plus à construire"
+                    )));
+                }
+                let loc = self.batiment(s.batiment)?.localite;
+                if !self.pj_present(loc) {
+                    return Err(Erreur::AucunPjPresent(self.localite(loc)?.nom.clone()));
+                }
+                let jour = self.jour;
+                let ch = chantier_accelere(
+                    NatureChantier::Construction,
+                    x.cout,
+                    x.duree,
+                    *facteur,
+                    jour,
+                    TypeCapital::Travail,
+                );
+                let m = self.salle_mut(*salle)?;
+                if let Some(e) = m.extensions.iter_mut().find(|e| e.reference == *reference) {
+                    e.statut = StatutExtension::EnTravaux(ch);
+                }
+            }
+            ExtensionAchetee {
+                salle,
+                reference,
+                payeur,
+                prix,
+            } => {
+                let s = self.salle(*salle)?.clone();
+                let nom = self.nom_salle(&s, r);
+                let x = s
+                    .extensions
+                    .iter()
+                    .find(|e| e.reference == *reference)
+                    .cloned()
+                    .ok_or_else(|| Erreur::Extension(format!("{nom} n'a pas cette extension")))?;
+                if x.statut != StatutExtension::AConstruire {
+                    return Err(Erreur::Extension(format!(
+                        "l'extension de {nom} n'est plus à construire"
+                    )));
+                }
+                let prix = prix.unwrap_or(Montant::po(x.prix_po as i64));
+                if prix.est_negatif() {
+                    return Err(Erreur::MontantNonPositif);
+                }
+                let loc = self.batiment(s.batiment)?.localite;
+                if prix.pa > 0 {
+                    self.debiter(payeur.unwrap_or(Payeur::Localite(loc)), prix)?;
+                }
+                let m = self.salle_mut(*salle)?;
+                if let Some(e) = m.extensions.iter_mut().find(|e| e.reference == *reference) {
+                    e.statut = StatutExtension::Construite;
+                }
+            }
+            ExtensionRetiree { salle, reference } => {
+                let s = self.salle(*salle)?.clone();
+                let nom = self.nom_salle(&s, r);
+                match s.extensions.iter().find(|e| e.reference == *reference) {
+                    Some(e) if e.statut == StatutExtension::AConstruire => {}
+                    Some(_) => {
+                        return Err(Erreur::Extension(format!(
+                            "une extension commencée ou faite est permanente ({nom}, GC p. 108)"
+                        )))
+                    }
+                    None => {
+                        return Err(Erreur::Extension(format!("{nom} n'a pas cette extension")))
+                    }
+                }
+                self.salle_mut(*salle)?
+                    .extensions
+                    .retain(|e| e.reference != *reference);
+            }
             _ => unreachable!("événement non lié aux bâtiments"),
         }
         Ok(())
@@ -478,6 +649,48 @@ impl Etat {
                     });
                 }
             }
+            // Extensions en travaux : même réserve, même limite quotidienne.
+            let salles_ext: Vec<IdSalle> = self
+                .salles
+                .values()
+                .filter(|s| {
+                    self.batiments
+                        .get(&s.batiment)
+                        .is_some_and(|b| b.localite == l)
+                        && s.extensions
+                            .iter()
+                            .any(|e| matches!(e.statut, StatutExtension::EnTravaux(_)))
+                })
+                .map(|s| s.id)
+                .collect();
+            for id in salles_ext {
+                let mut stock = self.localites[&l].capitaux;
+                let mut terminees = Vec::new();
+                let s = self.salles.get_mut(&id).expect("salle");
+                for e in s.extensions.iter_mut() {
+                    if let StatutExtension::EnTravaux(ch) = &mut e.statut {
+                        depenser_un_jour(ch, &mut stock, &mut budget);
+                        if ch.termine() {
+                            e.statut = StatutExtension::Construite;
+                            terminees.push(e.reference.clone());
+                        }
+                    }
+                }
+                self.localites.get_mut(&l).expect("localité").capitaux = stock;
+                let s = self.salles[&id].clone();
+                for x in terminees {
+                    let ext = r.extension(&x).map(|u| u.nom.clone()).unwrap_or(x);
+                    out.push(Consequence::SalleTerminee {
+                        salle: id,
+                        nom: format!("{ext} de {}", self.nom_salle(&s, r)),
+                        batiment: self
+                            .batiments
+                            .get(&s.batiment)
+                            .map(|b| b.nom.clone())
+                            .unwrap_or_default(),
+                    });
+                }
+            }
             // Recrutements des équipes de la localité : même réserve, même limite quotidienne.
             out.extend(self.avancer_recrutements(l, &mut budget, r));
         }
@@ -500,9 +713,22 @@ impl Etat {
 
     /// Durée restante d'un étage : somme (séquentiel) ou maximum (parallèle) des salles.
     pub fn duree_restante_etage(&self, e: &Etage, r: &Referentiel) -> u32 {
-        let durees = self.salles_etage(e.id).map(|s| match &s.statut {
-            StatutSalle::EnTravaux(c) => c.duree.saturating_sub(c.jours_ecoules),
-            _ => self.duree_salle(s, r),
+        let durees = self.salles_etage(e.id).map(|s| {
+            let salle = match &s.statut {
+                StatutSalle::EnTravaux(c) => c.duree.saturating_sub(c.jours_ecoules),
+                _ => self.duree_salle(s, r),
+            };
+            let ext = s
+                .extensions
+                .iter()
+                .map(|x| match &x.statut {
+                    StatutExtension::AConstruire => x.duree,
+                    StatutExtension::EnTravaux(c) => c.duree.saturating_sub(c.jours_ecoules),
+                    StatutExtension::Construite => 0,
+                })
+                .max()
+                .unwrap_or(0);
+            salle.max(ext)
         });
         match e.mode {
             ModeChantier::Parallele => durees.max().unwrap_or(0),
@@ -527,14 +753,22 @@ impl Etat {
         r: &Referentiel,
     ) -> CoutCapitaux {
         salles.fold(CoutCapitaux::default(), |acc, s| {
-            acc + match &s.statut {
-                StatutSalle::AConstruire => r
-                    .salle(&s.reference)
-                    .and_then(|u| u.cout)
-                    .unwrap_or_default(),
-                StatutSalle::EnTravaux(c) => c.reste(),
-                StatutSalle::Construite => CoutCapitaux::default(),
-            }
+            let ext = s.extensions.iter().fold(CoutCapitaux::default(), |c, x| {
+                c + match &x.statut {
+                    StatutExtension::AConstruire => x.cout,
+                    StatutExtension::EnTravaux(ch) => ch.reste(),
+                    StatutExtension::Construite => CoutCapitaux::default(),
+                }
+            });
+            acc + ext
+                + match &s.statut {
+                    StatutSalle::AConstruire => r
+                        .salle(&s.reference)
+                        .and_then(|u| u.cout)
+                        .unwrap_or_default(),
+                    StatutSalle::EnTravaux(c) => c.reste(),
+                    StatutSalle::Construite => CoutCapitaux::default(),
+                }
         })
     }
 
@@ -563,13 +797,15 @@ impl Etat {
             if !produit || !s.revenus_actifs {
                 continue;
             }
-            let Some(b) = r
+            let b = r
                 .salle(&s.reference)
                 .and_then(|u| u.recettes.as_ref())
                 .map(|x| x.bonus)
-            else {
+                .unwrap_or(0)
+                + Self::bonus_extensions(s, r);
+            if b == 0 {
                 continue;
-            };
+            }
             let b = if s.brisee { b / 2 } else { b };
             for x in &s.ressources {
                 *m.entry(*x).or_insert(0) += b;
@@ -583,6 +819,7 @@ impl Etat {
 /// salles à construire. Les extensions du modèle (ameublement, fortification) ne sont pas
 /// encore gérées et sont signalées dans le retour.
 pub fn evenements_depuis_modele(
+    r: &Referentiel,
     modele: &domaine::fiches::Modele,
     batiment: IdBatiment,
     localite: IdLocalite,
@@ -609,27 +846,112 @@ pub fn evenements_depuis_modele(
     ];
     let mut ignores = Vec::new();
     let mut n = premiere_salle.0;
+    let mut salles: Vec<(IdSalle, String)> = Vec::new();
     for e in &modele.composition {
-        match e {
-            domaine::fiches::ElementModele::Unite { id, quantite } => {
-                for _ in 0..*quantite {
-                    evs.push(Evenement::SalleAjoutee {
-                        id: IdSalle(n),
-                        batiment,
-                        etage: premier_etage,
-                        reference: id.clone(),
-                        nom: None,
-                        deja_construite: false,
-                    });
-                    n += 1;
-                }
+        if let domaine::fiches::ElementModele::Unite { id, quantite } = e {
+            for _ in 0..*quantite {
+                evs.push(Evenement::SalleAjoutee {
+                    id: IdSalle(n),
+                    batiment,
+                    etage: premier_etage,
+                    reference: id.clone(),
+                    nom: None,
+                    deja_construite: false,
+                });
+                salles.push((IdSalle(n), id.clone()));
+                n += 1;
             }
-            domaine::fiches::ElementModele::Extension { id, quantite, sur } => {
+        }
+    }
+    for e in &modele.composition {
+        if let domaine::fiches::ElementModele::Extension { id, quantite, sur } = e {
+            let cibles = salles_designees(sur, &salles, r);
+            let mut prises: Vec<IdSalle> = Vec::new();
+            for (reference, nombre) in cibles {
+                prises.extend(
+                    salles
+                        .iter()
+                        .filter(|(_, x)| *x == reference)
+                        .map(|(s, _)| *s)
+                        .take(nombre as usize),
+                );
+            }
+            if prises.len() as u32 != *quantite {
                 ignores.push(format!("{quantite} × extension {id} ({sur})"));
+                continue;
+            }
+            for s in prises {
+                evs.push(Evenement::ExtensionAjoutee {
+                    salle: s,
+                    reference: id.clone(),
+                    deja_construite: false,
+                    cout: None,
+                    prix_po: None,
+                    duree: None,
+                });
             }
         }
     }
     (evs, ignores)
+}
+
+/// Normalise un nom pour comparer « Chambre-forte » et « chambre forte ».
+fn normaliser(t: &str) -> String {
+    t.to_lowercase()
+        .replace(['-', '’', '\'', ',', ';', '.', '(', ')'], " ")
+        .split_whitespace()
+        .collect::<Vec<_>>()
+        .join(" ")
+}
+
+/// Salles désignées par le libellé d'une extension de modèle (« dans la salle de bal, deux
+/// chambres à coucher, un bureau… ») : (référence, nombre).
+fn salles_designees(
+    sur: &str,
+    salles: &[(IdSalle, String)],
+    r: &Referentiel,
+) -> Vec<(String, u32)> {
+    let texte = normaliser(sur);
+    let mots: Vec<&str> = texte.split(' ').collect();
+    let mut refs: Vec<String> = salles.iter().map(|(_, x)| x.clone()).collect();
+    refs.sort();
+    refs.dedup();
+    // noms les plus longs d'abord (« salle du trône » avant « salle »)
+    let mut noms: Vec<(String, Vec<String>)> = refs
+        .iter()
+        .filter_map(|x| r.salle(x).map(|u| (x.clone(), normaliser(&u.nom))))
+        .map(|(x, n)| (x, n.split(' ').map(String::from).collect()))
+        .collect();
+    noms.sort_by_key(|(_, n)| std::cmp::Reverse(n.len()));
+    let mut pris = vec![false; mots.len()];
+    let mut out = Vec::new();
+    for (reference, nom) in noms {
+        let k = nom.len();
+        if k == 0 || k > mots.len() {
+            continue;
+        }
+        for i in 0..=mots.len() - k {
+            if pris[i..i + k].iter().any(|x| *x) {
+                continue;
+            }
+            // pluriel accepté : « chambres » pour « chambre »
+            let ok = (0..k).all(|j| {
+                mots[i + j] == nom[j] || mots[i + j].strip_suffix('s') == Some(nom[j].as_str())
+            });
+            if !ok {
+                continue;
+            }
+            let nombre = match i.checked_sub(1).map(|p| mots[p]) {
+                Some("deux") => 2,
+                Some("trois") => 3,
+                Some("quatre") => 4,
+                _ => 1,
+            };
+            pris[i..i + k].iter_mut().for_each(|x| *x = true);
+            out.push((reference.clone(), nombre));
+        }
+    }
+    out
 }
 
 #[cfg(test)]
@@ -1049,7 +1371,7 @@ mod tests {
             m.c.nouvel_id_salle(),
         );
         let l = m.l;
-        let (evs, ignores) = evenements_depuis_modele(&modele, b, l, "Le Dragon vert", e, s);
+        let (evs, ignores) = evenements_depuis_modele(&m.r, &modele, b, l, "Le Dragon vert", e, s);
         assert!(ignores.is_empty());
         m.ev(Evenement::Groupe {
             libelle: "Taverne".into(),
@@ -1071,5 +1393,92 @@ mod tests {
         // annuler le groupe retire tout d'un coup
         m.c.annuler();
         assert!(!m.c.etat(&m.r).batiments.contains_key(&b));
+    }
+
+    #[test]
+    fn extensions_des_modeles() {
+        let mut m = monde("petite-bourgade");
+        let ids: Vec<String> = m.r.modeles_batiments.iter().map(|x| x.id.clone()).collect();
+        for id in ids {
+            let modele = m.r.modele_batiment(&id).unwrap().clone();
+            let (evs, ignores) = evenements_depuis_modele(
+                &m.r,
+                &modele,
+                m.c.nouvel_id_batiment(),
+                m.l,
+                "x",
+                m.c.nouvel_id_etage(),
+                m.c.nouvel_id_salle(),
+            );
+            let n = evs
+                .iter()
+                .filter(|e| matches!(e, Evenement::ExtensionAjoutee { .. }))
+                .count();
+            println!("{id}: {n} extensions, ignorées {ignores:?}");
+            assert!(ignores.is_empty(), "{id} : {ignores:?}");
+            m.ev(Evenement::Groupe {
+                libelle: id.clone(),
+                evenements: evs,
+            })
+            .unwrap();
+            let etat = m.c.etat(&m.r).clone();
+            let b = *etat.batiments.keys().max().unwrap();
+            // le coût du modèle (GC) inclut ses extensions
+            assert_eq!(
+                etat.cout_restant(etat.salles_batiment(b), &m.r),
+                modele.cout,
+                "{id}"
+            );
+            m.c.annuler();
+        }
+    }
+
+    #[test]
+    fn extensions_d_une_salle() {
+        let mut m = monde("petite-bourgade");
+        let bar = m.ajouter("bar");
+        m.ev(Evenement::SalleAchetee {
+            salle: bar,
+            payeur: None,
+            prix: None,
+        })
+        .ok();
+        let ajout = |reference: &str| Evenement::ExtensionAjoutee {
+            salle: bar,
+            reference: reference.into(),
+            deja_construite: false,
+            cout: None,
+            prix_po: None,
+            duree: None,
+        };
+        m.ev(ajout("ameublement")).unwrap();
+        // une seule extension de chaque type par salle
+        assert!(m.ev(ajout("ameublement")).is_err());
+        m.ev(ajout("fortification")).unwrap();
+        m.ev(Evenement::ExtensionRetiree {
+            salle: bar,
+            reference: "fortification".into(),
+        })
+        .unwrap();
+        m.ev(Evenement::ExtensionLancee {
+            salle: bar,
+            reference: "ameublement".into(),
+            facteur: 1,
+        })
+        .unwrap();
+        m.ev(Evenement::JoursAvances { nombre: 30 }).unwrap();
+        let etat = m.c.etat(&m.r).clone();
+        let s = etat.salle(bar).unwrap();
+        assert_eq!(s.extensions.len(), 1);
+        assert_eq!(s.extensions[0].statut, StatutExtension::Construite);
+        // ameublement : +5 au test de la salle (GC p. 108)
+        assert_eq!(Etat::bonus_extensions(s, &m.r), 5);
+        // extension terminée : permanente
+        assert!(m
+            .ev(Evenement::ExtensionRetiree {
+                salle: bar,
+                reference: "ameublement".into(),
+            })
+            .is_err());
     }
 }

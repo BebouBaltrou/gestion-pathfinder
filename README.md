@@ -11,7 +11,7 @@ Application Windows locale de gestion des localités, bâtiments, salles, organi
 | 1 | Document des règles et points à confirmer | fait |
 | 2 | Référentiel officiel + moteur de calcul | fait |
 | 3 | Campagnes, localités, trésoreries, comptes des PJ, transferts, historique, interface | fait |
-| 4 | Bâtiments, étages, salles, construction (limite de dépense, accélération, achat, améliorations, modèles) | fait (extensions des modèles à venir) |
+| 4 | Bâtiments, étages, salles, construction (limite de dépense, accélération, achat, améliorations, modèles) | fait, extensions de salle comprises (GC p. 108) |
 | 5 | Organisations, équipes (appartenance, lieu de travail, recrutement, délocalisation), gestionnaires et salaires | fait |
 | 6 | Tests de capitaux (recettes), absence, usure des capitaux et des entreprises | fait |
 | 7 | Simulation, export, tableau de bord, vente, abandon et réparation | fait |
@@ -34,7 +34,7 @@ Les campagnes sont enregistrées dans `%APPDATA%\GestionPathfinder\campagnes` (J
 ## Commandes
 
 ```
-cargo test                                            # 47 tests, dont les exemples chiffrés du livre
+cargo test                                            # 52 tests, dont les exemples chiffrés du livre
 cargo run -p regles --example verifier_referentiel    # contenu + avertissements
 ```
 
