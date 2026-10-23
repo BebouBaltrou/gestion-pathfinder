@@ -1,0 +1,72 @@
+{
+  "Locate Creature": {
+    "cible": "cercle centré sur vous, de rayon 120 m (400 pieds) + 12 m (40 pieds)/niveau",
+    "composantes": "V, G, M (du poil de limier)",
+    "description": "Ce sort fonctionne comme localisation d'objet, mais il localise une créature connue. Vous vous tournez lentement et sentez quand vous faites face à la direction de la créature à localiser, à condition qu'elle soit à portée. Vous savez aussi dans quelle direction la créature se déplace, le cas échéant.\nLe sort peut localiser une créature d'un genre précis ou une créature précise que vous connaissez. Il ne peut pas trouver une créature d'un certain type. Pour trouver un genre de créature, vous devez avoir vu une telle créature de près (à moins de 9 m, 30 pieds) au moins une fois.\nL'eau courante bloque le sort. Il ne peut pas détecter les objets. Il peut être trompé par double illusoire, antidétection et les sorts de métamorphose."
+  },
+  "Minor Creation": {
+    "cible": "objet non magique non surveillé en matière végétale non vivante, jusqu'à 0,03 m³ (1 pied cube) par niveau",
+    "composantes": "V, G, M (un minuscule morceau de matière de même nature que l'objet que vous comptez créer avec création mineure)",
+    "description": "Vous créez un objet non magique non surveillé en matière végétale non vivante. Le volume de l'objet créé ne peut dépasser 0,03 m³ (1 pied cube) par niveau de lanceur. Vous devez réussir un test d'Artisanat approprié pour fabriquer un objet complexe.\nTenter d'utiliser un objet créé comme composante matérielle fait échouer le sort."
+  },
+  "Phantasmal Killer": {
+    "cible": "une créature vivante",
+    "composantes": "V, G",
+    "description": "Vous créez une image fantasmatique de la créature la plus effrayante qui soit pour le sujet, simplement en donnant aux peurs de l'inconscient du sujet une forme que son conscient peut visualiser : cette bête la plus horrible. Seul le sujet du sort peut voir le tueur imaginaire. Vous ne voyez qu'une forme vague. La cible a d'abord droit à un jet de Volonté pour reconnaître l'image comme irréelle. Si ce jet échoue, le fantasme touche le sujet, qui doit réussir un jet de Vigueur ou mourir de peur. Même si le jet de Vigueur réussit, le sujet subit 3d6 points de dégâts.\nSi le sujet d'une attaque de tueur imaginaire réussit à dévoiler l'illusion et possède la télépathie ou porte un heaume de télépathie, la bête peut être retournée contre vous. Vous devez alors la dévoiler ou devenir sujet à son attaque mortelle de terreur."
+  },
+  "Rainbow Pattern": {
+    "cible": "lumières colorées dans une étendue de 6 m (20 pieds) de rayon",
+    "composantes": "V (barde seulement), G, M (un morceau de phosphore), F (un prisme de cristal) ; voir texte",
+    "description": "Un motif brillant aux couleurs de l'arc-en-ciel, aux teintes entrelacées, fascine ceux qui s'y trouvent. Motif arc-en-ciel fascine un maximum de 24 DV de créatures. Les créatures qui ont le moins de DV sont affectées en premier. Parmi les créatures de même nombre de DV, celles qui sont les plus proches du point d'origine du sort sont affectées en premier. Une créature affectée qui rate ses jets de sauvegarde est fascinée par le motif.\nPar un simple geste (une action libre), vous pouvez faire se déplacer le motif arc-en-ciel de 9 m (30 pieds) par round (déplaçant son point d'origine effectif). Toutes les créatures fascinées suivent l'arc-en-ciel de lumière en mouvement, en essayant de rester dans l'effet. Les créatures fascinées qui sont retenues et éloignées du motif essaient tout de même de le suivre. Si le motif mène ses sujets dans une zone dangereuse, chaque créature fascinée a droit à un second jet de sauvegarde. Si la vue des lumières est complètement bloquée, les créatures qui ne peuvent pas les voir ne sont plus affectées.\nLe sort n'affecte pas les créatures aveugles."
+  },
+  "Reduce Person, Mass": {
+    "cible": "une créature humanoïde par niveau, à pas plus de 9 m (30 pieds) les unes des autres",
+    "composantes": "V, G, M (une pincée de poudre de fer)",
+    "description": "Ce sort fonctionne comme rapetissement, mais il affecte plusieurs créatures."
+  },
+  "Remove Curse": {
+    "cible": "créature ou objet touché",
+    "composantes": "V, G",
+    "description": "Délivrance des malédictions mineure peut supprimer toutes les malédictions sur un objet ou une créature. Si la cible est une créature, vous devez faire un test de niveau de lanceur (1d20 + niveau de lanceur) contre le DD de chaque malédiction qui affecte la cible. Une réussite signifie que la malédiction est levée. Ce sort ne retire pas la malédiction d'un bouclier, d'une arme ou d'une armure maudite, bien qu'un test de niveau de lanceur réussi permette à la créature affligée par un tel objet maudit de l'enlever et de s'en débarrasser.\nDélivrance des malédictions mineure contre et dissipe malédiction."
+  },
+  "Resilient Sphere": {
+    "cible": "sphère de 30 cm (1 pied) de diamètre par niveau, centrée sur une créature",
+    "composantes": "V, G, F (une sphère de cristal)",
+    "description": "Un globe de force scintillante enferme une créature, à condition qu'elle soit assez petite pour tenir dans le diamètre de la sphère. La sphère contient son sujet pendant la durée du sort. La sphère fonctionne comme un mur de force, sauf qu'elle peut être annulée par dissipation de la magie. Un sujet à l'intérieur de la sphère peut respirer normalement. La sphère ne peut pas être déplacée physiquement, ni par des personnes à l'extérieur ni par les efforts de celles qui sont à l'intérieur."
+  },
+  "Scrying": {
+    "cible": "capteur magique",
+    "composantes": "V, G, M/FD (un bassin d'eau), F (un miroir d'argent d'une valeur de 1 000 po)",
+    "description": "Vous pouvez observer une créature à n'importe quelle distance. Si le sujet réussit un jet de Volonté, le sort échoue. La difficulté du jet dépend de la qualité de votre connaissance du sujet et du type de lien physique (s'il y en a un) que vous avez avec cette créature. De plus, si le sujet se trouve sur un autre plan, il obtient un bonus de +5 à son jet de Volonté.\nConnaissance — Modificateur au jet de Volonté\nAucune* — +10\nDe seconde main (vous avez entendu parler du sujet) — +5\nDe première main (vous avez rencontré le sujet) — +0\nFamilière (vous connaissez bien le sujet) — –5\nLien — Modificateur au jet de Volonté\nPortrait ou image — –2\nPossession ou vêtement — –4\nPartie du corps, mèche de cheveux, bout d'ongle, etc. — –10\n*Vous devez avoir une forme de lien (voir ci-dessus) avec une créature dont vous n'avez aucune connaissance.\nSi le jet échoue, vous pouvez voir et entendre le sujet et son environnement (environ 3 m, 10 pieds, dans toutes les directions autour du sujet). Si le sujet se déplace, le capteur le suit à une vitesse pouvant atteindre 45 m (150 pieds).\nComme pour tous les sorts de divination (scrutation), le capteur a toute votre acuité visuelle, y compris les effets magiques éventuels. De plus, les sorts suivants ont 5 % de chances par niveau de lanceur de fonctionner à travers le capteur : détection du chaos, détection du mal, détection du bien, détection de la loi, détection de la magie et message.\nSi le jet réussit, vous ne pouvez pas tenter de scruter ce sujet à nouveau avant au moins 24 heures."
+  },
+  "Secure Shelter": {
+    "cible": "structure de 6 m (20 pieds) de côté",
+    "composantes": "V, G, M (un éclat de pierre, du sable, une goutte d'eau et une écharde de bois)",
+    "description": "Vous invoquez une chaumière ou un pavillon solide fait de matériaux courants dans la région où le sort est lancé. Le sol est plat, propre et sec. L'abri ressemble à une chaumière normale, avec une porte solide, deux fenêtres à volets et une petite cheminée.\nL'abri doit être chauffé comme une habitation normale, et une chaleur extrême l'affecte, lui et ses occupants, défavorablement. L'habitation offre cependant par ailleurs une sécurité considérable : elle est aussi solide qu'un bâtiment de pierre ordinaire, quelle que soit sa composition matérielle. Elle résiste aux flammes et au feu comme si elle était de pierre. Elle est imperméable aux projectiles normaux (mais pas à ceux des machines de siège ou des géants).\nLa porte, les volets et même la cheminée sont protégés contre l'intrusion, les deux premiers par un verrou du mage et la dernière par une grille de fer au sommet et un conduit étroit. De plus, ces trois zones sont protégées par un sort d'alarme. Enfin, un serviteur invisible est invoqué pour vous servir pendant la durée de l'abri.\nL'abri sécurisé contient un mobilier rudimentaire : huit couchettes, une table à tréteaux, huit tabourets et un bureau."
+  },
+  "Shadow Conjuration": {
+    "cible": "voir texte",
+    "composantes": "V, G",
+    "description": "Vous utilisez de la matière du plan de l'Ombre pour façonner des illusions quasi réelles d'une ou plusieurs créatures, objets ou forces. Invocation d'ombres peut imiter tout sort d'invocation (convocation) ou d'invocation (création) d'ensorceleur ou de magicien de niveau 3 ou inférieur.\nLes invocations d'ombres ne sont qu'à un cinquième (20 %) aussi puissantes que les choses réelles, bien que les créatures qui croient que les invocations d'ombres sont réelles soient affectées par elles à pleine puissance. Toute créature qui interagit avec le sort peut faire un jet de Volonté pour reconnaître sa vraie nature.\nLes sorts qui infligent des dégâts ont des effets normaux, sauf si la créature affectée réussit un jet de Volonté. Chaque créature qui doute ne subit qu'un cinquième (20 %) des dégâts de l'attaque. Si l'attaque dévoilée a un effet spécial autre que des dégâts, cet effet n'a que 20 % de chances de se produire. Quel que soit le résultat du jet pour dévoiler, une créature affectée a aussi droit à tout jet de sauvegarde que permet le sort simulé, mais le DD est fixé d'après le niveau d'invocation d'ombres (4) plutôt que le niveau normal du sort. De plus, tout effet créé par invocation d'ombres permet la résistance à la magie, même si le sort simulé ne la permet pas. Les objets ou substances d'ombre ont des effets normaux sauf contre ceux qui doutent d'eux. Contre ceux qui doutent, ils ont 20 % de chances de fonctionner.\nUne créature d'ombre a un cinquième des points de vie d'une créature normale de son genre (qu'elle soit reconnue ou non comme faite d'ombre). Elle inflige des dégâts normaux et a toutes les capacités et faiblesses normales. Contre une créature qui la reconnaît comme une créature d'ombre, toutefois, les dégâts de la créature d'ombre sont d'un cinquième (20 %) des dégâts normaux, et toutes les capacités spéciales qui n'infligent pas de dégâts létaux n'ont que 20 % de chances de fonctionner. (Lancez les dés pour chaque utilisation et chaque personnage affecté séparément.) De plus, les bonus à la CA de la créature d'ombre ne sont qu'un cinquième aussi importants.\nUne créature qui réussit son jet voit les invocations d'ombres comme des images transparentes superposées à des formes vagues et sombres. Les objets réussissent automatiquement leurs jets de Volonté contre ce sort."
+  },
+  "Shout": {
+    "cible": "explosion en cône",
+    "composantes": "V",
+    "description": "Vous poussez un cri à fendre les oreilles qui assourdit et blesse les créatures sur son passage. Toute créature dans la zone est assourdie pendant 2d6 rounds et subit 5d6 points de dégâts de son. Un jet de sauvegarde réussi annule la surdité et réduit les dégâts de moitié. Tout objet fragile ou cristallin exposé, ou toute créature cristalline, subit 1d6 points de dégâts de son par niveau de lanceur (maximum 15d6). Une créature affectée a droit à un jet de Vigueur pour réduire les dégâts de moitié, et une créature qui tient des objets fragiles peut annuler les dégâts qu'ils subissent par un jet de Réflexes réussi. Un sort de cri ne peut pas pénétrer un sort de silence."
+  },
+  "Solid Fog": {
+    "cible": "brouillard s'étendant sur 6 m (20 pieds) de rayon",
+    "composantes": "V, G, M (des pois en poudre et un sabot d'animal)",
+    "description": "Ce sort fonctionne comme brume de dissimulation, mais en plus d'obscurcir la vue, le brouillard solide est si épais qu'il gêne le déplacement. Les créatures qui se déplacent dans un brouillard solide se déplacent à la moitié de leur vitesse normale et subissent un malus de –2 à tous les jets d'attaque et de dégâts de corps à corps. Les vapeurs empêchent les attaques efficaces à distance avec des armes (sauf les rayons magiques et assimilés). Une créature ou un objet qui tombe dans un brouillard solide est ralenti de sorte que chaque 3 m (10 pieds) de vapeur qu'il traverse réduisent les dégâts de chute de 1d6. Une créature ne peut pas faire de pas de placement de 1,50 m (5 pieds) dans un brouillard solide. Brouillard solide, et les effets qui fonctionnent comme lui, ne se cumulent pas entre eux en ce qui concerne le déplacement ralenti et les malus d'attaque.\nContrairement au brouillard normal, seul un vent violent (50 km/h, 31 mph, et plus) disperse ces vapeurs, et il le fait en 1 round.\nBrouillard solide peut être rendu permanent par un sort de permanence. Un brouillard solide permanent dispersé par le vent se reforme en 10 minutes."
+  },
+  "Stone Shape": {
+    "cible": "pierre ou objet de pierre touché, jusqu'à 0,3 m³ (10 pieds cubes) + 0,03 m³ (1 pied cube) par niveau",
+    "composantes": "V, G, M/FD (de l'argile molle)",
+    "description": "Vous pouvez façonner un morceau de pierre existant en n'importe quelle forme qui convient à votre dessein. S'il est possible de fabriquer des coffrets, des portes, etc. grossiers avec façonnage de la pierre, les détails fins ne sont pas possibles. Il y a 30 % de chances que toute forme comportant des pièces mobiles ne fonctionne simplement pas."
+  },
+  "Stoneskin": {
+    "cible": "créature touchée",
+    "composantes": "V, G, M (de la poudre de granit et de diamant d'une valeur de 250 po)",
+    "description": "La créature protégée obtient une résistance aux coups, aux entailles, aux coups d'estoc et aux coups tranchants. Le sujet obtient une RD 10/adamantium. Il ignore les 10 premiers points de dégâts chaque fois qu'il subit des dégâts d'une arme, bien qu'une arme en adamantium contourne la réduction. Une fois que le sort a empêché un total de 10 points de dégâts par niveau de lanceur (maximum 150 points), il est déchargé."
+  }
+}
