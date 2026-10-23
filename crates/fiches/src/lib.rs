@@ -16,6 +16,8 @@ pub mod equipement;
 #[cfg(feature = "serde")]
 pub mod etats;
 #[cfg(feature = "serde")]
+pub mod exemple;
+#[cfg(feature = "serde")]
 pub mod fiche;
 pub mod generation;
 #[cfg(feature = "serde")]

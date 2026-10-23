@@ -11,6 +11,7 @@ pub mod evenements;
 pub mod fichier;
 pub mod modele;
 pub mod organisation;
+pub mod personnages;
 pub mod rapport;
 pub mod recettes;
 pub mod ventes;
@@ -620,6 +621,12 @@ impl Campagne {
                     "Limite des dépenses : une par localité".to_string()
                 }
             }
+            Fiche { pj: id_pj, evenement } => format!(
+                "Fiche de {} : {}",
+                pj(id_pj),
+                evenement.description()
+            ),
+            ReglagePersonnages { .. } => "Réglages des personnages modifiés".to_string(),
             Note { texte } => format!("Note : {texte}"),
         }
     }

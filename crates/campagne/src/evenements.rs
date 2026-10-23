@@ -334,6 +334,15 @@ pub enum Evenement {
     ReglageLimiteDepense {
         par_pj: bool,
     },
+    /// Événement du journal de la fiche d'un PJ (création, XP, montée de niveau, équipement…).
+    Fiche {
+        pj: IdPersonnage,
+        evenement: fiches::journal::EvenementFiche,
+    },
+    /// Réglages de campagne des personnages (vitesse de progression, points de vie…).
+    ReglagePersonnages {
+        regles: crate::personnages::ReglesPersonnages,
+    },
     Note {
         texte: String,
     },

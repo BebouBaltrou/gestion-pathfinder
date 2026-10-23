@@ -187,6 +187,12 @@ pub struct Referentiel {
 }
 
 impl Referentiel {
+    /// Référentiel Core chargé une seule fois et partagé (le charger coûte cher).
+    pub fn partage() -> &'static Referentiel {
+        static R: std::sync::OnceLock<Referentiel> = std::sync::OnceLock::new();
+        R.get_or_init(Referentiel::core)
+    }
+
     /// Référentiel Core embarqué dans l'application.
     pub fn core() -> Referentiel {
         Self::depuis_json(

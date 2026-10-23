@@ -7,6 +7,8 @@ use std::collections::BTreeMap;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Erreur {
+    /// Refus venant des fiches de personnage (message déjà lisible).
+    Fiche(String),
     PersonnageInconnu(IdPersonnage),
     LocaliteInconnue(IdLocalite),
     IdDejaUtilise(String),
@@ -74,6 +76,7 @@ pub enum Erreur {
 impl std::fmt::Display for Erreur {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
+            Erreur::Fiche(m) => write!(f, "fiche : {m}"),
             Erreur::PersonnageInconnu(id) => write!(f, "personnage inconnu ({id})"),
             Erreur::LocaliteInconnue(id) => write!(f, "localité inconnue ({id})"),
             Erreur::IdDejaUtilise(id) => write!(f, "identifiant déjà utilisé ({id})"),
@@ -196,6 +199,9 @@ pub struct Etat {
     pub ventes: Vec<Vente>,
     /// Limite des dépenses par PJ présent plutôt que par localité (PC-14, option).
     pub limite_par_pj: bool,
+    /// Fiches de personnage des PJ, par journal de fiche.
+    pub fiches: BTreeMap<IdPersonnage, fiches::journal::Journal>,
+    pub regles_personnages: crate::personnages::ReglesPersonnages,
 }
 
 /// Effet notable d'un événement, pour l'historique (ex. arrivée d'un transfert).
@@ -567,6 +573,7 @@ impl Etat {
                     out.extend(self.suivre_presence());
                     out.extend(self.conclure_ventes());
                 }
+                self.faire_passer_le_temps_des_fiches(*nombre);
             }
             Groupe { evenements, .. } => {
                 for e in evenements {
@@ -609,6 +616,8 @@ impl Etat {
                 l.capitaux = l.capitaux + *capitaux;
             }
             ReglageLimiteDepense { par_pj } => self.limite_par_pj = *par_pj,
+            Fiche { pj, evenement } => self.appliquer_fiche(*pj, evenement)?,
+            ReglagePersonnages { regles } => self.regles_personnages = *regles,
             RecettesPercues { .. } => self.percevoir_recettes(ev, r)?,
             AbandonActif { .. }
             | VenteLancee { .. }
