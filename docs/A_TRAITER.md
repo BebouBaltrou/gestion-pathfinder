@@ -11,7 +11,8 @@ Ce fichier est tenu à jour à chaque étape.
 ## Migration vers la nouvelle application (Tauri, `desktop/`)
 
 Fait : coquille (navigation, date, annuler/rétablir, simulation, notifications), tableau de
-bord, campagnes ; compilation Windows (.exe) et Linux (AppImage) avec essai de bout en bout.
+bord, campagnes ; compilation Windows (.exe) avec essai de bout en bout (Linux en pause
+jusqu'à ce que l'application soit stable et terminée).
 À migrer, dans l'ordre : Localités, Personnages, Bâtiments (salles, extensions, vente),
 Recettes, Organisations, Gestionnaires, Historique, Paramètres, Référentiel, Points à
 confirmer, import/export, modèles personnels. Puis retrait de l'ancienne application (`app/`).

@@ -90,8 +90,11 @@ jobs:
           path: desktop/src-tauri/target/release/gestion-pathfinder.exe
           if-no-files-found: error
 
+  # Linux : mis en pause le 23/10/2026 (Windows d'abord ; portage quand l'application sera
+  # stable et terminée). Remplacer « false » par « true » pour le réactiver.
   bureau-linux:
     name: Nouvelle application — Linux
+    if: ${{ false }}
     runs-on: ubuntu-22.04
     defaults:
       run:

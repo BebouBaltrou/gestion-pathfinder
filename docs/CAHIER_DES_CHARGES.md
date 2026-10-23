@@ -5,9 +5,10 @@ une exigence ne change que sur décision explicite de l'utilisateur (datée ici)
 
 ## Plateformes et lancement
 
-- **Windows et Linux** : l'application doit se lancer sur les deux systèmes (exigence du
-  23/10/2026). La compilation automatique (GitHub Actions) doit produire un exécutable pour
-  chacun.
+- **Windows d'abord** : l'application est développée et livrée pour Windows. **Linux ensuite**,
+  une fois l'application stable et terminée (décision du 23/10/2026) : le code reste portable
+  (Tauri, chemins de fichiers multi-plateformes) et la compilation Linux, déjà au point, est
+  seulement mise en pause dans GitHub Actions.
 - **Application locale** : fonctionne hors ligne ; campagnes et modèles personnels enregistrés
   sur le disque de l'utilisateur.
 - **Fenêtre propre** : l'application s'ouvre dans sa propre fenêtre, jamais dans un navigateur
@@ -33,7 +34,7 @@ une exigence ne change que sur décision explicite de l'utilisateur (datée ici)
   (tableau de bord, fiche de bâtiment, recettes) : police Inter, fort contraste, une couleur
   fixe par type de capital, cartes arrondies, une seule action principale dorée par écran.
 - **Effets 3D à venir** : la technologie d'interface doit les permettre.
-- Technologie retenue le 23/10/2026 : **Tauri** (fenêtre native Windows et Linux, interface
+- Technologie retenue le 23/10/2026 : **Tauri** (fenêtre native Windows, Linux plus tard, interface
   web React, three.js pour la 3D), le moteur de règles Rust restant inchangé. Migration page
   par page dans `desktop/`, l'application egui actuelle (`app/`) restant disponible jusqu'à
   parité ; les deux travaillent sur les mêmes fichiers de campagne.

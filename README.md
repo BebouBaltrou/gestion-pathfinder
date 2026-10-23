@@ -1,6 +1,6 @@
 # Gestion d'intermède — Pathfinder 1 (Guide de campagne / Ultimate Campaign)
 
-Application locale (Windows et Linux) de gestion des localités, bâtiments, salles, organisations,
+Application locale (Windows ; Linux prévu plus tard) de gestion des localités, bâtiments, salles, organisations,
 équipes et gestionnaires selon les règles d'intermède du **Guide de campagne**
 (VF de *Ultimate Campaign*).
 
@@ -25,7 +25,7 @@ crates/domaine   types purs : capitaux, monnaie (en pa), sources, statuts, fiche
 crates/regles    référentiel officiel, personnalisations, calculs, contrôles
 crates/campagne  journal d'événements, état, annuler/rétablir, calendrier, sauvegarde JSON
 crates/vues      modèles d'affichage : ce que l'interface montre, calculé par le cœur
-desktop/         nouvelle application (Tauri) : src-tauri/ (Rust), ui/ (React), Windows et Linux
+desktop/         nouvelle application (Tauri) : src-tauri/ (Rust), ui/ (React) ; Windows (Linux plus tard)
 app/             application egui (ancienne interface), conservée jusqu'à la fin de la migration
 data/            referentiel_officiel.json : source de vérité des données officielles
 outils/extraction  scripts de relevé depuis le PDF et de génération du code Rust
