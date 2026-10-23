@@ -34,11 +34,17 @@ pub fn ressources_admises(
 }
 
 /// Coche par défaut : toutes les ressources d'une liste explicite, rien sinon.
+/// Type de revenu coché par défaut : le premier de la liste du livre (un seul type à la fois).
 pub(crate) fn ressources_par_defaut(u: &Unite) -> Vec<Ressource> {
     match u.recettes.as_ref().map(|r| &r.admissibles) {
-        Some(Admissibles::Liste { ressources }) => ressources.clone(),
+        Some(Admissibles::Liste { ressources }) => ressources.iter().take(1).copied().collect(),
         _ => Vec::new(),
     }
+}
+
+/// Un seul type de revenu coché à la fois : on garde le premier (anciens fichiers compris).
+pub(crate) fn un_seul_type(ressources: &[Ressource]) -> Vec<Ressource> {
+    ressources.iter().take(1).copied().collect()
 }
 
 /// Durée et coût d'un chantier avec accélération : durée ÷ k, capital accéléré × k (Travail
@@ -327,7 +333,7 @@ impl Etat {
                 let m = self.salle_mut(*id)?;
                 m.etage = *etage;
                 m.nom = nom.clone();
-                m.ressources = ressources.clone();
+                m.ressources = un_seul_type(ressources);
                 m.revenus_actifs = *revenus_actifs;
                 m.brisee = *brisee;
             }

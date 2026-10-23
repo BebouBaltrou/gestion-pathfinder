@@ -34,7 +34,7 @@ Les campagnes sont enregistrées dans `%APPDATA%\GestionPathfinder\campagnes` (J
 ## Commandes
 
 ```
-cargo test                                            # 52 tests, dont les exemples chiffrés du livre
+cargo test                                            # 53 tests, dont les exemples chiffrés du livre
 cargo run -p regles --example verifier_referentiel    # contenu + avertissements
 ```
 

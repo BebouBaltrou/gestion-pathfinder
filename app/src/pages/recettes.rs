@@ -95,7 +95,13 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
             widgets::champ_entier(ui, &mut s.jours, "jours", 60.0);
             widgets::texte_doux(
                 ui,
-                format!("({attente} jour(s) sans recettes, jusqu'à aujourd'hui inclus)"),
+                if attente == 0 {
+                    "(aucun jour en attente : avancez le temps pour produire)".to_string()
+                } else {
+                    format!(
+                        "({attente} jour(s) en attente, à traiter dans l'ordre à partir du plus ancien)"
+                    )
+                },
             );
         });
     });

@@ -800,22 +800,19 @@ fn detail(
                         let mut brisee = sb.brisee;
                         let mut change = false;
                         ui.label("Génère :");
+                        // un seul type de revenu à la fois ; recliquer le type choisi le décoche
                         for x in &admises {
-                            let mut coche = ress.contains(x);
+                            let choisi = ress.first() == Some(x);
                             if ui
-                                .checkbox(
-                                    &mut coche,
+                                .radio(
+                                    choisi,
                                     RichText::new(x.to_string())
                                         .color(theme::couleur_ressource(*x)),
                                 )
-                                .changed()
+                                .clicked()
                             {
                                 change = true;
-                                if coche {
-                                    ress.push(*x);
-                                } else {
-                                    ress.retain(|y| y != x);
-                                }
+                                ress = if choisi { Vec::new() } else { vec![*x] };
                             }
                         }
                         ui.separator();

@@ -385,14 +385,21 @@ impl Etat {
         r: &Referentiel,
     ) -> Result<BilanRecettes, Erreur> {
         self.localite(d.localite)?;
-        if d.jours == 0 || d.jours > self.jour {
+        // les jours en attente sont traités dans l'ordre, à partir du plus ancien
+        let attente = self.jours_sans_recettes(d.localite);
+        if attente == 0 {
+            return Err(Erreur::Recettes(
+                "aucun jour en attente de recettes : avancez le temps d'abord".into(),
+            ));
+        }
+        if d.jours == 0 || d.jours > attente {
             return Err(Erreur::Recettes(format!(
-                "nombre de jours invalide : {} (1 à {})",
-                d.jours, self.jour
+                "nombre de jours invalide : {} (1 à {attente} en attente)",
+                d.jours
             )));
         }
-        let du = self.jour + 1 - d.jours;
-        let au = self.jour;
+        let du = self.jour - attente + 1;
+        let au = du + d.jours - 1;
         let options = d.regles.options();
 
         let mut vus = BTreeSet::new();
@@ -721,6 +728,16 @@ mod tests {
         let admises = regles::repartition::admises(m.r.salle("bar").unwrap(), &BTreeSet::new());
         let res = *admises.iter().find(|x| x.capital().is_some()).unwrap();
         let t = res.capital().unwrap();
+        let etage = m.etat().salle(m.bar).unwrap().etage;
+        m.ev(Evenement::SalleModifiee {
+            id: m.bar,
+            etage,
+            nom: None,
+            ressources: vec![res],
+            revenus_actifs: true,
+            brisee: false,
+        })
+        .unwrap();
         // jet de 20 : (20 + bonus) ÷ 10 unités, on en garde 1
         let mut d = demande(&m, 1, res, vec![Some(20)]);
         let bilan = m.etat().calculer_recettes(&d, &m.r).unwrap();
@@ -746,7 +763,8 @@ mod tests {
             etat.localite(m.l).unwrap().tresorerie,
             Montant::po(100 - cout)
         );
-        // option personnalisée : capitaux produits gratuits
+        // option personnalisée : capitaux produits gratuits (sur le jour suivant)
+        m.ev(Evenement::JoursAvances { nombre: 1 }).unwrap();
         let mut g = d.clone();
         g.regles.capitaux_produits_gratuits = true;
         assert_eq!(
@@ -836,5 +854,33 @@ mod tests {
             [Consequence::TestPrestigeRequis { dd: 21, .. }]
         ));
         assert_eq!(m.etat().prestige_en_attente.get(&l), Some(&21));
+    }
+
+    #[test]
+    fn jours_en_attente_encaisses_une_seule_fois() {
+        let mut m = monde();
+        m.ev(Evenement::JoursAvances { nombre: 8 }).unwrap();
+        assert_eq!(m.etat().jours_sans_recettes(m.l), 9);
+        let percevoir = |m: &mut Monde, n: u32| {
+            let d = demande(m, n, Ressource::Po, vec![None; n as usize]);
+            m.ev(Evenement::RecettesPercues {
+                localite: d.localite,
+                jours: d.jours,
+                affectations: d.affectations.clone(),
+                jets: d.jets.clone(),
+                conserves: d.conserves,
+                payeur: None,
+                regles: d.regles,
+            })
+        };
+        // 4 jours sur 9 : il en reste 5
+        percevoir(&mut m, 4).unwrap();
+        assert_eq!(m.etat().jours_sans_recettes(m.l), 5);
+        // pas plus que les jours en attente
+        assert!(percevoir(&mut m, 6).is_err());
+        percevoir(&mut m, 5).unwrap();
+        assert_eq!(m.etat().jours_sans_recettes(m.l), 0);
+        // plus rien à encaisser tant que le temps n'avance pas
+        assert!(percevoir(&mut m, 1).is_err());
     }
 }

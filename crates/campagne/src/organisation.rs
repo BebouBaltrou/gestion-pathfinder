@@ -11,7 +11,7 @@
 //!   localité, qui peut devenir négative.
 
 use crate::construction::{
-    chantier_accelere, depenser_un_jour, ressources_admises, ressources_par_defaut,
+    chantier_accelere, depenser_un_jour, ressources_admises, ressources_par_defaut, un_seul_type,
 };
 use crate::etat::{Consequence, Erreur, Etat};
 use crate::evenements::Evenement;
@@ -270,7 +270,7 @@ impl Etat {
                 }
                 let m = self.equipe_mut(*id)?;
                 m.nom = nom.clone();
-                m.ressources = ressources.clone();
+                m.ressources = un_seul_type(ressources);
                 m.revenus_actifs = *revenus_actifs;
             }
             EquipeAffectee {

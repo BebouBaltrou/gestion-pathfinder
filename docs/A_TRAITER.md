@@ -17,8 +17,11 @@ Ce fichier est tenu à jour à chaque étape.
 - **Extensions** (GC p. 108) : chantiers sur les salles (fortification, ameublement +5 au test
   de la salle, piège au coût saisi), une de chaque type par salle, permanentes, conservées à
   l'amélioration ; créées avec les modèles du livre (salles repérées d'après le texte du
-  modèle, ex. « deux chambres à coucher »). Lecture à valider : une salle sans recettes propres
-  mais meublée produit les types que le bâtiment génère déjà, avec +5.
+  modèle, ex. « deux chambres à coucher »). Validé le 23/10 : une salle sans recettes propres
+  mais meublée produit un des types que le bâtiment génère déjà, avec +5.
+- **Recettes** (retours du 23/10) : un seul type de revenu coché par salle ou équipe ; les
+  jours en attente sont encaissés une seule fois, du plus ancien au plus récent, et un
+  encaissement partiel laisse le reste en attente.
 - **Vente** : la moitié du prix d'achat, en po. Sans acheteur (25 % des cas), le joueur garde
   le bien ou l'abandonne.
 
