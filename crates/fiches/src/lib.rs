@@ -12,6 +12,10 @@ pub mod effet;
 #[cfg(feature = "serde")]
 pub mod fiche;
 pub mod generation;
+#[cfg(feature = "serde")]
+pub mod journal;
+#[cfg(feature = "serde")]
+pub mod progression;
 
 pub use bonus::{calculer, Detail, Terme};
 pub use caracteristiques::{modificateur, Carac, Caracteristique};

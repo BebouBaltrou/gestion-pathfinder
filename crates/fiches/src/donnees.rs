@@ -119,6 +119,9 @@ pub struct Incantation {
     pub genre: String,
     pub mode: String,
     pub caracteristique: String,
+    /// Échange d’un sort connu : à partir de ce niveau de classe, puis tous les `echange_pas` niveaux.
+    pub echange_niveau_min: Option<u32>,
+    pub echange_pas: Option<u32>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -135,6 +138,22 @@ pub struct Classe {
     pub progression: Vec<ProgressionNiveau>,
     #[serde(default)]
     pub lignages: Vec<Lignage>,
+}
+
+/// Ligne du tableau 3-1 (Core p. 31) : XP requis et gains du niveau.
+#[derive(Debug, Clone, Deserialize)]
+pub struct LigneProgression {
+    pub niveau: u32,
+    pub xp_lente: u32,
+    pub xp_moyenne: u32,
+    pub xp_rapide: u32,
+    pub don: bool,
+    pub augmentation: bool,
+}
+
+#[derive(Debug, Deserialize)]
+struct FichierProgression {
+    niveaux: Vec<LigneProgression>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -156,6 +175,7 @@ pub struct Referentiel {
     pub races: Vec<Race>,
     pub competences: Vec<Competence>,
     pub classes: Vec<Classe>,
+    pub progression: Vec<LigneProgression>,
 }
 
 impl Referentiel {
@@ -165,6 +185,7 @@ impl Referentiel {
             include_str!("../../../data/core/races.json"),
             include_str!("../../../data/core/competences.json"),
             &[include_str!("../../../data/core/ensorceleur.json")],
+            include_str!("../../../data/core/progression.json"),
         )
         .expect("référentiel Core embarqué valide")
     }
@@ -173,6 +194,7 @@ impl Referentiel {
         races: &str,
         competences: &str,
         classes: &[&str],
+        progression: &str,
     ) -> Result<Referentiel, serde_json::Error> {
         let races: FichierRaces = serde_json::from_str(races)?;
         let competences: FichierCompetences = serde_json::from_str(competences)?;
@@ -181,11 +203,18 @@ impl Referentiel {
             let f: FichierClasse = serde_json::from_str(c)?;
             cl.push(f.classe);
         }
+        let progression: FichierProgression = serde_json::from_str(progression)?;
         Ok(Referentiel {
+            progression: progression.niveaux,
             races: races.races,
             competences: competences.competences,
             classes: cl,
         })
+    }
+
+    /// Ligne du tableau de progression pour un niveau de personnage (1 à 20).
+    pub fn ligne_progression(&self, niveau: u32) -> Option<&LigneProgression> {
+        self.progression.iter().find(|l| l.niveau == niveau)
     }
 
     pub fn race(&self, id: &str) -> Option<&Race> {

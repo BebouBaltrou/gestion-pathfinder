@@ -29,6 +29,9 @@ pub struct NiveauPris {
     /// Rangs placés à ce niveau, par compétence (`acrobatics`, `knowledge:arcana`…).
     pub rangs: BTreeMap<String, u32>,
     pub predilection: Option<BonusPredilection>,
+    /// Dons choisis à ce niveau (catalogue et prérequis : phase 4).
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub dons: Vec<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -45,6 +48,9 @@ pub struct Fiche {
     /// Augmentations de caractéristique prises (niveaux 4, 8, 12, 16, 20) : niveau, caractéristique.
     pub augmentations: Vec<(u32, Carac)>,
     pub niveaux: Vec<NiveauPris>,
+    /// Classes de prédilection (une, deux pour le demi-elfe).
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub classes_de_predilection: Vec<String>,
     pub lignage: Option<String>,
     /// Sous-type choisi pour « Knowledge (any one) » du lignage arcanique.
     pub connaissance_de_lignage: Option<String>,
@@ -707,7 +713,7 @@ impl Fiche {
 }
 
 #[cfg(test)]
-mod tests {
+pub(crate) mod tests {
     use super::*;
 
     pub(crate) fn elfe_ensorceleuse() -> Fiche {
@@ -737,7 +743,9 @@ mod tests {
                 de_vie_obtenu: 6,
                 rangs,
                 predilection: Some(BonusPredilection::PointDeVie),
+                dons: vec![],
             }],
+            classes_de_predilection: vec!["ensorceleur".into()],
             lignage: Some("draconic".into()),
             connaissance_de_lignage: None,
             effets: vec![],
@@ -803,6 +811,7 @@ mod tests {
             de_vie_obtenu: 4,
             rangs: BTreeMap::new(),
             predilection: None,
+            dons: vec![],
         });
         assert_eq!(f.calculer(&r).unwrap().pv_max.total, 7 + 4);
         f.scores_base.insert(Carac::Con, 16); // CON 14 après race : +2
@@ -823,6 +832,7 @@ mod tests {
             de_vie_obtenu: 2,
             rangs: BTreeMap::new(),
             predilection: None,
+            dons: vec![],
         });
         assert_eq!(f.calculer(&r).unwrap().pv_max.total, 2); // chaque niveau compte au moins 1
     }
@@ -912,6 +922,7 @@ mod tests {
                 de_vie_obtenu: if i == 1 { 6 } else { 4 },
                 rangs: BTreeMap::new(),
                 predilection: None,
+                dons: vec![],
             })
             .collect();
         f.augmentations = vec![
@@ -985,6 +996,7 @@ mod tests {
             de_vie_obtenu: 4,
             rangs: [("spellcraft".to_string(), 2)].into_iter().collect(),
             predilection: None,
+            dons: vec![],
         });
         // spellcraft : 1 + 2 = 3 rangs au niveau 2
         assert!(f.valider(&r).contains(&Probleme::RangAuDessusDuNiveau {

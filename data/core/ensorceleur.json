@@ -32,6 +32,8 @@
       "type": "profane",
       "mode": "spontané",
       "caracteristique": "cha",
+      "echange_niveau_min": 4,
+      "echange_pas": 2,
       "echange_de_sort": "niveaux 4, 6, 8… : un sort connu contre un autre du même niveau"
     },
     "or_de_depart_en": "2d6 x 10 gp (average 70 gp)",

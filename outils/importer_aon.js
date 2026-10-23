@@ -171,7 +171,7 @@ async function ensorceleur() {
     competences_de_classe_en: ['Appraise', 'Bluff', 'Craft', 'Fly', 'Intimidate', 'Knowledge (arcana)', 'Profession', 'Spellcraft', 'Use Magic Device'],
     bba: 'moyen', vigueur: 'lente', reflexes: 'lente', volonte: 'rapide',
     maitrises_en: 'all simple weapons; no armor, no shield',
-    incantation: { type: 'profane', mode: 'spontané', caracteristique: 'cha', echange_de_sort: 'niveaux 4, 6, 8… : un sort connu contre un autre du même niveau' },
+    incantation: { type: 'profane', mode: 'spontané', caracteristique: 'cha', echange_niveau_min: 4, echange_pas: 2, echange_de_sort: 'niveaux 4, 6, 8… : un sort connu contre un autre du même niveau' },
     or_de_depart_en: '2d6 x 10 gp (average 70 gp)',
     don_bonus_niveau_1: 'Eschew Materials',
     progression, lignages: bloodlines,
@@ -209,4 +209,20 @@ async function competences() {
   ecrire('competences.json', { source: SOURCE_AON, competences: liste });
 }
 
-(async () => { await races(); await competences(); await ensorceleur(); console.log('ok'); })().catch((e) => { console.error(e); process.exit(1); });
+
+// ---------------- Progression de niveau (tableau 3-1, p. 31) ----------------
+async function progression() {
+  const html = await telecharger('https://aonprd.com/Rules.aspx?Name=Character%20Advancement&Category=Basics', 'progression.html');
+  const l = texte(html);
+  const i0 = l.findIndex((x) => x.startsWith('Character Level Slow Medium Fast'));
+  const niveaux = [];
+  for (let n = 1; n <= 20; n++) {
+    const m = l[i0 + n].match(/^(\d+)(?:st|nd|rd|th) (\S+) (\S+) (\S+) (\S+) (\S+)$/);
+    if (!m || Number(m[1]) !== n) throw new Error('ligne XP illisible : ' + l[i0 + n]);
+    const xp = (x) => (x === '—' ? 0 : Number(x.replace(/,/g, '')));
+    niveaux.push({ niveau: n, xp_lente: xp(m[2]), xp_moyenne: xp(m[3]), xp_rapide: xp(m[4]), don: m[5] !== '—', augmentation: m[6] !== '—' });
+  }
+  ecrire('progression.json', { source: SOURCE_AON, livre: 'PRPG Core Rulebook', page: 31, niveaux });
+}
+
+(async () => { await progression(); await races(); await competences(); await ensorceleur(); console.log('ok'); })().catch((e) => { console.error(e); process.exit(1); });
