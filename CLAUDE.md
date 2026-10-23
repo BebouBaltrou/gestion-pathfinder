@@ -24,7 +24,7 @@ Règles et points à confirmer du référentiel : page « Points à confirmer »
 ```
 crates/domaine   types purs : capitaux, monnaie (en pa), sources, statuts, fiches
 crates/regles    référentiel officiel (données du livre), calculs, contrôles
-crates/campagne  journal d'événements (event sourcing), état recalculé, annuler/rétablir,
+crates/campagne  journal d'événements (event sourcing), état recalculé, annuler/rétablir, modèles personnels,
                  calendrier de Golarion, sauvegarde JSON (feature « serde »)
 crates/vues      modèles d'affichage calculés par le cœur pour l'interface
 desktop/         NOUVELLE application (Tauri 2) : src-tauri/ (Rust, commandes), ui/ (React + TS)
@@ -72,8 +72,8 @@ essai de bout en bout de la nouvelle application (variable `GESTION_PATHFINDER_A
 
 ## État de la migration vers `desktop/`
 
-Fait : coquille, tableau de bord, campagnes, localités, personnages. À faire, dans l'ordre :
-Bâtiments (salles, extensions, vente, réparation), Recettes, Organisations, Gestionnaires,
+Fait : coquille, tableau de bord, campagnes, localités, personnages, bâtiments. À faire, dans l'ordre :
+Recettes, Organisations, Gestionnaires,
 Historique, Paramètres, Référentiel, Points à confirmer, import/export, modèles personnels,
 mode simulation complet. Ensuite : retirer `app/`. Le détail est dans `docs/A_TRAITER.md`.
 Pour chaque page : reprendre le comportement de `app/src/pages/<page>.rs`, mettre les calculs

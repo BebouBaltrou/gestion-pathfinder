@@ -10,6 +10,8 @@ pub mod evenements;
 #[cfg(feature = "serde")]
 pub mod fichier;
 pub mod modele;
+#[cfg(feature = "serde")]
+pub mod modeles_perso;
 pub mod organisation;
 pub mod rapport;
 pub mod recettes;

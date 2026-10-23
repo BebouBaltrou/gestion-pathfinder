@@ -356,3 +356,14 @@ select.champ { cursor: pointer; }
   .maitre-detail { flex-direction: column; }
   .liste-maitre { position: static; flex: none; width: 100%; }
 }
+
+/* ---------------------------------------------------------------- bâtiments */
+.groupe-liste { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
+.groupe-liste .titre-groupe { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--or); padding: 0 4px; }
+.element-liste .puce { grid-column: 1 / -1; justify-self: start; }
+.etage { display: flex; flex-direction: column; gap: 14px; }
+.salle { display: flex; flex-direction: column; gap: 10px; padding: 16px 0; border-top: 1px solid var(--bord); }
+.carte.encadre { background: var(--carte-2); padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+.choix-radio { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
+.choix-radio input { accent-color: var(--or); width: 16px; height: 16px; }
+.fiche-localite .etiquette-champ { margin-bottom: 4px; }

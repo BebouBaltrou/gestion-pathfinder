@@ -48,6 +48,8 @@ pub struct Session {
     /// jetable, jamais enregistrée.
     pub simulation: Option<Campagne>,
     pub chemin: Option<PathBuf>,
+    /// Modèles personnels (bâtiments, organisations), communs à toutes les campagnes.
+    pub modeles: campagne::modeles_perso::ModelesPerso,
 }
 
 /// Dossier des campagnes : %APPDATA%\GestionPathfinder\campagnes sous Windows,
@@ -73,6 +75,7 @@ impl Session {
             campagne: None,
             simulation: None,
             chemin: None,
+            modeles: campagne::modeles_perso::ModelesPerso::charger(&dossier_campagnes()),
         };
         // rouvre la campagne la plus récemment modifiée
         if let Some(c) = s.lister().into_iter().next() {
@@ -151,6 +154,13 @@ impl Session {
             return Retour::erreur(e);
         }
         Retour::ok(format!("Campagne « {nom} » créée"))
+    }
+
+    /// Enregistre les modèles personnels (fichier commun aux deux applications).
+    pub fn enregistrer_modeles(&self) -> Result<(), String> {
+        self.modeles
+            .enregistrer(&self.dossier)
+            .map_err(|e| format!("Enregistrement des modèles impossible : {e}"))
     }
 
     fn enregistrer(&mut self) -> Result<(), String> {

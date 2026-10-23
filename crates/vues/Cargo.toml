@@ -8,9 +8,12 @@ license.workspace = true
 [dependencies]
 domaine = { path = "../domaine" }
 regles = { path = "../regles" }
-campagne = { path = "../campagne" }
+campagne = { path = "../campagne", features = ["serde"] }  # modèles personnels (fichier JSON)
 serde = { version = "1", features = ["derive"], optional = true }
 
 [features]
 # Sérialisation vers l'interface (activée par l'application de bureau).
 serde = ["dep:serde", "campagne/serde"]
+
+[dev-dependencies]
+serde_json = "1"

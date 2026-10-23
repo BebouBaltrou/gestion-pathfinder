@@ -32,6 +32,24 @@ export async function autotest(): Promise<void> {
       { marchandises: 0, influence: 0, travail: 0, magie: 0 }, "autotest")).ok, "ajustement de la localité");
     verifier((await api.pageLocalites())?.localites[0]?.tresorerie.pa === 125, "trésorerie après ajustement");
     verifier(!(await api.mouvementPo(true, 1, id, "abc")).ok, "montant illisible refusé");
+    verifier(
+      (await api.creerBatiment({
+        localite: id, modele: null, nom: "Auberge", classement: "auberge", acquisition: "plan",
+        facteur: 1, seulementManquants: false, prix: "", payeur: null,
+      })).ok,
+      "création d'un bâtiment vide",
+    );
+    const pb = await api.pageBatiments();
+    const idb = pb?.groupes[0]?.batiments[0]?.id ?? 0;
+    verifier(idb > 0 && (pb?.salles.length ?? 0) > 0, "page Bâtiments : liste et salles du livre");
+    const fb = await api.ficheBatiment(idb);
+    verifier(fb?.etages.length === 1, "fiche du bâtiment : un rez-de-chaussée");
+    verifier(
+      (await api.actionBatiment({ type: "ajouterSalle", batiment: idb, etage: fb?.etages[0]?.id ?? 0,
+        reference: pb?.salles[0]?.id ?? "", deja: true })).ok,
+      "ajout d'une salle déjà construite",
+    );
+    verifier((await api.ficheBatiment(idb))?.etages[0]?.salles[0]?.statut === "construite", "salle construite");
     verifier((await api.simulation("demarrer")).ok, "démarrer une simulation");
     await api.avancer(1);
     verifier((await api.etatApp()).simulation?.[1] === 1, "simulation : un jour d'avance");

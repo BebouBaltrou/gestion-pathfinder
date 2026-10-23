@@ -127,6 +127,159 @@ export type FichePersonnage = {
 
 export type PagePersonnages = { personnages: FichePersonnage[]; localites: Choix[] };
 
+// ------------------------------------------------------------------ bâtiments
+
+export type RessourceId = "po" | "marchandises" | "influence" | "travail" | "magie";
+
+export type Cible = { genre: "batiment" | "salle" | "organisation" | "equipe"; id: number };
+
+export type EtatVente = {
+  cible: Cible;
+  libelle: string;
+  enCours: string | null;
+  valeur: string;
+  produit: string;
+  influenceDispo: number;
+};
+
+export type PageBatiments = {
+  groupes: { localite: string; batiments: { id: number; nom: string; enTravaux: number }[] }[];
+  localites: Choix[];
+  modeles: { id: string; libelle: string; personnel: boolean }[];
+  salles: { id: string; nom: string; libelle: string }[];
+  payeurs: Choix[];
+};
+
+export type Acquisition = "plan" | "possede" | "construire" | "acheterCapitaux" | "acheterBatiment";
+
+export type SaisieBatiment = {
+  localite: number | null;
+  modele: string | null;
+  nom: string;
+  classement: string;
+  acquisition: Acquisition;
+  facteur: number;
+  seulementManquants: boolean;
+  prix: string;
+  payeur: number | null;
+};
+
+export type ApercuCreation = {
+  composition: string;
+  personnel: boolean;
+  source: string;
+  besoin: Capitaux;
+  aAcheter: Capitaux;
+  prixCapitauxPo: number;
+  prixLivrePo: number;
+  tresorerie: string;
+};
+
+export type Avancement = {
+  capitauxFaits: number;
+  capitauxTotal: number;
+  jours: number;
+  duree: number;
+  estimation: string;
+  manque: string | null;
+};
+
+export type FicheExtension = {
+  reference: string;
+  nom: string;
+  statutTexte: string;
+  aConstruire: boolean;
+  lancable: boolean;
+  description: string;
+  detail: string;
+  prixPo: number;
+  manque: string | null;
+};
+
+export type ExtensionPossible = { id: string; nom: string; aide: string; saisieRequise: boolean; detail: string };
+
+export type FicheSalle = {
+  id: number;
+  nom: string;
+  typeSalle: string | null;
+  statut: "a_construire" | "en_travaux" | "construite";
+  statutTexte: string;
+  brisee: boolean;
+  source: string;
+  infos: string;
+  pointAConfirmer: string | null;
+  admises: RessourceId[];
+  ressource: RessourceId | null;
+  revenusActifs: boolean;
+  chantier: Avancement | null;
+  constructible: boolean;
+  prixAchatPo: number | null;
+  ameliorations: { id: string; nom: string; detail: string | null }[];
+  vente: EtatVente | null;
+  reparation: [string, string | null] | null;
+  extensions: FicheExtension[];
+  extensionsPossibles: ExtensionPossible[];
+};
+
+export type FicheEtage = {
+  id: number;
+  nom: string;
+  sequentiel: boolean;
+  dureeRestante: number;
+  reste: Capitaux;
+  salles: FicheSalle[];
+};
+
+export type FicheBatiment = {
+  id: number;
+  nom: string;
+  classement: string;
+  notes: string;
+  modele: string | null;
+  localite: number;
+  lieu: string;
+  reste: Capitaux;
+  dureeRestante: number;
+  bonus: { ressource: RessourceId; valeur: number }[];
+  equipes: string;
+  gestionnaires: string;
+  etagesSuccessifs: boolean;
+  vente: EtatVente;
+  etages: FicheEtage[];
+  tresorerie: string;
+  payeurs: Choix[];
+};
+
+/** Action sur un bâtiment, une salle ou une extension (le cœur la traduit en événement). */
+export type ActionBatiment =
+  | { type: "etagesSuccessifs"; batiment: number; actif: boolean }
+  | { type: "modeEtage"; batiment: number; etage: number; sequentiel: boolean }
+  | { type: "ajouterEtage"; batiment: number; nom: string }
+  | { type: "ajouterSalle"; batiment: number; etage: number; reference: string; deja: boolean }
+  | { type: "reglerSalle"; salle: number; ressource: RessourceId | null; revenusActifs: boolean; brisee: boolean }
+  | { type: "lancerConstruction"; salle: number; facteur: number }
+  | { type: "acheterSalle"; salle: number; payeur: number | null }
+  | { type: "sallePossedee"; salle: number }
+  | { type: "retirerSalle"; salle: number }
+  | { type: "ameliorer"; salle: number; vers: string; facteur: number }
+  | { type: "reparer"; salle: number; enCapitaux: boolean; payeur: number | null }
+  | { type: "lancerExtension"; salle: number; reference: string; facteur: number }
+  | { type: "acheterExtension"; salle: number; reference: string; payeur: number | null }
+  | { type: "extensionPossedee"; salle: number; reference: string }
+  | { type: "retirerExtension"; salle: number; reference: string }
+  | {
+      type: "ajouterExtension";
+      salle: number;
+      reference: string;
+      deja: boolean;
+      cout: Capitaux | null;
+      prix: string;
+      duree: string;
+    }
+  | { type: "annulerVente"; cible: Cible }
+  | { type: "abandonner"; cible: Cible; sansAcheteur: boolean }
+  | { type: "garderSansAcheteur"; cible: Cible };
+
 /** Ce qu'un transfert déplace (l'Influence ne se transfère pas, GC p. 81). */
 export type RessourceTransfert = "po" | "marchandises" | "travail" | "magie";
 
@@ -175,6 +328,16 @@ export const api = {
     appeler<Retour>("modifier_personnage", { id, nom, prestige }),
   deplacerPersonnage: (id: number, vers: number | null) => appeler<Retour>("deplacer_personnage", { id, vers }),
   ajusterCompte: (pj: number, delta: string, motif: string) => appeler<Retour>("ajuster_compte", { pj, delta, motif }),
+
+  pageBatiments: () => appeler<PageBatiments | null>("page_batiments"),
+  apercuCreationBatiment: (saisie: SaisieBatiment) => appeler<ApercuCreation | null>("apercu_creation_batiment", { saisie }),
+  creerBatiment: (saisie: SaisieBatiment) => appeler<Retour>("creer_batiment", { saisie }),
+  ficheBatiment: (id: number) => appeler<FicheBatiment | null>("fiche_batiment", { id }),
+  actionBatiment: (action: ActionBatiment) => appeler<Retour>("action_batiment", { action }),
+  miseEnVente: (cible: Cible, jours: string, influence: number, po: string) =>
+    appeler<Retour>("mise_en_vente", { cible, jours, influence, po }),
+  enregistrerModeleBatiment: (id: number) => appeler<Retour>("enregistrer_modele_batiment", { id }),
+  supprimerModeleBatiment: (id: string) => appeler<Retour>("supprimer_modele_batiment", { id }),
 };
 
 // ------------------------------------------------------------------ montants

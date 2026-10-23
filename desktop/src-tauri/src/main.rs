@@ -205,6 +205,121 @@ fn ajuster_compte(s: S, pj: u32, delta: String, motif: String) -> Retour {
     executer_saisie(&mut x, ev, "Compte mis à jour")
 }
 
+// ---------------------------------------------------------------- bâtiments
+
+#[tauri::command]
+fn page_batiments(s: S) -> Option<vues::batiments::PageBatiments> {
+    let mut x = session(&s);
+    let (r, m) = (x.r.clone(), x.modeles.clone());
+    x.campagne
+        .as_mut()
+        .map(|c| vues::batiments::page_batiments(c, &r, &m))
+}
+
+#[tauri::command]
+fn apercu_creation_batiment(
+    s: S,
+    saisie: vues::batiments::SaisieBatiment,
+) -> Option<vues::batiments::ApercuCreation> {
+    let mut x = session(&s);
+    let (r, m) = (x.r.clone(), x.modeles.clone());
+    x.campagne
+        .as_mut()
+        .and_then(|c| vues::batiments::apercu_creation(c, &r, &m, &saisie))
+}
+
+/// Exécute un événement construit par le cœur (message de succès compris).
+fn executer_construit(x: &mut Session, ev: Result<(Evenement, String), String>) -> Retour {
+    match ev {
+        Ok((ev, msg)) => x.executer(ev, &msg),
+        Err(e) => Retour::erreur(e),
+    }
+}
+
+#[tauri::command]
+fn creer_batiment(s: S, saisie: vues::batiments::SaisieBatiment) -> Retour {
+    let mut x = session(&s);
+    let (r, m) = (x.r.clone(), x.modeles.clone());
+    let Some(c) = x.campagne.as_mut() else {
+        return Retour::erreur("Aucune campagne ouverte");
+    };
+    let ev = vues::batiments::creation(c, &r, &m, &saisie);
+    executer_construit(&mut x, ev)
+}
+
+#[tauri::command]
+fn fiche_batiment(s: S, id: u32) -> Option<vues::batiments::FicheBatiment> {
+    let mut x = session(&s);
+    let r = x.r.clone();
+    x.campagne
+        .as_mut()
+        .and_then(|c| vues::batiments::fiche_batiment(c, &r, id))
+}
+
+#[tauri::command]
+fn action_batiment(s: S, action: vues::actions_batiments::ActionBatiment) -> Retour {
+    let mut x = session(&s);
+    let r = x.r.clone();
+    let Some(c) = x.campagne.as_mut() else {
+        return Retour::erreur("Aucune campagne ouverte");
+    };
+    let ev = vues::actions_batiments::action(c, &r, action);
+    executer_construit(&mut x, ev)
+}
+
+#[tauri::command]
+fn mise_en_vente(
+    s: S,
+    cible: vues::ventes::Cible,
+    jours: String,
+    influence: u32,
+    po: String,
+) -> Retour {
+    let mut x = session(&s);
+    let r = x.r.clone();
+    let Some(c) = x.campagne.as_mut() else {
+        return Retour::erreur("Aucune campagne ouverte");
+    };
+    let etat = c.etat(&r).clone();
+    let ev = vues::ventes::mise_en_vente(&etat, &r, cible, &jours, influence, &po);
+    executer_construit(&mut x, ev)
+}
+
+/// Enregistre un bâtiment comme modèle personnel (un modèle du même nom est remplacé).
+#[tauri::command]
+fn enregistrer_modele_batiment(s: S, id: u32) -> Retour {
+    let mut x = session(&s);
+    let r = x.r.clone();
+    let Some(c) = x.campagne.as_mut() else {
+        return Retour::erreur("Aucune campagne ouverte");
+    };
+    let etat = c.etat(&r).clone();
+    let Some(b) = etat.batiments.get(&campagne::modele::IdBatiment(id)) else {
+        return Retour::erreur("Bâtiment introuvable");
+    };
+    let m = campagne::modeles_perso::BatimentPerso::depuis(&etat, b, &b.nom);
+    let nom = b.nom.clone();
+    x.modeles.ajouter_batiment(m);
+    match x.enregistrer_modeles() {
+        Ok(()) => Retour::ok(format!("Modèle personnel « {nom} » enregistré")),
+        Err(e) => Retour::erreur(e),
+    }
+}
+
+#[tauri::command]
+fn supprimer_modele_batiment(s: S, id: String) -> Retour {
+    let mut x = session(&s);
+    let Some(nom) = id.strip_prefix(campagne::modeles_perso::PREFIXE) else {
+        return Retour::erreur("Ce modèle est officiel : il ne peut pas être supprimé");
+    };
+    let nom = nom.to_string();
+    x.modeles.batiments.retain(|m| m.nom != nom);
+    match x.enregistrer_modeles() {
+        Ok(()) => Retour::ok(format!("Modèle personnel « {nom} » supprimé")),
+        Err(e) => Retour::erreur(e),
+    }
+}
+
 // ---------------------------------------------------------------- temps
 
 #[tauri::command]
@@ -293,6 +408,14 @@ fn main() {
             modifier_personnage,
             deplacer_personnage,
             ajuster_compte,
+            page_batiments,
+            apercu_creation_batiment,
+            creer_batiment,
+            fiche_batiment,
+            action_batiment,
+            mise_en_vente,
+            enregistrer_modele_batiment,
+            supprimer_modele_batiment,
             avancer,
             annuler,
             retablir,
