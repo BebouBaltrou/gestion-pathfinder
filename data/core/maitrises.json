@@ -1,0 +1,15 @@
+{
+  "source": "Core Rulebook : description de la classe (Ensorceleur, p. 70), traits « Weapon Familiarity » des races, dons de maîtrise (p. 118, 133, 134, 135)",
+  "classes": {
+    "ensorceleur": { "armes": ["simple"], "armures": [], "boucliers": false, "bouclier_pavois": false }
+  },
+  "races": {
+    "nain": { "armes": ["Battleaxe", "Heavy pick", "Warhammer"], "assimile_martiales": ["dwarven"] },
+    "elfe": { "armes": ["Longbow", "Composite longbow", "Longsword", "Rapier", "Shortbow", "Composite shortbow"], "assimile_martiales": ["elven"] },
+    "gnome": { "armes": [], "assimile_martiales": ["gnome"] },
+    "demi-orque": { "armes": ["Greataxe", "Falchion"], "assimile_martiales": ["orc"] },
+    "halfelin": { "armes": ["Sling"], "assimile_martiales": ["halfling"] },
+    "demi-elfe": { "armes": [], "assimile_martiales": [] },
+    "humain": { "armes": [], "assimile_martiales": [] }
+  }
+}

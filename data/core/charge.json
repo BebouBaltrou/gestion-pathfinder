@@ -1,0 +1,267 @@
+{
+  "source": {
+    "livre": "PRPG Core Rulebook",
+    "page": 169,
+    "note": "Table 7-4 : Carrying Capacity (Archives of Nethys)"
+  },
+  "vitesse_reduite": [
+    [
+      5,
+      5,
+      5
+    ],
+    [
+      10,
+      15,
+      10
+    ],
+    [
+      20,
+      20,
+      15
+    ],
+    [
+      25,
+      30,
+      20
+    ],
+    [
+      35,
+      35,
+      25
+    ],
+    [
+      40,
+      45,
+      30
+    ],
+    [
+      50,
+      50,
+      35
+    ],
+    [
+      55,
+      60,
+      40
+    ],
+    [
+      65,
+      65,
+      45
+    ],
+    [
+      70,
+      75,
+      50
+    ],
+    [
+      80,
+      80,
+      55
+    ],
+    [
+      85,
+      90,
+      60
+    ],
+    [
+      95,
+      95,
+      65
+    ],
+    [
+      100,
+      105,
+      70
+    ],
+    [
+      110,
+      110,
+      75
+    ],
+    [
+      115,
+      120,
+      80
+    ]
+  ],
+  "au_dela_de_29": "chaque tranche de 10 points de FOR au-dessus multiplie les valeurs par 4 (Core)",
+  "lignes": [
+    {
+      "force": 1,
+      "legere": 3,
+      "intermediaire_max": 6,
+      "lourde": 10
+    },
+    {
+      "force": 2,
+      "legere": 6,
+      "intermediaire_max": 13,
+      "lourde": 20
+    },
+    {
+      "force": 3,
+      "legere": 10,
+      "intermediaire_max": 20,
+      "lourde": 30
+    },
+    {
+      "force": 4,
+      "legere": 13,
+      "intermediaire_max": 26,
+      "lourde": 40
+    },
+    {
+      "force": 5,
+      "legere": 16,
+      "intermediaire_max": 33,
+      "lourde": 50
+    },
+    {
+      "force": 6,
+      "legere": 20,
+      "intermediaire_max": 40,
+      "lourde": 60
+    },
+    {
+      "force": 7,
+      "legere": 23,
+      "intermediaire_max": 46,
+      "lourde": 70
+    },
+    {
+      "force": 8,
+      "legere": 26,
+      "intermediaire_max": 53,
+      "lourde": 80
+    },
+    {
+      "force": 9,
+      "legere": 30,
+      "intermediaire_max": 60,
+      "lourde": 90
+    },
+    {
+      "force": 10,
+      "legere": 33,
+      "intermediaire_max": 66,
+      "lourde": 100
+    },
+    {
+      "force": 11,
+      "legere": 38,
+      "intermediaire_max": 76,
+      "lourde": 115
+    },
+    {
+      "force": 12,
+      "legere": 43,
+      "intermediaire_max": 86,
+      "lourde": 130
+    },
+    {
+      "force": 13,
+      "legere": 50,
+      "intermediaire_max": 100,
+      "lourde": 150
+    },
+    {
+      "force": 14,
+      "legere": 58,
+      "intermediaire_max": 116,
+      "lourde": 175
+    },
+    {
+      "force": 15,
+      "legere": 66,
+      "intermediaire_max": 133,
+      "lourde": 200,
+      "a_confirmer": "le site indique 67-134 puis 134-200 (chevauchement) ; limite intermédiaire prise à 133"
+    },
+    {
+      "force": 16,
+      "legere": 76,
+      "intermediaire_max": 153,
+      "lourde": 230
+    },
+    {
+      "force": 17,
+      "legere": 86,
+      "intermediaire_max": 173,
+      "lourde": 260
+    },
+    {
+      "force": 18,
+      "legere": 100,
+      "intermediaire_max": 200,
+      "lourde": 300
+    },
+    {
+      "force": 19,
+      "legere": 116,
+      "intermediaire_max": 233,
+      "lourde": 350
+    },
+    {
+      "force": 20,
+      "legere": 133,
+      "intermediaire_max": 266,
+      "lourde": 400
+    },
+    {
+      "force": 21,
+      "legere": 153,
+      "intermediaire_max": 306,
+      "lourde": 460
+    },
+    {
+      "force": 22,
+      "legere": 173,
+      "intermediaire_max": 346,
+      "lourde": 520
+    },
+    {
+      "force": 23,
+      "legere": 200,
+      "intermediaire_max": 400,
+      "lourde": 600
+    },
+    {
+      "force": 24,
+      "legere": 233,
+      "intermediaire_max": 466,
+      "lourde": 700
+    },
+    {
+      "force": 25,
+      "legere": 266,
+      "intermediaire_max": 533,
+      "lourde": 800
+    },
+    {
+      "force": 26,
+      "legere": 306,
+      "intermediaire_max": 613,
+      "lourde": 920
+    },
+    {
+      "force": 27,
+      "legere": 346,
+      "intermediaire_max": 693,
+      "lourde": 1040
+    },
+    {
+      "force": 28,
+      "legere": 400,
+      "intermediaire_max": 800,
+      "lourde": 1200
+    },
+    {
+      "force": 29,
+      "legere": 466,
+      "intermediaire_max": 933,
+      "lourde": 1400
+    }
+  ]
+}

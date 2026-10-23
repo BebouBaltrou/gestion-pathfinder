@@ -2,8 +2,18 @@
 //! L'état (fiche, XP, jalons) est toujours recalculé en rejouant le journal.
 
 use crate::donnees::Referentiel;
+use crate::etats::EffetTemporaire;
 use crate::fiche::Fiche;
 use crate::progression::{appliquer, niveau_atteignable, ErreurMontee, Montee, ReglesFiche};
+
+/// Où se porte une protection.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde", serde(rename_all = "snake_case"))]
+pub enum EmplacementProtection {
+    Armure,
+    Bouclier,
+}
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -27,6 +37,29 @@ pub enum EvenementFiche {
     },
     /// Repos : tous les emplacements sont rendus.
     Repos,
+    /// On enfile (ou retire, avec `None`) une armure ou un bouclier (nom anglais du catalogue).
+    Equiper {
+        emplacement: EmplacementProtection,
+        objet: Option<String>,
+    },
+    ArmeAjoutee(String),
+    ArmeRetiree(String),
+    ObjetAjoute {
+        nom_en: String,
+        quantite: u32,
+    },
+    ObjetRetire {
+        nom_en: String,
+        quantite: u32,
+    },
+    EtatAjoute(String),
+    EtatRetire(String),
+    EffetTemporaireAjoute(EffetTemporaire),
+    EffetTemporaireRetire(String),
+    /// Le temps passe : les effets temporaires à durée perdent des rounds et disparaissent à zéro.
+    TempsEcoule {
+        rounds: u32,
+    },
 }
 
 impl EvenementFiche {
@@ -46,6 +79,25 @@ impl EvenementFiche {
                 ..
             } => format!("Sort lancé : {sort} (niveau {niveau_de_sort})"),
             EvenementFiche::Repos => "Repos : emplacements de sorts rendus".to_string(),
+            EvenementFiche::Equiper { emplacement, objet } => match (emplacement, objet) {
+                (EmplacementProtection::Armure, Some(o)) => format!("Armure portée : {o}"),
+                (EmplacementProtection::Armure, None) => "Armure retirée".to_string(),
+                (EmplacementProtection::Bouclier, Some(o)) => format!("Bouclier porté : {o}"),
+                (EmplacementProtection::Bouclier, None) => "Bouclier retiré".to_string(),
+            },
+            EvenementFiche::ArmeAjoutee(a) => format!("Arme prise : {a}"),
+            EvenementFiche::ArmeRetiree(a) => format!("Arme rangée : {a}"),
+            EvenementFiche::ObjetAjoute { nom_en, quantite } => {
+                format!("Objet ajouté : {nom_en} × {quantite}")
+            }
+            EvenementFiche::ObjetRetire { nom_en, quantite } => {
+                format!("Objet retiré : {nom_en} × {quantite}")
+            }
+            EvenementFiche::EtatAjoute(e) => format!("État subi : {e}"),
+            EvenementFiche::EtatRetire(e) => format!("État terminé : {e}"),
+            EvenementFiche::EffetTemporaireAjoute(t) => format!("Effet temporaire : {}", t.nom),
+            EvenementFiche::EffetTemporaireRetire(n) => format!("Effet temporaire terminé : {n}"),
+            EvenementFiche::TempsEcoule { rounds } => format!("{rounds} round(s) écoulé(s)"),
         }
     }
 }
@@ -114,6 +166,10 @@ pub enum ErreurJournal {
         evenement: usize,
         raison: String,
     },
+    Equipement {
+        evenement: usize,
+        raison: String,
+    },
 }
 
 impl std::fmt::Display for ErreurJournal {
@@ -140,7 +196,19 @@ impl std::fmt::Display for ErreurJournal {
                 "plus d'emplacement de sort de niveau {niveau_de_sort} ({classe})"
             ),
             ErreurJournal::SortLanceImpossible { raison, .. } => write!(f, "{raison}"),
+            ErreurJournal::Equipement { raison, .. } => write!(f, "{raison}"),
         }
+    }
+}
+
+/// Refuse un événement d'équipement ou d'état qui nomme un objet ou un état inconnu.
+fn verifier_equipement(r: &Referentiel, fiche: &Fiche, i: usize) -> Result<(), ErreurJournal> {
+    match fiche.problemes_equipement(r).first() {
+        Some(p) => Err(ErreurJournal::Equipement {
+            evenement: i,
+            raison: p.to_string(),
+        }),
+        None => Ok(()),
     }
 }
 
@@ -252,6 +320,78 @@ impl Journal {
                         });
                     }
                     *utilises += 1;
+                }
+                EvenementFiche::Equiper { emplacement, objet } => {
+                    match emplacement {
+                        EmplacementProtection::Armure => fiche.equipement.armure = objet.clone(),
+                        EmplacementProtection::Bouclier => {
+                            fiche.equipement.bouclier = objet.clone()
+                        }
+                    }
+                    verifier_equipement(r, &fiche, i)?;
+                }
+                EvenementFiche::ArmeAjoutee(a) => {
+                    fiche.equipement.armes.push(a.clone());
+                    verifier_equipement(r, &fiche, i)?;
+                }
+                EvenementFiche::ArmeRetiree(a) => {
+                    let Some(pos) = fiche.equipement.armes.iter().position(|x| x == a) else {
+                        return Err(ErreurJournal::Equipement {
+                            evenement: i,
+                            raison: format!("{a} n'est pas portée"),
+                        });
+                    };
+                    fiche.equipement.armes.remove(pos);
+                }
+                EvenementFiche::ObjetAjoute { nom_en, quantite } => {
+                    fiche.equipement.ajouter_objet(nom_en, *quantite);
+                    verifier_equipement(r, &fiche, i)?;
+                }
+                EvenementFiche::ObjetRetire { nom_en, quantite } => {
+                    if !fiche.equipement.retirer_objet(nom_en, *quantite) {
+                        return Err(ErreurJournal::Equipement {
+                            evenement: i,
+                            raison: format!("pas assez de {nom_en} à retirer"),
+                        });
+                    }
+                }
+                EvenementFiche::EtatAjoute(e) => {
+                    if !fiche.etats.contains(e) {
+                        fiche.etats.push(e.clone());
+                    }
+                    verifier_equipement(r, &fiche, i)?;
+                }
+                EvenementFiche::EtatRetire(e) => {
+                    let avant = fiche.etats.len();
+                    fiche.etats.retain(|x| x != e);
+                    if fiche.etats.len() == avant {
+                        return Err(ErreurJournal::Equipement {
+                            evenement: i,
+                            raison: format!("l'état {e} n'est pas actif"),
+                        });
+                    }
+                }
+                EvenementFiche::EffetTemporaireAjoute(t) => {
+                    fiche.temporaires.retain(|x| x.nom != t.nom);
+                    fiche.temporaires.push(t.clone());
+                }
+                EvenementFiche::EffetTemporaireRetire(n) => {
+                    let avant = fiche.temporaires.len();
+                    fiche.temporaires.retain(|x| &x.nom != n);
+                    if fiche.temporaires.len() == avant {
+                        return Err(ErreurJournal::Equipement {
+                            evenement: i,
+                            raison: format!("l'effet {n} n'est pas actif"),
+                        });
+                    }
+                }
+                EvenementFiche::TempsEcoule { rounds } => {
+                    for t in &mut fiche.temporaires {
+                        if let Some(restants) = &mut t.rounds_restants {
+                            *restants = restants.saturating_sub(*rounds);
+                        }
+                    }
+                    fiche.temporaires.retain(|t| t.rounds_restants != Some(0));
                 }
                 EvenementFiche::MonteeDeNiveau(m) => {
                     let atteignable = niveau_atteignable(r, regles.vitesse, xp, jalon);

@@ -8,6 +8,10 @@ use crate::bonus::{calculer, Detail, Terme};
 use crate::caracteristiques::{modificateur, Carac, Caracteristique};
 use crate::donnees::{Classe, Competence, Referentiel};
 use crate::effet::{Cible, Effet, TypeBonus};
+use crate::equipement::{
+    BilanEquipement, ContexteEquipement, Equipement, GenreProtection, Maitrises,
+};
+use crate::etats::EffetTemporaire;
 use std::collections::BTreeMap;
 
 /// Choix fait à chaque niveau pour la classe de prédilection (Core p. 31, « Favored Class »).
@@ -59,10 +63,26 @@ pub struct Fiche {
     /// Sorts connus choisis (noms anglais du catalogue), hors sorts de lignage obtenus automatiquement.
     #[cfg_attr(feature = "serde", serde(default))]
     pub sorts_connus: Vec<String>,
+    /// Ce que le personnage porte (armure, bouclier, armes, objets).
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub equipement: Equipement,
+    /// États actifs (identifiants de `data/core/etats.json`, ex. `shaken`).
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub etats: Vec<String>,
+    /// Effets qui durent (sorts sur soi, potions…).
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub temporaires: Vec<EffetTemporaire>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Probleme {
+    EquipementInconnu(String),
+    MauvaisEmplacement {
+        objet: String,
+        attendu: &'static str,
+    },
+    ArmeNonManiable(String),
+    EtatInconnu(String),
     SortInconnu(String),
     SortHorsListe {
         sort: String,
@@ -180,6 +200,14 @@ impl std::fmt::Display for Probleme {
             Probleme::DonInconnu(d) => write!(f, "don inconnu du catalogue : {d}"),
             Probleme::DonEnDouble(d) => write!(f, "don pris deux fois (non répétable) : {d}"),
             Probleme::DonImposeManquant(d) => write!(f, "don imposé par la race manquant : {d}"),
+            Probleme::EquipementInconnu(n) => write!(f, "équipement inconnu du catalogue : {n}"),
+            Probleme::MauvaisEmplacement { objet, attendu } => {
+                write!(f, "{objet} ne peut pas être porté comme {attendu}")
+            }
+            Probleme::ArmeNonManiable(n) => {
+                write!(f, "{n} n'est pas une arme que l'on manie (munition ou engin de siège) : la ranger dans les objets")
+            }
+            Probleme::EtatInconnu(n) => write!(f, "état inconnu : {n}"),
             Probleme::DonsAuNiveau { niveau, attendus, choisis } => {
                 write!(f, "niveau {niveau} : {attendus} don(s) attendu(s), {choisis} choisi(s)")
             }
@@ -226,7 +254,23 @@ pub struct BilanRangs {
     pub disponibles: u32,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+/// Une arme portée, avec son attaque et ses dégâts calculés.
+#[derive(Debug, Clone, PartialEq)]
+pub struct AttaqueArme {
+    pub arme_en: String,
+    pub nom: String,
+    pub maitrise: bool,
+    pub attaque: Detail,
+    /// Dés de dégâts pour une créature de taille M.
+    pub des: Option<String>,
+    /// Bonus de dégâts (Force, états).
+    pub bonus_degats: Detail,
+    pub critique: Option<String>,
+    pub portee: Option<String>,
+    pub type_degats: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq)]
 pub struct Valeurs {
     pub niveau_de_personnage: u32,
     pub scores: BTreeMap<Carac, Detail>,
@@ -247,9 +291,27 @@ pub struct Valeurs {
     pub attaque_melee: Detail,
     pub attaque_distance: Detail,
     pub vitesse: u32,
+    pub equipement: BilanEquipement,
+    pub armes: Vec<AttaqueArme>,
+    /// Précisions des états actifs que le moteur ne calcule pas.
+    pub notes_etats: Vec<String>,
     pub competences: BTreeMap<String, Detail>,
     pub rangs: Vec<BilanRangs>,
     pub incantateurs: Vec<Incantateur>,
+}
+
+/// Comme `calculer`, mais plusieurs cibles à la fois (ex. une compétence et « toutes les compétences »),
+/// empilées ensemble.
+fn calculer_cibles(base: &[(&str, i32)], effets: &[Effet], cibles: &[&str]) -> Detail {
+    let choisis: Vec<Effet> = effets
+        .iter()
+        .filter(|e| cibles.contains(&e.cible.0.as_str()))
+        .map(|e| Effet {
+            cible: Cible::new("x"),
+            ..e.clone()
+        })
+        .collect();
+    calculer(base, &choisis, &Cible::new("x"))
 }
 
 fn carac_depuis_id(id: &str) -> Option<Carac> {
@@ -323,7 +385,116 @@ impl Fiche {
             });
         }
         e.extend(self.effets.iter().cloned());
+        for id in &self.etats {
+            if let Some(etat) = r.etat(id) {
+                e.extend(etat.effets_chiffres());
+            }
+        }
+        for t in &self.temporaires {
+            e.extend(t.effets.iter().cloned());
+        }
         Ok(e)
+    }
+
+    /// Maîtrises d'armes et d'armures : classes, race et dons.
+    pub fn maitrises(&self, r: &Referentiel) -> Maitrises {
+        let mut m = Maitrises::default();
+        let mut vues: Vec<&str> = Vec::new();
+        for n in &self.niveaux {
+            if vues.contains(&n.classe.as_str()) {
+                continue;
+            }
+            vues.push(&n.classe);
+            if let Some(c) = r.equipement.maitrises.classes.get(&n.classe) {
+                m.categories.extend(c.armes.iter().cloned());
+                m.armures.extend(c.armures.iter().copied());
+                m.boucliers |= c.boucliers;
+                m.pavois |= c.bouclier_pavois;
+            }
+        }
+        if let Some(rc) = r.equipement.maitrises.races.get(&self.race) {
+            m.armes.extend(rc.armes.iter().map(|a| a.to_lowercase()));
+            m.assimile_martiales
+                .extend(rc.assimile_martiales.iter().cloned());
+        }
+        for d in self
+            .dons_automatiques(r)
+            .into_iter()
+            .chain(self.dons_choisis())
+        {
+            let choix = d
+                .split_once(" (")
+                .map(|(_, c)| c.trim_end_matches(')').to_lowercase());
+            match crate::catalogue::nom_de_base(&d) {
+                "Armor Proficiency, Light" => m.armures.push(GenreProtection::Legere),
+                "Armor Proficiency, Medium" => m.armures.push(GenreProtection::Intermediaire),
+                "Armor Proficiency, Heavy" => m.armures.push(GenreProtection::Lourde),
+                "Shield Proficiency" => m.boucliers = true,
+                "Tower Shield Proficiency" => m.pavois = true,
+                "Simple Weapon Proficiency" => m.categories.push("simple".into()),
+                "Martial Weapon Proficiency" | "Exotic Weapon Proficiency" => {
+                    m.armes.extend(choix);
+                }
+                _ => {}
+            }
+        }
+        m
+    }
+
+    /// Problèmes d'équipement et d'états (noms inconnus, mauvais emplacement).
+    pub fn problemes_equipement(&self, r: &Referentiel) -> Vec<Probleme> {
+        let cat = &r.equipement;
+        let mut p = Vec::new();
+        let eq = &self.equipement;
+        if let Some(n) = &eq.armure {
+            match cat.armure(n) {
+                None => p.push(Probleme::EquipementInconnu(n.clone())),
+                Some(a)
+                    if !matches!(
+                        a.genre,
+                        GenreProtection::Legere
+                            | GenreProtection::Intermediaire
+                            | GenreProtection::Lourde
+                    ) =>
+                {
+                    p.push(Probleme::MauvaisEmplacement {
+                        objet: n.clone(),
+                        attendu: "armure",
+                    })
+                }
+                _ => {}
+            }
+        }
+        if let Some(n) = &eq.bouclier {
+            match cat.armure(n) {
+                None => p.push(Probleme::EquipementInconnu(n.clone())),
+                Some(a) if a.genre != GenreProtection::Bouclier => {
+                    p.push(Probleme::MauvaisEmplacement {
+                        objet: n.clone(),
+                        attendu: "bouclier",
+                    })
+                }
+                _ => {}
+            }
+        }
+        for n in &eq.armes {
+            match cat.arme(n) {
+                None => p.push(Probleme::EquipementInconnu(n.clone())),
+                Some(a) if !a.est_maniable() => p.push(Probleme::ArmeNonManiable(n.clone())),
+                _ => {}
+            }
+        }
+        for o in &eq.objets {
+            if cat.poids_de(&o.nom_en).is_none() {
+                p.push(Probleme::EquipementInconnu(o.nom_en.clone()));
+            }
+        }
+        for e in &self.etats {
+            if r.etat(e).is_none() {
+                p.push(Probleme::EtatInconnu(e.clone()));
+            }
+        }
+        p
     }
 
     fn caracteristique(&self, c: Carac) -> Caracteristique {
@@ -465,6 +636,7 @@ impl Fiche {
         }
         p.extend(self.valider_dons(r));
         p.extend(self.valider_sorts(r));
+        p.extend(self.problemes_equipement(r));
         p
     }
 
@@ -616,7 +788,7 @@ impl Fiche {
 
     /// Calcule toutes les valeurs dérivées, avec leur explication.
     pub fn calculer(&self, r: &Referentiel) -> Result<Valeurs, Probleme> {
-        let effets = self.tous_les_effets(r)?;
+        let mut effets = self.tous_les_effets(r)?;
         let mut scores = BTreeMap::new();
         let mut mods = BTreeMap::new();
         for c in Carac::TOUTES {
@@ -627,6 +799,56 @@ impl Fiche {
         }
         let m = |c: Carac| mods[&c];
         let niveau = self.niveau_de_personnage();
+
+        // Équipement : armure, bouclier, charge portée, malus et vitesse.
+        let maitrises = self.maitrises(r);
+        let race = r.race(&self.race);
+        let force =
+            scores[&Carac::For].total - self.dommages.get(&Carac::For).copied().unwrap_or(0);
+        let bilan = self.equipement.evaluer(
+            &r.equipement,
+            &ContexteEquipement {
+                force,
+                vitesse_base: race.map(|x| x.vitesse).unwrap_or(30),
+                vitesse_jamais_reduite: race.is_some_and(|x| x.vitesse_jamais_reduite),
+                maitrises: &maitrises,
+            },
+        );
+        effets.extend(bilan.effets.iter().cloned());
+        let (malus_armure, source_malus) = &bilan.malus_d_armure;
+        if *malus_armure < 0 {
+            for c in r.competences.iter().filter(|c| c.malus_d_armure) {
+                effets.push(Effet::new(
+                    &format!("comp.{}", c.id),
+                    TypeBonus::SansType,
+                    *malus_armure,
+                    &format!("malus d'armure ({source_malus})"),
+                ));
+            }
+        }
+        if bilan.malus_attaque_non_maitrise < 0 {
+            effets.push(Effet::new(
+                "attaque",
+                TypeBonus::SansType,
+                bilan.malus_attaque_non_maitrise,
+                &format!("sans maîtrise : {}", bilan.non_maitrises.join(", ")),
+            ));
+        }
+        let etats_actifs: Vec<&crate::etats::EtatDef> =
+            self.etats.iter().filter_map(|id| r.etat(id)).collect();
+        // Bonus de DEX à la CA : plafonné par l'équipement, perdu par certains états.
+        let mut dex_ca = m(Carac::Dex);
+        let mut dex_libelle = String::from("DEX");
+        if let Some((cap, source)) = &bilan.dex_max {
+            if dex_ca > *cap {
+                dex_ca = *cap;
+                dex_libelle = format!("DEX (plafonné à {cap:+} par {source})");
+            }
+        }
+        if dex_ca > 0 && etats_actifs.iter().any(|e| e.perd_bonus_dex_ca) {
+            dex_ca = 0;
+            dex_libelle = "DEX (bonus perdu : état)".to_string();
+        }
 
         // Totaux de classe : BBA, jets de sauvegarde, plus les tables de chaque classe.
         let mut bba_classe = 0;
@@ -671,7 +893,11 @@ impl Fiche {
         let volonte = jds("table de classe", vol, Carac::Sag, "jds.vol");
         let initiative = calculer(&[("DEX", m(Carac::Dex))], &effets, &eff("init"));
 
-        let ca = calculer(&[("base", 10), ("DEX", m(Carac::Dex))], &effets, &eff("ca"));
+        let ca = calculer(
+            &[("base", 10), (dex_libelle.as_str(), dex_ca)],
+            &effets,
+            &eff("ca"),
+        );
         let sans = |exclus: &[TypeBonus]| -> Vec<Effet> {
             effets
                 .iter()
@@ -680,7 +906,7 @@ impl Fiche {
                 .collect()
         };
         let ca_contact = calculer(
-            &[("base", 10), ("DEX", m(Carac::Dex))],
+            &[("base", 10), (dex_libelle.as_str(), dex_ca)],
             &sans(&[TypeBonus::Armure, TypeBonus::Bouclier, TypeBonus::Naturel]),
             &eff("ca"),
         );
@@ -795,14 +1021,13 @@ impl Fiche {
             if rangs >= 1 && est_de_classe(&de_classe, &cle) {
                 b.push(("compétence de classe", 3));
             }
-            let mut cibles = vec![format!("comp.{base}"), format!("comp.{cle}")];
-            cibles.dedup();
-            let mut d = calculer(&b, &effets, &eff(&cibles[0]));
-            if cibles.len() > 1 {
-                let sup = calculer(&[], &effets, &eff(&cibles[1]));
-                d.termes.extend(sup.termes);
-                d.total = d.termes.iter().filter(|t| t.compte).map(|t| t.valeur).sum();
+            let mut cibles = vec![format!("comp.{base}")];
+            if cle != base {
+                cibles.push(format!("comp.{cle}"));
             }
+            cibles.push("comp.*".to_string());
+            let refs: Vec<&str> = cibles.iter().map(String::as_str).collect();
+            let d = calculer_cibles(&b, &effets, &refs);
             competences.insert(cle, d);
         }
 
@@ -879,7 +1104,60 @@ impl Fiche {
             });
         }
 
-        let vitesse = r.race(&self.race).map(|x| x.vitesse).unwrap_or(30);
+        let mut vitesse = bilan.vitesse;
+        if etats_actifs.iter().any(|e| e.vitesse_moitie) {
+            vitesse = vitesse / 2 / 5 * 5;
+        }
+        let notes_etats: Vec<String> = etats_actifs
+            .iter()
+            .filter_map(|e| e.note.as_ref().map(|n| format!("{} : {n}", e.nom)))
+            .collect();
+        let mut armes = Vec::new();
+        for n in &self.equipement.armes {
+            let Some(def) = r.equipement.arme(n).filter(|a| a.est_maniable()) else {
+                continue;
+            };
+            let maitrise = maitrises.arme(def);
+            let mut ef = effets.clone();
+            if !maitrise {
+                ef.push(Effet::new(
+                    "attaque",
+                    TypeBonus::SansType,
+                    -4,
+                    "arme non maîtrisée",
+                ));
+            }
+            let (lib, val) = if def.est_a_distance() {
+                ("DEX", m(Carac::Dex))
+            } else {
+                ("FOR", m(Carac::For))
+            };
+            let attaque = calculer(&[("BBA", bba_classe), (lib, val)], &ef, &eff("attaque"));
+            let f = m(Carac::For);
+            let force_degats = if def.est_a_distance() {
+                if def.ajoute_la_force_aux_degats() {
+                    f
+                } else {
+                    0
+                }
+            } else if def.est_a_deux_mains() && f > 0 {
+                f * 3 / 2
+            } else {
+                f
+            };
+            let bonus_degats = calculer(&[("FOR", force_degats)], &effets, &eff("degats"));
+            armes.push(AttaqueArme {
+                arme_en: def.nom_en.clone(),
+                nom: def.nom.clone(),
+                maitrise,
+                attaque,
+                des: def.degats_moyens(),
+                bonus_degats,
+                critique: def.critique_en.clone(),
+                portee: def.portee_en.clone(),
+                type_degats: def.type_en.clone(),
+            });
+        }
         Ok(Valeurs {
             niveau_de_personnage: niveau,
             scores,
@@ -899,6 +1177,9 @@ impl Fiche {
             attaque_melee: melee,
             attaque_distance: distance,
             vitesse,
+            equipement: bilan,
+            armes,
+            notes_etats,
             competences,
             rangs,
             incantateurs,
@@ -943,6 +1224,9 @@ pub(crate) mod tests {
             lignage: Some("draconic".into()),
             connaissance_de_lignage: None,
             effets: vec![],
+            equipement: Default::default(),
+            etats: vec![],
+            temporaires: vec![],
             sorts_connus: [
                 "Acid Splash",
                 "Detect Magic",

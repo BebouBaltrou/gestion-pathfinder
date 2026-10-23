@@ -182,6 +182,8 @@ pub struct Referentiel {
     pub progression: Vec<LigneProgression>,
     pub dons: Vec<crate::catalogue::Don>,
     pub sorts: Vec<crate::catalogue::Sort>,
+    pub equipement: crate::equipement::CatalogueEquipement,
+    pub etats: Vec<crate::etats::EtatDef>,
 }
 
 impl Referentiel {
@@ -197,6 +199,16 @@ impl Referentiel {
             r.avec_catalogues(
                 include_str!("../../../data/core/dons.json"),
                 include_str!("../../../data/core/sorts.json"),
+            )
+        })
+        .and_then(|r| {
+            r.avec_equipement(
+                include_str!("../../../data/core/armures.json"),
+                include_str!("../../../data/core/armes.json"),
+                include_str!("../../../data/core/materiel.json"),
+                include_str!("../../../data/core/charge.json"),
+                include_str!("../../../data/core/maitrises.json"),
+                include_str!("../../../data/core/etats.json"),
             )
         })
         .expect("référentiel Core embarqué valide")
@@ -223,6 +235,8 @@ impl Referentiel {
             classes: cl,
             dons: Vec::new(),
             sorts: Vec::new(),
+            equipement: Default::default(),
+            etats: Vec::new(),
         })
     }
 
@@ -237,6 +251,27 @@ impl Referentiel {
         self.dons = d.dons;
         self.sorts = s.sorts;
         Ok(self)
+    }
+
+    /// Ajoute l'équipement (armures, armes, matériel, charge, maîtrises) et les états.
+    pub fn avec_equipement(
+        mut self,
+        armures: &str,
+        armes: &str,
+        materiel: &str,
+        charge: &str,
+        maitrises: &str,
+        etats: &str,
+    ) -> Result<Referentiel, serde_json::Error> {
+        self.equipement = crate::equipement::CatalogueEquipement::depuis_json(
+            armures, armes, materiel, charge, maitrises,
+        )?;
+        self.etats = serde_json::from_str::<crate::etats::FichierEtats>(etats)?.etats;
+        Ok(self)
+    }
+
+    pub fn etat(&self, id: &str) -> Option<&crate::etats::EtatDef> {
+        self.etats.iter().find(|e| e.id == id)
     }
 
     pub fn don(&self, nom_en: &str) -> Option<&crate::catalogue::Don> {

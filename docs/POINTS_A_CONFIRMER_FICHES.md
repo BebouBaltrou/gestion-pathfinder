@@ -36,3 +36,33 @@ Chaque point : ce que le moteur fait aujourd'hui, et ce qu'il faut te demander.
 12. **Sorts sans ligne « jet de sauvegarde »** dans AoN : traités comme « aucun ».
 13. **Sorts à plusieurs versions** (Mass, Greater, Lesser) : les niveaux d'ensorceleur de ces
     variantes ont été corrigés (l'import initial les confondait avec le sort de base).
+
+## Phase 5 (équipement et états) — ajouts du 24/10/2026
+
+14. **Tableau de charge, ligne Force 15** : le site indique « 67-134 » (intermédiaire) puis
+    « 134-200 » (lourde), ce qui se chevauche. Je prends 133 comme limite intermédiaire (coquille
+    probable). Le reste du tableau 7-4 est repris tel quel (Core p. 169).
+15. **Malus d'armure du bouclier** : armure et bouclier additionnent leurs malus ; la charge ne
+    s'y ajoute pas (on garde le pire, texte du Core p. 169). Sans maîtrise d'une armure ou d'un
+    bouclier, son malus s'applique aussi aux jets d'attaque (texte des dons de maîtrise). Le livre
+    ajoute « toutes les compétences impliquant un mouvement » : je n'applique le malus qu'aux 9
+    compétences à malus d'armure.
+16. **Surcharge** (au-delà de la charge lourde) : je reprends la règle « titube » du Core (bonus de
+    DEX perdu, 5 pieds par round) et le malus de la charge lourde, faute de valeur propre.
+17. **Vitesse divisée par deux** (épuisé, empêtré, hors de combat) : arrondie à un multiple de 5
+    vers le bas (30 → 15, 25 → 10). Les nains ne sont pas ralentis par l'armure ni la charge.
+18. **États : seuls les effets chiffrés sans ambiguïté sont calculés** (secoué, effrayé, malade,
+    fatigué, épuisé, éblouie, etc.). Ce qui est conditionnel ou vague reste en note à l'écran :
+    aveuglé (« la plupart » des jets de FOR/DEX : lesquels ?), à terre, sans défense, paralysé,
+    agrippé, assourdi (échec des sorts), brisé (dépend de l'objet).
+19. **Niveaux négatifs (drain d'énergie)** : non calculés. Je n'ai pas trouvé dans les pages du
+    Core relevées le détail des malus par niveau négatif ; à confirmer d'après le livre avant de
+    les chiffrer.
+20. **Pièces de monnaie** : non comptées dans la charge (la règle des 50 pièces par livre n'est
+    pas dans les pages relevées). Les objets dont le catalogue ne donne pas de poids (44 objets)
+    comptent pour 0 et sont signalés.
+21. **Armes de jet et dégâts de FOR** : la Force s'ajoute aux dégâts des armes de corps à corps,
+    des armes de jet et de la fronde, pas des arcs ni arbalètes (arcs composites à bonus de Force
+    : non gérés). Arme à deux mains : 1,5 × le bonus de FOR (malus non multiplié).
+22. **Noms français de l'équipement et des états** : ma traduction, non officielle (comme pour les
+    sorts). Prix en pièces conservés tels quels (po, pa, pc).

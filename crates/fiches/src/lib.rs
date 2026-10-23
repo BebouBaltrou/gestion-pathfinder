@@ -12,6 +12,10 @@ pub mod catalogue;
 pub mod donnees;
 pub mod effet;
 #[cfg(feature = "serde")]
+pub mod equipement;
+#[cfg(feature = "serde")]
+pub mod etats;
+#[cfg(feature = "serde")]
 pub mod fiche;
 pub mod generation;
 #[cfg(feature = "serde")]
@@ -30,3 +34,5 @@ pub use donnees::Referentiel;
 pub use effet::{Cible, Effet, TypeBonus};
 #[cfg(feature = "serde")]
 pub use fiche::{Fiche, Probleme, Valeurs};
+#[cfg(all(test, feature = "serde"))]
+mod tests_equipement;
