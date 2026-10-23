@@ -48,6 +48,8 @@ pub enum Message {
 pub struct App {
     pub r: Referentiel,
     pub dossier: PathBuf,
+    /// Modèles personnels (toutes campagnes).
+    pub modeles_perso: crate::modeles_perso::ModelesPerso,
     pub campagne: Option<Campagne>,
     /// Mode simulation : la campagne réelle mise de côté ; `campagne` est alors une copie
     /// jetable, jamais enregistrée.
@@ -82,6 +84,7 @@ impl App {
         let mut app = App {
             r: regles::referentiel_officiel(),
             dossier: dossier_campagnes(),
+            modeles_perso: crate::modeles_perso::ModelesPerso::charger(&dossier_campagnes()),
             campagne: None,
             simulation: None,
             chemin: None,
@@ -193,6 +196,14 @@ impl App {
         self.ok(format!(
             "Campagne « {nom} » créée — réglez son calendrier puis créez vos localités"
         ));
+    }
+
+    pub fn enregistrer_modeles(&mut self) {
+        if let Err(e) = self.modeles_perso.enregistrer(&self.dossier) {
+            self.erreur(format!(
+                "Enregistrement des modèles personnels impossible : {e}"
+            ));
+        }
     }
 
     pub fn enregistrer(&mut self) {

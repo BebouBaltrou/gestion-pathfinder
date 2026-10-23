@@ -201,6 +201,8 @@ fn creation(
 ) -> Action {
     let mut action = None;
     let r = app.r.clone();
+    let persos = app.modeles_perso.organisations.clone();
+    let mut supprimer: Option<String> = None;
     let s = &mut app.ui_organisations;
     widgets::carte(ui, |ui| {
         widgets::titre_section(ui, "Nouvelle organisation");
@@ -225,7 +227,16 @@ fn creation(
                 let texte = s
                     .modele
                     .as_ref()
-                    .and_then(|m| r.modele_organisation(m))
+                    .and_then(|m| {
+                        r.modele_organisation(m).cloned().or_else(|| {
+                            persos
+                                .iter()
+                                .find(|p| {
+                                    m.strip_prefix(crate::modeles_perso::PREFIXE) == Some(&p.nom)
+                                })
+                                .map(|p| p.en_modele(&r))
+                        })
+                    })
                     .map(|m| format!("{} — {} ({} po)", m.nom, m.cout, m.prix_po))
                     .unwrap_or_else(|| "aucun (organisation vide)".into());
                 egui::ComboBox::from_id_salt("org_modele")
@@ -233,6 +244,13 @@ fn creation(
                     .width(360.0)
                     .show_ui(ui, |ui| {
                         ui.selectable_value(&mut s.modele, None, "aucun (organisation vide)");
+                        for p in &persos {
+                            ui.selectable_value(
+                                &mut s.modele,
+                                Some(format!("{}{}", crate::modeles_perso::PREFIXE, p.nom)),
+                                format!("★ {} (modèle personnel)", p.nom),
+                            );
+                        }
                         for m in &r.modeles_organisations {
                             ui.selectable_value(
                                 &mut s.modele,
@@ -258,11 +276,27 @@ fn creation(
                 ui.end_row();
             });
 
+        let perso = s
+            .modele
+            .as_ref()
+            .and_then(|m| m.strip_prefix(crate::modeles_perso::PREFIXE))
+            .and_then(|n| persos.iter().find(|p| p.nom == n))
+            .cloned();
         let modele = s
             .modele
             .as_ref()
             .and_then(|m| r.modele_organisation(m))
-            .cloned();
+            .cloned()
+            .or_else(|| perso.as_ref().map(|p| p.en_modele(&r)));
+        if let Some(p) = &perso {
+            ui.horizontal(|ui| {
+                widgets::badge_statut(ui, domaine::Statut::Personnalise);
+                widgets::texte_doux(ui, "Modèle personnel : équipes comme enregistrées.");
+                if ui.small_button("Supprimer ce modèle").clicked() {
+                    supprimer = Some(p.nom.clone());
+                }
+            });
+        }
         let mut paiement: Option<(Payeur, Montant)> = None;
         let mut achat_capitaux: Option<(Payeur, CoutCapitaux)> = None;
         let mut ok_paiement = true;
@@ -379,6 +413,11 @@ fn creation(
             let (evs, ignores) = match &modele {
                 Some(m) => {
                     let (mut evs, ig) = evenements_depuis_modele_organisation(m, o, l, &nom, q, &r);
+                    if perso.is_some() {
+                        if let Some(Evenement::OrganisationCreee { modele, .. }) = evs.first_mut() {
+                            *modele = None;
+                        }
+                    }
                     if !s.classement.trim().is_empty() {
                         if let Some(Evenement::OrganisationCreee { classement, .. }) =
                             evs.first_mut()
@@ -457,6 +496,11 @@ fn creation(
             s.classement.clear();
         }
     });
+    if let Some(n) = supprimer {
+        app.modeles_perso.organisations.retain(|x| x.nom != n);
+        app.ui_organisations.modele = None;
+        app.enregistrer_modeles();
+    }
     action
 }
 
@@ -532,6 +576,16 @@ fn detail(
         Actif::Organisation(o.id),
     ) {
         action = Some(a);
+    }
+    if ui
+        .small_button("★ Enregistrer comme modèle personnel")
+        .on_hover_text("Équipes de cette organisation, réutilisables dans toutes vos campagnes (un modèle du même nom est remplacé)")
+        .clicked()
+    {
+        let m = crate::modeles_perso::OrganisationPerso::depuis(etat, o, &o.nom);
+        app.modeles_perso.ajouter_organisation(m);
+        app.enregistrer_modeles();
+        app.ok(format!("Modèle personnel « {} » enregistré", o.nom));
     }
     ui.add_space(6.0);
 

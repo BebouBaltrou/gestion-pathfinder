@@ -241,6 +241,8 @@ fn creation(
 ) -> Action {
     let mut action = None;
     let r = app.r.clone();
+    let persos = app.modeles_perso.batiments.clone();
+    let mut supprimer: Option<String> = None;
     let s = &mut app.ui_batiments;
     widgets::carte(ui, |ui| {
         widgets::titre_section(ui, "Nouveau bâtiment");
@@ -265,7 +267,16 @@ fn creation(
                 let texte = s
                     .modele
                     .as_ref()
-                    .and_then(|m| r.modele_batiment(m))
+                    .and_then(|m| {
+                        r.modele_batiment(m).cloned().or_else(|| {
+                            persos
+                                .iter()
+                                .find(|p| {
+                                    m.strip_prefix(crate::modeles_perso::PREFIXE) == Some(&p.nom)
+                                })
+                                .map(|p| p.en_modele(&r))
+                        })
+                    })
                     .map(|m| format!("{} — {} ({} po)", m.nom, m.cout, m.prix_po))
                     .unwrap_or_else(|| "aucun (bâtiment vide)".into());
                 egui::ComboBox::from_id_salt("bat_modele")
@@ -273,6 +284,13 @@ fn creation(
                     .width(360.0)
                     .show_ui(ui, |ui| {
                         ui.selectable_value(&mut s.modele, None, "aucun (bâtiment vide)");
+                        for p in &persos {
+                            ui.selectable_value(
+                                &mut s.modele,
+                                Some(format!("{}{}", crate::modeles_perso::PREFIXE, p.nom)),
+                                format!("★ {} (modèle personnel)", p.nom),
+                            );
+                        }
                         for m in &r.modeles_batiments {
                             ui.selectable_value(
                                 &mut s.modele,
@@ -297,11 +315,27 @@ fn creation(
                 );
                 ui.end_row();
             });
+        let perso = s
+            .modele
+            .as_ref()
+            .and_then(|m| m.strip_prefix(crate::modeles_perso::PREFIXE))
+            .and_then(|n| persos.iter().find(|p| p.nom == n))
+            .cloned();
         let modele = s
             .modele
             .as_ref()
             .and_then(|m| r.modele_batiment(m))
-            .cloned();
+            .cloned()
+            .or_else(|| perso.as_ref().map(|p| p.en_modele(&r)));
+        if let Some(p) = &perso {
+            ui.horizontal(|ui| {
+                widgets::badge_statut(ui, domaine::Statut::Personnalise);
+                widgets::texte_doux(ui, "Modèle personnel : étages et salles comme enregistrés.");
+                if ui.small_button("Supprimer ce modèle").clicked() {
+                    supprimer = Some(p.nom.clone());
+                }
+            });
+        }
         let mut paiement: Option<(Payeur, domaine::Montant)> = None;
         let mut achat_capitaux: Option<(Payeur, CoutCapitaux)> = None;
         let mut ok_paiement = true;
@@ -394,7 +428,10 @@ fn creation(
             let nom = s.nom.trim().to_string();
             let (evs, ignores) = match &modele {
                 Some(m) => {
-                    let (mut evs, ig) = evenements_depuis_modele(m, b, l, &nom, e, sa);
+                    let (mut evs, ig) = match &perso {
+                        Some(p) => (p.evenements(b, l, &nom, e, sa), Vec::new()),
+                        None => evenements_depuis_modele(m, b, l, &nom, e, sa),
+                    };
                     let salles: Vec<IdSalle> = evs
                         .iter()
                         .filter_map(|x| match x {
@@ -483,6 +520,11 @@ fn creation(
             s.classement.clear();
         }
     });
+    if let Some(n) = supprimer {
+        app.modeles_perso.batiments.retain(|x| x.nom != n);
+        app.ui_batiments.modele = None;
+        app.enregistrer_modeles();
+    }
     action
 }
 
@@ -605,6 +647,16 @@ fn detail(
         Actif::Batiment(b.id),
     ) {
         action = Some(a);
+    }
+    if ui
+        .small_button("★ Enregistrer comme modèle personnel")
+        .on_hover_text("Étages et salles de ce bâtiment, réutilisables dans toutes vos campagnes (un modèle du même nom est remplacé)")
+        .clicked()
+    {
+        let m = crate::modeles_perso::BatimentPerso::depuis(etat, b, &b.nom);
+        app.modeles_perso.ajouter_batiment(m);
+        app.enregistrer_modeles();
+        app.ok(format!("Modèle personnel « {} » enregistré", b.nom));
     }
     ui.add_space(6.0);
 

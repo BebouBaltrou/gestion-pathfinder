@@ -42,6 +42,12 @@ Ce fichier est tenu à jour à chaque étape.
   pendant la période traitée, par tranches de 7.
 - Les po des recettes sont créditées avant le paiement des capitaux gardés.
 
+## Modèles personnels
+
+- Enregistrés depuis un bâtiment (étages, modes, salles) ou une organisation (équipes), dans
+  `%APPDATA%\GestionPathfinder\modeles_personnels.json`, communs à toutes les campagnes.
+  Les salles améliorées sont enregistrées dans leur version actuelle.
+
 ## Lectures appliquées à l'étape 7 (vente, abandon, réparation)
 
 - **Vente** (GC p. 84) : « la moitié de son prix d'achat et de son coût de construction (en po
