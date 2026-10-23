@@ -49,6 +49,9 @@ pub struct App {
     pub r: Referentiel,
     pub dossier: PathBuf,
     pub campagne: Option<Campagne>,
+    /// Mode simulation : la campagne réelle mise de côté ; `campagne` est alors une copie
+    /// jetable, jamais enregistrée.
+    pub simulation: Option<Campagne>,
     pub chemin: Option<PathBuf>,
     pub page: Page,
     pub message: Option<(Message, f64)>,
@@ -80,6 +83,7 @@ impl App {
             r: regles::referentiel_officiel(),
             dossier: dossier_campagnes(),
             campagne: None,
+            simulation: None,
             chemin: None,
             page: Page::Campagnes,
             message: None,
@@ -123,7 +127,32 @@ impl App {
         v.into_iter().map(|(_, n, p)| (n, p)).collect()
     }
 
+    pub fn demarrer_simulation(&mut self) {
+        if let Some(c) = &self.campagne {
+            self.simulation = Some(c.clone());
+            self.ok(
+                "Simulation démarrée : rien ne sera enregistré tant que vous ne la gardez pas"
+                    .into(),
+            );
+        }
+    }
+
+    pub fn abandonner_simulation(&mut self) {
+        if let Some(reelle) = self.simulation.take() {
+            self.campagne = Some(reelle);
+            self.ok("Simulation abandonnée : la campagne est revenue à son état d'avant".into());
+        }
+    }
+
+    pub fn garder_simulation(&mut self) {
+        if self.simulation.take().is_some() {
+            self.enregistrer();
+            self.ok("Simulation gardée : ses actions font désormais partie de la campagne".into());
+        }
+    }
+
     pub fn ouvrir(&mut self, chemin: PathBuf) {
+        self.simulation = None;
         match campagne::fichier::charger(&chemin) {
             Ok(c) => {
                 self.ok(format!("Campagne « {} » ouverte", c.nom));
@@ -156,6 +185,7 @@ impl App {
             self.erreur(format!("Une campagne « {nom} » existe déjà"));
             return;
         }
+        self.simulation = None;
         self.campagne = Some(Campagne::nouvelle(nom));
         self.chemin = Some(chemin);
         self.enregistrer();
@@ -166,6 +196,9 @@ impl App {
     }
 
     pub fn enregistrer(&mut self) {
+        if self.simulation.is_some() {
+            return; // une simulation n'est jamais enregistrée
+        }
         if let (Some(c), Some(p)) = (&self.campagne, &self.chemin) {
             if let Err(e) = campagne::fichier::enregistrer(c, p) {
                 self.erreur(format!("Enregistrement impossible : {e}"));
@@ -308,6 +341,23 @@ impl App {
                             self.annuler();
                         }
                         ui.separator();
+                        if self.simulation.is_none()
+                            && ui
+                                .button("🧪 Simuler")
+                                .on_hover_text(
+                                    "Essayer des actions sur une copie de la campagne, \
+                                     puis les abandonner ou les garder",
+                                )
+                                .clicked()
+                        {
+                            self.demarrer_simulation();
+                        }
+                        if ui.button("+30 jours").clicked() {
+                            self.executer(
+                                Evenement::JoursAvances { nombre: 30 },
+                                "30 jours écoulés",
+                            );
+                        }
                         if ui.button("+7 jours").clicked() {
                             self.executer(Evenement::JoursAvances { nombre: 7 }, "7 jours écoulés");
                         }
@@ -317,6 +367,56 @@ impl App {
                     });
                 });
             });
+    }
+
+    fn bandeau_simulation(&mut self, ctx: &egui::Context) {
+        let Some(reelle) = &self.simulation else {
+            return;
+        };
+        let (n_reel, jour_reel) = (reelle.curseur, reelle.clone().etat(&self.r).jour);
+        let (n_sim, jour_sim) = match self.campagne.as_mut() {
+            Some(c) => (c.curseur, c.etat(&self.r).jour),
+            None => return,
+        };
+        let mut action = 0;
+        egui::TopBottomPanel::top("bandeau_simulation")
+            .frame(
+                egui::Frame::new()
+                    .fill(theme::BLEU.gamma_multiply(0.25))
+                    .inner_margin(egui::Margin::symmetric(14, 6)),
+            )
+            .show(ctx, |ui| {
+                ui.horizontal_wrapped(|ui| {
+                    ui.label(
+                        RichText::new("🧪 MODE SIMULATION")
+                            .color(theme::BLEU)
+                            .strong()
+                            .size(16.0),
+                    );
+                    ui.label(format!(
+                        "Rien n'est enregistré. {} action(s) de plus que la campagne réelle, {} jour(s) d'avance.",
+                        n_sim as i64 - n_reel as i64,
+                        jour_sim as i64 - jour_reel as i64
+                    ));
+                    ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                        if widgets::bouton_principal(ui, "Garder la simulation", true) {
+                            action = 2;
+                        }
+                        if ui
+                            .button("Abandonner")
+                            .on_hover_text("Revenir à la campagne réelle, sans rien garder")
+                            .clicked()
+                        {
+                            action = 1;
+                        }
+                    });
+                });
+            });
+        match action {
+            1 => self.abandonner_simulation(),
+            2 => self.garder_simulation(),
+            _ => {}
+        }
     }
 
     fn navigation(&mut self, ctx: &egui::Context) {
@@ -391,7 +491,9 @@ impl App {
                             .unwrap_or_default();
                         widgets::texte_doux(
                             ui,
-                            if chemin.is_empty() {
+                            if self.simulation.is_some() {
+                                "Simulation en cours : rien n'est enregistré".into()
+                            } else if chemin.is_empty() {
                                 "Prêt".into()
                             } else {
                                 format!("Enregistrement automatique : {chemin}")
@@ -430,6 +532,7 @@ impl eframe::App for App {
         }
 
         self.barre_haut(ctx);
+        self.bandeau_simulation(ctx);
         self.navigation(ctx);
         self.barre_bas(ctx);
         egui::CentralPanel::default()

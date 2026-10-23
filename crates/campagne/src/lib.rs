@@ -11,6 +11,7 @@ pub mod evenements;
 pub mod fichier;
 pub mod modele;
 pub mod organisation;
+pub mod rapport;
 pub mod recettes;
 
 use calendrier::Calendrier;

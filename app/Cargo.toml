@@ -13,6 +13,7 @@ domaine = { path = "../crates/domaine", features = ["serde"] }
 regles = { path = "../crates/regles", features = ["serde"] }
 campagne = { path = "../crates/campagne", features = ["serde"] }
 eframe = "0.31"
+rfd = "0.15"
 
 [profile.release]
 opt-level = 3
