@@ -39,6 +39,27 @@ const LOTS_SORTS: [&str; 30] = [
     include_str!("../../../data/core/fr/sorts_30.json"),
 ];
 
+/// Lots de traduction des dons (`data/core/fr/dons_NN.json`).
+const LOTS_DONS: [&str; 6] = [
+    include_str!("../../../data/core/fr/dons_01.json"),
+    include_str!("../../../data/core/fr/dons_02.json"),
+    include_str!("../../../data/core/fr/dons_03.json"),
+    include_str!("../../../data/core/fr/dons_04.json"),
+    include_str!("../../../data/core/fr/dons_05.json"),
+    include_str!("../../../data/core/fr/dons_06.json"),
+];
+
+/// Un don en français.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct DonFr {
+    pub nom: String,
+    pub resume: Option<String>,
+    pub prerequis: Option<String>,
+    pub avantage: Option<String>,
+    pub normal: Option<String>,
+    pub special: Option<String>,
+}
+
 /// Un sort en français, assemblé à partir du catalogue anglais et des fichiers de traduction.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SortFr {
@@ -62,6 +83,7 @@ pub struct Traductions {
     competences: Value,
     ensorceleur: Value,
     sorts: std::collections::BTreeMap<String, SortFr>,
+    dons: std::collections::BTreeMap<String, DonFr>,
 }
 
 impl Traductions {
@@ -78,7 +100,41 @@ impl Traductions {
             ))
             .expect("ensorceleur.json (fr) valide"),
             sorts: Self::charger_sorts(),
+            dons: Self::charger_dons(),
         }
+    }
+
+    fn charger_dons() -> std::collections::BTreeMap<String, DonFr> {
+        let noms: Value =
+            serde_json::from_str(include_str!("../../../data/core/fr/dons_noms.json"))
+                .expect("dons_noms.json valide");
+        let texte = |v: &Value| v.as_str().map(str::to_string);
+        let mut out = std::collections::BTreeMap::new();
+        for lot in LOTS_DONS {
+            let lot: Value = serde_json::from_str(lot).expect("lot de dons valide");
+            let Some(objet) = lot.as_object() else {
+                continue;
+            };
+            for (nom_en, t) in objet {
+                out.insert(
+                    nom_en.clone(),
+                    DonFr {
+                        nom: texte(&noms["noms"][nom_en]).unwrap_or_else(|| nom_en.clone()),
+                        resume: texte(&t["resume"]),
+                        prerequis: texte(&t["prerequis"]),
+                        avantage: texte(&t["avantage"]),
+                        normal: texte(&t["normal"]),
+                        special: texte(&t["special"]),
+                    },
+                );
+            }
+        }
+        out
+    }
+
+    /// Don en français d'après son nom anglais du catalogue (sans son choix éventuel).
+    pub fn don(&self, nom_en: &str) -> Option<&DonFr> {
+        self.dons.get(crate::catalogue::nom_de_base(nom_en))
     }
 
     fn charger_sorts() -> std::collections::BTreeMap<String, SortFr> {
@@ -305,6 +361,41 @@ mod tests {
         assert_eq!(magic.ecole, "évocation");
         assert_eq!(magic.portee.as_deref(), Some("moyenne (30 m + 3 m/niveau)"));
         assert_eq!(magic.composantes.as_deref(), Some("V, G"));
+    }
+
+    #[test]
+    fn tous_les_dons_sont_traduits() {
+        let r = Referentiel::core();
+        let t = Traductions::core();
+        for d in &r.dons {
+            let fr = t
+                .don(&d.nom_en)
+                .unwrap_or_else(|| panic!("don non traduit : {}", d.nom_en));
+            // « Endurance » s’écrit pareil dans les deux langues
+            if d.nom_en != "Endurance" {
+                assert_ne!(fr.nom, d.nom_en, "nom non traduit : {}", d.nom_en);
+            }
+            assert_eq!(fr.resume.is_some(), !d.resume_en.is_empty(), "{}", d.nom_en);
+            assert_eq!(
+                fr.prerequis.is_some(),
+                d.prerequis_en.is_some(),
+                "{}",
+                d.nom_en
+            );
+            assert_eq!(
+                fr.avantage.is_some(),
+                d.avantage_en.is_some(),
+                "{}",
+                d.nom_en
+            );
+            assert_eq!(fr.normal.is_some(), d.normal_en.is_some(), "{}", d.nom_en);
+            assert_eq!(fr.special.is_some(), d.special_en.is_some(), "{}", d.nom_en);
+        }
+        assert_eq!(t.don("Power Attack").unwrap().nom, "Attaque en puissance");
+        assert_eq!(
+            t.don("Weapon Focus (longsword)").unwrap().nom,
+            "Arme de prédilection"
+        );
     }
 
     #[test]
