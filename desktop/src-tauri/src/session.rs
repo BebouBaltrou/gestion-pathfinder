@@ -163,7 +163,7 @@ impl Session {
             .map_err(|e| format!("Enregistrement des modèles impossible : {e}"))
     }
 
-    fn enregistrer(&mut self) -> Result<(), String> {
+    pub fn enregistrer(&mut self) -> Result<(), String> {
         if self.simulation.is_some() {
             return Ok(()); // une simulation n'est jamais enregistrée
         }

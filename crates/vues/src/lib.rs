@@ -4,9 +4,12 @@
 pub mod actions_batiments;
 pub mod batiments;
 pub mod gestionnaires;
+pub mod historique;
 pub mod localites;
 pub mod organisations;
+pub mod parametres;
 pub mod personnages;
+pub mod points;
 pub mod recettes;
 pub mod tableau;
 pub mod ventes;

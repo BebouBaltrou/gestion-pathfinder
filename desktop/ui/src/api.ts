@@ -388,6 +388,41 @@ export type ActionGestionnaire =
   | { type: "affecter"; id: number; cible: CibleAffectation }
   | { type: "desaffecter"; id: number; cible: CibleAffectation };
 
+// ------------------------------------------------------------------ historique, points, paramètres
+
+export type LigneJournal = { numero: number; jour: number; date: string; texte: string };
+export type PageHistorique = { annulees: LigneJournal[]; journal: LigneJournal[] };
+
+export type PagePoints = {
+  avertissementsMasques: boolean;
+  controles: string[];
+  total: number;
+  ouverts: number;
+  points: {
+    code: string;
+    ouvert: boolean;
+    source: string;
+    question: string;
+    lectureAppliquee: string;
+    decision: string | null;
+  }[];
+};
+
+export type PageParametres = {
+  campagne: string;
+  reglages: { id: string; titre: string; aide: string; actif: boolean; statut: "officiel" | "personnalise" | null; point: string | null }[];
+  calendrier: {
+    jourSemaine: number;
+    jour: number;
+    mois: number;
+    annee: number;
+    bissextile: "quatre" | "huit";
+    joursSemaine: string[];
+    nomsMois: string[];
+    apercu: string;
+  };
+};
+
 // ------------------------------------------------------------------ recettes
 
 export type CleU = { genre: "salle" | "equipe"; id: number };
@@ -517,6 +552,13 @@ export const api = {
 
   pageGestionnaires: () => appeler<PageGestionnaires | null>("page_gestionnaires"),
   actionGestionnaire: (action: ActionGestionnaire) => appeler<Retour>("action_gestionnaire", { action }),
+
+  pageHistorique: () => appeler<PageHistorique | null>("page_historique"),
+  pagePoints: () => appeler<PagePoints>("page_points"),
+  pageParametres: () => appeler<PageParametres | null>("page_parametres"),
+  regler: (id: string, actif: boolean) => appeler<Retour>("regler", { id, actif }),
+  reglerCalendrier: (jourSemaine: number, jour: number, mois: number, annee: number, bissextile: "quatre" | "huit") =>
+    appeler<Retour>("regler_calendrier", { jourSemaine, jour, mois, annee, bissextile }),
 
   vueRecettes: (entree: EntreeRecettes) => appeler<VueRecettes | null>("vue_recettes", { entree }),
   encaisserRecettes: (entree: EntreeRecettes) => appeler<Retour>("encaisser_recettes", { entree }),

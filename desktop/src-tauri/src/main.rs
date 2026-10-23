@@ -433,6 +433,75 @@ fn action_gestionnaire(s: S, action: vues::gestionnaires::ActionGestionnaire) ->
     executer_construit(&mut x, ev)
 }
 
+// ---------------------------------------------------------------- historique, points, paramètres
+
+#[tauri::command]
+fn page_historique(s: S) -> Option<vues::historique::PageHistorique> {
+    let mut x = session(&s);
+    let r = x.r.clone();
+    x.campagne
+        .as_mut()
+        .map(|c| vues::historique::page_historique(c, &r))
+}
+
+#[tauri::command]
+fn page_points(s: S) -> vues::points::PagePoints {
+    let x = session(&s);
+    let afficher = x
+        .campagne
+        .as_ref()
+        .is_none_or(|c| c.options.afficher_avertissements);
+    vues::points::page_points(&x.r, afficher)
+}
+
+#[tauri::command]
+fn page_parametres(s: S) -> Option<vues::parametres::PageParametres> {
+    let mut x = session(&s);
+    let r = x.r.clone();
+    x.campagne
+        .as_mut()
+        .map(|c| vues::parametres::page_parametres(c, &r))
+}
+
+#[tauri::command]
+fn regler(s: S, id: String, actif: bool) -> Retour {
+    use vues::parametres::ResultatReglage;
+    let mut x = session(&s);
+    let Some(c) = x.campagne.as_mut() else {
+        return Retour::erreur("Aucune campagne ouverte");
+    };
+    match vues::parametres::regler(c, &id, actif) {
+        Ok(ResultatReglage::Evenement(ev, msg)) => x.executer(*ev, &msg),
+        Ok(ResultatReglage::Enregistre(msg)) => match x.enregistrer() {
+            Ok(()) => Retour::ok(msg),
+            Err(e) => Retour::erreur(e),
+        },
+        Err(e) => Retour::erreur(e),
+    }
+}
+
+#[tauri::command]
+fn regler_calendrier(
+    s: S,
+    jour_semaine: u8,
+    jour: u8,
+    mois: u8,
+    annee: i32,
+    bissextile: String,
+) -> Retour {
+    let mut x = session(&s);
+    let Some(c) = x.campagne.as_mut() else {
+        return Retour::erreur("Aucune campagne ouverte");
+    };
+    match vues::parametres::regler_calendrier(c, jour_semaine, jour, mois, annee, &bissextile) {
+        Ok(()) => match x.enregistrer() {
+            Ok(()) => Retour::ok("Calendrier enregistré"),
+            Err(e) => Retour::erreur(e),
+        },
+        Err(e) => Retour::erreur(e),
+    }
+}
+
 // ---------------------------------------------------------------- recettes
 
 #[tauri::command]
@@ -563,6 +632,11 @@ fn main() {
             supprimer_modele_organisation,
             page_gestionnaires,
             action_gestionnaire,
+            page_historique,
+            page_points,
+            page_parametres,
+            regler,
+            regler_calendrier,
             vue_recettes,
             encaisser_recettes,
             avancer,

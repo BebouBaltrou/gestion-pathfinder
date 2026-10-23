@@ -6,6 +6,9 @@ import { EnAttente } from "./pages/EnAttente";
 import { Localites } from "./pages/Localites";
 import { Batiments } from "./pages/Batiments";
 import { Gestionnaires } from "./pages/Gestionnaires";
+import { Historique } from "./pages/Historique";
+import { Parametres } from "./pages/Parametres";
+import { Points } from "./pages/Points";
 import { Organisations } from "./pages/Organisations";
 import { Personnages } from "./pages/Personnages";
 import { Recettes } from "./pages/Recettes";
@@ -211,8 +214,11 @@ export function App() {
           {pageActive === "batiments" && <Batiments outils={outils} />}
           {pageActive === "organisations" && <Organisations outils={outils} />}
           {pageActive === "gestionnaires" && <Gestionnaires outils={outils} />}
+          {pageActive === "historique" && <Historique outils={outils} />}
+          {pageActive === "points" && <Points outils={outils} />}
+          {pageActive === "parametres" && <Parametres outils={outils} />}
           {pageActive === "recettes" && <Recettes outils={outils} />}
-          {!["tableau", "campagnes", "localites", "personnages", "batiments", "recettes", "organisations", "gestionnaires"].includes(pageActive) && <EnAttente nom={NOMS_PAGES[pageActive]} />}
+          {!["tableau", "campagnes", "localites", "personnages", "batiments", "recettes", "organisations", "gestionnaires", "historique", "points", "parametres"].includes(pageActive) && <EnAttente nom={NOMS_PAGES[pageActive]} />}
         </main>
       </div>
 
