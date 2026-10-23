@@ -3,6 +3,7 @@
 /// Types de bonus du Core Rulebook.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde", serde(rename_all = "snake_case"))]
 pub enum TypeBonus {
     Alteration,
     Armure,

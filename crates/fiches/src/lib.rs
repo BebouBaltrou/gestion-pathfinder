@@ -6,8 +6,17 @@
 
 pub mod bonus;
 pub mod caracteristiques;
+#[cfg(feature = "serde")]
+pub mod donnees;
 pub mod effet;
+#[cfg(feature = "serde")]
+pub mod fiche;
+pub mod generation;
 
 pub use bonus::{calculer, Detail, Terme};
 pub use caracteristiques::{modificateur, Carac, Caracteristique};
+#[cfg(feature = "serde")]
+pub use donnees::Referentiel;
 pub use effet::{Cible, Effet, TypeBonus};
+#[cfg(feature = "serde")]
+pub use fiche::{Fiche, Probleme, Valeurs};
