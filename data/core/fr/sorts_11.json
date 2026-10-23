@@ -1,0 +1,72 @@
+{
+  "Major Image": {
+    "cible": "hallucination visuelle ne pouvant dépasser quatre cubes de 3 m (10 pieds) d'arête + un cube de 3 m (10 pieds) d'arête par niveau (E)",
+    "composantes": "V, G, F (un peu de toison)",
+    "description": "Ce sort fonctionne comme image silencieuse, mais le son, l'odeur et les illusions thermiques sont inclus dans l'effet du sort. Tant que vous vous concentrez, vous pouvez déplacer l'image dans la portée.\nL'image disparaît quand un adversaire la frappe, sauf si vous faites réagir l'illusion de façon appropriée."
+  },
+  "Nondetection": {
+    "cible": "créature ou objet touché",
+    "composantes": "V, G, M (de la poudre de diamant d'une valeur de 50 po)",
+    "description": "La créature ou l'objet protégé devient difficile à détecter par les sorts de divination comme clairaudience/clairvoyance, localisation d'objet et les sorts de détection. Antidétection empêche aussi la localisation par des objets magiques comme les boules de cristal. Si une divination est tentée contre la créature ou l'objet protégé, le lanceur de la divination doit réussir un test de niveau de lanceur (1d20 + niveau de lanceur) contre un DD de 11 + le niveau de lanceur du lanceur de sorts qui a lancé antidétection. Si vous lancez antidétection sur vous-même ou sur un objet actuellement en votre possession, le DD est de 15 + votre niveau de lanceur.\nSi le sort est lancé sur une créature, antidétection protège l'équipement de la créature ainsi que la créature elle-même."
+  },
+  "Phantom Steed": {
+    "cible": "une créature quasi réelle semblable à un cheval",
+    "composantes": "V, G",
+    "description": "Vous invoquez une créature de taille G, quasi réelle, semblable à un cheval (la coloration exacte peut être personnalisée comme vous le souhaitez). Elle ne peut être montée que par vous ou par la seule personne pour qui vous avez spécialement créé la monture. Une monture fantôme a la tête et le corps noirs, la crinière et la queue grises, et des sabots immatériels de couleur fumée qui ne font aucun bruit. Elle a ce qui semble être une selle, un mors et une bride. Elle ne combat pas, mais les animaux l'évitent et refusent de l'attaquer.\nLa monture a une CA de 18 (–1 taille, +4 armure naturelle, +5 Dex) et 7 points de vie + 1 point de vie par niveau de lanceur. Si elle perd tous ses points de vie, la monture fantôme disparaît. Une monture fantôme a une vitesse de 6 m (20 pieds) par deux niveaux de lanceur, jusqu'à un maximum de 30 m (100 pieds) au niveau 10. Elle peut porter le poids de son cavalier plus 4,5 kg (10 livres) par niveau de lanceur.\nCes montures obtiennent certains pouvoirs selon le niveau de lanceur. Les capacités d'une monture incluent celles des montures de niveaux de lanceur inférieurs.\nNiveau 8 : la monture peut chevaucher sur un sol sablonneux, boueux, voire marécageux, sans difficulté ni réduction de vitesse.\nNiveau 10 : la monture peut utiliser marche sur l'eau à volonté (comme le sort, sans action nécessaire pour activer cette capacité).\nNiveau 12 : la monture peut utiliser marche dans les airs à volonté (comme le sort, sans action nécessaire pour activer cette capacité) pendant 1 round à la fois, après quoi elle tombe au sol.\nNiveau 14 : la monture peut voler à sa vitesse avec un bonus aux tests de Vol égal à votre niveau de lanceur."
+  },
+  "Protection from Energy": {
+    "cible": "créature touchée",
+    "composantes": "V, G, FD",
+    "description": "Protection contre les énergies destructrices confère une immunité temporaire au type d'énergie que vous précisez en le lançant (acide, froid, électricité, feu ou son). Quand le sort a absorbé 12 points de dégâts d'énergie par niveau de lanceur (jusqu'à un maximum de 120 points au niveau 10), il est déchargé.\nProtection contre les énergies destructrices se recoupe avec résistance aux énergies destructrices (et ne se cumule pas avec lui). Si un personnage est protégé à la fois par protection contre les énergies destructrices et résistance aux énergies destructrices, le sort de protection absorbe les dégâts jusqu'à épuisement de sa puissance."
+  },
+  "Rage": {
+    "cible": "une créature vivante consentante par trois niveaux, à pas plus de 9 m (30 pieds) les unes des autres",
+    "composantes": "V, G",
+    "description": "Chaque créature affectée obtient un bonus de moral de +2 en Force et en Constitution, un bonus de moral de +1 aux jets de Volonté et un malus de –2 à la CA. L'effet est par ailleurs identique à la rage d'un barbare, sauf que les sujets ne sont pas fatigués à la fin de la rage."
+  },
+  "Ray of Exhaustion": {
+    "cible": "rayon",
+    "composantes": "V, G, M (une goutte de sueur)",
+    "description": "Un rayon noir jaillit de votre doigt tendu. Vous devez réussir une attaque de contact à distance avec le rayon pour toucher une cible.\nLe sujet est immédiatement épuisé pour la durée du sort. Un jet de Vigueur réussi signifie que la créature n'est que fatiguée.\nUn personnage déjà fatigué devient à la place épuisé.\nCe sort n'a aucun effet sur une créature déjà épuisée. Contrairement à l'épuisement ou à la fatigue normaux, l'effet prend fin dès que la durée du sort expire."
+  },
+  "Secret Page": {
+    "cible": "page touchée, de 0,3 m² (3 pieds carrés) maximum",
+    "composantes": "V, G, M (des écailles de hareng en poudre et une fiole d'essence de feu follet)",
+    "description": "Page secrète modifie le contenu d'une page de sorte qu'elle paraisse être quelque chose d'entièrement différent. Le texte d'un sort peut être changé pour montrer un autre sort de niveau égal ou inférieur connu du lanceur. Ce sort ne peut pas servir à changer un sort contenu sur un parchemin, mais il peut servir à cacher un parchemin. Des runes explosives ou un signe du serpent sépia peuvent être lancés sur la page secrète.\nUn sort de compréhension des langues seul ne peut pas révéler le contenu d'une page secrète. Vous pouvez révéler le contenu d'origine en prononçant un mot spécial. Vous pouvez alors parcourir la page réelle et la ramener à sa forme de page secrète à volonté. Vous pouvez aussi supprimer le sort en répétant deux fois le mot spécial. Un sort de détection de la magie révèle une magie ténue sur la page en question mais ne révèle pas son véritable contenu. Vision lucide révèle la présence du contenu caché mais ne révèle pas le contenu, sauf s'il est lancé en combinaison avec compréhension des langues. Un sort de page secrète peut être dissipé, et les écrits cachés peuvent être détruits au moyen d'un sort d'effacement."
+  },
+  "Sepia Snake Sigil": {
+    "cible": "un livre ou ouvrage écrit touché",
+    "composantes": "V, G, M (de l'ambre en poudre d'une valeur de 500 po et une écaille de serpent)",
+    "description": "Vous faites apparaître un petit symbole dans le texte d'un ouvrage écrit. Le texte contenant le symbole doit comporter au moins 25 mots. Quand quelqu'un lit le texte contenant le symbole, le signe du serpent sépia prend vie et se transforme en un grand serpent sépia qui frappe le lecteur, à condition qu'il existe une ligne d'effet entre le symbole et le lecteur.\nSimplement voir le texte ensorcelé ne suffit pas à déclencher le sort ; le sujet doit le lire délibérément. La cible a droit à un jet de sauvegarde pour esquiver l'attaque du serpent. En cas de réussite, le serpent sépia se dissipe dans un éclair de lumière brune accompagné d'un nuage de fumée brun-gris et d'un grand bruit. Si la cible rate son jet, elle est engloutie dans un champ de force ambré scintillant et immobilisée jusqu'à sa libération, soit sur votre ordre, soit quand 1d4 jours + 1 jour par niveau de lanceur se sont écoulés.\nTant qu'il est piégé dans le champ de force ambré, le sujet ne vieillit pas, ne respire pas, n'a pas faim, ne dort pas et ne récupère pas de sorts. Il est préservé dans un état d'animation suspendue, inconscient de son environnement. Il peut être blessé par des forces extérieures (et peut-être même tué), car le champ n'offre aucune protection contre les blessures physiques. Toutefois, un sujet mourant ne perd pas de points de vie et ne se stabilise pas avant la fin du sort.\nLe signe caché ne peut pas être détecté par une observation normale, et la détection de la magie révèle seulement que tout le texte est magique.\nUne dissipation de la magie peut supprimer le signe. Un sort d'effacement détruit toute la page de texte.\nSigne du serpent sépia peut être lancé en combinaison avec d'autres sorts qui cachent ou brouillent un texte, comme page secrète."
+  },
+  "Shrink Item": {
+    "cible": "un objet touché jusqu'à 0,06 m³ (2 pieds cubes) par niveau",
+    "composantes": "V, G",
+    "description": "Vous pouvez rétrécir un objet non magique (s'il respecte la limite de taille) à 1/16 de sa taille normale dans chaque dimension (environ 1/4 000 du volume et de la masse d'origine). Ce changement réduit de fait la taille de l'objet de quatre catégories. Vous pouvez aussi, si vous le souhaitez, changer sa composition désormais rétrécie en une composition semblable à du tissu. Les objets modifiés par un sort de rétrécissement d'objet peuvent retrouver leur composition et leur taille normales simplement en étant jetés sur une surface solide ou par un mot de commande du lanceur d'origine. Même un feu qui brûle et son combustible peuvent être rétrécis par ce sort. Rendre à l'objet rétréci sa taille et sa composition normales met fin au sort.\nRétrécissement d'objet peut être rendu permanent par un sort de permanence, auquel cas l'objet affecté peut être rétréci et agrandi un nombre indéfini de fois, mais seulement par le lanceur d'origine."
+  },
+  "Sleet Storm": {
+    "cible": "cylindre (rayon 12 m, 40 pieds, hauteur 6 m, 20 pieds)",
+    "composantes": "V, G, M/FD (de la poussière et de l'eau)",
+    "description": "Un grésil battant bloque toute vue (même la vision dans le noir) à l'intérieur et rend le sol de la zone glacé. Une créature peut marcher dans la zone de grésil, ou la traverser, à la moitié de sa vitesse normale avec un test d'Acrobaties DD 10. Un échec signifie qu'elle ne peut pas bouger ce round, tandis qu'un échec de 5 ou plus signifie qu'elle tombe (voir la compétence Acrobaties pour les détails).\nLe grésil éteint les torches et les petits feux."
+  },
+  "Slow": {
+    "cible": "une créature par niveau, à pas plus de 9 m (30 pieds) les unes des autres",
+    "composantes": "V, G, M (une goutte de mélasse)",
+    "description": "Une créature affectée se déplace et attaque à un rythme considérablement ralenti. Les créatures affectées par ce sort sont chancelantes et ne peuvent entreprendre qu'une seule action de mouvement ou action simple à chaque tour, mais pas les deux (ni d'actions complexes). De plus, elles subissent un malus de –1 aux jets d'attaque, à la CA et aux jets de Réflexes. Une créature ralentie se déplace à la moitié de sa vitesse normale (arrondie au multiple de 1,50 m, 5 pieds, inférieur), ce qui affecte la distance de saut de la créature comme pour toute vitesse réduite.\nPlusieurs effets de lenteur ne se cumulent pas. Lenteur contre et dissipe rapidité."
+  },
+  "Suggestion": {
+    "cible": "une créature vivante",
+    "composantes": "V, M (une langue de serpent et un rayon de miel)",
+    "description": "Vous influencez les actions de la créature cible en lui suggérant une ligne de conduite (limitée à une phrase ou deux). La suggestion doit être formulée de manière à rendre l'activité raisonnable. Demander à la créature d'accomplir un acte manifestement nuisible annule automatiquement l'effet du sort.\nLa ligne de conduite suggérée peut se poursuivre pendant toute la durée. Si l'activité suggérée peut être accomplie en moins de temps, le sort prend fin quand le sujet a terminé ce qu'on lui a demandé. Vous pouvez à la place préciser des conditions qui déclencheront une activité particulière pendant la durée. Si la condition n'est pas remplie avant l'expiration de la durée du sort, l'activité n'est pas accomplie.\nUne suggestion très raisonnable fait que le jet de sauvegarde est fait avec un malus (comme –1 ou –2)."
+  },
+  "Summon Monster 3": {
+    "cible": "une créature convoquée",
+    "composantes": "V, G, F/FD (un minuscule sac et une petite bougie)",
+    "description": "Ce sort fonctionne comme convocation de monstres I, mais vous pouvez convoquer une créature de la liste de niveau 3, 1d3 créatures du même genre de la liste de niveau 2, ou 1d4+1 créatures du même genre de la liste de niveau 1."
+  },
+  "Tiny Hut": {
+    "cible": "sphère de 6 m (20 pieds) de rayon centrée sur votre position",
+    "composantes": "V, G, M (une petite perle de cristal)",
+    "description": "Vous créez autour de vous une sphère de force immobile et opaque de la couleur de votre choix. La moitié de la sphère dépasse du sol, et l'hémisphère inférieur traverse le sol. Jusqu'à neuf autres créatures de taille M peuvent tenir dans le champ avec vous ; elles peuvent entrer et sortir librement de la cabane sans l'endommager. Cependant, si vous quittez la cabane, le sort prend fin.\nLa température à l'intérieur de la cabane est de 21 °C (70 °F) si la température extérieure est comprise entre –18 °C et 38 °C (0 et 100 °F). Une température extérieure inférieure à –18 °C ou supérieure à 38 °C abaisse ou élève la température intérieure à raison d'un degré pour un degré. La cabane offre aussi une protection contre les éléments, comme la pluie, la poussière et les tempêtes de sable. La cabane résiste à tout vent d'une force inférieure à celle d'un ouragan, mais un ouragan (vent de 120 km/h, 75 mph, ou plus) ou une force supérieure la détruit.\nL'intérieur de la cabane est un hémisphère. Vous pouvez l'éclairer faiblement sur ordre ou éteindre la lumière à volonté. Bien que le champ de force soit opaque de l'extérieur, il est transparent de l'intérieur. Les projectiles, les armes et la plupart des effets de sorts peuvent traverser la cabane sans l'affecter, bien que les occupants ne puissent pas être vus de l'extérieur (ils bénéficient d'un camouflage total)."
+  }
+}
