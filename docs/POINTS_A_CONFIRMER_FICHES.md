@@ -49,8 +49,8 @@ Chaque point : ce que le moteur fait aujourd'hui, et ce qu'il faut te demander.
     compétences à malus d'armure.
 16. **Surcharge** (au-delà de la charge lourde) : je reprends la règle « titube » du Core (bonus de
     DEX perdu, 5 pieds par round) et le malus de la charge lourde, faute de valeur propre.
-17. *(Décidé le 23/10 : règle stricte, division entière, 25 → 12 ; arrondi à éclaircir.)* **Vitesse divisée par deux** (épuisé, empêtré, hors de combat) : arrondie à un multiple de 5
-    vers le bas (30 → 15, 25 → 10). Les nains ne sont pas ralentis par l'armure ni la charge.
+17. *(Décidé le 23/10 : règle stricte, division entière, 25 → 12 ; arrondi à éclaircir.)* **Vitesse divisée par deux** (épuisé, empêtré, hors de combat) : division entière.
+    (30 → 15, 25 → 12). Les nains ne sont pas ralentis par l'armure ni la charge.
 18. **États : seuls les effets chiffrés sans ambiguïté sont calculés** (secoué, effrayé, malade,
     fatigué, épuisé, éblouie, etc.). Ce qui est conditionnel ou vague reste en note à l'écran :
     aveuglé (« la plupart » des jets de FOR/DEX : lesquels ?), à terre, sans défense, paralysé,
