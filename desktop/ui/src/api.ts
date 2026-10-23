@@ -280,6 +280,85 @@ export type ActionBatiment =
   | { type: "abandonner"; cible: Cible; sansAcheteur: boolean }
   | { type: "garderSansAcheteur"; cible: Cible };
 
+// ------------------------------------------------------------------ organisations
+
+export type PageOrganisations = {
+  groupes: { localite: string; organisations: { id: number; nom: string; equipes: number; effectif: number }[] }[];
+  localites: Choix[];
+  modeles: { id: string; libelle: string; personnel: boolean }[];
+  equipes: { id: string; nom: string; libelle: string }[];
+  payeurs: Choix[];
+};
+
+export type FicheEquipe = {
+  id: number;
+  nom: string;
+  typeEquipe: string | null;
+  statut: "a_recruter" | "en_recrutement" | "recrutee" | "en_delocalisation";
+  statutTexte: string;
+  ailleurs: string | null;
+  effectif: number;
+  source: string;
+  infos: string;
+  pointAConfirmer: string | null;
+  organisation: number;
+  lieu: number | null;
+  lieux: Choix[];
+  moitieSansBatiment: boolean;
+  admises: RessourceId[];
+  ressource: RessourceId | null;
+  revenusActifs: boolean;
+  chantier: Avancement | null;
+  constructible: boolean;
+  prixAchatPo: number | null;
+  ameliorations: { id: string; nom: string; detail: string | null }[];
+  vente: EtatVente | null;
+  delocalisable: boolean;
+  prixDeloc: string;
+};
+
+export type FicheOrganisation = {
+  id: number;
+  nom: string;
+  classement: string;
+  modele: string | null;
+  siege: string;
+  localite: number;
+  effectif: string;
+  reste: Capitaux;
+  bonus: { ressource: RessourceId; valeur: number }[];
+  gestionnaires: string;
+  vente: EtatVente;
+  equipes: FicheEquipe[];
+  tresorerie: string;
+  payeurs: Choix[];
+  organisations: Choix[];
+  localites: Choix[];
+  jetUnique: boolean;
+  equipesRecrutees: number;
+  prixDelocOrganisation: string;
+};
+
+export type ActionOrganisation =
+  | { type: "ajouterEquipe"; organisation: number; reference: string; deja: boolean }
+  | { type: "affecterEquipe"; equipe: number; organisation: number; lieu: number | null }
+  | { type: "reglerEquipe"; equipe: number; ressource: RessourceId | null; revenusActifs: boolean }
+  | { type: "lancerRecrutement"; equipe: number; facteur: number }
+  | { type: "acheterEquipe"; equipe: number; payeur: number | null }
+  | { type: "equipePossedee"; equipe: number }
+  | { type: "retirerEquipe"; equipe: number }
+  | { type: "ameliorerEquipe"; equipe: number; vers: string; facteur: number }
+  | { type: "delocaliser"; equipe: number; vers: number; preparation: string; voyage: string; payeur: number | null; prix: string }
+  | {
+      type: "delocaliserOrganisation";
+      organisation: number;
+      vers: number;
+      preparation: string;
+      voyage: string;
+      payeur: number | null;
+      prix: string;
+    };
+
 // ------------------------------------------------------------------ recettes
 
 export type CleU = { genre: "salle" | "equipe"; id: number };
@@ -397,6 +476,15 @@ export const api = {
     appeler<Retour>("mise_en_vente", { cible, jours, influence, po }),
   enregistrerModeleBatiment: (id: number) => appeler<Retour>("enregistrer_modele_batiment", { id }),
   supprimerModeleBatiment: (id: string) => appeler<Retour>("supprimer_modele_batiment", { id }),
+
+  pageOrganisations: () => appeler<PageOrganisations | null>("page_organisations"),
+  apercuCreationOrganisation: (saisie: SaisieBatiment) =>
+    appeler<ApercuCreation | null>("apercu_creation_organisation", { saisie }),
+  creerOrganisation: (saisie: SaisieBatiment) => appeler<Retour>("creer_organisation", { saisie }),
+  ficheOrganisation: (id: number) => appeler<FicheOrganisation | null>("fiche_organisation", { id }),
+  actionOrganisation: (action: ActionOrganisation) => appeler<Retour>("action_organisation", { action }),
+  enregistrerModeleOrganisation: (id: number) => appeler<Retour>("enregistrer_modele_organisation", { id }),
+  supprimerModeleOrganisation: (id: string) => appeler<Retour>("supprimer_modele_organisation", { id }),
 
   vueRecettes: (entree: EntreeRecettes) => appeler<VueRecettes | null>("vue_recettes", { entree }),
   encaisserRecettes: (entree: EntreeRecettes) => appeler<Retour>("encaisser_recettes", { entree }),

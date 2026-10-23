@@ -5,6 +5,7 @@ import { Campagnes } from "./pages/Campagnes";
 import { EnAttente } from "./pages/EnAttente";
 import { Localites } from "./pages/Localites";
 import { Batiments } from "./pages/Batiments";
+import { Organisations } from "./pages/Organisations";
 import { Personnages } from "./pages/Personnages";
 import { Recettes } from "./pages/Recettes";
 import { Tableau } from "./pages/Tableau";
@@ -207,8 +208,9 @@ export function App() {
           {pageActive === "localites" && <Localites outils={outils} />}
           {pageActive === "personnages" && <Personnages outils={outils} />}
           {pageActive === "batiments" && <Batiments outils={outils} />}
+          {pageActive === "organisations" && <Organisations outils={outils} />}
           {pageActive === "recettes" && <Recettes outils={outils} />}
-          {!["tableau", "campagnes", "localites", "personnages", "batiments", "recettes"].includes(pageActive) && <EnAttente nom={NOMS_PAGES[pageActive]} />}
+          {!["tableau", "campagnes", "localites", "personnages", "batiments", "recettes", "organisations"].includes(pageActive) && <EnAttente nom={NOMS_PAGES[pageActive]} />}
         </main>
       </div>
 

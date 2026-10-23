@@ -50,6 +50,21 @@ export async function autotest(): Promise<void> {
       "ajout d'une salle déjà construite",
     );
     verifier((await api.ficheBatiment(idb))?.etages[0]?.salles[0]?.statut === "construite", "salle construite");
+    verifier(
+      (await api.creerOrganisation({
+        localite: id, modele: null, nom: "Guilde", classement: "guilde", acquisition: "plan",
+        facteur: 1, seulementManquants: false, prix: "", payeur: null,
+      })).ok,
+      "création d'une organisation vide",
+    );
+    const po = await api.pageOrganisations();
+    const ido = po?.groupes[0]?.organisations[0]?.id ?? 0;
+    verifier(ido > 0 && (po?.equipes.length ?? 0) > 0, "page Organisations : liste et équipes du livre");
+    verifier(
+      (await api.actionOrganisation({ type: "ajouterEquipe", organisation: ido, reference: po?.equipes[0]?.id ?? "", deja: true })).ok,
+      "ajout d'une équipe déjà recrutée",
+    );
+    verifier((await api.ficheOrganisation(ido))?.equipes[0]?.statut === "recrutee", "équipe recrutée");
     const vr = await api.vueRecettes({ repartition: [], jets: [], conserves: { marchandises: 0, influence: 0, travail: 0, magie: 0 }, payeur: null });
     verifier(vr?.localite === id && (vr?.joursEnAttente ?? -1) >= 0, "page Recettes : calcul de la localité");
     verifier((await api.simulation("demarrer")).ok, "démarrer une simulation");

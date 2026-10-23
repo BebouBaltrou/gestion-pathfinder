@@ -320,6 +320,97 @@ fn supprimer_modele_batiment(s: S, id: String) -> Retour {
     }
 }
 
+// ---------------------------------------------------------------- organisations
+
+#[tauri::command]
+fn page_organisations(s: S) -> Option<vues::organisations::PageOrganisations> {
+    let mut x = session(&s);
+    let (r, m) = (x.r.clone(), x.modeles.clone());
+    x.campagne
+        .as_mut()
+        .map(|c| vues::organisations::page_organisations(c, &r, &m))
+}
+
+#[tauri::command]
+fn apercu_creation_organisation(
+    s: S,
+    saisie: vues::batiments::SaisieBatiment,
+) -> Option<vues::batiments::ApercuCreation> {
+    let mut x = session(&s);
+    let (r, m) = (x.r.clone(), x.modeles.clone());
+    x.campagne
+        .as_mut()
+        .and_then(|c| vues::organisations::apercu_creation(c, &r, &m, &saisie))
+}
+
+#[tauri::command]
+fn creer_organisation(s: S, saisie: vues::batiments::SaisieBatiment) -> Retour {
+    let mut x = session(&s);
+    let (r, m) = (x.r.clone(), x.modeles.clone());
+    let Some(c) = x.campagne.as_mut() else {
+        return Retour::erreur("Aucune campagne ouverte");
+    };
+    let ev = vues::organisations::creation(c, &r, &m, &saisie);
+    executer_construit(&mut x, ev)
+}
+
+#[tauri::command]
+fn fiche_organisation(s: S, id: u32) -> Option<vues::organisations::FicheOrganisation> {
+    let mut x = session(&s);
+    let r = x.r.clone();
+    x.campagne
+        .as_mut()
+        .and_then(|c| vues::organisations::fiche_organisation(c, &r, id))
+}
+
+#[tauri::command]
+fn action_organisation(s: S, action: vues::organisations::ActionOrganisation) -> Retour {
+    let mut x = session(&s);
+    let r = x.r.clone();
+    let Some(c) = x.campagne.as_mut() else {
+        return Retour::erreur("Aucune campagne ouverte");
+    };
+    let ev = vues::organisations::action(c, &r, action);
+    executer_construit(&mut x, ev)
+}
+
+#[tauri::command]
+fn enregistrer_modele_organisation(s: S, id: u32) -> Retour {
+    let mut x = session(&s);
+    let r = x.r.clone();
+    let Some(c) = x.campagne.as_mut() else {
+        return Retour::erreur("Aucune campagne ouverte");
+    };
+    let etat = c.etat(&r).clone();
+    let Some(o) = etat
+        .organisations
+        .get(&campagne::modele::IdOrganisation(id))
+    else {
+        return Retour::erreur("Organisation introuvable");
+    };
+    let m = campagne::modeles_perso::OrganisationPerso::depuis(&etat, o, &o.nom);
+    let nom = o.nom.clone();
+    x.modeles.ajouter_organisation(m);
+    match x.enregistrer_modeles() {
+        Ok(()) => Retour::ok(format!("Modèle personnel « {nom} » enregistré")),
+        Err(e) => Retour::erreur(e),
+    }
+}
+
+#[tauri::command]
+fn supprimer_modele_organisation(s: S, id: String) -> Retour {
+    let mut x = session(&s);
+    let Some(nom) = id.strip_prefix(campagne::modeles_perso::PREFIXE) else {
+        return Retour::erreur("Ce modèle est officiel : il ne peut pas être supprimé");
+    };
+    let nom = nom.to_string();
+    x.modeles.organisations.retain(|m| m.nom != nom);
+    match x.enregistrer_modeles() {
+        Ok(()) => Retour::ok(format!("Modèle personnel « {nom} » supprimé")),
+        Err(e) => Retour::erreur(e),
+    }
+}
+
 // ---------------------------------------------------------------- recettes
 
 #[tauri::command]
@@ -441,6 +532,13 @@ fn main() {
             mise_en_vente,
             enregistrer_modele_batiment,
             supprimer_modele_batiment,
+            page_organisations,
+            apercu_creation_organisation,
+            creer_organisation,
+            fiche_organisation,
+            action_organisation,
+            enregistrer_modele_organisation,
+            supprimer_modele_organisation,
             vue_recettes,
             encaisser_recettes,
             avancer,

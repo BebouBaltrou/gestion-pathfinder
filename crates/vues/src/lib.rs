@@ -4,6 +4,7 @@
 pub mod actions_batiments;
 pub mod batiments;
 pub mod localites;
+pub mod organisations;
 pub mod personnages;
 pub mod recettes;
 pub mod tableau;
