@@ -19,3 +19,20 @@ Chaque point : ce que le moteur fait aujourd'hui, et ce qu'il faut te demander.
    les effets chiffrés des pouvoirs de lignage sont conservés en texte (anglais) pour l'instant.
 7. **Attaques itératives** : -5 par attaque supplémentaire (jusqu'à 4 attaques) ; à confirmer
    pour les BBA qui ne sont pas des multiples de 5.
+
+## Phase 4 (dons et sorts) — ajouts du 24/10/2026
+
+8. **Noms français non officiels** : tous les noms de sorts, de dons, de compétences, de traits
+   raciaux et de lignages sont de ma traduction (fichiers `data/core/fr/*_noms.json`). À corriger
+   d'après le Manuel des joueurs quand tu veux ; le moteur ne dépend pas des noms français.
+9. **Abréviations** : durée « (D) » traduite « (R) » ; composantes V/S/M/F/DF traduites
+   V/G/M/F/FD ; conversions 30 pieds = 9 m, 1 mile = 1,5 km (même règle que le livre français,
+   à vérifier).
+10. **Dons à prérequis non évaluables** (36 prérequis, ex. « capacité de canalisation d'énergie »,
+    « arme choisie ») : signalés « à vérifier », ils ne bloquent pas le choix.
+11. **Familiers** : le Core liste 21 familiers (le lignage arcanique donne un lien arcanique,
+    familier ou objet lié) et le don Familier amélioré renvoie à une liste : ces listes ne sont
+    pas encore importées. À faire quand on traitera les compagnons.
+12. **Sorts sans ligne « jet de sauvegarde »** dans AoN : traités comme « aucun ».
+13. **Sorts à plusieurs versions** (Mass, Greater, Lesser) : les niveaux d'ensorceleur de ces
+    variantes ont été corrigés (l'import initial les confondait avec le sort de base).
