@@ -1,0 +1,16 @@
+[package]
+name = "vues"
+description = "Modèles d'affichage de l'interface : données prêtes à montrer, calculées par le cœur"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+
+[dependencies]
+domaine = { path = "../domaine" }
+regles = { path = "../regles" }
+campagne = { path = "../campagne" }
+serde = { version = "1", features = ["derive"], optional = true }
+
+[features]
+# Sérialisation vers l'interface (activée par l'application de bureau).
+serde = ["dep:serde", "campagne/serde"]

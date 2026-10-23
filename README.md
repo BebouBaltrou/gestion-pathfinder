@@ -24,7 +24,9 @@ Exigences : voir [docs/CAHIER_DES_CHARGES.md](docs/CAHIER_DES_CHARGES.md).
 crates/domaine   types purs : capitaux, monnaie (en pa), sources, statuts, fiches
 crates/regles    référentiel officiel, personnalisations, calculs, contrôles
 crates/campagne  journal d'événements, état, annuler/rétablir, calendrier, sauvegarde JSON
-app/             application Windows (egui/eframe), espace de travail séparé
+crates/vues      modèles d'affichage : ce que l'interface montre, calculé par le cœur
+desktop/         nouvelle application (Tauri) : src-tauri/ (Rust), ui/ (React), Windows et Linux
+app/             application egui (ancienne interface), conservée jusqu'à la fin de la migration
 data/            referentiel_officiel.json : source de vérité des données officielles
 outils/extraction  scripts de relevé depuis le PDF et de génération du code Rust
 ```
@@ -36,7 +38,7 @@ Les campagnes sont enregistrées dans `%APPDATA%\GestionPathfinder\campagnes` (J
 ## Commandes
 
 ```
-cargo test                                            # 53 tests, dont les exemples chiffrés du livre
+cargo test                                            # 54 tests, dont les exemples chiffrés du livre
 cargo run -p regles --example verifier_referentiel    # contenu + avertissements
 ```
 

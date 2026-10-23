@@ -49,3 +49,72 @@ jobs:
           name: gestion-pathfinder-windows
           path: app/target/release/gestion-pathfinder.exe
           if-no-files-found: error
+
+  bureau-windows:
+    name: Nouvelle application — Windows
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: desktop
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: desktop/src-tauri -> target
+      - name: Dépendances de l'interface
+        run: npm install --no-audit --no-fund
+      - name: Vérification des types (TypeScript)
+        run: ../outils/ci/annoter.sh npm run check
+      - name: Interface (dist)
+        run: npm run build
+      - name: Icônes
+        run: npx tauri icon src-tauri/icone-source.png
+      - name: Compilation
+        run: ../outils/ci/annoter.sh npx tauri build --no-bundle
+      - name: Exécutable
+        uses: actions/upload-artifact@v4
+        with:
+          name: gestion-pathfinder-bureau-windows
+          path: desktop/src-tauri/target/release/gestion-pathfinder.exe
+          if-no-files-found: error
+
+  bureau-linux:
+    name: Nouvelle application — Linux
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: desktop
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: desktop/src-tauri -> target
+      - name: Bibliothèques système (WebKitGTK)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libxdo-dev
+      - name: Dépendances de l'interface
+        run: npm install --no-audit --no-fund
+      - name: Vérification des types (TypeScript)
+        run: ../outils/ci/annoter.sh npm run check
+      - name: Interface (dist)
+        run: npm run build
+      - name: Icônes
+        run: npx tauri icon src-tauri/icone-source.png
+      - name: Compilation (AppImage)
+        run: ../outils/ci/annoter.sh npx tauri build --bundles appimage
+      - name: AppImage
+        uses: actions/upload-artifact@v4
+        with:
+          name: gestion-pathfinder-bureau-linux
+          path: desktop/src-tauri/target/release/bundle/appimage/*.AppImage
+          if-no-files-found: error

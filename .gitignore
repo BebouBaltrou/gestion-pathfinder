@@ -3,3 +3,9 @@ target/
 outils/extraction/*.json
 Cargo.lock
 app/target/
+desktop/node_modules
+desktop/dist/
+desktop/package-lock.json
+desktop/src-tauri/target/
+desktop/src-tauri/gen/
+desktop/src-tauri/icons/
