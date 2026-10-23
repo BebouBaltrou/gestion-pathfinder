@@ -49,3 +49,10 @@ une exigence ne change que sur décision explicite de l'utilisateur (datée ici)
 - Données importées d'Archives of Nethys (textes en anglais), interface et noms en français.
 - Fiches stockées **dans le fichier de campagne** (journal d'événements) ; l'ancienne
   application egui ne les gérera pas. Interface uniquement dans `desktop/`.
+- (Mise à jour 23/10/2026, soir) **Application finale entièrement en français**, y compris les
+  textes de sorts, dons et capacités : remplace le choix « descriptions en anglais ». Le mode
+  de traduction reste à fixer avec l'utilisateur.
+- Pas d'*Advanced Race Guide* : aucun trait racial alternatif. Méthode de calcul des PV
+  (jet / moyenne / moyenne arrondie / maximum) : **réglage de campagne** au choix du joueur.
+- L'ensorceleur n'a pas de composants matériels bon marché à fournir (Eschew Materials) ; il ne
+  reçoit pas l'Écriture de parchemin gratuitement.
