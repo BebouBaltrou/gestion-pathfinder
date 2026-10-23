@@ -6,6 +6,7 @@ import { EnAttente } from "./pages/EnAttente";
 import { Localites } from "./pages/Localites";
 import { Batiments } from "./pages/Batiments";
 import { Personnages } from "./pages/Personnages";
+import { Recettes } from "./pages/Recettes";
 import { Tableau } from "./pages/Tableau";
 
 export type Page =
@@ -206,7 +207,8 @@ export function App() {
           {pageActive === "localites" && <Localites outils={outils} />}
           {pageActive === "personnages" && <Personnages outils={outils} />}
           {pageActive === "batiments" && <Batiments outils={outils} />}
-          {!["tableau", "campagnes", "localites", "personnages", "batiments"].includes(pageActive) && <EnAttente nom={NOMS_PAGES[pageActive]} />}
+          {pageActive === "recettes" && <Recettes outils={outils} />}
+          {!["tableau", "campagnes", "localites", "personnages", "batiments", "recettes"].includes(pageActive) && <EnAttente nom={NOMS_PAGES[pageActive]} />}
         </main>
       </div>
 

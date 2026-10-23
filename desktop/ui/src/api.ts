@@ -280,6 +280,65 @@ export type ActionBatiment =
   | { type: "abandonner"; cible: Cible; sansAcheteur: boolean }
   | { type: "garderSansAcheteur"; cible: Cible };
 
+// ------------------------------------------------------------------ recettes
+
+export type CleU = { genre: "salle" | "equipe"; id: number };
+export type Points = { ressource: RessourceId; points: number };
+export type SaisieJet = { ressource: RessourceId; prendre10: boolean; des: string };
+
+/** Saisie de la page Recettes ; les champs absents prennent leur valeur par défaut (calculée par le cœur). */
+export type EntreeRecettes = {
+  localite?: number | null;
+  jours?: string | null;
+  batiments?: number[] | null;
+  organisations?: number[] | null;
+  repartition: { cle: CleU; points: Points[] }[];
+  jets: SaisieJet[];
+  conserverTout?: boolean | null;
+  conserves: Capitaux;
+  payeur: number | null;
+};
+
+export type VueRecettes = {
+  localites: Choix[];
+  localite: number | null;
+  joursEnAttente: number;
+  jours: string;
+  batiments: { id: number; nom: string; coche: boolean }[];
+  organisations: { id: number; nom: string; coche: boolean }[];
+  sansType: string[];
+  repartitionStricte: boolean;
+  unites: {
+    cle: CleU;
+    libelle: string;
+    bonus: number;
+    admises: RessourceId[];
+    points: Points[];
+    somme: number;
+    defaut: Points[];
+    precedente: Points[] | null;
+  }[];
+  tests: { ressource: RessourceId; prendre10: boolean; des: string; erreur: string | null }[];
+  gratuits: boolean;
+  conserverTout: boolean;
+  payeurs: Choix[];
+  tresorerie: string;
+  bilan: {
+    premierJour: { ressource: RessourceId; lignes: string; prendre10: boolean; formule: string }[];
+    detailJours: string[];
+    jours: number;
+    poBrut: Somme;
+    capitauxBruts: Capitaux;
+    absence: string | null;
+    poNet: Somme;
+    capitauxNets: Capitaux;
+    conservables: { capital: RessourceId; max: number; garde: number; coutUnitePo: number }[];
+    coutConserves: Somme;
+  } | null;
+  erreur: string | null;
+  encaissable: boolean;
+};
+
 /** Ce qu'un transfert déplace (l'Influence ne se transfère pas, GC p. 81). */
 export type RessourceTransfert = "po" | "marchandises" | "travail" | "magie";
 
@@ -338,6 +397,9 @@ export const api = {
     appeler<Retour>("mise_en_vente", { cible, jours, influence, po }),
   enregistrerModeleBatiment: (id: number) => appeler<Retour>("enregistrer_modele_batiment", { id }),
   supprimerModeleBatiment: (id: string) => appeler<Retour>("supprimer_modele_batiment", { id }),
+
+  vueRecettes: (entree: EntreeRecettes) => appeler<VueRecettes | null>("vue_recettes", { entree }),
+  encaisserRecettes: (entree: EntreeRecettes) => appeler<Retour>("encaisser_recettes", { entree }),
 };
 
 // ------------------------------------------------------------------ montants

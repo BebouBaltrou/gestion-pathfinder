@@ -320,6 +320,31 @@ fn supprimer_modele_batiment(s: S, id: String) -> Retour {
     }
 }
 
+// ---------------------------------------------------------------- recettes
+
+#[tauri::command]
+fn vue_recettes(
+    s: S,
+    entree: vues::recettes::EntreeRecettes,
+) -> Option<vues::recettes::VueRecettes> {
+    let mut x = session(&s);
+    let r = x.r.clone();
+    x.campagne
+        .as_mut()
+        .map(|c| vues::recettes::vue_recettes(c, &r, &entree))
+}
+
+#[tauri::command]
+fn encaisser_recettes(s: S, entree: vues::recettes::EntreeRecettes) -> Retour {
+    let mut x = session(&s);
+    let r = x.r.clone();
+    let Some(c) = x.campagne.as_mut() else {
+        return Retour::erreur("Aucune campagne ouverte");
+    };
+    let ev = vues::recettes::encaisser(c, &r, &entree);
+    executer_construit(&mut x, ev)
+}
+
 // ---------------------------------------------------------------- temps
 
 #[tauri::command]
@@ -416,6 +441,8 @@ fn main() {
             mise_en_vente,
             enregistrer_modele_batiment,
             supprimer_modele_batiment,
+            vue_recettes,
+            encaisser_recettes,
             avancer,
             annuler,
             retablir,

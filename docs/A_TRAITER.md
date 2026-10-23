@@ -11,10 +11,10 @@ Ce fichier est tenu à jour à chaque étape.
 ## Migration vers la nouvelle application (Tauri, `desktop/`)
 
 Fait : coquille (navigation, date, annuler/rétablir, simulation, notifications), tableau de
-bord, campagnes, localités, personnages, bâtiments ; compilation Windows (.exe) avec essai de bout en bout (Linux en pause
+bord, campagnes, localités, personnages, bâtiments, recettes ; compilation Windows (.exe) avec essai de bout en bout (Linux en pause
 jusqu'à ce que l'application soit stable et terminée).
 À migrer, dans l'ordre :
-Recettes, Organisations, Gestionnaires, Historique, Paramètres, Référentiel, Points à
+Organisations, Gestionnaires, Historique, Paramètres, Référentiel, Points à
 confirmer, import/export, modèles personnels d'organisations (ceux des bâtiments sont faits). Puis retrait de l'ancienne application (`app/`).
 
 ## Décisions du 23/10/2026

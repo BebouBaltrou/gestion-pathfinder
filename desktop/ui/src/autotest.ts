@@ -50,6 +50,8 @@ export async function autotest(): Promise<void> {
       "ajout d'une salle déjà construite",
     );
     verifier((await api.ficheBatiment(idb))?.etages[0]?.salles[0]?.statut === "construite", "salle construite");
+    const vr = await api.vueRecettes({ repartition: [], jets: [], conserves: { marchandises: 0, influence: 0, travail: 0, magie: 0 }, payeur: null });
+    verifier(vr?.localite === id && (vr?.joursEnAttente ?? -1) >= 0, "page Recettes : calcul de la localité");
     verifier((await api.simulation("demarrer")).ok, "démarrer une simulation");
     await api.avancer(1);
     verifier((await api.etatApp()).simulation?.[1] === 1, "simulation : un jour d'avance");
