@@ -72,9 +72,9 @@ essai de bout en bout de la nouvelle application (variable `GESTION_PATHFINDER_A
 
 ## État de la migration vers `desktop/`
 
-Fait : coquille, tableau de bord, campagnes, localités, personnages, bâtiments, recettes, organisations, gestionnaires. À faire, dans l'ordre :
-Gestionnaires,
-Historique, Paramètres, Référentiel, Points à confirmer, import/export, modèles personnels,
-mode simulation complet. Ensuite : retirer `app/`. Le détail est dans `docs/A_TRAITER.md`.
-Pour chaque page : reprendre le comportement de `app/src/pages/<page>.rs`, mettre les calculs
-dans `crates/vues`, ajouter les commandes Tauri, puis l'interface React.
+Toutes les pages de `app/` sont migrées dans `desktop/` (tableau de bord, campagnes avec
+export/import, localités, personnages, bâtiments, recettes, organisations, gestionnaires,
+historique, paramètres, référentiel, points à confirmer, modèles personnels). Reste : essai à
+la main de chaque page par l'utilisateur, puis retirer `app/` **avec son accord**. Le détail
+est dans `docs/A_TRAITER.md`. Pour une page nouvelle : mettre les calculs dans `crates/vues`
+(avec tests), ajouter les commandes Tauri, puis l'interface React.

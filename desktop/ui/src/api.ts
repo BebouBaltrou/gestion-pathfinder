@@ -408,6 +408,45 @@ export type PagePoints = {
   }[];
 };
 
+export type UniteVue = {
+  id: string;
+  nom: string;
+  recettes: string;
+  avantages: string | null;
+  cout: string;
+  prix: string;
+  duree: string;
+  taille: string;
+  page: string;
+  source: string;
+  amelioreDe: string[];
+  amelioreEn: string[];
+  statut: "officiel" | "a_confirmer";
+  point: string | null;
+};
+
+export type ModeleVue = {
+  nom: string;
+  page: string;
+  cout: string;
+  prix: string;
+  composition: string;
+  imprime: string | null;
+  statut: "officiel" | "a_confirmer";
+  point: string | null;
+};
+
+export type PageReferentiel = {
+  salles: UniteVue[];
+  equipes: UniteVue[];
+  extensions: UniteVue[];
+  gestionnaires: { nom: string; salaire: string; competences: string; page: string }[];
+  modelesBatiments: ModeleVue[];
+  modelesOrganisations: ModeleVue[];
+  communautes: { nom: string; population: string; limite: string; statut: "officiel" | "a_confirmer"; point: string | null }[];
+  capitaux: { ressource: RessourceId; nom: string; coutAchat: string; coutProduit: string }[];
+};
+
 export type PageParametres = {
   campagne: string;
   reglages: { id: string; titre: string; aide: string; actif: boolean; statut: "officiel" | "personnalise" | null; point: string | null }[];
@@ -502,6 +541,11 @@ export const api = {
   etatApp: () => appeler<EtatApp>("etat_app"),
   ouvrirCampagne: (chemin: string) => appeler<Retour>("ouvrir_campagne", { chemin }),
   creerCampagne: (nom: string) => appeler<Retour>("creer_campagne", { nom }),
+  exporterCampagne: () => appeler<Retour>("exporter_campagne"),
+  exporterRecapitulatif: () => appeler<Retour>("exporter_recapitulatif"),
+  exporterHistorique: () => appeler<Retour>("exporter_historique"),
+  importerCampagne: () => appeler<Retour>("importer_campagne"),
+  ouvrirDossier: () => appeler<Retour>("ouvrir_dossier"),
   tableauDeBord: () => appeler<TableauDeBord | null>("tableau_de_bord"),
   avancer: (jours: number) => appeler<Retour>("avancer", { jours }),
   annuler: () => appeler<Retour>("annuler"),
@@ -555,6 +599,7 @@ export const api = {
 
   pageHistorique: () => appeler<PageHistorique | null>("page_historique"),
   pagePoints: () => appeler<PagePoints>("page_points"),
+  pageReferentiel: () => appeler<PageReferentiel>("page_referentiel"),
   pageParametres: () => appeler<PageParametres | null>("page_parametres"),
   regler: (id: string, actif: boolean) => appeler<Retour>("regler", { id, actif }),
   reglerCalendrier: (jourSemaine: number, jour: number, mois: number, annee: number, bissextile: "quatre" | "huit") =>

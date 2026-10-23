@@ -9,6 +9,7 @@ import { Gestionnaires } from "./pages/Gestionnaires";
 import { Historique } from "./pages/Historique";
 import { Parametres } from "./pages/Parametres";
 import { Points } from "./pages/Points";
+import { Referentiel } from "./pages/Referentiel";
 import { Organisations } from "./pages/Organisations";
 import { Personnages } from "./pages/Personnages";
 import { Recettes } from "./pages/Recettes";
@@ -216,9 +217,10 @@ export function App() {
           {pageActive === "gestionnaires" && <Gestionnaires outils={outils} />}
           {pageActive === "historique" && <Historique outils={outils} />}
           {pageActive === "points" && <Points outils={outils} />}
+          {pageActive === "referentiel" && <Referentiel outils={outils} />}
           {pageActive === "parametres" && <Parametres outils={outils} />}
           {pageActive === "recettes" && <Recettes outils={outils} />}
-          {!["tableau", "campagnes", "localites", "personnages", "batiments", "recettes", "organisations", "gestionnaires", "historique", "points", "parametres"].includes(pageActive) && <EnAttente nom={NOMS_PAGES[pageActive]} />}
+          {!["tableau", "campagnes", "localites", "personnages", "batiments", "recettes", "organisations", "gestionnaires", "historique", "points", "parametres", "referentiel"].includes(pageActive) && <EnAttente nom={NOMS_PAGES[pageActive]} />}
         </main>
       </div>
 

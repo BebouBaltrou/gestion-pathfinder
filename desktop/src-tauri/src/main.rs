@@ -3,6 +3,7 @@
 
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+mod export;
 mod session;
 
 use campagne::evenements::Evenement;
@@ -54,6 +55,31 @@ fn ouvrir_campagne(s: S, chemin: String) -> Retour {
 #[tauri::command]
 fn creer_campagne(s: S, nom: String) -> Retour {
     session(&s).creer(&nom)
+}
+
+#[tauri::command]
+fn exporter_campagne(s: S) -> Retour {
+    export::exporter(&mut session(&s), export::Export::Campagne)
+}
+
+#[tauri::command]
+fn exporter_recapitulatif(s: S) -> Retour {
+    export::exporter(&mut session(&s), export::Export::Recapitulatif)
+}
+
+#[tauri::command]
+fn exporter_historique(s: S) -> Retour {
+    export::exporter(&mut session(&s), export::Export::Historique)
+}
+
+#[tauri::command]
+fn importer_campagne(s: S) -> Retour {
+    export::importer(&mut session(&s))
+}
+
+#[tauri::command]
+fn ouvrir_dossier(s: S) -> Retour {
+    export::ouvrir_dossier(&session(&s))
 }
 
 #[tauri::command]
@@ -455,6 +481,11 @@ fn page_points(s: S) -> vues::points::PagePoints {
 }
 
 #[tauri::command]
+fn page_referentiel(s: S) -> vues::referentiel::PageReferentiel {
+    vues::referentiel::page_referentiel(&session(&s).r)
+}
+
+#[tauri::command]
 fn page_parametres(s: S) -> Option<vues::parametres::PageParametres> {
     let mut x = session(&s);
     let r = x.r.clone();
@@ -601,6 +632,11 @@ fn main() {
             etat_app,
             ouvrir_campagne,
             creer_campagne,
+            exporter_campagne,
+            exporter_recapitulatif,
+            exporter_historique,
+            importer_campagne,
+            ouvrir_dossier,
             tableau_de_bord,
             page_localites,
             categorie_suggeree,
@@ -634,6 +670,7 @@ fn main() {
             action_gestionnaire,
             page_historique,
             page_points,
+            page_referentiel,
             page_parametres,
             regler,
             regler_calendrier,

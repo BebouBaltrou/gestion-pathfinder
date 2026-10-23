@@ -11,6 +11,7 @@ pub mod parametres;
 pub mod personnages;
 pub mod points;
 pub mod recettes;
+pub mod referentiel;
 pub mod tableau;
 pub mod ventes;
 
