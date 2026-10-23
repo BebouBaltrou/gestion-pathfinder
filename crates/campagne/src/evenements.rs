@@ -275,6 +275,31 @@ pub enum Evenement {
         localite: IdLocalite,
         reussi: bool,
     },
+    /// Abandon d'un bien sans compensation (GC p. 84) : immédiat et définitif.
+    AbandonActif {
+        cible: Actif,
+    },
+    /// Mise en vente (GC p. 84) : acheteur trouvé au bout de `jours` (3d6 dans 75 % des cas,
+    /// −1d6 par point d'Influence dépensé : jets saisis par le joueur) ; le produit (po et/ou
+    /// capitaux, par défaut la moitié du prix ou du coût) arrive à ce moment-là.
+    VenteLancee {
+        cible: Actif,
+        jours: u32,
+        influence: u32,
+        po: Montant,
+        capitaux: CoutCapitaux,
+    },
+    VenteAnnulee {
+        cible: Actif,
+    },
+    /// Réparation d'une salle brisée (GC p. 92) : po et/ou capitaux (réserves de la localité),
+    /// en règle générale la moitié du prix de construction.
+    SalleReparee {
+        salle: IdSalle,
+        payeur: Option<Payeur>,
+        po: Montant,
+        capitaux: CoutCapitaux,
+    },
     /// Réglage de la limite des dépenses (PC-14) : `false` = une limite par localité (défaut),
     /// `true` = une limite par PJ présent, additionnées. Journalisé pour que le changement
     /// ne s'applique qu'à partir de ce jour et reste annulable.

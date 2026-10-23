@@ -4,7 +4,7 @@ Application Windows locale de gestion des localités, bâtiments, salles, organi
 équipes et gestionnaires selon les règles d'intermède du **Guide de campagne**
 (VF de *Ultimate Campaign*).
 
-## État : étape 6 — recettes, usure, prestige
+## État : étape 7 — simulation, export, tableau de bord, vente et réparation
 
 | Étape | Contenu | État |
 | --- | --- | --- |
@@ -14,7 +14,7 @@ Application Windows locale de gestion des localités, bâtiments, salles, organi
 | 4 | Bâtiments, étages, salles, construction (limite de dépense, accélération, achat, améliorations, modèles) | fait (extensions des modèles à venir) |
 | 5 | Organisations, équipes (appartenance, lieu de travail, recrutement, délocalisation), gestionnaires et salaires | fait |
 | 6 | Tests de capitaux (recettes), absence, usure des capitaux et des entreprises | fait |
-| 7 | Simulation, export, tableau de bord | à venir |
+| 7 | Simulation, export, tableau de bord, vente, abandon et réparation | fait |
 
 ## Structure
 

@@ -13,6 +13,7 @@ pub mod modele;
 pub mod organisation;
 pub mod rapport;
 pub mod recettes;
+pub mod ventes;
 
 use calendrier::Calendrier;
 use etat::{Consequence, Erreur, Etat};
@@ -502,6 +503,42 @@ impl Campagne {
             ),
             GestionnaireModifie { nom, .. } => format!("Gestionnaire {nom} modifié"),
             GestionnaireRenvoye { id } => format!("Gestionnaire {} renvoyé", ges(id)),
+            AbandonActif { cible } => format!("Abandon : {}", etat.libelle_actif(*cible, r)),
+            VenteLancee {
+                cible,
+                jours,
+                influence,
+                po,
+                capitaux,
+            } => {
+                let inf = if *influence > 0 {
+                    format!(", {influence} Influence dépensée")
+                } else {
+                    String::new()
+                };
+                let cap = if capitaux.unites() > 0 {
+                    format!(" + {capitaux}")
+                } else {
+                    String::new()
+                };
+                format!(
+                    "Mise en vente : {} pour {po}{cap}, acheteur dans {jours} j{inf}",
+                    etat.libelle_actif(*cible, r)
+                )
+            }
+            VenteAnnulee { cible } => {
+                format!("Vente annulée : {}", etat.libelle_actif(*cible, r))
+            }
+            SalleReparee {
+                salle, po, capitaux, ..
+            } => {
+                let cap = if capitaux.unites() > 0 {
+                    format!(" + {capitaux}")
+                } else {
+                    String::new()
+                };
+                format!("Réparation de {} ({po}{cap})", sal(salle))
+            }
             RecettesPercues {
                 localite,
                 jours,

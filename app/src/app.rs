@@ -237,6 +237,19 @@ impl App {
                         campagne::etat::Consequence::EquipeArrivee { nom, localite, .. } => {
                             msg.push_str(&format!(" — {nom} arrivée à {localite}"));
                         }
+                        campagne::etat::Consequence::VenteConclue {
+                            libelle,
+                            po,
+                            capitaux,
+                            ..
+                        } => {
+                            let cap = if capitaux.unites() > 0 {
+                                format!(" + {capitaux}")
+                            } else {
+                                String::new()
+                            };
+                            msg.push_str(&format!(" — vente conclue : {libelle} ({po}{cap})"));
+                        }
                         campagne::etat::Consequence::UsureCapitaux { localite } => {
                             msg.push_str(&format!(
                                 " — usure des capitaux à {localite} (−1 par type, GC p. 82)"

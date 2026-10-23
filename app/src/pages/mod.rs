@@ -10,6 +10,7 @@ pub mod points;
 pub mod recettes;
 pub mod referentiel;
 pub mod tableau;
+pub mod ventes;
 
 use campagne::modele::CategorieLocalite;
 use regles::Referentiel;

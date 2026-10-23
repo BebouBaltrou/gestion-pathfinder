@@ -1,7 +1,10 @@
 use crate::app::{App, Page};
 use crate::{theme, widgets};
-use domaine::{CoutCapitaux, Montant};
+use campagne::etat::Etat as EtatCampagne;
+use campagne::modele::*;
+use domaine::{CoutCapitaux, Montant, TypeCapital};
 use eframe::egui::{self, RichText};
+use regles::Referentiel;
 
 #[derive(Default)]
 pub struct Etat;
@@ -12,6 +15,7 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
     };
     let etat = c.etat(&app.r).clone();
     let date = c.date_courante(&app.r);
+    let calendrier = c.calendrier.clone();
     widgets::titre_page(ui, "Tableau de bord", &date);
 
     let total_po: Montant = etat.localites.values().map(|l| l.tresorerie).sum();
@@ -51,7 +55,16 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
         });
     });
 
-    // ---------- alertes ----------
+    // ---------- alertes et travaux ----------
+    let r = app.r.clone();
+    if let Some(p) = alertes(ui, &etat, &r) {
+        app.page = p;
+    }
+    if let Some(p) = travaux(ui, &etat, &r, &calendrier) {
+        app.page = p;
+    }
+
+    // ---------- tests de prestige ----------
     let mut resolution = None;
     for (l, dd) in &etat.prestige_en_attente {
         let nom = etat
@@ -219,4 +232,285 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
             });
         }
     });
+}
+
+/// Une alerte : texte, couleur, page où agir.
+struct Alerte {
+    texte: String,
+    grave: bool,
+    page: Page,
+}
+
+fn alertes(ui: &mut egui::Ui, etat: &EtatCampagne, r: &Referentiel) -> Option<Page> {
+    let mut v = Vec::new();
+    for l in etat.localites.values() {
+        if l.tresorerie.est_negatif() {
+            v.push(Alerte {
+                texte: format!("Trésorerie de {} négative : {}", l.nom, l.tresorerie),
+                grave: true,
+                page: Page::Localites,
+            });
+        }
+        let salaires = etat.salaires_localite(l.id);
+        if salaires.pa > 0 && !l.tresorerie.est_negatif() {
+            let jours = l.tresorerie.pa / salaires.pa;
+            if jours < 7 {
+                v.push(Alerte {
+                    texte: format!(
+                        "{} : salaires couverts encore {jours} jour(s) seulement ({salaires}/jour)",
+                        l.nom
+                    ),
+                    grave: false,
+                    page: Page::Gestionnaires,
+                });
+            }
+        }
+        let absence = etat.absence.get(&l.id).copied().unwrap_or(0);
+        if absence > 0 && etat.frequentees.contains(&l.id) && l.capitaux.unites() > 0 {
+            if let Some(p) = etat.periode_usure(l.id) {
+                let reste = p - absence % p;
+                if reste <= 2 {
+                    v.push(Alerte {
+                        texte: format!(
+                            "{} : usure des capitaux dans {reste} jour(s) (aucun PJ depuis {absence} j)",
+                            l.nom
+                        ),
+                        grave: false,
+                        page: Page::Personnages,
+                    });
+                }
+            }
+            if absence >= 23 && !etat.gestionnaire_paye(l.id) && etat.a_entreprise(l.id, r) {
+                v.push(Alerte {
+                    texte: format!(
+                        "{} : aucun PJ depuis {absence} j ; à 30 j, un test de prestige sera demandé au retour",
+                        l.nom
+                    ),
+                    grave: false,
+                    page: Page::Gestionnaires,
+                });
+            }
+        }
+    }
+    // chantiers et recrutements bloqués faute de capitaux en réserve
+    for s in etat.salles.values() {
+        if let StatutSalle::EnTravaux(ch) = &s.statut {
+            let Some(b) = etat.batiments.get(&s.batiment) else {
+                continue;
+            };
+            if bloque(ch, etat, b.localite) {
+                v.push(Alerte {
+                    texte: format!(
+                        "{} — {} : réserves vides pour {}",
+                        b.nom,
+                        etat.nom_salle(s, r),
+                        manque(ch, etat, b.localite)
+                    ),
+                    grave: false,
+                    page: Page::Batiments,
+                });
+            }
+        }
+    }
+    for e in etat.equipes.values() {
+        if let StatutEquipe::EnRecrutement(ch) = &e.statut {
+            if bloque(ch, etat, e.localite) {
+                v.push(Alerte {
+                    texte: format!(
+                        "{} : réserves vides pour {}",
+                        etat.nom_equipe(e, r),
+                        manque(ch, etat, e.localite)
+                    ),
+                    grave: false,
+                    page: Page::Organisations,
+                });
+            }
+        }
+    }
+    if v.is_empty() {
+        return None;
+    }
+    let mut aller = None;
+    ui.add_space(8.0);
+    widgets::titre_section(ui, "Alertes");
+    widgets::carte(ui, |ui| {
+        ui.set_width(ui.available_width());
+        for a in &v {
+            ui.horizontal_wrapped(|ui| {
+                ui.label(RichText::new(format!("⚠ {}", a.texte)).color(if a.grave {
+                    theme::ROUGE
+                } else {
+                    theme::ORANGE
+                }));
+                if ui.small_button("Voir").clicked() {
+                    aller = Some(a.page);
+                }
+            });
+        }
+    });
+    aller
+}
+
+/// Le chantier a encore besoin de capitaux et aucun des types manquants n'est en réserve.
+fn bloque(ch: &Chantier, etat: &EtatCampagne, l: IdLocalite) -> bool {
+    let reste = ch.reste();
+    let stock = etat
+        .localites
+        .get(&l)
+        .map(|x| x.capitaux)
+        .unwrap_or_default();
+    reste.unites() > 0
+        && TypeCapital::TOUS
+            .iter()
+            .all(|t| reste.get(*t) == 0 || stock.get(*t) == 0)
+}
+
+fn manque(ch: &Chantier, etat: &EtatCampagne, l: IdLocalite) -> String {
+    let reste = ch.reste();
+    let stock = etat
+        .localites
+        .get(&l)
+        .map(|x| x.capitaux)
+        .unwrap_or_default();
+    TypeCapital::TOUS
+        .iter()
+        .filter(|t| reste.get(**t) > 0 && stock.get(**t) == 0)
+        .map(|t| format!("{} {t}", reste.get(*t)))
+        .collect::<Vec<_>>()
+        .join(", ")
+}
+
+/// Chantiers, recrutements et délocalisations en cours, avec une fin estimée.
+fn travaux(
+    ui: &mut egui::Ui,
+    etat: &EtatCampagne,
+    r: &Referentiel,
+    cal: &campagne::calendrier::Calendrier,
+) -> Option<Page> {
+    // (libellé, détail, avancement 0-1, jours restants estimés, page)
+    let mut lignes: Vec<(String, String, f32, u32, Page)> = Vec::new();
+    let avance = |ch: &Chantier| {
+        let c = ch.depense.unites() as f32 / ch.cout.unites().max(1) as f32;
+        let t = if ch.duree == 0 {
+            1.0
+        } else {
+            ch.jours_ecoules as f32 / ch.duree as f32
+        };
+        c.min(t).min(1.0)
+    };
+    for s in etat.salles.values() {
+        if let StatutSalle::EnTravaux(ch) = &s.statut {
+            let Some(b) = etat.batiments.get(&s.batiment) else {
+                continue;
+            };
+            let limite = etat.limite_depense(b.localite, r).unwrap_or(0);
+            let quoi = match &ch.nature {
+                NatureChantier::Construction => "construction",
+                NatureChantier::Amelioration { .. } => "amélioration",
+            };
+            lignes.push((
+                format!("🏛 {} — {}", b.nom, etat.nom_salle(s, r)),
+                format!("{quoi}, reste {}", ch.reste()),
+                avance(ch),
+                ch.jours_restants_estimes(limite),
+                Page::Batiments,
+            ));
+        }
+    }
+    for e in etat.equipes.values() {
+        let org = etat
+            .organisations
+            .get(&e.organisation)
+            .map(|o| o.nom.clone())
+            .unwrap_or_default();
+        match &e.statut {
+            StatutEquipe::EnRecrutement(ch) => {
+                let limite = etat.limite_depense(e.localite, r).unwrap_or(0);
+                let quoi = match &ch.nature {
+                    NatureChantier::Construction => "recrutement",
+                    NatureChantier::Amelioration { .. } => "amélioration",
+                };
+                lignes.push((
+                    format!("⚔ {org} — {}", etat.nom_equipe(e, r)),
+                    format!("{quoi}, reste {}", ch.reste()),
+                    avance(ch),
+                    ch.jours_restants_estimes(limite),
+                    Page::Organisations,
+                ));
+            }
+            StatutEquipe::EnDelocalisation(d) => {
+                let vers = etat
+                    .localites
+                    .get(&d.vers)
+                    .map(|l| l.nom.clone())
+                    .unwrap_or_default();
+                let total = (d.preparation + d.voyage).max(1);
+                lignes.push((
+                    format!("⚔ {org} — {}", etat.nom_equipe(e, r)),
+                    format!("délocalisation vers {vers}"),
+                    d.jours_ecoules as f32 / total as f32,
+                    d.jours_restants(),
+                    Page::Organisations,
+                ));
+            }
+            _ => {}
+        }
+    }
+    for t in &etat.transferts {
+        let de = etat
+            .localites
+            .get(&t.de)
+            .map(|l| l.nom.clone())
+            .unwrap_or_default();
+        let vers = etat
+            .localites
+            .get(&t.vers)
+            .map(|l| l.nom.clone())
+            .unwrap_or_default();
+        lignes.push((
+            format!("⏳ {} : {de} → {vers}", t.lot),
+            "transfert".into(),
+            0.0,
+            t.jour_arrivee.saturating_sub(etat.jour),
+            Page::Localites,
+        ));
+    }
+    if lignes.is_empty() {
+        return None;
+    }
+    lignes.sort_by_key(|l| l.3);
+    let mut aller = None;
+    ui.add_space(8.0);
+    widgets::titre_section(ui, "En cours");
+    widgets::carte(ui, |ui| {
+        ui.set_width(ui.available_width());
+        egui::Grid::new("travaux")
+            .num_columns(4)
+            .striped(true)
+            .spacing([14.0, 6.0])
+            .show(ui, |ui| {
+                for (nom, detail, a, reste, page) in &lignes {
+                    if ui
+                        .link(RichText::new(nom).color(theme::OR_PALE))
+                        .on_hover_text("Ouvrir la page")
+                        .clicked()
+                    {
+                        aller = Some(*page);
+                    }
+                    widgets::texte_doux(ui, detail);
+                    ui.add(egui::ProgressBar::new(*a).desired_width(120.0));
+                    if *reste == u32::MAX {
+                        ui.label(RichText::new("bloqué (limite nulle)").color(theme::ROUGE));
+                    } else {
+                        ui.label(format!("≈ {reste} j — {}", cal.libelle(etat.jour + reste)));
+                    }
+                    ui.end_row();
+                }
+            });
+        widgets::texte_doux(
+            ui,
+            "Fins estimées avec la limite de dépense et la durée ; elles supposent des réserves suffisantes.",
+        );
+    });
+    aller
 }

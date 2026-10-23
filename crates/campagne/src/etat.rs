@@ -64,6 +64,8 @@ pub enum Erreur {
     DelocalisationVersElleMeme,
     /// Phase des recettes refusée (affectation, jets, quantités…).
     Recettes(String),
+    /// Vente, abandon ou réparation refusés.
+    Actif(String),
 }
 
 impl std::fmt::Display for Erreur {
@@ -147,6 +149,7 @@ impl std::fmt::Display for Erreur {
             ),
             Erreur::OrganisationNonVide(o) => write!(f, "l'organisation {o} contient encore des équipes"),
             Erreur::Recettes(m) => write!(f, "recettes : {m}"),
+            Erreur::Actif(m) => f.write_str(m),
             Erreur::DelocalisationVersElleMeme => {
                 f.write_str("l'équipe se trouve déjà dans cette localité")
             }
@@ -184,6 +187,8 @@ pub struct Etat {
     pub sans_usure_avec_gestionnaire: bool,
     /// Tests de prestige à faire (retour après 30 jours ou plus) : DD par localité (GC p. 82).
     pub prestige_en_attente: BTreeMap<IdLocalite, u32>,
+    /// Ventes en attente d'un acheteur.
+    pub ventes: Vec<Vente>,
     /// Limite des dépenses par PJ présent plutôt que par localité (PC-14, option).
     pub limite_par_pj: bool,
 }
@@ -214,6 +219,12 @@ pub enum Consequence {
     /// Usure des capitaux (GC p. 82) : −1 à chaque type en réserve.
     UsureCapitaux {
         localite: String,
+    },
+    /// Vente conclue : le bien est cédé, le produit arrive dans la localité.
+    VenteConclue {
+        libelle: String,
+        po: Montant,
+        capitaux: CoutCapitaux,
     },
     /// Retour après une longue absence : test de prestige à faire (GC p. 82).
     TestPrestigeRequis {
@@ -549,6 +560,7 @@ impl Etat {
                     out.extend(self.avancer_delocalisations(r));
                     out.extend(self.payer_salaires());
                     out.extend(self.suivre_presence());
+                    out.extend(self.conclure_ventes());
                 }
             }
             Groupe { evenements, .. } => {
@@ -589,6 +601,10 @@ impl Etat {
             }
             ReglageLimiteDepense { par_pj } => self.limite_par_pj = *par_pj,
             RecettesPercues { .. } => self.percevoir_recettes(ev, r)?,
+            AbandonActif { .. }
+            | VenteLancee { .. }
+            | VenteAnnulee { .. }
+            | SalleReparee { .. } => self.appliquer_vente(ev, r)?,
             ReglageUsure {
                 sans_usure_avec_gestionnaire,
             } => self.sans_usure_avec_gestionnaire = *sans_usure_avec_gestionnaire,

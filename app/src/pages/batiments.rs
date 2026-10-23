@@ -32,6 +32,7 @@ pub struct Etat {
     prix: String,
     seulement_manquants: bool,
     payeur_pj: Option<IdPersonnage>,
+    vente: super::ventes::Formulaire,
 }
 
 /// Façon d'obtenir le bâtiment créé depuis un modèle.
@@ -596,6 +597,15 @@ fn detail(
             ));
         }
     });
+    if let Some(a) = super::ventes::actions_actif(
+        ui,
+        &mut app.ui_batiments.vente,
+        etat,
+        &r,
+        Actif::Batiment(b.id),
+    ) {
+        action = Some(a);
+    }
     ui.add_space(6.0);
 
     let s = &mut app.ui_batiments;
@@ -901,6 +911,20 @@ fn detail(
                         }
                     }
                 });
+                if sb.statut == StatutSalle::Construite {
+                    if let Some(a) = super::ventes::actions_actif(
+                        ui,
+                        &mut s.vente,
+                        etat,
+                        &r,
+                        Actif::Salle(sb.id),
+                    ) {
+                        action = Some(a);
+                    }
+                }
+                if let Some(a) = super::ventes::reparation(ui, etat, &r, sb, payeur) {
+                    action = Some(a);
+                }
                 ui.add_space(6.0);
             }
 

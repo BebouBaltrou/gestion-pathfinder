@@ -42,6 +42,17 @@ Ce fichier est tenu à jour à chaque étape.
   pendant la période traitée, par tranches de 7.
 - Les po des recettes sont créditées avant le paiement des capitaux gardés.
 
+## Lectures appliquées à l'étape 7 (vente, abandon, réparation)
+
+- **Vente** (GC p. 84) : « la moitié de son prix d'achat et de son coût de construction (en po
+  ou en Marchandises, Influence, Travail ou Magie) ». L'application propose au choix la moitié
+  du prix en po ou la moitié du coût en capitaux (arrondi inférieur), montants modifiables ;
+  seules les parties construites ou recrutées comptent. Les 25 % de cas où l'acheteur ne se
+  trouve pas en 3d6 jours ne sont pas précisés : délai saisi par le joueur. Le bien reste au
+  personnage (et continue de produire) jusqu'à la vente.
+- **Réparation** (GC p. 92) : moitié du prix en po, ou moitié du coût en capitaux (arrondi
+  inférieur) pris dans les réserves ; immédiate (aucune durée indiquée).
+
 ## Décisions déjà appliquées (étape 5)
 
 - Limite de dépense partagée entre chantiers et recrutements d'une localité : les salles sont

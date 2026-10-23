@@ -336,3 +336,29 @@ pub struct ReglesTest {
 
 /// Jet d'un jour : d20 saisi, ou « faire 10 » (`None`).
 pub type JetJour = Option<u8>;
+
+// ------------------------------------------------------------------ ventes
+
+/// Bien que l'on peut vendre ou abandonner (GC p. 84) : bâtiment entier ou salle,
+/// organisation entière ou équipe.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub enum Actif {
+    Batiment(IdBatiment),
+    Salle(IdSalle),
+    Organisation(IdOrganisation),
+    Equipe(IdEquipe),
+}
+
+/// Vente en cours : le bien reste au personnage jusqu'à ce que l'acheteur paie.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub struct Vente {
+    pub cible: Actif,
+    pub libelle: String,
+    /// Localité qui reçoit le produit de la vente.
+    pub localite: IdLocalite,
+    pub jour_fin: u32,
+    pub po: Montant,
+    pub capitaux: CoutCapitaux,
+}

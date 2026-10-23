@@ -39,6 +39,7 @@ pub struct Etat {
     deloc_voyage: String,
     deloc_prix: String,
     deloc_org: bool,
+    vente: super::ventes::Formulaire,
 }
 
 type Action = Option<(Evenement, String)>;
@@ -523,6 +524,15 @@ fn detail(
             },
         );
     });
+    if let Some(a) = super::ventes::actions_actif(
+        ui,
+        &mut app.ui_organisations.vente,
+        etat,
+        &r,
+        Actif::Organisation(o.id),
+    ) {
+        action = Some(a);
+    }
     ui.add_space(6.0);
 
     let s = &mut app.ui_organisations;
@@ -803,6 +813,17 @@ fn detail(
                     widgets::texte_doux(ui, "L'équipe arrivera sans lieu de travail ; affectez-la ensuite à un bâtiment.");
                 }
             });
+
+            if matches!(
+                e.statut,
+                StatutEquipe::Recrutee | StatutEquipe::EnDelocalisation(_)
+            ) {
+                if let Some(a) =
+                    super::ventes::actions_actif(ui, &mut s.vente, etat, &r, Actif::Equipe(e.id))
+                {
+                    action = Some(a);
+                }
+            }
 
             // formulaire de délocalisation
             if s.deloc == Some(e.id) && e.statut == StatutEquipe::Recrutee {
