@@ -8,6 +8,14 @@ Ce fichier est tenu à jour à chaque étape.
 - Fonctionnalités liées aux fiches de personnage (limite par le Prestige, travail du PJ,
   promotion d'entreprise) : voir `docs/FICHES_PERSONNAGE.md`.
 
+## Migration vers la nouvelle application (Tauri, `desktop/`)
+
+Fait : coquille (navigation, date, annuler/rétablir, simulation, notifications), tableau de
+bord, campagnes ; compilation Windows (.exe) et Linux (AppImage) avec essai de bout en bout.
+À migrer, dans l'ordre : Localités, Personnages, Bâtiments (salles, extensions, vente),
+Recettes, Organisations, Gestionnaires, Historique, Paramètres, Référentiel, Points à
+confirmer, import/export, modèles personnels. Puis retrait de l'ancienne application (`app/`).
+
 ## Décisions du 23/10/2026
 
 - **Coût produit** des capitaux produits par les bâtiments et organisations : gratuits par
