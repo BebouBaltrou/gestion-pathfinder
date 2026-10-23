@@ -33,8 +33,12 @@ function lignes(html) {
 
 function analyser(nom, html) {
   const l = lignes(html);
-  const iNom = l.findIndex((x) => x === nom);
-  const debut = iNom >= 0 ? iNom : 0;
+  // La fiche peut contenir plusieurs sorts (« Enlarge Person » puis « Enlarge Person, Mass ») :
+  // on se place sur le titre demandé, parfois collé à la fin de la ligne précédente.
+  let iNom = l.findIndex((x, i) => (x === nom || x.endsWith(' ' + nom)) && l[i + 1] && l[i + 1].startsWith('Source '));
+  if (iNom < 0) iNom = l.findIndex((x) => x === nom);
+  if (iNom < 0) throw new Error('titre introuvable dans la page');
+  const debut = iNom;
   const src = l.slice(debut).find((x) => x.startsWith('Source '));
   if (!src || !src.includes('PRPG Core Rulebook')) return null;
   const premiereSource = src.split(/ ?, ?/)[0];
@@ -84,9 +88,23 @@ function analyser(nom, html) {
       }
       if (!trouve && derniere && !enDescription) champs[derniere] += ' ' + x;
     } else {
-      if (/^Mythic /.test(x) && l[i + 1] && l[i + 1].startsWith('Source ')) break;
+      // Une autre fiche (variante d'un autre livre, version mythique) commence : son titre est
+      // la dernière ligne, parfois collé à la fin du dernier paragraphe.
+      if (l[i + 1] && l[i + 1].startsWith('Source ')) {
+        if (!/[.!?)"”:]$/.test(x)) {
+          const coupe = x.search(/[.!?)”"][^.!?)”"]*$/);
+          if (coupe >= 0) desc.push(x.slice(0, coupe + 1));
+        } else {
+          desc.push(x);
+        }
+        break;
+      }
       desc.push(x);
     }
+  }
+  if (champs.Range && / Target\/Effect /.test(champs.Range)) {
+    const [portee, cible] = champs.Range.split(' Target/Effect ');
+    champs.Range = portee; champs.Cible = cible; champs.CibleType = 'Target/Effect';
   }
   const sauv = champs['Saving Throw'] || '';
   const sm = sauv.match(/^(.*?); Spell Resistance (.*?)(?: Description)?$/);

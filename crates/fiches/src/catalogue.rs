@@ -134,7 +134,7 @@ mod tests {
             .iter()
             .filter(|s| s.niveau_pour("sorcerer").is_some())
             .count();
-        assert_eq!(de_l_ensorceleur, 391);
+        assert_eq!(de_l_ensorceleur, 390);
         let niveau = |n: &str| r.sort(n).unwrap().niveau_pour("sorcerer");
         assert_eq!(niveau("Light"), Some(0));
         assert_eq!(niveau("Magic Missile"), Some(1));
