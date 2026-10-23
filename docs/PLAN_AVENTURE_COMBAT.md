@@ -121,3 +121,17 @@ raccourcis/actions épinglées, mode daltonisme et thèmes supplémentaires, per
 
 Déjà décidés avec toi : minuit avance l'intermède ; survie = nourriture/eau, sommeil/fatigue, guérison
 naturelle (pas de torches) ; ordre d'initiative = uniquement tes personnages.
+
+## 8. Décisions du 24/10/2026 (réponses d'Antoine)
+
+1. **Arrondi §1.2** : le reliquat d'un effet en minutes est arrondi à la **minute entière la plus proche, minimum
+   1 minute** (7 min 24 s → 7 min ; 7 min 30 s → 8 min ; 42 s → 1 min). Simplification « maison », pas une règle du Core.
+2. Points 2 à 6 acceptés tels que proposés (recul sans résurrection, trois crates, `FORMAT = 2`, prototype
+   d'interface tôt, durée de sort préremplie).
+
+## 9. Avancement
+
+- **Phase 2 faite** : crate `crates/temps` (instants en rounds, durées extensibles, horloge aventure/combat,
+  effets temporisés génériques, alertes, conversion de fin de combat, recul d'horloge). 26 tests dont 7 tests de
+  propriétés. Reste, pour le branchement : remplacer `EffetTemporaire` dans `fiches` par ce modèle (migration de
+  l'ancien format à la lecture), à coordonner avec le fil « Gestion de personnage ».
