@@ -19,6 +19,14 @@ pub enum EvenementFiche {
         niveau: u32,
     },
     MonteeDeNiveau(Montee),
+    /// Un emplacement de sort dépensé (niveau de sort 1 à 9). Les tours de magie sont à volonté.
+    SortLance {
+        classe: String,
+        niveau_de_sort: u32,
+        sort: String,
+    },
+    /// Repos : tous les emplacements sont rendus.
+    Repos,
 }
 
 impl EvenementFiche {
@@ -32,6 +40,12 @@ impl EvenementFiche {
             EvenementFiche::XpGagnes { nombre, motif } => format!("+{nombre} XP ({motif})"),
             EvenementFiche::JalonAccorde { niveau } => format!("Jalon : niveau {niveau} accordé"),
             EvenementFiche::MonteeDeNiveau(m) => format!("Montée de niveau en {}", m.classe),
+            EvenementFiche::SortLance {
+                niveau_de_sort,
+                sort,
+                ..
+            } => format!("Sort lancé : {sort} (niveau {niveau_de_sort})"),
+            EvenementFiche::Repos => "Repos : emplacements de sorts rendus".to_string(),
         }
     }
 }
@@ -43,9 +57,37 @@ pub struct EtatPersonnage {
     pub jalon: u32,
     /// Niveau permis par les XP ou les jalons.
     pub niveau_atteignable: u32,
+    /// Emplacements de sorts dépensés depuis le dernier repos : (classe, niveau de sort) → nombre.
+    pub sorts_depenses: std::collections::BTreeMap<(String, u32), u32>,
 }
 
 impl EtatPersonnage {
+    /// Emplacements restants : (classe, niveau de sort, restants, total par jour).
+    pub fn emplacements_restants(&self, r: &Referentiel) -> Vec<(String, u32, u32, u32)> {
+        let Ok(v) = self.fiche.calculer(r) else {
+            return Vec::new();
+        };
+        let mut out = Vec::new();
+        for inc in &v.incantateurs {
+            for e in &inc.emplacements {
+                if let Some(total) = e.par_jour {
+                    let utilises = self
+                        .sorts_depenses
+                        .get(&(inc.classe.clone(), e.niveau_de_sort))
+                        .copied()
+                        .unwrap_or(0);
+                    out.push((
+                        inc.classe.clone(),
+                        e.niveau_de_sort,
+                        total.saturating_sub(utilises),
+                        total,
+                    ));
+                }
+            }
+        }
+        out
+    }
+
     /// Niveaux gagnés mais pas encore appliqués (« montée de niveau en attente »).
     /// Tant qu'ils ne sont pas appliqués, tout reste calculé au niveau actuel.
     pub fn niveaux_en_attente(&self) -> u32 {
@@ -63,6 +105,15 @@ pub enum ErreurJournal {
         erreurs: Vec<ErreurMontee>,
     },
     JalonHorsLimites(u32),
+    PlusDEmplacement {
+        evenement: usize,
+        classe: String,
+        niveau_de_sort: u32,
+    },
+    SortLanceImpossible {
+        evenement: usize,
+        raison: String,
+    },
 }
 
 impl std::fmt::Display for ErreurJournal {
@@ -80,6 +131,15 @@ impl std::fmt::Display for ErreurJournal {
                 Ok(())
             }
             ErreurJournal::JalonHorsLimites(n) => write!(f, "jalon {n} hors de 1 à 20"),
+            ErreurJournal::PlusDEmplacement {
+                classe,
+                niveau_de_sort,
+                ..
+            } => write!(
+                f,
+                "plus d'emplacement de sort de niveau {niveau_de_sort} ({classe})"
+            ),
+            ErreurJournal::SortLanceImpossible { raison, .. } => write!(f, "{raison}"),
         }
     }
 }
@@ -110,6 +170,7 @@ impl Journal {
             None => return Err(ErreurJournal::Vide),
         };
         let (mut xp, mut jalon) = (0u32, 0u32);
+        let mut sorts_depenses: std::collections::BTreeMap<(String, u32), u32> = Default::default();
         for (i, ev) in it {
             match ev {
                 EvenementFiche::Creation(_) => return Err(ErreurJournal::CreationManquante),
@@ -119,6 +180,78 @@ impl Journal {
                         return Err(ErreurJournal::JalonHorsLimites(*niveau));
                     }
                     jalon = jalon.max(*niveau);
+                }
+                EvenementFiche::Repos => sorts_depenses.clear(),
+                EvenementFiche::SortLance {
+                    classe,
+                    niveau_de_sort,
+                    sort,
+                } => {
+                    if *niveau_de_sort == 0 || *niveau_de_sort > 9 {
+                        return Err(ErreurJournal::SortLanceImpossible {
+                            evenement: i,
+                            raison: "les tours de magie se lancent à volonté".into(),
+                        });
+                    }
+                    let valeurs =
+                        fiche
+                            .calculer(r)
+                            .map_err(|p| ErreurJournal::SortLanceImpossible {
+                                evenement: i,
+                                raison: p.to_string(),
+                            })?;
+                    let total = valeurs
+                        .incantateurs
+                        .iter()
+                        .find(|inc| &inc.classe == classe)
+                        .and_then(|inc| {
+                            inc.emplacements
+                                .iter()
+                                .find(|e| e.niveau_de_sort == *niveau_de_sort)
+                        })
+                        .and_then(|e| e.par_jour)
+                        .ok_or_else(|| ErreurJournal::SortLanceImpossible {
+                            evenement: i,
+                            raison: format!(
+                                "{classe} ne lance pas de sorts de niveau {niveau_de_sort}"
+                            ),
+                        })?;
+                    let utilises = sorts_depenses
+                        .entry((classe.clone(), *niveau_de_sort))
+                        .or_default();
+                    if *utilises >= total {
+                        return Err(ErreurJournal::PlusDEmplacement {
+                            evenement: i,
+                            classe: classe.clone(),
+                            niveau_de_sort: *niveau_de_sort,
+                        });
+                    }
+                    let connu = fiche
+                        .sorts_connus
+                        .iter()
+                        .any(|s| s.eq_ignore_ascii_case(sort))
+                        || r.classe(classe).is_some_and(|c| {
+                            fiche
+                                .calculer(r)
+                                .map(|v| {
+                                    v.incantateurs.iter().any(|inc| {
+                                        &inc.classe == classe
+                                            && inc
+                                                .sorts_de_lignage
+                                                .iter()
+                                                .any(|(n, _)| n.eq_ignore_ascii_case(sort))
+                                    })
+                                })
+                                .unwrap_or(false)
+                                && c.incantation.is_some()
+                        });
+                    if !connu {
+                        return Err(ErreurJournal::SortLanceImpossible {
+                            evenement: i,
+                            raison: format!("{sort} n'est pas un sort connu"),
+                        });
+                    }
+                    *utilises += 1;
                 }
                 EvenementFiche::MonteeDeNiveau(m) => {
                     let atteignable = niveau_atteignable(r, regles.vitesse, xp, jalon);
@@ -137,6 +270,7 @@ impl Journal {
             xp,
             jalon,
             niveau_atteignable,
+            sorts_depenses,
         })
     }
 
@@ -172,18 +306,12 @@ impl Journal {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::fiche::BonusPredilection;
-    use std::collections::BTreeMap;
 
+    /// Montée valide du niveau 1 au niveau 2 de la fiche de test.
     fn niveau_simple() -> Montee {
-        Montee {
-            classe: "ensorceleur".into(),
-            de_vie: 4,
-            rangs: BTreeMap::new(),
-            predilection: Some(BonusPredilection::PointDeVie),
-            dons: vec![],
-            augmentation: None,
-        }
+        let r = Referentiel::core();
+        let f = crate::fiche::tests::elfe_ensorceleuse();
+        crate::progression::montee_auto(&r, &f, "ensorceleur", 4)
     }
 
     fn journal() -> Journal {
@@ -336,5 +464,69 @@ mod tests {
             ..moyenne
         };
         assert!(j.etat(&r, &lente).is_err());
+    }
+
+    #[test]
+    fn emplacements_depenses_puis_rendus_au_repos() {
+        let r = Referentiel::core();
+        let regles = ReglesFiche::default();
+        let mut j = journal();
+        let sort = |nom: &str| EvenementFiche::SortLance {
+            classe: "ensorceleur".into(),
+            niveau_de_sort: 1,
+            sort: nom.into(),
+        };
+        // niveau 1 : 3 + 1 (CHA 16) = 4 sorts de niveau 1 par jour
+        for _ in 0..4 {
+            j.ajouter(sort("Magic Missile"), &r, &regles).unwrap();
+        }
+        let e = j.etat(&r, &regles).unwrap();
+        let restants = e.emplacements_restants(&r);
+        assert!(restants.contains(&("ensorceleur".to_string(), 1, 0, 4)));
+        // le cinquième est refusé et le journal reste inchangé
+        let avant = j.clone();
+        let err = j.ajouter(sort("Mage Armor"), &r, &regles).unwrap_err();
+        assert!(matches!(
+            err,
+            ErreurJournal::PlusDEmplacement {
+                niveau_de_sort: 1,
+                ..
+            }
+        ));
+        assert_eq!(j, avant);
+        j.ajouter(EvenementFiche::Repos, &r, &regles).unwrap();
+        let e = j.etat(&r, &regles).unwrap();
+        assert!(e
+            .emplacements_restants(&r)
+            .contains(&("ensorceleur".to_string(), 1, 4, 4)));
+    }
+
+    #[test]
+    fn sort_inconnu_ou_tour_de_magie_refuses() {
+        let r = Referentiel::core();
+        let regles = ReglesFiche::default();
+        let mut j = journal();
+        let inconnu = EvenementFiche::SortLance {
+            classe: "ensorceleur".into(),
+            niveau_de_sort: 1,
+            sort: "Fireball".into(),
+        };
+        assert!(matches!(
+            j.ajouter(inconnu, &r, &regles),
+            Err(ErreurJournal::SortLanceImpossible { .. })
+        ));
+        let tour = EvenementFiche::SortLance {
+            classe: "ensorceleur".into(),
+            niveau_de_sort: 0,
+            sort: "Light".into(),
+        };
+        assert!(j.ajouter(tour, &r, &regles).is_err());
+        // pas de sort de niveau 2 au niveau 1
+        let haut = EvenementFiche::SortLance {
+            classe: "ensorceleur".into(),
+            niveau_de_sort: 2,
+            sort: "Magic Missile".into(),
+        };
+        assert!(j.ajouter(haut, &r, &regles).is_err());
     }
 }

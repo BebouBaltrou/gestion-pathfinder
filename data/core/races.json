@@ -347,6 +347,8 @@
       ],
       "langues_choix": "toutes (sauf langues secrètes)",
       "deux_classes_de_predilection": true,
+      "bonus_don": 1,
+      "don_impose": "Skill Focus",
       "effets": [
         {
           "cible": "comp.perception",

@@ -49,7 +49,7 @@ const RACES = [
     langues_choix: 'draconique, nain, elfique, géant, gobelin, orque' },
   { id: 'demi-elfe', aon: 'Half-Elf', nom: 'Demi-elfe', taille: 'moyenne', vitesse: 30, vision: 'vision nocturne',
     ajustements: [], choix_libre: 2, langues: ['commun', 'elfique'], langues_choix: 'toutes (sauf langues secrètes)',
-    deux_classes_de_predilection: true },
+    deux_classes_de_predilection: true, bonus_don: 1, don_impose: 'Skill Focus' },
   { id: 'demi-orque', aon: 'Half-Orc', nom: 'Demi-orque', taille: 'moyenne', vitesse: 30, vision: 'vision dans le noir 18 m (60 pi)',
     ajustements: [], choix_libre: 2, langues: ['commun', 'orque'], langues_choix: 'abyssal, draconique, géant, gnoll, gobelin' },
   { id: 'halfelin', aon: 'Halfling', nom: 'Halfelin', taille: 'petite', vitesse: 20, vision: 'normale',

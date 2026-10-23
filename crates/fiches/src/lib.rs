@@ -7,6 +7,8 @@
 pub mod bonus;
 pub mod caracteristiques;
 #[cfg(feature = "serde")]
+pub mod catalogue;
+#[cfg(feature = "serde")]
 pub mod donnees;
 pub mod effet;
 #[cfg(feature = "serde")]
@@ -14,6 +16,8 @@ pub mod fiche;
 pub mod generation;
 #[cfg(feature = "serde")]
 pub mod journal;
+#[cfg(feature = "serde")]
+pub mod prerequis;
 #[cfg(feature = "serde")]
 pub mod progression;
 #[cfg(feature = "serde")]

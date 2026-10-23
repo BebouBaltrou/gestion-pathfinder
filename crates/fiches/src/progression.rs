@@ -99,10 +99,17 @@ pub struct Montee {
     pub predilection: Option<BonusPredilection>,
     pub dons: Vec<String>,
     pub augmentation: Option<Carac>,
+    /// Nouveaux sorts connus choisis à ce niveau (noms anglais du catalogue).
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub sorts_appris: Vec<String>,
+    /// Sort connu échangé contre un autre du même niveau : (ancien, nouveau).
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub echange: Option<(String, String)>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ErreurMontee {
+    EchangeImpossible(String),
     NiveauPasEncoreAtteint { niveau: u32, atteignable: u32 },
     NiveauMaximum,
     ClasseInconnue(String),
@@ -152,6 +159,7 @@ impl std::fmt::Display for ErreurMontee {
             ErreurMontee::PredilectionInattendue => {
                 write!(f, "ce niveau n'est pas dans une classe de prédilection")
             }
+            ErreurMontee::EchangeImpossible(m) => write!(f, "échange de sort impossible : {m}"),
             ErreurMontee::Fiche(p) => write!(f, "{p}"),
         }
     }
@@ -314,7 +322,37 @@ pub fn appliquer(
         return Err(e);
     }
 
+    let ap = apercu(r, f, &m.classe);
+    if let Some((vieux, neuf)) = &m.echange {
+        let permis = ap.as_ref().is_some_and(|a| a.echange_de_sort);
+        let cle = classe.nom_en.to_lowercase();
+        let niveau_de = |s: &str| r.sort(s).and_then(|x| x.niveau_pour(&cle));
+        if !permis {
+            e.push(ErreurMontee::EchangeImpossible(
+                "pas d'échange possible à ce niveau".into(),
+            ));
+        } else if !f.sorts_connus.iter().any(|s| s.eq_ignore_ascii_case(vieux)) {
+            e.push(ErreurMontee::EchangeImpossible(format!(
+                "{vieux} n'est pas un sort connu (les sorts de lignage ne s'échangent pas)"
+            )));
+        } else if niveau_de(vieux).is_none() || niveau_de(vieux) != niveau_de(neuf) {
+            e.push(ErreurMontee::EchangeImpossible(
+                "le nouveau sort doit être du même niveau que l'ancien".into(),
+            ));
+        }
+    }
+    if !e.is_empty() {
+        return Err(e);
+    }
+
     let mut nouvelle = f.clone();
+    if let Some((vieux, neuf)) = &m.echange {
+        nouvelle
+            .sorts_connus
+            .retain(|s| !s.eq_ignore_ascii_case(vieux));
+        nouvelle.sorts_connus.push(neuf.clone());
+    }
+    nouvelle.sorts_connus.extend(m.sorts_appris.iter().cloned());
     nouvelle.niveaux.push(NiveauPris {
         classe: m.classe.clone(),
         de_vie_obtenu: m.de_vie,
@@ -333,6 +371,48 @@ pub fn appliquer(
     }
 }
 
+/// Niveau valide pour les tests : choisit automatiquement les sorts, dons et l'augmentation requis.
+#[cfg(test)]
+pub(crate) fn montee_auto(r: &Referentiel, f: &Fiche, classe: &str, de: u32) -> Montee {
+    let ap = apercu(r, f, classe).unwrap();
+    let cle = r.classe(classe).unwrap().nom_en.to_lowercase();
+    let mut pris = f.sorts_connus.clone();
+    let mut neufs = Vec::new();
+    for (sn, nb) in &ap.sorts_connus_gagnes {
+        for _ in 0..*nb {
+            let s = r
+                .sorts
+                .iter()
+                .filter(|s| s.niveau_pour(&cle) == Some(*sn))
+                .find(|s| !pris.contains(&s.nom_en))
+                .expect("assez de sorts dans le catalogue");
+            pris.push(s.nom_en.clone());
+            neufs.push(s.nom_en.clone());
+        }
+    }
+    let deja = f.dons_choisis();
+    let dons: Vec<String> = r
+        .dons
+        .iter()
+        .filter(|d| !d.repetable() && d.prerequis.is_empty() && !deja.contains(&d.nom_en))
+        .filter(|d| !d.a_un_choix())
+        .take(ap.dons_a_choisir as usize)
+        .map(|d| d.nom_en.clone())
+        .collect();
+    Montee {
+        classe: classe.to_string(),
+        de_vie: de,
+        rangs: BTreeMap::new(),
+        predilection: ap
+            .predilection_possible
+            .then_some(BonusPredilection::PointDeVie),
+        dons,
+        augmentation: ap.augmentation.then_some(Carac::Cha),
+        sorts_appris: neufs,
+        echange: None,
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -342,15 +422,8 @@ mod tests {
         crate::fiche::tests::elfe_ensorceleuse()
     }
 
-    fn montee(_f: &Fiche, de: u32) -> Montee {
-        Montee {
-            classe: "ensorceleur".into(),
-            de_vie: de,
-            rangs: BTreeMap::new(),
-            predilection: Some(BonusPredilection::PointDeVie),
-            dons: vec![],
-            augmentation: None,
-        }
+    fn montee(r: &Referentiel, f: &Fiche, de: u32) -> Montee {
+        montee_auto(r, f, "ensorceleur", de)
     }
 
     #[test]
@@ -404,10 +477,9 @@ mod tests {
         assert_eq!(a.sorts_connus_gagnes, vec![(0, 1)]); // 4 -> 5 tours de magie
         assert!(!a.echange_de_sort);
 
-        let regles = ReglesFiche::default();
-        let m = montee(&f, 4);
-        let n = appliquer(&r, &regles, &f, &m, 2).unwrap();
+        let n = appliquer(&r, &ReglesFiche::default(), &f, &montee(&r, &f, 4), 2).unwrap();
         assert_eq!(n.niveau_de_personnage(), 2);
+        assert_eq!(n.sorts_connus.len(), 5 + 2);
         assert_eq!(n.calculer(&r).unwrap().bba.total, 1);
         // la fiche d'origine n'est pas modifiée
         assert_eq!(f.niveau_de_personnage(), 1);
@@ -417,7 +489,7 @@ mod tests {
     fn tant_que_le_niveau_n_est_pas_atteint_on_refuse() {
         let r = Referentiel::core();
         let f = base();
-        let e = appliquer(&r, &ReglesFiche::default(), &f, &montee(&f, 4), 1).unwrap_err();
+        let e = appliquer(&r, &ReglesFiche::default(), &f, &montee(&r, &f, 4), 1).unwrap_err();
         assert_eq!(
             e,
             vec![ErreurMontee::NiveauPasEncoreAtteint {
@@ -432,9 +504,11 @@ mod tests {
         let r = Referentiel::core();
         let regles = ReglesFiche::default();
         let mut f = base();
-        f = appliquer(&r, &regles, &f, &montee(&f, 4), 20).unwrap();
+        f = appliquer(&r, &regles, &f, &montee(&r, &f, 4), 20).unwrap();
         // niveau 3 : un don, sinon erreur
-        let e = appliquer(&r, &regles, &f, &montee(&f, 4), 20).unwrap_err();
+        let mut m = montee(&r, &f, 4);
+        m.dons.clear();
+        let e = appliquer(&r, &regles, &f, &m, 20).unwrap_err();
         assert_eq!(
             e,
             vec![ErreurMontee::DonsAttendus {
@@ -442,17 +516,15 @@ mod tests {
                 fournis: 0
             }]
         );
-        let mut m = montee(&f, 4);
-        m.dons = vec!["Toughness".into()];
-        f = appliquer(&r, &regles, &f, &m, 20).unwrap();
+        f = appliquer(&r, &regles, &f, &montee(&r, &f, 4), 20).unwrap();
         // niveau 4 : augmentation obligatoire
-        let e = appliquer(&r, &regles, &f, &montee(&f, 4), 20).unwrap_err();
+        let mut m = montee(&r, &f, 4);
+        m.augmentation = None;
+        let e = appliquer(&r, &regles, &f, &m, 20).unwrap_err();
         assert_eq!(e, vec![ErreurMontee::AugmentationAttendue]);
-        let mut m = montee(&f, 4);
-        m.augmentation = Some(Carac::Cha);
         let a = apercu(&r, &f, "ensorceleur").unwrap();
         assert!(a.augmentation && a.echange_de_sort);
-        f = appliquer(&r, &regles, &f, &m, 20).unwrap();
+        f = appliquer(&r, &regles, &f, &montee(&r, &f, 4), 20).unwrap();
         assert_eq!(f.augmentations, vec![(4, Carac::Cha)]);
         assert_eq!(f.calculer(&r).unwrap().scores[&Carac::Cha].total, 17);
     }
@@ -463,15 +535,9 @@ mod tests {
         let regles = ReglesFiche::default();
         let mut f = base();
         for niv in 2..=7 {
-            let mut m = montee(&f, 4);
-            if niv % 2 == 1 {
-                m.dons = vec!["Don".into()];
-            }
-            if niv == 4 {
-                m.augmentation = Some(Carac::Cha);
-            }
+            let m = montee(&r, &f, 4);
             if niv == 7 {
-                m.dons.push("Don de lignage".into()); // niveau impair + lignage
+                assert_eq!(m.dons.len(), 2, "don de niveau impair + don de lignage");
             }
             f = appliquer(&r, &regles, &f, &m, 20)
                 .unwrap_or_else(|e| panic!("niveau {niv} : {e:?}"));
@@ -483,8 +549,7 @@ mod tests {
     fn multiclassage_desactive_par_defaut() {
         let r = Referentiel::core();
         let f = base();
-        // une seule classe disponible dans le référentiel : on simule une nouvelle classe inconnue
-        let mut m = montee(&f, 4);
+        let mut m = montee(&r, &f, 4);
         m.classe = "magicien".into();
         let e = appliquer(&r, &ReglesFiche::default(), &f, &m, 20).unwrap_err();
         assert_eq!(e, vec![ErreurMontee::ClasseInconnue("magicien".into())]);
@@ -494,7 +559,7 @@ mod tests {
     fn predilection_obligatoire_dans_la_classe_de_predilection() {
         let r = Referentiel::core();
         let f = base();
-        let mut m = montee(&f, 4);
+        let mut m = montee(&r, &f, 4);
         m.predilection = None;
         let e = appliquer(&r, &ReglesFiche::default(), &f, &m, 20).unwrap_err();
         assert_eq!(e, vec![ErreurMontee::PredilectionAttendue]);
@@ -509,12 +574,72 @@ mod tests {
     fn rangs_en_trop_refuses_a_la_montee() {
         let r = Referentiel::core();
         let f = base();
-        let mut m = montee(&f, 4);
-        m.rangs.insert("bluff".into(), 5); // 2+1 disponibles, +1 prédilection non choisie
+        let mut m = montee(&r, &f, 4);
+        m.rangs.insert("bluff".into(), 5);
         let e = appliquer(&r, &ReglesFiche::default(), &f, &m, 20).unwrap_err();
         assert!(matches!(
             e[0],
             ErreurMontee::Fiche(Probleme::RangsDepasses { niveau: 2, .. })
         ));
+    }
+
+    #[test]
+    fn sorts_a_choisir_a_chaque_niveau() {
+        let r = Referentiel::core();
+        let f = base();
+        let mut m = montee(&r, &f, 4);
+        m.sorts_appris.clear();
+        let e = appliquer(&r, &ReglesFiche::default(), &f, &m, 20).unwrap_err();
+        assert!(e.iter().any(|x| matches!(
+            x,
+            ErreurMontee::Fiche(Probleme::SortsAChoisir {
+                niveau_de_sort: 0,
+                attendus: 5,
+                choisis: 4,
+                ..
+            })
+        )));
+        // un sort absent de la liste de l'ensorceleur est refusé
+        let mut m = montee(&r, &f, 4);
+        m.sorts_appris = vec!["Cure Light Wounds".into()];
+        let e = appliquer(&r, &ReglesFiche::default(), &f, &m, 20).unwrap_err();
+        assert!(e.iter().any(|x| matches!(
+            x,
+            ErreurMontee::Fiche(Probleme::SortInconnu(_) | Probleme::SortHorsListe { .. })
+        )));
+    }
+
+    #[test]
+    fn echange_de_sort_a_partir_du_niveau_4() {
+        let r = Referentiel::core();
+        let regles = ReglesFiche::default();
+        let mut f = base();
+        for _ in 2..=3 {
+            f = appliquer(&r, &regles, &f, &montee(&r, &f, 4), 20).unwrap();
+        }
+        // niveau 4 : échange permis ; ici contre un sort de niveau 1 du catalogue
+        let vieux = f
+            .sorts_connus
+            .iter()
+            .find(|s| r.sort(s).unwrap().niveau_pour("sorcerer") == Some(1))
+            .unwrap()
+            .clone();
+        let neuf = r
+            .sorts
+            .iter()
+            .find(|s| s.niveau_pour("sorcerer") == Some(1) && !f.sorts_connus.contains(&s.nom_en))
+            .unwrap()
+            .nom_en
+            .clone();
+        let mut m = montee(&r, &f, 4);
+        m.echange = Some((vieux.clone(), neuf.clone()));
+        let n = appliquer(&r, &regles, &f, &m, 20).unwrap();
+        assert!(n.sorts_connus.contains(&neuf) && !n.sorts_connus.contains(&vieux));
+        // pas d'échange au niveau 2 (niveau d'échange : 4, 6, 8…)
+        let f2 = appliquer(&r, &regles, &base(), &montee(&r, &base(), 4), 20).unwrap();
+        let mut m = montee(&r, &f2, 4);
+        m.echange = Some((vieux, neuf));
+        let e = appliquer(&r, &regles, &f2, &m, 20).unwrap_err();
+        assert!(matches!(e[0], ErreurMontee::EchangeImpossible(_)));
     }
 }

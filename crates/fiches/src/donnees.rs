@@ -54,6 +54,8 @@ pub struct Race {
     pub rang_supplementaire: u32,
     #[serde(default)]
     pub deux_classes_de_predilection: bool,
+    /// Don imposé au niveau 1 (demi-elfe : Skill Focus), à choisir parmi ses variantes.
+    pub don_impose: Option<String>,
     pub effets: Vec<EffetDonnee>,
     pub source: SourceLivre,
     pub traits: Vec<TraitTexte>,
@@ -135,6 +137,8 @@ pub struct Classe {
     pub caracteristique_rangs: String,
     pub competences_de_classe_en: Vec<String>,
     pub incantation: Option<Incantation>,
+    /// Don obtenu gratuitement au niveau 1 (ensorceleur : Eschew Materials).
+    pub don_bonus_niveau_1: Option<String>,
     pub progression: Vec<ProgressionNiveau>,
     #[serde(default)]
     pub lignages: Vec<Lignage>,
@@ -176,6 +180,8 @@ pub struct Referentiel {
     pub competences: Vec<Competence>,
     pub classes: Vec<Classe>,
     pub progression: Vec<LigneProgression>,
+    pub dons: Vec<crate::catalogue::Don>,
+    pub sorts: Vec<crate::catalogue::Sort>,
 }
 
 impl Referentiel {
@@ -187,6 +193,12 @@ impl Referentiel {
             &[include_str!("../../../data/core/ensorceleur.json")],
             include_str!("../../../data/core/progression.json"),
         )
+        .and_then(|r| {
+            r.avec_catalogues(
+                include_str!("../../../data/core/dons.json"),
+                include_str!("../../../data/core/sorts.json"),
+            )
+        })
         .expect("référentiel Core embarqué valide")
     }
 
@@ -209,7 +221,43 @@ impl Referentiel {
             races: races.races,
             competences: competences.competences,
             classes: cl,
+            dons: Vec::new(),
+            sorts: Vec::new(),
         })
+    }
+
+    /// Ajoute les catalogues de dons et de sorts.
+    pub fn avec_catalogues(
+        mut self,
+        dons: &str,
+        sorts: &str,
+    ) -> Result<Referentiel, serde_json::Error> {
+        let d: crate::catalogue::FichierDons = serde_json::from_str(dons)?;
+        let s: crate::catalogue::FichierSorts = serde_json::from_str(sorts)?;
+        self.dons = d.dons;
+        self.sorts = s.sorts;
+        Ok(self)
+    }
+
+    pub fn don(&self, nom_en: &str) -> Option<&crate::catalogue::Don> {
+        self.dons
+            .iter()
+            .find(|d| d.nom_en.eq_ignore_ascii_case(nom_en))
+    }
+
+    /// Sort du catalogue d'après un nom écrit autrement (« greater teleport », « burning hands* »,
+    /// « summon monster IX ») comme dans les listes de sorts de lignage.
+    pub fn sort_approx(&self, nom: &str) -> Option<&crate::catalogue::Sort> {
+        let cible = forme_canonique(nom);
+        self.sorts
+            .iter()
+            .find(|s| forme_canonique(&s.nom_en) == cible)
+    }
+
+    pub fn sort(&self, nom_en: &str) -> Option<&crate::catalogue::Sort> {
+        self.sorts
+            .iter()
+            .find(|s| s.nom_en.eq_ignore_ascii_case(nom_en))
     }
 
     /// Ligne du tableau de progression pour un niveau de personnage (1 à 20).
@@ -226,6 +274,23 @@ impl Referentiel {
     pub fn competence(&self, id: &str) -> Option<&Competence> {
         self.competences.iter().find(|c| c.id == id)
     }
+}
+
+/// Forme comparable d'un nom de sort : minuscules, sans astérisque ni précision entre
+/// parenthèses ni virgule, mots triés (« Teleport, Greater » = « greater teleport »),
+/// chiffres romains de « Summon Monster » en chiffres arabes.
+fn forme_canonique(nom: &str) -> String {
+    let nom = nom.split(" (").next().unwrap_or(nom);
+    let nom = nom.replace(['*', ','], "").to_lowercase();
+    let mut mots: Vec<String> = nom.split_whitespace().map(String::from).collect();
+    if mots.len() == 3 && mots[0] == "summon" && mots[1] == "monster" {
+        let romain = ["i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"];
+        if let Some(p) = romain.iter().position(|r| *r == mots[2]) {
+            mots[2] = (p + 1).to_string();
+        }
+    }
+    mots.sort();
+    mots.join(" ")
 }
 
 #[cfg(test)]

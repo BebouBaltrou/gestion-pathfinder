@@ -56,10 +56,36 @@ pub struct Fiche {
     pub connaissance_de_lignage: Option<String>,
     /// Effets supplémentaires (objets, sorts, états…) ajoutés à ceux de la race.
     pub effets: Vec<Effet>,
+    /// Sorts connus choisis (noms anglais du catalogue), hors sorts de lignage obtenus automatiquement.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub sorts_connus: Vec<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Probleme {
+    SortInconnu(String),
+    SortHorsListe {
+        sort: String,
+    },
+    SortEnDouble(String),
+    SortsAChoisir {
+        classe: String,
+        niveau_de_sort: u32,
+        attendus: u32,
+        choisis: u32,
+    },
+    CharismeInsuffisantPourSort {
+        sort: String,
+        niveau_de_sort: u32,
+    },
+    DonInconnu(String),
+    DonEnDouble(String),
+    DonImposeManquant(String),
+    DonsAuNiveau {
+        niveau: u32,
+        attendus: u32,
+        choisis: u32,
+    },
     RaceInconnue(String),
     ClasseInconnue(String),
     ChoixRacialManquant,
@@ -137,6 +163,26 @@ impl std::fmt::Display for Probleme {
                 )
             }
             Probleme::CompetenceInconnue(c) => write!(f, "compétence inconnue : {c}"),
+            Probleme::SortInconnu(s) => write!(f, "sort inconnu du catalogue : {s}"),
+            Probleme::SortHorsListe { sort } => {
+                write!(f, "{sort} n'est pas sur la liste de sorts de la classe")
+            }
+            Probleme::SortEnDouble(s) => write!(f, "sort choisi deux fois : {s}"),
+            Probleme::SortsAChoisir { classe, niveau_de_sort, attendus, choisis } => write!(
+                f,
+                "{classe} : {attendus} sort(s) connu(s) de niveau {niveau_de_sort} attendu(s), {choisis} choisi(s)"
+            ),
+            Probleme::CharismeInsuffisantPourSort { sort, niveau_de_sort } => write!(
+                f,
+                "{sort} : la caractéristique d'incantation doit valoir au moins {} (sort de niveau {niveau_de_sort})",
+                10 + niveau_de_sort
+            ),
+            Probleme::DonInconnu(d) => write!(f, "don inconnu du catalogue : {d}"),
+            Probleme::DonEnDouble(d) => write!(f, "don pris deux fois (non répétable) : {d}"),
+            Probleme::DonImposeManquant(d) => write!(f, "don imposé par la race manquant : {d}"),
+            Probleme::DonsAuNiveau { niveau, attendus, choisis } => {
+                write!(f, "niveau {niveau} : {attendus} don(s) attendu(s), {choisis} choisi(s)")
+            }
         }
     }
 }
@@ -415,6 +461,154 @@ impl Fiche {
         for (niv, _) in &self.augmentations {
             if !matches!(niv, 4 | 8 | 12 | 16 | 20) || *niv > niveau {
                 p.push(Probleme::AugmentationInvalide { niveau: *niv });
+            }
+        }
+        p.extend(self.valider_dons(r));
+        p.extend(self.valider_sorts(r));
+        p
+    }
+
+    /// Dons obtenus sans choix (ensorceleur : Eschew Materials).
+    pub fn dons_automatiques(&self, r: &Referentiel) -> Vec<String> {
+        self.niveaux
+            .first()
+            .and_then(|n| r.classe(&n.classe))
+            .and_then(|c| c.don_bonus_niveau_1.clone())
+            .into_iter()
+            .collect()
+    }
+
+    /// Tous les dons choisis, dans l'ordre d'acquisition.
+    pub fn dons_choisis(&self) -> Vec<String> {
+        self.niveaux.iter().flat_map(|n| n.dons.clone()).collect()
+    }
+
+    /// Nombre de dons à choisir au niveau de personnage `i + 1` (index `i`).
+    pub(crate) fn dons_attendus_a(&self, r: &Referentiel, i: usize) -> u32 {
+        let niveau = i as u32 + 1;
+        let Some(classe) = r.classe(&self.niveaux[i].classe) else {
+            return 0;
+        };
+        let nc = self.niveaux[..=i]
+            .iter()
+            .filter(|n| n.classe == classe.id)
+            .count() as u32;
+        let mut n = 0;
+        if r.ligne_progression(niveau).is_some_and(|l| l.don) {
+            n += 1;
+        }
+        if niveau == 1 {
+            n += r.race(&self.race).map(|x| x.bonus_don).unwrap_or(0);
+        }
+        if nc >= 1
+            && classe
+                .progression
+                .get(nc as usize - 1)
+                .is_some_and(|l| l.special_en.contains("Bloodline feat"))
+        {
+            n += 1;
+        }
+        n
+    }
+
+    fn valider_dons(&self, r: &Referentiel) -> Vec<Probleme> {
+        let mut p = Vec::new();
+        let mut vus: Vec<String> = Vec::new();
+        for (i, n) in self.niveaux.iter().enumerate() {
+            let attendus = self.dons_attendus_a(r, i);
+            if attendus != n.dons.len() as u32 {
+                p.push(Probleme::DonsAuNiveau {
+                    niveau: i as u32 + 1,
+                    attendus,
+                    choisis: n.dons.len() as u32,
+                });
+            }
+            for d in &n.dons {
+                let base = crate::catalogue::nom_de_base(d);
+                match r.don(base) {
+                    None => p.push(Probleme::DonInconnu(d.clone())),
+                    Some(def) => {
+                        if vus.iter().any(|v| v.eq_ignore_ascii_case(d)) && !def.repetable() {
+                            p.push(Probleme::DonEnDouble(d.clone()));
+                        }
+                    }
+                }
+                vus.push(d.clone());
+            }
+        }
+        if let (Some(imp), Some(premier)) = (
+            r.race(&self.race).and_then(|x| x.don_impose.clone()),
+            self.niveaux.first(),
+        ) {
+            if !premier
+                .dons
+                .iter()
+                .any(|d| crate::catalogue::nom_de_base(d).eq_ignore_ascii_case(&imp))
+            {
+                p.push(Probleme::DonImposeManquant(imp));
+            }
+        }
+        p
+    }
+
+    fn valider_sorts(&self, r: &Referentiel) -> Vec<Probleme> {
+        let mut p = Vec::new();
+        let mut classes: Vec<&str> = Vec::new();
+        for n in &self.niveaux {
+            if !classes.contains(&n.classe.as_str()) {
+                classes.push(&n.classe);
+            }
+        }
+        let effets = self.tous_les_effets(r).unwrap_or_default();
+        for id in classes {
+            let Some(classe) = r.classe(id) else { continue };
+            let Some(inc) = &classe.incantation else {
+                continue;
+            };
+            let nc = self.niveau_de_classe(id) as usize;
+            let Some(ligne) = classe.progression.get(nc - 1) else {
+                continue;
+            };
+            let cle = classe.nom_en.to_lowercase();
+            let mut choisis = [0u32; 10];
+            let mut vus: Vec<String> = Vec::new();
+            let car = carac_depuis_id(&inc.caracteristique).unwrap_or(Carac::Cha);
+            let score = self.caracteristique(car).score(car, &effets).total;
+            for s in &self.sorts_connus {
+                if vus.iter().any(|v| v.eq_ignore_ascii_case(s)) {
+                    p.push(Probleme::SortEnDouble(s.clone()));
+                    continue;
+                }
+                vus.push(s.clone());
+                let Some(def) = r.sort(s) else {
+                    p.push(Probleme::SortInconnu(s.clone()));
+                    continue;
+                };
+                match def.niveau_pour(&cle) {
+                    None => p.push(Probleme::SortHorsListe { sort: s.clone() }),
+                    Some(sn) => {
+                        if sn <= 9 {
+                            choisis[sn as usize] += 1;
+                        }
+                        if sn > 0 && score < 10 + sn as i32 {
+                            p.push(Probleme::CharismeInsuffisantPourSort {
+                                sort: s.clone(),
+                                niveau_de_sort: sn,
+                            });
+                        }
+                    }
+                }
+            }
+            for (sn, nb) in choisis.iter().enumerate() {
+                let attendus = ligne.sorts_connus.get(sn).copied().flatten().unwrap_or(0);
+                if attendus != *nb {
+                    p.push(Probleme::SortsAChoisir {
+                        classe: id.to_string(),
+                        niveau_de_sort: sn as u32,
+                        attendus,
+                        choisis: *nb,
+                    });
+                }
             }
         }
         p
@@ -743,12 +937,53 @@ pub(crate) mod tests {
                 de_vie_obtenu: 6,
                 rangs,
                 predilection: Some(BonusPredilection::PointDeVie),
-                dons: vec![],
+                dons: vec!["Toughness".into()],
             }],
             classes_de_predilection: vec!["ensorceleur".into()],
             lignage: Some("draconic".into()),
             connaissance_de_lignage: None,
             effets: vec![],
+            sorts_connus: [
+                "Acid Splash",
+                "Detect Magic",
+                "Light",
+                "Mage Hand",
+                "Magic Missile",
+                "Mage Armor",
+            ]
+            .map(String::from)
+            .to_vec(),
+        }
+    }
+
+    /// Complète les sorts connus pour que la fiche soit valide à son niveau actuel.
+    pub(crate) fn completer_sorts(r: &Referentiel, f: &mut Fiche) {
+        let classe = r.classe("ensorceleur").unwrap();
+        let ligne = &classe.progression[f.niveau_de_classe("ensorceleur") as usize - 1];
+        let mut choisis: Vec<String> = Vec::new();
+        for sn in 0..=9usize {
+            let n = ligne.sorts_connus[sn].unwrap_or(0) as usize;
+            choisis.extend(
+                r.sorts
+                    .iter()
+                    .filter(|s| s.niveau_pour("sorcerer") == Some(sn as u32))
+                    .take(n)
+                    .map(|s| s.nom_en.clone()),
+            );
+        }
+        f.sorts_connus = choisis;
+    }
+
+    /// Donne à chaque niveau les dons attendus (dons distincts, sans prérequis ni choix).
+    pub(crate) fn completer_dons(r: &Referentiel, f: &mut Fiche) {
+        let mut pool = r
+            .dons
+            .iter()
+            .filter(|d| !d.repetable() && d.prerequis.is_empty() && !d.a_un_choix())
+            .map(|d| d.nom_en.clone());
+        for i in 0..f.niveaux.len() {
+            let n = f.dons_attendus_a(r, i) as usize;
+            f.niveaux[i].dons = (&mut pool).take(n).collect();
         }
     }
 
@@ -932,6 +1167,8 @@ pub(crate) mod tests {
             (16, Carac::Cha),
             (20, Carac::Cha),
         ];
+        completer_dons(&r, &mut f);
+        completer_sorts(&r, &mut f);
         assert_eq!(f.valider(&r), vec![]);
         let v = f.calculer(&r).unwrap();
         assert_eq!(v.niveau_de_personnage, 20);
