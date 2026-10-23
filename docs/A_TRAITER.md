@@ -67,3 +67,12 @@ confirmer, import/export, modèles personnels. Puis retrait de l'ancienne applic
   servies avant les équipes.
 - Délocalisation équipe par équipe (1d6 par groupe, règle officielle) ; option personnalisée
   « un seul jet pour toute l'organisation ».
+
+## Fiches de personnage : à faire plus tard (décisions du 23/10/2026)
+
+- **Charge portée** : conversion automatique poids -> charge (tableau 7-4 déjà chargé dans
+  `data/core/charge.json`), pièces de monnaie (50 par livre) et poids manquants ; pour l'instant le
+  joueur indique la charge.
+- **Niveaux négatifs (drain d'énergie)** : malus par niveau négatif, perte de niveau effectif,
+  jets de sauvegarde pour les rendre permanents.
+- Vitesse divisée par deux : arrondi à clarifier (voir `docs/POINTS_A_CONFIRMER_FICHES.md`, n° 17).

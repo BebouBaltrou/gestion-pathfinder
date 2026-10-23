@@ -1106,7 +1106,7 @@ impl Fiche {
 
         let mut vitesse = bilan.vitesse;
         if etats_actifs.iter().any(|e| e.vitesse_moitie) {
-            vitesse = vitesse / 2 / 5 * 5;
+            vitesse /= 2;
         }
         let notes_etats: Vec<String> = etats_actifs
             .iter()

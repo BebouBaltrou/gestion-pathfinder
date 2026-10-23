@@ -89,32 +89,23 @@ fn armure_et_bouclier_changent_ca_competences_sorts_et_vitesse() {
 }
 
 #[test]
-fn la_charge_et_l_armure_ne_se_cumulent_pas() {
+fn la_charge_est_indiquee_par_le_joueur_et_ne_se_cumule_pas_avec_l_armure() {
     let r = Referentiel::core();
     let mut f = elfe_ensorceleuse();
-    f.scores_base.insert(Carac::For, 12); // léger ≤ 43 lb, intermédiaire ≤ 86 lb
-    f.equipement.ajouter_objet("Torch", 50);
+    f.equipement.ajouter_objet("Torch", 500);
+    // Le poids est calculé mais ne change pas la charge : c'est le joueur qui l'indique.
     let v = f.calculer(&r).unwrap();
-    assert_eq!(
-        v.equipement.charge,
-        Charge::Intermediaire,
-        "{} lb",
-        v.equipement.poids_total
-    );
-    // Charge intermédiaire : malus –3, vitesse réduite.
+    assert!(v.equipement.poids_total >= 500.0);
+    assert_eq!(v.equipement.charge, Charge::Legere);
+    assert_eq!(v.vitesse, 30);
+    f.equipement.charge_declaree = Charge::Intermediaire;
+    let v = f.calculer(&r).unwrap();
     assert_eq!(v.equipement.malus_d_armure.0, -3);
     assert_eq!(v.vitesse, 20);
     // Une chemise de mailles (malus –2) : on prend le pire des deux, –3, sans additionner.
     f.equipement.armure = Some("Chain shirt".into());
     let v = f.calculer(&r).unwrap();
-    assert_eq!(v.equipement.charge, Charge::Intermediaire);
     assert_eq!(v.equipement.malus_d_armure.0, -3);
-    // Charge ignorée par la campagne : seule l'armure compte (–2, vitesse inchangée).
-    f.equipement.ignorer_charge = true;
-    let v = f.calculer(&r).unwrap();
-    assert_eq!(v.equipement.charge, Charge::Legere);
-    assert_eq!(v.equipement.malus_d_armure.0, -2);
-    assert_eq!(v.vitesse, 30);
 }
 
 #[test]
@@ -164,6 +155,7 @@ fn les_etats_modifient_les_valeurs() {
     // Épuisé : vitesse divisée par deux, arrondie à 5.
     f.etats = vec!["exhausted".into()];
     assert_eq!(f.calculer(&r).unwrap().vitesse, 15);
+    f.race = "elfe".into();
     // Pris au dépourvu : plus de bonus de DEX à la CA.
     f.etats = vec!["flat_footed".into()];
     assert_eq!(f.calculer(&r).unwrap().ca.total, 10);

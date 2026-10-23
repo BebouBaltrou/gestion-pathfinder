@@ -39,7 +39,7 @@ Chaque point : ce que le moteur fait aujourd'hui, et ce qu'il faut te demander.
 
 ## Phase 5 (équipement et états) — ajouts du 24/10/2026
 
-14. **Tableau de charge, ligne Force 15** : le site indique « 67-134 » (intermédiaire) puis
+14. *(Décidé le 23/10 : la charge est indiquée par le joueur, le poids reste indicatif.)* **Tableau de charge, ligne Force 15** : le site indique « 67-134 » (intermédiaire) puis
     « 134-200 » (lourde), ce qui se chevauche. Je prends 133 comme limite intermédiaire (coquille
     probable). Le reste du tableau 7-4 est repris tel quel (Core p. 169).
 15. **Malus d'armure du bouclier** : armure et bouclier additionnent leurs malus ; la charge ne
@@ -49,16 +49,16 @@ Chaque point : ce que le moteur fait aujourd'hui, et ce qu'il faut te demander.
     compétences à malus d'armure.
 16. **Surcharge** (au-delà de la charge lourde) : je reprends la règle « titube » du Core (bonus de
     DEX perdu, 5 pieds par round) et le malus de la charge lourde, faute de valeur propre.
-17. **Vitesse divisée par deux** (épuisé, empêtré, hors de combat) : arrondie à un multiple de 5
+17. *(Décidé le 23/10 : règle stricte, division entière, 25 → 12 ; arrondi à éclaircir.)* **Vitesse divisée par deux** (épuisé, empêtré, hors de combat) : arrondie à un multiple de 5
     vers le bas (30 → 15, 25 → 10). Les nains ne sont pas ralentis par l'armure ni la charge.
 18. **États : seuls les effets chiffrés sans ambiguïté sont calculés** (secoué, effrayé, malade,
     fatigué, épuisé, éblouie, etc.). Ce qui est conditionnel ou vague reste en note à l'écran :
     aveuglé (« la plupart » des jets de FOR/DEX : lesquels ?), à terre, sans défense, paralysé,
     agrippé, assourdi (échec des sorts), brisé (dépend de l'objet).
-19. **Niveaux négatifs (drain d'énergie)** : non calculés. Je n'ai pas trouvé dans les pages du
+19. *(À implémenter plus tard, décision du 23/10.)* **Niveaux négatifs (drain d'énergie)** : non calculés. Je n'ai pas trouvé dans les pages du
     Core relevées le détail des malus par niveau négatif ; à confirmer d'après le livre avant de
     les chiffrer.
-20. **Pièces de monnaie** : non comptées dans la charge (la règle des 50 pièces par livre n'est
+20. *(Charge non suivie pour l'instant, décision du 23/10.)* **Pièces de monnaie** : non comptées dans la charge (la règle des 50 pièces par livre n'est
     pas dans les pages relevées). Les objets dont le catalogue ne donne pas de poids (44 objets)
     comptent pour 0 et sont signalés.
 21. **Armes de jet et dégâts de FOR** : la Force s'ajoute aux dégâts des armes de corps à corps,

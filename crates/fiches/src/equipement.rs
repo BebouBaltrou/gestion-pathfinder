@@ -142,8 +142,9 @@ pub struct TableCharge {
     pub vitesse_reduite: Vec<(u32, u32, u32)>,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Charge {
+    #[default]
     Legere,
     Intermediaire,
     Lourde,
@@ -363,8 +364,9 @@ pub struct Equipement {
     pub armes: Vec<String>,
     /// Autres objets : matériel, munitions…
     pub objets: Vec<ObjetPorte>,
-    /// Règle de campagne : la charge n'est pas suivie (seules l'armure compte).
-    pub ignorer_charge: bool,
+    /// Charge indiquée par le joueur. Pour l'instant le poids n'est pas converti en charge
+    /// automatiquement (décision du 23/10/2026) ; le poids total reste affiché à titre indicatif.
+    pub charge_declaree: Charge,
 }
 
 impl Equipement {
@@ -465,12 +467,7 @@ impl Equipement {
             compter(&o.nom_en, cat.poids_de(&o.nom_en), o.quantite);
         }
 
-        let suivre = !self.ignorer_charge;
-        let charge = if suivre {
-            cat.charge.charge(ctx.force, poids)
-        } else {
-            Charge::Legere
-        };
+        let charge = self.charge_declaree;
 
         // Plafond de DEX : le plus bas entre armure, bouclier et charge (« ne pas cumuler »).
         let mut dex_max: Option<(i32, String)> = None;
