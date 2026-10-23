@@ -86,3 +86,9 @@ montée de niveau, page Paramètres (registre des règles optionnelles de la cam
 Reste : équipement de départ dans l'assistant de création, multiclassage (une seule classe
 existe pour l'instant), tirage de dés intégré pour les caractéristiques et les dés de vie,
 familiers, lien de la fiche avec le déplacement du PJ dans une localité, impression de la fiche.
+
+## À élucider plus tard (décision du 23/10/2026)
+
+Les points 23 à 26 de `docs/POINTS_A_CONFIRMER_FICHES.md` sont gardés tels quels, à trancher plus
+tard : bonus de compétence dans les jets de recettes, Prestige calculé, temps de campagne et
+fiches, compatibilité des sauvegardes.
