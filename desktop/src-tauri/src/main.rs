@@ -162,6 +162,49 @@ fn ajustement(
     executer_saisie(&mut x, ev, "Ajustement enregistré")
 }
 
+// ---------------------------------------------------------------- personnages
+
+#[tauri::command]
+fn page_personnages(s: S) -> Option<vues::personnages::PagePersonnages> {
+    let mut x = session(&s);
+    let r = x.r.clone();
+    x.campagne
+        .as_mut()
+        .map(|c| vues::personnages::page_personnages(c, &r))
+}
+
+#[tauri::command]
+fn creer_personnage(s: S, nom: String, compte: String, prestige: String) -> Retour {
+    let mut x = session(&s);
+    let Some(id) = x.campagne.as_ref().map(|c| c.nouvel_id_personnage()) else {
+        return Retour::erreur("Aucune campagne ouverte");
+    };
+    let ev = vues::personnages::creation(id, &nom, &compte, &prestige);
+    executer_saisie(&mut x, ev, &format!("Personnage « {} » créé", nom.trim()))
+}
+
+#[tauri::command]
+fn modifier_personnage(s: S, id: u32, nom: String, prestige: String) -> Retour {
+    let mut x = session(&s);
+    let ev = vues::personnages::modification(id, &nom, &prestige);
+    executer_saisie(&mut x, ev, "Personnage modifié")
+}
+
+#[tauri::command]
+fn deplacer_personnage(s: S, id: u32, vers: Option<u32>) -> Retour {
+    session(&s).executer(
+        vues::personnages::deplacement(id, vers),
+        "Déplacement enregistré",
+    )
+}
+
+#[tauri::command]
+fn ajuster_compte(s: S, pj: u32, delta: String, motif: String) -> Retour {
+    let mut x = session(&s);
+    let ev = vues::personnages::ajustement_compte(pj, &delta, &motif);
+    executer_saisie(&mut x, ev, "Compte mis à jour")
+}
+
 // ---------------------------------------------------------------- temps
 
 #[tauri::command]
@@ -245,6 +288,11 @@ fn main() {
             mouvement_po,
             transfert,
             ajustement,
+            page_personnages,
+            creer_personnage,
+            modifier_personnage,
+            deplacer_personnage,
+            ajuster_compte,
             avancer,
             annuler,
             retablir,

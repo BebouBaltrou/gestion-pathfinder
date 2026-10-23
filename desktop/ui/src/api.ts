@@ -116,6 +116,17 @@ export type PageLocalites = {
   categories: ChoixCategorie[];
 };
 
+export type FichePersonnage = {
+  id: number;
+  nom: string;
+  compte: Somme;
+  localite: number | null;
+  lieu: string;
+  prestige: number | null;
+};
+
+export type PagePersonnages = { personnages: FichePersonnage[]; localites: Choix[] };
+
 /** Ce qu'un transfert déplace (l'Influence ne se transfère pas, GC p. 81). */
 export type RessourceTransfert = "po" | "marchandises" | "travail" | "magie";
 
@@ -156,6 +167,14 @@ export const api = {
     appeler<Retour>("transfert", { de, vers, ressource, quantite, duree }),
   ajustement: (localite: number, deltaPo: string, ajout: Capitaux, retrait: Capitaux, motif: string) =>
     appeler<Retour>("ajustement", { localite, deltaPo, ajout, retrait, motif }),
+
+  pagePersonnages: () => appeler<PagePersonnages | null>("page_personnages"),
+  creerPersonnage: (nom: string, compte: string, prestige: string) =>
+    appeler<Retour>("creer_personnage", { nom, compte, prestige }),
+  modifierPersonnage: (id: number, nom: string, prestige: string) =>
+    appeler<Retour>("modifier_personnage", { id, nom, prestige }),
+  deplacerPersonnage: (id: number, vers: number | null) => appeler<Retour>("deplacer_personnage", { id, vers }),
+  ajusterCompte: (pj: number, delta: string, motif: string) => appeler<Retour>("ajuster_compte", { pj, delta, motif }),
 };
 
 // ------------------------------------------------------------------ montants

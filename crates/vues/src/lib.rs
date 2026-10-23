@@ -2,6 +2,7 @@
 //! campagne. L'interface (quelle qu'elle soit) ne refait aucun calcul de règles.
 
 pub mod localites;
+pub mod personnages;
 pub mod tableau;
 
 use domaine::{CoutCapitaux, Montant};

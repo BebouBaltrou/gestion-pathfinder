@@ -321,7 +321,7 @@ const ACTIONS: [Action, string][] = [
 ];
 
 /** Champ de montant en po, avec sa lecture par le cœur (« = 12 po 5 pa »). */
-function ChampMontant(props: { id: string; valeur: string; changer: (v: string) => void; signe?: boolean }) {
+export function ChampMontant(props: { id: string; valeur: string; changer: (v: string) => void; signe?: boolean }) {
   const [lu, setLu] = useState<Somme | null>(null);
   useEffect(() => {
     let actuel = true;
