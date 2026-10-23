@@ -431,7 +431,7 @@ fn creation(
                 Some(m) => {
                     let (mut evs, ig) = match &perso {
                         Some(p) => (p.evenements(b, l, &nom, e, sa), Vec::new()),
-                        None => evenements_depuis_modele(r, m, b, l, &nom, e, sa),
+                        None => evenements_depuis_modele(&r, m, b, l, &nom, e, sa),
                     };
                     let salles: Vec<IdSalle> = evs
                         .iter()
