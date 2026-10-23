@@ -71,6 +71,54 @@ export type TableauDeBord = {
   personnages: CartePersonnage[];
 };
 
+// ------------------------------------------------------------------ localités
+
+export type SaisieLocalite = {
+  nom: string;
+  genre: string;
+  population: string;
+  officielle: boolean;
+  categorieOfficielle: string;
+  categoriePersoNom: string;
+  categoriePersoLimite: string;
+  notes: string;
+};
+
+export type ChoixCategorie = {
+  id: string;
+  libelle: string;
+  nom: string;
+  limite: number;
+  sourcePopulation: string;
+  sourceLimite: string;
+  pointAConfirmer: string | null;
+};
+
+export type FicheLocalite = {
+  id: number;
+  nom: string;
+  genre: string;
+  population: number | null;
+  categorie: string;
+  personnalisee: boolean;
+  tresorerie: Somme;
+  capitaux: Capitaux;
+  transferts: string[];
+  notes: string;
+  saisie: SaisieLocalite;
+};
+
+export type Choix = { id: number; libelle: string };
+
+export type PageLocalites = {
+  localites: FicheLocalite[];
+  personnages: Choix[];
+  categories: ChoixCategorie[];
+};
+
+/** Ce qu'un transfert déplace (l'Influence ne se transfère pas, GC p. 81). */
+export type RessourceTransfert = "po" | "marchandises" | "travail" | "magie";
+
 declare const __MOCK__: boolean;
 
 type Invoke = (cmd: string, args?: Record<string, unknown>) => Promise<unknown>;
@@ -96,6 +144,18 @@ export const api = {
     appeler<Retour>("resoudre_prestige", { localite, reussi }),
   simulation: (action: "demarrer" | "abandonner" | "garder") =>
     appeler<Retour>("simulation", { action }),
+
+  pageLocalites: () => appeler<PageLocalites | null>("page_localites"),
+  categorieSuggeree: (population: string) => appeler<ChoixCategorie | null>("categorie_suggeree", { population }),
+  lireMontant: (texte: string) => appeler<Somme | null>("lire_montant", { texte }),
+  creerLocalite: (saisie: SaisieLocalite) => appeler<Retour>("creer_localite", { saisie }),
+  modifierLocalite: (id: number, saisie: SaisieLocalite) => appeler<Retour>("modifier_localite", { id, saisie }),
+  mouvementPo: (injection: boolean, pj: number, localite: number, montant: string) =>
+    appeler<Retour>("mouvement_po", { injection, pj, localite, montant }),
+  transfert: (de: number, vers: number, ressource: RessourceTransfert, quantite: string, duree: string) =>
+    appeler<Retour>("transfert", { de, vers, ressource, quantite, duree }),
+  ajustement: (localite: number, deltaPo: string, ajout: Capitaux, retrait: Capitaux, motif: string) =>
+    appeler<Retour>("ajustement", { localite, deltaPo, ajout, retrait, motif }),
 };
 
 // ------------------------------------------------------------------ montants
@@ -115,6 +175,13 @@ export function formaterPo(pa: number): string {
 
 // ------------------------------------------------------------------ données d'exemple
 // Uniquement pour l'aperçu sans Tauri (MOCK=1) : retiré de la version de l'application.
+
+// Aperçu seulement : valeurs factices, les vraies viennent du référentiel.
+const CATEGORIES_EXEMPLE: ChoixCategorie[] = [
+  { id: "village", libelle: "Village (exemple) — 4/jour", nom: "Village", limite: 4, sourcePopulation: "(aperçu)", sourceLimite: "(aperçu)", pointAConfirmer: null },
+  { id: "petite-bourgade", libelle: "Petite bourgade (exemple) — 15/jour", nom: "Petite bourgade", limite: 15, sourcePopulation: "(aperçu)", sourceLimite: "(aperçu)", pointAConfirmer: null },
+  { id: "grande-cite", libelle: "Grande cité (exemple) — 60/jour", nom: "Grande cité", limite: 60, sourcePopulation: "(aperçu)", sourceLimite: "(aperçu)", pointAConfirmer: "PC-11" },
+];
 
 let jourSimule = 24;
 let annulables = 3;
@@ -193,6 +260,50 @@ function simule(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
         ],
       };
       return Promise.resolve(t);
+    }
+    case "lire_montant": {
+      const t = String(args?.texte ?? "").trim().replace(",", ".");
+      const n = Number(t);
+      return Promise.resolve(t && !Number.isNaN(n) ? { pa: Math.round(n * 10), texte: formaterPo(Math.round(n * 10)) } : null);
+    }
+    case "categorie_suggeree":
+      return Promise.resolve(Number(String(args?.population ?? "").replace(/\s/g, "")) > 0 ? CATEGORIES_EXEMPLE[1] : null);
+    case "page_localites": {
+      const saisie = (nom: string, categorieOfficielle: string): SaisieLocalite => ({
+        nom, genre: "ville", population: "", officielle: true, categorieOfficielle,
+        categoriePersoNom: "", categoriePersoLimite: "", notes: "",
+      });
+      const p: PageLocalites = {
+        localites: [
+          {
+            id: 1, nom: "Sandpoint", genre: "ville", population: 1240, categorie: "Petite bourgade · limite 15/jour",
+            personnalisee: false, tresorerie: { pa: 10523, texte: "1052 po 3 pa" },
+            capitaux: { marchandises: 12, influence: 6, travail: 9, magie: 2 },
+            transferts: ["3 Marchandises part vers Magnimar — arrivée le jour 27 (astredi 17 Rova 4712 AR)"],
+            notes: "Port de pêche de la Côte perdue.", saisie: { ...saisie("Sandpoint", "petite-bourgade"), population: "1240" },
+          },
+          {
+            id: 2, nom: "Magnimar", genre: "cité", population: null, categorie: "Grande cité · limite 60/jour",
+            personnalisee: false, tresorerie: { pa: 2320, texte: "232 po" },
+            capitaux: { marchandises: 4, influence: 3, travail: 5, magie: 0 },
+            transferts: ["3 Marchandises arrive de Sandpoint — arrivée le jour 27 (astredi 17 Rova 4712 AR)"],
+            notes: "", saisie: saisie("Magnimar", "grande-cite"),
+          },
+          {
+            id: 3, nom: "Tour de Thistletop", genre: "lieu-dit", population: null, categorie: "Avant-poste (personnalisée) · limite 2/jour",
+            personnalisee: true, tresorerie: { pa: -40, texte: "-4 po" },
+            capitaux: { marchandises: 0, influence: 0, travail: 1, magie: 0 },
+            transferts: [], notes: "",
+            saisie: { ...saisie("Tour de Thistletop", ""), officielle: false, categoriePersoNom: "Avant-poste", categoriePersoLimite: "2" },
+          },
+        ],
+        personnages: [
+          { id: 1, libelle: "Seoni (145 po)" },
+          { id: 2, libelle: "Valeros (87 po)" },
+        ],
+        categories: CATEGORIES_EXEMPLE,
+      };
+      return Promise.resolve(p);
     }
     default:
       return Promise.resolve(ok(`(aperçu) ${cmd}`));

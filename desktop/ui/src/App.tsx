@@ -3,6 +3,7 @@ import { api, EtatApp, Retour } from "./api";
 import { icones } from "./icones";
 import { Campagnes } from "./pages/Campagnes";
 import { EnAttente } from "./pages/EnAttente";
+import { Localites } from "./pages/Localites";
 import { Tableau } from "./pages/Tableau";
 
 export type Page =
@@ -200,7 +201,8 @@ export function App() {
         <main className="contenu">
           {pageActive === "tableau" && <Tableau outils={outils} />}
           {pageActive === "campagnes" && <Campagnes outils={outils} />}
-          {pageActive !== "tableau" && pageActive !== "campagnes" && <EnAttente nom={NOMS_PAGES[pageActive]} />}
+          {pageActive === "localites" && <Localites outils={outils} />}
+          {!["tableau", "campagnes", "localites"].includes(pageActive) && <EnAttente nom={NOMS_PAGES[pageActive]} />}
         </main>
       </div>
 

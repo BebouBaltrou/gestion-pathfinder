@@ -65,6 +65,105 @@ fn tableau_de_bord(s: S) -> Option<vues::tableau::TableauDeBord> {
         .map(|c| vues::tableau::tableau_de_bord(c, &r))
 }
 
+// ---------------------------------------------------------------- localités
+
+#[tauri::command]
+fn page_localites(s: S) -> Option<vues::localites::PageLocalites> {
+    let mut x = session(&s);
+    let r = x.r.clone();
+    x.campagne
+        .as_mut()
+        .map(|c| vues::localites::page_localites(c, &r))
+}
+
+#[tauri::command]
+fn categorie_suggeree(s: S, population: String) -> Option<vues::localites::ChoixCategorie> {
+    vues::localites::categorie_suggeree(&population, &session(&s).r)
+}
+
+#[tauri::command]
+fn lire_montant(texte: String) -> Option<vues::Somme> {
+    vues::localites::lire_montant(&texte)
+}
+
+/// Exécute l'événement construit à partir d'une saisie, ou signale la saisie refusée.
+fn executer_saisie(x: &mut Session, ev: Result<Evenement, String>, succes: &str) -> Retour {
+    match ev {
+        Ok(ev) => x.executer(ev, succes),
+        Err(e) => Retour::erreur(e),
+    }
+}
+
+#[tauri::command]
+fn creer_localite(s: S, saisie: vues::localites::SaisieLocalite) -> Retour {
+    let mut x = session(&s);
+    let Some(id) = x.campagne.as_ref().map(|c| c.nouvel_id_localite()) else {
+        return Retour::erreur("Aucune campagne ouverte");
+    };
+    let ev = saisie.creation(id, &x.r);
+    executer_saisie(
+        &mut x,
+        ev,
+        &format!("Localité « {} » créée", saisie.nom.trim()),
+    )
+}
+
+#[tauri::command]
+fn modifier_localite(s: S, id: u32, saisie: vues::localites::SaisieLocalite) -> Retour {
+    let mut x = session(&s);
+    let ev = saisie.modification(IdLocalite(id), &x.r);
+    executer_saisie(&mut x, ev, "Localité modifiée")
+}
+
+#[tauri::command]
+fn mouvement_po(s: S, injection: bool, pj: u32, localite: u32, montant: String) -> Retour {
+    let mut x = session(&s);
+    let ev = vues::localites::mouvement_po(injection, pj, localite, &montant);
+    let succes = match (&ev, injection) {
+        (Ok(Evenement::InjectionPo { montant, .. }), true) => format!("{montant} injectés"),
+        (Ok(Evenement::RetraitPo { montant, .. }), false) => format!("{montant} retirés"),
+        _ => String::new(),
+    };
+    executer_saisie(&mut x, ev, &succes)
+}
+
+#[tauri::command]
+fn transfert(
+    s: S,
+    de: u32,
+    vers: u32,
+    ressource: String,
+    quantite: String,
+    duree: String,
+) -> Retour {
+    let mut x = session(&s);
+    let Some(id) = x.campagne.as_ref().map(|c| c.nouvel_id_transfert()) else {
+        return Retour::erreur("Aucune campagne ouverte");
+    };
+    let ev = vues::localites::transfert(id, de, vers, &ressource, &quantite, &duree);
+    let succes = match &ev {
+        Ok(Evenement::TransfertEnvoye { lot, .. }) => format!("Transfert de {lot} envoyé"),
+        _ => String::new(),
+    };
+    executer_saisie(&mut x, ev, &succes)
+}
+
+#[tauri::command]
+fn ajustement(
+    s: S,
+    localite: u32,
+    delta_po: String,
+    ajout: vues::Capitaux,
+    retrait: vues::Capitaux,
+    motif: String,
+) -> Retour {
+    let mut x = session(&s);
+    let ev = vues::localites::ajustement(localite, &delta_po, ajout, retrait, &motif);
+    executer_saisie(&mut x, ev, "Ajustement enregistré")
+}
+
+// ---------------------------------------------------------------- temps
+
 #[tauri::command]
 fn avancer(s: S, jours: u32) -> Retour {
     let succes = if jours == 1 {
@@ -138,6 +237,14 @@ fn main() {
             ouvrir_campagne,
             creer_campagne,
             tableau_de_bord,
+            page_localites,
+            categorie_suggeree,
+            lire_montant,
+            creer_localite,
+            modifier_localite,
+            mouvement_po,
+            transfert,
+            ajustement,
             avancer,
             annuler,
             retablir,
