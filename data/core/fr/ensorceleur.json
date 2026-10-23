@@ -1,0 +1,145 @@
+{
+  "avertissement": "Traduction non officielle des textes du Core Rulebook (Archives of Nethys, licence OGL). Les noms de sorts et de dons sont traduits avec le catalogue (phase 4).",
+  "classe": {
+    "nom": "Ensorceleur",
+    "capacites_par_niveau": {
+      "bloodline power": "pouvoir de lignage",
+      "cantrips": "tours de magie",
+      "eschew materials": "Eschew Materials (dispense des composants matériels bon marché)",
+      "bloodline spell": "sort de lignage",
+      "bloodline feat": "don de lignage"
+    },
+    "textes": {
+      "Spells": "L'ensorceleur lance des sorts profanes tirés surtout de la liste de sorts de l'ensorceleur/magicien. Il peut lancer n'importe quel sort qu'il connaît sans le préparer à l'avance. Pour apprendre ou lancer un sort, il doit avoir un Charisme d'au moins 10 + niveau du sort. Le DD du jet de sauvegarde contre un sort de l'ensorceleur est égal à 10 + niveau du sort + modificateur de Charisme.",
+      "Spells Known": "L'ensorceleur connaît au départ quatre sorts de niveau 0 et deux sorts de niveau 1 de son choix. À chaque nouveau niveau, il en apprend d'autres selon la table des sorts connus. Le nombre de sorts connus ne dépend pas du Charisme.",
+      "Swap": "Au niveau 4, puis à chaque niveau pair suivant, l'ensorceleur peut apprendre un nouveau sort à la place d'un sort qu'il connaît déjà. Le niveau du nouveau sort doit être égal à celui du sort remplacé. Il ne peut échanger qu'un seul sort par niveau, et doit décider de l'échanger au moment où il gagne ses nouveaux sorts connus.",
+      "Bloodline": "Chaque ensorceleur a, dans son ascendance, une source de magie qui lui donne des sorts, des dons supplémentaires, une compétence de classe supplémentaire et d'autres capacités spéciales. Il choisit un lignage au niveau 1, et ce choix est définitif. Au niveau 3, puis tous les deux niveaux, il apprend un sort supplémentaire issu de son lignage (en plus des sorts connus de la table, et sans pouvoir l'échanger). Au niveau 7, puis tous les six niveaux, il reçoit un don supplémentaire choisi dans une liste propre à son lignage, dont il doit remplir les conditions.",
+      "Cantrips": "Les tours de magie (sorts de niveau 0) se lancent comme les autres sorts, mais ne consomment aucun emplacement et peuvent être utilisés à volonté.",
+      "Proficiency": "L'ensorceleur manie toutes les armes courantes. Il ne manie aucune armure ni aucun bouclier. L'armure gêne ses gestes et peut faire échouer ses sorts à composante gestuelle."
+    }
+  },
+  "lignages": {
+    "aberrant": {
+      "nom": "Aberrant",
+      "competence_de_classe": "Connaissances (exploration souterraine)",
+      "arcane": "Chaque fois que vous lancez un sort de la sous-école métamorphose, la durée du sort augmente de 50 % (minimum 1 round). Ce bonus ne se cumule pas avec l'augmentation du don Extend Spell.",
+      "pouvoirs": {
+        "Acidic Ray": { "nom": "Rayon acide (Mg)", "texte": "À partir du niveau 1, vous pouvez tirer un rayon acide par une action simple, sur un ennemi à 9 m (30 pieds) maximum, comme une attaque de contact à distance. Le rayon inflige 1d6 points de dégâts d'acide + 1 par tranche de deux niveaux d'ensorceleur. Vous pouvez l'utiliser un nombre de fois par jour égal à 3 + votre modificateur de Charisme." },
+        "Long Limbs": { "nom": "Membres allongés (Ex)", "texte": "Au niveau 3, votre allonge augmente de 1,50 m (5 pieds) quand vous faites une attaque de contact au corps à corps. Cette capacité n'augmente pas autrement votre zone de menace. Au niveau 11, ce bonus passe à 3 m (10 pieds), et au niveau 17 à 4,50 m (15 pieds)." },
+        "Unusual Anatomy": { "nom": "Anatomie inhabituelle (Ex)", "texte": "Au niveau 9, votre anatomie change : vous avez 25 % de chances d'ignorer tout coup critique ou attaque sournoise qui vous touche. Cette chance passe à 50 % au niveau 13." },
+        "Alien Resistance": { "nom": "Résistance étrangère (Sur)", "texte": "Au niveau 15, vous obtenez une résistance à la magie égale à votre niveau d'ensorceleur + 10." },
+        "Aberrant Form": { "nom": "Forme aberrante (Ex)", "texte": "Au niveau 20, votre corps devient véritablement contre nature. Vous êtes immunisé aux coups critiques et aux attaques sournoises. De plus, vous obtenez la perception aveugle (rayon de 18 m, 60 pieds) et une réduction de dégâts de 5/—." }
+      }
+    },
+    "abyssal": {
+      "nom": "Abyssal",
+      "competence_de_classe": "Connaissances (plans)",
+      "arcane": "Chaque fois que vous lancez un sort de la sous-école convocation, les créatures convoquées obtiennent une RD/bon égale à la moitié de votre niveau d'ensorceleur (minimum 1). Cela ne se cumule pas avec une RD que la créature possède déjà.",
+      "pouvoirs": {
+        "Claws": { "nom": "Griffes (Sur)", "texte": "Au niveau 1, vous pouvez faire pousser des griffes par une action libre. Elles sont des armes naturelles et vous permettent de faire deux attaques de griffes lors d'une attaque à outrance, avec votre bonus de base à l'attaque complet. Chaque attaque inflige 1d4 points de dégâts (1d3 si vous êtes de taille P) plus votre modificateur de Force. Au niveau 5, ces griffes sont considérées comme des armes magiques pour vaincre la RD. Au niveau 7, les dégâts passent à 1d6 (1d4 si vous êtes de taille P). Au niveau 11, ces griffes deviennent des armes de feu et infligent chacune 1d6 points de dégâts de feu supplémentaires en cas de coup au but. Vous pouvez utiliser vos griffes un nombre de rounds par jour égal à 3 + votre modificateur de Charisme, consécutifs ou non." },
+        "Demon Resistances": { "nom": "Résistances démoniaques (Ex)", "texte": "Au niveau 3, vous obtenez une résistance à l'électricité 5 et un bonus de +2 aux jets de sauvegarde contre le poison. Au niveau 9, la résistance passe à 10 et le bonus contre le poison à +4." },
+        "Strength of the Abyss": { "nom": "Force de l'Abîme (Ex)", "texte": "Au niveau 9, vous obtenez un bonus inné de +2 en Force. Ce bonus passe à +4 au niveau 13 et à +6 au niveau 17." },
+        "Added Summonings": { "nom": "Convocations supplémentaires (Sur)", "texte": "Au niveau 15, chaque fois que vous convoquez, avec un sort de convocation de monstres, une créature du sous-type démon ou du type fiélon, vous convoquez une créature supplémentaire du même genre." },
+        "Demonic Might": { "nom": "Puissance démoniaque (Sur)", "texte": "Au niveau 20, la puissance de l'Abîme coule en vous. Vous obtenez l'immunité à l'électricité et au poison, une résistance à l'acide 10, au froid 10 et au feu 10, et la télépathie sur 18 m (60 pieds), ce qui vous permet de communiquer avec toute créature qui parle une langue." }
+      }
+    },
+    "arcane": {
+      "nom": "Arcanique",
+      "competence_de_classe": "Connaissances (au choix)",
+      "arcane": "Chaque fois que vous appliquez à un sort un don de métamagie qui augmente d'au moins un niveau l'emplacement utilisé, le DD du sort augmente de +1. Ce bonus ne se cumule pas avec lui-même et ne s'applique pas aux sorts modifiés par le don Heighten Spell.",
+      "pouvoirs": {
+        "Arcane Bond": { "nom": "Lien arcanique (Sur)", "texte": "Au niveau 1, vous obtenez un lien arcanique, comme un magicien de niveau égal à votre niveau d'ensorceleur. Vos niveaux d'ensorceleur se cumulent avec vos éventuels niveaux de magicien pour déterminer les pouvoirs de votre familier ou de votre objet lié. Vous ne pouvez pas avoir à la fois un familier et un objet lié. Une fois par jour, votre objet lié vous permet de lancer n'importe lequel des sorts que vous connaissez (contrairement à l'objet lié d'un magicien, qui permet de lancer n'importe quel sort de son grimoire)." },
+        "Metamagic Adept": { "nom": "Adepte de la métamagie (Ex)", "texte": "Au niveau 3, vous pouvez appliquer un don de métamagie que vous connaissez à un sort que vous allez lancer, sans augmenter son temps d'incantation. Vous devez toujours dépenser un emplacement de sort de niveau supérieur. Vous pouvez utiliser cette capacité une fois par jour au niveau 3, puis une fois de plus par jour tous les quatre niveaux d'ensorceleur au-delà du niveau 3, jusqu'à cinq fois par jour au niveau 19. Au niveau 20, cette capacité est remplacée par l'apothéose arcanique." },
+        "New Arcana": { "nom": "Nouvelle arcane (Ex)", "texte": "Au niveau 9, vous pouvez ajouter un sort de la liste de sorts de l'ensorceleur/magicien à vos sorts connus. Ce sort doit être d'un niveau que vous pouvez lancer. Vous pouvez ajouter un sort supplémentaire au niveau 13 et au niveau 17." },
+        "School Power": { "nom": "Puissance d'école (Ex)", "texte": "Au niveau 15, choisissez une école de magie. Le DD de tous les sorts que vous lancez de cette école augmente de +2. Ce bonus se cumule avec celui du don Spell Focus." },
+        "Arcane Apotheosis": { "nom": "Apothéose arcanique (Ex)", "texte": "Au niveau 20, votre corps déborde de puissance arcanique. Vous pouvez ajouter à vos sorts n'importe quel don de métamagie que vous connaissez sans augmenter leur temps d'incantation, mais vous devez toujours dépenser des emplacements de niveau supérieur. Quand vous utilisez un objet magique à charges, vous pouvez dépenser des emplacements de sorts à la place : pour chaque tranche de trois niveaux d'emplacements dépensés, vous consommez une charge de moins." }
+      }
+    },
+    "celestial": {
+      "nom": "Céleste",
+      "competence_de_classe": "Premiers secours",
+      "arcane": "Chaque fois que vous lancez un sort de la sous-école convocation, les créatures convoquées obtiennent une RD/mal égale à la moitié de votre niveau d'ensorceleur (minimum 1). Cela ne se cumule pas avec une RD que la créature possède déjà.",
+      "pouvoirs": {
+        "Heavenly Fire": { "nom": "Feu céleste (Mg)", "texte": "À partir du niveau 1, vous pouvez lancer un rayon de feu céleste par une action simple, sur un ennemi à 9 m (30 pieds) maximum, comme une attaque de contact à distance. Contre les créatures mauvaises, ce rayon inflige 1d4 points de dégâts + 1 par tranche de deux niveaux d'ensorceleur. Ces dégâts sont divins et ne sont pas soumis à la résistance ou à l'immunité à l'énergie. Le rayon soigne les créatures bonnes de 1d4 points de vie + 1 par tranche de deux niveaux d'ensorceleur ; une créature bonne ne peut bénéficier de votre feu céleste qu'une fois par jour. Les créatures neutres ne sont ni blessées ni soignées. Vous pouvez l'utiliser un nombre de fois par jour égal à 3 + votre modificateur de Charisme." },
+        "Celestial Resistances": { "nom": "Résistances célestes (Ex)", "texte": "Au niveau 3, vous obtenez une résistance à l'acide 5 et au froid 5. Au niveau 9, ces résistances passent à 10." },
+        "Wings of Heaven": { "nom": "Ailes du paradis (Sur)", "texte": "Au niveau 9, vous pouvez faire pousser des ailes emplumées et voler pendant un nombre de minutes par jour égal à votre niveau d'ensorceleur, avec une vitesse de 18 m (60 pieds) et une bonne manœuvrabilité. Cette durée n'a pas besoin d'être consécutive, mais elle s'utilise par tranches d'une minute." },
+        "Conviction": { "nom": "Conviction (Sur)", "texte": "Au niveau 15, vous pouvez relancer un test de caractéristique, un jet d'attaque, un test de compétence ou un jet de sauvegarde que vous venez de faire. Vous devez décider de l'utiliser après le jet de dé, mais avant que le MJ n'annonce le résultat. Vous devez garder le second résultat, même s'il est pire. Utilisable une fois par jour." },
+        "Ascension": { "nom": "Ascension (Sur)", "texte": "Au niveau 20, vous êtes imprégné de la puissance des cieux. Vous obtenez l'immunité à l'acide, au froid et à la pétrification, une résistance à l'électricité 10 et au feu 10, et un bonus racial de +4 aux jets de sauvegarde contre le poison. Vous pouvez utiliser les ailes du paradis sans limite, et vous pouvez parler avec toute créature qui possède un langage (comme avec le sort langues)." }
+      }
+    },
+    "destined": {
+      "nom": "Prédestiné",
+      "competence_de_classe": "Connaissances (histoire)",
+      "arcane": "Chaque fois que vous lancez un sort de portée « personnelle », vous obtenez un bonus de chance égal au niveau du sort à tous vos jets de sauvegarde pendant 1 round.",
+      "pouvoirs": {
+        "Touch of Destiny": { "nom": "Toucher du destin (Mg)", "texte": "Au niveau 1, vous pouvez toucher une créature par une action simple : elle obtient un bonus de perspicacité aux jets d'attaque, tests de compétence, tests de caractéristique et jets de sauvegarde égal à la moitié de votre niveau d'ensorceleur (minimum 1) pendant 1 round. Vous pouvez l'utiliser un nombre de fois par jour égal à 3 + votre modificateur de Charisme." },
+        "Fated": { "nom": "Voué au destin (Sur)", "texte": "À partir du niveau 3, vous obtenez un bonus de chance de +1 à tous vos jets de sauvegarde et à votre CA pendant les rounds de surprise et quand vous ignorez qu'une attaque va vous viser. Au niveau 7, puis tous les quatre niveaux, ce bonus augmente de +1, jusqu'à un maximum de +5 au niveau 19." },
+        "It Was Meant To Be": { "nom": "C'était écrit (Sur)", "texte": "Au niveau 9, vous pouvez relancer un jet d'attaque, un jet de confirmation de critique ou un test de niveau de lanceur de sorts pour vaincre la résistance à la magie. Vous devez décider de l'utiliser après le premier jet, mais avant que le MJ n'annonce le résultat. Vous devez garder le second résultat, même s'il est pire. Utilisable une fois par jour au niveau 9, deux fois par jour au niveau 17." },
+        "Within Reach": { "nom": "Au bout du chemin (Sur)", "texte": "Au niveau 15, votre destin ultime approche. Une fois par jour, quand une attaque ou un sort qui inflige des dégâts causerait votre mort, vous pouvez tenter un jet de Volonté DD 20. En cas de réussite, vous tombez à –1 point de vie et vous êtes automatiquement stabilisé. Le bonus de « Voué au destin » s'applique à ce jet." },
+        "Destiny Realized": { "nom": "Destin accompli (Sur)", "texte": "Au niveau 20, votre heure est venue. Les menaces de coup critique contre vous ne sont confirmées que si le second jet donne un 20 naturel. Les menaces de coup critique que vous obtenez avec un sort sont automatiquement confirmées. Une fois par jour, vous pouvez réussir automatiquement un test de niveau de lanceur de sorts pour vaincre la résistance à la magie ; vous devez l'utiliser avant le jet." }
+      }
+    },
+    "draconic": {
+      "nom": "Draconique",
+      "competence_de_classe": "Perception",
+      "arcane": "Chaque fois que vous lancez un sort dont le registre d'énergie correspond à celui de votre lignage draconique, ce sort inflige +1 point de dégâts par dé lancé.",
+      "pouvoirs": {
+        "Claws": { "nom": "Griffes (Sur)", "texte": "À partir du niveau 1, vous pouvez faire pousser des griffes par une action libre. Elles sont des armes naturelles et vous permettent de faire deux attaques de griffes lors d'une attaque à outrance, avec votre bonus de base à l'attaque complet. Chaque attaque inflige 1d4 points de dégâts plus votre modificateur de Force (1d3 si vous êtes de taille P). Au niveau 5, ces griffes sont considérées comme des armes magiques pour vaincre la RD. Au niveau 7, les dégâts passent à 1d6 (1d4 si vous êtes de taille P). Au niveau 11, elles infligent 1d6 points de dégâts supplémentaires de votre type d'énergie en cas de coup au but. Vous pouvez utiliser vos griffes un nombre de rounds par jour égal à 3 + votre modificateur de Charisme, consécutifs ou non." },
+        "Dragon Resistances": { "nom": "Résistances draconiques (Ex)", "texte": "Au niveau 3, vous obtenez une résistance 5 à votre type d'énergie et un bonus d'armure naturelle de +1. Au niveau 9, la résistance passe à 10 et l'armure naturelle à +2. Au niveau 15, l'armure naturelle passe à +4." },
+        "Breath Weapon": { "nom": "Souffle (Sur)", "texte": "Au niveau 9, vous obtenez un souffle qui inflige 1d6 points de dégâts de votre type d'énergie par niveau d'ensorceleur. Les créatures prises dans la zone ont droit à un jet de Réflexes pour réduire les dégâts de moitié. Le DD est égal à 10 + la moitié de votre niveau d'ensorceleur + votre modificateur de Charisme. La forme du souffle dépend de votre type de dragon (voir le tableau). Utilisable une fois par jour au niveau 9, deux fois par jour au niveau 17, trois fois par jour au niveau 20." },
+        "Wings": { "nom": "Ailes (Sur)", "texte": "Au niveau 15, des ailes de dragon coriaces vous poussent dans le dos par une action simple et vous donnent une vitesse de vol de 18 m (60 pieds) avec une manœuvrabilité moyenne. Vous pouvez les faire disparaître par une action libre." },
+        "Power of Wyrms": { "nom": "Puissance des dragons (Sur)", "texte": "Au niveau 20, votre hérédité draconique se manifeste pleinement. Vous obtenez l'immunité à la paralysie, au sommeil et aux dégâts de votre type d'énergie, ainsi que la perception aveugle sur 18 m (60 pieds)." }
+      },
+      "choix": "Au niveau 1, choisissez un type de dragon chromatique ou métallique (définitif) : noir (acide, ligne de 18 m), bleu (électricité, ligne de 18 m), vert (acide, cône de 9 m), rouge (feu, cône de 9 m), blanc (froid, cône de 9 m), airain (feu, ligne de 18 m), bronze (électricité, ligne de 18 m), cuivre (acide, ligne de 18 m), or (feu, cône de 9 m), argent (froid, cône de 9 m)."
+    },
+    "elemental": {
+      "nom": "Élémentaire",
+      "competence_de_classe": "Connaissances (plans)",
+      "arcane": "Chaque fois que vous lancez un sort qui inflige des dégâts d'énergie, vous pouvez changer le type de dégâts pour celui de votre lignage. Cela change aussi le type du sort.",
+      "pouvoirs": {
+        "Elemental Ray": { "nom": "Rayon élémentaire (Mg)", "texte": "À partir du niveau 1, vous pouvez lancer un rayon élémentaire par une action simple, sur un ennemi à 9 m (30 pieds) maximum, comme une attaque de contact à distance. Il inflige 1d6 points de dégâts de votre type d'énergie + 1 par tranche de deux niveaux d'ensorceleur. Vous pouvez l'utiliser un nombre de fois par jour égal à 3 + votre modificateur de Charisme." },
+        "Elemental Resistance": { "nom": "Résistance élémentaire (Ex)", "texte": "Au niveau 3, vous obtenez une résistance à l'énergie 10 contre votre type d'énergie. Au niveau 9, elle passe à 20." },
+        "Elemental Blast": { "nom": "Explosion élémentaire (Mg)", "texte": "Au niveau 9, vous pouvez libérer une explosion de puissance élémentaire une fois par jour. Cette explosion de 6 m (20 pieds) de rayon inflige 1d6 points de dégâts de votre type d'énergie par niveau d'ensorceleur. Les créatures prises dans la zone ont droit à un jet de Réflexes pour réduire les dégâts de moitié ; celles qui échouent deviennent vulnérables à votre type d'énergie jusqu'à la fin de votre tour suivant. Le DD est égal à 10 + la moitié de votre niveau d'ensorceleur + votre modificateur de Charisme. Utilisable une fois par jour au niveau 9, deux fois au niveau 17, trois fois au niveau 20. Portée : 18 m (60 pieds)." },
+        "Elemental Movement": { "nom": "Déplacement élémentaire (Sur)", "texte": "Au niveau 15, vous obtenez un mode de déplacement ou un bonus selon votre élément (voir le tableau)." },
+        "Elemental Body": { "nom": "Corps élémentaire (Sur)", "texte": "Au niveau 20, la puissance élémentaire déferle dans votre corps. Vous obtenez l'immunité aux attaques sournoises, aux coups critiques et aux dégâts de votre type d'énergie." }
+      },
+      "choix": "Au niveau 1, choisissez un élément (définitif) : air (électricité ; vol 18 m, moyenne), terre (acide ; creusement 9 m), feu (feu ; +9 m de vitesse de base), eau (froid ; nage 18 m)."
+    },
+    "fey": {
+      "nom": "Féerique",
+      "competence_de_classe": "Connaissances (nature)",
+      "arcane": "Chaque fois que vous lancez un sort de la sous-école coercition, le DD du sort augmente de +2.",
+      "pouvoirs": {
+        "Laughing Touch": { "nom": "Toucher hilarant (Mg)", "texte": "Au niveau 1, vous pouvez faire éclater de rire une créature pendant 1 round par une attaque de contact au corps à corps. Une créature qui rit ne peut effectuer qu'une action de mouvement mais peut se défendre normalement. Une fois affectée, elle est immunisée pendant 24 heures. Vous pouvez l'utiliser un nombre de fois par jour égal à 3 + votre modificateur de Charisme. C'est un effet mental." },
+        "Woodland Stride": { "nom": "Déplacement facilité en forêt (Ex)", "texte": "Au niveau 3, vous pouvez traverser toute sorte de sous-bois (ronces, épines, zones envahies par la végétation…) à votre vitesse normale, sans subir de dégâts ni aucune autre gêne. Les ronces et zones envahies par la végétation manipulées magiquement pour entraver le mouvement vous affectent toujours." },
+        "Fleeting Glance": { "nom": "Regard fugace (Mg)", "texte": "Au niveau 9, vous pouvez devenir invisible pendant un nombre de rounds par jour égal à votre niveau d'ensorceleur, comme avec le sort invisibilité suprême. Ces rounds n'ont pas besoin d'être consécutifs." },
+        "Fey Magic": { "nom": "Magie féerique (Sur)", "texte": "Au niveau 15, vous pouvez relancer tout test de niveau de lanceur de sorts pour vaincre la résistance à la magie. Vous devez décider de l'utiliser avant que le MJ n'annonce le résultat, et garder le second résultat même s'il est pire. Utilisable à volonté." },
+        "Soul of the Fey": { "nom": "Âme féerique (Sur)", "texte": "Au niveau 20, votre âme ne fait plus qu'un avec le monde des fées. Vous obtenez l'immunité au poison et une RD 10/fer froid. Les créatures du type animal ne vous attaquent pas, sauf contrainte magique. Une fois par jour, vous pouvez lancer marche dans l'ombre comme capacité magique, avec votre niveau d'ensorceleur comme niveau de lanceur." }
+      }
+    },
+    "infernal": {
+      "nom": "Infernal",
+      "competence_de_classe": "Diplomatie",
+      "arcane": "Chaque fois que vous lancez un sort de la sous-école charme, le DD du sort augmente de +2.",
+      "pouvoirs": {
+        "Corrupting Touch": { "nom": "Toucher corrupteur (Mg)", "texte": "Au niveau 1, vous pouvez rendre une créature secouée par une attaque de contact au corps à corps. L'effet dure un nombre de rounds égal à la moitié de votre niveau d'ensorceleur (minimum 1). Les créatures ainsi secouées dégagent une aura de mal, comme un extérieur mauvais (voir détection du mal). Les touchers multiples ne se cumulent pas, mais s'ajoutent à la durée. Vous pouvez l'utiliser un nombre de fois par jour égal à 3 + votre modificateur de Charisme." },
+        "Infernal Resistances": { "nom": "Résistances infernales (Ex)", "texte": "Au niveau 3, vous obtenez une résistance au feu 5 et un bonus de +2 aux jets de sauvegarde contre le poison. Au niveau 9, la résistance au feu passe à 10 et le bonus contre le poison à +4." },
+        "Hellfire": { "nom": "Feu infernal (Mg)", "texte": "Au niveau 9, vous pouvez faire tomber une colonne de feu infernal. Cette explosion de 3 m (10 pieds) de rayon inflige 1d6 points de dégâts de feu par niveau d'ensorceleur. Les créatures prises dans la zone ont droit à un jet de Réflexes pour réduire les dégâts de moitié. Les créatures bonnes qui échouent sont secouées pendant un nombre de rounds égal à votre niveau d'ensorceleur. Le DD est égal à 10 + la moitié de votre niveau d'ensorceleur + votre modificateur de Charisme. Utilisable une fois par jour au niveau 9, deux fois au niveau 17, trois fois au niveau 20. Portée : 18 m (60 pieds)." },
+        "On Dark Wings": { "nom": "Sur des ailes sombres (Sur)", "texte": "Au niveau 15, vous pouvez faire pousser de terrifiantes ailes de chauve-souris par une action simple, ce qui vous donne une vitesse de vol de 18 m (60 pieds) avec une manœuvrabilité moyenne. Vous pouvez les faire disparaître par une action libre." },
+        "Power of the Pit": { "nom": "Puissance de l'Abîme infernal (Sur)", "texte": "Au niveau 20, votre corps est imprégné d'une puissance vile. Vous obtenez l'immunité au feu et au poison, une résistance à l'acide 10 et au froid 10, et la faculté de voir parfaitement dans n'importe quelle obscurité jusqu'à 18 m (60 pieds)." }
+      }
+    },
+    "undead": {
+      "nom": "Mort-vivant",
+      "competence_de_classe": "Connaissances (religion)",
+      "arcane": "Certains morts-vivants sont sensibles à vos sorts affectant l'esprit. Les morts-vivants corporels qui étaient autrefois des humanoïdes sont traités comme des humanoïdes pour déterminer quels sorts les affectent.",
+      "pouvoirs": {
+        "Grave Touch": { "nom": "Toucher du tombeau (Mg)", "texte": "À partir du niveau 1, vous pouvez faire une attaque de contact au corps à corps par une action simple : une créature vivante touchée devient secouée pendant un nombre de rounds égal à la moitié de votre niveau d'ensorceleur (minimum 1). Si vous touchez ainsi une créature déjà secouée, elle devient effrayée pendant 1 round si elle a moins de dés de vie que votre niveau d'ensorceleur. Vous pouvez l'utiliser un nombre de fois par jour égal à 3 + votre modificateur de Charisme." },
+        "Death's Gift": { "nom": "Don de la mort (Sur)", "texte": "Au niveau 3, vous obtenez une résistance au froid 5 et une RD 5/— contre les dégâts non létaux. Au niveau 9, la résistance au froid passe à 10 et la RD à 10/— contre les dégâts non létaux." },
+        "Grasp of the Dead": { "nom": "Étreinte des morts (Mg)", "texte": "Au niveau 9, vous pouvez faire surgir du sol un essaim de bras squelettiques qui lacèrent vos ennemis, dans une explosion de 6 m (20 pieds) de rayon. Chaque créature de la zone subit 1d6 points de dégâts tranchants par niveau d'ensorceleur, avec un jet de Réflexes pour réduire les dégâts de moitié. Celles qui échouent ne peuvent pas bouger pendant 1 round. Le DD est égal à 10 + la moitié de votre niveau d'ensorceleur + votre modificateur de Charisme. Les bras disparaissent après 1 round et doivent surgir d'une surface solide. Utilisable une fois par jour au niveau 9, deux fois au niveau 17, trois fois au niveau 20. Portée : 18 m (60 pieds)." },
+        "Incorporeal Form": { "nom": "Forme incorporelle (Mg)", "texte": "Au niveau 15, vous pouvez devenir incorporel pendant 1 round par niveau d'ensorceleur. Sous cette forme, vous obtenez le sous-type incorporel. Vous ne subissez que la moitié des dégâts des sources corporelles, à condition qu'elles soient magiques (aucun dégât des armes et objets non magiques). De même, vos sorts n'infligent que la moitié des dégâts aux créatures corporelles. Les sorts et effets qui n'infligent pas de dégâts fonctionnent normalement. Utilisable une fois par jour." },
+        "One of Us": { "nom": "L'un des nôtres (Ex)", "texte": "Au niveau 20, votre corps commence à pourrir (l'aspect de cette décomposition est à votre choix) et les morts-vivants vous voient comme l'un des leurs. Vous obtenez l'immunité au froid, aux dégâts non létaux, à la paralysie et au sommeil, ainsi qu'une RD 5/—. Les morts-vivants dénués d'intelligence ne vous remarquent pas, sauf si vous les attaquez. Vous recevez un bonus de moral de +4 aux jets de sauvegarde contre les sorts et capacités magiques lancés par des morts-vivants." }
+      }
+    }
+  }
+}

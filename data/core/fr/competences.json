@@ -1,0 +1,43 @@
+{
+  "avertissement": "Noms français non officiels (repris de docs/FICHES_PERSONNAGE.md quand ils y figurent) : à corriger d'après le Manuel des joueurs.",
+  "competences": {
+    "acrobatics": "Acrobaties",
+    "appraise": "Estimation",
+    "bluff": "Bluff",
+    "climb": "Escalade",
+    "craft": "Artisanat",
+    "diplomacy": "Diplomatie",
+    "disable_device": "Sabotage",
+    "disguise": "Déguisement",
+    "escape_artist": "Évasion",
+    "fly": "Vol",
+    "handle_animal": "Dressage",
+    "heal": "Premiers secours",
+    "intimidate": "Intimidation",
+    "knowledge": "Connaissances",
+    "linguistics": "Linguistique",
+    "perception": "Perception",
+    "perform": "Représentation",
+    "profession": "Profession",
+    "ride": "Équitation",
+    "sense_motive": "Psychologie",
+    "sleight_of_hand": "Escamotage",
+    "spellcraft": "Art de la magie",
+    "stealth": "Discrétion",
+    "survival": "Survie",
+    "swim": "Natation",
+    "use_magic_device": "Utilisation d'objets magiques"
+  },
+  "sous_types_connaissances": {
+    "arcana": "arcanes",
+    "dungeoneering": "exploration souterraine",
+    "engineering": "ingénierie",
+    "geography": "géographie",
+    "history": "histoire",
+    "local": "folklore local",
+    "nature": "nature",
+    "nobility": "noblesse",
+    "planes": "plans",
+    "religion": "religion"
+  }
+}
