@@ -1,0 +1,167 @@
+{
+  "Medusa's Wrath": {
+    "resume": "Vous pouvez profiter de la confusion de votre adversaire pour porter des coups multiples.",
+    "prerequis": "Science du combat à mains nues, Poing de la gorgone, Style du scorpion, bonus de base à l'attaque +11",
+    "avantage": "Chaque fois que vous utilisez l'action d'attaque à outrance et faites au moins une attaque à mains nues, vous pouvez faire deux attaques à mains nues supplémentaires avec votre plus haut bonus de base à l'attaque. Ces attaques bonus doivent être faites contre un ennemi hébété, pris au dépourvu, paralysé, chancelant, étourdi ou inconscient."
+  },
+  "Mobility": {
+    "resume": "Vous pouvez facilement vous déplacer dans une mêlée dangereuse.",
+    "prerequis": "Dex 13, Esquive",
+    "avantage": "Vous obtenez un bonus d'esquive de +4 à la classe d'armure contre les attaques d'opportunité provoquées quand vous sortez d'une zone menacée ou vous y déplacez. Une condition qui vous fait perdre votre bonus de Dextérité à la classe d'armure (s'il y en a un) vous fait aussi perdre les bonus d'esquive.\nLes bonus d'esquive se cumulent entre eux, contrairement à la plupart des types de bonus."
+  },
+  "Mounted Archery": {
+    "resume": "Vous savez faire des attaques à distance en étant monté.",
+    "prerequis": "Équitation 1 rang, Combat monté",
+    "avantage": "Le malus que vous subissez quand vous utilisez une arme à distance en étant monté est réduit de moitié : –2 au lieu de –4 si votre monture fait un double mouvement, et –4 au lieu de –8 si votre monture court."
+  },
+  "Mounted Combat": {
+    "resume": "Vous savez guider votre monture au combat.",
+    "prerequis": "Équitation 1 rang",
+    "avantage": "Une fois par round, quand votre monture est touchée au combat, vous pouvez tenter un test d'Équitation (par une action immédiate) pour annuler le coup. Le coup est annulé si le résultat de votre test d'Équitation est supérieur au jet d'attaque de l'adversaire."
+  },
+  "Natural Spell": {
+    "resume": "Vous pouvez lancer des sorts même sous une forme qui ne peut normalement pas en lancer.",
+    "prerequis": "Sag 13, capacité de classe de forme sauvage",
+    "avantage": "Vous pouvez accomplir les composantes verbales et gestuelles des sorts pendant que vous utilisez la forme sauvage. Vous substituez divers bruits et gestes aux composantes verbales et gestuelles normales d'un sort.\nVous pouvez aussi utiliser les composantes matérielles ou focalisateurs que vous possédez, même si ces objets sont fusionnés dans votre forme actuelle. Ce don ne permet pas l'utilisation d'objets magiques sous une forme qui ne pourrait normalement pas les utiliser, et vous n'obtenez pas la faculté de parler pendant la forme sauvage."
+  },
+  "Nimble Moves": {
+    "resume": "Vous pouvez franchir un obstacle isolé avec aisance.",
+    "prerequis": "Dex 13",
+    "avantage": "Chaque fois que vous vous déplacez, vous pouvez traverser 1,50 m (5 pieds) de terrain difficile par round comme s'il s'agissait d'un terrain normal. Ce don vous permet de faire un pas de placement de 1,50 m (5 pieds) dans un terrain difficile."
+  },
+  "Penetrating Strike": {
+    "resume": "Vos attaques peuvent percer les défenses de certaines créatures.",
+    "prerequis": "Arme de prédilection, bonus de base à l'attaque +1, guerrier de niveau 12, maniement de l'arme",
+    "avantage": "Vos attaques faites avec des armes choisies avec Arme de prédilection ignorent jusqu'à 5 points de réduction des dégâts. Ce don ne s'applique pas à la réduction des dégâts sans type (comme RD 10/—)."
+  },
+  "Persuasive": {
+    "resume": "Vous savez influencer les attitudes et intimider les autres pour qu'ils pensent comme vous.",
+    "avantage": "Vous obtenez un bonus de +2 aux tests de Diplomatie et d'Intimidation. Si vous avez 10 rangs ou plus dans l'une de ces compétences, le bonus passe à +4 pour cette compétence."
+  },
+  "Pinpoint Targeting": {
+    "resume": "Vous pouvez viser les points faibles de l'armure de votre adversaire.",
+    "prerequis": "Dex 19, Tir de précision amélioré, Tir à bout portant, Tir de précision, bonus de base à l'attaque +16",
+    "avantage": "Par une action simple, faites une seule attaque à distance. La cible n'obtient aucun bonus d'armure, d'armure naturelle ou de bouclier à sa classe d'armure. Vous n'obtenez pas l'avantage de ce don si vous vous déplacez ce round."
+  },
+  "Point-Blank Shot": {
+    "resume": "Vous êtes particulièrement précis quand vous faites des attaques à distance contre des cibles proches.",
+    "avantage": "Vous obtenez un bonus de +1 aux jets d'attaque et de dégâts avec les armes à distance à des portées allant jusqu'à 9 m (30 pieds)."
+  },
+  "Power Attack": {
+    "resume": "Vous pouvez faire des attaques de corps à corps exceptionnellement mortelles en sacrifiant la précision à la force.",
+    "prerequis": "For 13, bonus de base à l'attaque +1",
+    "avantage": "Vous pouvez choisir de subir un malus de –1 à tous les jets d'attaque de corps à corps et tests de manœuvre offensive pour obtenir un bonus de +2 à tous les jets de dégâts de corps à corps. Ce bonus aux dégâts est augmenté de moitié (+50 %) si vous faites une attaque avec une arme à deux mains, une arme à une main maniée à deux mains, ou une arme naturelle principale qui ajoute une fois et demie votre modificateur de Force aux jets de dégâts. Ce bonus aux dégâts est réduit de moitié (–50 %) si vous faites une attaque avec une arme de la main non directrice ou une arme naturelle secondaire. Quand votre bonus de base à l'attaque atteint +4, puis tous les 4 points ensuite, le malus augmente de –1 et le bonus aux dégâts augmente de +2. Vous devez choisir d'utiliser ce don avant de faire un jet d'attaque, et ses effets durent jusqu'à votre tour suivant. Les dégâts supplémentaires ne s'appliquent pas aux attaques de contact ni aux effets qui n'infligent pas de dégâts de points de vie."
+  },
+  "Precise Shot": {
+    "resume": "Vous savez tirer des attaques à distance dans une mêlée.",
+    "prerequis": "Tir à bout portant",
+    "avantage": "Vous pouvez tirer ou lancer des armes à distance sur un adversaire engagé en mêlée sans subir le malus standard de –4 à votre jet d'attaque."
+  },
+  "Quick Draw": {
+    "resume": "Vous dégainez vos armes plus vite que la plupart.",
+    "prerequis": "Bonus de base à l'attaque +1",
+    "avantage": "Vous pouvez dégainer une arme par une action libre au lieu d'une action de mouvement. Vous pouvez dégainer une arme cachée (voir la compétence Escamotage) par une action de mouvement. Un personnage qui a choisi ce don peut lancer des armes à sa cadence normale complète d'attaques (un peu comme un personnage avec un arc). Les objets alchimiques, potions, parchemins et baguettes ne peuvent pas être dégainés rapidement avec ce don.",
+    "normal": "Sans ce don, vous pouvez dégainer une arme par une action de mouvement, ou (si votre bonus de base à l'attaque est de +1 ou plus) par une action libre dans le cadre d'un déplacement. Sans ce don, vous pouvez dégainer une arme cachée par une action simple."
+  },
+  "Quicken Spell": {
+    "resume": "Vous pouvez lancer des sorts en une fraction du temps normal.",
+    "avantage": "Lancer un sort rapide est une action rapide. Vous pouvez accomplir une autre action, même lancer un autre sort, dans le même round que celui où vous lancez un sort rapide. Un sort dont le temps d'incantation dépasse 1 round ou 1 action complexe ne peut pas être rendu rapide.\nUn sort rapide utilise un emplacement de sort de quatre niveaux supérieurs au niveau réel du sort. Lancer un sort rapide ne provoque pas d'attaque d'opportunité.",
+    "special": "Vous pouvez appliquer les effets de ce don à un sort lancé spontanément, tant que son temps d'incantation ne dépasse pas 1 action complexe, sans augmenter le temps d'incantation du sort."
+  },
+  "Rapid Reload": {
+    "resume": "Choisissez un type d'arbalète (de poing, légère, lourde) ou un seul type d'arme à feu à une ou deux mains que vous maniez. Vous pouvez recharger une telle arme rapidement.",
+    "prerequis": "Maniement de l'arme (type d'arbalète choisi) ou Maniement des armes exotiques (arme à feu)",
+    "avantage": "Le temps nécessaire pour recharger votre type d'arme choisi est réduit à une action libre (pour une arbalète de poing ou légère), une action de mouvement (pour une arbalète lourde ou une arme à feu à une main) ou une action simple (arme à feu à deux mains). Recharger une arbalète ou une arme à feu provoque toujours des attaques d'opportunité.\nSi vous avez choisi ce don pour une arbalète de poing ou une arbalète légère, vous pouvez tirer avec cette arme autant de fois lors d'une action d'attaque à outrance que vous pourriez attaquer si vous utilisiez un arc.",
+    "normal": "Un personnage sans ce don a besoin d'une action de mouvement pour recharger une arbalète de poing ou légère, d'une action simple pour recharger une arme à feu à une main, ou d'une action complexe pour charger une arbalète lourde ou une arme à feu à deux mains.",
+    "special": "Vous pouvez prendre Rechargement rapide plusieurs fois. Chaque fois que vous prenez le don, il s'applique à un nouveau type d'arbalète ou à un nouveau type d'arme à feu."
+  },
+  "Rapid Shot": {
+    "resume": "Vous pouvez faire une attaque à distance supplémentaire.",
+    "prerequis": "Dex 13, Tir à bout portant",
+    "avantage": "Quand vous faites une action d'attaque à outrance avec une arme à distance, vous pouvez tirer une fois de plus ce round avec votre plus haut bonus. Tous vos jets d'attaque subissent un malus de –2 quand vous utilisez Tir rapide."
+  },
+  "Ride-By Attack": {
+    "resume": "En étant monté et en chargeant, vous pouvez vous déplacer, frapper un ennemi, puis continuer à vous déplacer.",
+    "prerequis": "Équitation 1 rang, Combat monté",
+    "avantage": "Quand vous êtes monté et utilisez l'action de charge, vous pouvez vous déplacer et attaquer comme avec une charge normale, puis vous déplacer de nouveau (en poursuivant la ligne droite de la charge). Votre déplacement total pour le round ne peut pas dépasser le double de votre vitesse montée. Vous et votre monture ne provoquez pas d'attaque d'opportunité de la part de l'adversaire que vous attaquez."
+  },
+  "Run": {
+    "resume": "Vous avez le pied léger.",
+    "avantage": "Quand vous courez, vous vous déplacez de cinq fois votre vitesse normale (si vous portez une armure intermédiaire, légère ou aucune et ne portez pas plus qu'une charge intermédiaire) ou quatre fois votre vitesse (si vous portez une armure lourde ou une charge lourde). Si vous faites un saut après une course d'élan (voir la description de la compétence Acrobaties), vous obtenez un bonus de +4 à votre test d'Acrobaties. Quand vous courez, vous conservez votre bonus de Dextérité à votre classe d'armure.",
+    "normal": "Vous vous déplacez de quatre fois votre vitesse en courant (si vous portez une armure intermédiaire, légère ou aucune et ne portez pas plus qu'une charge intermédiaire) ou de trois fois votre vitesse (si vous portez une armure lourde ou une charge lourde), et vous perdez votre bonus de Dextérité à la CA."
+  },
+  "Scorpion Style": {
+    "resume": "Vous pouvez porter une attaque à mains nues qui gêne considérablement le mouvement de votre cible.",
+    "prerequis": "Science du combat à mains nues",
+    "avantage": "Pour utiliser ce don, vous devez faire une seule attaque à mains nues par une action simple. Si cette attaque à mains nues touche, vous infligez des dégâts normalement, et la vitesse terrestre de base de la cible est réduite à 1,50 m (5 pieds) pendant un nombre de rounds égal à votre modificateur de Sagesse, à moins qu'elle ne réussisse un jet de Vigueur (DD 10 + la moitié de votre niveau de personnage + votre modificateur de Sag)."
+  },
+  "Scribe Scroll": {
+    "resume": "Vous pouvez créer des parchemins magiques.",
+    "prerequis": "Niveau de lanceur 1",
+    "avantage": "Vous pouvez créer un parchemin de n'importe quel sort que vous connaissez. Écrire un parchemin prend 2 heures si son prix de base est de 250 po ou moins, sinon cela prend 1 jour par tranche de 1 000 po de son prix de base. Pour écrire un parchemin, vous devez consommer des matières premières coûtant la moitié de ce prix de base. Voir les règles de création d'objets magiques dans Objets magiques pour plus d'informations."
+  },
+  "Selective Channeling": {
+    "resume": "Vous pouvez choisir qui affecter quand vous canalisez de l'énergie.",
+    "prerequis": "Cha 13, capacité de classe de canalisation d'énergie",
+    "avantage": "Quand vous canalisez de l'énergie, vous pouvez choisir un nombre de cibles dans la zone allant jusqu'à votre modificateur de Charisme. Ces cibles ne sont pas affectées par votre énergie canalisée.",
+    "normal": "Toutes les cibles dans une explosion de 9 m (30 pieds) sont affectées quand vous canalisez de l'énergie. Vous pouvez seulement choisir si vous êtes affecté ou non."
+  },
+  "Self-Sufficient": {
+    "resume": "Vous savez vous débrouiller dans la nature et soigner efficacement les blessures.",
+    "avantage": "Vous obtenez un bonus de +2 à tous les tests de Premiers secours et de Survie. Si vous avez 10 rangs ou plus dans l'une de ces compétences, le bonus passe à +4 pour cette compétence."
+  },
+  "Shatter Defenses": {
+    "resume": "Votre habileté avec l'arme choisie laisse les adversaires incapables de se défendre si vous les frappez quand leurs défenses sont déjà compromises.",
+    "prerequis": "Arme de prédilection, Démonstration éblouissante, bonus de base à l'attaque +6, maniement de l'arme",
+    "avantage": "Tout adversaire secoué, effrayé ou paniqué que vous touchez ce round est pris au dépourvu face à vos attaques jusqu'à la fin de votre tour suivant. Cela inclut toutes les attaques supplémentaires que vous faites ce round."
+  },
+  "Shield Focus": {
+    "resume": "Vous savez parer les coups avec votre bouclier.",
+    "prerequis": "Maniement des boucliers, bonus de base à l'attaque +1",
+    "avantage": "Augmentez de 1 le bonus à la CA conféré par tout bouclier que vous utilisez."
+  },
+  "Shield Master": {
+    "resume": "Votre maîtrise du bouclier vous permet de combattre avec lui sans gêne.",
+    "prerequis": "Coup de bouclier amélioré, Maniement des boucliers, Charge au bouclier, Combat à deux armes, bonus de base à l'attaque +11",
+    "avantage": "Vous ne subissez aucun malus aux jets d'attaque faits avec un bouclier tant que vous brandissez une autre arme. Ajoutez le bonus d'altération de votre bouclier aux jets d'attaque et de dégâts faits avec le bouclier comme s'il s'agissait d'un bonus d'altération d'arme."
+  },
+  "Shield Proficiency": {
+    "resume": "Vous êtes entraîné à utiliser correctement un bouclier.",
+    "avantage": "Quand vous utilisez un bouclier (sauf un pavois), le malus d'armure aux tests du bouclier ne s'applique qu'aux compétences basées sur la Force et la Dextérité.",
+    "normal": "Quand vous utilisez un bouclier que vous ne maniez pas, vous subissez le malus d'armure aux tests du bouclier aux jets d'attaque et à tous les tests de compétence qui impliquent un déplacement.",
+    "special": "Les barbares, bardes, clercs, druides, guerriers, paladins et rôdeurs ont tous automatiquement le Maniement des boucliers comme don supplémentaire. Ils n'ont pas besoin de le choisir."
+  },
+  "Shield Slam": {
+    "resume": "Bien placé, votre bouclier peut servir à envoyer voler les adversaires.",
+    "prerequis": "Coup de bouclier amélioré, Maniement des boucliers, Combat à deux armes, bonus de base à l'attaque +6",
+    "avantage": "Tout adversaire touché par votre coup de bouclier est aussi touché par une attaque de bousculade gratuite, votre jet d'attaque remplaçant le test de manœuvre offensive (voir Combat). Cette bousculade ne provoque pas d'attaque d'opportunité. Les adversaires qui ne peuvent pas reculer à cause d'un mur ou d'une autre surface sont jetés à terre après avoir reculé de la distance maximale possible. Vous pouvez choisir de vous déplacer avec votre cible si vous pouvez faire un pas de placement de 1,50 m (5 pieds) ou dépenser une action pour vous déplacer ce tour."
+  },
+  "Shot on the Run": {
+    "resume": "Vous pouvez vous déplacer, tirer avec une arme à distance et vous déplacer de nouveau avant que vos ennemis puissent réagir.",
+    "prerequis": "Dex 13, Esquive, Mobilité, Tir à bout portant, bonus de base à l'attaque +4",
+    "avantage": "Par une action complexe, vous pouvez vous déplacer jusqu'à votre vitesse et faire une seule attaque à distance à n'importe quel moment de votre déplacement.",
+    "normal": "Vous ne pouvez pas vous déplacer avant et après une attaque avec une arme à distance."
+  },
+  "Sickening Critical": {
+    "resume": "Vos coups critiques rendent vos adversaires écœurés.",
+    "prerequis": "Succès critique, bonus de base à l'attaque +11",
+    "avantage": "Chaque fois que vous infligez un coup critique, votre adversaire devient écœuré pendant 1 minute. Les effets de ce don ne se cumulent pas. Les coups supplémentaires s'ajoutent plutôt à la durée de l'effet.",
+    "special": "Vous ne pouvez appliquer les effets que d'un seul don de critique à un même coup critique, à moins de posséder Maîtrise du critique."
+  },
+  "Silent Spell": {
+    "resume": "Vous pouvez lancer vos sorts sans faire aucun bruit.",
+    "avantage": "Un sort silencieux peut être lancé sans composantes verbales. Les sorts sans composantes verbales ne sont pas affectés. Un sort silencieux utilise un emplacement de sort d'un niveau supérieur au niveau réel du sort.",
+    "special": "Les sorts de barde ne peuvent pas être améliorés par ce don."
+  },
+  "Simple Weapon Proficiency": {
+    "resume": "Vous êtes entraîné à l'usage des armes de base.",
+    "avantage": "Vous faites les jets d'attaque avec les armes courantes sans malus.",
+    "normal": "Quand vous utilisez une arme que vous ne maniez pas, vous subissez un malus de –4 aux jets d'attaque.",
+    "special": "Tous les personnages sauf les druides, les moines et les magiciens manient automatiquement toutes les armes courantes. Ils n'ont pas besoin de choisir ce don."
+  },
+  "Skill Focus": {
+    "resume": "Choisissez une compétence. Vous y êtes particulièrement habile.",
+    "avantage": "Vous obtenez un bonus de +3 à tous les tests impliquant la compétence choisie. Si vous avez 10 rangs ou plus dans cette compétence, ce bonus passe à +6.",
+    "special": "Vous pouvez prendre ce don plusieurs fois. Ses effets ne se cumulent pas. Chaque fois que vous prenez le don, il s'applique à une nouvelle compétence."
+  }
+}

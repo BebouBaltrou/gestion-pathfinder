@@ -1,0 +1,169 @@
+{
+  "Improved Bull Rush": {
+    "resume": "Vous savez bousculer vos ennemis.",
+    "prerequis": "For 13, Attaque en puissance, bonus de base à l'attaque +1",
+    "avantage": "Vous ne provoquez pas d'attaque d'opportunité quand vous effectuez une manœuvre de bousculade. De plus, vous recevez un bonus de +2 aux tests faits pour bousculer un ennemi. Vous recevez aussi un bonus de +2 à votre Défense contre les manœuvres de combat chaque fois qu'un adversaire essaie de vous bousculer.",
+    "normal": "Vous provoquez une attaque d'opportunité quand vous effectuez une manœuvre de bousculade."
+  },
+  "Improved Channel": {
+    "resume": "Votre énergie canalisée est plus difficile à repousser.",
+    "prerequis": "Capacité de classe de canalisation d'énergie",
+    "avantage": "Ajoutez 2 au DD des jets de sauvegarde faits pour résister aux effets de votre faculté de canalisation d'énergie."
+  },
+  "Improved Counterspell": {
+    "resume": "Vous savez contrer les sorts des autres avec des sorts similaires.",
+    "avantage": "Quand vous contrez un sort, vous pouvez utiliser un sort de la même école d'un ou plusieurs niveaux de sort supérieur au sort visé.",
+    "normal": "Sans ce don, vous ne pouvez contrer un sort qu'avec le même sort ou avec un sort spécifiquement désigné comme contrant le sort visé."
+  },
+  "Improved Critical": {
+    "resume": "Les attaques faites avec l'arme choisie sont assez mortelles.",
+    "prerequis": "Maniement de l'arme, bonus de base à l'attaque +8",
+    "avantage": "Quand vous utilisez l'arme que vous avez choisie, sa zone de menace est doublée.",
+    "special": "Vous pouvez prendre Critique amélioré plusieurs fois. Les effets ne se cumulent pas. Chaque fois que vous prenez le don, il s'applique à un nouveau type d'arme. Cet effet ne se cumule avec aucun autre effet qui étend la zone de menace d'une arme."
+  },
+  "Improved Disarm": {
+    "resume": "Vous savez faire lâcher son arme à un ennemi.",
+    "prerequis": "Int 13, Expertise du combat",
+    "avantage": "Vous ne provoquez pas d'attaque d'opportunité quand vous effectuez une manœuvre de désarmement. De plus, vous recevez un bonus de +2 aux tests faits pour désarmer un ennemi. Vous recevez aussi un bonus de +2 à votre Défense contre les manœuvres de combat chaque fois qu'un adversaire essaie de vous désarmer.",
+    "normal": "Vous provoquez une attaque d'opportunité quand vous effectuez une manœuvre de désarmement."
+  },
+  "Improved Familiar": {
+    "resume": "Ce don vous permet d'acquérir un familier puissant, mais seulement quand vous pourriez normalement acquérir un nouveau familier.",
+    "prerequis": "Faculté d'acquérir un nouveau familier, alignement compatible, niveau suffisamment élevé (voir ci-dessous)",
+    "avantage": "Quand vous choisissez un familier, les créatures de la liste des familiers améliorés vous sont aussi accessibles. Vous pouvez choisir un familier dont l'alignement est éloigné d'au plus un cran sur chaque axe d'alignement (de loyal à chaotique, de bon à mauvais).\nLes familiers améliorés utilisent par ailleurs les règles des familiers ordinaires, avec deux exceptions : si le type de la créature est autre qu'animal, son type ne change pas ; et les familiers améliorés n'obtiennent pas la faculté de parler avec les autres créatures de leur espèce (bien que beaucoup d'entre eux aient déjà la faculté de communiquer)."
+  },
+  "Improved Feint": {
+    "resume": "Vous savez tromper vos adversaires au combat.",
+    "prerequis": "Int 13, Expertise du combat",
+    "avantage": "Vous pouvez faire un test de Bluff pour feinter au combat par une action de mouvement.",
+    "normal": "Feinter au combat est une action simple."
+  },
+  "Improved Grapple": {
+    "resume": "Vous savez agripper vos adversaires.",
+    "prerequis": "Dex 13, Science du combat à mains nues",
+    "avantage": "Vous ne provoquez pas d'attaque d'opportunité quand vous effectuez une manœuvre d'empoignade. De plus, vous recevez un bonus de +2 aux tests faits pour agripper un ennemi. Vous recevez aussi un bonus de +2 à votre Défense contre les manœuvres de combat chaque fois qu'un adversaire essaie de vous agripper.",
+    "normal": "Vous provoquez une attaque d'opportunité quand vous effectuez une manœuvre d'empoignade."
+  },
+  "Improved Great Fortitude": {
+    "resume": "Vous pouvez puiser dans une réserve intérieure pour résister aux maladies, aux poisons et à d'autres maux graves.",
+    "prerequis": "Vigueur surhumaine",
+    "avantage": "Une fois par jour, vous pouvez relancer un jet de Vigueur. Vous devez décider d'utiliser cette capacité avant que le résultat ne soit révélé. Vous devez garder le second jet, même s'il est pire."
+  },
+  "Improved Initiative": {
+    "resume": "Vos réflexes rapides vous permettent de réagir vite au danger.",
+    "avantage": "Vous obtenez un bonus de +4 aux tests d'initiative."
+  },
+  "Improved Iron Will": {
+    "resume": "La clarté de votre pensée vous permet de résister aux attaques mentales.",
+    "prerequis": "Volonté de fer",
+    "avantage": "Une fois par jour, vous pouvez relancer un jet de Volonté. Vous devez décider d'utiliser cette capacité avant que le résultat ne soit révélé. Vous devez garder le second jet, même s'il est pire."
+  },
+  "Improved Lightning Reflexes": {
+    "resume": "Vous avez le don d'éviter les dangers qui vous entourent.",
+    "prerequis": "Réflexes éclair",
+    "avantage": "Une fois par jour, vous pouvez relancer un jet de Réflexes. Vous devez décider d'utiliser cette capacité avant que le résultat ne soit révélé. Vous devez garder le second jet, même s'il est pire."
+  },
+  "Improved Overrun": {
+    "resume": "Vous savez piétiner vos ennemis.",
+    "prerequis": "For 13, Attaque en puissance, bonus de base à l'attaque +1",
+    "avantage": "Vous ne provoquez pas d'attaque d'opportunité quand vous effectuez une manœuvre de renversement. De plus, vous recevez un bonus de +2 aux tests faits pour renverser un ennemi. Vous recevez aussi un bonus de +2 à votre Défense contre les manœuvres de combat chaque fois qu'un adversaire essaie de vous renverser. Les cibles de votre tentative de renversement ne peuvent pas choisir de vous éviter.",
+    "normal": "Vous provoquez une attaque d'opportunité quand vous effectuez une manœuvre de renversement."
+  },
+  "Improved Precise Shot": {
+    "resume": "Vos attaques à distance ignorent tout sauf le camouflage total et l'abri total.",
+    "prerequis": "Dex 19, Tir à bout portant, Tir de précision, bonus de base à l'attaque +11",
+    "avantage": "Vos attaques à distance ignorent le bonus à la CA conféré aux cibles par tout ce qui est inférieur à un abri total, et le pourcentage de chances de rater conféré aux cibles par tout ce qui est inférieur à un camouflage total. L'abri total et le camouflage total procurent leurs avantages normaux contre vos attaques à distance.",
+    "normal": "Voir les règles normales sur les effets de l'abri et du camouflage dans Combat."
+  },
+  "Improved Shield Bash": {
+    "resume": "Vous pouvez vous protéger avec votre bouclier, même si vous l'utilisez pour attaquer.",
+    "prerequis": "Maniement des boucliers",
+    "avantage": "Quand vous effectuez un coup de bouclier, vous pouvez toujours appliquer le bonus de bouclier à votre CA.",
+    "normal": "Sans ce don, un personnage qui effectue un coup de bouclier perd le bonus de bouclier à la CA jusqu'à son tour suivant (voir Équipement)."
+  },
+  "Improved Sunder": {
+    "resume": "Vous savez endommager les armes et armures de vos ennemis.",
+    "prerequis": "For 13, Attaque en puissance, bonus de base à l'attaque +1",
+    "avantage": "Vous ne provoquez pas d'attaque d'opportunité quand vous effectuez une manœuvre de bris d'arme. De plus, vous recevez un bonus de +2 aux tests faits pour briser un objet. Vous recevez aussi un bonus de +2 à votre Défense contre les manœuvres de combat chaque fois qu'un adversaire essaie de briser votre équipement.",
+    "normal": "Vous provoquez une attaque d'opportunité quand vous effectuez une manœuvre de bris d'arme."
+  },
+  "Improved Trip": {
+    "resume": "Vous savez envoyer vos adversaires au sol.",
+    "prerequis": "Int 13, Expertise du combat",
+    "avantage": "Vous ne provoquez pas d'attaque d'opportunité quand vous effectuez une manœuvre de croc-en-jambe. De plus, vous recevez un bonus de +2 aux tests faits pour faire trébucher un ennemi. Vous recevez aussi un bonus de +2 à votre Défense contre les manœuvres de combat chaque fois qu'un adversaire essaie de vous faire trébucher.",
+    "normal": "Vous provoquez une attaque d'opportunité quand vous effectuez une manœuvre de croc-en-jambe."
+  },
+  "Improved Two-Weapon Fighting": {
+    "resume": "Vous savez combattre avec deux armes.",
+    "prerequis": "Dex 17, Combat à deux armes, bonus de base à l'attaque +6",
+    "avantage": "En plus de l'unique attaque supplémentaire standard que vous obtenez avec une arme de la main non directrice, vous obtenez une seconde attaque avec elle, quoique avec un malus de –5.",
+    "normal": "Sans ce don, vous ne pouvez obtenir qu'une seule attaque supplémentaire avec une arme de la main non directrice."
+  },
+  "Improved Unarmed Strike": {
+    "resume": "Vous savez combattre à mains nues.",
+    "avantage": "Vous êtes considéré comme armé même quand vous êtes désarmé : vous ne provoquez pas d'attaques d'opportunité quand vous attaquez des ennemis à mains nues. Vos attaques à mains nues peuvent infliger des dégâts létaux ou non létaux, à votre choix.",
+    "normal": "Sans ce don, vous êtes considéré comme désarmé quand vous attaquez à mains nues, et vous ne pouvez infliger que des dégâts non létaux avec une telle attaque."
+  },
+  "Improved Vital Strike": {
+    "resume": "Vous pouvez faire une seule attaque qui inflige une grande quantité de dégâts.",
+    "prerequis": "Frappe vitale, bonus de base à l'attaque +11",
+    "avantage": "Quand vous utilisez l'action d'attaque, vous pouvez faire une attaque avec votre plus haut bonus de base à l'attaque qui inflige des dégâts supplémentaires. Lancez trois fois les dés de dégâts de l'arme pour l'attaque et additionnez les résultats avant d'ajouter les bonus de Force, de capacités d'arme (comme enflammée), de dégâts de précision et d'autres bonus de dégâts. Ces dés de dégâts d'arme supplémentaires ne sont pas multipliés en cas de coup critique, mais s'ajoutent au total."
+  },
+  "Improvised Weapon Mastery": {
+    "resume": "Vous pouvez transformer presque n'importe quel objet en arme mortelle, d'un pied de chaise tranchant comme un rasoir à un sac de farine.",
+    "prerequis": "Prise au dépourvu ou Lancer n'importe quoi, bonus de base à l'attaque +8",
+    "avantage": "Vous ne subissez aucun malus pour l'utilisation d'une arme improvisée. Augmentez d'un cran les dégâts infligés par l'arme improvisée (par exemple 1d4 devient 1d6) jusqu'à un maximum de 1d8 (2d6 si l'arme improvisée est à deux mains). L'arme improvisée a une zone de menace de 19-20, avec un multiplicateur de critique de ×2."
+  },
+  "Intimidating Prowess": {
+    "resume": "Votre puissance physique intimide les autres.",
+    "avantage": "Ajoutez votre modificateur de Force aux tests d'Intimidation, en plus de votre modificateur de Charisme."
+  },
+  "Iron Will": {
+    "resume": "Vous résistez mieux aux effets mentaux.",
+    "avantage": "Vous obtenez un bonus de +2 à tous les jets de Volonté."
+  },
+  "Leadership": {
+    "resume": "Vous attirez des partisans à votre cause et un compagnon pour vous rejoindre dans vos aventures.",
+    "prerequis": "Niveau de personnage 7",
+    "avantage": "Ce don vous permet d'attirer un acolyte loyal et un certain nombre de subordonnés dévoués qui vous assistent. Un acolyte est généralement un PNJ ayant des niveaux de classe, tandis que les partisans sont typiquement des PNJ de niveau inférieur. Voir le tableau « Commandement » pour savoir quel niveau d'acolyte et combien de partisans vous pouvez recruter.\nScore de commandement — Niveau de l'acolyte — Nombre de partisans par niveau (1er, 2e, 3e, 4e, 5e, 6e)\n1 ou moins — — — aucun\n2 — 1 — aucun\n3 — 2 — aucun\n4 — 3 — aucun\n5 — 3 — aucun\n6 — 4 — aucun\n7 — 5 — aucun\n8 — 5 — aucun\n9 — 6 — aucun\n10 — 7 — 5 / — / — / — / — / —\n11 — 7 — 6 / — / — / — / — / —\n12 — 8 — 8 / — / — / — / — / —\n13 — 9 — 10 / 1 / — / — / — / —\n14 — 10 — 15 / 1 / — / — / — / —\n15 — 10 — 20 / 2 / 1 / — / — / —\n16 — 11 — 25 / 2 / 1 / — / — / —\n17 — 12 — 30 / 3 / 1 / 1 / — / —\n18 — 12 — 35 / 3 / 1 / 1 / — / —\n19 — 13 — 40 / 4 / 2 / 1 / 1 / —\n20 — 14 — 50 / 5 / 3 / 2 / 1 / —\n21 — 15 — 60 / 6 / 3 / 2 / 1 / 1\n22 — 15 — 75 / 7 / 4 / 2 / 2 / 1\n23 — 16 — 90 / 9 / 5 / 3 / 2 / 1\n24 — 17 — 110 / 11 / 6 / 3 / 2 / 1\n25 ou plus — 17 — 135 / 13 / 7 / 4 / 2 / 2\nModificateurs de commandement : plusieurs facteurs peuvent affecter votre score de commandement, le faisant varier par rapport au score de base (niveau de personnage + modificateur de Cha). Votre réputation (du point de vue de l'acolyte ou du partisan que vous essayez d'attirer) augmente ou diminue votre score de commandement :\nRéputation du chef — Modificateur\nGrande renommée — +2\nÉquité et générosité — +1\nPouvoir spécial — +1\nÉchec — –1\nDistance — –1\nCruauté — –2\nD'autres modificateurs peuvent s'appliquer quand vous essayez d'attirer un acolyte, comme indiqué ci-dessous.\nLe chef… — Modificateur\nA un familier, une monture spéciale ou un compagnon animal — –2\nRecrute un acolyte d'un alignement différent — –1\nA causé la mort d'un acolyte — –2*\n*Cumulatif par acolyte tué.\nLes partisans ont des priorités différentes de celles des acolytes. Quand vous essayez d'attirer un partisan, utilisez les modificateurs suivants.\nLe chef… — Modificateur\nA une place forte, une base d'opérations, une maison de guilde, etc. — +2\nSe déplace beaucoup — –1\nA causé la mort d'autres partisans — –1\nScore de commandement : votre score de commandement de base est égal à votre niveau plus votre modificateur de Charisme. Pour tenir compte des modificateurs de Charisme négatifs, ce tableau prévoit des scores de commandement très bas, mais vous devez tout de même être de niveau 7 ou plus pour obtenir le don Commandement. Des facteurs extérieurs peuvent affecter votre score de commandement, comme détaillé ci-dessus.\nNiveau de l'acolyte : vous pouvez attirer un acolyte de ce niveau au plus. Quel que soit votre score de commandement, vous ne pouvez recruter qu'un acolyte de deux niveaux ou plus inférieur au vôtre. L'acolyte doit être équipé d'un matériel approprié à son niveau (voir Création de PNJ). Un acolyte peut être de n'importe quelle race ou classe. L'alignement de l'acolyte ne doit pas être opposé au vôtre sur l'axe loi/chaos ni sur l'axe bien/mal, et vous subissez un malus de –1 à votre score de commandement si vous recrutez un acolyte d'un alignement différent du vôtre.\nUn acolyte ne compte pas comme un membre du groupe pour déterminer les PX du groupe. Divisez plutôt le niveau de l'acolyte par votre niveau. Multipliez ce résultat par le total des PX qui vous sont accordés, puis ajoutez ce nombre de points d'expérience au total de l'acolyte.\nSi un acolyte gagne assez de PX pour atteindre un niveau inférieur d'un au vôtre, l'acolyte ne gagne pas le nouveau niveau : son nouveau total de PX est inférieur d'un point à celui nécessaire pour atteindre le niveau suivant.\nNombre de partisans par niveau : vous pouvez diriger jusqu'au nombre indiqué de personnages de chaque niveau. Les partisans sont semblables aux acolytes, sauf qu'ils sont généralement des PNJ de bas niveau. Comme ils ont généralement 5 niveaux de retard ou plus sur vous, ils sont rarement efficaces au combat.\nLes partisans ne gagnent pas d'expérience et ne gagnent donc pas de niveaux. Quand vous gagnez un nouveau niveau, consultez le tableau de commandement pour déterminer si vous obtenez plus de partisans, dont certains peuvent être de niveau supérieur aux partisans existants. Ne consultez pas le tableau pour voir si votre acolyte gagne des niveaux, toutefois, car les acolytes gagnent de l'expérience par eux-mêmes."
+  },
+  "Lightning Reflexes": {
+    "resume": "Vous avez des réflexes plus rapides que la normale.",
+    "avantage": "Vous obtenez un bonus de +2 à tous les jets de Réflexes."
+  },
+  "Lightning Stance": {
+    "resume": "La vitesse à laquelle vous vous déplacez rend presque impossible à vos adversaires de vous frapper.",
+    "prerequis": "Dex 17, Esquive, Posture du vent, bonus de base à l'attaque +11",
+    "avantage": "Si vous entreprenez deux actions pour vous déplacer ou une action de retraite dans un tour, vous obtenez un camouflage de 50 % pendant 1 round."
+  },
+  "Lunge": {
+    "resume": "Vous pouvez frapper des ennemis qui seraient normalement hors de portée.",
+    "prerequis": "Bonus de base à l'attaque +6",
+    "avantage": "Vous pouvez augmenter l'allonge de vos attaques de corps à corps de 1,50 m (5 pieds) jusqu'à la fin de votre tour en subissant un malus de –2 à votre CA jusqu'à votre tour suivant. Vous devez décider d'utiliser cette capacité avant que des attaques soient faites."
+  },
+  "Magical Aptitude": {
+    "resume": "Vous êtes doué pour lancer des sorts et utiliser des objets magiques.",
+    "avantage": "Vous obtenez un bonus de +2 à tous les tests d'Art de la magie et d'Utilisation d'objets magiques. Si vous avez 10 rangs ou plus dans l'une de ces compétences, le bonus passe à +4 pour cette compétence."
+  },
+  "Manyshot": {
+    "resume": "Vous pouvez tirer plusieurs flèches sur une seule cible.",
+    "prerequis": "Dex 17, Tir à bout portant, Tir rapide, bonus de base à l'attaque +6",
+    "avantage": "Quand vous faites une action d'attaque à outrance avec un arc, votre première attaque tire deux flèches. Si l'attaque touche, les deux flèches touchent. Appliquez les dégâts de précision (comme l'attaque sournoise) et les dégâts de coup critique une seule fois pour cette attaque. Les bonus de dégâts dus à l'emploi d'un arc composite avec un bonus de Force élevé s'appliquent à chaque flèche, de même que les autres bonus de dégâts, comme le bonus d'ennemi juré d'un rôdeur. La réduction des dégâts et les résistances s'appliquent séparément à chaque flèche."
+  },
+  "Martial Weapon Proficiency": {
+    "resume": "Choisissez un type d'arme de guerre. Vous comprenez comment utiliser ce type d'arme de guerre au combat.",
+    "avantage": "Vous faites normalement les jets d'attaque avec l'arme choisie (sans le malus de non-maniement).",
+    "normal": "Quand vous utilisez une arme que vous ne maniez pas, vous subissez un malus de –4 aux jets d'attaque.",
+    "special": "Les barbares, guerriers, paladins et rôdeurs manient toutes les armes de guerre. Ils n'ont pas besoin de choisir ce don.\nVous pouvez prendre Maniement des armes de guerre plusieurs fois. Chaque fois que vous prenez le don, il s'applique à un nouveau type d'arme."
+  },
+  "Master Craftsman": {
+    "resume": "Votre habileté supérieure d'artisan vous permet de créer des objets magiques simples.",
+    "prerequis": "5 rangs dans une compétence d'Artisanat ou de Profession quelconque",
+    "avantage": "Choisissez une compétence d'Artisanat ou de Profession dans laquelle vous possédez au moins 5 rangs. Vous recevez un bonus de +2 à cette compétence d'Artisanat ou de Profession. Les rangs de la compétence choisie comptent comme votre niveau de lanceur pour remplir les conditions des dons Création d'armes et armures magiques et Création d'objets merveilleux. Vous pouvez créer des objets magiques avec ces dons, en substituant vos rangs dans la compétence choisie à votre niveau de lanceur total. Vous devez utiliser la compétence choisie pour le test de création de l'objet. Le DD de création de l'objet augmente toujours pour toute condition de sort nécessaire (voir les règles de création d'objets magiques dans Objets magiques). Vous ne pouvez pas utiliser ce don pour créer un objet à déclenchement de sort ou à activation de sort.",
+    "normal": "Seuls les lanceurs de sorts peuvent remplir les conditions des dons Création d'armes et armures magiques et Création d'objets merveilleux."
+  },
+  "Maximize Spell": {
+    "resume": "Vos sorts ont l'effet maximal possible.",
+    "avantage": "Tous les effets numériques variables d'un sort modifié par ce don sont maximisés. Les jets de sauvegarde et les jets opposés ne sont pas affectés, pas plus que les sorts sans variables aléatoires. Un sort maximisé utilise un emplacement de sort de trois niveaux supérieurs au niveau réel du sort.\nUn sort amplifié et maximisé obtient les avantages distincts de chaque don : le résultat maximal plus la moitié du résultat normalement lancé."
+  }
+}
