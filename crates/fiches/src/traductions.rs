@@ -5,11 +5,63 @@
 
 use serde_json::Value;
 
+/// Lots de traduction des sorts (`data/core/fr/sorts_NN.json`).
+const LOTS_SORTS: [&str; 30] = [
+    include_str!("../../../data/core/fr/sorts_01.json"),
+    include_str!("../../../data/core/fr/sorts_02.json"),
+    include_str!("../../../data/core/fr/sorts_03.json"),
+    include_str!("../../../data/core/fr/sorts_04.json"),
+    include_str!("../../../data/core/fr/sorts_05.json"),
+    include_str!("../../../data/core/fr/sorts_06.json"),
+    include_str!("../../../data/core/fr/sorts_07.json"),
+    include_str!("../../../data/core/fr/sorts_08.json"),
+    include_str!("../../../data/core/fr/sorts_09.json"),
+    include_str!("../../../data/core/fr/sorts_10.json"),
+    include_str!("../../../data/core/fr/sorts_11.json"),
+    include_str!("../../../data/core/fr/sorts_12.json"),
+    include_str!("../../../data/core/fr/sorts_13.json"),
+    include_str!("../../../data/core/fr/sorts_14.json"),
+    include_str!("../../../data/core/fr/sorts_15.json"),
+    include_str!("../../../data/core/fr/sorts_16.json"),
+    include_str!("../../../data/core/fr/sorts_17.json"),
+    include_str!("../../../data/core/fr/sorts_18.json"),
+    include_str!("../../../data/core/fr/sorts_19.json"),
+    include_str!("../../../data/core/fr/sorts_20.json"),
+    include_str!("../../../data/core/fr/sorts_21.json"),
+    include_str!("../../../data/core/fr/sorts_22.json"),
+    include_str!("../../../data/core/fr/sorts_23.json"),
+    include_str!("../../../data/core/fr/sorts_24.json"),
+    include_str!("../../../data/core/fr/sorts_25.json"),
+    include_str!("../../../data/core/fr/sorts_26.json"),
+    include_str!("../../../data/core/fr/sorts_27.json"),
+    include_str!("../../../data/core/fr/sorts_28.json"),
+    include_str!("../../../data/core/fr/sorts_29.json"),
+    include_str!("../../../data/core/fr/sorts_30.json"),
+];
+
+/// Un sort en français, assemblé à partir du catalogue anglais et des fichiers de traduction.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct SortFr {
+    pub nom: String,
+    pub ecole: String,
+    pub sous_ecole: Option<String>,
+    pub descripteurs: Vec<String>,
+    pub temps_d_incantation: Option<String>,
+    pub composantes: Option<String>,
+    pub portee: Option<String>,
+    pub cible: Option<String>,
+    pub duree: Option<String>,
+    pub jet_de_sauvegarde: Option<String>,
+    pub resistance_a_la_magie: Option<String>,
+    pub description: String,
+}
+
 #[derive(Debug, Clone)]
 pub struct Traductions {
     races: Value,
     competences: Value,
     ensorceleur: Value,
+    sorts: std::collections::BTreeMap<String, SortFr>,
 }
 
 impl Traductions {
@@ -25,7 +77,60 @@ impl Traductions {
                 "../../../data/core/fr/ensorceleur.json"
             ))
             .expect("ensorceleur.json (fr) valide"),
+            sorts: Self::charger_sorts(),
         }
+    }
+
+    fn charger_sorts() -> std::collections::BTreeMap<String, SortFr> {
+        let noms: Value =
+            serde_json::from_str(include_str!("../../../data/core/fr/sorts_noms.json"))
+                .expect("sorts_noms.json valide");
+        let champs: Value =
+            serde_json::from_str(include_str!("../../../data/core/fr/sorts_champs.json"))
+                .expect("sorts_champs.json valide");
+        let texte = |v: &Value| v.as_str().map(str::to_string);
+        let mut out = std::collections::BTreeMap::new();
+        for lot in LOTS_SORTS {
+            let lot: Value = serde_json::from_str(lot).expect("lot de sorts valide");
+            let Some(objet) = lot.as_object() else {
+                continue;
+            };
+            for (nom_en, t) in objet {
+                let c = &champs[nom_en];
+                out.insert(
+                    nom_en.clone(),
+                    SortFr {
+                        nom: texte(&noms["noms"][nom_en]).unwrap_or_else(|| nom_en.clone()),
+                        ecole: texte(&c["ecole"]).unwrap_or_default(),
+                        sous_ecole: texte(&c["sous_ecole"]),
+                        descripteurs: c["descripteurs"]
+                            .as_array()
+                            .map(|a| a.iter().filter_map(texte).collect())
+                            .unwrap_or_default(),
+                        temps_d_incantation: texte(&c["temps_d_incantation"]),
+                        // les composantes avec détail matériel sont dans le lot, sinon la forme normalisée
+                        composantes: texte(&t["composantes"]).or_else(|| texte(&c["composantes"])),
+                        portee: texte(&c["portee"]),
+                        cible: texte(&t["cible"]),
+                        duree: texte(&c["duree"]),
+                        jet_de_sauvegarde: texte(&c["jet_de_sauvegarde"]),
+                        resistance_a_la_magie: texte(&c["resistance_a_la_magie"]),
+                        description: texte(&t["description"]).unwrap_or_default(),
+                    },
+                );
+            }
+        }
+        out
+    }
+
+    /// Sort en français d'après son nom anglais du catalogue.
+    pub fn sort(&self, nom_en: &str) -> Option<&SortFr> {
+        self.sorts.get(nom_en)
+    }
+
+    /// Nombre de sorts traduits.
+    pub fn nombre_de_sorts(&self) -> usize {
+        self.sorts.len()
     }
 
     /// Nom et texte français d'un trait racial, d'après son nom anglais.
@@ -157,6 +262,49 @@ mod tests {
                 );
             }
         }
+    }
+
+    #[test]
+    fn tous_les_sorts_de_l_ensorceleur_et_de_lignage_sont_traduits() {
+        let r = Referentiel::core();
+        let t = Traductions::core();
+        let mut manquants = Vec::new();
+        for s in &r.sorts {
+            if s.niveau_pour("sorcerer").is_some() && t.sort(&s.nom_en).is_none() {
+                manquants.push(s.nom_en.clone());
+            }
+        }
+        let ens = r.classe("ensorceleur").unwrap();
+        for l in &ens.lignages {
+            for b in &l.sorts_bonus {
+                if let Some(s) = r.sort_approx(&b.nom_en) {
+                    if t.sort(&s.nom_en).is_none() {
+                        manquants.push(s.nom_en.clone());
+                    }
+                }
+            }
+        }
+        assert!(manquants.is_empty(), "sorts non traduits : {manquants:?}");
+        // champs mécaniques présents pour chaque sort traduit
+        for s in &r.sorts {
+            if let Some(fr) = t.sort(&s.nom_en) {
+                assert!(!fr.ecole.is_empty(), "{}", s.nom_en);
+                assert!(!fr.description.is_empty(), "{}", s.nom_en);
+                assert_eq!(
+                    fr.temps_d_incantation.is_some(),
+                    s.temps_d_incantation_en.is_some(),
+                    "{}",
+                    s.nom_en
+                );
+                assert_eq!(fr.cible.is_some(), s.cible_en.is_some(), "{}", s.nom_en);
+                assert_eq!(fr.portee.is_some(), s.portee_en.is_some(), "{}", s.nom_en);
+            }
+        }
+        let magic = t.sort("Magic Missile").unwrap();
+        assert_eq!(magic.nom, "Projectile magique");
+        assert_eq!(magic.ecole, "évocation");
+        assert_eq!(magic.portee.as_deref(), Some("moyenne (30 m + 3 m/niveau)"));
+        assert_eq!(magic.composantes.as_deref(), Some("V, G"));
     }
 
     #[test]
