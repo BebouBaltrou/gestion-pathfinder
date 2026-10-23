@@ -76,6 +76,13 @@ jobs:
         run: npx tauri icon src-tauri/icone-source.png
       - name: Compilation
         run: ../outils/ci/annoter.sh npx tauri build --no-bundle
+      - name: Essai de bout en bout
+        run: |
+          export GESTION_PATHFINDER_DOSSIER="$RUNNER_TEMP/campagnes"
+          export GESTION_PATHFINDER_AUTOTEST="$RUNNER_TEMP/autotest.txt"
+          timeout 120 ./src-tauri/target/release/gestion-pathfinder.exe || true
+          cat "$GESTION_PATHFINDER_AUTOTEST" || { echo "::error title=Essai de bout en bout::aucun rapport"; exit 1; }
+          grep -q "AUTOTEST OK" "$GESTION_PATHFINDER_AUTOTEST" || { echo "::error title=Essai de bout en bout::$(tr '\n' '|' < "$GESTION_PATHFINDER_AUTOTEST")"; exit 1; }
       - name: Exécutable
         uses: actions/upload-artifact@v4
         with:
@@ -112,6 +119,13 @@ jobs:
         run: npx tauri icon src-tauri/icone-source.png
       - name: Compilation (AppImage)
         run: ../outils/ci/annoter.sh npx tauri build --bundles appimage
+      - name: Essai de bout en bout
+        run: |
+          export GESTION_PATHFINDER_DOSSIER="$RUNNER_TEMP/campagnes"
+          export GESTION_PATHFINDER_AUTOTEST="$RUNNER_TEMP/autotest.txt"
+          xvfb-run -a timeout 120 ./src-tauri/target/release/gestion-pathfinder || true
+          cat "$GESTION_PATHFINDER_AUTOTEST" || { echo "::error title=Essai de bout en bout::aucun rapport"; exit 1; }
+          grep -q "AUTOTEST OK" "$GESTION_PATHFINDER_AUTOTEST" || { echo "::error title=Essai de bout en bout::$(tr '\n' '|' < "$GESTION_PATHFINDER_AUTOTEST")"; exit 1; }
       - name: AppImage
         uses: actions/upload-artifact@v4
         with:

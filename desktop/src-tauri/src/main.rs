@@ -111,6 +111,25 @@ fn simulation(s: S, action: String) -> Retour {
     }
 }
 
+/// Essai automatique de bout en bout (compilation sur GitHub) : l'interface enchaîne
+/// quelques actions puis écrit son rapport dans le fichier indiqué et ferme l'application.
+fn fichier_autotest() -> Option<String> {
+    std::env::var("GESTION_PATHFINDER_AUTOTEST").ok()
+}
+
+#[tauri::command]
+fn autotest_actif() -> bool {
+    fichier_autotest().is_some()
+}
+
+#[tauri::command]
+fn autotest_fin(app: tauri::AppHandle, rapport: String) {
+    if let Some(f) = fichier_autotest() {
+        let _ = std::fs::write(f, rapport);
+        app.exit(0);
+    }
+}
+
 fn main() {
     tauri::Builder::default()
         .manage(Etat(Mutex::new(Session::demarrer())))
@@ -123,7 +142,9 @@ fn main() {
             annuler,
             retablir,
             resoudre_prestige,
-            simulation
+            simulation,
+            autotest_actif,
+            autotest_fin
         ])
         .run(tauri::generate_context!())
         .expect("impossible de lancer l'application");

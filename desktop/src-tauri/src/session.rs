@@ -53,6 +53,10 @@ pub struct Session {
 /// Dossier des campagnes : %APPDATA%\GestionPathfinder\campagnes sous Windows,
 /// ~/.local/share/GestionPathfinder/campagnes sous Linux (même dossier que l'ancienne version).
 pub fn dossier_campagnes() -> PathBuf {
+    // dossier imposé (essais automatiques, version portable)
+    if let Some(d) = std::env::var_os("GESTION_PATHFINDER_DOSSIER") {
+        return PathBuf::from(d);
+    }
     let base = std::env::var_os("APPDATA")
         .or_else(|| std::env::var_os("XDG_DATA_HOME"))
         .map(PathBuf::from)
