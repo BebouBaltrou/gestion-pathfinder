@@ -87,6 +87,12 @@ pub struct Traductions {
 }
 
 impl Traductions {
+    /// Traductions chargées une seule fois et partagées.
+    pub fn partage() -> &'static Traductions {
+        static T: std::sync::OnceLock<Traductions> = std::sync::OnceLock::new();
+        T.get_or_init(Traductions::core)
+    }
+
     pub fn core() -> Traductions {
         Traductions {
             races: serde_json::from_str(include_str!("../../../data/core/fr/races.json"))

@@ -1,6 +1,7 @@
 //! Modèles d'affichage : ce que l'interface montre, calculé ici à partir de l'état de la
 //! campagne. L'interface (quelle qu'elle soit) ne refait aucun calcul de règles.
 
+pub mod personnage;
 pub mod tableau;
 
 use domaine::{CoutCapitaux, Montant};

@@ -3,6 +3,7 @@
 
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+mod personnages;
 mod session;
 
 use campagne::evenements::Evenement;
@@ -13,9 +14,9 @@ use std::path::Path;
 use std::sync::Mutex;
 use tauri::State;
 
-struct Etat(Mutex<Session>);
+pub(crate) struct Etat(Mutex<Session>);
 
-type S<'a> = State<'a, Etat>;
+pub(crate) type S<'a> = State<'a, Etat>;
 
 /// Ce que la coquille de l'interface affiche en permanence.
 #[derive(Serialize)]
@@ -28,7 +29,7 @@ struct EtatApp {
     simulation: Option<(i64, i64)>,
 }
 
-fn session<'a>(s: &'a State<'_, Etat>) -> std::sync::MutexGuard<'a, Session> {
+pub(crate) fn session<'a>(s: &'a State<'_, Etat>) -> std::sync::MutexGuard<'a, Session> {
     // une commande qui a paniqué ne doit pas bloquer les suivantes
     s.0.lock().unwrap_or_else(|e| e.into_inner())
 }
@@ -143,6 +144,17 @@ fn main() {
             retablir,
             resoudre_prestige,
             simulation,
+            personnages::liste_personnages,
+            personnages::fiche_personnage,
+            personnages::catalogue_creation,
+            personnages::apercu_fiche,
+            personnages::creer_personnage,
+            personnages::creer_fiche,
+            personnages::evenement_fiche,
+            personnages::apercu_montee,
+            personnages::essai_montee,
+            personnages::regles_campagne,
+            personnages::changer_regle,
             autotest_actif,
             autotest_fin
         ])

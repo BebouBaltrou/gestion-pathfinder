@@ -9,8 +9,10 @@ license.workspace = true
 domaine = { path = "../domaine" }
 regles = { path = "../regles" }
 campagne = { path = "../campagne" }
+fiches = { path = "../fiches" }
 serde = { version = "1", features = ["derive"], optional = true }
+serde_json = { version = "1", optional = true }
 
 [features]
 # Sérialisation vers l'interface (activée par l'application de bureau).
-serde = ["dep:serde", "campagne/serde"]
+serde = ["dep:serde", "dep:serde_json", "campagne/serde"]

@@ -66,3 +66,18 @@ Chaque point : ce que le moteur fait aujourd'hui, et ce qu'il faut te demander.
     : non gérés). Arme à deux mains : 1,5 × le bonus de FOR (malus non multiplié).
 22. **Noms français de l'équipement et des états** : ma traduction, non officielle (comme pour les
     sorts). Prix en pièces conservés tels quels (po, pa, pc).
+
+## Phase 6 (campagne, intermède, pages) — ajouts du 24/10/2026
+
+23. **Bonus de compétence dans les jets de recettes** : dans le Guide de campagne, le test de
+    recettes se fait avec le bonus des salles et des équipes (d20 + bonus), pas avec une
+    compétence de PJ. Je n'ai donc rien branché : dis-moi quelle compétence ou quel test tu avais
+    en tête (par exemple le travail du PJ lui-même, ou le test de Prestige).
+24. **Prestige calculé** : sans valeur saisie, le Prestige affiché est « niveau + modificateur de
+    Charisme » (lecture du commentaire existant sur la limite de recrutement, GC p. 93). Une
+    valeur saisie l'emporte toujours.
+25. **Le temps de campagne et les fiches** : un jour = 14 400 rounds (6 secondes par round) ; les
+    effets temporaires à durée avancent avec les jours et disparaissent à zéro. Les sorts du jour
+    ne sont PAS rendus automatiquement : bouton « Repos » sur la fiche.
+26. **Sauvegardes** : une campagne avec fiches reste lisible par l'ancienne application, qui
+    ignore les fiches. Les anciennes sauvegardes (sans fiches) s'ouvrent sans changement.

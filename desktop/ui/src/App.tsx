@@ -3,6 +3,8 @@ import { api, EtatApp, Retour } from "./api";
 import { icones } from "./icones";
 import { Campagnes } from "./pages/Campagnes";
 import { EnAttente } from "./pages/EnAttente";
+import { Parametres } from "./pages/Parametres";
+import { Personnages } from "./pages/Personnages";
 import { Tableau } from "./pages/Tableau";
 
 export type Page =
@@ -200,7 +202,12 @@ export function App() {
         <main className="contenu">
           {pageActive === "tableau" && <Tableau outils={outils} />}
           {pageActive === "campagnes" && <Campagnes outils={outils} />}
-          {pageActive !== "tableau" && pageActive !== "campagnes" && <EnAttente nom={NOMS_PAGES[pageActive]} />}
+          {pageActive === "personnages" && <Personnages outils={outils} />}
+          {pageActive === "parametres" && <Parametres outils={outils} />}
+          {pageActive !== "tableau" &&
+            pageActive !== "campagnes" &&
+            pageActive !== "personnages" &&
+            pageActive !== "parametres" && <EnAttente nom={NOMS_PAGES[pageActive]} />}
         </main>
       </div>
 

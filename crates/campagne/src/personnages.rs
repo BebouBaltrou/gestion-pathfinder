@@ -50,6 +50,8 @@ impl ReglesPersonnages {
 
 /// Une règle optionnelle de campagne, telle que l'interface la présente.
 #[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize))]
+#[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
 pub struct RegleInfo {
     pub id: &'static str,
     pub nom: &'static str,

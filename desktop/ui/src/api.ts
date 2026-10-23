@@ -1,5 +1,17 @@
 // Pont vers le cœur Rust (commandes Tauri). Les types reprennent ceux de crates/vues.
 
+import type {
+  ApercuMontee,
+  CatalogueCreation,
+  EssaiMontee,
+  EvenementFiche,
+  FicheDonnees,
+  FicheVue,
+  LignePersonnage,
+  Montee,
+  RegleInfo,
+} from "./fiche-types";
+
 export type Somme = { pa: number; texte: string };
 export type Capitaux = { marchandises: number; influence: number; travail: number; magie: number };
 
@@ -96,6 +108,19 @@ export const api = {
     appeler<Retour>("resoudre_prestige", { localite, reussi }),
   simulation: (action: "demarrer" | "abandonner" | "garder") =>
     appeler<Retour>("simulation", { action }),
+  // ---- personnages et fiches
+  listePersonnages: () => appeler<LignePersonnage[]>("liste_personnages"),
+  fichePersonnage: (id: number) => appeler<FicheVue | null>("fiche_personnage", { id }),
+  catalogueCreation: () => appeler<CatalogueCreation>("catalogue_creation"),
+  apercuFiche: (fiche: FicheDonnees) => appeler<FicheVue>("apercu_fiche", { fiche }),
+  creerPersonnage: (nom: string, po: number) => appeler<Retour>("creer_personnage", { nom, po }),
+  creerFiche: (pj: number, fiche: FicheDonnees) => appeler<Retour>("creer_fiche", { pj, fiche }),
+  evenementFiche: (pj: number, evenement: EvenementFiche) =>
+    appeler<Retour>("evenement_fiche", { pj, evenement }),
+  apercuMontee: (pj: number, classe: string) => appeler<ApercuMontee | null>("apercu_montee", { pj, classe }),
+  essaiMontee: (pj: number, montee: Montee) => appeler<EssaiMontee | null>("essai_montee", { pj, montee }),
+  reglesCampagne: () => appeler<RegleInfo[]>("regles_campagne"),
+  changerRegle: (id: string, valeur: string) => appeler<Retour>("changer_regle", { id, valeur }),
 };
 
 // ------------------------------------------------------------------ montants
@@ -194,6 +219,26 @@ function simule(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
       };
       return Promise.resolve(t);
     }
+    case "liste_personnages":
+      return Promise.resolve([
+        { id: 1, nom: "Lyra", compte: { pa: 1000, texte: "100 po" }, lieu: "Sandpoint", prestige: 4, prestigeCalcule: true,
+          fiche: { race: "Elfe", classes: "Ensorceleur 1", niveau: 1, pv: 7, ca: 13, xp: 0, niveauAtteignable: 1, niveauxEnAttente: 0 } },
+        { id: 2, nom: "Valeros", compte: { pa: 870, texte: "87 po" }, lieu: null, prestige: null, prestigeCalcule: false, fiche: null },
+      ]);
+    case "fiche_personnage":
+      return args?.id === 1 ? fetch("mock/fiche.json").then((r) => r.json()) : Promise.resolve(null);
+    case "catalogue_creation":
+      return fetch("mock/catalogue.json").then((r) => r.json());
+    case "apercu_fiche":
+      return fetch("mock/fiche.json").then((r) => r.json());
+    case "regles_campagne":
+      return Promise.resolve([
+        { id: "pj.vitesse", nom: "Vitesse de progression", description: "Table d'expérience utilisée pour monter de niveau.", officielle: true,
+          impact: "Fixe les XP nécessaires pour chaque niveau.", defaut: "moyenne", valeur: "moyenne",
+          choix: [["lente", "Lente"], ["moyenne", "Moyenne"], ["rapide", "Rapide"]] },
+        { id: "inter.repartition_stricte", nom: "Répartition stricte des bonus", description: "Une salle donne tout son bonus à un seul type de capital par jour.",
+          officielle: false, impact: "Recettes des salles et des équipes.", defaut: "oui", valeur: "non", choix: [["oui", "Oui"], ["non", "Non"]] },
+      ]);
     default:
       return Promise.resolve(ok(`(aperçu) ${cmd}`));
   }

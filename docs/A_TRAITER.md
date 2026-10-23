@@ -76,3 +76,12 @@ confirmer, import/export, modèles personnels. Puis retrait de l'ancienne applic
 - **Niveaux négatifs (drain d'énergie)** : malus par niveau négatif, perte de niveau effectif,
   jets de sauvegarde pour les rendre permanents.
 - Vitesse divisée par deux : arrondi à clarifier (voir `docs/POINTS_A_CONFIRMER_FICHES.md`, n° 17).
+
+## Pages des personnages (nouvelle application) : fait et reste à faire
+
+Fait : liste des PJ, création de fiche pas à pas, fiche complète (chiffres détaillés au clic,
+compétences, dons, sorts et repos, équipement, états et effets temporaires, XP, historique),
+montée de niveau, page Paramètres (registre des règles optionnelles de la campagne).
+Reste : équipement de départ dans l'assistant de création, multiclassage (une seule classe
+existe pour l'instant), tirage de dés intégré pour les caractéristiques et les dés de vie,
+familiers, lien de la fiche avec le déplacement du PJ dans une localité, impression de la fiche.

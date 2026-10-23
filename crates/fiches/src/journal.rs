@@ -44,6 +44,8 @@ pub enum EvenementFiche {
     },
     ArmeAjoutee(String),
     ArmeRetiree(String),
+    /// Le joueur indique sa charge (légère, intermédiaire, lourde) ; elle n'est pas déduite du poids.
+    ChargeDeclaree(crate::equipement::Charge),
     ObjetAjoute {
         nom_en: String,
         quantite: u32,
@@ -85,6 +87,7 @@ impl EvenementFiche {
                 (EmplacementProtection::Bouclier, Some(o)) => format!("Bouclier porté : {o}"),
                 (EmplacementProtection::Bouclier, None) => "Bouclier retiré".to_string(),
             },
+            EvenementFiche::ChargeDeclaree(c) => format!("Charge portée : {}", c.nom()),
             EvenementFiche::ArmeAjoutee(a) => format!("Arme prise : {a}"),
             EvenementFiche::ArmeRetiree(a) => format!("Arme rangée : {a}"),
             EvenementFiche::ObjetAjoute { nom_en, quantite } => {
@@ -330,6 +333,7 @@ impl Journal {
                     }
                     verifier_equipement(r, &fiche, i)?;
                 }
+                EvenementFiche::ChargeDeclaree(c) => fiche.equipement.charge_declaree = *c,
                 EvenementFiche::ArmeAjoutee(a) => {
                     fiche.equipement.armes.push(a.clone());
                     verifier_equipement(r, &fiche, i)?;

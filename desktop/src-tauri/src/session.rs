@@ -186,6 +186,28 @@ impl Session {
         }
     }
 
+    /// Lit l'état de la campagne ouverte.
+    pub fn avec_etat<T>(&mut self, f: impl FnOnce(&campagne::etat::Etat) -> T) -> Option<T> {
+        let c = self.campagne.as_mut()?;
+        Some(f(c.etat(&self.r)))
+    }
+
+    /// Règles optionnelles de l'intermède (hors journal), puis enregistrement.
+    pub fn regler_options(
+        &mut self,
+        o: regles::options::OptionsRegles,
+        succes: &str,
+    ) -> Retour {
+        let Some(c) = self.campagne.as_mut() else {
+            return Retour::erreur("Aucune campagne ouverte");
+        };
+        c.options = o;
+        match self.enregistrer() {
+            Ok(()) => Retour::ok(succes),
+            Err(e) => Retour::erreur(e),
+        }
+    }
+
     pub fn annuler(&mut self) -> Retour {
         let Some(c) = self.campagne.as_mut() else {
             return Retour::erreur("Aucune campagne ouverte");

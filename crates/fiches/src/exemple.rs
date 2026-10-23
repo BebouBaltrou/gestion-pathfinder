@@ -54,3 +54,23 @@ pub fn elfe_ensorceleuse() -> Fiche {
         .to_vec(),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn json_de_la_fiche_exemple() {
+        let j = serde_json::to_string(&super::elfe_ensorceleuse()).unwrap();
+        println!("JSON>>{j}");
+        let ev = crate::journal::EvenementFiche::Equiper {
+            emplacement: crate::journal::EmplacementProtection::Armure,
+            objet: Some("Chainmail".into()),
+        };
+        println!("EV>>{}", serde_json::to_string(&ev).unwrap());
+        println!(
+            "EV2>>{}",
+            serde_json::to_string(&crate::journal::EvenementFiche::Repos).unwrap()
+        );
+        let back: crate::fiche::Fiche = serde_json::from_str(&j).unwrap();
+        assert_eq!(back, super::elfe_ensorceleuse());
+    }
+}
