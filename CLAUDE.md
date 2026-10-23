@@ -14,6 +14,7 @@ jargon, et on lui livre des choses qu'il peut lancer et tester.
 - **Inspecter et proposer avant de coder** ; ne pas écraser de fichier sans le signaler.
 - Toute lecture de règle non évidente est signalée comme « lecture à valider ».
 
+Passation (état détaillé et prochaines étapes) : `docs/REPRISE.md`.
 Exigences complètes : `docs/CAHIER_DES_CHARGES.md`. Décisions et lectures validées :
 `docs/A_TRAITER.md`. À faire avec les fiches de personnage : `docs/FICHES_PERSONNAGE.md`.
 Règles et points à confirmer du référentiel : page « Points à confirmer » de l'application.
