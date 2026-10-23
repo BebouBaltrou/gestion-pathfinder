@@ -3,30 +3,22 @@
 Questions mises de côté et décisions prises pour les étapes suivantes.
 Ce fichier est tenu à jour à chaque étape.
 
-## Mis en attente (à traiter à la fin)
+## Mis en attente
 
-- **Limite de recrutement par le Prestige** (GC p. 93) : « votre personnage peut uniquement
-  recruter des équipes composées d'employés dont le niveau est inférieur ou égal à sa valeur
-  de Prestige ». Le niveau des équipes ne figure pas dans le référentiel : la règle n'est pas
-  vérifiée. Mis en attente le 22/10/2026.
-- **Effectifs des équipes et des organisations** : compter le nombre de personnes (taille
-  des équipes : nombre indiqué, de 50 % à 150 % selon GC p. 95) et le total par organisation.
-  Demandé le 22/10/2026.
-- **Travail du PJ** (GC p. 79 et 86, « Produire des capitaux ») : travail non qualifié
-  (5 pa ou 1 point de capital) et travail qualifié (test de compétence du PJ, Coût produit).
-  Demandé le 22/10/2026.
-- **Promouvoir une entreprise** (GC p. 86) : capitaux dépensés + test, production
-  supplémentaire pendant 1d6 jours. Demandé le 22/10/2026.
-- **Extensions des modèles** (ameublement, fortification) : ignorées à la création d'un
-  bâtiment depuis un modèle (l'application le signale).
+- Fonctionnalités liées aux fiches de personnage (limite par le Prestige, travail du PJ,
+  promotion d'entreprise) : voir `docs/FICHES_PERSONNAGE.md`.
 
-## Question ouverte
+## Décisions du 23/10/2026
 
-- **Coût produit des capitaux obtenus par les bâtiments et organisations** : le livre le
-  demande (GC p. 79 pour le travail qualifié du PJ ; p. 94, section « Recettes » : « Le
-  personnage doit tout de même payer les coûts occasionnés par ce type d'acquisition de
-  capitaux (voir page 77) »). L'utilisateur pense que cela ne concerne que le travail du PJ.
-  Option provisoire « capitaux produits encaissés gratuitement » ajoutée le 22/10/2026.
+- **Coût produit** des capitaux produits par les bâtiments et organisations : gratuits par
+  défaut, option « faire payer le Coût produit » (GC p. 94). Travail du PJ : payant par défaut.
+- **Effectifs** : tailles des équipes selon le livre (pas de réglage 50-150 %), totaux par
+  organisation, bâtiment, localité et campagne.
+- **Extensions** (GC p. 108) : chantiers sur les salles (fortification, ameublement +5 au test
+  de la salle, piège au coût saisi), une de chaque type par salle, permanentes, conservées à
+  l'amélioration ; créées avec les modèles du livre.
+- **Vente** : la moitié du prix d'achat, en po. Sans acheteur (25 % des cas), le joueur garde
+  le bien ou l'abandonne.
 
 ## Lectures appliquées à l'étape 6 (à valider à l'usage)
 
@@ -50,11 +42,7 @@ Ce fichier est tenu à jour à chaque étape.
 
 ## Lectures appliquées à l'étape 7 (vente, abandon, réparation)
 
-- **Vente** (GC p. 84) : « la moitié de son prix d'achat et de son coût de construction (en po
-  ou en Marchandises, Influence, Travail ou Magie) ». L'application propose au choix la moitié
-  du prix en po ou la moitié du coût en capitaux (arrondi inférieur), montants modifiables ;
-  seules les parties construites ou recrutées comptent. Les 25 % de cas où l'acheteur ne se
-  trouve pas en 3d6 jours ne sont pas précisés : délai saisi par le joueur. Le bien reste au
+- **Vente** : seules les parties construites ou recrutées comptent ; le bien reste au
   personnage (et continue de produire) jusqu'à la vente.
 - **Réparation** (GC p. 92) : moitié du prix en po, ou moitié du coût en capitaux (arrondi
   inférieur) pris dans les réserves ; immédiate (aucune durée indiquée).

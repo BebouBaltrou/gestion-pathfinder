@@ -606,7 +606,11 @@ fn detail(
             if equipes.is_empty() {
                 "Aucune équipe n'y travaille (page Organisations pour en affecter)".to_string()
             } else {
-                format!("Équipes qui y travaillent : {}", equipes.join(", "))
+                format!(
+                    "Équipes qui y travaillent (👥 {} personne(s)) : {}",
+                    etat.effectif(etat.equipes_batiment(b.id), &r).0,
+                    equipes.join(", ")
+                )
             },
         );
         let g: Vec<String> = etat

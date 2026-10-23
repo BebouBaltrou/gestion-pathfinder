@@ -45,6 +45,20 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
         });
         widgets::carte(ui, |ui| {
             ui.vertical(|ui| {
+                widgets::texte_doux(ui, "Employés");
+                let (gens, a_venir) = etat.effectif(etat.equipes.values(), &app.r);
+                ui.label(
+                    RichText::new(format!("👥 {gens}"))
+                        .size(22.0)
+                        .color(theme::OR_PALE),
+                );
+                if a_venir > 0 {
+                    widgets::texte_doux(ui, format!("+{a_venir} à venir"));
+                }
+            });
+        });
+        widgets::carte(ui, |ui| {
+            ui.vertical(|ui| {
                 widgets::texte_doux(ui, "Transferts en route");
                 ui.label(
                     RichText::new(etat.transferts.len().to_string())
@@ -155,9 +169,15 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
                     let n_bat = etat.batiments_localite(l.id).count();
                     let n_org = etat.organisations_localite(l.id).count();
                     if n_bat + n_org > 0 {
+                        let (gens, _) = etat.effectif(
+                            etat.equipes.values().filter(|e| e.localite == l.id),
+                            &app.r,
+                        );
                         widgets::texte_doux(
                             ui,
-                            format!("{n_bat} bâtiment(s) · {n_org} organisation(s)"),
+                            format!(
+                                "{n_bat} bâtiment(s) · {n_org} organisation(s) · 👥 {gens} employé(s)"
+                            ),
                         );
                     }
                     widgets::capitaux(ui, &l.capitaux, false);

@@ -69,6 +69,41 @@ impl Etat {
             .filter(move |g| g.affectations.contains(&a))
     }
 
+    /// Nombre de personnes d'une équipe : la taille de son profil (GC p. 95 « Taille »).
+    pub fn effectif_equipe(&self, e: &Equipe, r: &Referentiel) -> u32 {
+        match r.equipe(&e.reference).and_then(|u| u.taille.as_ref()) {
+            Some(domaine::fiches::Taille::Personnes { nombre }) => *nombre,
+            _ => 0,
+        }
+    }
+
+    /// L'équipe est en place (recrutée, en amélioration ou en délocalisation).
+    pub fn equipe_en_place(e: &Equipe) -> bool {
+        match &e.statut {
+            StatutEquipe::Recrutee | StatutEquipe::EnDelocalisation(_) => true,
+            StatutEquipe::EnRecrutement(c) => {
+                matches!(c.nature, NatureChantier::Amelioration { .. })
+            }
+            StatutEquipe::ARecruter => false,
+        }
+    }
+
+    /// Effectif (en place, à venir : à recruter ou en recrutement) d'un ensemble d'équipes.
+    pub fn effectif<'a>(
+        &self,
+        equipes: impl Iterator<Item = &'a Equipe>,
+        r: &Referentiel,
+    ) -> (u32, u32) {
+        equipes.fold((0, 0), |(p, v), e| {
+            let n = self.effectif_equipe(e, r);
+            if Self::equipe_en_place(e) {
+                (p + n, v)
+            } else {
+                (p, v + n)
+            }
+        })
+    }
+
     pub fn nom_equipe(&self, e: &Equipe, r: &Referentiel) -> String {
         e.nom
             .clone()
@@ -932,6 +967,17 @@ mod tests {
             1
         );
         assert_eq!(m.etat().localite(l).unwrap().tresorerie, Montant::po(-14));
+    }
+
+    #[test]
+    fn effectifs() {
+        let mut m = monde();
+        m.ajouter("gardes", true); // 5 personnes
+        m.ajouter("acolyte", true); // 1
+        m.ajouter("artisans", false); // 3, à recruter
+        let etat = m.etat();
+        let o = m.o;
+        assert_eq!(etat.effectif(etat.equipes_organisation(o), &m.r), (6, 3));
     }
 
     #[test]

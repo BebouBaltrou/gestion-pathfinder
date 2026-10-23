@@ -5,7 +5,7 @@ use crate::{theme, widgets};
 use campagne::etat::Etat as EtatCampagne;
 use campagne::evenements::Evenement;
 use campagne::modele::*;
-use domaine::{CoutCapitaux, Montant, TypeCapital};
+use domaine::{CoutCapitaux, Montant};
 use eframe::egui::{self, RichText};
 use regles::Referentiel;
 
@@ -15,9 +15,8 @@ pub type Action = Option<(Evenement, String)>;
 pub struct Formulaire {
     vente: Option<Actif>,
     abandon: Option<Actif>,
-    en_capitaux: bool,
+    sans_acheteur: bool,
     po: String,
-    capitaux: CoutCapitaux,
     jours: String,
     influence: u32,
 }
@@ -60,15 +59,16 @@ pub fn actions_actif(
     ui.horizontal_wrapped(|ui| {
         if ui
             .small_button("Vendre…")
-            .on_hover_text("Moitié du prix ou du coût, acheteur trouvé en 3d6 jours (GC p. 84)")
+            .on_hover_text(
+                "Moitié du prix d'achat, acheteur trouvé en 3d6 jours dans 75 % des cas (GC p. 84)",
+            )
             .clicked()
         {
-            let (po, cap) = etat.produit_vente(cible, r);
+            let (po, _) = etat.produit_vente(cible, r);
             f.vente = Some(cible);
             f.abandon = None;
-            f.en_capitaux = false;
+            f.sans_acheteur = false;
             f.po = po.to_string();
-            f.capitaux = cap;
             f.jours.clear();
             f.influence = 0;
         }
@@ -128,57 +128,76 @@ pub fn actions_actif(
             widgets::texte_doux(
                 ui,
                 format!(
-                    "Valeur des parties construites ou recrutées : {prix} ; {cout}. Le livre donne « la moitié \
-                     de son prix d'achat et de son coût de construction » (en po ou en capitaux)."
+                    "Prix d'achat des parties construites ou recrutées : {prix} (coût {cout}). \
+                     Produit de la vente : la moitié du prix d'achat, en po (GC p. 84)."
                 ),
             );
             ui.horizontal(|ui| {
-                ui.radio_value(&mut f.en_capitaux, false, "Produit en po");
-                ui.radio_value(&mut f.en_capitaux, true, "Produit en capitaux");
+                ui.radio_value(
+                    &mut f.sans_acheteur,
+                    false,
+                    "Acheteur trouvé (75 % des cas)",
+                );
+                ui.radio_value(&mut f.sans_acheteur, true, "Aucun acheteur (25 %)");
             });
-            let mut po = Some(Montant::ZERO);
-            if f.en_capitaux {
-                ui.horizontal_wrapped(|ui| {
-                    for t in TypeCapital::TOUS {
-                        ui.label(
-                            RichText::new(t.to_string()).color(theme::couleur_ressource(t.into())),
-                        );
-                        ui.add(egui::DragValue::new(f.capitaux.get_mut(t)).range(0..=9999));
+            if f.sans_acheteur {
+                widgets::texte_doux(
+                    ui,
+                    "Personne ne reprend le bien : vous le gardez, ou vous l'abandonnez sans compensation.",
+                );
+                ui.horizontal(|ui| {
+                    if ui.button("Garder le bien").clicked() {
+                        action = Some((
+                            Evenement::Note {
+                                texte: format!("Aucun acheteur pour {libelle} : bien conservé"),
+                            },
+                            format!("Aucun acheteur : {libelle} conservé"),
+                        ));
+                        f.vente = None;
+                    }
+                    if ui
+                        .button(RichText::new("Abandonner le bien").color(theme::ROUGE))
+                        .clicked()
+                    {
+                        action = Some((
+                            Evenement::AbandonActif { cible },
+                            format!("Aucun acheteur : {libelle} abandonné"),
+                        ));
+                        f.vente = None;
+                    }
+                    if ui.button("Annuler").clicked() {
+                        f.vente = None;
                     }
                 });
-            } else {
-                ui.horizontal(|ui| {
-                    ui.label("Montant");
-                    po = widgets::champ_montant(ui, &mut f.po, 140.0).filter(|m| !m.est_negatif());
-                });
+                return;
             }
+            let mut po = None;
+            ui.horizontal(|ui| {
+                ui.label("Produit");
+                po = widgets::champ_montant(ui, &mut f.po, 140.0).filter(|m| !m.est_negatif());
+            });
             ui.horizontal_wrapped(|ui| {
-                ui.label("Jours pour trouver un acheteur");
+                ui.label("Jours pour trouver l'acheteur");
                 widgets::champ_entier(ui, &mut f.jours, "3d6", 60.0);
                 ui.label("Influence dépensée");
                 ui.add(egui::DragValue::new(&mut f.influence).range(0..=influence_dispo));
             });
             widgets::texte_doux(
                 ui,
-                "Lancez 3d6 (75 % des cas, le reste est à voir avec le MJ), puis retirez 1d6 par point \
-                 d'Influence dépensé (minimum 0). Le bien reste à vous jusqu'à la vente.",
+                "Lancez 3d6, puis retirez 1d6 par point d'Influence dépensé (minimum 0). \
+                 Le bien reste à vous jusqu'à la vente.",
             );
             let jours = f.jours.trim().parse::<u32>().ok();
             ui.horizontal(|ui| {
                 let ok = jours.is_some() && po.is_some();
                 if widgets::bouton_principal(ui, "Mettre en vente", ok) {
-                    let (po, capitaux) = if f.en_capitaux {
-                        (Montant::ZERO, f.capitaux)
-                    } else {
-                        (po.expect("valide"), CoutCapitaux::default())
-                    };
                     action = Some((
                         Evenement::VenteLancee {
                             cible,
                             jours: jours.expect("saisi"),
                             influence: f.influence,
-                            po,
-                            capitaux,
+                            po: po.expect("valide"),
+                            capitaux: CoutCapitaux::default(),
                         },
                         format!("Mise en vente : {libelle}"),
                     ));

@@ -70,13 +70,13 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
     );
     change |= option(
         ui,
-        &mut o.capitaux_produits_gratuits,
-        "Capitaux produits par les recettes encaissés gratuitement",
-        "Activé : les Marchandises, l'Influence, le Travail et la Magie obtenus aux tests de capitaux entrent \
-         dans les réserves sans rien payer. Désactivé : règle officielle, chaque unité gardée se paie au \
-         Coût produit (Table 2-1 ; GC p. 79 et p. 94 « Le personnage doit tout de même payer les coûts \
-         occasionnés par ce type d'acquisition de capitaux »). Option provisoire, le temps d'éclaircir la règle.",
-        Statut::Personnalise,
+        &mut o.capitaux_produits_payants,
+        "Faire payer le Coût produit des capitaux des bâtiments et organisations",
+        "Activé : règle du livre, chaque Marchandise, Influence, Travail ou Magie obtenue aux tests de \
+         capitaux se paie au Coût produit (Table 2-1 ; GC p. 94 « Le personnage doit tout de même payer les \
+         coûts occasionnés par ce type d'acquisition de capitaux »). Désactivé (par défaut) : encaissés \
+         gratuitement. Le travail du PJ lui-même restera payant (à venir avec les fiches de personnage).",
+        Statut::Officiel,
     );
     change |= option(
         ui,

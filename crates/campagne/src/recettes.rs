@@ -544,7 +544,7 @@ impl ReglesTest {
             repartition_stricte: o.repartition_stricte,
             moitie_equipe_sans_batiment: o.moitie_equipe_sans_batiment,
             production_pendant_amelioration: o.production_pendant_amelioration,
-            capitaux_produits_gratuits: o.capitaux_produits_gratuits,
+            capitaux_produits_gratuits: !o.capitaux_produits_payants,
         }
     }
 
@@ -553,7 +553,7 @@ impl ReglesTest {
             repartition_stricte: self.repartition_stricte,
             moitie_equipe_sans_batiment: self.moitie_equipe_sans_batiment,
             production_pendant_amelioration: self.production_pendant_amelioration,
-            capitaux_produits_gratuits: self.capitaux_produits_gratuits,
+            capitaux_produits_payants: !self.capitaux_produits_gratuits,
             ..OptionsRegles::default()
         }
     }

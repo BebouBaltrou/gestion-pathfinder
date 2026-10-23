@@ -21,9 +21,10 @@ pub struct OptionsRegles {
     /// Personnalisé : délocalisation d'une organisation entière avec un seul jet de 1d6 pour la
     /// préparation, au lieu d'un jet par groupe d'employés (GC p. 95).
     pub delocalisation_jet_unique: bool,
-    /// Personnalisé (provisoire) : les capitaux produits par les tests sont encaissés sans payer
-    /// le Coût produit (règle officielle : GC p. 79 et 94).
-    pub capitaux_produits_gratuits: bool,
+    /// Règle officielle (GC p. 94) : les capitaux produits par les tests des bâtiments et
+    /// organisations se paient au Coût produit. Désactivé par défaut (décision de l'utilisateur
+    /// du 23/10/2026 : gratuits) ; ne concerne pas le travail du PJ, payant par défaut.
+    pub capitaux_produits_payants: bool,
     /// Afficher les avertissements liés aux points à confirmer.
     pub afficher_avertissements: bool,
 }
@@ -37,7 +38,7 @@ impl Default for OptionsRegles {
             salaire_gestionnaire_unique: true,
             moitie_equipe_sans_batiment: true,
             delocalisation_jet_unique: false,
-            capitaux_produits_gratuits: false,
+            capitaux_produits_payants: false,
             afficher_avertissements: true,
         }
     }

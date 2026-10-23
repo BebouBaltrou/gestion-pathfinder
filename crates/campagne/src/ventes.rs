@@ -4,10 +4,11 @@
 //! - Abandon : immédiat, sans compensation.
 //! - Vente : « un montant égal à la moitié de son prix d'achat et de son coût de construction
 //!   (le coût […] s'exprime en termes de po ou de Marchandises, Influence, Travail ou Magie) ».
-//!   L'application propose la moitié du prix en po ou la moitié du coût en capitaux (arrondi
-//!   inférieur), modifiables. Délai pour trouver un acheteur saisi par le joueur (3d6 jours dans
-//!   75 % des cas, −1d6 par point d'Influence dépensé, minimum 0) ; le bien reste au personnage
-//!   jusque-là, puis le produit arrive dans la localité du bien.
+//!   Décision de l'utilisateur (23/10/2026) : la moitié du prix d'achat, en po (modifiable).
+//!   Délai pour trouver un acheteur saisi par le joueur (3d6 jours dans 75 % des cas, −1d6 par
+//!   point d'Influence dépensé, minimum 0) ; dans les 25 % restants, aucun acheteur : le joueur
+//!   garde ou abandonne le bien. Le bien reste au personnage jusqu'à la vente, puis le produit
+//!   arrive dans la localité du bien.
 //! - Réparation d'une salle brisée : « en règle générale […] un montant de po ou de capitaux
 //!   égal à la moitié du prix de construction de la salle » ; immédiate.
 

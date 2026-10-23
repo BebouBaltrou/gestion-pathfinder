@@ -146,10 +146,11 @@ pub fn afficher(app: &mut App, ui: &mut egui::Ui) {
             for o in orgs {
                 let choisi = app.ui_organisations.selection == Some(o.id);
                 let n = etat.equipes_organisation(o.id).count();
+                let (gens, _) = etat.effectif(etat.equipes_organisation(o.id), &app.r);
                 if ui
                     .selectable_label(
                         choisi,
-                        RichText::new(format!("{}  ·  {n} équipe(s)", o.nom))
+                        RichText::new(format!("{}  ·  {n} équipe(s), 👥 {gens}", o.nom))
                             .size(15.5)
                             .color(theme::OR_PALE),
                     )
@@ -539,6 +540,17 @@ fn detail(
             }
         });
         widgets::texte_doux(ui, format!("📍 siège : {siege}"));
+        let (gens, a_venir) = etat.effectif(equipes.iter(), &r);
+        ui.label(
+            RichText::new(if a_venir > 0 {
+                format!(
+                    "👥 Effectif : {gens} personne(s) (+{a_venir} à recruter ou en recrutement)"
+                )
+            } else {
+                format!("👥 Effectif : {gens} personne(s)")
+            })
+            .color(theme::OR_PALE),
+        );
         ui.horizontal(|ui| {
             ui.label("Reste à dépenser :");
             widgets::capitaux(ui, &etat.cout_restant_equipes(equipes.iter(), &r), true);
@@ -627,6 +639,11 @@ fn detail(
                         .unwrap_or_default();
                     widgets::badge(ui, &format!("à {l}"), theme::BLEU);
                 }
+                widgets::badge(
+                    ui,
+                    &format!("👥 {}", etat.effectif_equipe(e, &r)),
+                    theme::OR,
+                );
                 widgets::texte_doux(ui, format!("p. {}", u.source.page.unwrap_or(0)));
             });
             widgets::texte_doux(
