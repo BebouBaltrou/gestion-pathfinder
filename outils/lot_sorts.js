@@ -17,7 +17,7 @@ for (const l of lignages) {
 }
 const dossierFr = path.join(__dirname, "..", "data", "core", "fr");
 const deja = new Set();
-for (const f of fs.readdirSync(dossierFr).filter((x) => /^sorts_d+.json$/.test(x))) for (const k of Object.keys(JSON.parse(fs.readFileSync(path.join(dossierFr, f), "utf8")))) deja.add(k);
+for (const f of fs.readdirSync(dossierFr).filter((x) => /^sorts_\d+\.json$/.test(x))) for (const k of Object.keys(JSON.parse(fs.readFileSync(path.join(dossierFr, f), "utf8")))) deja.add(k);
 const ordre = [...surListe, ...extras].filter((s) => !deja.has(s.nom_en));
 const n = Number(taille);
 const lot = ordre.slice((Number(numero) - 1) * n, Number(numero) * n);

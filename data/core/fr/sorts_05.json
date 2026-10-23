@@ -1,0 +1,69 @@
+{
+  "Protection from Good": {
+    "cible": "créature touchée",
+    "composantes": "V, G, M/FD",
+    "description": "Ce sort fonctionne comme protection contre le mal, mais les bonus de parade et de résistance s'appliquent aux attaques faites par des créatures bonnes. La cible reçoit un nouveau jet de sauvegarde contre le contrôle par des créatures bonnes, et les créatures convoquées bonnes ne peuvent pas toucher la cible."
+  },
+  "Protection from Law": {
+    "cible": "créature touchée",
+    "composantes": "V, G, M/FD",
+    "description": "Ce sort fonctionne comme protection contre le mal, mais les bonus de parade et de résistance s'appliquent aux attaques faites par des créatures loyales. La cible reçoit un nouveau jet de sauvegarde contre le contrôle par des créatures loyales, et les créatures convoquées loyales ne peuvent pas toucher la cible."
+  },
+  "Ray of Enfeeblement": {
+    "cible": "rayon",
+    "description": "Un rayon scintillant jaillit de votre main. Vous devez réussir une attaque de contact à distance pour toucher une cible. Le sujet subit un malus en Force égal à 1d6+1 par deux niveaux de lanceur (maximum 1d6+5). Le score de Force du sujet ne peut pas tomber sous 1. Un jet de Vigueur réussi réduit ce malus de moitié. Ce malus ne se cumule pas avec lui-même : appliquez plutôt le malus le plus élevé."
+  },
+  "Reduce Person": {
+    "cible": "une créature humanoïde",
+    "composantes": "V, G, M (une pincée de poudre de fer)",
+    "description": "Ce sort réduit instantanément une créature humanoïde, divisant par deux sa taille, sa longueur et sa largeur, et son poids par 8. Cette diminution fait passer la catégorie de taille de la créature à la catégorie inférieure. La cible obtient un bonus de taille de +2 en Dextérité, un malus de taille de –2 en Force (jusqu'à un minimum de 1) et un bonus de +1 aux jets d'attaque et à la CA en raison de sa taille réduite.\nUne créature humanoïde de taille P dont la taille passe à Min occupe un espace de 75 cm (2,5 pieds) et a une allonge naturelle de 0 m (ce qui signifie qu'elle doit entrer dans la case d'un adversaire pour l'attaquer). Une créature humanoïde de taille G dont la taille passe à M occupe un espace de 1,50 m (5 pieds) et a une allonge naturelle de 1,50 m (5 pieds). Ce sort ne modifie pas la vitesse de la cible.\nTout l'équipement porté ou tenu par une créature est réduit de la même façon par le sort.\nLes armes de corps à corps et les projectiles infligent moins de dégâts. Les autres propriétés magiques ne sont pas affectées par ce sort. Tout objet réduit qui quitte la possession de la créature réduite (y compris un projectile ou une arme de jet) retrouve instantanément sa taille normale. Les armes de jet infligent donc leurs dégâts normaux (les projectiles infligent des dégâts selon la taille de l'arme qui les a tirés).\nPlusieurs effets magiques qui réduisent la taille ne se cumulent pas. Rapetissement contre et dissipe agrandissement.\nRapetissement peut être rendu permanent par un sort de permanence."
+  },
+  "Shield": {
+    "cible": "vous",
+    "description": "Bouclier crée un bouclier de force invisible qui flotte devant vous. Il annule les attaques de projectile magique dirigées contre vous. Le disque confère aussi un bonus de bouclier de +4 à la CA. Ce bonus s'applique contre les attaques de contact des créatures incorporelles, puisque c'est un effet de force. Le bouclier n'entraîne aucun malus d'armure aux tests ni risque d'échec des sorts profanes."
+  },
+  "Shocking Grasp": {
+    "cible": "créature ou objet touché",
+    "description": "Votre attaque de contact au corps à corps réussie inflige 1d6 points de dégâts d'électricité par niveau de lanceur (maximum 5d6). Quand vous délivrez la décharge, vous obtenez un bonus de +3 aux jets d'attaque si l'adversaire porte une armure de métal (ou porte une arme de métal ou est fait de métal)."
+  },
+  "Silent Image": {
+    "cible": "hallucination visuelle ne pouvant dépasser quatre cubes de 3 m (10 pieds) d'arête + un cube de 3 m (10 pieds) d'arête par niveau (E)",
+    "composantes": "V, G, F (un peu de toison)",
+    "description": "Ce sort crée l'illusion visuelle d'un objet, d'une créature ou d'une force, telle que vous la visualisez. L'illusion ne crée ni son, ni odeur, ni texture, ni température. Vous pouvez déplacer l'image dans les limites de la taille de l'effet."
+  },
+  "Sleep": {
+    "cible": "une ou plusieurs créatures vivantes dans une explosion de 3 m (10 pieds) de rayon",
+    "composantes": "V, G, M (du sable fin, des pétales de rose ou un grillon vivant)",
+    "description": "Un sort de sommeil plonge dans un sommeil magique 4 DV de créatures. Les créatures qui ont le moins de DV sont affectées en premier. Parmi les créatures de même nombre de DV, celles qui sont les plus proches du point d'origine du sort sont affectées en premier. Les DV insuffisants pour affecter une créature sont perdus. Les créatures endormies sont sans défense. Une gifle ou une blessure réveille une créature affectée, mais un bruit normal non. Réveiller une créature est une action simple (une application de l'action aider quelqu'un). Sommeil ne vise pas les créatures inconscientes, les créations artificielles ni les morts-vivants."
+  },
+  "Summon Monster 1": {
+    "cible": "une créature convoquée",
+    "composantes": "V, G, F/FD (un minuscule sac et une petite bougie)",
+    "description": "Note : les antipaladins ne peuvent convoquer que des créatures mauvaises.\nCe sort convoque une créature extraplanaire (typiquement un extérieur, un élémentaire ou une bête magique native d'un autre plan). Elle apparaît à l'endroit que vous désignez et agit immédiatement, pendant votre tour. Elle attaque vos adversaires au mieux de ses capacités. Si vous pouvez communiquer avec la créature, vous pouvez lui ordonner de ne pas attaquer, d'attaquer des ennemis précis ou d'accomplir d'autres actions. Le sort invoque l'une des créatures de la liste de niveau 1 du tableau 10-1. Vous choisissez le genre de créature à convoquer, et vous pouvez en choisir un différent chaque fois que vous lancez le sort.\nUn monstre convoqué ne peut pas convoquer ni invoquer d'une autre façon une autre créature, ni utiliser de capacité de téléportation ou de voyage planaire. On ne peut pas convoquer de créatures dans un environnement où elles ne peuvent pas survivre. Les créatures convoquées par ce sort ne peuvent pas utiliser les sorts ou capacités magiques qui reproduisent des sorts à composantes matérielles coûteuses (comme souhait).\nQuand vous utilisez un sort de convocation pour convoquer une créature d'alignement ou de sous-type élémentaire, il s'agit d'un sort de ce type. Les créatures du tableau 10-1 marquées d'un « * » sont convoquées avec le modèle céleste si vous êtes bon, et avec le modèle fiélon si vous êtes mauvais. Si vous êtes neutre, vous pouvez choisir le modèle à appliquer à la créature. Les créatures marquées d'un « * » ont toujours un alignement qui correspond au vôtre, quel que soit leur alignement habituel. Convoquer ces créatures fait que le type du sort de convocation correspond à votre alignement.\nNiveau 1 : rat sanguinaire*, dauphin*, chien*, aigle*, scarabée de feu*, grenouille venimeuse*, poney (cheval)*, vipère (serpent)*.\nNiveau 2 : fourmi géante (ouvrière)*, élémentaire (P) [élémentaire], mille-pattes géant*, grenouille géante*, araignée géante*, chien gobelin*, cheval*, hyène*, lémure (diable) [mauvais, loyal], pieuvre*, calmar*, loup*.\nNiveau 3 : fourmi géante (soldat)*, singe*, aurochs (herbivore de troupeau)*, sanglier*, guépard*, serpent constricteur*, crocodile*, chauve-souris sanguinaire*, dretch (démon) [chaotique, mauvais], anguille électrique*, archon lanterne [bon, loyal], léopard (félin)*, varan*, requin*, glouton*.\nNiveau 4 : fourmi géante (mâle)*, bison (herbivore de troupeau)*, deinonychus (dinosaure)*, grand singe sanguinaire*, sanglier sanguinaire*, loup sanguinaire*, élémentaire (M) [élémentaire], scorpion géant*, guêpe géante*, grizzly*, molosse infernal [mauvais, loyal], archon molosse [bon, loyal], lion*, méphite (au choix) [élémentaire], ptéranodon (dinosaure)*, rhinocéros*.\nNiveau 5 : ankylosaure (dinosaure)*, babau (démon) [chaotique, mauvais], diable barbu [mauvais, loyal], azata bralani [chaotique, bon], lion sanguinaire*, élémentaire (G) [élémentaire], murène géante*, kyton [mauvais, loyal], orque (dauphin)*, salamandre [mauvais], rhinocéros laineux*, xill [mauvais, loyal].\nNiveau 6 : ours sanguinaire*, tigre sanguinaire*, élasmosaure (dinosaure)*, élémentaire (TG) [élémentaire], éléphant*, érinye (diable) [mauvais, loyal], pieuvre géante*, rôdeur invisible [air], azata lillende [chaotique, bon], démon d'ombre [chaotique, mauvais], succube (démon) [chaotique, mauvais], tricératops (dinosaure)*.\nNiveau 7 : bébilith [chaotique, mauvais], diable des os [mauvais, loyal], brachiosaure (dinosaure)*, crocodile sanguinaire*, requin sanguinaire*, élémentaire (supérieur) [élémentaire], calmar géant*, mastodonte (éléphant)*, roc*, tyrannosaure (dinosaure)*, vrock (démon) [chaotique, mauvais].\nNiveau 8 : diable barbelé [mauvais, loyal], élémentaire (ancien) [élémentaire], hézrou (démon) [chaotique, mauvais].\nNiveau 9 : deva astral (ange) [bon], azata ghaéle [chaotique, bon], glabrezu (démon) [chaotique, mauvais], diable des glaces [mauvais, loyal], nalfeshnee (démon) [chaotique, mauvais], archon trompette [bon, loyal].\n* Cette créature est convoquée avec le modèle céleste si vous êtes bon, ou le modèle fiélon si vous êtes mauvais ; vous pouvez choisir l'un ou l'autre si vous êtes neutre."
+  },
+  "True Strike": {
+    "cible": "vous",
+    "composantes": "V, F (une petite réplique en bois d'une cible de tir à l'arc)",
+    "description": "Vous obtenez un aperçu intuitif temporaire du futur immédiat lors de votre prochaine attaque. Votre prochain jet d'attaque unique (s'il est fait avant la fin du round suivant) obtient un bonus de perspicacité de +20. De plus, vous n'êtes pas affecté par le risque d'échec qui s'applique aux attaquants qui tentent de frapper une cible camouflée."
+  },
+  "Unseen Servant": {
+    "cible": "un serviteur invisible, stupide et sans forme",
+    "composantes": "V, G, M (un morceau de ficelle et un peu de bois)",
+    "description": "Un serviteur invisible est une force invisible, stupide et sans forme qui accomplit de simples tâches sur votre ordre. Il peut courir chercher des objets, ouvrir des portes coincées, tenir des chaises, ainsi que nettoyer et raccommoder. Le serviteur ne peut accomplir qu'une activité à la fois, mais il répète indéfiniment la même activité si on le lui ordonne, tant que vous restez à portée. Il ne peut ouvrir que des portes, tiroirs, couvercles et autres objets normaux. Il a un score de Force effectif de 2 (il peut donc soulever 10 kg, 20 livres, ou traîner 45 kg, 100 livres). Il peut déclencher des pièges et autres, mais il ne peut exercer qu'une force de 10 kg (20 livres), ce qui ne suffit pas pour activer certaines plaques de pression et d'autres dispositifs. Il ne peut accomplir aucune tâche qui exige un test de compétence de DD supérieur à 10 ou qui exige un test avec une compétence qui ne peut pas être utilisée sans formation. Ce serviteur ne peut ni voler, ni escalader, ni même nager (bien qu'il puisse marcher sur l'eau). Sa vitesse de base est de 4,50 m (15 pieds).\nLe serviteur ne peut attaquer d'aucune façon ; il n'a jamais droit à un jet d'attaque. Il ne peut pas être tué, mais il se dissipe s'il subit 6 points de dégâts d'attaques de zone. (Il n'a pas de jet de sauvegarde contre les attaques.) Si vous essayez de l'envoyer au-delà de la portée du sort (mesurée à partir de votre position actuelle), le serviteur cesse d'exister."
+  },
+  "Ventriloquism": {
+    "cible": "son intelligible, généralement des paroles",
+    "composantes": "V, F (du parchemin roulé en cône)",
+    "description": "Vous pouvez faire paraître votre voix (ou n'importe quel son que vous pouvez normalement produire avec la voix) provenir d'un autre endroit. Vous pouvez parler dans n'importe quelle langue que vous connaissez. Pour ces voix et ces sons, quiconque entend le son et réussit un jet de sauvegarde le reconnaît comme illusoire (mais l'entend quand même)."
+  },
+  "Acid Arrow": {
+    "cible": "une flèche d'acide",
+    "composantes": "V, G, M (une feuille de rhubarbe et un estomac de vipère), F (un dard)",
+    "description": "Une flèche d'acide jaillit de votre main et file vers sa cible. Vous devez réussir une attaque de contact à distance pour toucher votre cible. La flèche inflige 2d4 points de dégâts d'acide, sans dégâts d'éclaboussure. Pour chaque tranche de trois niveaux de lanceur que vous possédez, l'acide, s'il n'est pas neutralisé, dure un round de plus (jusqu'à un maximum de 6 rounds supplémentaires au niveau 18) et inflige 2d4 points de dégâts supplémentaires à chaque round."
+  },
+  "Alter Self": {
+    "cible": "vous",
+    "composantes": "V, G, M (un morceau de la créature dont vous comptez prendre la forme)",
+    "description": "Quand vous lancez ce sort, vous pouvez prendre la forme de n'importe quelle créature de taille P ou M du type humanoïde. Si la forme que vous prenez possède l'une des capacités suivantes, vous obtenez la capacité indiquée : vision dans le noir 18 m (60 pieds), vision nocturne, odorat et nage 9 m (30 pieds).\nCréature de taille P : si vous prenez la forme d'un humanoïde de taille P, vous obtenez un bonus de taille de +2 en Dextérité.\nCréature de taille M : si vous prenez la forme d'un humanoïde de taille M, vous obtenez un bonus de taille de +2 en Force."
+  }
+}
