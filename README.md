@@ -1,8 +1,10 @@
 # Gestion d'intermède — Pathfinder 1 (Guide de campagne / Ultimate Campaign)
 
-Application Windows locale de gestion des localités, bâtiments, salles, organisations,
+Application locale (Windows et Linux) de gestion des localités, bâtiments, salles, organisations,
 équipes et gestionnaires selon les règles d'intermède du **Guide de campagne**
 (VF de *Ultimate Campaign*).
+
+Exigences : voir [docs/CAHIER_DES_CHARGES.md](docs/CAHIER_DES_CHARGES.md).
 
 ## État : étape 7 — simulation, export, tableau de bord, vente et réparation
 
