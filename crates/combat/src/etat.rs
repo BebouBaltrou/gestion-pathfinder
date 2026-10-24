@@ -54,6 +54,21 @@ pub enum ActionCombat {
     },
     /// Lancement d'un sort (voir `EtatCombat::apercu_sort` pour ce qu'il faut lancer avant).
     Lancer(ParamsLancer),
+    /// Attaque (action simple, action complexe, ou ce que l'attaque coûte). Une attaque qui tire des
+    /// munitions les décompte automatiquement (`tirs` par attaque) et **est refusée** si le
+    /// personnage n'a pas assez de munitions dans son inventaire (décision du 24/10/2026).
+    Attaquer {
+        pj: IdPj,
+        type_action: TypeAction,
+        libelle: String,
+        /// Munitions tirées (une par attaque ; plusieurs à l'attaque à outrance).
+        tirs: u32,
+        /// Objet « munition » de l'inventaire ; `None` : arme qui n'en consomme pas.
+        munition: Option<aventure::IdObjet>,
+        /// L'arme tire des munitions : sans objet `munition` valable, l'attaque est refusée.
+        a_distance_avec_munitions: bool,
+        deplacement: bool,
+    },
     /// Utilisation d'un objet de l'inventaire (potion, parchemin, baguette, bâton, objet à charges).
     UtiliserObjet(ParamsObjet),
     /// Test de concentration : sort à maintenir, ou distraction (Core p. 206).
@@ -105,8 +120,8 @@ impl From<ErreurTemps> for ErreurCombat {
     }
 }
 
-fn invalide<T>(m: &str) -> Result<T, ErreurCombat> {
-    Err(ErreurCombat::Invalide(m.to_string()))
+fn invalide<T>(m: impl Into<String>) -> Result<T, ErreurCombat> {
+    Err(ErreurCombat::Invalide(m.into()))
 }
 
 /// Ce que le moteur demande au joueur de saisir.
@@ -587,6 +602,70 @@ impl EtatCombat {
             }
             ActionCombat::Lancer(params) => self.lancer(params, ctx)?,
             ActionCombat::UtiliserObjet(params) => self.utiliser_objet(params, ctx)?,
+            ActionCombat::Attaquer {
+                pj,
+                type_action,
+                libelle,
+                tirs,
+                munition,
+                a_distance_avec_munitions,
+                deplacement,
+            } => {
+                self.verifier_engage(*pj)?;
+                let c = ctx(*pj).ok_or(ErreurAventure::PjInconnu(*pj))?;
+                let tirs = (*tirs).max(1);
+                let consomme = *a_distance_avec_munitions || munition.is_some();
+                if consomme {
+                    let Some(id) = munition else {
+                        return invalide(format!(
+                            "{} n'a pas de munition désignée : l'attaque est refusée",
+                            c.nom
+                        ));
+                    };
+                    let reste = self
+                        .aventure
+                        .pjs
+                        .get(pj)
+                        .and_then(|s| s.inventaire.get(id))
+                        .filter(|o| o.genre == aventure::GenreObjet::Munition)
+                        .map(|o| o.quantite);
+                    match reste {
+                        None => {
+                            return invalide(format!(
+                                "{} n'a pas cette munition dans son inventaire : l'attaque est refusée",
+                                c.nom
+                            ));
+                        }
+                        Some(q) if q < tirs => {
+                            return invalide(format!(
+                                "{} n'a plus assez de munitions ({q} restante(s), {tirs} demandée(s)) : l'attaque est refusée",
+                                c.nom
+                            ));
+                        }
+                        Some(_) => {}
+                    }
+                }
+                self.appliquer_interne(
+                    &ActionCombat::Agir {
+                        pj: *pj,
+                        type_action: *type_action,
+                        libelle: libelle.clone(),
+                        deplacement: *deplacement,
+                    },
+                    ctx,
+                )?;
+                if let (true, Some(id)) = (consomme, munition) {
+                    let s = self.aventure.appliquer(
+                        &EvenementAventure::ObjetUtilise {
+                            pj: *pj,
+                            id: *id,
+                            charges: tirs,
+                        },
+                        ctx,
+                    )?;
+                    self.fusionner(s);
+                }
+            }
             ActionCombat::Concentration {
                 pj,
                 d20,

@@ -31,7 +31,7 @@ pouvoirs de lignage recopiées de `data/core/ensorceleur.json` (un test vérifie
 | 9 | Pouvoirs de lignage : « 3 + modificateur de Charisme » par jour (rayons, griffes en rounds), « une fois par jour », paliers 9 / 17 / 20 (souffle, explosion, enfer…), « autant que le niveau d'ensorceleur » (rounds ou minutes), Adepte de la métamagie (1 au niveau 3 puis +1 tous les 4 niveaux, 5 au plus) | p. 72-77 | `data/combat/ressources_lignage.json` ; un test compare chaque formule au texte du livre | sûr |
 | 10 | Une nuit de repos complète rend les usages quotidiens | repos p. 191 (lecture de la phase 3) | Rendus avec les emplacements de sorts | lecture à valider |
 | 11 | Charges des baguettes et bâtons | p. 491, 496 | Ne reviennent pas au repos (le livre décrit une recharge de bâton par un lanceur : non modélisée) | **point à confirmer** |
-| 12 | Munitions : une unité par tir ; flèches récupérables | — | Compte à rebours manuel ; la récupération se saisit après le combat (aucune règle de perte inventée) | à décider |
+| 12 | Munitions : une unité par tir | décision d'Antoine | Décompte automatique à l'attaque, attaque refusée sans munition ; récupération saisie après le combat | validé |
 
 ## Pas encore fait
 
@@ -39,3 +39,13 @@ pouvoirs de lignage recopiées de `data/core/ensorceleur.json` (un test vérifie
 - **Tableau des accidents de parchemin** : à résoudre à la main.
 - **Objets de lignage de l'ensorceleur « familier »**, **Écriture de parchemin** : à faire plus tard.
 - **Nom français des pouvoirs** : le catalogue ne donne pour l'instant que les noms anglais.
+
+## Décisions d'Antoine du 24/10/2026
+
+- Lectures validées : 2 (baguette), 5 et 6 (parchemin), 10 (repos), 11 (charges non rendues au repos).
+- **Parchemin et échec des sorts profanes (7)** : comme pour un sort lancé (déjà le cas).
+- **Bâtons (3)** et **échec des sorts profanes d'une baguette ou d'un bâton (8)** : on y reviendra plus tard.
+- **Munitions (12)** : le décompte est **automatique** à chaque attaque à distance (action `Attaquer` : une
+  munition par tir, plusieurs à l'attaque à outrance, rendues si on annule). L'attaque est **refusée** si le
+  personnage n'a pas la munition dans son inventaire, ou pas assez pour les tirs demandés ; l'action du tour n'est
+  alors pas dépensée. La récupération après combat reste une saisie (aucune règle de perte inventée).

@@ -484,3 +484,85 @@ fn pouvoir_de_lignage_a_utilisations_quotidiennes() {
     assert_eq!(apres.pjs[&1].ressources["Acidic Ray"].utilisees, 0);
     let _ = EvenementFiche::Repos;
 }
+
+fn fleches(n: u32) -> Consommable {
+    Consommable {
+        nom: "Flèches".into(),
+        genre: GenreObjet::Munition,
+        sort: None,
+        niveau_du_sort: 0,
+        niveau_de_lanceur: 0,
+        arcanique: false,
+        quantite: n,
+        charges: None,
+        par_jour: None,
+        notes: String::new(),
+    }
+}
+
+fn tirer(tirs: u32, munition: Option<u64>) -> ActionCombat {
+    tirer_en(TypeAction::Simple, tirs, munition)
+}
+
+fn tirer_en(type_action: TypeAction, tirs: u32, munition: Option<u64>) -> ActionCombat {
+    ActionCombat::Attaquer {
+        pj: 1,
+        type_action,
+        libelle: "Tir à l'arc".into(),
+        tirs,
+        munition,
+        a_distance_avec_munitions: true,
+        deplacement: false,
+    }
+}
+
+#[test]
+fn l_attaque_a_distance_decompte_les_munitions() {
+    let ctx = ctx_avec(5, 0);
+    let mut c = combat_avec(vec![fleches(3)], &ctx);
+    c.appliquer(tirer(1, Some(1)), &ctx).unwrap();
+    assert_eq!(c.etat().aventure.pjs[&1].inventaire[&1].quantite, 2);
+    c.appliquer(ActionCombat::TourSuivant, &ctx).unwrap();
+    c.appliquer(ActionCombat::TourSuivant, &ctx).unwrap();
+    // attaque à outrance : deux tirs d'un coup
+    c.appliquer(tirer_en(TypeAction::Complexe, 2, Some(1)), &ctx)
+        .unwrap();
+    // les trois flèches sont parties : l'objet a disparu de l'inventaire
+    assert!(c.etat().aventure.pjs[&1].inventaire.is_empty());
+    // annuler rend les munitions
+    c.annuler(&ctx).unwrap();
+    assert_eq!(c.etat().aventure.pjs[&1].inventaire[&1].quantite, 2);
+}
+
+#[test]
+fn attaque_refusee_sans_munition() {
+    let ctx = ctx_avec(5, 0);
+    // aucune munition dans l'inventaire
+    let mut c = combat_avec(vec![], &ctx);
+    let e = c.appliquer(tirer(1, None), &ctx).unwrap_err();
+    assert!(e.to_string().contains("l'attaque est refusée"));
+    let e = c.appliquer(tirer(1, Some(7)), &ctx).unwrap_err();
+    assert!(e.to_string().contains("n'a pas cette munition"));
+    // l'action n'a pas été dépensée : une attaque au corps à corps reste possible
+    c.appliquer(
+        ActionCombat::Attaquer {
+            pj: 1,
+            type_action: TypeAction::Simple,
+            libelle: "Bâton".into(),
+            tirs: 0,
+            munition: None,
+            a_distance_avec_munitions: false,
+            deplacement: false,
+        },
+        &ctx,
+    )
+    .unwrap();
+    // pas assez de flèches pour l'attaque à outrance
+    let mut c = combat_avec(vec![fleches(1)], &ctx);
+    let e = c.appliquer(tirer(2, Some(1)), &ctx).unwrap_err();
+    assert!(e.to_string().contains("plus assez de munitions"));
+    assert_eq!(c.etat().aventure.pjs[&1].inventaire[&1].quantite, 1);
+    // un objet qui n'est pas une munition ne convient pas
+    let mut c = combat_avec(vec![baguette("Shield", 1, 5, 3)], &ctx);
+    assert!(c.appliquer(tirer(1, Some(1)), &ctx).is_err());
+}
