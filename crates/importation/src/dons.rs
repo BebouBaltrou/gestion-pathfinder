@@ -133,12 +133,15 @@ pub fn rapprocher(texte: &str) -> Vec<DonLu> {
 }
 
 /// Noms français vus sur des feuilles de joueurs (autres que les traductions de l'application),
-/// avec le don du Manuel de base qu'ils désignent. À confirmer avec le joueur.
+/// avec le don du Manuel de base qu'ils désignent. Noms vérifiés sur le Manuel des joueurs
+/// français et le wiki pathfinder-fr.org (Magie de guerre, École renforcée, Efficacité des sorts
+/// accrue, Création de baguettes magiques, Science du contresort, École supérieure).
 const ALIAS: &[(&str, &str)] = &[
     ("Science du contresort", "Improved Counterspell"),
     ("Magie de guerre", "Combat Casting"),
     ("École renforcée", "Spell Focus"),
     ("École supérieure", "Greater Spell Focus"),
+    ("Création de baguettes magiques", "Craft Wand"),
     ("Création de baguette magique", "Craft Wand"),
     ("Efficacité des sorts accrue", "Spell Penetration"),
     ("Efficacité des sorts accrues", "Spell Penetration"),
