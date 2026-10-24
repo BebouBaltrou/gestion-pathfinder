@@ -13,6 +13,13 @@ const EFFETS = [
   { id: 3, nom: "Prière", source: "sort, Kyra", restant: 8, total: 10 },
 ];
 const MAX = 31;
+const THEMES = ["sombre", "parchemin", "nuit", "clair"];
+const NOMS_THEMES = {
+  sombre: "Sombre actuel",
+  parchemin: "A · Parchemin arcanique",
+  nuit: "B · Nuit de Golarion",
+  clair: "Clair",
+};
 
 function Chrono({ restant, total }) {
   const r = 15;
@@ -206,12 +213,12 @@ export default function App() {
         <button className="principal" onClick={suivant}>Tour suivant</button>
         <button
           onClick={() => {
-            const t = theme === "sombre" ? "clair" : "sombre";
+            const t = THEMES[(THEMES.indexOf(theme) + 1) % THEMES.length];
             setTheme(t);
             document.documentElement.dataset.theme = t;
           }}
         >
-          Thème
+          Thème : {NOMS_THEMES[theme]}
         </button>
       </div>
       <div className="panneaux">
