@@ -217,6 +217,8 @@ function Dons({ f }: { f: FicheVue }) {
                 <p>{d.avantage}</p>
               </details>
             )}
+            {d.source && <small className="doux">{d.source}</small>}
+            {d.noteLivre && <small className="doux"><em>{d.noteLivre}</em></small>}
           </div>
         ))}
       </div>
@@ -315,11 +317,31 @@ const CHARGES: [Charge, string][] = [
   ["Surcharge", "Surcharge"],
 ];
 
+function FicheObjet({ nomEn, onFermer }: { nomEn: string; onFermer: () => void }) {
+  const cat = useCatalogue();
+  if (!cat) return null;
+  const o = [...cat.armures, ...cat.armes, ...cat.materiel].find((x) => x.nomEn === nomEn);
+  if (!o) return null;
+  return (
+    <div className="carte fiche-objet">
+      <div className="ligne">
+        <strong>{o.nom}</strong>
+        <button className="bouton discret" onClick={onFermer}>Fermer</button>
+      </div>
+      {o.poidsLb != null && <p className="doux">Poids : {(o.poidsLb / 2).toLocaleString("fr-FR", { maximumFractionDigits: 2 })} kg</p>}
+      {o.description ? o.description.split("\n").map((t, i) => <p key={i}>{t}</p>) : <p className="doux">Pas de description dans le livre.</p>}
+      {o.source && <small className="doux">{o.source}</small>}
+      {o.noteLivre && <small className="doux"><em>{o.noteLivre}</em></small>}
+    </div>
+  );
+}
+
 function Equipement({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => void }) {
   const cat = useCatalogue();
   const [objet, setObjet] = useState("");
   const [quantite, setQuantite] = useState("1");
   const [arme, setArme] = useState("");
+  const [detail, setDetail] = useState("");
   const eq = f.equipement;
   if (!cat) return null;
   const protections = (genre: (g: string) => boolean) =>
@@ -372,6 +394,7 @@ function Equipement({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => voi
         ))}
       </div>
 
+      {detail && <FicheObjet nomEn={detail} onFermer={() => setDetail("")} />}
       <h2>Armure et bouclier</h2>
       <div className="ligne">
         <Choix
@@ -381,6 +404,7 @@ function Equipement({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => voi
           options={protections((g) => g.startsWith("armure"))}
           onChange={(v) => agir({ Equiper: { emplacement: "armure", objet: v || null } })}
         />
+        {eq.armure && <button className="bouton discret" onClick={() => setDetail(eq.armure!.nomEn)}>Voir l'armure</button>}
         <Choix
           etiquette="Bouclier"
           vide="Aucun bouclier"
@@ -388,13 +412,14 @@ function Equipement({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => voi
           options={protections((g) => g === "bouclier")}
           onChange={(v) => agir({ Equiper: { emplacement: "bouclier", objet: v || null } })}
         />
+        {eq.bouclier && <button className="bouton discret" onClick={() => setDetail(eq.bouclier!.nomEn)}>Voir le bouclier</button>}
       </div>
 
       <h2>Armes</h2>
       <div className="puces">
         {eq.armes.map((a) => (
           <span className="puce" key={a.nomEn}>
-            {a.nom}{" "}
+            <button className="bouton discret" onClick={() => setDetail(a.nomEn)}>{a.nom}</button>{" "}
             <button className="croix" aria-label={`Ranger ${a.nom}`} onClick={() => agir({ ArmeRetiree: a.nomEn })}>×</button>
           </span>
         ))}
@@ -415,7 +440,7 @@ function Equipement({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => voi
         <tbody>
           {eq.objets.map((o) => (
             <tr key={o.nomEn}>
-              <td>{o.nom}</td>
+              <td><button className="bouton discret" onClick={() => setDetail(o.nomEn)}>{o.nom}</button></td>
               <td className="num">× {o.quantite}</td>
               <td>
                 <button className="bouton discret" onClick={() => agir({ ObjetRetire: { nom_en: o.nomEn, quantite: 1 } })}>−1</button>

@@ -55,13 +55,13 @@
         "livre": "PRPG Core Rulebook",
         "page": 159
       },
-      "prix_en": "2 sp (gallon), 4 cp (mug)",
+      "prix_en": "7 cp",
       "cout": {
-        "valeur": 2,
-        "unite": "sp"
+        "valeur": 7,
+        "unite": "cp"
       },
-      "poids_en": "8 lbs. (gallon), 1 lb. (mug)",
-      "poids_lb": 8,
+      "poids_en": "2 lb.",
+      "poids_lb": 2,
       "categorie_en": null,
       "nom": "Bière (gallon)"
     },
@@ -71,13 +71,13 @@
         "livre": "PRPG Core Rulebook",
         "page": 159
       },
-      "prix_en": "2 sp (gallon), 4 cp (mug)",
+      "prix_en": "4 cp",
       "cout": {
-        "valeur": 2,
-        "unite": "sp"
+        "valeur": 4,
+        "unite": "cp"
       },
-      "poids_en": "8 lbs. (gallon), 1 lb. (mug)",
-      "poids_lb": 8,
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
       "categorie_en": null,
       "nom": "Bière (chope)"
     },
@@ -135,9 +135,9 @@
         "livre": "PRPG Core Rulebook",
         "page": 158
       },
-      "prix_en": "5 gp (common), 55 gp (masterwork)",
+      "prix_en": "55 gp",
       "cout": {
-        "valeur": 5,
+        "valeur": 55,
         "unite": "gp"
       },
       "poids_en": "5 lbs. (common), 5 lbs. (masterwork)",
@@ -151,13 +151,13 @@
         "livre": "PRPG Core Rulebook",
         "page": 158
       },
-      "prix_en": "25 gp (carrier), 2 gp (common), 40 gp (hydration), 50 gp (masterwork), 25 gp (weaponrack)",
+      "prix_en": "2 gp",
       "cout": {
-        "valeur": 25,
+        "valeur": 2,
         "unite": "gp"
       },
-      "poids_en": "5 lbs. (carrier), 2 lbs. (common), 4 lbs. (hydration), 4 lbs. (masterwork), 5 lbs. (weaponrack)",
-      "poids_lb": 5,
+      "poids_en": "2 lb.",
+      "poids_lb": 2,
       "categorie_en": null,
       "nom": "Sac à dos (courant)"
     },
@@ -326,8 +326,8 @@
         "valeur": 2,
         "unite": "gp"
       },
-      "poids_en": "1 lb.",
-      "poids_lb": 1,
+      "poids_en": "—",
+      "poids_lb": null,
       "categorie_en": "Adventuring Gear",
       "nom": "Bouteille"
     },
@@ -422,8 +422,8 @@
         "valeur": 1,
         "unite": "sp"
       },
-      "poids_en": "1 lb.",
-      "poids_lb": 1,
+      "poids_en": "2 lb.",
+      "poids_lb": 2,
       "categorie_en": "Adventuring Gear",
       "nom": "Toile (yard carré)"
     },
@@ -438,8 +438,8 @@
         "valeur": 100,
         "unite": "gp"
       },
-      "poids_en": null,
-      "poids_lb": null,
+      "poids_en": "600 lb.",
+      "poids_lb": 600,
       "categorie_en": "Transport, Land",
       "nom": "Carrosse"
     },
@@ -454,8 +454,8 @@
         "valeur": 15,
         "unite": "gp"
       },
-      "poids_en": null,
-      "poids_lb": null,
+      "poids_en": "200 lb.",
+      "poids_lb": 200,
       "categorie_en": "Transport, Land",
       "nom": "Charrette"
     },
@@ -513,13 +513,13 @@
         "livre": "PRPG Core Rulebook",
         "page": 158
       },
-      "prix_en": "25 gp (huge), 10 gp (large), 5 gp (medium), 2 gp (small)",
+      "prix_en": "2 gp",
       "cout": {
-        "valeur": 25,
+        "valeur": 2,
         "unite": "gp"
       },
-      "poids_en": "250 lbs. (huge), 100 lbs. (large), 50 lbs. (medium), 25 lbs. (small)",
-      "poids_lb": 250,
+      "poids_en": "25 lb.",
+      "poids_lb": 25,
       "categorie_en": null,
       "nom": "Coffre (petit)"
     },
@@ -646,8 +646,8 @@
         "valeur": 25,
         "unite": "gp"
       },
-      "poids_en": "25 lbs. (guard), 5 lbs. (lap), 50 lbs. (riding)",
-      "poids_lb": 25,
+      "poids_en": "—",
+      "poids_lb": null,
       "categorie_en": null,
       "nom": "Chien (de garde)"
     },
@@ -657,13 +657,13 @@
         "livre": "PRPG Core Rulebook",
         "page": 159
       },
-      "prix_en": "25 gp (guard), 15 gp (lap), 150 gp (riding)",
+      "prix_en": "150 gp",
       "cout": {
-        "valeur": 25,
+        "valeur": 150,
         "unite": "gp"
       },
-      "poids_en": "25 lbs. (guard), 5 lbs. (lap), 50 lbs. (riding)",
-      "poids_lb": 25,
+      "poids_en": "—",
+      "poids_lb": null,
       "categorie_en": null,
       "nom": "Chien (de monte)"
     },
@@ -790,8 +790,8 @@
         "valeur": 3,
         "unite": "cp"
       },
-      "poids_en": "1-1/2 lbs.",
-      "poids_lb": 0.5,
+      "poids_en": "4.5 lb.",
+      "poids_lb": 4.5,
       "categorie_en": "Adventuring Gear",
       "nom": "Flasque"
     },
@@ -929,9 +929,9 @@
         "livre": "PRPG Core Rulebook",
         "page": 158
       },
-      "prix_en": "100 gp (gold), 5 gp (iron), 500 gp (platinum), 25 gp (silver), 1 gp (wooden)",
+      "prix_en": "25 gp",
       "cout": {
-        "valeur": 100,
+        "valeur": 25,
         "unite": "gp"
       },
       "poids_en": "1 lb. (gold), 1 lb. (iron), 1 lb. (platinum), 1 lb. (silver), — (wooden)",
@@ -945,13 +945,13 @@
         "livre": "PRPG Core Rulebook",
         "page": 158
       },
-      "prix_en": "100 gp (gold), 5 gp (iron), 500 gp (platinum), 25 gp (silver), 1 gp (wooden)",
+      "prix_en": "1 gp",
       "cout": {
-        "valeur": 100,
+        "valeur": 1,
         "unite": "gp"
       },
-      "poids_en": "1 lb. (gold), 1 lb. (iron), 1 lb. (platinum), 1 lb. (silver), — (wooden)",
-      "poids_lb": 1,
+      "poids_en": "—",
+      "poids_lb": null,
       "categorie_en": null,
       "nom": "Symbole sacré (bois)"
     },
@@ -998,8 +998,8 @@
         "valeur": 200,
         "unite": "gp"
       },
-      "poids_en": "2,000 lbs. (heavy), 3,000 lbs. (heavy, combat trained), 900 lbs. (light), 1,200 lbs. (light, combat trained), 800 lbs. (pony), 900 lbs. (pony, combat trained)",
-      "poids_lb": 2000,
+      "poids_en": "—",
+      "poids_lb": null,
       "categorie_en": null,
       "nom": "Cheval (lourd)"
     },
@@ -1009,13 +1009,13 @@
         "livre": "PRPG Core Rulebook",
         "page": 159
       },
-      "prix_en": "200 gp (heavy), 300 gp (heavy, combat trained), 75 gp (light), 110 gp (light, combat trained), 30 gp (pony), 45 gp (pony, combat trained)",
+      "prix_en": "300 gp",
       "cout": {
-        "valeur": 200,
+        "valeur": 300,
         "unite": "gp"
       },
-      "poids_en": "2,000 lbs. (heavy), 3,000 lbs. (heavy, combat trained), 900 lbs. (light), 1,200 lbs. (light, combat trained), 800 lbs. (pony), 900 lbs. (pony, combat trained)",
-      "poids_lb": 2000,
+      "poids_en": "—",
+      "poids_lb": null,
       "categorie_en": null,
       "nom": "Cheval (lourd, dressé au combat)"
     },
@@ -1025,13 +1025,13 @@
         "livre": "PRPG Core Rulebook",
         "page": 159
       },
-      "prix_en": "200 gp (heavy), 300 gp (heavy, combat trained), 75 gp (light), 110 gp (light, combat trained), 30 gp (pony), 45 gp (pony, combat trained)",
+      "prix_en": "75 gp",
       "cout": {
-        "valeur": 200,
+        "valeur": 75,
         "unite": "gp"
       },
-      "poids_en": "2,000 lbs. (heavy), 3,000 lbs. (heavy, combat trained), 900 lbs. (light), 1,200 lbs. (light, combat trained), 800 lbs. (pony), 900 lbs. (pony, combat trained)",
-      "poids_lb": 2000,
+      "poids_en": "—",
+      "poids_lb": null,
       "categorie_en": null,
       "nom": "Cheval (léger)"
     },
@@ -1046,8 +1046,8 @@
         "valeur": 200,
         "unite": "gp"
       },
-      "poids_en": "2,000 lbs. (heavy), 3,000 lbs. (heavy, combat trained), 900 lbs. (light), 1,200 lbs. (light, combat trained), 800 lbs. (pony), 900 lbs. (pony, combat trained)",
-      "poids_lb": 2000,
+      "poids_en": "—",
+      "poids_lb": null,
       "categorie_en": null,
       "nom": "Cheval (léger, dressé au combat)"
     },
@@ -1057,13 +1057,13 @@
         "livre": "PRPG Core Rulebook",
         "page": 159
       },
-      "prix_en": "200 gp (heavy), 300 gp (heavy, combat trained), 75 gp (light), 110 gp (light, combat trained), 30 gp (pony), 45 gp (pony, combat trained)",
+      "prix_en": "30 gp",
       "cout": {
-        "valeur": 200,
+        "valeur": 30,
         "unite": "gp"
       },
-      "poids_en": "2,000 lbs. (heavy), 3,000 lbs. (heavy, combat trained), 900 lbs. (light), 1,200 lbs. (light, combat trained), 800 lbs. (pony), 900 lbs. (pony, combat trained)",
-      "poids_lb": 2000,
+      "poids_en": "—",
+      "poids_lb": null,
       "categorie_en": null,
       "nom": "Poney"
     },
@@ -1073,13 +1073,13 @@
         "livre": "PRPG Core Rulebook",
         "page": 159
       },
-      "prix_en": "200 gp (heavy), 300 gp (heavy, combat trained), 75 gp (light), 110 gp (light, combat trained), 30 gp (pony), 45 gp (pony, combat trained)",
+      "prix_en": "45 gp",
       "cout": {
-        "valeur": 200,
+        "valeur": 45,
         "unite": "gp"
       },
-      "poids_en": "2,000 lbs. (heavy), 3,000 lbs. (heavy, combat trained), 900 lbs. (light), 1,200 lbs. (light, combat trained), 800 lbs. (pony), 900 lbs. (pony, combat trained)",
-      "poids_lb": 2000,
+      "poids_en": "—",
+      "poids_lb": null,
       "categorie_en": null,
       "nom": "Poney (dressé au combat)"
     },
@@ -1153,10 +1153,10 @@
         "livre": "PRPG Core Rulebook",
         "page": 159
       },
-      "prix_en": "5 sp (common), 2 gp (good), 2 sp (poor), 16 gp (suite, average), 32 gp+ (suite, luxurious), 4 gp (suite, small)",
+      "prix_en": "2 gp",
       "cout": {
-        "valeur": 5,
-        "unite": "sp"
+        "valeur": 2,
+        "unite": "gp"
       },
       "poids_en": "— (common), — (good), — (poor), — (suite, average), — (suite, luxurious), — (suite, small)",
       "poids_lb": null,
@@ -1169,9 +1169,9 @@
         "livre": "PRPG Core Rulebook",
         "page": 159
       },
-      "prix_en": "5 sp (common), 2 gp (good), 2 sp (poor), 16 gp (suite, average), 32 gp+ (suite, luxurious), 4 gp (suite, small)",
+      "prix_en": "2 sp",
       "cout": {
-        "valeur": 5,
+        "valeur": 2,
         "unite": "sp"
       },
       "poids_en": "— (common), — (good), — (poor), — (suite, average), — (suite, luxurious), — (suite, small)",
@@ -1217,10 +1217,10 @@
         "livre": "PRPG Core Rulebook",
         "page": 158
       },
-      "prix_en": "2 sp",
+      "prix_en": "5 cp",
       "cout": {
-        "valeur": 2,
-        "unite": "sp"
+        "valeur": 5,
+        "unite": "cp"
       },
       "poids_en": "20 lbs.",
       "poids_lb": 20,
@@ -1265,9 +1265,9 @@
         "livre": "PRPG Core Rulebook",
         "page": 158
       },
-      "prix_en": "40 gp (average), 80 gp (good), 20 gp (simple), 150 gp (superior)",
+      "prix_en": "80 gp",
       "cout": {
-        "valeur": 40,
+        "valeur": 80,
         "unite": "gp"
       },
       "poids_en": "1 lb. (average), 1 lb. (good), 1 lb. (simple), 1 lb. (superior)",
@@ -1281,9 +1281,9 @@
         "livre": "PRPG Core Rulebook",
         "page": 158
       },
-      "prix_en": "40 gp (average), 80 gp (good), 20 gp (simple), 150 gp (superior)",
+      "prix_en": "20 gp",
       "cout": {
-        "valeur": 40,
+        "valeur": 20,
         "unite": "gp"
       },
       "poids_en": "1 lb. (average), 1 lb. (good), 1 lb. (simple), 1 lb. (superior)",
@@ -1297,9 +1297,9 @@
         "livre": "PRPG Core Rulebook",
         "page": 158
       },
-      "prix_en": "40 gp (average), 80 gp (good), 20 gp (simple), 150 gp (superior)",
+      "prix_en": "150 gp",
       "cout": {
-        "valeur": 40,
+        "valeur": 150,
         "unite": "gp"
       },
       "poids_en": "1 lb. (average), 1 lb. (good), 1 lb. (simple), 1 lb. (superior)",
@@ -1361,9 +1361,9 @@
         "livre": "PRPG Core Rulebook",
         "page": 158
       },
-      "prix_en": "15 gp (common), 50 gp (masterwork), 1,000 gp (mithral)",
+      "prix_en": "50 gp",
       "cout": {
-        "valeur": 15,
+        "valeur": 50,
         "unite": "gp"
       },
       "poids_en": "2 lbs. (common), 2 lbs. (masterwork), 2 lbs. (mithral)",
@@ -1409,9 +1409,9 @@
         "livre": "PRPG Core Rulebook",
         "page": 159
       },
-      "prix_en": "3 sp (common, per day), 5 sp (good, per day), 1 sp (poor, per day)",
+      "prix_en": "5 sp",
       "cout": {
-        "valeur": 3,
+        "valeur": 5,
         "unite": "sp"
       },
       "poids_en": "— (common, per day), — (good, per day), — (poor, per day)",
@@ -1425,9 +1425,9 @@
         "livre": "PRPG Core Rulebook",
         "page": 159
       },
-      "prix_en": "3 sp (common, per day), 5 sp (good, per day), 1 sp (poor, per day)",
+      "prix_en": "1 sp",
       "cout": {
-        "valeur": 3,
+        "valeur": 1,
         "unite": "sp"
       },
       "poids_en": "— (common, per day), — (good, per day), — (poor, per day)",
@@ -1446,8 +1446,8 @@
         "valeur": 3,
         "unite": "sp"
       },
-      "poids_en": "1/2 lb.",
-      "poids_lb": 0.5,
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
       "categorie_en": "Food/Drink",
       "nom": "Viande"
     },
@@ -1569,9 +1569,9 @@
         "livre": "PRPG Core Rulebook",
         "page": 158
       },
-      "prix_en": "5 gp (common), 100 gp (masterwork)",
+      "prix_en": "100 gp",
       "cout": {
-        "valeur": 5,
+        "valeur": 100,
         "unite": "gp"
       },
       "poids_en": "3 lbs. (common), 3 lbs. (masterwork)",
@@ -1638,8 +1638,8 @@
         "valeur": 8,
         "unite": "gp"
       },
-      "poids_en": "600 lbs. Pack animal (donkey/mule), 1 ton Pack animal (ox), 2 tons Pack animal (yak)",
-      "poids_lb": 600,
+      "poids_en": "—",
+      "poids_lb": null,
       "categorie_en": null,
       "nom": "Bête de somme (âne ou mule)"
     },
@@ -1782,8 +1782,8 @@
         "valeur": 1,
         "unite": "gp"
       },
-      "poids_en": "1/2 lb.",
-      "poids_lb": 0.5,
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
       "categorie_en": "Adventuring Gear",
       "nom": "Bourse de ceinture (vide)"
     },
@@ -1830,8 +1830,8 @@
         "valeur": 50,
         "unite": "gp"
       },
-      "poids_en": null,
-      "poids_lb": null,
+      "poids_en": "100 lb.",
+      "poids_lb": 100,
       "categorie_en": "Transport, Sea",
       "nom": "Barque"
     },
@@ -1889,13 +1889,13 @@
         "livre": "PRPG Core Rulebook",
         "page": 159
       },
-      "prix_en": "60 gp (exotic, military), 15 gp (exotic, pack), 30 gp (exotic, riding), 20 gp (military), 5 gp (pack), 10 gp (riding)",
+      "prix_en": "15 gp",
       "cout": {
-        "valeur": 60,
+        "valeur": 15,
         "unite": "gp"
       },
-      "poids_en": "40 lbs. (exotic, military), 20 lbs. (exotic, pack), 30 lbs. (exotic, riding), 30 lbs. (military), 15 lbs. (pack), 25 lbs. (riding)",
-      "poids_lb": 40,
+      "poids_en": "20 lb.",
+      "poids_lb": 20,
       "categorie_en": null,
       "nom": "Selle (exotique, de bât)"
     },
@@ -1905,13 +1905,13 @@
         "livre": "PRPG Core Rulebook",
         "page": 159
       },
-      "prix_en": "60 gp (exotic, military), 15 gp (exotic, pack), 30 gp (exotic, riding), 20 gp (military), 5 gp (pack), 10 gp (riding)",
+      "prix_en": "30 gp",
       "cout": {
-        "valeur": 60,
+        "valeur": 30,
         "unite": "gp"
       },
-      "poids_en": "40 lbs. (exotic, military), 20 lbs. (exotic, pack), 30 lbs. (exotic, riding), 30 lbs. (military), 15 lbs. (pack), 25 lbs. (riding)",
-      "poids_lb": 40,
+      "poids_en": "30 lb.",
+      "poids_lb": 30,
       "categorie_en": null,
       "nom": "Selle (exotique, de monte)"
     },
@@ -1921,13 +1921,13 @@
         "livre": "PRPG Core Rulebook",
         "page": 159
       },
-      "prix_en": "60 gp (exotic, military), 15 gp (exotic, pack), 30 gp (exotic, riding), 20 gp (military), 5 gp (pack), 10 gp (riding)",
+      "prix_en": "20 gp",
       "cout": {
-        "valeur": 60,
+        "valeur": 20,
         "unite": "gp"
       },
-      "poids_en": "40 lbs. (exotic, military), 20 lbs. (exotic, pack), 30 lbs. (exotic, riding), 30 lbs. (military), 15 lbs. (pack), 25 lbs. (riding)",
-      "poids_lb": 40,
+      "poids_en": "30 lb.",
+      "poids_lb": 30,
       "categorie_en": null,
       "nom": "Selle (de guerre)"
     },
@@ -1937,13 +1937,13 @@
         "livre": "PRPG Core Rulebook",
         "page": 159
       },
-      "prix_en": "60 gp (exotic, military), 15 gp (exotic, pack), 30 gp (exotic, riding), 20 gp (military), 5 gp (pack), 10 gp (riding)",
+      "prix_en": "5 gp",
       "cout": {
-        "valeur": 60,
+        "valeur": 5,
         "unite": "gp"
       },
-      "poids_en": "40 lbs. (exotic, military), 20 lbs. (exotic, pack), 30 lbs. (exotic, riding), 30 lbs. (military), 15 lbs. (pack), 25 lbs. (riding)",
-      "poids_lb": 40,
+      "poids_en": "15 lb.",
+      "poids_lb": 15,
       "categorie_en": null,
       "nom": "Selle (de bât)"
     },
@@ -1953,13 +1953,13 @@
         "livre": "PRPG Core Rulebook",
         "page": 159
       },
-      "prix_en": "60 gp (exotic, military), 15 gp (exotic, pack), 30 gp (exotic, riding), 20 gp (military), 5 gp (pack), 10 gp (riding)",
+      "prix_en": "10 gp",
       "cout": {
-        "valeur": 60,
+        "valeur": 10,
         "unite": "gp"
       },
-      "poids_en": "40 lbs. (exotic, military), 20 lbs. (exotic, pack), 30 lbs. (exotic, riding), 30 lbs. (military), 15 lbs. (pack), 25 lbs. (riding)",
-      "poids_lb": 40,
+      "poids_en": "25 lb.",
+      "poids_lb": 25,
       "categorie_en": null,
       "nom": "Selle (de monte)"
     },
@@ -2081,13 +2081,13 @@
         "livre": "PRPG Core Rulebook",
         "page": 158
       },
-      "prix_en": "2 cp",
+      "prix_en": "2 gp",
       "cout": {
         "valeur": 2,
-        "unite": "cp"
+        "unite": "gp"
       },
-      "poids_en": "3 lbs.",
-      "poids_lb": 3,
+      "poids_en": "8 lb.",
+      "poids_lb": 8,
       "categorie_en": "Adventuring Gear",
       "nom": "Pelle"
     },
@@ -2134,8 +2134,8 @@
         "valeur": 20,
         "unite": "gp"
       },
-      "poids_en": null,
-      "poids_lb": null,
+      "poids_en": "300 lb.",
+      "poids_lb": 300,
       "categorie_en": "Transport, Land",
       "nom": "Traîneau"
     },
@@ -2177,13 +2177,13 @@
         "livre": "PRPG Core Rulebook",
         "page": 158
       },
-      "prix_en": "1 cp",
+      "prix_en": "5 sp",
       "cout": {
-        "valeur": 1,
-        "unite": "cp"
+        "valeur": 5,
+        "unite": "sp"
       },
-      "poids_en": "1/2 lb.",
-      "poids_lb": 0.5,
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
       "categorie_en": "Adventuring Gear",
       "nom": "Savon"
     },
@@ -2337,13 +2337,13 @@
         "livre": "PRPG Core Rulebook",
         "page": 158
       },
-      "prix_en": "30 gp (common), 100 gp (masterwork)",
+      "prix_en": "100 gp",
       "cout": {
-        "valeur": 30,
+        "valeur": 100,
         "unite": "gp"
       },
-      "poids_en": "1 lb. (common), 2 lbs. (masterwork)",
-      "poids_lb": 1,
+      "poids_en": "2 lb.",
+      "poids_lb": 2,
       "categorie_en": null,
       "nom": "Outils de voleur (de maître)"
     },
@@ -2438,8 +2438,8 @@
         "valeur": 1,
         "unite": "gp"
       },
-      "poids_en": "—",
-      "poids_lb": null,
+      "poids_en": "0.1 lb.",
+      "poids_lb": 0.1,
       "categorie_en": "Adventuring Gear",
       "nom": "Fiole"
     },
@@ -2449,13 +2449,13 @@
         "livre": "PRPG Core Rulebook",
         "page": 159
       },
-      "prix_en": "100 gp (heavy), 50 gp (light), 75 gp (medium)",
+      "prix_en": "35 gp",
       "cout": {
-        "valeur": 100,
+        "valeur": 35,
         "unite": "gp"
       },
-      "poids_en": "3 cp (heavy), 2 cp (light), 2 cp (medium)",
-      "poids_lb": null,
+      "poids_en": "400 lb.",
+      "poids_lb": 400,
       "categorie_en": null,
       "nom": "Chariot (léger)"
     },
@@ -2561,13 +2561,13 @@
         "livre": "PRPG Core Rulebook",
         "page": 159
       },
-      "prix_en": "2 sp (common, pitcher), 10 gp (fine, bottle)",
+      "prix_en": "10 gp",
       "cout": {
-        "valeur": 2,
-        "unite": "sp"
+        "valeur": 10,
+        "unite": "gp"
       },
-      "poids_en": "6 lbs. (common, pitcher), 1-1/2 lbs. (fine, bottle)",
-      "poids_lb": 6,
+      "poids_en": "1.5 lb.",
+      "poids_lb": 1.5,
       "categorie_en": null,
       "nom": "Vin (fin, bouteille)"
     }
