@@ -13,3 +13,4 @@ prototypes/*/node_modules
 prototypes/*/dist/
 prototypes/*/package-lock.json
 prototypes/*.log
+desktop/dist-mock/
