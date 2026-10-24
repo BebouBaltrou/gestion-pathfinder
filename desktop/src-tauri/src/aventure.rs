@@ -72,7 +72,10 @@ impl Session {
     /// Applique une action au combat, puis le sauvegarde.
     fn agir_en_combat(
         &mut self,
-        f: impl FnOnce(&mut Combat, &dyn Fn(IdPj) -> Option<aventure::ContextePj>) -> Result<String, String>,
+        f: impl FnOnce(
+            &mut Combat,
+            &dyn Fn(IdPj) -> Option<aventure::ContextePj>,
+        ) -> Result<String, String>,
     ) -> Retour {
         if self.combat.is_none() {
             return Retour::erreur("Aucun combat en cours");
@@ -154,13 +157,14 @@ pub fn aventure_actualiser_ressources(s: S, pj: u32) -> Retour {
     let mut x = session(&s);
     let Some(ressources) = x.avec_etat(|e| {
         let etat = e.fiche_de(IdPersonnage(pj))?;
-        let v = etat
-            .fiche
-            .calculer(fiches::Referentiel::partage())
-            .ok()?;
+        let v = etat.fiche.calculer(fiches::Referentiel::partage()).ok()?;
         let lignage = etat.fiche.lignage.clone()?;
         let niveau = etat.fiche.niveau_de_classe("ensorceleur");
-        let cha = v.modificateurs.get(&fiches::Carac::Cha).copied().unwrap_or(0);
+        let cha = v
+            .modificateurs
+            .get(&fiches::Carac::Cha)
+            .copied()
+            .unwrap_or(0);
         Some(aventure::ressources_de_lignage(&lignage, niveau, cha))
     }) else {
         return Retour::erreur("Aucune campagne ouverte");

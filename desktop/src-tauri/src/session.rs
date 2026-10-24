@@ -112,7 +112,7 @@ impl Session {
                 )
             })
             .collect();
-        v.sort_by(|a, b| b.0.cmp(&a.0));
+        v.sort_by_key(|x| std::cmp::Reverse(x.0));
         v.into_iter().map(|(_, f)| f).collect()
     }
 
@@ -208,11 +208,7 @@ impl Session {
     }
 
     /// Règles optionnelles de l'intermède (hors journal), puis enregistrement.
-    pub fn regler_options(
-        &mut self,
-        o: regles::options::OptionsRegles,
-        succes: &str,
-    ) -> Retour {
+    pub fn regler_options(&mut self, o: regles::options::OptionsRegles, succes: &str) -> Retour {
         let Some(c) = self.campagne.as_mut() else {
             return Retour::erreur("Aucune campagne ouverte");
         };
@@ -225,7 +221,9 @@ impl Session {
 
     pub fn annuler(&mut self) -> Retour {
         if self.combat.is_some() {
-            return Retour::erreur("Un combat est en cours : annulez dans le combat (ou abandonnez-le)");
+            return Retour::erreur(
+                "Un combat est en cours : annulez dans le combat (ou abandonnez-le)",
+            );
         }
         let Some(c) = self.campagne.as_mut() else {
             return Retour::erreur("Aucune campagne ouverte");

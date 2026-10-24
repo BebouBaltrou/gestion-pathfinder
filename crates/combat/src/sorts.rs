@@ -814,6 +814,13 @@ impl EtatCombat {
     }
 }
 
+/// Nom français d'un sort (traduction non officielle), à défaut le nom anglais.
+pub(crate) fn nom_fr(nom_en: &str) -> String {
+    fiches::traductions::Traductions::partage()
+        .sort(nom_en)
+        .map_or_else(|| nom_en.to_string(), |s| s.nom.clone())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -923,11 +930,4 @@ mod tests {
             }
         }
     }
-}
-
-/// Nom français d'un sort (traduction non officielle), à défaut le nom anglais.
-pub(crate) fn nom_fr(nom_en: &str) -> String {
-    fiches::traductions::Traductions::partage()
-        .sort(nom_en)
-        .map_or_else(|| nom_en.to_string(), |s| s.nom.clone())
 }

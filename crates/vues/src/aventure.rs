@@ -1059,12 +1059,13 @@ pub fn apercu_recul(etat: &Etat, instant: i64) -> Option<ReculVue> {
             .actifs
             .iter()
             .map(|e| (e.id, e.nom.clone(), nom_de(&e.proprietaire)))
-            .chain(
-                a.effets
-                    .termines
-                    .iter()
-                    .map(|t| (t.effet.id, t.effet.nom.clone(), nom_de(&t.effet.proprietaire))),
-            )
+            .chain(a.effets.termines.iter().map(|t| {
+                (
+                    t.effet.id,
+                    t.effet.nom.clone(),
+                    nom_de(&t.effet.proprietaire),
+                )
+            }))
             .find(|(i, _, _)| *i == id)
     };
     Some(ReculVue {
