@@ -35,6 +35,7 @@ export type LignePersonnage = {
   lieu: string | null;
   prestige: number | null;
   prestigeCalcule: boolean;
+  acolyteDe: string | null;
   fiche: ResumeFiche | null;
 };
 
@@ -335,4 +336,20 @@ export type ApercuImport = {
   dons: string[];
   lignes: LigneImport[];
   non_verifie: string[];
+};
+
+// ---- don Prestige
+export type ModificateurPrestige = { id: string; libelle: string; valeur: number; portee: "tous" | "acolyte" | "partisans"; cumulable: boolean; compte: number };
+export type PrestigeDonVue = {
+  actif: boolean;
+  niveauMinimal: number;
+  acolyte: { id: number; nom: string; niveau: number | null; xp: number | null; aUneFiche: boolean } | null;
+  scoreAcolyte: number | null;
+  scorePartisans: number | null;
+  niveauTableau: number;
+  niveauMaxAcolyte: number;
+  modificateurs: ModificateurPrestige[];
+  candidats: [number, string][];
+  partisans: { index: number; niveau: number; nom: string }[];
+  places: { niveau: number; permis: number; pris: number }[];
 };

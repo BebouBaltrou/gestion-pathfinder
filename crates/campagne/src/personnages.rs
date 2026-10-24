@@ -333,8 +333,25 @@ impl Etat {
         ev: &EvenementFiche,
     ) -> Result<(), Erreur> {
         self.pj(pj)?;
+        self.verifier_fiche_d_acolyte(pj, ev)?;
         let r = ReferentielFiches::partage();
         let regles = self.regles_personnages.fiche();
+        let resultat = self.appliquer_fiche_brute(pj, ev, r, &regles);
+        if resultat.is_ok() {
+            if let EvenementFiche::XpGagnes { nombre, .. } = ev {
+                self.partager_l_xp_avec_l_acolyte(pj, *nombre);
+            }
+        }
+        resultat
+    }
+
+    fn appliquer_fiche_brute(
+        &mut self,
+        pj: IdPersonnage,
+        ev: &EvenementFiche,
+        r: &ReferentielFiches,
+        regles: &ReglesFiche,
+    ) -> Result<(), Erreur> {
         match self.fiches.get_mut(&pj) {
             None => {
                 let EvenementFiche::Creation(f) = ev else {
@@ -346,14 +363,14 @@ impl Etat {
                     return Err(Erreur::Fiche(p.to_string()));
                 }
                 let j = Journal::nouveau((**f).clone());
-                j.etat(r, &regles)
+                j.etat(r, regles)
                     .map_err(|e| Erreur::Fiche(e.to_string()))?;
                 self.fiches.insert(pj, j);
             }
             Some(j) => {
                 let mut copie = j.clone();
                 copie
-                    .ajouter(ev.clone(), r, &regles)
+                    .ajouter(ev.clone(), r, regles)
                     .map_err(|e| Erreur::Fiche(e.to_string()))?;
                 *j = copie;
             }
@@ -400,6 +417,15 @@ impl Etat {
     ) -> Result<Option<EvenementFiche>, String> {
         if !(1..=20).contains(&niveau) {
             return Err("Le niveau doit être compris entre 1 et 20.".into());
+        }
+        if let Some(maitre) = self.acolytes.get(&pj) {
+            let plafond = self.plafond_acolyte(*maitre).unwrap_or(0);
+            if niveau > plafond {
+                return Err(format!(
+                    "Un acolyte ne peut pas dépasser le niveau {plafond} (tableau du don Prestige \
+                     et au moins deux niveaux sous son maître)."
+                ));
+            }
         }
         let e = self
             .fiche_de(pj)

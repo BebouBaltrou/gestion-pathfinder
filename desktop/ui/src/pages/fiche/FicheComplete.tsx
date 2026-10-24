@@ -4,10 +4,11 @@ import { api, formaterPo } from "../../api";
 import type { Charge, EffetDonnees, EvenementFiche, FicheVue, LignePersonnage } from "../../fiche-types";
 import { Chiffre, Choix, Detail, signe, useCatalogue } from "./commun";
 import { Montee } from "./Montee";
+import { PrestigeDon } from "./PrestigeDon";
 
 /** `niveauVise` : niveau choisi à la création ; l'assistant de montée s'ouvre tant qu'il n'est pas atteint. */
 type Props = { outils: Outils; pj: LignePersonnage; fiche: FicheVue; niveauVise?: number };
-type Onglet = "combat" | "competences" | "dons" | "sorts" | "equipement" | "etats" | "histoire";
+type Onglet = "combat" | "competences" | "dons" | "sorts" | "equipement" | "etats" | "histoire" | "prestige";
 
 const ONGLETS: [Onglet, string][] = [
   ["combat", "Combat"],
@@ -22,8 +23,12 @@ const ONGLETS: [Onglet, string][] = [
 export function FicheComplete(p: Props) {
   const [onglet, setOnglet] = useState<Onglet>("combat");
   const [monter, setMonter] = useState(false);
+  const [avecPrestige, setAvecPrestige] = useState(false);
   const f = p.fiche;
   const id = f.identite;
+  useEffect(() => {
+    api.prestigeDon(p.pj.id).then((v) => setAvecPrestige(!!v?.actif));
+  }, [p.pj.id, p.outils.version]);
   useEffect(() => {
     if ((p.niveauVise ?? 1) > id.niveau && id.niveauxEnAttente > 0) setMonter(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -78,7 +83,7 @@ export function FicheComplete(p: Props) {
       {monter && <Montee outils={p.outils} pj={p.pj} fiche={f} onFerme={() => setMonter(false)} />}
 
       <div className="onglets" role="tablist">
-        {ONGLETS.map(([k, nom]) => (
+        {[...ONGLETS, ...(avecPrestige ? ([["prestige", "Prestige"]] as [Onglet, string][]) : [])].map(([k, nom]) => (
           <button key={k} role="tab" aria-selected={onglet === k} className={"onglet" + (onglet === k ? " actif" : "")} onClick={() => setOnglet(k)}>
             {nom}
           </button>
@@ -92,6 +97,7 @@ export function FicheComplete(p: Props) {
       {onglet === "equipement" && <Equipement f={f} agir={agir} />}
       {onglet === "etats" && <Etats f={f} agir={agir} />}
       {onglet === "histoire" && <Histoire f={f} agir={agir} />}
+      {onglet === "prestige" && <PrestigeDon outils={p.outils} pj={p.pj} />}
     </div>
   );
 }

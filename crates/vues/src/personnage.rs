@@ -73,6 +73,8 @@ vue! {
         /// Prestige saisi, ou niveau + modificateur de Charisme de la fiche.
         pub prestige: Option<i32>,
         pub prestige_calcule: bool,
+        /// Nom du maître, si ce personnage est l'acolyte d'un autre (don Prestige).
+        pub acolyte_de: Option<String>,
         pub fiche: Option<ResumeFiche>,
     }
 }
@@ -130,6 +132,11 @@ pub fn liste_personnages(etat: &Etat) -> Vec<LignePersonnage> {
                     .map(|l| l.nom.clone()),
                 prestige: etat.prestige_effectif(p.id),
                 prestige_calcule: p.prestige.is_none() && e.is_some(),
+                acolyte_de: etat
+                    .acolytes
+                    .get(&p.id)
+                    .and_then(|m| etat.personnages.get(m))
+                    .map(|m| m.nom.clone()),
                 fiche: e.as_ref().and_then(|e| resume(r, e)),
             }
         })
