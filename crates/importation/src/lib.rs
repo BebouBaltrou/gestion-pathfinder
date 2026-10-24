@@ -9,6 +9,8 @@ pub mod dons;
 pub mod feuille;
 pub mod lecteur;
 
-pub use controle::{controler, Gravite, Ligne, Rapport};
+pub use controle::{
+    appliquer_gardes, controler, proposer, Garde, Gravite, Ligne, Proposition, Rapport,
+};
 pub use feuille::{lire_feuille, Feuille};
 pub use lecteur::{lire_champs, lire_champs_octets, Champs};

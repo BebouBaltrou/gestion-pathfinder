@@ -2,7 +2,7 @@
 //! ce que la feuille dit, puis on compare chaque valeur. Aucune règle n'est écrite ici :
 //! tout ce qui est « attendu » vient du moteur (`fiches`).
 
-use crate::feuille::Feuille;
+use crate::feuille::{entier, Feuille};
 use fiches::{Carac, Effet, Fiche, Referentiel, TypeBonus};
 use std::collections::BTreeMap;
 
@@ -27,6 +27,17 @@ pub struct Ligne {
     pub regles: String,
     pub explication: String,
     pub gravite: Gravite,
+    /// Identifiant stable de la ligne (champ du PDF + libellé), pour y attacher un choix.
+    pub cle: String,
+    /// Si la ligne est numérique et modifiable : ce qu'ajoute « Garder » (feuille − règles).
+    pub garde: Option<Garde>,
+}
+
+/// Valeur de la feuille que le joueur choisit de garder : elle devient un effet « personnalisé ».
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Garde {
+    pub cible: String,
+    pub delta: i32,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
@@ -70,6 +81,8 @@ pub fn controler(f: &Feuille, r: &Referentiel) -> Rapport {
             regles,
             explication,
             gravite,
+            cle: String::new(),
+            garde: None,
         });
     };
 
@@ -103,7 +116,7 @@ pub fn controler(f: &Feuille, r: &Referentiel) -> Rapport {
     }
 
     // ── Personnage dans le moteur ──────────────────────────────────────────────
-    let fiche = fiche_depuis_feuille(f, niveau);
+    let fiche = fiche_depuis_feuille(f, niveau, r);
 
     // ── Caractéristiques ───────────────────────────────────────────────────────
     let valeurs_a = fiche.calculer(r);
@@ -430,6 +443,8 @@ pub fn controler(f: &Feuille, r: &Referentiel) -> Rapport {
                 regles,
                 explication,
                 gravite,
+                cle: String::new(),
+                garde: None,
             });
         }
         rap.lignes.push(Ligne {
@@ -447,6 +462,8 @@ pub fn controler(f: &Feuille, r: &Referentiel) -> Rapport {
             } else {
                 Gravite::Ecart
             },
+            cle: String::new(),
+            garde: None,
         });
     }
     rap.non_verifie.push(
@@ -456,9 +473,95 @@ pub fn controler(f: &Feuille, r: &Referentiel) -> Rapport {
             .into(),
     );
 
+    // Identifiants stables et valeurs « gardables ».
+    for l in &mut rap.lignes {
+        l.cle = format!("{}|{}", l.champ, l.libelle);
+        l.garde = garde_pour(f, l);
+    }
     // Tri : écarts d'abord.
     rap.lignes.sort_by_key(|l| std::cmp::Reverse(l.gravite));
     rap
+}
+
+/// Une ligne numérique dont le moteur sait recevoir un ajustement : on garde l'écart feuille − règles.
+fn garde_pour(f: &Feuille, l: &Ligne) -> Option<Garde> {
+    if l.gravite == Gravite::Accord {
+        return None;
+    }
+    let (a, b) = (entier(&l.feuille)?, entier(&l.regles)?);
+    if a == b {
+        return None;
+    }
+    let cible = match (l.rubrique, l.champ.as_str()) {
+        ("Caractéristiques", c) if c.starts_with("Val") => {
+            let n: usize = c[3..].parse().ok()?;
+            carac_de(f.caracs.get(n - 1)?.id).cible().0
+        }
+        ("Jets de sauvegarde", "JdS1") => "jds.ref".into(),
+        ("Jets de sauvegarde", "JdS2") => "jds.vig".into(),
+        ("Jets de sauvegarde", "JdS3") => "jds.vol".into(),
+        ("Combat", "Init") => "init".into(),
+        ("Classe d'armure", "CombatCA.0") => "ca".into(),
+        ("Compétences", champ) => {
+            let c = f.competences.iter().find(|c| c.champ == champ)?;
+            if l.libelle != c.libelle {
+                return None;
+            }
+            format!("comp.{}", c.cle)
+        }
+        _ => return None,
+    };
+    Some(Garde {
+        cible,
+        delta: a - b,
+    })
+}
+
+/// Ce que le contrôle propose : la fiche reconstruite et le rapport d'écarts.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Proposition {
+    pub fiche: Fiche,
+    pub niveau: u32,
+    pub rapport: Rapport,
+}
+
+/// Prépare l'import d'une feuille déjà lue (classe prise en charge : ensorceleur).
+pub fn proposer(f: &Feuille, r: &Referentiel) -> Result<Proposition, String> {
+    let (classe, niveau) = niveau_lu(&f.classes_et_niveaux).ok_or_else(|| {
+        format!(
+            "Classe et niveau illisibles : « {} ».",
+            f.classes_et_niveaux
+        )
+    })?;
+    if classe != "ensorceleur" {
+        return Err(format!(
+            "Classe « {classe} » : pas encore prise en charge (ensorceleur seulement)."
+        ));
+    }
+    Ok(Proposition {
+        fiche: fiche_depuis_feuille(f, niveau, r),
+        niveau,
+        rapport: controler(f, r),
+    })
+}
+
+/// Applique les valeurs que le joueur a choisi de garder : chacune devient un effet
+/// « personnalisé » (jamais présenté comme officiel).
+pub fn appliquer_gardes(mut fiche: Fiche, rapport: &Rapport, gardes: &[String]) -> Fiche {
+    for l in &rapport.lignes {
+        if let (true, Some(g)) = (gardes.contains(&l.cle), &l.garde) {
+            fiche.effets.push(Effet {
+                cible: fiches::Cible::new(&g.cible),
+                type_bonus: TypeBonus::SansType,
+                valeur: g.delta,
+                source: format!(
+                    "{} (valeur de la feuille PDF gardée : personnalisé)",
+                    l.libelle
+                ),
+            });
+        }
+    }
+    fiche
 }
 
 fn carac_de(id: &str) -> Carac {
@@ -484,7 +587,7 @@ fn index_carac(id: &str) -> usize {
 /// la colonne « Base » inclut déjà l'ajustement racial ; le +2 libre de l'humain est en CHA ;
 /// la colonne « Altération » vient d'objets (bonus d'altération) ; tous les rangs sont posés
 /// au niveau 1 (la feuille ne dit pas à quel niveau ils ont été pris).
-pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32) -> Fiche {
+pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32, r: &Referentiel) -> Fiche {
     let race = "humain";
     let mut scores: BTreeMap<Carac, i32> = BTreeMap::new();
     let mut effets: Vec<Effet> = Vec::new();
@@ -510,10 +613,35 @@ pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32) -> Fiche {
             rangs.insert(c.cle.clone(), rg as u32);
         }
     }
-    let niveaux = (0..niveau)
+    // Dés de vie : la feuille ne donne que le total de PV, pas les jets. On répartit ce total
+    // le plus régulièrement possible (niveau 1 au maximum) ; le résultat est signalé au joueur.
+    let con = fiches::modificateur(
+        f.caracs
+            .iter()
+            .find(|c| c.id == "con")
+            .and_then(|c| c.val.or(c.base))
+            .unwrap_or(10),
+    );
+    let n = niveau as i32;
+    let reste = (f.pv_max.unwrap_or(0) - n * con - 6).clamp(n - 1, 6 * (n - 1).max(1));
+    let (socle, supplement) = if n > 1 {
+        (reste / (n - 1), reste % (n - 1))
+    } else {
+        (0, 0)
+    };
+    let de_vie = |i: u32| -> u32 {
+        if i == 0 {
+            6
+        } else if (i as i32) <= supplement {
+            (socle + 1) as u32
+        } else {
+            socle.max(1) as u32
+        }
+    };
+    let mut niveaux: Vec<fiches::fiche::NiveauPris> = (0..niveau)
         .map(|i| fiches::fiche::NiveauPris {
             classe: "ensorceleur".into(),
-            de_vie_obtenu: if i == 0 { 6 } else { 4 },
+            de_vie_obtenu: de_vie(i),
             rangs: if i == 0 {
                 rangs.clone()
             } else {
@@ -523,7 +651,7 @@ pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32) -> Fiche {
             dons: vec![],
         })
         .collect();
-    Fiche {
+    let mut fiche = Fiche {
         nom: f.nom.clone(),
         race: race.into(),
         bonus_racial_libre: Some(Carac::Cha),
@@ -531,7 +659,7 @@ pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32) -> Fiche {
         dommages: BTreeMap::new(),
         drain: BTreeMap::new(),
         augmentations: vec![],
-        niveaux,
+        niveaux: std::mem::take(&mut niveaux),
         classes_de_predilection: vec!["ensorceleur".into()],
         lignage: Some("infernal".into()),
         connaissance_de_lignage: None,
@@ -540,7 +668,51 @@ pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32) -> Fiche {
         equipement: Default::default(),
         etats: vec![],
         temporaires: vec![],
+    };
+    // Dons reconnus : posés dans les emplacements de don que le moteur prévoit, dans l'ordre.
+    let mut dons: std::collections::VecDeque<String> = crate::dons::rapprocher(&f.notes_dons)
+        .into_iter()
+        .filter_map(|d| {
+            let en = d.nom_en?;
+            Some(match d.precision.as_deref().and_then(ecole_en) {
+                Some(e) => format!("{en} ({e})"),
+                None => en,
+            })
+        })
+        .collect();
+    let emplacements: Vec<(u32, u32)> = fiche
+        .valider(r)
+        .iter()
+        .filter_map(|p| match p {
+            fiches::Probleme::DonsAuNiveau {
+                niveau, attendus, ..
+            } => Some((*niveau, *attendus)),
+            _ => None,
+        })
+        .collect();
+    for (nv, attendus) in emplacements {
+        for _ in 0..attendus {
+            if let Some(d) = dons.pop_front() {
+                fiche.niveaux[nv as usize - 1].dons.push(d);
+            }
+        }
     }
+    fiche
+}
+
+/// École de magie en anglais minuscule, comme dans les choix du catalogue (« Spell Focus (evocation) »).
+fn ecole_en(fr: &str) -> Option<&'static str> {
+    Some(match fr.trim().to_lowercase().replace('é', "e").as_str() {
+        "abjuration" => "abjuration",
+        "divination" => "divination",
+        "enchantement" => "enchantment",
+        "evocation" => "evocation",
+        "illusion" => "illusion",
+        "invocation" => "conjuration",
+        "necromancie" => "necromancy",
+        "transmutation" => "transmutation",
+        _ => return None,
+    })
 }
 
 /// Une valeur de la feuille plus haute que celle du moteur peut venir d'un objet ou d'un don
@@ -556,7 +728,6 @@ fn bonus_total(feuille: i32, moteur: i32) -> Gravite {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::feuille::entier;
 
     #[test]
     fn lit_les_nombres_de_la_feuille() {
@@ -592,5 +763,64 @@ mod tests {
         let rap = controler(&f, Referentiel::partage());
         assert!(rap.lignes.is_empty());
         assert!(rap.non_verifie[0].contains("pas encore prise en charge"));
+    }
+}
+
+#[cfg(test)]
+mod tests_import {
+    use super::*;
+    use crate::feuille::lire_feuille;
+    use crate::lecteur::Champs;
+
+    fn champs_ensorceleur_3() -> Champs {
+        let mut c = Champs::new();
+        let mut mets = |k: &str, v: &str| {
+            c.insert(k.to_string(), v.to_string());
+        };
+        mets("Nom", "Test");
+        mets("Classes&Niveaux", "Ensorceleur 3");
+        // FOR 10, DEX 10, CON 12, INT 10, SAG 10, CHA 16 (14 + 2 humain)
+        for (n, v) in [(1, 10), (2, 10), (3, 12), (4, 10), (5, 10), (6, 16)] {
+            mets(&format!("Base{n}"), &v.to_string());
+            mets(&format!("Val{n}"), &v.to_string());
+            mets(&format!("Mod{n}"), &format!("{:+}", (v - 10) / 2));
+        }
+        // Vigueur au niveau 3 : 1 (table) + 1 (CON) = 2 ; la feuille écrit 4.
+        mets("JdS2", "4");
+        mets("MaxPV", "17");
+        c
+    }
+
+    #[test]
+    fn garder_une_valeur_ajoute_un_effet_personnalise() {
+        let r = Referentiel::partage();
+        let feuille = lire_feuille(&champs_ensorceleur_3());
+        let p = proposer(&feuille, r).unwrap();
+        assert_eq!(p.niveau, 3);
+        let sans = p.fiche.calculer(r).unwrap();
+        assert_eq!(sans.vigueur.total, 2);
+        let ligne = p
+            .rapport
+            .lignes
+            .iter()
+            .find(|l| l.champ == "JdS2")
+            .expect("ligne Vigueur");
+        assert_eq!(ligne.garde.as_ref().map(|g| g.delta), Some(2));
+
+        // Corriger : rien ne change. Garder : la fiche donne la valeur de la feuille, avec une
+        // source marquée « personnalisé ».
+        let corrigee = appliquer_gardes(p.fiche.clone(), &p.rapport, &[]);
+        assert_eq!(corrigee.calculer(r).unwrap().vigueur.total, 2);
+        let gardee = appliquer_gardes(p.fiche, &p.rapport, std::slice::from_ref(&ligne.cle));
+        let v = gardee.calculer(r).unwrap();
+        assert_eq!(v.vigueur.total, 4);
+        assert!(v.vigueur.explication().contains("personnalisé"));
+    }
+
+    #[test]
+    fn les_points_de_vie_de_la_feuille_sont_retrouves() {
+        let r = Referentiel::partage();
+        let p = proposer(&lire_feuille(&champs_ensorceleur_3()), r).unwrap();
+        assert_eq!(p.fiche.calculer(r).unwrap().pv_max.total, 17);
     }
 }

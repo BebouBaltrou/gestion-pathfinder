@@ -37,6 +37,17 @@ fn main() {
         }
         println!();
     }
+    if let Ok(p) = importation::proposer(&feuille, fiches::Referentiel::partage()) {
+        if let Ok(v) = p.fiche.calculer(fiches::Referentiel::partage()) {
+            println!(
+                "Fiche proposée : niveau {}, PV {}, dons {:?}
+",
+                p.niveau,
+                v.pv_max.total,
+                p.fiche.dons_choisis()
+            );
+        }
+    }
     println!("== NON VÉRIFIÉ");
     for n in &rapport.non_verifie {
         println!("- {n}");
