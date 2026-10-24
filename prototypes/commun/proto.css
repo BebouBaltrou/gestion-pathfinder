@@ -1,0 +1,76 @@
+/* Prototype d'interface — feuille de style commune aux trois essais (même rendu partout).
+   Tout passe par des jetons (variables CSS) : un second thème n'est qu'un autre jeu de valeurs. */
+:root {
+  --fond: #0f1115; --panneau: #14171c; --carte: #1d2129; --bord: #2f3540;
+  --texte: #e8e6e1; --doux: #a3a8b3; --or: #e9c46a; --or-sombre: #1b1608;
+  --pv: #7fd1a8; --pv-retard: #f07a6e; --temp: #7fb2e5; --nonletal: #b79cf0;
+  --degats: #f07a6e; --soin: #7fd1a8; --magie: #5cc8b5;
+  --duree: 450ms; --rayon: 14px;
+  color-scheme: dark;
+}
+:root[data-theme="clair"] {
+  --fond: #f4f1ea; --panneau: #fffdf8; --carte: #ece7db; --bord: #cfc7b4;
+  --texte: #23201a; --doux: #5f5a4d; --or: #8a6414; --or-sombre: #fff6dc;
+  --pv: #2f8f63; --pv-retard: #c0463a; --temp: #2f6fb0; --nonletal: #7a55c8;
+  --degats: #c0463a; --soin: #2f8f63; --magie: #1f8f7d;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--fond); color: var(--texte);
+  font-family: "Segoe UI", system-ui, sans-serif; font-size: 15px; font-variant-numeric: tabular-nums; }
+button { font: inherit; color: inherit; background: var(--carte); border: 1px solid var(--bord);
+  border-radius: 10px; padding: 8px 14px; cursor: pointer; transition: transform 120ms, border-color 120ms; }
+button:hover { border-color: var(--or); } button:active { transform: scale(.96); }
+button.principal { background: var(--or); color: var(--or-sombre); border-color: var(--or); font-weight: 600; }
+:focus-visible { outline: 2px solid var(--or); outline-offset: 2px; }
+.app { max-width: 980px; margin: 0 auto; padding: 20px 16px 60px; }
+.entete { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 18px; }
+.entete h1 { font-size: 20px; margin: 0; flex: 1; } .round { color: var(--doux); }
+.round b { color: var(--or); font-size: 22px; }
+.panneaux { display: grid; gap: 14px; }
+.panneau { background: var(--panneau); border: 1px solid var(--bord); border-radius: var(--rayon); padding: 14px 16px; }
+.panneau.survol { border-color: var(--or); border-style: dashed; }
+.panneau.glisse { opacity: .45; }
+.panneau h2 { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--doux);
+  margin: 0 0 12px; display: flex; align-items: center; gap: 8px; cursor: grab; user-select: none; }
+.poignee { opacity: .6; }
+/* barre d'initiative */
+.barre { display: flex; gap: 10px; overflow-x: auto; padding: 4px; }
+.jeton { min-width: 130px; background: var(--carte); border: 2px solid var(--bord); border-radius: 12px; padding: 10px 12px; }
+.jeton.actif { border-color: var(--or); box-shadow: 0 0 0 3px color-mix(in srgb, var(--or) 25%, transparent); }
+.jeton .nom { font-weight: 600; } .jeton .init { color: var(--doux); font-size: 13px; display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+.jeton .marque { color: var(--or); font-size: 12px; min-height: 16px; }
+.jeton button { padding: 0 8px; border-radius: 6px; }
+/* jauge de PV */
+.jauge-zone { position: relative; }
+.jauge { position: relative; height: 26px; border-radius: 13px; background: var(--carte); border: 1px solid var(--bord); overflow: hidden; }
+.jauge > div { position: absolute; top: 0; bottom: 0; left: 0; }
+.jauge-retard { background: var(--pv-retard); transition: width 900ms ease 350ms; }
+.jauge-pv { background: var(--pv); transition: width var(--duree) cubic-bezier(.2,.7,.2,1); }
+.jauge-temp { background: var(--temp); opacity: .85; transition: width var(--duree); }
+.jauge-nl { background: repeating-linear-gradient(135deg, var(--nonletal) 0 6px, transparent 6px 12px); opacity: .7; transition: width var(--duree); }
+.jauge-texte { margin-top: 8px; display: flex; gap: 14px; flex-wrap: wrap; color: var(--doux); }
+.jauge-texte b { color: var(--texte); font-size: 18px; }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.secoue { animation: secousse 380ms; } .flash-degats { animation: flash-d 520ms; } .flash-soin { animation: flash-s 520ms; }
+@keyframes secousse { 20% { transform: translateX(-7px) } 40% { transform: translateX(7px) } 60% { transform: translateX(-4px) } 80% { transform: translateX(3px) } }
+@keyframes flash-d { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--degats) 70%, transparent) } 100% { box-shadow: 0 0 0 18px transparent } }
+@keyframes flash-s { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--soin) 70%, transparent) } 100% { box-shadow: 0 0 0 18px transparent } }
+.flottant { position: absolute; right: 12px; top: -6px; font-weight: 700; font-size: 22px; pointer-events: none;
+  animation: monte 1100ms ease-out forwards; }
+.flottant.degats { color: var(--degats); } .flottant.soin { color: var(--soin); } .flottant.autre { color: var(--temp); }
+@keyframes monte { from { transform: translateY(0); opacity: 1 } to { transform: translateY(-38px); opacity: 0 } }
+/* effets */
+.effets { display: grid; gap: 8px; }
+.effet { display: flex; align-items: center; gap: 12px; background: var(--carte); border-radius: 12px; padding: 8px 12px; }
+.effet .nom { font-weight: 600; } .effet small { color: var(--doux); display: block; }
+.chrono { width: 38px; height: 38px; flex: none; }
+.chrono circle { fill: none; stroke-width: 4; } .chrono .fond { stroke: var(--bord); }
+.chrono .reste { stroke: var(--magie); stroke-linecap: round; transform: rotate(-90deg); transform-origin: 50% 50%;
+  transition: stroke-dashoffset var(--duree), stroke var(--duree); }
+.chrono .reste.bas { stroke: var(--degats); }
+.alertes { display: grid; gap: 6px; margin-bottom: 12px; }
+.alerte { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 12px; border-radius: 10px;
+  border: 1px solid var(--degats); background: color-mix(in srgb, var(--degats) 12%, transparent); animation: pulse 1.6s ease-in-out 2; }
+@keyframes pulse { 50% { background: color-mix(in srgb, var(--degats) 28%, transparent) } }
+@media (prefers-reduced-motion: reduce) { * { animation-duration: 1ms !important; transition-duration: 1ms !important; } }
