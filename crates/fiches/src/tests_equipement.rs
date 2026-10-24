@@ -247,3 +247,70 @@ fn le_journal_gere_equipement_etats_et_duree() {
     );
     assert!(j.historique().iter().any(|l| l.contains("Armure portée")));
 }
+
+#[test]
+fn les_objets_magiques_portes_changent_les_valeurs() {
+    let r = Referentiel::core();
+    let nue = elfe_ensorceleuse().calculer(&r).unwrap();
+    let mut f = elfe_ensorceleuse();
+    for nom in [
+        "Ring of Protection (+2)",
+        "Cloak of Resistance (+3)",
+        "Headband of Alluring Charisma (+4)",
+        "Cloak of Elvenkind",
+    ] {
+        f.equipement.ajouter_objet(nom, 1);
+    }
+    assert!(f.problemes_equipement(&r).is_empty());
+    let v = f.calculer(&r).unwrap();
+    // Anneau de protection : bonus de parade à la CA.
+    assert_eq!(v.ca.total, nue.ca.total + 2);
+    // Cape de résistance : bonus de résistance aux trois jets de sauvegarde.
+    assert_eq!(v.vigueur.total, nue.vigueur.total + 3);
+    assert_eq!(v.reflexes.total, nue.reflexes.total + 3);
+    assert_eq!(v.volonte.total, nue.volonte.total + 3);
+    // Bandeau : +4 en Charisme (altération), donc le modificateur monte aussi.
+    assert_eq!(
+        v.scores[&Carac::Cha].total,
+        nue.scores[&Carac::Cha].total + 4
+    );
+    // Cape elfique : bonus d'aptitude en Discrétion.
+    assert_eq!(
+        v.competences["stealth"].total,
+        nue.competences["stealth"].total + 5
+    );
+}
+
+#[test]
+fn deux_bonus_de_meme_type_ne_se_cumulent_pas_et_un_emplacement_ne_sert_qu_une_fois() {
+    let r = Referentiel::core();
+    let nue = elfe_ensorceleuse().calculer(&r).unwrap();
+    let mut f = elfe_ensorceleuse();
+    // Deux ceintures : même emplacement.
+    f.equipement.ajouter_objet("Belt of Giant Strength (+2)", 1);
+    f.equipement.ajouter_objet("Belt of Giant Strength (+4)", 1);
+    assert!(f
+        .problemes_equipement(&r)
+        .iter()
+        .any(|p| matches!(p, Probleme::EmplacementOccupe { .. })));
+    // Seul le plus fort des bonus d'altération compte.
+    let v = f.calculer(&r).unwrap();
+    assert_eq!(
+        v.scores[&Carac::For].total,
+        nue.scores[&Carac::For].total + 4
+    );
+    // Deux anneaux sont permis.
+    let mut g = elfe_ensorceleuse();
+    g.equipement.ajouter_objet("Ring of Protection (+1)", 1);
+    g.equipement.ajouter_objet("Ring of Protection (+3)", 1);
+    assert!(g.problemes_equipement(&r).is_empty());
+    // Mais deux bonus de parade ne se cumulent pas : seul +3 compte.
+    assert_eq!(g.calculer(&r).unwrap().ca.total, nue.ca.total + 3);
+    // Un nom inconnu est signalé, jamais deviné.
+    let mut h = elfe_ensorceleuse();
+    h.equipement.ajouter_objet("Ring of Protection (+9)", 1);
+    assert!(h
+        .problemes_equipement(&r)
+        .iter()
+        .any(|p| matches!(p, Probleme::EquipementInconnu(_))));
+}

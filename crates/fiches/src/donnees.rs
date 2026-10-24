@@ -184,6 +184,7 @@ pub struct Referentiel {
     pub sorts: Vec<crate::catalogue::Sort>,
     pub equipement: crate::equipement::CatalogueEquipement,
     pub etats: Vec<crate::etats::EtatDef>,
+    pub objets_magiques: crate::objets_magiques::CatalogueMagique,
 }
 
 impl Referentiel {
@@ -217,6 +218,9 @@ impl Referentiel {
                 include_str!("../../../data/core/etats.json"),
             )
         })
+        .and_then(|r| {
+            r.avec_objets_magiques(include_str!("../../../data/core/objets_magiques.json"))
+        })
         .expect("référentiel Core embarqué valide")
     }
 
@@ -243,6 +247,7 @@ impl Referentiel {
             sorts: Vec::new(),
             equipement: Default::default(),
             etats: Vec::new(),
+            objets_magiques: Default::default(),
         })
     }
 
@@ -256,6 +261,12 @@ impl Referentiel {
         let s: crate::catalogue::FichierSorts = serde_json::from_str(sorts)?;
         self.dons = d.dons;
         self.sorts = s.sorts;
+        Ok(self)
+    }
+
+    /// Ajoute les objets magiques à bonus chiffré.
+    pub fn avec_objets_magiques(mut self, json: &str) -> Result<Referentiel, serde_json::Error> {
+        self.objets_magiques = crate::objets_magiques::CatalogueMagique::depuis_json(json)?;
         Ok(self)
     }
 

@@ -134,6 +134,10 @@ pub enum Probleme {
         niveau: u32,
     },
     CompetenceInconnue(String),
+    /// Deux objets magiques portés au même emplacement du corps (deux anneaux sont permis).
+    EmplacementOccupe {
+        emplacement: String,
+    },
 }
 
 impl Probleme {
@@ -199,6 +203,9 @@ impl std::fmt::Display for Probleme {
                 )
             }
             Probleme::CompetenceInconnue(c) => write!(f, "compétence inconnue : {c}"),
+            Probleme::EmplacementOccupe { emplacement } => {
+                write!(f, "deux objets magiques portés à l'emplacement « {emplacement} »")
+            }
             Probleme::SortInconnu(s) => write!(f, "sort inconnu du catalogue : {s}"),
             Probleme::SortHorsListe { sort } => {
                 write!(f, "{sort} n'est pas sur la liste de sorts de la classe")
@@ -401,6 +408,12 @@ impl Fiche {
             });
         }
         e.extend(self.effets.iter().cloned());
+        // Objets magiques portés : leur bonus chiffré, avec son type (altération, parade…).
+        for o in &self.equipement.objets {
+            if let Some(m) = r.objets_magiques.objet(&o.nom_en) {
+                e.extend(m.effets);
+            }
+        }
         for id in &self.etats {
             if let Some(etat) = r.etat(id) {
                 e.extend(etat.effets_chiffres());
@@ -500,9 +513,25 @@ impl Fiche {
                 _ => {}
             }
         }
+        let mut occupes: BTreeMap<String, u32> = BTreeMap::new();
         for o in &eq.objets {
-            if cat.poids_de(&o.nom_en).is_none() {
-                p.push(Probleme::EquipementInconnu(o.nom_en.clone()));
+            match r.objets_magiques.objet(&o.nom_en) {
+                Some(m) => {
+                    if let Some(e) = m.emplacement {
+                        *occupes.entry(e).or_insert(0) += o.quantite;
+                    }
+                }
+                None if cat.poids_de(&o.nom_en).is_none() => {
+                    p.push(Probleme::EquipementInconnu(o.nom_en.clone()))
+                }
+                None => {}
+            }
+        }
+        // Un seul objet par emplacement du corps, sauf deux anneaux.
+        for (emplacement, n) in occupes {
+            let permis = if emplacement == "anneau" { 2 } else { 1 };
+            if n > permis {
+                p.push(Probleme::EmplacementOccupe { emplacement });
             }
         }
         for e in &self.etats {
