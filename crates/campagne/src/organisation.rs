@@ -36,6 +36,35 @@ fn demis(e: &Equipe, moitie_sans_batiment: bool) -> u32 {
 }
 
 impl Etat {
+    /// Limite de recrutement (GC p. 93) : parmi les PJ présents dans la localité, le meilleur Prestige
+    /// doit être au moins égal au niveau des employés. Lecture à valider : le livre parle de « votre
+    /// personnage » ; ici n'importe quel PJ présent peut mener le recrutement. Sans PJ dont le Prestige
+    /// est connu (ni fiche ni valeur saisie), ou si le livre ne donne pas de niveau, rien n'est bloqué.
+    pub(crate) fn verifier_prestige(
+        &self,
+        localite: IdLocalite,
+        reference: &str,
+        nom: &str,
+    ) -> Result<(), Erreur> {
+        let Some(n) = regles::niveaux_equipes::niveau_des_employes(reference) else {
+            return Ok(());
+        };
+        let meilleur = self
+            .personnages
+            .values()
+            .filter(|p| p.localite == Some(localite))
+            .filter_map(|p| self.prestige_effectif(p.id))
+            .max();
+        match meilleur {
+            Some(prestige) if prestige < n.niveau as i32 => Err(Erreur::PrestigeInsuffisant {
+                equipe: nom.to_string(),
+                niveau: n.niveau,
+                prestige,
+            }),
+            _ => Ok(()),
+        }
+    }
+
     pub fn organisation(&self, id: IdOrganisation) -> Result<&Organisation, Erreur> {
         self.organisations
             .get(&id)
@@ -306,6 +335,7 @@ impl Etat {
                         self.localite(e.localite)?.nom.clone(),
                     ));
                 }
+                self.verifier_prestige(e.localite, &e.reference, &nom)?;
                 let u = r
                     .equipe(&e.reference)
                     .ok_or_else(|| Erreur::EquipeReferentielInconnue(e.reference.clone()))?;
@@ -335,6 +365,7 @@ impl Etat {
                         attendu: "à recruter",
                     });
                 }
+                self.verifier_prestige(e.localite, &e.reference, &nom)?;
                 let u = r
                     .equipe(&e.reference)
                     .ok_or_else(|| Erreur::EquipeReferentielInconnue(e.reference.clone()))?;
@@ -383,6 +414,7 @@ impl Etat {
                         self.localite(e.localite)?.nom.clone(),
                     ));
                 }
+                self.verifier_prestige(e.localite, vers, &cible.nom)?;
                 let diff = regles::calculs::cout_amelioration(de, cible)
                     .map_err(|_| Erreur::SansCoutFixe(nom))?;
                 let jour = self.jour;
@@ -833,6 +865,48 @@ mod tests {
             panic!()
         };
         assert_eq!((ch.cout.influence, ch.cout.travail, ch.duree), (8, 2, 1));
+    }
+
+    #[test]
+    fn le_prestige_limite_le_niveau_des_equipes_recrutees() {
+        let mut m = monde();
+        let pj = *m.etat().personnages.keys().next().unwrap();
+        let regler = |m: &mut Monde, prestige| {
+            m.ev(Evenement::PersonnageModifie {
+                id: pj,
+                nom: "Seoni".into(),
+                prestige,
+            })
+            .unwrap();
+        };
+        // acolyte : employés de niveau 1 ; mage : niveau 3
+        let acolyte = m.ajouter("acolyte", false);
+        let mage = m.ajouter("mage", false);
+        regler(&mut m, Some(0));
+        let lancer = |e| Evenement::RecrutementLance {
+            equipe: e,
+            facteur: 1,
+        };
+        assert!(matches!(
+            m.ev(lancer(acolyte)),
+            Err(Erreur::PrestigeInsuffisant {
+                niveau: 1,
+                prestige: 0,
+                ..
+            })
+        ));
+        regler(&mut m, Some(2));
+        m.ev(lancer(acolyte)).unwrap();
+        assert!(matches!(
+            m.ev(lancer(mage)),
+            Err(Erreur::PrestigeInsuffisant { niveau: 3, .. })
+        ));
+        regler(&mut m, Some(3));
+        m.ev(lancer(mage)).unwrap();
+        // sans Prestige connu, rien n'est bloqué
+        let sage = m.ajouter("sage", false);
+        regler(&mut m, None);
+        m.ev(lancer(sage)).unwrap();
     }
 
     #[test]

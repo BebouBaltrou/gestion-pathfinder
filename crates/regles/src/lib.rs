@@ -10,6 +10,7 @@
 pub mod calculs;
 pub mod controles;
 mod donnees_officielles;
+pub mod niveaux_equipes;
 pub mod options;
 pub mod personnalisation;
 pub mod referentiel;

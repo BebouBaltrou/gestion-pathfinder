@@ -38,6 +38,12 @@ pub enum Erreur {
     SalleInconnue(IdSalle),
     SalleReferentielInconnue(String),
     AucunPjPresent(String),
+    /// Limite de recrutement par le Prestige (GC p. 93).
+    PrestigeInsuffisant {
+        equipe: String,
+        niveau: u32,
+        prestige: i32,
+    },
     StatutIncompatible {
         salle: String,
         attendu: &'static str,
@@ -129,6 +135,14 @@ impl std::fmt::Display for Erreur {
                 f,
                 "aucun personnage n'est présent à {l} : un PJ doit se trouver dans la communauté \
                  au début des travaux (Guide de campagne p. 95)"
+            ),
+            Erreur::PrestigeInsuffisant {
+                equipe,
+                niveau,
+                prestige,
+            } => write!(
+                f,
+                "{equipe} : ses employés sont de niveau {niveau}, mais le meilleur Prestige parmi les                  personnages présents est {prestige} ; un personnage ne peut recruter que des employés                  de niveau inférieur ou égal à son Prestige (Guide de campagne p. 93)"
             ),
             Erreur::StatutIncompatible { salle, attendu } => {
                 write!(f, "{salle} doit être {attendu}")
