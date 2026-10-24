@@ -18,11 +18,11 @@ Statut : « lecture à valider » = comportement implémenté d'après ma lectur
 | 3 | Dommages de caractéristique temporaires : 1 point par nuit et par caractéristique atteinte ; 2 points par 24 h d'alitement complet | p. 191 | Idem règles 1 et 2 ; jamais en dessous de 0 | lecture à valider |
 | 4 | On ne récupère jamais plus de PV qu'on n'en a perdu ; un soin magique ne dépasse pas le maximum | p. 191 | `Vital::soigner` | sûr |
 | 5 | Les PV temporaires absorbent les dégâts avant les PV, disparaissent à la fin de l'effet, ne se récupèrent pas | p. 191 | Les temporaires passent en premier, aussi pour les dégâts non létaux | lecture à valider (dégâts non létaux) |
-| 6 | Plusieurs sources de PV temporaires | non trouvé dans le texte relevé | On garde le plus grand lot, sans cumul | **point à confirmer** |
+| 6 | Plusieurs sources de PV temporaires | non trouvé dans le texte relevé | Les lots se cumulent | décidé par Antoine le 24/10/2026 |
 | 7 | Dégâts non létaux : 1 PV par heure et par niveau ; un sort qui soigne des PV retire autant de dégâts non létaux | p. 191 | `laisser_passer` à chaque avance du temps ; `soigner` retire autant de non létaux | sûr |
 | 8 | Soif : 1 jour + (score de Constitution) heures sans eau, puis test de Constitution toutes les heures (DD 10, +1 par test précédent), sinon 1d6 dégâts non létaux | p. 444 | `Survie`, test demandé au joueur (d20 physique + mod. de Con. de la fiche) | lecture à valider |
 | 9 | Faim : 3 jours sans nourriture, puis test de Constitution par jour (même DD), sinon 1d6 non létaux | p. 444 | idem | lecture à valider |
-| 10 | Premier test : « après » le délai de grâce | p. 444 | Le premier test tombe **une période complète après** la fin du délai (1 h pour la soif, 1 jour pour la faim) | **point à confirmer** |
+| 10 | Premier test : « après » le délai de grâce | p. 444 | Le premier test tombe **une période complète après** la fin du délai (1 h pour la soif, 1 jour pour la faim) | décision d'Antoine le 24/10/2026 : faim et soif seront implémentées plus tard, restent désactivées par défaut |
 | 11 | Les dégâts non létaux dus à la faim ou à la soif rendent fatigué et ne se récupèrent pas avant d'avoir bu ou mangé | p. 444 | « Fatigué » ajouté à la fiche au premier échec, retiré quand plus rien n'est bloqué ; la part due à la soif se libère en buvant, celle de la faim en mangeant | lecture à valider |
 | 12 | Besoins : 1 gallon d'eau et ~1 livre de nourriture par jour (Moyen), moitié pour Petit, 2 à 3 fois l'eau par climat très chaud | p. 444 | **Non modélisé** (taille et climat). Un bouton « Boire » / « Manger » remet les compteurs à zéro | à décider |
 
@@ -41,3 +41,11 @@ Statut : « lecture à valider » = comportement implémenté d'après ma lectur
 Le repos appelle `EvenementFiche::Repos` du moteur de personnage, qui rend **tous** les emplacements de sorts
 (lanceur spontané : aucune préparation). Si une règle plus fine existe (heure de la journée, interruption),
 le moteur de personnage devra la porter ; je ne l'ai pas inventée.
+
+## Décisions d'Antoine du 24/10/2026
+
+- PV temporaires de plusieurs sources : **ils se cumulent** (règle 6).
+- Faim et soif (règles 8 à 12, dont le moment du premier test) : **à reprendre plus tard**. Le code existe mais reste
+  désactivé par défaut (`survie_active = faux`) et ne sera pas proposé dans l'interface pour l'instant.
+- Pas de règle maison de fatigue de sommeil.
+- Retarder son action en combat (sans appliquer les effets « fin de mon tour ») : lecture validée.

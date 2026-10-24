@@ -71,9 +71,9 @@ impl Vital {
         rendus
     }
 
-    /// PV temporaires : un nouveau lot remplace l'ancien s'il est plus grand (pas de cumul).
+    /// PV temporaires : les lots se cumulent (décision d'Antoine, 24/10/2026).
     pub fn donner_temporaires(&mut self, nombre: i32) {
-        self.temporaires = self.temporaires.max(nombre.max(0));
+        self.temporaires = self.temporaires.saturating_add(nombre.max(0));
     }
 
     /// Le temps passe : 1 point de dégâts non létaux guéri par heure et par niveau (p. 191).
@@ -117,10 +117,10 @@ mod tests {
         v.prendre_degats(6, true);
         assert_eq!((v.temporaires, v.degats), (0, 2));
         v.donner_temporaires(5);
-        v.donner_temporaires(3); // pas de cumul : le plus grand lot reste
-        assert_eq!(v.temporaires, 5);
+        v.donner_temporaires(3); // les lots se cumulent
+        assert_eq!(v.temporaires, 8);
         v.prendre_degats(3, false);
-        assert_eq!((v.temporaires, v.non_letaux), (2, 0));
+        assert_eq!((v.temporaires, v.non_letaux), (5, 0));
     }
 
     #[test]
