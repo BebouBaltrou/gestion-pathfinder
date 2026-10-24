@@ -68,3 +68,21 @@ Reste : essai à la main de chaque page par l'utilisateur, puis retrait de l'anc
   servies avant les équipes.
 - Délocalisation équipe par équipe (1d6 par groupe, règle officielle) ; option personnalisée
   « un seul jet pour toute l'organisation ».
+
+## Fiches de personnage : à faire plus tard (décisions du 23/10/2026)
+
+- **Charge portée** : conversion automatique poids -> charge (tableau 7-4 déjà chargé dans
+  `data/core/charge.json`), pièces de monnaie (50 par livre) et poids manquants ; pour l'instant le
+  joueur indique la charge.
+- **Niveaux négatifs (drain d'énergie)** : malus par niveau négatif, perte de niveau effectif,
+  jets de sauvegarde pour les rendre permanents.
+- Vitesse divisée par deux : arrondi à clarifier (voir `docs/POINTS_A_CONFIRMER_FICHES.md`, n° 17).
+
+## Pages des personnages (nouvelle application) : fait et reste à faire
+
+Fait : liste des PJ, création de fiche pas à pas, fiche complète (chiffres détaillés au clic,
+compétences, dons, sorts et repos, équipement, états et effets temporaires, XP, historique),
+montée de niveau, page Paramètres (registre des règles optionnelles de la campagne).
+Reste : équipement de départ dans l'assistant de création, multiclassage (une seule classe
+existe pour l'instant), tirage de dés intégré pour les caractéristiques et les dés de vie,
+familiers, lien de la fiche avec le déplacement du PJ dans une localité, impression de la fiche.

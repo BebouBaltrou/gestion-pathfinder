@@ -27,6 +27,8 @@ crates/regles    référentiel officiel (données du livre), calculs, contrôles
 crates/campagne  journal d'événements (event sourcing), état recalculé, annuler/rétablir, modèles personnels,
                  calendrier de Golarion, sauvegarde JSON (feature « serde »)
 crates/vues      modèles d'affichage calculés par le cœur pour l'interface
+crates/fiches      personnages (PF1, Core) : effets typés, fiche, progression, dons, sorts, équipement,
+                 états ; données dans data/core/ ; plan : docs/PLAN_PERSONNAGES.md
 desktop/         NOUVELLE application (Tauri 2) : src-tauri/ (Rust, commandes), ui/ (React + TS)
 app/             ANCIENNE application (egui), gardée jusqu'à la fin de la migration
 data/            referentiel_officiel.json (source de vérité des données du livre)

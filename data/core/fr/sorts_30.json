@@ -1,0 +1,42 @@
+{
+  "Bless": {
+    "cible": "le lanceur et tous ses alliés dans une explosion de 15 m (50 pieds), centrée sur le lanceur",
+    "composantes": "V, G, FD",
+    "description": "Bénédiction emplit vos alliés de courage. Chaque allié obtient un bonus de moral de +1 aux jets d'attaque et aux jets de sauvegarde contre les effets de peur.\nBénédiction contre et dissipe imprécation."
+  },
+  "Flame Strike": {
+    "cible": "cylindre (rayon 3 m, 10 pieds, hauteur 12 m, 40 pieds)",
+    "composantes": "V, G, FD",
+    "description": "Une colonne de feu évoque une colonne verticale de feu divin. Le sort inflige 1d6 points de dégâts par niveau de lanceur (maximum 15d6). La moitié des dégâts sont des dégâts de feu, mais l'autre moitié provient directement de la puissance divine et n'est donc pas réduite par la résistance aux attaques de feu."
+  },
+  "Freedom of Movement": {
+    "cible": "vous ou une créature touchée",
+    "composantes": "V, G, M (une bande de cuir attachée à la cible), FD",
+    "description": "Ce sort permet à vous ou à une créature que vous touchez de se déplacer et d'attaquer normalement pendant la durée du sort, même sous l'influence d'une magie qui entrave habituellement le mouvement, comme la paralysie, le brouillard solide, la lenteur et la toile d'araignée. Tous les tests de manœuvre offensive faits pour agripper la cible échouent automatiquement. Le sujet réussit automatiquement tous les tests de manœuvre offensive et d'Évasion faits pour échapper à une empoignade ou à une immobilisation.\nLe sort permet aussi au sujet de se déplacer et d'attaquer normalement sous l'eau, même avec des armes tranchantes comme les haches et les épées ou des armes contondantes comme les fléaux, les marteaux et les masses, à condition que l'arme soit tenue en main plutôt que lancée. Le sort de liberté de mouvement ne confère toutefois pas la respiration aquatique."
+  },
+  "Spell Resistance": {
+    "cible": "créature touchée",
+    "composantes": "V, G, FD",
+    "description": "La cible obtient une résistance à la magie égale à 12 + votre niveau de lanceur."
+  },
+  "Elemental Swarm": {
+    "cible": "deux créatures convoquées ou plus, à pas plus de 9 m (30 pieds) les unes des autres",
+    "composantes": "V, G",
+    "description": "Ce sort ouvre un portail vers un plan élémentaire et en convoque des élémentaires. Un druide peut choisir n'importe quel plan (Air, Terre, Feu ou Eau) ; un clerc ouvre un portail vers le plan correspondant à son domaine.\nQuand le sort est terminé, 2d4 élémentaires de taille G apparaissent. Dix minutes plus tard, 1d4 élémentaires de taille TG apparaissent. Dix minutes après cela, un élémentaire supérieur apparaît. Chaque élémentaire a le maximum de points de vie par DV. Une fois ces créatures apparues, elles vous servent pendant la durée du sort.\nLes élémentaires vous obéissent explicitement et ne vous attaquent jamais, même si quelqu'un d'autre parvient à prendre le contrôle sur eux. Vous n'avez pas besoin de vous concentrer pour maintenir le contrôle des élémentaires. Vous pouvez les congédier individuellement ou en groupe à tout moment.\nQuand vous utilisez un sort de convocation pour convoquer une créature de l'air, de la terre, du feu ou de l'eau, il s'agit d'un sort de ce type."
+  },
+  "Entangle": {
+    "cible": "plantes dans une étendue de 12 m (40 pieds) de rayon",
+    "composantes": "V, G, FD",
+    "description": "Ce sort fait que les hautes herbes, les mauvaises herbes et d'autres plantes s'enroulent autour des créatures dans la zone d'effet ou de celles qui y entrent. Les créatures qui ratent leur jet de sauvegarde obtiennent la condition enchevêtré. Les créatures qui réussissent leur jet peuvent se déplacer normalement, mais celles qui restent dans la zone doivent refaire un jet de sauvegarde à la fin de votre tour. Les créatures qui entrent dans la zone doivent faire un jet immédiatement. Celles qui échouent doivent terminer leur déplacement et obtiennent la condition enchevêtré. Les créatures enchevêtrées peuvent tenter de se libérer par une action de mouvement, en faisant un test de Force ou d'Évasion. Le DD de ce test est égal au DD du sort. Toute la zone d'effet est considérée comme un terrain difficile tant que l'effet dure.\nSi les plantes dans la zone sont couvertes d'épines, les créatures dans la zone subissent 1 point de dégâts chaque fois qu'elles ratent un jet de sauvegarde contre l'enchevêtrement ou ratent un test pour se libérer. D'autres effets, selon les plantes locales, peuvent être possibles à la discrétion du MJ."
+  },
+  "Poison": {
+    "cible": "créature vivante touchée",
+    "composantes": "V, G, FD",
+    "description": "En faisant appel aux pouvoirs venimeux des prédateurs naturels, vous infectez le sujet d'un horrible poison par une attaque de contact au corps à corps réussie. Ce poison inflige 1d3 points de dégâts de Constitution par round pendant 6 rounds. Les créatures empoisonnées peuvent faire un jet de Vigueur à chaque round pour annuler les dégâts et mettre fin à l'affliction."
+  },
+  "Tree Stride": {
+    "cible": "vous",
+    "composantes": "V, G, FD",
+    "description": "Quand vous lancez ce sort, vous obtenez la faculté d'entrer dans un arbre, vous imprégnant magiquement de la plante. Une fois dans un arbre, vous pouvez vous téléporter de cet arbre particulier vers un autre arbre. Les arbres dans lesquels vous entrez doivent être de la même espèce, vivants, et avoir un tour de taille au moins égal au vôtre. En entrant dans un chêne (par exemple), vous connaissez instantanément l'emplacement de tous les autres chênes à portée de transport (voir ci-dessous) et pouvez choisir si vous voulez passer dans l'un d'eux ou simplement ressortir de l'arbre dans lequel vous êtes entré. Vous pouvez choisir de passer dans n'importe quel arbre de l'espèce appropriée à portée de transport, comme indiqué dans le tableau suivant.\nType d'arbre — Portée de transport\nChêne, frêne, if — 900 m (3 000 pieds)\nOrme, tilleul — 600 m (2 000 pieds)\nAutres feuillus — 450 m (1 500 pieds)\nTout conifère — 300 m (1 000 pieds)\nVous pouvez entrer dans un arbre jusqu'à une fois par niveau de lanceur (passer d'un arbre à un autre ne compte que comme entrer dans un seul arbre). Le sort dure jusqu'à l'expiration de la durée ou jusqu'à ce que vous sortiez d'un arbre. Chaque transport est une action complexe.\nVous pouvez, si vous le souhaitez, rester dans un arbre sans vous transporter, mais vous en êtes expulsé quand le sort prend fin. Si l'arbre dans lequel vous êtes dissimulé est abattu ou brûlé, vous êtes tué si vous n'en sortez pas avant la fin du processus."
+  }
+}

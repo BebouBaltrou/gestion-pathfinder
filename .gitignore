@@ -9,3 +9,8 @@ desktop/package-lock.json
 desktop/src-tauri/target/
 desktop/src-tauri/gen/
 desktop/src-tauri/icons/
+prototypes/*/node_modules
+prototypes/*/dist/
+prototypes/*/package-lock.json
+prototypes/*.log
+desktop/dist-mock/

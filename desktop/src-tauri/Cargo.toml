@@ -16,6 +16,10 @@ domaine = { path = "../../crates/domaine", features = ["serde"] }
 regles = { path = "../../crates/regles", features = ["serde"] }
 campagne = { path = "../../crates/campagne", features = ["serde"] }
 vues = { path = "../../crates/vues", features = ["serde"] }
+fiches = { path = "../../crates/fiches" }
+aventure = { path = "../../crates/aventure" }
+combat = { path = "../../crates/combat" }
+temps = { path = "../../crates/temps" }
 tauri = { version = "2", features = [] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"

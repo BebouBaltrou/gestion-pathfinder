@@ -1,0 +1,167 @@
+{
+  "source": "Archives of Nethys (aonprd.com), contenu du Core Rulebook sous licence OGL",
+  "livre": "PRPG Core Rulebook",
+  "page": 31,
+  "niveaux": [
+    {
+      "niveau": 1,
+      "xp_lente": 0,
+      "xp_moyenne": 0,
+      "xp_rapide": 0,
+      "don": true,
+      "augmentation": false
+    },
+    {
+      "niveau": 2,
+      "xp_lente": 3000,
+      "xp_moyenne": 2000,
+      "xp_rapide": 1300,
+      "don": false,
+      "augmentation": false
+    },
+    {
+      "niveau": 3,
+      "xp_lente": 7500,
+      "xp_moyenne": 5000,
+      "xp_rapide": 3300,
+      "don": true,
+      "augmentation": false
+    },
+    {
+      "niveau": 4,
+      "xp_lente": 14000,
+      "xp_moyenne": 9000,
+      "xp_rapide": 6000,
+      "don": false,
+      "augmentation": true
+    },
+    {
+      "niveau": 5,
+      "xp_lente": 23000,
+      "xp_moyenne": 15000,
+      "xp_rapide": 10000,
+      "don": true,
+      "augmentation": false
+    },
+    {
+      "niveau": 6,
+      "xp_lente": 35000,
+      "xp_moyenne": 23000,
+      "xp_rapide": 15000,
+      "don": false,
+      "augmentation": false
+    },
+    {
+      "niveau": 7,
+      "xp_lente": 53000,
+      "xp_moyenne": 35000,
+      "xp_rapide": 23000,
+      "don": true,
+      "augmentation": false
+    },
+    {
+      "niveau": 8,
+      "xp_lente": 77000,
+      "xp_moyenne": 51000,
+      "xp_rapide": 34000,
+      "don": false,
+      "augmentation": true
+    },
+    {
+      "niveau": 9,
+      "xp_lente": 115000,
+      "xp_moyenne": 75000,
+      "xp_rapide": 50000,
+      "don": true,
+      "augmentation": false
+    },
+    {
+      "niveau": 10,
+      "xp_lente": 160000,
+      "xp_moyenne": 105000,
+      "xp_rapide": 71000,
+      "don": false,
+      "augmentation": false
+    },
+    {
+      "niveau": 11,
+      "xp_lente": 235000,
+      "xp_moyenne": 155000,
+      "xp_rapide": 105000,
+      "don": true,
+      "augmentation": false
+    },
+    {
+      "niveau": 12,
+      "xp_lente": 330000,
+      "xp_moyenne": 220000,
+      "xp_rapide": 145000,
+      "don": false,
+      "augmentation": true
+    },
+    {
+      "niveau": 13,
+      "xp_lente": 475000,
+      "xp_moyenne": 315000,
+      "xp_rapide": 210000,
+      "don": true,
+      "augmentation": false
+    },
+    {
+      "niveau": 14,
+      "xp_lente": 665000,
+      "xp_moyenne": 445000,
+      "xp_rapide": 295000,
+      "don": false,
+      "augmentation": false
+    },
+    {
+      "niveau": 15,
+      "xp_lente": 955000,
+      "xp_moyenne": 635000,
+      "xp_rapide": 425000,
+      "don": true,
+      "augmentation": false
+    },
+    {
+      "niveau": 16,
+      "xp_lente": 1350000,
+      "xp_moyenne": 890000,
+      "xp_rapide": 600000,
+      "don": false,
+      "augmentation": true
+    },
+    {
+      "niveau": 17,
+      "xp_lente": 1900000,
+      "xp_moyenne": 1300000,
+      "xp_rapide": 850000,
+      "don": true,
+      "augmentation": false
+    },
+    {
+      "niveau": 18,
+      "xp_lente": 2700000,
+      "xp_moyenne": 1800000,
+      "xp_rapide": 1200000,
+      "don": false,
+      "augmentation": false
+    },
+    {
+      "niveau": 19,
+      "xp_lente": 3850000,
+      "xp_moyenne": 2550000,
+      "xp_rapide": 1700000,
+      "don": true,
+      "augmentation": false
+    },
+    {
+      "niveau": 20,
+      "xp_lente": 5350000,
+      "xp_moyenne": 3600000,
+      "xp_rapide": 2400000,
+      "don": false,
+      "augmentation": true
+    }
+  ]
+}

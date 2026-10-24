@@ -46,6 +46,14 @@ pub struct VueCalendrier {
     pub apercu: String,
 }
 
+/// Réglages affichés ici : ceux que le registre des règles de la campagne ne couvre pas.
+const AUTRES: [&str; 4] = [
+    "sans_usure",
+    "salaire_unique",
+    "limite_par_pj",
+    "afficher_avertissements",
+];
+
 fn statut(actif_officiel: bool, actif: bool) -> Option<String> {
     // une règle « officielle quand cochée » devient personnalisée quand elle est décochée, et inversement
     let officiel = actif == actif_officiel;
@@ -171,6 +179,12 @@ pub fn page_parametres(c: &mut campagne::Campagne, r: &Referentiel) -> PageParam
             None,
         ),
     ];
+    // les six options de l'intermède déjà proposées par le registre des règles de la campagne
+    // (page Paramètres, groupe « Intermède ») ne sont pas répétées ici
+    let reglages: Vec<Reglage> = reglages
+        .into_iter()
+        .filter(|x| AUTRES.contains(&x.id.as_str()))
+        .collect();
     let cal = &c.calendrier;
     let calendrier = VueCalendrier {
         jour_semaine: cal.jour_semaine_origine % 7,
@@ -307,15 +321,15 @@ mod tests {
         let r = regles::referentiel_officiel();
         let mut c = Campagne::nouvelle("Test");
         let p = page_parametres(&mut c, &r);
-        assert_eq!(p.reglages.len(), 10);
+        assert_eq!(p.reglages.len(), 4);
         assert_eq!(p.campagne, "Test");
         // une option simple est modifiée directement
-        let avant = c.options.production_pendant_amelioration;
+        let avant = c.options.afficher_avertissements;
         assert!(matches!(
-            regler(&mut c, "production_pendant_amelioration", !avant),
+            regler(&mut c, "afficher_avertissements", !avant),
             Ok(ResultatReglage::Enregistre(_))
         ));
-        assert_eq!(c.options.production_pendant_amelioration, !avant);
+        assert_eq!(c.options.afficher_avertissements, !avant);
         // un réglage journalisé est un événement, qui change l'état une fois exécuté
         let Ok(ResultatReglage::Evenement(ev, _)) = regler(&mut c, "limite_par_pj", true) else {
             panic!("événement attendu");

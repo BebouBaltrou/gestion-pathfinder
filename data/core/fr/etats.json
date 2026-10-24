@@ -1,0 +1,141 @@
+{
+  "note": "Traductions non officielles faites pour l'application d'après le texte anglais du Core (p. 565) ; le texte anglais reste la référence.",
+  "etats": {
+    "bleed": {
+      "nom": "Saignement",
+      "texte": "Une créature qui subit des dégâts de saignement perd le nombre de points indiqué au début de son tour. Le saignement s'arrête par un test de Premiers secours (Heal) DD 15 ou par tout sort qui soigne des points de vie (même si le saignement inflige des dégâts de caractéristique). Certains saignements infligent des dégâts ou même un drain de caractéristique. Les saignements ne se cumulent pas entre eux, sauf s'ils infligent des dégâts de nature différente. Quand plusieurs saignements infligent la même nature de dégâts, on retient le pire ; dans ce cas, le drain de caractéristique est pire que les dégâts de caractéristique."
+    },
+    "blinded": {
+      "nom": "Aveuglé",
+      "texte": "La créature ne voit rien. Elle subit un malus de –2 à la classe d'armure, perd son bonus de Dextérité à la CA (s'il y en a un) et subit un malus de –4 à « la plupart » des jets de compétence basés sur la Force et la Dextérité ainsi qu'aux jets opposés de Perception. Tous les jets et toutes les actions qui reposent sur la vue (lire, Perception visuelle…) échouent automatiquement. Tous les adversaires sont considérés comme bénéficiant d'un camouflage total (50 % de chances de rater) contre le personnage aveuglé. Une créature aveugle doit réussir un test d'Acrobaties DD 10 pour se déplacer plus vite que la moitié de sa vitesse, sinon elle tombe à terre. Un personnage aveuglé pendant longtemps s'habitue à ces désagréments et peut en surmonter certains."
+    },
+    "broken": {
+      "nom": "Brisé",
+      "texte": "Un objet qui a subi plus de la moitié de ses points de vie en dégâts devient brisé : il est moins efficace pour sa fonction. Pour une arme, toutes les attaques faites avec subissent un malus de –2 aux jets d'attaque et de dégâts ; elle ne fait de coup critique que sur un 20 naturel et ne fait que des dégâts ×2 sur un critique confirmé. Pour une armure ou un bouclier, le bonus à la CA est réduit de moitié (arrondi à l'inférieur) et le malus d'armure aux compétences est doublé. Pour un outil nécessaire à une compétence, tout jet fait avec subit un malus de –2. Pour une baguette ou un bâton, il consomme deux fois plus de charges. Si l'objet n'entre dans aucune de ces catégories, l'état brisé n'a pas d'effet sur son usage. Quel que soit son type, un objet brisé vaut 75 % de sa valeur normale. Un objet magique ne peut être réparé que par un sort de réparation ou de remise en état lancé par un personnage dont le niveau de lanceur est au moins égal à celui de l'objet ; il perd l'état brisé si le sort lui rend au moins la moitié de ses points de vie d'origine. Un objet non magique peut être réparé de la même façon ou par la compétence d'Artisanat qui a servi à le créer : en général un test d'Artisanat DD 20 et 1 heure de travail par point de dégâts à réparer. La plupart des artisans demandent un dixième du coût total de l'objet pour de telles réparations (davantage si l'objet est très abîmé ou ruiné)."
+    },
+    "confused": {
+      "nom": "Confus",
+      "texte": "Une créature confuse a l'esprit embrouillé et ne peut pas agir normalement. Elle ne distingue plus allié et ennemi et traite toutes les créatures en ennemies. Un allié qui veut lancer sur elle un sort bénéfique nécessitant un contact doit réussir une attaque de contact au corps à corps. Si elle est attaquée, elle attaque la créature qui l'a attaquée en dernier jusqu'à ce que celle-ci soit morte ou hors de vue. Au début du tour de chaque sujet confus, on lance 1d100 : 01-25 agit normalement ; 26-50 ne fait que balbutier de façon incohérente ; 51-75 se inflige 1d8 points de dégâts + modificateur de Force avec un objet qu'elle tient en main ; 76-100 attaque la créature la plus proche (pour cela, un familier compte comme faisant partie du sujet). Une créature confuse qui ne peut pas accomplir l'action indiquée ne fait que balbutier. Les attaquants n'ont aucun avantage particulier contre une créature confuse. Toute créature confuse qui est attaquée attaque automatiquement ses agresseurs à son tour suivant, tant qu'elle est encore confuse. Une créature confuse ne fait pas d'attaques d'opportunité contre ce qu'elle n'est pas déjà occupée à attaquer (à cause de son action la plus récente ou parce qu'elle vient d'être attaquée)."
+    },
+    "cowering": {
+      "nom": "Terrorisé (recroquevillé)",
+      "texte": "Le personnage est paralysé par la peur et ne peut entreprendre aucune action. Un personnage recroquevillé subit un malus de –2 à la classe d'armure et perd son bonus de Dextérité (s'il y en a un)."
+    },
+    "dazed": {
+      "nom": "Hébété",
+      "texte": "La créature ne peut pas agir normalement. Une créature hébétée ne peut entreprendre aucune action mais n'a aucun malus à la CA. L'état hébété dure généralement 1 round."
+    },
+    "dazzled": {
+      "nom": "Ébloui",
+      "texte": "La créature voit mal à cause d'une surstimulation des yeux. Une créature éblouie subit un malus de –1 aux jets d'attaque et aux jets de Perception basés sur la vue."
+    },
+    "dead": {
+      "nom": "Mort",
+      "texte": "Les points de vie du personnage sont tombés à un nombre négatif égal à son score de Constitution, sa Constitution tombe à 0, ou il est tué net par un sort ou un effet. L'âme du personnage quitte son corps. Un personnage mort ne bénéficie ni des soins normaux ni des soins magiques, mais peut être ramené à la vie par la magie. Un cadavre se décompose normalement à moins d'être préservé par magie ; la magie qui ramène un mort à la vie restaure aussi le corps, soit en pleine santé, soit dans l'état où il se trouvait à la mort (selon le sort ou l'objet). Dans les deux cas, le personnage ressuscité n'a pas à se soucier de la rigidité cadavérique, de la décomposition ou des autres états qui touchent les cadavres."
+    },
+    "deafened": {
+      "nom": "Assourdi",
+      "texte": "Un personnage assourdi n'entend rien. Il subit un malus de –4 aux jets d'initiative, rate automatiquement les jets de Perception basés sur le son, subit un malus de –4 aux jets opposés de Perception et a 20 % de chances d'échec quand il lance un sort à composante verbale. Un personnage assourdi pendant longtemps s'habitue à ces désagréments et peut en surmonter certains."
+    },
+    "disabled": {
+      "nom": "Hors de combat",
+      "texte": "Un personnage à 0 point de vie, ou à points de vie négatifs mais stabilisé et conscient, est hors de combat. Il peut faire une seule action de mouvement ou une seule action simple par round (pas les deux, ni d'action complexe), mais peut encore faire des actions libres, rapides et immédiates. Il se déplace à demi-vitesse. Les actions de mouvement ne risquent pas de le blesser davantage, mais toute action simple (ou toute autre action que le MJ juge éprouvante, y compris certaines actions libres comme lancer un sort accéléré) lui inflige 1 point de dégâts une fois accomplie. À moins que l'action n'ait augmenté ses points de vie, il passe alors en points de vie négatifs et agonise. Un personnage hors de combat à points de vie négatifs récupère naturellement s'il est aidé. Sinon, chaque jour, après 8 heures de repos, il peut tenter un test de Constitution DD 10 pour commencer à récupérer naturellement. Il subit sur ce jet un malus égal à son total de points de vie négatifs. Un échec lui fait perdre 1 point de vie, sans le faire perdre connaissance. Une fois ce test réussi, il continue de guérir naturellement et ne risque plus de perdre des points de vie."
+    },
+    "dying": {
+      "nom": "Agonisant",
+      "texte": "Une créature agonisante est inconsciente et à deux doigts de la mort. Les créatures à points de vie négatifs qui ne sont pas stabilisées agonisent. Une créature agonisante ne peut entreprendre aucune action. À son tour suivant, après être tombée en points de vie négatifs (sans être morte), et à chaque tour ensuite, le personnage doit réussir un test de Constitution DD 10 pour se stabiliser, avec un malus égal à son total de points de vie négatifs. Un personnage stabilisé n'a plus à faire ce test. Un 20 naturel est une réussite automatique. En cas d'échec, il perd 1 point de vie. Si une créature agonisante atteint un total de points de vie négatifs égal à son score de Constitution, elle meurt."
+    },
+    "energy_drained": {
+      "nom": "Drain d'énergie",
+      "texte": "Le personnage subit un ou plusieurs niveaux négatifs, qui peuvent devenir permanents. S'il a au moins autant de niveaux négatifs que de dés de vie, il meurt. Voir les règles sur le drain d'énergie et les niveaux négatifs."
+    },
+    "entangled": {
+      "nom": "Empêtré",
+      "texte": "Le personnage est pris au piège. Être empêtré gêne les déplacements mais ne les empêche pas entièrement, sauf si les liens sont fixés à un objet immobile ou retenus par une force adverse. Une créature empêtrée se déplace à demi-vitesse, ne peut ni courir ni charger, et subit un malus de –2 à tous ses jets d'attaque et de –4 en Dextérité. Un personnage empêtré qui tente de lancer un sort doit réussir un test de concentration (DD 15 + niveau du sort) sous peine de perdre le sort."
+    },
+    "exhausted": {
+      "nom": "Épuisé",
+      "texte": "Un personnage épuisé se déplace à demi-vitesse, ne peut ni courir ni charger, et subit un malus de –6 en Force et en Dextérité. Après 1 heure de repos complet, un personnage épuisé devient fatigué. Un personnage fatigué devient épuisé s'il fait autre chose qui causerait normalement la fatigue."
+    },
+    "fascinated": {
+      "nom": "Fasciné",
+      "texte": "Une créature fascinée est hypnotisée par un effet surnaturel ou un sort. Elle reste debout ou assise sans bouger, n'accomplissant aucune action autre que prêter attention à l'effet fascinant, aussi longtemps qu'il dure. Elle subit un malus de –4 aux jets de compétence faits en réaction, comme la Perception. Toute menace potentielle, comme l'approche d'une créature hostile, lui donne un nouveau jet de sauvegarde contre l'effet. Toute menace évidente, comme quelqu'un qui dégaine une arme, lance un sort ou vise la créature avec une arme à distance, brise automatiquement l'effet. Un allié de la créature fascinée peut la secouer pour la libérer de l'effet par une action simple."
+    },
+    "fatigued": {
+      "nom": "Fatigué",
+      "texte": "Un personnage fatigué ne peut ni courir ni charger et subit un malus de –2 en Force et en Dextérité. Faire quoi que ce soit qui causerait normalement la fatigue rend épuisé un personnage déjà fatigué. Après 8 heures de repos complet, les personnages fatigués ne le sont plus."
+    },
+    "flat_footed": {
+      "nom": "Pris au dépourvu",
+      "texte": "Un personnage qui n'a pas encore agi pendant un combat est pris au dépourvu : il ne peut pas réagir normalement à la situation. Un personnage pris au dépourvu perd son bonus de Dextérité à la CA (s'il y en a un) et ne peut pas faire d'attaques d'opportunité."
+    },
+    "frightened": {
+      "nom": "Effrayé",
+      "texte": "Une créature effrayée fuit la source de sa peur du mieux qu'elle peut. Si elle ne peut pas fuir, elle peut se battre. Une créature effrayée subit un malus de –2 à tous ses jets d'attaque, jets de sauvegarde, jets de compétence et jets de caractéristique. Elle peut utiliser des capacités spéciales, y compris des sorts, pour fuir ; elle y est même obligée si c'est le seul moyen de s'échapper. Effrayé est comme secoué, sauf que la créature doit fuir si possible. Paniqué est un état de peur plus extrême."
+    },
+    "grappled": {
+      "nom": "Agrippé",
+      "texte": "Une créature agrippée est immobilisée par une créature, un piège ou un effet. Les créatures agrippées ne peuvent pas se déplacer et subissent un malus de –4 en Dextérité. Une créature agrippée subit un malus de –2 à tous ses jets d'attaque et ses jets de manœuvre offensive, sauf ceux faits pour agripper ou pour se libérer d'une prise. De plus, elle ne peut accomplir aucune action nécessitant deux mains. Un personnage agrippé qui tente de lancer un sort ou d'utiliser une capacité magique doit réussir un test de concentration (DD 10 + BMO de l'agrippeur + niveau du sort) sous peine de perdre le sort. Les créatures agrippées ne peuvent pas faire d'attaques d'opportunité. Une créature agrippée ne peut pas utiliser Discrétion pour se cacher de celle qui l'agrippe, même si une capacité spéciale (comme se cacher à la vue de tous) le permettrait normalement. Si une créature agrippée devient invisible, par un sort ou une autre capacité, elle gagne un bonus de circonstance de +2 à son DMD pour éviter d'être agrippée, mais ne reçoit aucun autre avantage."
+    },
+    "helpless": {
+      "nom": "Sans défense",
+      "texte": "Un personnage sans défense est paralysé, retenu, ligoté, endormi, inconscient ou entièrement à la merci d'un adversaire. Une cible sans défense est traitée comme ayant une Dextérité de 0 (modificateur de –5). Les attaques de corps à corps contre elle bénéficient d'un bonus de +4 (équivalent à attaquer une cible à terre). Les attaques à distance ne reçoivent aucun bonus particulier. Les roublards peuvent porter une attaque sournoise à une cible sans défense. Par une action complexe, un ennemi peut donner un coup de grâce avec une arme de corps à corps. Il peut aussi utiliser un arc ou une arbalète, à condition d'être adjacent à la cible. L'attaquant touche automatiquement et inflige un coup critique. (Un roublard ajoute aussi ses dégâts d'attaque sournoise lors d'un coup de grâce.) Si le défenseur survit, il doit réussir un jet de Vigueur (DD 10 + dégâts infligés) ou mourir. Porter un coup de grâce provoque des attaques d'opportunité. Les créatures immunisées contre les critiques ne subissent pas de dégâts critiques et n'ont pas à faire de jet de Vigueur pour éviter d'être tuées par un coup de grâce."
+    },
+    "incorporeal": {
+      "nom": "Intangible",
+      "texte": "Les créatures intangibles n'ont pas de corps physique. Elles sont immunisées contre toutes les formes d'attaque non magiques. Elles ne subissent que la moitié des dégâts (50 %) des armes magiques, des sorts, des effets magiques et des effets surnaturels. Elles subissent tous les dégâts des autres créatures et effets intangibles, ainsi que de tous les effets de force."
+    },
+    "invisible": {
+      "nom": "Invisible",
+      "texte": "Les créatures invisibles sont indétectables à la vue. Une créature invisible gagne un bonus de +2 aux jets d'attaque contre un adversaire qui voit, et ignore le bonus de Dextérité à la CA de son adversaire (s'il y en a un). Voir Invisibilité, dans les capacités spéciales."
+    },
+    "nauseated": {
+      "nom": "Nauséeux",
+      "texte": "Les créatures nauséeuses ont mal au cœur. Elles ne peuvent ni attaquer, ni lancer de sorts, ni se concentrer sur des sorts, ni faire quoi que ce soit qui demande de l'attention. La seule action possible est une unique action de mouvement par tour."
+    },
+    "panicked": {
+      "nom": "Paniqué",
+      "texte": "Une créature paniquée doit lâcher tout ce qu'elle tient et fuir à vitesse maximale la source de sa peur, ainsi que tous les autres dangers qu'elle rencontre, selon un trajet aléatoire. Elle ne peut entreprendre aucune autre action. De plus, elle subit un malus de –2 à tous ses jets de sauvegarde, jets de compétence et jets de caractéristique. Si elle est acculée, elle se recroqueville et n'attaque pas, utilisant généralement l'action de défense totale en combat. Elle peut utiliser des capacités spéciales, y compris des sorts, pour fuir ; elle y est même obligée si c'est le seul moyen de s'échapper. Paniqué est un état de peur plus extrême que secoué ou effrayé."
+    },
+    "paralyzed": {
+      "nom": "Paralysé",
+      "texte": "Un personnage paralysé est figé sur place et incapable de bouger ou d'agir. Il a des scores effectifs de Dextérité et de Force de 0 et est sans défense, mais peut accomplir des actions purement mentales. Une créature ailée qui vole au moment où elle est paralysée ne peut plus battre des ailes et tombe. Un nageur paralysé ne peut plus nager et risque de se noyer. Une créature peut traverser un espace occupé par une créature paralysée, alliée ou non ; chaque case occupée par une créature paralysée compte toutefois pour 2 cases de déplacement."
+    },
+    "petrified": {
+      "nom": "Pétrifié",
+      "texte": "Un personnage pétrifié a été changé en pierre et est considéré comme inconscient. Si un personnage pétrifié se fêle ou se brise, mais que les morceaux sont raccordés au corps quand il redevient chair, il est indemne. Si le corps pétrifié est incomplet quand il redevient chair, le corps est de même incomplet et il en résulte une perte permanente de points de vie et/ou une infirmité."
+    },
+    "pinned": {
+      "nom": "Immobilisé",
+      "texte": "Une créature immobilisée est étroitement ligotée et ne peut entreprendre que peu d'actions. Elle ne peut pas se déplacer et perd son bonus de Dextérité. Un personnage immobilisé subit aussi un malus supplémentaire de –4 à sa classe d'armure. Elle peut toujours tenter de se libérer, généralement par un jet de manœuvre offensive ou un test d'Évasion. Elle peut accomplir des actions verbales et mentales, mais ne peut lancer aucun sort nécessitant une composante gestuelle ou matérielle. Un personnage immobilisé qui tente de lancer un sort ou d'utiliser une capacité magique doit réussir un test de concentration (DD 10 + BMO de l'agrippeur + niveau du sort) sous peine de perdre le sort. Immobilisé est une version plus sévère d'agrippé, et leurs effets ne se cumulent pas."
+    },
+    "prone": {
+      "nom": "À terre",
+      "texte": "Le personnage est allongé sur le sol. Un attaquant à terre subit un malus de –4 à ses jets d'attaque de corps à corps et ne peut pas utiliser d'arme à distance (sauf une arbalète). Un défenseur à terre gagne un bonus de +4 à la classe d'armure contre les attaques à distance, mais subit un malus de –4 à la CA contre les attaques de corps à corps. Se relever est une action de mouvement qui provoque une attaque d'opportunité."
+    },
+    "shaken": {
+      "nom": "Secoué",
+      "texte": "Un personnage secoué subit un malus de –2 aux jets d'attaque, aux jets de sauvegarde, aux jets de compétence et aux jets de caractéristique. Secoué est un état de peur moins sévère qu'effrayé ou paniqué."
+    },
+    "sickened": {
+      "nom": "Malade",
+      "texte": "Le personnage subit un malus de –2 à tous ses jets d'attaque, jets de dégâts d'arme, jets de sauvegarde, jets de compétence et jets de caractéristique."
+    },
+    "stable": {
+      "nom": "Stabilisé",
+      "texte": "Un personnage qui agonisait mais ne perd plus de points de vie à chaque round et a toujours des points de vie négatifs est stabilisé. Le personnage n'agonise plus, mais reste inconscient. S'il s'est stabilisé grâce à l'aide d'un autre personnage (un test de Premiers secours ou des soins magiques), il ne perd plus de points de vie. Il peut faire un test de Constitution DD 10 chaque heure pour reprendre conscience et devenir hors de combat (même si ses points de vie sont toujours négatifs), avec un malus égal à son total de points de vie négatifs. S'il s'est stabilisé seul sans aide, il risque encore de perdre des points de vie : chaque heure il peut faire un test de Constitution pour se stabiliser (comme s'il avait été aidé), mais chaque échec lui fait perdre 1 point de vie."
+    },
+    "staggered": {
+      "nom": "Chancelant",
+      "texte": "Une créature chancelante peut faire une seule action de mouvement ou une seule action simple par round (pas les deux, ni d'action complexe). Elle peut toujours faire des actions libres, rapides et immédiates. Une créature dont les dégâts non létaux sont exactement égaux à ses points de vie actuels devient chancelante."
+    },
+    "stunned": {
+      "nom": "Étourdi",
+      "texte": "Une créature étourdie lâche tout ce qu'elle tient, ne peut entreprendre aucune action, subit un malus de –2 à la CA et perd son bonus de Dextérité à la CA (s'il y en a un)."
+    },
+    "unconscious": {
+      "nom": "Inconscient",
+      "texte": "Les créatures inconscientes sont assommées et sans défense. L'inconscience peut résulter de points de vie négatifs (sans dépasser le score de Constitution de la créature), ou de dégâts non létaux supérieurs aux points de vie actuels."
+    }
+  }
+}

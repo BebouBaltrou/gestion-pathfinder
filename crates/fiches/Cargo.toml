@@ -1,0 +1,15 @@
+[package]
+name = "fiches"
+description = "Moteur de fiche de personnage Pathfinder 1 : effets typés, empilement des bonus, valeurs expliquées"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+
+[dependencies]
+serde = { version = "1", features = ["derive"], optional = true }
+serde_json = { version = "1", optional = true }
+
+[features]
+default = ["serde"]
+# Sérialisation et chargement des référentiels JSON (data/core).
+serde = ["dep:serde", "dep:serde_json"]

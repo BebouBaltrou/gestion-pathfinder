@@ -1,0 +1,127 @@
+{
+  "Craft Magic Arms and Armor": {
+    "resume": "Vous pouvez créer des armures, boucliers et armes magiques.",
+    "prerequis": "Niveau de lanceur 5",
+    "avantage": "Vous pouvez créer des armes, armures ou boucliers magiques. Améliorer une arme, une armure ou un bouclier prend 1 jour par tranche de 1 000 po du prix de ses propriétés magiques. Pour améliorer une arme, une armure ou un bouclier, vous devez consommer des matières premières coûtant la moitié de ce prix total. Voir les règles de création d'objets magiques dans Objets magiques pour plus d'informations.\nL'arme, l'armure ou le bouclier à améliorer doit être un objet de maître que vous fournissez. Son coût n'est pas inclus dans le coût ci-dessus.\nVous pouvez aussi réparer une arme, une armure ou un bouclier magique brisé si c'en est un que vous pourriez fabriquer. Cela coûte la moitié des matières premières et prend la moitié du temps qu'il faudrait pour fabriquer cet objet au départ."
+  },
+  "Craft Rod": {
+    "resume": "Vous pouvez créer des sceptres magiques.",
+    "prerequis": "Niveau de lanceur 9",
+    "avantage": "Vous pouvez créer des sceptres magiques. Fabriquer un sceptre prend 1 jour par tranche de 1 000 po de son prix de base. Pour fabriquer un sceptre, vous devez consommer des matières premières coûtant la moitié de son prix de base. Voir les règles de création d'objets magiques dans Objets magiques pour plus d'informations."
+  },
+  "Craft Staff": {
+    "resume": "Vous pouvez créer des bâtons magiques.",
+    "prerequis": "Niveau de lanceur 11",
+    "avantage": "Vous pouvez créer tout bâton dont vous remplissez les conditions. Fabriquer un bâton prend 1 jour par tranche de 1 000 po de son prix de base. Pour fabriquer un bâton, vous devez consommer des matières premières coûtant la moitié de son prix de base. Un bâton nouvellement créé a 10 charges. Voir les règles de création d'objets magiques dans Objets magiques pour plus d'informations."
+  },
+  "Craft Wand": {
+    "resume": "Vous pouvez créer des baguettes magiques.",
+    "prerequis": "Niveau de lanceur 5",
+    "avantage": "Vous pouvez créer une baguette de n'importe quel sort de niveau 4 ou inférieur que vous connaissez. Fabriquer une baguette prend 1 jour par tranche de 1 000 po de son prix de base. Pour fabriquer une baguette, vous devez consommer des matières premières coûtant la moitié de ce prix de base. Une baguette nouvellement créée a 50 charges. Voir les règles de création d'objets magiques dans Objets magiques pour plus d'informations."
+  },
+  "Craft Wondrous Item": {
+    "resume": "Vous pouvez créer des objets merveilleux, un type d'objet magique.",
+    "prerequis": "Niveau de lanceur 3",
+    "avantage": "Vous pouvez créer une grande variété d'objets merveilleux magiques. Fabriquer un objet merveilleux prend 1 jour par tranche de 1 000 po de son prix. Pour créer un objet merveilleux, vous devez consommer des matières premières coûtant la moitié de son prix de base. Voir les règles de création d'objets magiques dans Objets magiques pour plus d'informations.\nVous pouvez aussi réparer un objet merveilleux brisé si c'en est un que vous pourriez fabriquer. Cela coûte la moitié des matières premières et prend la moitié du temps qu'il faudrait pour fabriquer cet objet."
+  },
+  "Critical Focus": {
+    "resume": "Vous êtes entraîné à l'art de causer la douleur.",
+    "prerequis": "Bonus de base à l'attaque +9",
+    "avantage": "Vous recevez un bonus de circonstances de +4 aux jets d'attaque faits pour confirmer les coups critiques."
+  },
+  "Critical Mastery": {
+    "resume": "Vos coups critiques causent deux effets supplémentaires.",
+    "prerequis": "Succès critique, deux dons de critique quelconques, guerrier de niveau 14",
+    "avantage": "Quand vous infligez un coup critique, vous pouvez appliquer les effets de deux dons de critique en plus des dégâts infligés.",
+    "normal": "Vous ne pouvez appliquer les effets que d'un seul don de critique à un coup critique donné, en plus des dégâts infligés."
+  },
+  "Dazzling Display": {
+    "resume": "Votre habileté avec votre arme de prédilection peut effrayer vos ennemis.",
+    "prerequis": "Arme de prédilection, maniement de l'arme choisie",
+    "avantage": "Tant que vous brandissez l'arme pour laquelle vous avez Arme de prédilection, vous pouvez faire une démonstration déroutante de prouesse par une action complexe. Faites un test d'Intimidation pour démoraliser tous les ennemis situés à 9 m (30 pieds) qui peuvent voir votre démonstration."
+  },
+  "Deadly Aim": {
+    "resume": "Vous pouvez faire des attaques à distance exceptionnellement mortelles en visant le point faible d'un ennemi, au détriment de la probabilité de réussite de l'attaque.",
+    "prerequis": "Dex 13, bonus de base à l'attaque +1",
+    "avantage": "Vous pouvez choisir de subir un malus de –1 à tous les jets d'attaque à distance pour obtenir un bonus de +2 à tous les jets de dégâts à distance. Quand votre bonus de base à l'attaque atteint +4, puis tous les +4 ensuite, le malus augmente de –1 et le bonus aux dégâts augmente de +2. Vous devez choisir d'utiliser ce don avant de faire un jet d'attaque, et ses effets durent jusqu'à votre tour suivant. Les dégâts supplémentaires ne s'appliquent pas aux attaques de contact ni aux effets qui n'infligent pas de dégâts de points de vie."
+  },
+  "Deadly Stroke": {
+    "resume": "Par une frappe bien placée, vous pouvez mettre une fin rapide et douloureuse à la plupart des ennemis.",
+    "prerequis": "Démonstration éblouissante, Arme de prédilection supérieure, Défenses brisées, Arme de prédilection, maniement de l'arme choisie, bonus de base à l'attaque +11",
+    "avantage": "Par une action simple, faites une seule attaque avec l'arme pour laquelle vous avez Arme de prédilection supérieure contre un adversaire étourdi ou pris au dépourvu. Si vous touchez, vous infligez le double des dégâts normaux et la cible subit 1 point de saignement de Constitution (voir Conditions). Les dégâts supplémentaires et le saignement ne sont pas multipliés en cas de coup critique."
+  },
+  "Deafening Critical": {
+    "resume": "Vos coups critiques font perdre l'ouïe à vos ennemis.",
+    "prerequis": "Succès critique, bonus de base à l'attaque +13",
+    "avantage": "Chaque fois que vous infligez un coup critique à un adversaire, la victime est assourdie de façon permanente. Un jet de Vigueur réussi réduit la surdité à 1 round. Le DD de ce jet de Vigueur est égal à 10 + votre bonus de base à l'attaque. Ce don n'a aucun effet sur les créatures sourdes. Cette surdité peut être guérie par guérison, régénération, guérison de la cécité/surdité ou une capacité similaire.",
+    "special": "Vous ne pouvez appliquer les effets que d'un seul don de critique à un même coup critique, à moins de posséder Maîtrise du critique."
+  },
+  "Deceitful": {
+    "resume": "Vous êtes doué pour tromper les autres, aussi bien avec la parole qu'avec des déguisements physiques.",
+    "avantage": "Vous obtenez un bonus de +2 à tous les tests de Bluff et de Déguisement. Si vous avez 10 rangs ou plus dans l'une de ces compétences, le bonus passe à +4 pour cette compétence."
+  },
+  "Defensive Combat Training": {
+    "resume": "Vous excellez à vous défendre contre toutes sortes de manœuvres de combat.",
+    "avantage": "Vous comptez votre total de dés de vie comme votre bonus de base à l'attaque pour calculer votre Défense contre les manœuvres de combat (voir Combat)."
+  },
+  "Deflect Arrows": {
+    "resume": "Vous pouvez dévier les flèches et autres projectiles pour les empêcher de vous toucher.",
+    "prerequis": "Dex 13, Science du combat à mains nues",
+    "avantage": "Vous devez avoir au moins une main libre (ne tenant rien) pour utiliser ce don. Une fois par round, quand vous seriez normalement touché par une attaque d'arme à distance, vous pouvez la dévier de sorte que vous ne subissiez aucun dégât. Vous devez être conscient de l'attaque et ne pas être pris au dépourvu. Tenter de dévier une attaque à distance ne compte pas comme une action. Les armes à distance exceptionnellement massives (comme les rochers ou les carreaux de baliste) et les attaques à distance produites par des attaques naturelles ou des effets de sorts ne peuvent pas être déviées."
+  },
+  "Deft Hands": {
+    "resume": "Vous avez une dextérité manuelle exceptionnelle.",
+    "avantage": "Vous obtenez un bonus de +2 aux tests de Sabotage et d'Escamotage. Si vous avez 10 rangs ou plus dans l'une de ces compétences, le bonus passe à +4 pour cette compétence."
+  },
+  "Diehard": {
+    "resume": "Vous êtes particulièrement difficile à tuer. Non seulement vos blessures se stabilisent automatiquement quand vous êtes gravement blessé, mais vous pouvez rester conscient et continuer à agir même aux portes de la mort.",
+    "prerequis": "Endurance",
+    "avantage": "Quand votre total de points de vie est inférieur à 0 mais que vous n'êtes pas mort, vous vous stabilisez automatiquement. Vous n'avez pas besoin de faire un test de Constitution à chaque round pour éviter de perdre des points de vie supplémentaires. Vous pouvez choisir d'agir comme si vous étiez hors de combat, plutôt que mourant. Vous devez prendre cette décision dès que vous êtes réduit à des points de vie négatifs (même si ce n'est pas votre tour). Si vous ne choisissez pas d'agir comme si vous étiez hors de combat, vous tombez immédiatement inconscient.\nEn utilisant ce don, vous êtes chancelant. Vous pouvez entreprendre une action de mouvement sans vous blesser davantage, mais si vous accomplissez une action simple (ou toute autre action jugée éprouvante, y compris certaines actions rapides, comme lancer un sort rapide), vous subissez 1 point de dégâts après avoir terminé l'acte. Si vos points de vie négatifs sont égaux ou supérieurs à votre score de Constitution, vous mourez immédiatement.",
+    "normal": "Un personnage sans ce don qui est réduit à des points de vie négatifs est inconscient et mourant."
+  },
+  "Disruptive": {
+    "resume": "Votre entraînement rend difficile aux lanceurs de sorts ennemis de lancer des sorts en sécurité près de vous.",
+    "prerequis": "Guerrier de niveau 6",
+    "avantage": "Le DD pour lancer des sorts sur la défensive augmente de +4 pour tous les ennemis qui se trouvent dans votre zone de menace. Cette augmentation du DD pour lancer des sorts sur la défensive ne s'applique que si vous connaissez la position de l'ennemi et êtes capable de faire une attaque d'opportunité. Si vous ne pouvez faire qu'une attaque d'opportunité par round et avez déjà utilisé cette attaque, cette augmentation ne s'applique pas."
+  },
+  "Dodge": {
+    "resume": "Votre entraînement et vos réflexes vous permettent de réagir vite pour éviter les attaques de vos adversaires.",
+    "prerequis": "Dex 13",
+    "avantage": "Vous obtenez un bonus d'esquive de +1 à votre CA. Une condition qui vous fait perdre votre bonus de Dex à la CA vous fait aussi perdre les avantages de ce don."
+  },
+  "Double Slice": {
+    "resume": "Votre arme de la main non directrice frappe avec plus de puissance quand vous combattez à deux armes.",
+    "prerequis": "Dex 15, Combat à deux armes",
+    "avantage": "Ajoutez votre bonus de Force aux jets de dégâts faits avec votre arme de la main non directrice.",
+    "normal": "Vous n'ajoutez normalement que la moitié de votre modificateur de Force aux jets de dégâts faits avec une arme tenue dans la main non directrice."
+  },
+  "Elemental Channel": {
+    "resume": "Choisissez un sous-type élémentaire, comme l'air, la terre, le feu ou l'eau. Vous pouvez canaliser votre énergie divine pour blesser ou soigner les extérieurs qui possèdent le sous-type élémentaire choisi.",
+    "prerequis": "Capacité de classe de canalisation d'énergie",
+    "avantage": "Au lieu de son effet normal, vous pouvez choisir que votre faculté de canaliser l'énergie soigne ou blesse les extérieurs du sous-type élémentaire choisi. Vous devez faire ce choix chaque fois que vous canalisez de l'énergie. Si vous choisissez de soigner ou de blesser les créatures de votre sous-type élémentaire, votre canalisation d'énergie n'a aucun effet sur les autres créatures. La quantité de dégâts soignés ou infligés et le DD pour les réduire de moitié restent par ailleurs inchangés.",
+    "special": "Vous pouvez prendre ce don plusieurs fois. Ses effets ne se cumulent pas. Chaque fois que vous prenez ce don, il s'applique à un nouveau sous-type élémentaire."
+  },
+  "Empower Spell": {
+    "resume": "Vous pouvez augmenter la puissance de vos sorts, ce qui leur fait infliger plus de dégâts.",
+    "avantage": "Tous les effets numériques variables d'un sort amplifié sont augmentés de moitié, y compris les bonus à ces jets de dés.\nLes jets de sauvegarde et les jets opposés ne sont pas affectés, pas plus que les sorts sans variables aléatoires. Un sort amplifié utilise un emplacement de sort de deux niveaux supérieurs au niveau réel du sort."
+  },
+  "Endurance": {
+    "resume": "Les conditions rudes ou les efforts prolongés ne vous fatiguent pas facilement.",
+    "avantage": "Vous obtenez un bonus de +4 aux tests et jets de sauvegarde suivants : tests de Natation faits pour résister aux dégâts non létaux de l'épuisement ; tests de Constitution faits pour continuer à courir ; tests de Constitution faits pour éviter les dégâts non létaux d'une marche forcée ; tests de Constitution faits pour retenir son souffle ; tests de Constitution faits pour éviter les dégâts non létaux de la faim ou de la soif ; jets de Vigueur faits pour éviter les dégâts non létaux des environnements chauds ou froids ; et jets de Vigueur faits pour résister aux dégâts de la suffocation.\nVous pouvez dormir en armure légère ou intermédiaire sans être fatigué.",
+    "normal": "Un personnage sans ce don qui dort en armure intermédiaire ou plus lourde est fatigué le lendemain."
+  },
+  "Enlarge Spell": {
+    "resume": "Vous pouvez augmenter la portée de vos sorts.",
+    "avantage": "Vous pouvez modifier un sort de portée courte, moyenne ou longue pour augmenter sa portée de 100 %. Un sort agrandi de portée courte a maintenant une portée de 15 m (50 pieds) + 1,50 m (5 pieds)/niveau, tandis que les sorts de portée moyenne ont une portée de 60 m (200 pieds) + 6 m (20 pieds)/niveau et ceux de portée longue une portée de 240 m (800 pieds) + 24 m (80 pieds)/niveau. Un sort agrandi utilise un emplacement de sort d'un niveau supérieur au niveau réel du sort.\nLes sorts dont la portée n'est pas définie par une distance, ainsi que ceux dont la portée n'est pas courte, moyenne ou longue, ne bénéficient pas de ce don."
+  },
+  "Eschew Materials": {
+    "resume": "Vous pouvez lancer de nombreux sorts sans avoir besoin d'utiliser de petites composantes matérielles.",
+    "avantage": "Vous pouvez lancer tout sort dont la composante matérielle coûte 1 po ou moins sans avoir besoin de cette composante. L'incantation du sort provoque toujours des attaques d'opportunité comme d'habitude. Si le sort exige une composante matérielle qui coûte plus de 1 po, vous devez avoir la composante matérielle à portée de main pour lancer le sort, comme d'habitude."
+  },
+  "Exhausting Critical": {
+    "resume": "Vos coups critiques épuisent vos adversaires.",
+    "prerequis": "Succès critique, Critique fatigant, bonus de base à l'attaque +15",
+    "avantage": "Quand vous infligez un coup critique à un ennemi, votre cible devient immédiatement épuisée. Ce don n'a aucun effet sur les créatures épuisées.",
+    "special": "Vous ne pouvez appliquer les effets que d'un seul don de critique à un même coup critique, à moins de posséder le don Maîtrise du critique."
+  }
+}

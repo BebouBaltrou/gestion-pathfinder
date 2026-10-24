@@ -1,0 +1,167 @@
+{
+  "Exotic Weapon Proficiency": {
+    "resume": "Choisissez un type d'arme exotique, comme la chaîne cloutée ou le fouet. Vous comprenez comment utiliser ce type d'arme exotique au combat et pouvez recourir à tous les tours ou qualités spéciaux que cette arme exotique peut permettre.",
+    "prerequis": "Bonus de base à l'attaque +1",
+    "avantage": "Vous faites normalement les jets d'attaque avec l'arme.",
+    "normal": "Un personnage qui utilise une arme qu'il ne manie pas subit un malus de –4 aux jets d'attaque.",
+    "special": "Vous pouvez prendre Maniement des armes exotiques plusieurs fois. Chaque fois que vous prenez le don, il s'applique à un nouveau type d'arme exotique."
+  },
+  "Extend Spell": {
+    "resume": "Vous pouvez faire durer vos sorts deux fois plus longtemps.",
+    "avantage": "Un sort prolongé dure deux fois plus longtemps que la normale. Un sort dont la durée est concentration, instantanée ou permanente n'est pas affecté par ce don. Un sort prolongé utilise un emplacement de sort d'un niveau supérieur au niveau réel du sort."
+  },
+  "Extra Channel": {
+    "resume": "Vous pouvez canaliser l'énergie divine plus souvent.",
+    "prerequis": "Capacité de classe de canalisation d'énergie",
+    "avantage": "Vous pouvez canaliser l'énergie deux fois de plus par jour.",
+    "special": "Si un paladin capable de canaliser l'énergie positive prend ce don, il peut utiliser l'imposition des mains quatre fois de plus par jour, mais seulement pour canaliser de l'énergie positive. Si un prêtre combattant capable de canaliser l'énergie prend ce don, il obtient quatre utilisations de ferveur de plus par jour, mais ne peut les utiliser que pour canaliser l'énergie."
+  },
+  "Extra Ki": {
+    "resume": "Vous pouvez utiliser votre réserve de ki plus de fois par jour que la plupart.",
+    "prerequis": "Capacité de classe de réserve de ki",
+    "avantage": "Votre réserve de ki augmente de 2.",
+    "special": "Vous pouvez prendre Ki supplémentaire plusieurs fois. Ses effets se cumulent."
+  },
+  "Extra Lay on Hands": {
+    "resume": "Vous pouvez utiliser votre imposition des mains plus souvent.",
+    "prerequis": "Capacité de classe d'imposition des mains",
+    "avantage": "Vous pouvez utiliser votre imposition des mains deux fois de plus par jour.",
+    "special": "Vous pouvez prendre Imposition des mains supplémentaire plusieurs fois. Ses effets se cumulent."
+  },
+  "Extra Mercy": {
+    "resume": "Votre imposition des mains ajoute une pitié supplémentaire.",
+    "prerequis": "Capacités de classe d'imposition des mains et de pitié",
+    "avantage": "Choisissez une pitié supplémentaire dont vous remplissez les conditions. Quand vous utilisez l'imposition des mains pour soigner des dégâts sur une cible, celle-ci reçoit aussi les effets supplémentaires de cette pitié.",
+    "special": "Vous pouvez prendre ce don plusieurs fois. Ses effets ne se cumulent pas. Chaque fois que vous prenez ce don, choisissez une nouvelle pitié."
+  },
+  "Extra Performance": {
+    "resume": "Vous pouvez utiliser votre représentation bardique plus souvent que la normale.",
+    "prerequis": "Capacité de classe de représentation bardique",
+    "avantage": "Vous pouvez utiliser la représentation bardique pendant 6 rounds de plus par jour.",
+    "special": "Vous pouvez prendre Représentation supplémentaire plusieurs fois. Ses effets se cumulent."
+  },
+  "Extra Rage": {
+    "resume": "Vous pouvez utiliser votre rage plus que la normale.",
+    "prerequis": "Capacité de classe de rage",
+    "avantage": "Vous pouvez entrer en rage pendant 6 rounds de plus par jour.",
+    "special": "Vous pouvez prendre Rage supplémentaire plusieurs fois. Ses effets se cumulent."
+  },
+  "Far Shot": {
+    "resume": "Vous êtes plus précis à longue distance.",
+    "prerequis": "Tir à bout portant",
+    "avantage": "Vous ne subissez qu'un malus de –1 par facteur de portée complet entre vous et votre cible quand vous utilisez une arme à distance.",
+    "normal": "Vous subissez un malus de –2 par facteur de portée complet entre vous et votre cible."
+  },
+  "Fleet": {
+    "resume": "Vous êtes plus rapide que la plupart.",
+    "avantage": "Tant que vous portez une armure légère ou aucune armure, votre vitesse de base augmente de 1,50 m (5 pieds). Vous perdez les avantages de ce don si vous portez une charge intermédiaire ou lourde.",
+    "special": "Vous pouvez prendre ce don plusieurs fois. Les effets se cumulent."
+  },
+  "Forge Ring": {
+    "resume": "Vous pouvez créer des anneaux magiques.",
+    "prerequis": "Niveau de lanceur 7",
+    "avantage": "Vous pouvez créer des anneaux magiques. Forger un anneau prend 1 jour par tranche de 1 000 po de son prix de base. Pour forger un anneau, vous devez consommer des matières premières coûtant la moitié du prix de base. Voir les règles de création d'objets magiques dans Objets magiques pour plus d'informations.\nVous pouvez aussi réparer un anneau brisé si c'en est un que vous pourriez fabriquer. Cela coûte la moitié des matières premières et prend la moitié du temps qu'il faudrait pour forger cet anneau au départ."
+  },
+  "Gorgon's Fist": {
+    "resume": "Par un coup bien placé, vous laissez votre cible chancelante.",
+    "prerequis": "Science du combat à mains nues, Style du scorpion, bonus de base à l'attaque +6",
+    "avantage": "Par une action simple, faites une seule attaque de corps à corps à mains nues contre un ennemi dont la vitesse est réduite (par exemple par Style du scorpion). Si l'attaque touche, vous infligez des dégâts normalement et la cible est chancelante jusqu'à la fin de votre tour suivant, à moins qu'elle ne réussisse un jet de Vigueur (DD 10 + la moitié de votre niveau de personnage + votre modificateur de Sag). Ce don n'a aucun effet sur les cibles chancelantes."
+  },
+  "Great Cleave": {
+    "resume": "Vous pouvez frapper de nombreux ennemis adjacents d'un seul coup.",
+    "prerequis": "For 13, Enchaînement, Attaque en puissance, bonus de base à l'attaque +4",
+    "avantage": "Par une action simple, vous pouvez faire une seule attaque avec votre bonus de base à l'attaque complet contre un ennemi à portée. Si vous touchez, vous infligez des dégâts normalement et pouvez faire une attaque supplémentaire (avec votre bonus de base à l'attaque complet) contre un ennemi adjacent au précédent et également à portée. Si vous touchez, vous pouvez continuer à faire des attaques contre des ennemis adjacents au précédent, tant qu'ils sont à votre portée. Vous ne pouvez pas attaquer un même ennemi plus d'une fois pendant cette action d'attaque. Quand vous utilisez ce don, vous subissez un malus de –2 à votre classe d'armure jusqu'à votre tour suivant."
+  },
+  "Great Fortitude": {
+    "resume": "Vous résistez aux poisons, aux maladies et aux autres maux.",
+    "avantage": "Vous obtenez un bonus de +2 à tous les jets de Vigueur."
+  },
+  "Greater Bull Rush": {
+    "resume": "Vos bousculades déséquilibrent les ennemis.",
+    "prerequis": "Bousculade améliorée, Attaque en puissance, bonus de base à l'attaque +6, For 13",
+    "avantage": "Vous recevez un bonus de +2 aux tests faits pour bousculer un ennemi. Ce bonus se cumule avec celui conféré par Bousculade améliorée. Chaque fois que vous bousculez un adversaire, son déplacement provoque des attaques d'opportunité de la part de tous vos alliés (mais pas de vous).",
+    "normal": "Les créatures déplacées par une bousculade ne provoquent pas d'attaques d'opportunité."
+  },
+  "Greater Disarm": {
+    "resume": "Vous pouvez envoyer des armes loin de l'emprise d'un ennemi.",
+    "prerequis": "Expertise du combat, Désarmement amélioré, bonus de base à l'attaque +6, Int 13",
+    "avantage": "Vous recevez un bonus de +2 aux tests faits pour désarmer un ennemi. Ce bonus se cumule avec celui conféré par Désarmement amélioré. Chaque fois que vous désarmez un adversaire avec succès, l'arme atterrit à 4,50 m (15 pieds) de son ancien porteur, dans une direction aléatoire.",
+    "normal": "Les armes et équipements désarmés atterrissent aux pieds de la créature désarmée."
+  },
+  "Greater Feint": {
+    "resume": "Vous savez faire trop réagir vos ennemis à vos attaques.",
+    "prerequis": "Expertise du combat, Feinte améliorée, bonus de base à l'attaque +6, Int 13",
+    "avantage": "Chaque fois que vous utilisez une feinte pour faire perdre son bonus de Dextérité à un adversaire, il perd ce bonus jusqu'au début de votre tour suivant, en plus de perdre son bonus de Dextérité contre votre prochaine attaque.",
+    "normal": "Une créature que vous feintez perd son bonus de Dextérité contre votre prochaine attaque."
+  },
+  "Greater Grapple": {
+    "resume": "Maintenir une empoignade est une seconde nature pour vous.",
+    "prerequis": "Empoignade améliorée, Science du combat à mains nues, bonus de base à l'attaque +6, Dex 13",
+    "avantage": "Vous recevez un bonus de +2 aux tests faits pour agripper un ennemi. Ce bonus se cumule avec celui conféré par Empoignade améliorée. Une fois que vous avez agrippé une créature, maintenir l'empoignade est une action de mouvement. Ce don vous permet de faire deux tests d'empoignade par round (pour déplacer, blesser ou immobiliser votre adversaire), mais vous n'êtes pas obligé de faire deux tests. Vous n'avez besoin de réussir qu'un seul de ces tests pour maintenir l'empoignade.",
+    "normal": "Maintenir une empoignade est une action simple."
+  },
+  "Greater Overrun": {
+    "resume": "Les ennemis doivent plonger pour éviter votre mouvement dangereux.",
+    "prerequis": "Renversement amélioré, Attaque en puissance, bonus de base à l'attaque +6, For 13",
+    "avantage": "Vous recevez un bonus de +2 aux tests faits pour renverser un ennemi. Ce bonus se cumule avec celui conféré par Renversement amélioré. Chaque fois que vous renversez des adversaires, ils provoquent des attaques d'opportunité s'ils sont jetés à terre par votre renversement.",
+    "normal": "Les créatures jetées à terre par votre renversement ne provoquent pas d'attaque d'opportunité."
+  },
+  "Greater Penetrating Strike": {
+    "resume": "Vos attaques percent les défenses de la plupart des ennemis.",
+    "prerequis": "Frappe perforante, Arme de prédilection, guerrier de niveau 16",
+    "avantage": "Vos attaques faites avec des armes choisies avec Arme de prédilection ignorent jusqu'à 10 points de réduction des dégâts. Cette valeur est ramenée à 5 points pour la réduction des dégâts sans type (comme RD 10/—)."
+  },
+  "Greater Shield Focus": {
+    "resume": "Vous savez parer les coups avec votre bouclier.",
+    "prerequis": "Spécialisation du bouclier, Maniement des boucliers, bonus de base à l'attaque +1, guerrier de niveau 8",
+    "avantage": "Augmentez de 1 le bonus à la CA conféré par tout bouclier que vous utilisez. Ce bonus se cumule avec celui conféré par Spécialisation du bouclier."
+  },
+  "Greater Spell Focus": {
+    "resume": "Choisissez une école de magie pour laquelle vous avez déjà appliqué le don Science des sorts. Tous les sorts que vous lancez de cette école sont très difficiles à repousser.",
+    "prerequis": "Science des sorts",
+    "avantage": "Ajoutez +1 au degré de difficulté de tous les jets de sauvegarde contre les sorts de l'école de magie que vous choisissez. Ce bonus se cumule avec celui de Science des sorts.",
+    "special": "Vous pouvez prendre ce don plusieurs fois. Ses effets ne se cumulent pas. Chaque fois que vous prenez le don, il s'applique à une nouvelle école pour laquelle vous avez déjà appliqué le don Science des sorts."
+  },
+  "Greater Spell Penetration": {
+    "resume": "Vos sorts percent la résistance à la magie bien plus facilement que la plupart.",
+    "prerequis": "Pénétration des sorts",
+    "avantage": "Vous obtenez un bonus de +2 aux tests de niveau de lanceur (1d20 + niveau de lanceur) faits pour vaincre la résistance à la magie d'une créature. Ce bonus se cumule avec celui de Pénétration des sorts."
+  },
+  "Greater Sunder": {
+    "resume": "Vos frappes dévastatrices tranchent armes et armures et atteignent leurs porteurs, endommageant à la fois l'objet et le porteur d'un seul coup terrible.",
+    "prerequis": "Bris d'arme amélioré, Attaque en puissance, bonus de base à l'attaque +6, For 13",
+    "avantage": "Vous recevez un bonus de +2 aux tests faits pour briser un objet. Ce bonus se cumule avec celui conféré par Bris d'arme amélioré. Chaque fois que vous brisez pour détruire une arme, un bouclier ou une armure, tout excédent de dégâts est appliqué au porteur de l'objet. Aucun dégât n'est transféré si vous décidez de laisser l'objet à 1 point de vie."
+  },
+  "Greater Trip": {
+    "resume": "Vous pouvez faire des attaques gratuites sur les ennemis que vous jetez à terre.",
+    "prerequis": "Expertise du combat, Croc-en-jambe amélioré, bonus de base à l'attaque +6, Int 13",
+    "avantage": "Vous recevez un bonus de +2 aux tests faits pour faire trébucher un ennemi. Ce bonus se cumule avec celui conféré par Croc-en-jambe amélioré. Chaque fois que vous faites trébucher un adversaire avec succès, cet adversaire provoque des attaques d'opportunité.",
+    "normal": "Les créatures ne provoquent pas d'attaques d'opportunité en trébuchant."
+  },
+  "Greater Two-Weapon Fighting": {
+    "resume": "Vous êtes incroyablement habile pour combattre avec deux armes en même temps.",
+    "prerequis": "Dex 19, Combat à deux armes amélioré, Combat à deux armes, bonus de base à l'attaque +11",
+    "avantage": "Vous obtenez une troisième attaque avec votre arme de la main non directrice, quoique avec un malus de –10."
+  },
+  "Greater Vital Strike": {
+    "resume": "Vous pouvez faire une seule attaque qui inflige des dégâts incroyables.",
+    "prerequis": "Frappe vitale améliorée, Frappe vitale, bonus de base à l'attaque +16",
+    "avantage": "Quand vous utilisez l'action d'attaque, vous pouvez faire une attaque avec votre plus haut bonus de base à l'attaque qui inflige des dégâts supplémentaires. Lancez quatre fois les dés de dégâts de l'arme pour l'attaque et additionnez les résultats avant d'ajouter les bonus de Force, de capacités d'arme (comme enflammée), de dégâts de précision et d'autres bonus de dégâts. Ces dés de dégâts d'arme supplémentaires ne sont pas multipliés en cas de coup critique, mais s'ajoutent au total."
+  },
+  "Greater Weapon Focus": {
+    "resume": "Choisissez un type d'arme (y compris l'attaque à mains nues ou l'empoignade) pour lequel vous avez déjà choisi Arme de prédilection. Vous maîtrisez parfaitement l'arme choisie.",
+    "prerequis": "Maniement de l'arme choisie, Arme de prédilection avec l'arme choisie, bonus de base à l'attaque +1, guerrier de niveau 8",
+    "avantage": "Vous obtenez un bonus de +1 aux jets d'attaque que vous faites avec l'arme choisie. Ce bonus se cumule avec les autres bonus aux jets d'attaque, y compris ceux d'Arme de prédilection.",
+    "special": "Vous pouvez prendre Arme de prédilection supérieure plusieurs fois. Ses effets ne se cumulent pas. Chaque fois que vous prenez le don, il s'applique à un nouveau type d'arme."
+  },
+  "Greater Weapon Specialization": {
+    "resume": "Choisissez un type d'arme (y compris l'attaque à mains nues ou l'empoignade) pour lequel vous possédez le don Spécialisation martiale. Vos attaques avec l'arme choisie sont plus dévastatrices que la normale.",
+    "prerequis": "Maniement de l'arme choisie, Arme de prédilection supérieure avec l'arme choisie, Arme de prédilection avec l'arme choisie, Spécialisation martiale avec l'arme choisie, guerrier de niveau 12",
+    "avantage": "Vous obtenez un bonus de +2 à tous les jets de dégâts que vous faites avec l'arme choisie. Ce bonus aux dégâts se cumule avec les autres bonus aux jets de dégâts, y compris ceux de Spécialisation martiale.",
+    "special": "Vous pouvez prendre Spécialisation martiale supérieure plusieurs fois. Ses effets ne se cumulent pas. Chaque fois que vous prenez le don, il s'applique à un nouveau type d'arme."
+  },
+  "Heighten Spell": {
+    "resume": "Vous pouvez lancer des sorts comme s'ils étaient d'un niveau supérieur.",
+    "avantage": "Un sort intensifié a un niveau de sort supérieur à la normale (jusqu'à un maximum de niveau 9). Contrairement aux autres dons de métamagie, Sort intensifié augmente réellement le niveau effectif du sort qu'il modifie. Tous les effets dépendant du niveau du sort (comme les DD des jets de sauvegarde et la capacité de percer un globe d'invulnérabilité mineur) sont calculés d'après le niveau intensifié. Le sort intensifié est aussi difficile à préparer et à lancer qu'un sort de son niveau effectif."
+  }
+}

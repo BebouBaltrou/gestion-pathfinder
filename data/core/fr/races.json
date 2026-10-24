@@ -1,0 +1,100 @@
+{
+  "avertissement": "Traduction non officielle des textes du Core Rulebook (Archives of Nethys, licence OGL). Les noms officiels du Manuel des joueurs peuvent différer : à corriger par le joueur.",
+  "races": {
+    "humain": {
+      "traits": {
+        "+2 to One Ability Score": { "nom": "+2 à une caractéristique", "texte": "Les humains reçoivent un bonus de +2 à une caractéristique de leur choix à la création, ce qui représente leur nature variée." },
+        "Medium": { "nom": "Taille moyenne", "texte": "Les humains sont des créatures de taille M et n'ont ni bonus ni malus liés à leur taille." },
+        "Normal Speed": { "nom": "Vitesse normale", "texte": "Les humains ont une vitesse de base de 9 m (30 pieds)." },
+        "Bonus Feat": { "nom": "Don supplémentaire", "texte": "Les humains choisissent un don supplémentaire au niveau 1." },
+        "Skilled": { "nom": "Qualifié", "texte": "Les humains gagnent 1 rang de compétence supplémentaire au niveau 1, puis 1 rang supplémentaire à chaque nouveau niveau." },
+        "Languages": { "nom": "Langues", "texte": "Les humains parlent le commun et leur langue ethnique. Les humains dont la langue ethnique est le commun (ou le taldorien, pour les Chelaxiens ou les Taldans) ne reçoivent pas de langue ethnique supplémentaire. Les humains ayant une Intelligence élevée peuvent choisir les langues qu'ils veulent (sauf les langues secrètes, comme le druidique)." }
+      }
+    },
+    "nain": {
+      "traits": {
+        "+2 Constitution, +2 Wisdom, –2 Charisma": { "nom": "+2 Constitution, +2 Sagesse, –2 Charisme", "texte": "Les nains sont à la fois robustes et sages, mais aussi un peu bourrus." },
+        "Medium": { "nom": "Taille moyenne", "texte": "Les nains sont des créatures de taille M et n'ont ni bonus ni malus liés à leur taille." },
+        "Slow and Steady": { "nom": "Lent mais constant", "texte": "Les nains ont une vitesse de base de 6 m (20 pieds), mais leur vitesse n'est jamais modifiée par l'armure ou l'encombrement." },
+        "Darkvision": { "nom": "Vision dans le noir", "texte": "Les nains voient dans le noir jusqu'à 18 m (60 pieds)." },
+        "Defensive Training": { "nom": "Entraînement défensif", "texte": "Les nains ont un bonus d'esquive de +4 à la CA contre les monstres du sous-type géant." },
+        "Greed": { "nom": "Cupidité", "texte": "Les nains reçoivent un bonus racial de +2 aux tests d'Estimation pour déterminer le prix de biens non magiques contenant des métaux précieux ou des gemmes." },
+        "Hatred": { "nom": "Haine", "texte": "Les nains reçoivent un bonus de +1 aux jets d'attaque contre les humanoïdes des sous-types orque et gobelinoïde, en raison de leur entraînement spécial contre ces ennemis détestés." },
+        "Hardy": { "nom": "Robuste", "texte": "Les nains reçoivent un bonus racial de +2 aux jets de sauvegarde contre le poison, les sorts et les capacités magiques." },
+        "Stability": { "nom": "Stabilité", "texte": "Les nains reçoivent un bonus racial de +4 à leur Défense contre les manœuvres de combat (DMD) lorsqu'ils résistent à une bousculade ou à un croc-en-jambe en se tenant sur le sol." },
+        "Stonecunning": { "nom": "Connaissance de la pierre", "texte": "Les nains reçoivent un bonus de +2 aux tests de Perception pour remarquer un travail de la pierre inhabituel, comme des pièges et des portes secrètes dans des murs ou sols de pierre. Ils ont droit à un test pour remarquer ces éléments s'ils passent à moins de 3 m (10 pieds), qu'ils cherchent activement ou non." },
+        "Weapon Familiarity": { "nom": "Familiarité avec les armes", "texte": "Les nains manient les haches d'armes, les pics lourds et les marteaux de guerre, et considèrent toute arme dont le nom contient « nain » comme une arme de guerre." },
+        "Languages": { "nom": "Langues", "texte": "Les nains parlent le commun et le nain. Les nains ayant une Intelligence élevée peuvent choisir parmi : géant, gnome, gobelin, orque, terreux et commun des profondeurs." }
+      }
+    },
+    "elfe": {
+      "traits": {
+        "+2 Dexterity, +2 Intelligence, –2 Constitution": { "nom": "+2 Dextérité, +2 Intelligence, –2 Constitution", "texte": "Les elfes sont agiles de corps et d'esprit, mais leur constitution est fragile." },
+        "Medium": { "nom": "Taille moyenne", "texte": "Les elfes sont des créatures de taille M et n'ont ni bonus ni malus liés à leur taille." },
+        "Normal Speed": { "nom": "Vitesse normale", "texte": "Les elfes ont une vitesse de base de 9 m (30 pieds)." },
+        "Low-Light Vision": { "nom": "Vision nocturne", "texte": "Les elfes voient deux fois plus loin que les humains dans une lumière faible." },
+        "Elven Immunities": { "nom": "Immunités elfiques", "texte": "Les elfes sont immunisés contre les effets magiques de sommeil et reçoivent un bonus racial de +2 aux jets de sauvegarde contre les sorts et effets d'enchantement." },
+        "Elven Magic": { "nom": "Magie elfique", "texte": "Les elfes reçoivent un bonus racial de +2 aux tests de niveau de lanceur de sorts pour vaincre la résistance à la magie. De plus, ils reçoivent un bonus racial de +2 aux tests de Connaissances des sorts pour identifier les propriétés d'un objet magique." },
+        "Keen Senses": { "nom": "Sens aiguisés", "texte": "Les elfes reçoivent un bonus racial de +2 aux tests de Perception." },
+        "Weapon Familiarity": { "nom": "Familiarité avec les armes", "texte": "Les elfes manient les arcs longs (y compris composites), les épées longues, les rapières et les arcs courts (y compris composites), et considèrent toute arme dont le nom contient « elfique » comme une arme de guerre." },
+        "Languages": { "nom": "Langues", "texte": "Les elfes parlent le commun et l'elfique. Les elfes ayant une Intelligence élevée peuvent choisir parmi : céleste, draconique, gnoll, gnome, gobelin, orque et sylvestre." }
+      }
+    },
+    "gnome": {
+      "traits": {
+        "+2 Constitution, +2 Charisma, –2 Strength": { "nom": "+2 Constitution, +2 Charisme, –2 Force", "texte": "Les gnomes sont physiquement faibles mais étonnamment robustes, et leur attitude enthousiaste les rend naturellement agréables." },
+        "Small": { "nom": "Petite taille", "texte": "Les gnomes sont des créatures de taille P : bonus de taille de +1 à la CA, bonus de taille de +1 aux jets d'attaque, malus de –1 aux tests de manœuvre offensive et à leur DMD, et bonus de taille de +4 aux tests de Discrétion." },
+        "Slow Speed": { "nom": "Vitesse lente", "texte": "Les gnomes ont une vitesse de base de 6 m (20 pieds)." },
+        "Low-Light Vision": { "nom": "Vision nocturne", "texte": "Les gnomes voient deux fois plus loin que les humains dans une lumière faible." },
+        "Defensive Training": { "nom": "Entraînement défensif", "texte": "Les gnomes ont un bonus d'esquive de +4 à la CA contre les monstres du type géant." },
+        "Gnome Magic": { "nom": "Magie gnome", "texte": "Les gnomes ajoutent 1 au DD des jets de sauvegarde contre les sorts d'illusion qu'ils lancent. Les gnomes avec un Charisme de 11 ou plus obtiennent aussi les capacités magiques suivantes, 1 fois par jour : lumières dansantes, son imaginaire, prestidigitation et communication avec les animaux. Le niveau de lanceur est égal au niveau du gnome. Le DD est égal à 10 + niveau du sort + modificateur de Charisme du gnome." },
+        "Hatred": { "nom": "Haine", "texte": "Les gnomes reçoivent un bonus de +1 aux jets d'attaque contre les humanoïdes des sous-types reptilien et gobelinoïde, en raison de leur entraînement spécial contre ces ennemis détestés." },
+        "Illusion Resistance": { "nom": "Résistance aux illusions", "texte": "Les gnomes reçoivent un bonus racial de +2 aux jets de sauvegarde contre les sorts et effets d'illusion." },
+        "Keen Senses": { "nom": "Sens aiguisés", "texte": "Les gnomes reçoivent un bonus racial de +2 aux tests de Perception." },
+        "Obsessive": { "nom": "Obsessionnel", "texte": "Les gnomes reçoivent un bonus racial de +2 à une compétence d'Artisanat ou de Profession de leur choix." },
+        "Weapon Familiarity": { "nom": "Familiarité avec les armes", "texte": "Les gnomes considèrent toute arme dont le nom contient « gnome » comme une arme de guerre." },
+        "Languages": { "nom": "Langues", "texte": "Les gnomes parlent le commun, le gnome et le sylvestre. Les gnomes ayant une Intelligence élevée peuvent choisir parmi : draconique, nain, elfique, géant, gobelin et orque." }
+      }
+    },
+    "demi-elfe": {
+      "traits": {
+        "+2 to One Ability Score": { "nom": "+2 à une caractéristique", "texte": "Les demi-elfes reçoivent un bonus de +2 à une caractéristique de leur choix à la création, ce qui représente leur nature variée." },
+        "Medium": { "nom": "Taille moyenne", "texte": "Les demi-elfes sont des créatures de taille M et n'ont ni bonus ni malus liés à leur taille." },
+        "Normal Speed": { "nom": "Vitesse normale", "texte": "Les demi-elfes ont une vitesse de base de 9 m (30 pieds)." },
+        "Low-Light Vision": { "nom": "Vision nocturne", "texte": "Les demi-elfes voient deux fois plus loin que les humains dans une lumière faible." },
+        "Adaptability": { "nom": "Adaptabilité", "texte": "Les demi-elfes reçoivent le don Talent (Skill Focus) comme don supplémentaire au niveau 1." },
+        "Elf Blood": { "nom": "Sang elfique", "texte": "Les demi-elfes comptent à la fois comme des elfes et comme des humains pour tout effet lié à la race." },
+        "Elven Immunities": { "nom": "Immunités elfiques", "texte": "Les demi-elfes sont immunisés contre les effets magiques de sommeil et reçoivent un bonus racial de +2 aux jets de sauvegarde contre les sorts et effets d'enchantement." },
+        "Keen Senses": { "nom": "Sens aiguisés", "texte": "Les demi-elfes reçoivent un bonus racial de +2 aux tests de Perception." },
+        "Multitalented": { "nom": "Multi-talentueux", "texte": "Les demi-elfes choisissent deux classes de prédilection au niveau 1 et gagnent 1 point de vie ou point de compétence supplémentaire chaque fois qu'ils prennent un niveau dans l'une d'elles." },
+        "Languages": { "nom": "Langues", "texte": "Les demi-elfes parlent le commun et l'elfique. Les demi-elfes ayant une Intelligence élevée peuvent choisir les langues qu'ils veulent (sauf les langues secrètes, comme le druidique)." }
+      }
+    },
+    "demi-orque": {
+      "traits": {
+        "+2 to One Ability Score": { "nom": "+2 à une caractéristique", "texte": "Les demi-orques reçoivent un bonus de +2 à une caractéristique de leur choix à la création, ce qui représente leur nature variée." },
+        "Medium": { "nom": "Taille moyenne", "texte": "Les demi-orques sont des créatures de taille M et n'ont ni bonus ni malus liés à leur taille." },
+        "Normal Speed": { "nom": "Vitesse normale", "texte": "Les demi-orques ont une vitesse de base de 9 m (30 pieds)." },
+        "Darkvision": { "nom": "Vision dans le noir", "texte": "Les demi-orques voient dans le noir jusqu'à 18 m (60 pieds)." },
+        "Intimidating": { "nom": "Intimidant", "texte": "Les demi-orques reçoivent un bonus racial de +2 aux tests d'Intimidation, en raison de leur nature redoutable." },
+        "Orc Blood": { "nom": "Sang orque", "texte": "Les demi-orques comptent à la fois comme des humains et comme des orques pour tout effet lié à la race." },
+        "Orc Ferocity": { "nom": "Férocité orque", "texte": "Une fois par jour, lorsqu'un demi-orque tombe sous 0 point de vie sans être tué, il peut combattre 1 round de plus comme s'il était hors de combat. À la fin de son tour suivant, sauf s'il est ramené à 1 point de vie ou plus, il tombe aussitôt inconscient et commence à agoniser." },
+        "Weapon Familiarity": { "nom": "Familiarité avec les armes", "texte": "Les demi-orques manient les grandes haches et les fauchards, et considèrent toute arme dont le nom contient « orque » comme une arme de guerre." },
+        "Languages": { "nom": "Langues", "texte": "Les demi-orques parlent le commun et l'orque. Les demi-orques ayant une Intelligence élevée peuvent choisir parmi : abyssal, draconique, géant, gnoll et gobelin." }
+      }
+    },
+    "halfelin": {
+      "traits": {
+        "+2 Dexterity, +2 Charisma, –2 Strength": { "nom": "+2 Dextérité, +2 Charisme, –2 Force", "texte": "Les halfelins sont agiles et ont de la volonté, mais leur petite taille les rend plus faibles que les autres races." },
+        "Small": { "nom": "Petite taille", "texte": "Les halfelins sont des créatures de taille P : bonus de taille de +1 à la CA, bonus de taille de +1 aux jets d'attaque, malus de –1 aux tests de manœuvre offensive et à leur DMD, et bonus de taille de +4 aux tests de Discrétion." },
+        "Slow Speed": { "nom": "Vitesse lente", "texte": "Les halfelins ont une vitesse de base de 6 m (20 pieds)." },
+        "Fearless": { "nom": "Intrépide", "texte": "Les halfelins reçoivent un bonus racial de +2 à tous les jets de sauvegarde contre la peur. Ce bonus se cumule avec celui de la chance du halfelin." },
+        "Halfling Luck": { "nom": "Chance du halfelin", "texte": "Les halfelins reçoivent un bonus racial de +1 à tous les jets de sauvegarde." },
+        "Keen Senses": { "nom": "Sens aiguisés", "texte": "Les halfelins reçoivent un bonus racial de +2 aux tests de Perception." },
+        "Sure-Footed": { "nom": "Pied sûr", "texte": "Les halfelins reçoivent un bonus racial de +2 aux tests d'Acrobaties et d'Escalade." },
+        "Weapon Familiarity": { "nom": "Familiarité avec les armes", "texte": "Les halfelins manient les frondes et considèrent toute arme dont le nom contient « halfelin » comme une arme de guerre." },
+        "Languages": { "nom": "Langues", "texte": "Les halfelins parlent le commun et le halfelin. Les halfelins ayant une Intelligence élevée peuvent choisir parmi : nain, elfique, gnome et gobelin." }
+      }
+    }
+  }
+}

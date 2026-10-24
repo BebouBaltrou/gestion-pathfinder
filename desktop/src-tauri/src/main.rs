@@ -3,7 +3,9 @@
 
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+mod aventure;
 mod export;
+mod personnages;
 mod session;
 
 use campagne::evenements::Evenement;
@@ -14,9 +16,9 @@ use std::path::Path;
 use std::sync::Mutex;
 use tauri::State;
 
-struct Etat(Mutex<Session>);
+pub(crate) struct Etat(Mutex<Session>);
 
-type S<'a> = State<'a, Etat>;
+pub(crate) type S<'a> = State<'a, Etat>;
 
 /// Ce que la coquille de l'interface affiche en permanence.
 #[derive(Serialize)]
@@ -27,9 +29,11 @@ struct EtatApp {
     dossier: String,
     /// (actions, jours) d'avance de la simulation sur la campagne réelle.
     simulation: Option<(i64, i64)>,
+    /// Un combat est en cours (copie de travail) : le reste de la campagne est verrouillé.
+    combat_en_cours: bool,
 }
 
-fn session<'a>(s: &'a State<'_, Etat>) -> std::sync::MutexGuard<'a, Session> {
+pub(crate) fn session<'a>(s: &'a State<'_, Etat>) -> std::sync::MutexGuard<'a, Session> {
     // une commande qui a paniqué ne doit pas bloquer les suivantes
     s.0.lock().unwrap_or_else(|e| e.into_inner())
 }
@@ -44,6 +48,7 @@ fn etat_app(s: S) -> EtatApp {
         campagnes: x.lister(),
         dossier: x.dossier.to_string_lossy().to_string(),
         simulation,
+        combat_en_cours: x.combat.is_some(),
     }
 }
 
@@ -197,16 +202,6 @@ fn page_personnages(s: S) -> Option<vues::personnages::PagePersonnages> {
     x.campagne
         .as_mut()
         .map(|c| vues::personnages::page_personnages(c, &r))
-}
-
-#[tauri::command]
-fn creer_personnage(s: S, nom: String, compte: String, prestige: String) -> Retour {
-    let mut x = session(&s);
-    let Some(id) = x.campagne.as_ref().map(|c| c.nouvel_id_personnage()) else {
-        return Retour::erreur("Aucune campagne ouverte");
-    };
-    let ev = vues::personnages::creation(id, &nom, &compte, &prestige);
-    executer_saisie(&mut x, ev, &format!("Personnage « {} » créé", nom.trim()))
 }
 
 #[tauri::command]
@@ -647,7 +642,6 @@ fn main() {
             transfert,
             ajustement,
             page_personnages,
-            creer_personnage,
             modifier_personnage,
             deplacer_personnage,
             ajuster_compte,
@@ -681,6 +675,39 @@ fn main() {
             retablir,
             resoudre_prestige,
             simulation,
+            aventure::aventure_vue,
+            aventure::aventure_demarrer,
+            aventure::aventure_terminer,
+            aventure::aventure_evenement,
+            aventure::aventure_actualiser_ressources,
+            aventure::aventure_apercu_recul,
+            aventure::combat_vue,
+            aventure::combat_demarrer,
+            aventure::combat_action,
+            aventure::combat_annuler,
+            aventure::combat_retablir,
+            aventure::combat_apercu_sort,
+            aventure::combat_apercu_fin,
+            aventure::combat_terminer,
+            aventure::catalogue_actions,
+            aventure::catalogue_fp,
+            aventure::catalogue_regles,
+            aventure::combat_xp,
+            aventure::combat_historique,
+            aventure::combat_exporter,
+            aventure::catalogue_etats,
+            personnages::liste_personnages,
+            personnages::fiche_personnage,
+            personnages::catalogue_creation,
+            personnages::apercu_fiche,
+            personnages::creer_personnage,
+            personnages::creer_fiche,
+            personnages::accorder_niveau_de_depart,
+            personnages::evenement_fiche,
+            personnages::apercu_montee,
+            personnages::essai_montee,
+            personnages::regles_campagne,
+            personnages::changer_regle,
             autotest_actif,
             autotest_fin
         ])

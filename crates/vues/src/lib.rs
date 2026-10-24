@@ -2,12 +2,14 @@
 //! campagne. L'interface (quelle qu'elle soit) ne refait aucun calcul de règles.
 
 pub mod actions_batiments;
+pub mod aventure;
 pub mod batiments;
 pub mod gestionnaires;
 pub mod historique;
 pub mod localites;
 pub mod organisations;
 pub mod parametres;
+pub mod personnage;
 pub mod personnages;
 pub mod points;
 pub mod recettes;

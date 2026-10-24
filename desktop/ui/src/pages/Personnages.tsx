@@ -1,201 +1,135 @@
 import { useEffect, useState } from "react";
 import type { Outils } from "../App";
-import { api, FichePersonnage, formaterPo, PagePersonnages } from "../api";
-import { icones } from "../icones";
-import { ChampMontant } from "./Localites";
+import { api, formaterPo } from "../api";
+import type { FicheVue, LignePersonnage } from "../fiche-types";
+import { Creation } from "./fiche/Creation";
+import { FicheComplete } from "./fiche/FicheComplete";
+import { SuiviPersonnage } from "./SuiviPersonnage";
 
-const AIDE_PRESTIGE =
-  "Valeur de Prestige, ou niveau + modificateur de Charisme sans le don (Guide de campagne p. 93)";
-
+/** Liste des personnages joueurs et, pour celui choisi, sa fiche. */
 export function Personnages({ outils }: { outils: Outils }) {
-  const [p, setP] = useState<PagePersonnages | null>(null);
-  const [selection, setSelection] = useState<number | null>(null);
+  const [liste, setListe] = useState<LignePersonnage[]>([]);
+  const [choisi, setChoisi] = useState<number | null>(null);
+  const [fiche, setFiche] = useState<FicheVue | null>(null);
   const [creation, setCreation] = useState(false);
+  const [niveauVise, setNiveauVise] = useState(1);
+  const [nom, setNom] = useState("");
+  const [po, setPo] = useState("0");
 
   useEffect(() => {
-    api.pagePersonnages().then((x) => {
-      setP(x);
-      if (x && x.personnages.length === 0) setCreation(true);
+    api.listePersonnages().then((l) => {
+      setListe(l);
+      setChoisi((c) => (c !== null && l.some((p) => p.id === c) ? c : (l[0]?.id ?? null)));
     });
   }, [outils.version]);
 
-  if (!p) return null;
-  const choisi = p.personnages.find((x) => x.id === selection) ?? (creation ? undefined : p.personnages[0]);
+  useEffect(() => setNiveauVise(1), [choisi]);
+
+  useEffect(() => {
+    if (choisi === null) {
+      setFiche(null);
+      return;
+    }
+    api.fichePersonnage(choisi).then(setFiche, () => setFiche(null));
+  }, [choisi, outils.version]);
+
+  const pj = liste.find((p) => p.id === choisi) ?? null;
+
+  const ajouter = async () => {
+    const r = await outils.agir(api.creerPersonnage(nom, Math.max(0, Number(po) || 0)));
+    if (r?.ok) {
+      setNom("");
+      setPo("0");
+    }
+  };
 
   return (
     <div className="page">
       <div className="titre-page">
         <h1>Personnages</h1>
-        <p>Chaque PJ a un compte en po séparé des trésoreries des localités</p>
+        <p>Les PJ de la campagne, leur compte et leur fiche. Tout se recalcule à partir des règles du Core.</p>
       </div>
 
-      <div className="maitre-detail">
-        <aside className="liste-maitre" aria-label="Liste des personnages">
-          <button
-            className={"bouton nouvelle" + (creation ? " actif" : "")}
-            onClick={() => {
-              setCreation(true);
-              setSelection(null);
-            }}
-          >
-            {icones.plus({})} Nouveau personnage
-          </button>
-          {p.personnages.map((x) => {
-            const actif = !creation && choisi?.id === x.id;
-            return (
-              <button
-                key={x.id}
-                className={"element-liste" + (actif ? " actif" : "")}
-                aria-current={actif ? "true" : undefined}
-                onClick={() => {
-                  setSelection(x.id);
-                  setCreation(false);
-                }}
-              >
-                <span className="nom">{x.nom}</span>
-                <span className={"montant" + (x.compte.pa < 0 ? " negatif" : "")}>{formaterPo(x.compte.pa)}</span>
-                <span className="doux">{x.lieu}</span>
-              </button>
-            );
-          })}
-        </aside>
+      <div className="deux-colonnes">
+        <div className="colonne-etroite">
+          <section className="section">
+            <h2>Joueurs</h2>
+            <div className="liste-campagnes">
+              {liste.length === 0 && <p className="doux">Aucun personnage pour l'instant.</p>}
+              {liste.map((p) => (
+                <button
+                  key={p.id}
+                  className={"ligne-campagne carte-pj" + (p.id === choisi ? " choisi" : "")}
+                  onClick={() => {
+                    setChoisi(p.id);
+                    setCreation(false);
+                  }}
+                >
+                  <span className="nom">
+                    {p.nom}
+                    <small className="doux">
+                      {p.fiche ? `${p.fiche.race} · ${p.fiche.classes}` : "pas encore de fiche"}
+                    </small>
+                  </span>
+                  {p.fiche && p.fiche.niveauxEnAttente > 0 && <span className="puce or">niveau à monter</span>}
+                </button>
+              ))}
+            </div>
+          </section>
+          <section className="carte section">
+            <h2>Nouveau personnage</h2>
+            <form
+              className="formulaire"
+              onSubmit={(e) => {
+                e.preventDefault();
+                ajouter();
+              }}
+            >
+              <div>
+                <label className="etiquette-champ" htmlFor="nom-pj">Nom</label>
+                <input id="nom-pj" className="champ large" value={nom} onChange={(e) => setNom(e.target.value)} />
+              </div>
+              <div>
+                <label className="etiquette-champ" htmlFor="po-pj">Or de départ (po)</label>
+                <input
+                  id="po-pj"
+                  className="champ large"
+                  inputMode="numeric"
+                  value={po}
+                  onChange={(e) => setPo(e.target.value)}
+                />
+              </div>
+              <button className="bouton principal" type="submit" disabled={!nom.trim()}>Ajouter</button>
+            </form>
+          </section>
+        </div>
 
-        <div className="detail">
-          {creation || !choisi ? (
+        <div className="colonne-large">
+          {!pj && <div className="carte vide"><p>Ajoutez un personnage pour commencer.</p></div>}
+          {pj && !fiche && !creation && (
+            <div className="carte vide">
+              <h2>{pj.nom}</h2>
+              <p>
+                Compte : {formaterPo(pj.compte.pa)}
+                {pj.lieu ? ` · à ${pj.lieu}` : ""}. Ce personnage n'a pas encore de fiche.
+              </p>
+              <button className="bouton principal" onClick={() => setCreation(true)}>Créer la fiche</button>
+            </div>
+          )}
+          {pj && !fiche && creation && (
             <Creation
               outils={outils}
-              apres={async (avant) => {
-                const apres = await api.pagePersonnages();
+              pj={pj}
+              onFini={(n) => {
+                setNiveauVise(n);
                 setCreation(false);
-                setSelection(apres?.personnages.find((x) => !avant.has(x.id))?.id ?? null);
               }}
-              existants={new Set(p.personnages.map((x) => x.id))}
             />
-          ) : (
-            <Detail key={choisi.id} pj={choisi} p={p} outils={outils} />
           )}
+          {pj && fiche && <FicheComplete outils={outils} pj={pj} fiche={fiche} niveauVise={niveauVise} />}
+          {pj && <SuiviPersonnage outils={outils} pj={pj} />}
         </div>
       </div>
     </div>
-  );
-}
-
-function Creation(props: { outils: Outils; existants: Set<number>; apres: (avant: Set<number>) => void }) {
-  const [nom, setNom] = useState("");
-  const [compte, setCompte] = useState("");
-  const [prestige, setPrestige] = useState("");
-  return (
-    <section className="carte section">
-      <h2>Nouveau personnage</h2>
-      <form
-        className="formulaire"
-        onSubmit={async (e) => {
-          e.preventDefault();
-          const r = await props.outils.agir(api.creerPersonnage(nom, compte, prestige));
-          if (r?.ok) props.apres(props.existants);
-        }}
-      >
-        <label htmlFor="pj-nom">Nom</label>
-        <input id="pj-nom" className="champ" value={nom} onChange={(e) => setNom(e.target.value)} />
-        <label htmlFor="pj-compte">Compte initial</label>
-        <ChampMontant id="pj-compte" valeur={compte} changer={setCompte} />
-        <label htmlFor="pj-prestige">Prestige</label>
-        <div className="pile">
-          <input id="pj-prestige" className="champ mini" inputMode="numeric" placeholder="—" value={prestige} onChange={(e) => setPrestige(e.target.value)} />
-          <span className="doux">Facultatif. {AIDE_PRESTIGE}.</span>
-        </div>
-        <span />
-        <div>
-          <button type="submit" className="bouton principal" disabled={!nom.trim()}>Créer le personnage</button>
-        </div>
-      </form>
-    </section>
-  );
-}
-
-function Detail({ pj, p, outils }: { pj: FichePersonnage; p: PagePersonnages; outils: Outils }) {
-  const [delta, setDelta] = useState("");
-  const [motif, setMotif] = useState("");
-  const [nom, setNom] = useState(pj.nom);
-  const [prestige, setPrestige] = useState(pj.prestige === null ? "" : String(pj.prestige));
-
-  return (
-    <>
-      <section className="carte fiche-localite">
-        <div className="tete">
-          <h2 className="nom">{pj.nom}</h2>
-          {pj.prestige !== null && <span className="doux">Prestige {pj.prestige}</span>}
-        </div>
-        <div className="ligne">
-          <div className="tresor">
-            <span className="etiquette">Compte personnel</span>
-            <span className={"montant" + (pj.compte.pa < 0 ? " negatif" : "")}>{formaterPo(pj.compte.pa)}</span>
-          </div>
-          <div>
-            <label className="etiquette-champ" htmlFor="pj-lieu">Se trouve à</label>
-            <select
-              id="pj-lieu"
-              className="champ moyen"
-              value={pj.localite ?? ""}
-              onChange={(e) => outils.agir(api.deplacerPersonnage(pj.id, e.target.value === "" ? null : Number(e.target.value)))}
-            >
-              <option value="">hors localité</option>
-              {p.localites.map((l) => (
-                <option key={l.id} value={l.id}>{l.libelle}</option>
-              ))}
-            </select>
-          </div>
-        </div>
-        <p className="doux">La présence des PJ compte pour l'usure des capitaux et des entreprises (Guide de campagne p. 82).</p>
-      </section>
-
-      <section className="carte section">
-        <h2>Gain ou dépense</h2>
-        <form
-          className="ligne operation"
-          onSubmit={async (e) => {
-            e.preventDefault();
-            const r = await outils.agir(api.ajusterCompte(pj.id, delta, motif));
-            if (r?.ok) {
-              setDelta("");
-              setMotif("");
-            }
-          }}
-        >
-          <div>
-            <label className="etiquette-champ" htmlFor="pj-delta">Montant (négatif pour une dépense)</label>
-            <ChampMontant id="pj-delta" valeur={delta} changer={setDelta} signe />
-          </div>
-          <div style={{ flex: 1 }}>
-            <label className="etiquette-champ" htmlFor="pj-motif">Motif</label>
-            <input id="pj-motif" className="champ large" placeholder="butin, achat…" value={motif} onChange={(e) => setMotif(e.target.value)} />
-          </div>
-          <button type="submit" className="bouton principal" disabled={!delta.trim() || !motif.trim()}>Appliquer</button>
-        </form>
-      </section>
-
-      <details className="carte repli">
-        <summary>Modifier le personnage</summary>
-        <form
-          className="formulaire"
-          onSubmit={(e) => {
-            e.preventDefault();
-            outils.agir(api.modifierPersonnage(pj.id, nom, prestige));
-          }}
-        >
-          <label htmlFor="pj-edit-nom">Nom</label>
-          <input id="pj-edit-nom" className="champ" value={nom} onChange={(e) => setNom(e.target.value)} />
-          <label htmlFor="pj-edit-prestige">Prestige</label>
-          <div className="pile">
-            <input id="pj-edit-prestige" className="champ mini" inputMode="numeric" placeholder="—" value={prestige} onChange={(e) => setPrestige(e.target.value)} />
-            <span className="doux">{AIDE_PRESTIGE}.</span>
-          </div>
-          <span />
-          <div>
-            <button type="submit" className="bouton" disabled={!nom.trim()}>Enregistrer les modifications</button>
-          </div>
-        </form>
-      </details>
-    </>
   );
 }

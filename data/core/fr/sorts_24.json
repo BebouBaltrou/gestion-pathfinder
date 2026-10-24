@@ -1,0 +1,72 @@
+{
+  "Power Word Blind": {
+    "cible": "une créature de 200 pv ou moins",
+    "composantes": "V",
+    "description": "Vous prononcez un seul mot de pouvoir qui aveugle une créature, qu'elle entende le mot ou non. La durée du sort dépend du total actuel de points de vie de la cible. Toute créature qui a actuellement 201 points de vie ou plus n'est pas affectée.\nPoints de vie — Durée\n50 ou moins — Permanente\n51 à 100 — 1d4+1 minutes\n101 à 200 — 1d4+1 rounds"
+  },
+  "Prismatic Spray": {
+    "cible": "explosion en cône",
+    "composantes": "V, G",
+    "description": "Ce sort fait jaillir de votre main sept rayons de lumière scintillants et multicolores. Chaque rayon a un pouvoir différent. Les créatures de 8 DV ou moins dans la zone du sort sont automatiquement aveuglées pendant 2d4 rounds. Chaque créature dans la zone est frappée au hasard par un ou plusieurs rayons, qui ont des effets supplémentaires.\n1d8 — Couleur du rayon\n1 — Rouge : 20 points de dégâts de feu (Réflexes moitié)\n2 — Orange : 40 points de dégâts d'acide (Réflexes moitié)\n3 — Jaune : 80 points de dégâts d'électricité (Réflexes moitié)\n4 — Vert : poison (fréquence 1/round pendant 6 rounds ; effet initial : mort ; effet secondaire : 1 Con/round ; guérison : 2 jets de Vigueur consécutifs)*\n5 — Bleu : pétrification (Vigueur annule)\n6 — Indigo : démence, comme le sort de démence (Volonté annule)\n7 — Violet : envoyé sur un autre plan (Volonté annule)\n8 — Frappé par deux rayons : lancez deux fois de plus, en ignorant tout résultat « 8 »\n*Voir poisons"
+  },
+  "Project Image": {
+    "cible": "un double d'ombre",
+    "composantes": "V, G, M (une petite réplique de vous d'une valeur de 5 po)",
+    "description": "Vous puisez de l'énergie dans le plan de l'Ombre pour créer une version illusoire quasi réelle de vous-même. L'image projetée a votre apparence, votre voix et votre odeur mais est intangible. L'image projetée imite vos actions (y compris la parole) à moins que vous ne lui ordonniez d'agir autrement (ce qui est une action de mouvement).\nVous pouvez voir par ses yeux et entendre par ses oreilles comme si vous vous teniez là où elle est, et pendant votre tour vous pouvez passer de l'utilisation de ses sens à celle des vôtres, ou inversement, par une action libre. Tant que vous utilisez ses sens, votre corps est considéré comme aveuglé et assourdi.\nSi vous le désirez, tout sort que vous lancez dont la portée est le contact ou plus peut provenir de l'image projetée plutôt que de vous. L'image projetée ne peut lancer aucun sort sur elle-même, sauf des sorts d'illusion. Les sorts affectent normalement les autres cibles, bien qu'ils proviennent de l'image projetée.\nLes objets sont affectés par l'image projetée comme s'ils avaient réussi leur jet de Volonté. Vous devez maintenir une ligne d'effet vers l'image projetée en permanence. Si votre ligne d'effet est obstruée, le sort prend fin. Si vous utilisez porte dimensionnelle, téléportation, changement de plan ou un sort similaire qui rompt votre ligne d'effet, même un instant, le sort prend fin."
+  },
+  "Reverse Gravity": {
+    "cible": "jusqu'à un cube de 3 m (10 pieds) d'arête par niveau (E)",
+    "composantes": "V, G, M/FD (une pierre d'aimant et de la limaille de fer)",
+    "description": "Ce sort inverse la gravité dans une zone, ce qui fait « tomber » vers le haut les objets et créatures non attachés dans la zone, qui atteignent le haut de la zone en 1 round. Si un objet solide (comme un plafond) est rencontré lors de cette chute, les objets et créatures qui tombent le heurtent de la même manière que lors d'une chute normale vers le bas. Si un objet ou une créature atteint le haut de la zone sans rien heurter, il y reste, oscillant légèrement, jusqu'à la fin du sort. À la fin de la durée du sort, les objets et créatures affectés tombent vers le bas.\nÀ condition d'avoir quelque chose à quoi se tenir, une créature prise dans la zone peut tenter un jet de Réflexes pour se retenir quand le sort frappe. Les créatures qui peuvent voler ou léviter peuvent s'empêcher de tomber."
+  },
+  "Scrying, Greater": {
+    "cible": "capteur magique",
+    "composantes": "V, G",
+    "description": "Ce sort fonctionne comme scrutation, sauf comme indiqué ci-dessus. De plus, tous les sorts suivants fonctionnent de façon fiable à travers le capteur : détection du chaos, détection du mal, détection du bien, détection de la loi, détection de la magie, message, lecture de la magie et don des langues."
+  },
+  "Sequester": {
+    "cible": "une créature consentante ou un objet (jusqu'à un cube de 60 cm, 2 pieds, d'arête par niveau) touché",
+    "composantes": "V, G, M (un cil de basilic et de la gomme arabique)",
+    "description": "Une fois lancé, ce sort empêche les sorts de divination de détecter ou de localiser la cible et rend aussi la cible affectée invisible (comme le sort d'invisibilité). Le sort n'empêche pas le sujet d'être découvert par le toucher ou au moyen de dispositifs. Les créatures affectées par séquestration deviennent comateuses et sont en fait en état d'animation suspendue jusqu'à la fin du sort.\nNote : le jet de Volonté empêche un objet surveillé ou magique d'être séquestré. Il n'y a pas de jet de sauvegarde pour voir la créature ou l'objet séquestré ni pour le détecter avec un sort de divination."
+  },
+  "Shadow Conjuration, Greater": {
+    "cible": "voir texte",
+    "composantes": "V, G",
+    "description": "Ce sort fonctionne comme invocation d'ombres, mais il reproduit tout sort d'invocation (convocation) ou d'invocation (création) d'ensorceleur ou de magicien de niveau 6 ou inférieur. Les invocations illusoires créées infligent trois cinquièmes (60 %) des dégâts à ceux qui n'y croient pas, et les effets non dommageables ont 60 % de chances de fonctionner contre ceux qui n'y croient pas."
+  },
+  "Simulacrum": {
+    "cible": "une créature dupliquée",
+    "composantes": "V, G, M (une sculpture de glace de la cible plus des rubis en poudre d'une valeur de 500 po par DV du simulacre)",
+    "description": "Simulacre crée un double illusoire de n'importe quelle créature. La créature dupliquée est partiellement réelle et formée de glace ou de neige. Elle paraît identique à l'original, mais n'a que la moitié des niveaux ou des DV de la créature réelle (et les points de vie, dons, rangs de compétence et capacités spéciales appropriés pour une créature de ce niveau ou de ce nombre de DV). Vous ne pouvez pas créer un simulacre d'une créature dont les DV ou les niveaux dépassent le double de votre niveau de lanceur. Vous devez faire un test de Déguisement quand vous lancez le sort pour déterminer la qualité de la ressemblance. Une créature qui connaît l'original peut déceler la ruse par un test de Perception réussi (opposé au test de Déguisement du lanceur) ou un test de Psychologie DD 20.\nEn toutes circonstances, le simulacre reste sous votre commandement absolu. Il n'existe aucun lien télépathique particulier, de sorte que le commandement doit s'exercer d'une autre manière. Un simulacre n'a aucune capacité de devenir plus puissant. Il ne peut pas augmenter son niveau ou ses capacités. S'il est réduit à 0 point de vie ou autrement détruit, il redevient neige et fond instantanément dans le néant. Un processus complexe exigeant au moins 24 heures, 100 po par point de vie et un laboratoire magique entièrement équipé peut réparer les dégâts subis par un simulacre."
+  },
+  "Spell Turning": {
+    "cible": "vous",
+    "composantes": "V, G, M/FD (un petit miroir d'argent)",
+    "description": "Les sorts et effets magiques qui vous visent sont renvoyés vers le lanceur d'origine. Cette abjuration ne renvoie que les sorts qui vous ont pour cible. Les sorts d'effet et de zone ne sont pas affectés. Renvoi des sorts ne parvient pas non plus à arrêter les sorts à portée de contact. De sept à dix (1d4+6) niveaux de sorts sont affectés par le renvoi. Le nombre exact est lancé en secret.\nQuand vous êtes visé par un sort de niveau supérieur à la quantité de renvoi des sorts qu'il vous reste, ce sort est partiellement renvoyé. Soustrayez la quantité de renvoi des sorts restante du niveau du sort entrant, puis divisez le résultat par le niveau du sort entrant pour voir quelle fraction de l'effet passe. Pour les sorts dommageables, vous et le lanceur subissez chacun une fraction des dégâts. Pour les sorts non dommageables, chacun de vous a une chance proportionnelle d'être celui qui est affecté. Si vous et un attaquant lanceur de sorts êtes tous deux protégés par des effets de renvoi des sorts en fonctionnement, un champ de résonance est créé. Lancez les dés au hasard pour déterminer le résultat.\nd% — Effet\n01-70 — Le sort se dissipe sans effet.\n71-80 — Le sort vous affecte tous les deux également à plein effet.\n81-97 — Les deux effets de renvoi sont rendus non fonctionnels pendant 1d4 minutes.\n98-100 — Vous passez tous les deux par une faille vers un autre plan."
+  },
+  "Statue": {
+    "cible": "créature touchée",
+    "composantes": "V, G, M (de la chaux, du sable et une goutte d'eau remuée avec un clou de fer)",
+    "description": "Un sort de statue transforme le sujet en pierre solide, ainsi que tous les vêtements et équipements portés ou tenus. Sous forme de statue, le sujet obtient une dureté de 8. Le sujet conserve ses propres points de vie. Le sujet peut voir, entendre et sentir normalement, mais n'a pas besoin de manger ni de respirer. Les sensations sont limitées à celles qui peuvent affecter la substance dure comme le granit du corps de l'individu. Un éclat n'équivaut qu'à une simple égratignure, mais briser un bras de la statue constitue un dommage grave. Le sujet d'un sort de statue peut revenir à son état normal, agir, puis retourner instantanément à l'état de statue (une action libre) s'il le désire, tant que la durée du sort est en vigueur."
+  },
+  "Summon Monster 7": {
+    "cible": "une créature convoquée",
+    "composantes": "V, G, F/FD (un minuscule sac et une petite bougie)",
+    "description": "Ce sort fonctionne comme convocation de monstres I, mais vous pouvez convoquer une créature de la liste de niveau 7, 1d3 créatures du même genre de la liste de niveau 6, ou 1d4+1 créatures du même genre d'une liste de niveau inférieur."
+  },
+  "Symbol of Stunning": {
+    "cible": "un symbole",
+    "composantes": "V, G, M (du mercure et du phosphore, plus de la poudre de diamant et d'opale pour une valeur totale de 5 000 po)",
+    "description": "Ce sort fonctionne comme symbole de mort, mais toutes les créatures situées à 18 m (60 pieds) d'un symbole d'étourdissement sont à la place étourdies pendant 1d6 rounds.\nNote : les pièges magiques comme symbole d'étourdissement sont difficiles à détecter et à désamorcer. Un roublard (seulement) peut utiliser la compétence Perception pour trouver un symbole d'étourdissement et Sabotage pour le déjouer. Le DD est dans chaque cas de 25 + niveau du sort, soit 32 pour symbole d'étourdissement."
+  },
+  "Symbol of Weakness": {
+    "cible": "un symbole",
+    "composantes": "V, G, M (du mercure et du phosphore, plus de la poudre de diamant et d'opale pour une valeur totale de 5 000 po)",
+    "description": "Ce sort fonctionne comme symbole de mort, mais chaque créature située à 18 m (60 pieds) d'un symbole de faiblesse subit à la place une faiblesse invalidante qui inflige 3d6 points de dégâts de Force.\nContrairement à symbole de mort, symbole de faiblesse n'a pas de limite de points de vie ; une fois déclenché, un symbole de faiblesse reste simplement actif pendant 10 minutes par niveau de lanceur. Une créature ne peut être affectée par ce symbole qu'une seule fois.\nNote : les pièges magiques comme symbole de faiblesse sont difficiles à détecter et à désamorcer. Un roublard (seulement) peut utiliser la compétence Perception pour trouver un symbole de faiblesse et Sabotage pour le déjouer. Le DD est dans chaque cas de 25 + niveau du sort, soit 32 pour symbole de faiblesse."
+  },
+  "Teleport Object": {
+    "cible": "un objet touché pesant jusqu'à 22,5 kg (50 livres) par niveau et 0,09 m³ (3 pieds cubes) par niveau",
+    "composantes": "V",
+    "description": "Ce sort fonctionne comme téléportation, mais il téléporte un objet, pas vous. Les créatures et les forces magiques ne peuvent pas être téléportées.\nSi vous le désirez, l'objet cible peut être envoyé vers un lieu éloigné du plan Éthéré. Dans ce cas, le point d'où l'objet a été téléporté reste faiblement magique jusqu'à ce que l'objet soit récupéré. Un sort de dissipation de la magie ciblée réussi, lancé sur ce point, ramène l'objet disparu du plan Éthéré."
+  }
+}

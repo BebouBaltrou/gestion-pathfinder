@@ -13,14 +13,16 @@ import { Referentiel } from "./pages/Referentiel";
 import { Organisations } from "./pages/Organisations";
 import { Personnages } from "./pages/Personnages";
 import { Recettes } from "./pages/Recettes";
+import { Aventure } from "./pages/Aventure";
 import { Tableau } from "./pages/Tableau";
 
 export type Page =
-  | "tableau" | "recettes" | "historique"
+  | "tableau" | "aventure" | "recettes" | "historique"
   | "localites" | "batiments" | "organisations" | "gestionnaires" | "personnages"
   | "referentiel" | "points" | "parametres" | "campagnes";
 
 const NAVIGATION: { titre: string; pages: [Page, string][] }[] = [
+  { titre: "Table de jeu", pages: [["aventure", "Aventure et combat"]] },
   { titre: "Campagne", pages: [["tableau", "Tableau de bord"], ["recettes", "Recettes"], ["historique", "Historique"]] },
   {
     titre: "Domaines",
@@ -160,7 +162,7 @@ export function App() {
                 className="bouton icone"
                 aria-label="Annuler"
                 title={entete.derniereAction ? `Annuler : ${entete.derniereAction} (Ctrl+Z)` : "Rien à annuler"}
-                disabled={!entete.peutAnnuler}
+                disabled={!entete.peutAnnuler || etat.combatEnCours}
                 onClick={() => agir(api.annuler())}
               >
                 {icones.annuler({})}
@@ -169,7 +171,7 @@ export function App() {
                 className="bouton icone"
                 aria-label="Rétablir"
                 title="Rétablir (Ctrl+Y)"
-                disabled={!entete.peutRetablir}
+                disabled={!entete.peutRetablir || etat.combatEnCours}
                 onClick={() => agir(api.retablir())}
               >
                 {icones.retablir({})}
@@ -184,15 +186,24 @@ export function App() {
                 </button>
               )}
               <div className="groupe-boutons">
-                <button className="bouton" onClick={() => agir(api.avancer(7))}>+7 j</button>
-                <button className="bouton" onClick={() => agir(api.avancer(30))}>+30 j</button>
+                <button className="bouton" disabled={etat.combatEnCours} onClick={() => agir(api.avancer(7))}>+7 j</button>
+                <button className="bouton" disabled={etat.combatEnCours} onClick={() => agir(api.avancer(30))}>+30 j</button>
               </div>
-              <button className="bouton principal" onClick={() => agir(api.avancer(1))}>
+              <button className="bouton principal" disabled={etat.combatEnCours} onClick={() => agir(api.avancer(1))}>
                 {icones.suivant({})} Jour suivant
               </button>
             </>
           )}
         </header>
+
+        {etat.combatEnCours && (
+          <div className="bandeau-simulation" role="status">
+            <strong>COMBAT EN COURS</strong>
+            <span>Le reste de la campagne est verrouillé jusqu'à la fin du combat (validation ou abandon).</span>
+            <span className="espace" />
+            <button className="bouton principal" onClick={() => setPage("aventure")}>Retourner au combat</button>
+          </div>
+        )}
 
         {etat.simulation && (
           <div className="bandeau-simulation" role="status">
@@ -209,6 +220,7 @@ export function App() {
 
         <main className="contenu">
           {pageActive === "tableau" && <Tableau outils={outils} />}
+          {pageActive === "aventure" && <Aventure outils={outils} />}
           {pageActive === "campagnes" && <Campagnes outils={outils} />}
           {pageActive === "localites" && <Localites outils={outils} />}
           {pageActive === "personnages" && <Personnages outils={outils} />}
@@ -220,7 +232,7 @@ export function App() {
           {pageActive === "referentiel" && <Referentiel outils={outils} />}
           {pageActive === "parametres" && <Parametres outils={outils} />}
           {pageActive === "recettes" && <Recettes outils={outils} />}
-          {!["tableau", "campagnes", "localites", "personnages", "batiments", "recettes", "organisations", "gestionnaires", "historique", "points", "parametres", "referentiel"].includes(pageActive) && <EnAttente nom={NOMS_PAGES[pageActive]} />}
+          {!["tableau", "aventure", "campagnes", "localites", "personnages", "batiments", "recettes", "organisations", "gestionnaires", "historique", "points", "parametres", "referentiel"].includes(pageActive) && <EnAttente nom={NOMS_PAGES[pageActive]} />}
         </main>
       </div>
 
