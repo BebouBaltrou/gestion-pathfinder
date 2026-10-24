@@ -5,6 +5,7 @@
 
 mod aventure;
 mod export;
+mod import_fiche;
 mod personnages;
 mod session;
 
@@ -702,6 +703,8 @@ fn main() {
             personnages::apercu_fiche,
             personnages::creer_personnage,
             personnages::creer_fiche,
+            import_fiche::choisir_fiche_pdf,
+            import_fiche::importer_fiche_pdf,
             personnages::accorder_niveau_de_depart,
             personnages::evenement_fiche,
             personnages::apercu_montee,

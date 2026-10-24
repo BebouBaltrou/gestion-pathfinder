@@ -4,6 +4,7 @@ import { api, formaterPo } from "../api";
 import type { FicheVue, LignePersonnage } from "../fiche-types";
 import { Creation } from "./fiche/Creation";
 import { FicheComplete } from "./fiche/FicheComplete";
+import { ImportPdf } from "./fiche/ImportPdf";
 import { SuiviPersonnage } from "./SuiviPersonnage";
 
 /** Liste des personnages joueurs et, pour celui choisi, sa fiche. */
@@ -12,6 +13,7 @@ export function Personnages({ outils }: { outils: Outils }) {
   const [choisi, setChoisi] = useState<number | null>(null);
   const [fiche, setFiche] = useState<FicheVue | null>(null);
   const [creation, setCreation] = useState(false);
+  const [importPdf, setImportPdf] = useState(false);
   const [niveauVise, setNiveauVise] = useState(1);
   const [nom, setNom] = useState("");
   const [po, setPo] = useState("0");
@@ -101,10 +103,13 @@ export function Personnages({ outils }: { outils: Outils }) {
               </div>
               <button className="bouton principal" type="submit" disabled={!nom.trim()}>Ajouter</button>
             </form>
+            <p className="doux">ou</p>
+            <button className="bouton" onClick={() => setImportPdf(true)}>Importer une fiche PDF…</button>
           </section>
         </div>
 
         <div className="colonne-large">
+          {importPdf && <ImportPdf outils={outils} onFini={() => setImportPdf(false)} />}
           {!pj && <div className="carte vide"><p>Ajoutez un personnage pour commencer.</p></div>}
           {pj && !fiche && !creation && (
             <div className="carte vide">

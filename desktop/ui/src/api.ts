@@ -17,6 +17,7 @@ import type {
   RegleOptionnelle,
 } from "./aventure-types";
 import type {
+  ApercuImport,
   ApercuMontee,
   CatalogueCreation,
   EssaiMontee,
@@ -642,6 +643,9 @@ export const api = {
   apercuFiche: (fiche: FicheDonnees) => appeler<FicheVue>("apercu_fiche", { fiche }),
   creerPersonnage: (nom: string, po: number) => appeler<Retour>("creer_personnage", { nom, po }),
   creerFiche: (pj: number, fiche: FicheDonnees) => appeler<Retour>("creer_fiche", { pj, fiche }),
+  choisirFichePdf: () => appeler<ApercuImport | null>("choisir_fiche_pdf"),
+  importerFichePdf: (chemin: string, gardes: string[], po: number) =>
+    appeler<Retour>("importer_fiche_pdf", { chemin, gardes, po }),
   accorderNiveauDeDepart: (pj: number, niveau: number) => appeler<Retour>("accorder_niveau_de_depart", { pj, niveau }),
   evenementFiche: (pj: number, evenement: EvenementFiche) =>
     appeler<Retour>("evenement_fiche", { pj, evenement }),

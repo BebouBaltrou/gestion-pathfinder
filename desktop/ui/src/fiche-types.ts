@@ -308,3 +308,31 @@ export type RegleInfo = {
   valeur: string;
   choix: [string, string][];
 };
+
+// ---- Importation d'une fiche PDF (desktop/src-tauri/src/import_fiche.rs) ----
+
+export type GraviteImport = "accord" | "a_valider" | "ecart";
+
+export type LigneImport = {
+  cle: string;
+  rubrique: string;
+  libelle: string;
+  champ: string;
+  feuille: string;
+  regles: string;
+  explication: string;
+  gravite: GraviteImport;
+  /** « Garder » est possible pour cette ligne (valeur numérique que la fiche sait recevoir). */
+  peut_garder: boolean;
+  delta: number | null;
+};
+
+export type ApercuImport = {
+  chemin: string;
+  nom: string;
+  niveau: number;
+  pv: number;
+  dons: string[];
+  lignes: LigneImport[];
+  non_verifie: string[];
+};

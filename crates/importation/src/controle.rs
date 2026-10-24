@@ -642,11 +642,7 @@ pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32, r: &Referentiel) -> Fiche 
         .map(|i| fiches::fiche::NiveauPris {
             classe: "ensorceleur".into(),
             de_vie_obtenu: de_vie(i),
-            rangs: if i == 0 {
-                rangs.clone()
-            } else {
-                BTreeMap::new()
-            },
+            rangs: BTreeMap::new(),
             predilection: Some(fiches::fiche::BonusPredilection::Rang),
             dons: vec![],
         })
@@ -669,6 +665,36 @@ pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32, r: &Referentiel) -> Fiche 
         etats: vec![],
         temporaires: vec![],
     };
+    // Rangs : la feuille ne dit pas à quel niveau ils ont été pris. On les répartit niveau par
+    // niveau dans ce que le moteur permet (rangs disponibles, rang maximum = niveau), en
+    // alternant entre les compétences ; ce qui ne rentre pas est signalé par le rapport.
+    let disponibles: Vec<u32> = fiche
+        .calculer(r)
+        .map(|v| v.rangs.iter().map(|b| b.disponibles).collect())
+        .unwrap_or_default();
+    let mut restants: Vec<(String, u32)> = rangs.into_iter().collect();
+    restants.sort_by_key(|(_, n)| std::cmp::Reverse(*n));
+    let mut cumul: BTreeMap<String, u32> = BTreeMap::new();
+    for (i, budget) in disponibles.iter().enumerate() {
+        let niveau_i = i as u32 + 1;
+        let mut budget = *budget;
+        while budget > 0 {
+            let mut place = false;
+            for (cle, reste) in restants.iter_mut() {
+                let deja = cumul.entry(cle.clone()).or_insert(0);
+                if budget > 0 && *reste > 0 && *deja < niveau_i {
+                    *deja += 1;
+                    *reste -= 1;
+                    budget -= 1;
+                    *fiche.niveaux[i].rangs.entry(cle.clone()).or_insert(0) += 1;
+                    place = true;
+                }
+            }
+            if !place {
+                break;
+            }
+        }
+    }
     // Dons reconnus : posés dans les emplacements de don que le moteur prévoit, dans l'ordre.
     let mut dons: std::collections::VecDeque<String> = crate::dons::rapprocher(&f.notes_dons)
         .into_iter()

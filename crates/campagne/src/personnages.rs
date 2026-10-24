@@ -342,7 +342,7 @@ impl Etat {
                         "ce personnage n'a pas encore de fiche : la créer d'abord".into(),
                     ));
                 };
-                if let Some(p) = f.valider(r).first() {
+                if let Some(p) = f.valider(r).iter().find(|p| !p.est_incomplet()) {
                     return Err(Erreur::Fiche(p.to_string()));
                 }
                 let j = Journal::nouveau((**f).clone());

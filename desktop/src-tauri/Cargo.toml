@@ -17,6 +17,7 @@ regles = { path = "../../crates/regles", features = ["serde"] }
 campagne = { path = "../../crates/campagne", features = ["serde"] }
 vues = { path = "../../crates/vues", features = ["serde"] }
 fiches = { path = "../../crates/fiches" }
+importation = { path = "../../crates/importation" }
 aventure = { path = "../../crates/aventure" }
 combat = { path = "../../crates/combat" }
 temps = { path = "../../crates/temps" }

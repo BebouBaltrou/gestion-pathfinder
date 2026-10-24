@@ -136,6 +136,22 @@ pub enum Probleme {
     CompetenceInconnue(String),
 }
 
+impl Probleme {
+    /// La fiche n'est pas fausse, seulement inachevée : il manque des dons ou des sorts à choisir.
+    /// Une fiche importée d'un PDF peut être dans ce cas ; les dons et sorts se complètent ensuite.
+    pub fn est_incomplet(&self) -> bool {
+        match self {
+            Probleme::DonsAuNiveau {
+                attendus, choisis, ..
+            }
+            | Probleme::SortsAChoisir {
+                attendus, choisis, ..
+            } => choisis < attendus,
+            _ => false,
+        }
+    }
+}
+
 impl std::fmt::Display for Probleme {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
