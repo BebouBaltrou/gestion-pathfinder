@@ -16,7 +16,7 @@ Charisme, ou la valeur saisie sur le personnage.)
   l'**achat** d'une équipe et à son **amélioration** (l'équipe obtenue doit respecter la limite).
 - L'écran des équipes affiche « employés de niveau N (Prestige requis) ».
 
-### Lectures à valider
+### Lectures (validées par le joueur le 24/10/2026)
 
 1. **Quel personnage recrute ?** Le livre dit « votre personnage ». L'application ne demande pas
    encore qui recrute : on prend le **meilleur Prestige parmi les PJ présents** dans la localité.
@@ -83,7 +83,7 @@ Charisme, ou la valeur saisie sur le personnage.)
 - Partisans : effectifs par niveau, bornés par le tableau, noms facultatifs (C).
 - L'acolyte reçoit sa part d'XP à chaque gain du maître, présent ou non (D).
 
-### Lectures à valider
+### Lectures (validées par le joueur le 24/10/2026)
 1. Part d'XP de l'acolyte arrondie vers le bas ; sans effet en mode jalons (pas de points d'XP).
 2. Les facteurs de réputation se cumulent (le texte les liste sans dire s'ils s'excluent).
 3. Seule la « mort d'un acolyte » est comptée par acolyte ; les autres modificateurs valent une fois.
