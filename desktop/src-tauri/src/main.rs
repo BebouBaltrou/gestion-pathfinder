@@ -28,6 +28,8 @@ struct EtatApp {
     dossier: String,
     /// (actions, jours) d'avance de la simulation sur la campagne réelle.
     simulation: Option<(i64, i64)>,
+    /// Un combat est en cours (copie de travail) : le reste de la campagne est verrouillé.
+    combat_en_cours: bool,
 }
 
 pub(crate) fn session<'a>(s: &'a State<'_, Etat>) -> std::sync::MutexGuard<'a, Session> {
@@ -45,6 +47,7 @@ fn etat_app(s: S) -> EtatApp {
         campagnes: x.lister(),
         dossier: x.dossier.to_string_lossy().to_string(),
         simulation,
+        combat_en_cours: x.combat.is_some(),
     }
 }
 
@@ -150,6 +153,7 @@ fn main() {
             aventure::aventure_terminer,
             aventure::aventure_evenement,
             aventure::aventure_actualiser_ressources,
+            aventure::aventure_apercu_recul,
             aventure::combat_vue,
             aventure::combat_demarrer,
             aventure::combat_action,
@@ -159,6 +163,7 @@ fn main() {
             aventure::combat_apercu_fin,
             aventure::combat_terminer,
             aventure::catalogue_actions,
+            aventure::catalogue_etats,
             personnages::liste_personnages,
             personnages::fiche_personnage,
             personnages::catalogue_creation,

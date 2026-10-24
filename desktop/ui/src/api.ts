@@ -1,6 +1,18 @@
 // Pont vers le cœur Rust (commandes Tauri). Les types reprennent ceux de crates/vues.
 
 import type {
+  ActionCombat,
+  ActionDef,
+  ApercuFin,
+  ApercuSort,
+  AventureVue,
+  CombatVue,
+  Duree,
+  EvenementAventure,
+  ReculVue,
+  Validation,
+} from "./aventure-types";
+import type {
   ApercuMontee,
   CatalogueCreation,
   EssaiMontee,
@@ -32,6 +44,7 @@ export type EtatApp = {
   campagnes: FichierCampagne[];
   dossier: string;
   simulation: [number, number] | null;
+  combatEnCours: boolean;
 };
 
 export type Retour = { ok: boolean; alerte: boolean; message: string };
@@ -121,6 +134,27 @@ export const api = {
   essaiMontee: (pj: number, montee: Montee) => appeler<EssaiMontee | null>("essai_montee", { pj, montee }),
   reglesCampagne: () => appeler<RegleInfo[]>("regles_campagne"),
   changerRegle: (id: string, valeur: string) => appeler<Retour>("changer_regle", { id, valeur }),
+  // ---- aventure
+  aventureVue: () => appeler<AventureVue>("aventure_vue"),
+  aventureDemarrer: (heure: number, minute: number, survie: boolean, degatsMassifs: boolean) =>
+    appeler<Retour>("aventure_demarrer", { heure, minute, survie, degatsMassifs }),
+  aventureTerminer: () => appeler<Retour>("aventure_terminer"),
+  aventureEvenement: (evenement: EvenementAventure) => appeler<Retour>("aventure_evenement", { evenement }),
+  aventureApercuRecul: (instant: number) => appeler<ReculVue | null>("aventure_apercu_recul", { instant }),
+  aventureActualiserRessources: (pj: number) => appeler<Retour>("aventure_actualiser_ressources", { pj }),
+  // ---- combat
+  combatVue: () => appeler<CombatVue | null>("combat_vue"),
+  combatDemarrer: (engages: number[]) => appeler<Retour>("combat_demarrer", { engages }),
+  combatAction: (action: ActionCombat) => appeler<Retour>("combat_action", { action }),
+  combatAnnuler: () => appeler<Retour>("combat_annuler"),
+  combatRetablir: () => appeler<Retour>("combat_retablir"),
+  combatApercuSort: (pj: number, sort: string, metamagies: string[] = [], niveauHeighten: number | null = null) =>
+    appeler<ApercuSort>("combat_apercu_sort", { pj, sort, metamagies, niveauHeighten }),
+  combatApercuFin: () => appeler<ApercuFin>("combat_apercu_fin"),
+  combatTerminer: (validation: Validation, contestations: [number, Duree][]) =>
+    appeler<Retour>("combat_terminer", { validation, contestations }),
+  catalogueActions: () => appeler<ActionDef[]>("catalogue_actions"),
+  catalogueEtats: () => appeler<[string, string][]>("catalogue_etats"),
 };
 
 // ------------------------------------------------------------------ montants
@@ -141,6 +175,10 @@ export function formaterPo(pa: number): string {
 // ------------------------------------------------------------------ données d'exemple
 // Uniquement pour l'aperçu sans Tauri (MOCK=1) : retiré de la version de l'application.
 
+import { apercuFinExemple, apercuSortExemple, aventureExemple, aventureVide, combatExemple, combatInitiative } from "./mock-aventure";
+
+let mockAventure = true;
+let mockCombat: "non" | "initiative" | "encours" = "encours";
 let jourSimule = 24;
 let annulables = 3;
 
@@ -165,6 +203,7 @@ function simule(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
         ],
         dossier: "~/.local/share/GestionPathfinder/campagnes",
         simulation: null,
+        combatEnCours: mockCombat !== "non",
       });
     case "avancer":
       jourSimule += Number(args?.jours ?? 1);
@@ -239,6 +278,37 @@ function simule(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
         { id: "inter.repartition_stricte", nom: "Répartition stricte des bonus", description: "Une salle donne tout son bonus à un seul type de capital par jour.",
           officielle: false, impact: "Recettes des salles et des équipes.", defaut: "oui", valeur: "non", choix: [["oui", "Oui"], ["non", "Non"]] },
       ]);
+    case "aventure_vue":
+      return Promise.resolve(mockAventure ? aventureExemple() : aventureVide());
+    case "aventure_demarrer":
+      mockAventure = true;
+      return Promise.resolve(ok("Aventure démarrée"));
+    case "combat_vue":
+      return Promise.resolve(mockCombat === "non" ? null : mockCombat === "initiative" ? combatInitiative() : combatExemple());
+    case "combat_demarrer":
+      mockCombat = "initiative";
+      return Promise.resolve(ok("Combat commencé"));
+    case "combat_action":
+      if (JSON.stringify(args?.action).includes("Demarrer")) mockCombat = "encours";
+      return Promise.resolve(ok("Action du combat"));
+    case "combat_apercu_sort":
+      return Promise.resolve(apercuSortExemple(String(args?.sort)));
+    case "combat_apercu_fin":
+      return Promise.resolve(apercuFinExemple());
+    case "combat_terminer":
+      mockCombat = "non";
+      return Promise.resolve(ok("Combat validé"));
+    case "catalogue_etats":
+      return Promise.resolve([["shaken", "Secoué"], ["sickened", "Nauséeux"], ["fatigued", "Fatigué"], ["invisible", "Invisible"]]);
+    case "catalogue_actions":
+      return Promise.resolve([
+        { id: "attack", nom_en: "Attack", nom: "Attaque", type: "simple", deplacement: false },
+        { id: "move", nom_en: "Move", nom: "Se déplacer", type: "mouvement", deplacement: true },
+        { id: "full_attack", nom_en: "Full attack", nom: "Attaque à outrance", type: "complexe", deplacement: false },
+        { id: "five_foot_step", nom_en: "5-foot step", nom: "Pas de 1,5 m", type: "aucune", deplacement: false },
+        { id: "cast_quickened", nom_en: "Cast a quickened spell", nom: "Lancer un sort accéléré", type: "rapide", deplacement: false },
+        { id: "speak", nom_en: "Speak", nom: "Parler", type: "libre", deplacement: false },
+      ] satisfies ActionDef[]);
     default:
       return Promise.resolve(ok(`(aperçu) ${cmd}`));
   }

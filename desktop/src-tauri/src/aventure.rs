@@ -140,6 +140,14 @@ pub fn aventure_evenement(s: S, evenement: EvenementAventure) -> Retour {
     x.executer(Evenement::Aventure(evenement), &message)
 }
 
+/// Ce qu'un recul de l'horloge toucherait (rien n'est modifié).
+#[tauri::command]
+pub fn aventure_apercu_recul(s: S, instant: i64) -> Option<va::ReculVue> {
+    session(&s)
+        .avec_etat(|e| va::apercu_recul(e, instant))
+        .flatten()
+}
+
 /// Calcule les usages quotidiens des pouvoirs de lignage du personnage (3 + Charisme, paliers…).
 #[tauri::command]
 pub fn aventure_actualiser_ressources(s: S, pj: u32) -> Retour {
@@ -317,4 +325,14 @@ pub fn combat_terminer(
 #[tauri::command]
 pub fn catalogue_actions() -> Vec<combat::catalogue::ActionDef> {
     combat::catalogue::catalogue()
+}
+
+/// Les 34 états du Core (identifiant, nom français) pour les choisir dans l'interface.
+#[tauri::command]
+pub fn catalogue_etats() -> Vec<(String, String)> {
+    fiches::Referentiel::partage()
+        .etats
+        .iter()
+        .map(|e| (e.id.clone(), e.nom.clone()))
+        .collect()
 }

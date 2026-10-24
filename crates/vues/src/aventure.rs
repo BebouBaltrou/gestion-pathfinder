@@ -69,6 +69,8 @@ pub struct EmplacementVue {
 #[cfg_attr(feature = "serde", derive(serde::Serialize))]
 #[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
 pub struct RessourceVue {
+    /// Identifiant (nom anglais du pouvoir) à renvoyer au moteur.
+    pub cle: String,
     pub nom: String,
     pub unite: String,
     pub restantes: u32,
@@ -132,6 +134,10 @@ pub struct PjAventure {
     /// Initiative de la fiche (modificateur).
     pub initiative: i32,
     pub caster: bool,
+    /// Niveau de lanceur (0 si le personnage ne lance pas de sorts).
+    pub niveau_de_lanceur: u32,
+    /// Chance d'échec des sorts profanes due à l'armure (%).
+    pub echec_arcanique_pct: u32,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -379,6 +385,7 @@ fn pj_vue(
             .ressources
             .iter()
             .map(|(nom, r)| RessourceVue {
+                cle: nom.clone(),
                 nom: nom_pouvoir_fr(&r.source, nom),
                 unite: match r.unite {
                     UniteRessource::Utilisations => "utilisations",
@@ -409,6 +416,8 @@ fn pj_vue(
         degats_continus: suivi.vital.continu,
         initiative: c.initiative,
         caster: c.incantation.is_some(),
+        niveau_de_lanceur: c.incantation.as_ref().map_or(0, |i| i.niveau_de_lanceur),
+        echec_arcanique_pct: c.incantation.as_ref().map_or(0, |i| i.echec_arcanique_pct),
     }
 }
 
@@ -1021,4 +1030,46 @@ mod tests {
         assert_eq!(f.persistants.len(), 1);
         assert_eq!(f.personnages[0].nom, "Lyra");
     }
+}
+
+/// Ce qu'un recul d'horloge toucherait : effets expirés qu'on peut réactiver, effets créés après le nouvel instant.
+#[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize))]
+#[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
+pub struct ReculVue {
+    pub reactivables: Vec<(u64, String, String)>,
+    pub crees: Vec<(u64, String, String)>,
+    /// Reculer avant minuit est refusé (il faut annuler, ce qui défait aussi le jour d'intermède).
+    pub avant_minuit: bool,
+}
+
+pub fn apercu_recul(etat: &Etat, instant: i64) -> Option<ReculVue> {
+    let a = etat.aventure.as_ref()?;
+    let nouvel = Instant(instant);
+    let ap = a.apercu_recul(nouvel);
+    let contextes = etat.contextes_aventure();
+    let nom_de = |s: &str| {
+        s.parse::<u32>()
+            .ok()
+            .and_then(|id| contextes.get(&id))
+            .map_or_else(|| s.to_string(), |c| c.nom.clone())
+    };
+    let trouve = |id: u64| {
+        a.effets
+            .actifs
+            .iter()
+            .map(|e| (e.id, e.nom.clone(), nom_de(&e.proprietaire)))
+            .chain(
+                a.effets
+                    .termines
+                    .iter()
+                    .map(|t| (t.effet.id, t.effet.nom.clone(), nom_de(&t.effet.proprietaire))),
+            )
+            .find(|(i, _, _)| *i == id)
+    };
+    Some(ReculVue {
+        reactivables: ap.reactivables.iter().filter_map(|i| trouve(*i)).collect(),
+        crees: ap.crees.iter().filter_map(|i| trouve(*i)).collect(),
+        avant_minuit: nouvel.jour() < a.horloge.maintenant.jour(),
+    })
 }

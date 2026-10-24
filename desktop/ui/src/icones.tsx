@@ -23,6 +23,14 @@ function Icone({ taille = 18, children }: P & { children: ReactNode }) {
 }
 
 export const icones: Record<string, (p: P) => ReactElement> = {
+  aventure: (p) => (
+    <Icone {...p}>
+      <path d="M14.5 3.5 20.5 3.5 20.5 9.5 11 19" />
+      <path d="M9.5 14.5 5 19 3.5 20.5" />
+      <path d="M3.5 3.5 9.5 3.5 20.5 14.5" />
+      <path d="M13 19 15 21" />
+    </Icone>
+  ),
   tableau: (p) => (
     <Icone {...p}>
       <rect x="3" y="3" width="7" height="9" rx="1.5" />

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Outils } from "../App";
 import { api } from "../api";
+import { Apparence } from "../composants/Apparence";
 import type { RegleInfo } from "../fiche-types";
 
 /** Registre des règles optionnelles de la campagne : description, impact, valeur par défaut. */
@@ -25,6 +26,7 @@ export function Parametres({ outils }: { outils: Outils }) {
           personnages sont enregistrés dans l'historique et peuvent être annulés.
         </p>
       </div>
+      <Apparence />
       {groupes.map(([titre, liste]) => (
         <section className="section" key={titre}>
           <h2>{titre}</h2>
