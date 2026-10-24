@@ -309,11 +309,11 @@ pub fn controler(f: &Feuille, r: &Referentiel) -> Rapport {
             ca.to_string(),
             v.ca.total.to_string(),
             format!(
-                "Le moteur ne connaît pas les objets magiques écrits en texte libre (bracelets, anneau, \
-                 amulette…) ; sans eux : {}. À valider avec la liste d'objets.",
+                "Calcul du moteur avec les objets magiques reconnus de la feuille : {}. Une CA plus \
+                 basse que celle des règles est un écart ; plus haute, un objet ou un don à valider.",
                 v.ca.explication()
             ),
-            Gravite::AValider,
+            bonus_total(ca, v.ca.total),
         );
         let attendu_depourvu = ca - dex.max(0);
         ajoute(
