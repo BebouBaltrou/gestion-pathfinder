@@ -73,6 +73,27 @@ pub fn creer_fiche(s: S, pj: u32, fiche: Fiche) -> Retour {
     )
 }
 
+/// Personnage créé au niveau voulu : accorde les XP (ou le jalon) du niveau, puis l'interface
+/// enchaîne les montées de niveau une à une.
+#[tauri::command]
+pub fn accorder_niveau_de_depart(s: S, pj: u32, niveau: u32) -> Retour {
+    let mut x = session(&s);
+    let ev = match x.avec_etat(|e| e.evenement_niveau_de_depart(IdPersonnage(pj), niveau)) {
+        None => return Retour::erreur("Aucune campagne ouverte"),
+        Some(Err(m)) => return Retour::erreur(m),
+        Some(Ok(None)) => return Retour::ok("Niveau déjà atteignable"),
+        Some(Ok(Some(ev))) => ev,
+    };
+    let message = ev.description();
+    x.executer(
+        Evenement::Fiche {
+            pj: IdPersonnage(pj),
+            evenement: ev,
+        },
+        &message,
+    )
+}
+
 /// Applique un événement de la fiche (XP, repos, sort lancé, équipement, état, montée…).
 #[tauri::command]
 pub fn evenement_fiche(s: S, pj: u32, evenement: EvenementFiche) -> Retour {

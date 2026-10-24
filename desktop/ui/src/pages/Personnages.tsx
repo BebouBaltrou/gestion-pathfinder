@@ -11,6 +11,7 @@ export function Personnages({ outils }: { outils: Outils }) {
   const [choisi, setChoisi] = useState<number | null>(null);
   const [fiche, setFiche] = useState<FicheVue | null>(null);
   const [creation, setCreation] = useState(false);
+  const [niveauVise, setNiveauVise] = useState(1);
   const [nom, setNom] = useState("");
   const [po, setPo] = useState("0");
 
@@ -20,6 +21,8 @@ export function Personnages({ outils }: { outils: Outils }) {
       setChoisi((c) => (c !== null && l.some((p) => p.id === c) ? c : (l[0]?.id ?? null)));
     });
   }, [outils.version]);
+
+  useEffect(() => setNiveauVise(1), [choisi]);
 
   useEffect(() => {
     if (choisi === null) {
@@ -116,10 +119,13 @@ export function Personnages({ outils }: { outils: Outils }) {
             <Creation
               outils={outils}
               pj={pj}
-              onFini={() => setCreation(false)}
+              onFini={(n) => {
+                setNiveauVise(n);
+                setCreation(false);
+              }}
             />
           )}
-          {pj && fiche && <FicheComplete outils={outils} pj={pj} fiche={fiche} />}
+          {pj && fiche && <FicheComplete outils={outils} pj={pj} fiche={fiche} niveauVise={niveauVise} />}
         </div>
       </div>
     </div>

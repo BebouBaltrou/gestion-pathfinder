@@ -70,6 +70,9 @@ export async function autotest(): Promise<void> {
     verifier((await api.evenementFiche(pj.id, { EtatAjoute: "bidon" })).ok === false, "état inconnu refusé");
     verifier((await api.evenementFiche(pj.id, { XpGagnes: { nombre: 2000, motif: "essai" } })).ok, "XP gagnés");
     verifier(((await api.listePersonnages())[0].fiche?.niveauxEnAttente ?? 0) === 1, "niveau en attente");
+    verifier((await api.accorderNiveauDeDepart(pj.id, 5)).ok && ((await api.listePersonnages())[0].fiche?.niveauxEnAttente ?? 0) === 4, "niveau de départ 5 : quatre niveaux à monter");
+    verifier((await api.annuler()).ok && ((await api.listePersonnages())[0].fiche?.niveauxEnAttente ?? 0) === 1, "niveau de départ annulé");
+    verifier((await api.accorderNiveauDeDepart(pj.id, 25)).ok === false, "niveau de départ hors limites refusé");
     const ap = await api.apercuMontee(pj.id, "ensorceleur");
     verifier(ap !== null && ap.niveauDePersonnage === 2, "aperçu de montée de niveau");
     verifier((await api.reglesCampagne()).length > 5, "registre des règles");

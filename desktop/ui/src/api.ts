@@ -132,6 +132,7 @@ export const api = {
   apercuFiche: (fiche: FicheDonnees) => appeler<FicheVue>("apercu_fiche", { fiche }),
   creerPersonnage: (nom: string, po: number) => appeler<Retour>("creer_personnage", { nom, po }),
   creerFiche: (pj: number, fiche: FicheDonnees) => appeler<Retour>("creer_fiche", { pj, fiche }),
+  accorderNiveauDeDepart: (pj: number, niveau: number) => appeler<Retour>("accorder_niveau_de_depart", { pj, niveau }),
   evenementFiche: (pj: number, evenement: EvenementFiche) =>
     appeler<Retour>("evenement_fiche", { pj, evenement }),
   apercuMontee: (pj: number, classe: string) => appeler<ApercuMontee | null>("apercu_montee", { pj, classe }),

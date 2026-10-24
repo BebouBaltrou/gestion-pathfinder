@@ -9,19 +9,21 @@ import {
   NOMS_CARAC,
   RegleInfo,
 } from "../../fiche-types";
+import { SaisieNombre } from "../../composants/jeu";
 import { Choix, Pas, signe, useCatalogue } from "./commun";
 import { SelectionDons, SelectionRangs, SelectionSorts } from "./selections";
 
 const ETAPES = ["Identité", "Caractéristiques", "Compétences", "Dons", "Sorts", "Récapitulatif"];
 
 /** Assistant de création : un niveau 1 contrôlé pas à pas par le cœur de règles. */
-export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePersonnage; onFini: () => void }) {
+export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePersonnage; onFini: (niveauVise: number) => void }) {
   const cat = useCatalogue();
   const [etape, setEtape] = useState(0);
   const [regle, setRegle] = useState<RegleInfo | null>(null);
   const [apercu, setApercu] = useState<FicheVue | null>(null);
   const [erreur, setErreur] = useState<string | null>(null);
   const [fiche, setFiche] = useState<FicheDonnees | null>(null);
+  const [niveauVise, setNiveauVise] = useState<number | null>(1);
 
   useEffect(() => {
     api.reglesCampagne().then((l) => setRegle(l.find((r) => r.id === "pj.generation") ?? null));
@@ -94,7 +96,14 @@ export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePers
 
   const creer = async () => {
     const r = await outils.agir(api.creerFiche(pj.id, fiche));
-    if (r?.ok) onFini();
+    if (!r?.ok) return;
+    const niveau = niveauVise ?? 1;
+    if (niveau > 1) {
+      // les XP du niveau choisi sont accordés ; les niveaux se montent ensuite un à un
+      const g = await outils.agir(api.accorderNiveauDeDepart(pj.id, niveau));
+      if (!g?.ok) return;
+    }
+    onFini(niveau);
   };
 
   const peutAvancer = [
@@ -111,7 +120,7 @@ export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePers
       <div className="section-tete">
         <h2>Fiche de {pj.nom}</h2>
         <span className="espace" />
-        <button className="bouton" onClick={onFini}>Annuler</button>
+        <button className="bouton" onClick={() => onFini(1)}>Annuler</button>
       </div>
       <ol className="etapes">
         {ETAPES.map((n, i) => (
@@ -313,7 +322,15 @@ export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePers
               ) : (
                 <p>La fiche est valide.</p>
               )}
-              <button className="bouton principal" disabled={apercu.problemes.length > 0} onClick={creer}>Créer la fiche</button>
+              <SaisieNombre etiquette="Niveau du personnage à la création" min={1} max={20} valeur={niveauVise} onChange={setNiveauVise} />
+              {(niveauVise ?? 1) > 1 && (
+                <p className="doux">
+                  La fiche est créée au niveau 1, puis les XP du niveau {niveauVise} (selon la vitesse de progression de la campagne, ou le
+                  jalon) lui sont accordés et l'assistant vous fait monter les niveaux un par un, avec tous les choix (dé de vie, rangs, dons,
+                  sorts).
+                </p>
+              )}
+              <button className="bouton principal" disabled={apercu.problemes.length > 0 || niveauVise === null} onClick={creer}>Créer la fiche</button>
             </>
           )}
         </div>

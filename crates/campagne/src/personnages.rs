@@ -8,7 +8,7 @@ use crate::etat::{Erreur, Etat};
 use crate::modele::IdPersonnage;
 use fiches::generation::Methode;
 use fiches::journal::{EtatPersonnage, EvenementFiche, Journal};
-use fiches::progression::{MethodePv, ReglesFiche, Vitesse};
+use fiches::progression::{xp_requis, MethodePv, ReglesFiche, Vitesse};
 use fiches::Referentiel as ReferentielFiches;
 use regles::options::OptionsRegles;
 
@@ -389,6 +389,34 @@ impl Etat {
         .ok()
     }
 
+    /// Événement qui donne à un personnage de niveau 1 de quoi atteindre `niveau` dès sa création
+    /// (personnage créé à un niveau supérieur à 1) : les XP du niveau choisi selon la vitesse de la
+    /// campagne, ou le jalon en mode jalons. `Ok(None)` : rien à accorder. Les niveaux se montent
+    /// ensuite un à un par l'assistant de montée de niveau, comme en jeu.
+    pub fn evenement_niveau_de_depart(
+        &self,
+        pj: IdPersonnage,
+        niveau: u32,
+    ) -> Result<Option<EvenementFiche>, String> {
+        if !(1..=20).contains(&niveau) {
+            return Err("Le niveau doit être compris entre 1 et 20.".into());
+        }
+        let e = self
+            .fiche_de(pj)
+            .ok_or("Ce personnage n'a pas encore de fiche.")?;
+        let vitesse = self.regles_personnages.fiche().vitesse;
+        let motif = format!("Création au niveau {niveau}");
+        if vitesse == Vitesse::Jalons {
+            return Ok((niveau > e.jalon).then_some(EvenementFiche::JalonAccorde { niveau }));
+        }
+        let requis = xp_requis(ReferentielFiches::partage(), vitesse, niveau)
+            .ok_or("Niveau inconnu du tableau de progression.")?;
+        Ok((requis > e.xp).then(|| EvenementFiche::XpGagnes {
+            nombre: requis - e.xp,
+            motif,
+        }))
+    }
+
     /// Prestige du PJ : la valeur saisie si elle existe, sinon niveau + modificateur de Charisme
     /// de sa fiche (GC p. 93), sinon rien.
     pub fn prestige_effectif(&self, pj: IdPersonnage) -> Option<i32> {
@@ -432,6 +460,27 @@ mod tests {
 
     fn fiche_ev(pj: IdPersonnage, e: EvenementFiche) -> Evenement {
         Evenement::Fiche { pj, evenement: e }
+    }
+
+    #[test]
+    fn un_personnage_peut_etre_cree_a_un_niveau_superieur_a_un() {
+        let (mut c, r, pj) = campagne_avec_pj();
+        let fiche = fiches::exemple::elfe_ensorceleuse();
+        c.executer(fiche_ev(pj, EvenementFiche::Creation(Box::new(fiche))), &r)
+            .unwrap();
+        // niveau 1 : rien à accorder
+        assert_eq!(c.etat(&r).evenement_niveau_de_depart(pj, 1), Ok(None));
+        assert!(c.etat(&r).evenement_niveau_de_depart(pj, 21).is_err());
+        let ev = c
+            .etat(&r)
+            .evenement_niveau_de_depart(pj, 5)
+            .unwrap()
+            .unwrap();
+        c.executer(fiche_ev(pj, ev), &r).unwrap();
+        assert_eq!(c.etat(&r).fiche_de(pj).unwrap().niveau_atteignable, 5);
+        // une seule annulation défait l'octroi
+        c.annuler().unwrap();
+        assert_eq!(c.etat(&r).fiche_de(pj).unwrap().niveau_atteignable, 1);
     }
 
     #[test]

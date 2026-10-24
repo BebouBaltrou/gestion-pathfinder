@@ -1,11 +1,12 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import type { Outils } from "../../App";
 import { api, formaterPo } from "../../api";
 import type { Charge, EffetDonnees, EvenementFiche, FicheVue, LignePersonnage } from "../../fiche-types";
 import { Chiffre, Choix, Detail, signe, useCatalogue } from "./commun";
 import { Montee } from "./Montee";
 
-type Props = { outils: Outils; pj: LignePersonnage; fiche: FicheVue };
+/** `niveauVise` : niveau choisi à la création ; l'assistant de montée s'ouvre tant qu'il n'est pas atteint. */
+type Props = { outils: Outils; pj: LignePersonnage; fiche: FicheVue; niveauVise?: number };
 type Onglet = "combat" | "competences" | "dons" | "sorts" | "equipement" | "etats" | "histoire";
 
 const ONGLETS: [Onglet, string][] = [
@@ -23,6 +24,10 @@ export function FicheComplete(p: Props) {
   const [monter, setMonter] = useState(false);
   const f = p.fiche;
   const id = f.identite;
+  useEffect(() => {
+    if ((p.niveauVise ?? 1) > id.niveau && id.niveauxEnAttente > 0) setMonter(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id.niveau, p.niveauVise]);
   const agir = (e: EvenementFiche) => p.outils.agir(api.evenementFiche(p.pj.id, e));
   const progression =
     id.xpSuivant !== null ? Math.min(1, id.xp / id.xpSuivant) : id.niveau >= 20 ? 1 : 0;

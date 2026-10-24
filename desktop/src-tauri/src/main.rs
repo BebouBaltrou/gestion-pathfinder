@@ -175,6 +175,7 @@ fn main() {
             personnages::apercu_fiche,
             personnages::creer_personnage,
             personnages::creer_fiche,
+            personnages::accorder_niveau_de_depart,
             personnages::evenement_fiche,
             personnages::apercu_montee,
             personnages::essai_montee,
