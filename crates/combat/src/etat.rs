@@ -87,6 +87,11 @@ pub enum ActionCombat {
     /// Santé, effets, boire, manger… (les événements qui touchent au temps sont refusés).
     Aventure(EvenementAventure),
     Note(String),
+    /// Dégâts infligés par un personnage, saisis à la main (statistiques : aucun ennemi n'est modélisé).
+    DegatsInfliges {
+        pj: IdPj,
+        nombre: i32,
+    },
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -158,6 +163,8 @@ pub struct Stats {
     pub soins_recus: i32,
     pub sorts_lances: u32,
     pub objets_utilises: u32,
+    /// Dégâts infligés à l'adversaire, saisis à la main (aucun ennemi n'est modélisé).
+    pub degats_infliges: i32,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -699,6 +706,15 @@ impl EtatCombat {
                 self.fusionner(s);
             }
             ActionCombat::Note(t) => self.noter(t.clone()),
+            ActionCombat::DegatsInfliges { pj, nombre } => {
+                self.verifier_engage(*pj)?;
+                if *nombre <= 0 {
+                    return invalide("dégâts infligés : un nombre positif");
+                }
+                self.stats.entry(*pj).or_default().degats_infliges += nombre;
+                let n = Self::nom(ctx, *pj);
+                self.noter(format!("{n} inflige {nombre} dégât(s) (noté à la main)."));
+            }
         }
         Ok(())
     }

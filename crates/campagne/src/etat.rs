@@ -207,6 +207,8 @@ pub struct Etat {
     pub regles_personnages: crate::personnages::ReglesPersonnages,
     /// Mode aventure : horloge, santé, effets, ressources (`None` tant que le joueur ne l'a pas démarré).
     pub aventure: Option<aventure::EtatAventure>,
+    /// Combats validés, du plus ancien au plus récent (historique, statistiques, export).
+    pub combats: Vec<crate::aventure::CombatPasse>,
 }
 
 /// Effet notable d'un événement, pour l'historique (ex. arrivée d'un transfert).

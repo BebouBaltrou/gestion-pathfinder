@@ -120,8 +120,48 @@ export async function autotest(): Promise<void> {
     verifier((await api.combatAction(act.tourSuivant())).ok, "tour suivant (après annulation)");
     const fin = await api.combatApercuFin();
     verifier(fin.roundsJoues === 1 && fin.personnages.length === 1, "aperçu de fin de combat");
-    verifier((await api.combatTerminer({ genre: "tout" }, [])).ok, "combat validé");
+    verifier((await api.combatAction(act.degatsInfliges(pj.id, 11))).ok, "dégâts infligés notés à la main");
+    const calcXp = await api.combatXp(["1", "1/2"], 2);
+    verifier(calcXp.total === 600 && calcXp.parPersonnage === 300, `XP d'après les FP (${calcXp.total} / ${calcXp.parPersonnage})`);
+    verifier((await api.combatXp(["99"], 1).then(() => false, () => true)), "FP inconnu refusé");
+    const xpAvant = (await api.listePersonnages())[0].fiche?.xp ?? 0;
+    const poAvant = (await api.listePersonnages())[0].compte.pa;
+    const potion = {
+      nom: "Potion de soins légers",
+      genre: "potion" as const,
+      sort: "Cure Light Wounds",
+      niveau_du_sort: 1,
+      niveau_de_lanceur: 1,
+      arcanique: false,
+      quantite: 2,
+      charges: null,
+      par_jour: null,
+      notes: "",
+    };
+    verifier(
+      (
+        await api.combatTerminer({ genre: "tout" }, [], {
+          xp: [[pj.id, calcXp.parPersonnage]],
+          motif: "essai",
+          or: [[pj.id, 5]],
+          objets: [[pj.id, potion]],
+        })
+      ).ok,
+      "combat validé avec XP, or et objet",
+    );
     verifier((await api.etatApp()).combatEnCours === false, "campagne déverrouillée");
+    const fiche1 = (await api.listePersonnages())[0];
+    verifier((fiche1.fiche?.xp ?? 0) === xpAvant + 300, "XP reportés sur la fiche");
+    verifier(fiche1.compte.pa === poAvant + 50, "or ajouté au compte du personnage");
+    verifier((await api.aventureVue()).personnages[0].inventaire.some((o) => o.nom === "Potion de soins légers" && o.quantite === 2), "objet ajouté à l'inventaire");
+    const histo = await api.combatHistorique();
+    verifier(histo.combats.length === 1 && histo.combats[0].rounds === 1 && histo.statistiques[0].degatsInfliges === 11, "historique et statistiques du combat");
+    const expo = await api.combatExporter(1);
+    verifier(expo.length === 2 && expo[0].endsWith(".md") && expo[1].endsWith(".json"), "export du combat (Markdown et JSON)");
+    // une seule annulation défait le combat et toutes ses récompenses
+    verifier((await api.annuler()).ok, "annuler le combat validé");
+    verifier((await api.listePersonnages())[0].fiche?.xp === xpAvant && (await api.combatHistorique()).combats.length === 0, "tout est défait (XP, historique)");
+    verifier((await api.retablir()).ok, "rétablir le combat validé");
     const a3 = await api.aventureVue();
     verifier(a3.personnages[0].effets.length === 1 && a3.personnages[0].pv === a3.personnages[0].pvMax - 3, "état d'aventure mis à jour par le combat");
     verifier((await api.aventureEvenement(ev.repos([pj.id], 8, false, false))).ok, "repos de 8 heures");

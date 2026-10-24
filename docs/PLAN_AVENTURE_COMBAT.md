@@ -168,3 +168,10 @@ naturelle (pas de torches) ; ordre d'initiative = uniquement tes personnages.
   et « Combat » (initiative et départage, round de surprise, barre d'initiative, actions, sorts, objets, santé,
   concentration, fin de combat avec alertes). Essai automatique dans la vraie fenêtre : 62 vérifications.
   Palettes A et B choisissables dans Paramètres. Backlog : `ROADMAP.md`.
+- **Phase 9 (fin de combat, statistiques, intégration, export) faite** : à la validation d'un combat, récompenses
+  facultatives (XP saisis ou calculés d'après les FP des créatures vaincues, or au compte du personnage, objets
+  trouvés) enregistrées **dans le même événement** `CombatValide` : une seule annulation défait tout. Historique des
+  combats passés (rounds, bilan par personnage), statistiques de campagne (dégâts subis et infligés, soins, sorts,
+  objets), « dégâts infligés » notés à la main (aucun ennemi n'est modélisé), export Markdown et JSON d'un combat.
+  Essai automatique dans la vraie fenêtre : 73 vérifications. 285 tests dans le workspace.
+  Lectures à valider : `docs/POINTS_A_CONFIRMER_COMBAT.md` (section « Expérience »).

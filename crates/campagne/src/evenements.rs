@@ -364,6 +364,18 @@ pub enum Evenement {
         minuits: i64,
         /// Récapitulatif lisible du combat, pour l'historique.
         resume: String,
+        /// Rounds achevés.
+        #[cfg_attr(feature = "serde", serde(default))]
+        rounds: u32,
+        /// Bilan par personnage (statistiques de campagne).
+        #[cfg_attr(feature = "serde", serde(default))]
+        bilan: Vec<BilanCombatPj>,
+        /// Journal du combat (round, texte), pour l'historique et l'export.
+        #[cfg_attr(feature = "serde", serde(default))]
+        journal: Vec<(u32, String)>,
+        /// Actions du combat avec les dés saisis, en JSON : le combat peut être rejoué.
+        #[cfg_attr(feature = "serde", serde(default))]
+        actions: String,
     },
     AventureTerminee,
     Note {
@@ -371,7 +383,33 @@ pub enum Evenement {
     },
 }
 
+/// Ce qu'un personnage a vécu pendant un combat validé.
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub struct BilanCombatPj {
+    pub pj: u32,
+    pub pv_avant: i32,
+    pub pv_apres: i32,
+    pub degats_subis: i32,
+    pub soins_recus: i32,
+    /// Dégâts infligés, saisis à la main.
+    pub degats_infliges: i32,
+    pub sorts_lances: u32,
+    pub objets_utilises: u32,
+}
+
 impl Evenement {
+    /// Cet événement valide-t-il un combat (seul événement permis tant qu'un combat est en cours) ?
+    pub fn valide_un_combat(&self) -> bool {
+        match self {
+            Evenement::CombatValide { .. } => true,
+            Evenement::Groupe { evenements, .. } => {
+                evenements.iter().any(Evenement::valide_un_combat)
+            }
+            _ => false,
+        }
+    }
+
     /// Le mode aventure ou combat intervient-il dans cet événement ? (Détermine le format de fichier.)
     pub fn utilise_aventure(&self) -> bool {
         match self {

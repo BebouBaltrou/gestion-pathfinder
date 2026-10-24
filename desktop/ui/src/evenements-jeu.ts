@@ -88,6 +88,7 @@ export const act = {
   modifierInitiative: (pj: number, total: number): ActionCombat => ({ ModifierInitiative: { pj, total } }),
   preparer: (pj: number, action: string): ActionCombat => ({ Preparer: { pj, action } }),
   note: (texte: string): ActionCombat => ({ Note: texte }),
+  degatsInfliges: (pj: number, nombre: number): ActionCombat => ({ DegatsInfliges: { pj, nombre } }),
   aventure: (e: EvenementAventure): ActionCombat => ({ Aventure: e }),
   agir: (pj: number, typeAction: TypeAction, libelle: string, deplacement = false): ActionCombat => ({
     Agir: { pj, type_action: typeAction, libelle, deplacement },

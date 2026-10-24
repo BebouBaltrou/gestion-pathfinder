@@ -9,6 +9,7 @@ import { Alertes, Dialogue, SaisieDe } from "../composants/jeu";
 import { ev, PasHoraire } from "../evenements-jeu";
 import { CartePj } from "./aventure/CartePj";
 import { Combat } from "./aventure/Combat";
+import { Historique } from "./aventure/Historique";
 import { DialogueEffet, DialogueHeure, DialogueObjet, DialogueRepos, DialogueSante, ChoixDuree } from "./aventure/dialogues";
 import { SaisieNombre } from "../composants/jeu";
 
@@ -132,6 +133,8 @@ export function Aventure({ outils }: { outils: Outils }) {
           />
         ))}
       </div>
+
+      <Historique outils={outils} />
 
       <section className="carte">
         <div className="section-tete">

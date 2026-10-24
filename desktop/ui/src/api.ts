@@ -9,8 +9,11 @@ import type {
   CombatVue,
   Duree,
   EvenementAventure,
+  HistoriqueVue,
+  Recompenses,
   ReculVue,
   Validation,
+  XpVue,
 } from "./aventure-types";
 import type {
   ApercuMontee,
@@ -151,8 +154,12 @@ export const api = {
   combatApercuSort: (pj: number, sort: string, metamagies: string[] = [], niveauHeighten: number | null = null) =>
     appeler<ApercuSort>("combat_apercu_sort", { pj, sort, metamagies, niveauHeighten }),
   combatApercuFin: () => appeler<ApercuFin>("combat_apercu_fin"),
-  combatTerminer: (validation: Validation, contestations: [number, Duree][]) =>
-    appeler<Retour>("combat_terminer", { validation, contestations }),
+  combatTerminer: (validation: Validation, contestations: [number, Duree][], recompenses: Recompenses | null = null) =>
+    appeler<Retour>("combat_terminer", { validation, contestations, recompenses }),
+  combatXp: (fps: string[], personnages: number) => appeler<XpVue>("combat_xp", { fps, personnages }),
+  catalogueFp: () => appeler<string[]>("catalogue_fp"),
+  combatHistorique: () => appeler<HistoriqueVue>("combat_historique"),
+  combatExporter: (numero: number) => appeler<string[]>("combat_exporter", { numero }),
   catalogueActions: () => appeler<ActionDef[]>("catalogue_actions"),
   catalogueEtats: () => appeler<[string, string][]>("catalogue_etats"),
 };
@@ -298,6 +305,24 @@ function simule(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
     case "combat_terminer":
       mockCombat = "non";
       return Promise.resolve(ok("Combat validé"));
+    case "catalogue_fp":
+      return Promise.resolve(["1/8", "1/4", "1/2", "1", "2", "3", "4", "5"]);
+    case "combat_xp":
+      return Promise.resolve({ total: 1200, parPersonnage: Math.floor(1200 / Number(args?.personnages ?? 1)) });
+    case "combat_historique":
+      return Promise.resolve<HistoriqueVue>({
+        totalRounds: 7,
+        combats: [
+          { numero: 1, jour: 22, heureDeFin: "10:30", rounds: 4, resume: "4 round(s), 3 sort(s) lancé(s)", bilan: [] },
+          { numero: 2, jour: 24, heureDeFin: "14:05", rounds: 3, resume: "3 round(s), 2 sort(s) lancé(s)", bilan: [] },
+        ],
+        statistiques: [
+          { id: 1, nom: "Mialee", combats: 2, degatsSubis: 18, soinsRecus: 6, degatsInfliges: 54, sortsLances: 5, objetsUtilises: 1 },
+          { id: 2, nom: "Valéros", combats: 2, degatsSubis: 41, soinsRecus: 0, degatsInfliges: 96, sortsLances: 0, objetsUtilises: 0 },
+        ],
+      });
+    case "combat_exporter":
+      return Promise.resolve(["exports/campagne-combat-1.md", "exports/campagne-combat-1.json"]);
     case "catalogue_etats":
       return Promise.resolve([["shaken", "Secoué"], ["sickened", "Nauséeux"], ["fatigued", "Fatigué"], ["invisible", "Invisible"]]);
     case "catalogue_actions":

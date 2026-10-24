@@ -8,8 +8,10 @@
 use crate::session::{Retour, Session};
 use crate::{session, S};
 use aventure::{EvenementAventure, IdPj};
-use campagne::evenements::Evenement;
+use campagne::evenements::{BilanCombatPj, Evenement};
 use campagne::modele::IdPersonnage;
+use domaine::Montant;
+use fiches::journal::EvenementFiche;
 use combat::{ActionCombat, Combat, Validation};
 use serde::Deserialize;
 use std::collections::BTreeMap;
@@ -280,12 +282,30 @@ pub enum ValidationDto {
     Abandon,
 }
 
+/// Récompenses saisies à la fin du combat (XP, or, objets) : elles entrent dans la campagne avec le
+/// combat, en un seul bloc annulable.
+#[derive(Debug, Default, Deserialize)]
+pub struct Recompenses {
+    /// XP gagnés par personnage (le total est saisi ou calculé d'après les FP, puis partagé).
+    #[serde(default)]
+    pub xp: Vec<(u32, u32)>,
+    #[serde(default)]
+    pub motif: String,
+    /// Pièces d'or ramassées : (personnage qui les garde, montant en po).
+    #[serde(default)]
+    pub or: Vec<(u32, i64)>,
+    /// Objets ramassés : (personnage qui les porte, objet).
+    #[serde(default)]
+    pub objets: Vec<(u32, aventure::Consommable)>,
+}
+
 /// Fin du combat : on le valide (pour tous, ou certains personnages seulement) ou on l'abandonne.
 #[tauri::command]
 pub fn combat_terminer(
     s: S,
     validation: ValidationDto,
     contestations: Vec<(IdEffet, Duree)>,
+    recompenses: Option<Recompenses>,
 ) -> Retour {
     let mut x = session(&s);
     let Some(c) = x.combat.clone() else {
@@ -307,23 +327,165 @@ pub fn combat_terminer(
         Ok(r) => r,
         Err(e) => return Retour::erreur(e.to_string()),
     };
-    let rounds = c.etat().rounds_joues;
-    let sorts: u32 = c.etat().stats.values().map(|st| st.sorts_lances).sum();
+    let apercu = match c.apercu_fin(&ctx) {
+        Ok(a) => a,
+        Err(e) => return Retour::erreur(e.to_string()),
+    };
+    let e = c.etat();
+    let rounds = e.rounds_joues;
+    let sorts: u32 = e.stats.values().map(|st| st.sorts_lances).sum();
     let resume = format!("{rounds} round(s), {sorts} sort(s) lancé(s)");
-    let retour = x.executer(
-        Evenement::CombatValide {
-            aventure: Box::new(res.aventure),
-            fiche: res.sortie.fiche,
-            minuits: res.sortie.minuits,
-            resume: resume.clone(),
-        },
-        &format!("Combat validé ({resume})"),
-    );
+    let bilan: Vec<BilanCombatPj> = apercu
+        .par_pj
+        .iter()
+        .map(|r| BilanCombatPj {
+            pj: r.pj,
+            pv_avant: r.pv_avant,
+            pv_apres: r.pv_apres,
+            degats_subis: r.stats.degats_subis,
+            soins_recus: r.stats.soins_recus,
+            degats_infliges: r.stats.degats_infliges,
+            sorts_lances: r.stats.sorts_lances,
+            objets_utilises: r.stats.objets_utilises,
+        })
+        .collect();
+    let journal: Vec<(u32, String)> = e
+        .journal
+        .iter()
+        .map(|j| (j.round, j.texte.clone()))
+        .collect();
+    let actions = serde_json::to_string(&c.actions[..c.curseur]).unwrap_or_else(|_| "[]".into());
+    let validation_combat = Evenement::CombatValide {
+        aventure: Box::new(res.aventure),
+        fiche: res.sortie.fiche,
+        minuits: res.sortie.minuits,
+        resume: resume.clone(),
+        rounds,
+        bilan,
+        journal,
+        actions,
+    };
+    // Récompenses : XP sur les fiches, or sur les comptes, objets dans les inventaires.
+    let r = recompenses.unwrap_or_default();
+    let motif = if r.motif.trim().is_empty() {
+        "combat".to_string()
+    } else {
+        r.motif.trim().to_string()
+    };
+    let mut evenements = vec![validation_combat];
+    for (pj, xp) in &r.xp {
+        if *xp > 0 {
+            evenements.push(Evenement::Fiche {
+                pj: IdPersonnage(*pj),
+                evenement: EvenementFiche::XpGagnes {
+                    nombre: *xp,
+                    motif: motif.clone(),
+                },
+            });
+        }
+    }
+    for (pj, po) in &r.or {
+        if *po != 0 {
+            evenements.push(Evenement::AjustementCompte {
+                pj: IdPersonnage(*pj),
+                delta: Montant::po(*po),
+                motif: format!("Butin ({motif})"),
+            });
+        }
+    }
+    for (pj, objet) in &r.objets {
+        evenements.push(Evenement::Aventure(EvenementAventure::ObjetAjoute {
+            pj: *pj,
+            objet: objet.clone(),
+        }));
+    }
+    let ev = if evenements.len() == 1 {
+        evenements.remove(0)
+    } else {
+        Evenement::Groupe {
+            libelle: format!("Fin du combat et récompenses ({resume})"),
+            evenements,
+        }
+    };
+    let retour = x.executer(ev, &format!("Combat validé ({resume})"));
     if retour.ok {
         x.combat = None;
         x.supprimer_fichier_combat();
     }
     retour
+}
+
+/// XP d'un combat d'après les FP des créatures vaincues (Core p. 397) et part de chaque personnage (p. 399).
+#[derive(Debug, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct XpVue {
+    pub total: u32,
+    pub par_personnage: u32,
+}
+
+#[tauri::command]
+pub fn combat_xp(fps: Vec<String>, personnages: u32) -> Result<XpVue, String> {
+    let total = combat::xp::xp_total(&fps)?;
+    Ok(XpVue {
+        total,
+        par_personnage: combat::xp::par_personnage(total, personnages),
+    })
+}
+
+#[tauri::command]
+pub fn catalogue_fp() -> Vec<String> {
+    combat::xp::facteurs_de_puissance()
+}
+
+/// Combats validés et statistiques de la campagne.
+#[tauri::command]
+pub fn combat_historique(s: S) -> va::HistoriqueVue {
+    session(&s)
+        .avec_etat(va::historique)
+        .expect("une campagne est ouverte")
+}
+
+/// Écrit l'export d'un combat validé : un fichier Markdown lisible et un fichier JSON des actions
+/// (avec les dés saisis) dans le dossier `exports` à côté des campagnes. Renvoie les chemins.
+#[tauri::command]
+pub fn combat_exporter(s: S, numero: u32) -> Result<Vec<String>, String> {
+    let mut x = session(&s);
+    let nom = x
+        .campagne
+        .as_ref()
+        .map(|c| c.nom.clone())
+        .ok_or("Aucune campagne ouverte")?;
+    let (md, json) = x
+        .avec_etat(|e| {
+            (
+                va::exporter_markdown(e, numero, &nom),
+                va::exporter_actions(e, numero),
+            )
+        })
+        .ok_or("Aucune campagne ouverte")?;
+    let (Some(md), Some(json)) = (md, json) else {
+        return Err(format!("Le combat n° {numero} n'existe pas"));
+    };
+    let dossier = x.dossier.join("exports");
+    std::fs::create_dir_all(&dossier).map_err(|e| e.to_string())?;
+    let base: String = nom
+        .chars()
+        .map(|c| {
+            if c.is_alphanumeric() || c == '-' || c == '_' {
+                c
+            } else {
+                '_'
+            }
+        })
+        .collect();
+    let chemin_md = dossier.join(format!("{base}-combat-{numero}.md"));
+    let chemin_json = dossier.join(format!("{base}-combat-{numero}.json"));
+    std::fs::write(&chemin_md, md).map_err(|e| e.to_string())?;
+    std::fs::write(&chemin_json, json).map_err(|e| e.to_string())?;
+    Ok(vec![
+        chemin_md.to_string_lossy().to_string(),
+        chemin_json.to_string_lossy().to_string(),
+    ])
 }
 
 #[tauri::command]

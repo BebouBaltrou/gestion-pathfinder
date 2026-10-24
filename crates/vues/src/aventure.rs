@@ -1074,3 +1074,127 @@ pub fn apercu_recul(etat: &Etat, instant: i64) -> Option<ReculVue> {
         avant_minuit: nouvel.jour() < a.horloge.maintenant.jour(),
     })
 }
+
+// ------------------------------------------------- historique, statistiques, export
+
+#[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize))]
+#[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
+pub struct CombatPasseVue {
+    pub numero: u32,
+    pub jour: u32,
+    pub heure_de_fin: String,
+    pub rounds: u32,
+    pub resume: String,
+    pub bilan: Vec<BilanPjVue>,
+}
+
+#[derive(Debug, Clone, PartialEq, Default)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize))]
+#[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
+pub struct StatsPjVue {
+    pub id: u32,
+    pub nom: String,
+    pub combats: u32,
+    pub degats_subis: i32,
+    pub soins_recus: i32,
+    pub degats_infliges: i32,
+    pub sorts_lances: u32,
+    pub objets_utilises: u32,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize))]
+#[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
+pub struct HistoriqueVue {
+    pub combats: Vec<CombatPasseVue>,
+    pub total_rounds: u32,
+    /// Statistiques par personnage et par campagne.
+    pub statistiques: Vec<StatsPjVue>,
+}
+
+fn nom_du_pj(etat: &Etat, id: u32) -> String {
+    etat.personnages
+        .get(&IdPersonnage(id))
+        .map_or_else(|| format!("PJ {id}"), |p| p.nom.clone())
+}
+
+pub fn historique(etat: &Etat) -> HistoriqueVue {
+    let mut stats: std::collections::BTreeMap<u32, StatsPjVue> = Default::default();
+    let mut combats = Vec::new();
+    for c in &etat.combats {
+        let mut bilan = Vec::new();
+        for b in &c.bilan {
+            let nom = nom_du_pj(etat, b.pj);
+            let s = stats.entry(b.pj).or_insert_with(|| StatsPjVue {
+                id: b.pj,
+                nom: nom.clone(),
+                ..Default::default()
+            });
+            s.combats += 1;
+            s.degats_subis += b.degats_subis;
+            s.soins_recus += b.soins_recus;
+            s.degats_infliges += b.degats_infliges;
+            s.sorts_lances += b.sorts_lances;
+            s.objets_utilises += b.objets_utilises;
+            bilan.push(BilanPjVue {
+                id: b.pj,
+                nom,
+                pv_avant: b.pv_avant,
+                pv_apres: b.pv_apres,
+                degats_subis: b.degats_subis,
+                soins_recus: b.soins_recus,
+                sorts_lances: b.sorts_lances,
+            });
+        }
+        combats.push(CombatPasseVue {
+            numero: c.numero,
+            jour: c.jour,
+            heure_de_fin: c.heure_de_fin.clone(),
+            rounds: c.rounds,
+            resume: c.resume.clone(),
+            bilan,
+        });
+    }
+    HistoriqueVue {
+        total_rounds: etat.combats.iter().map(|c| c.rounds).sum(),
+        combats,
+        statistiques: stats.into_values().collect(),
+    }
+}
+
+/// Export lisible d'un combat validé (Markdown) : récapitulatif, bilan par personnage et journal complet.
+pub fn exporter_markdown(etat: &Etat, numero: u32, campagne: &str) -> Option<String> {
+    let c = etat.combats.iter().find(|c| c.numero == numero)?;
+    let mut s = format!(
+        "# Combat n° {} — {campagne}\n\nFin du combat : jour {} à {}. {} round(s). {}\n\n## Bilan par personnage\n\n| Personnage | PV avant | PV après | Dégâts subis | Soins reçus | Dégâts infligés (saisis) | Sorts lancés | Objets utilisés |\n|---|---|---|---|---|---|---|---|\n",
+        c.numero, c.jour, c.heure_de_fin, c.rounds, c.resume
+    );
+    for b in &c.bilan {
+        s.push_str(&format!(
+            "| {} | {} | {} | {} | {} | {} | {} | {} |\n",
+            nom_du_pj(etat, b.pj),
+            b.pv_avant,
+            b.pv_apres,
+            b.degats_subis,
+            b.soins_recus,
+            b.degats_infliges,
+            b.sorts_lances,
+            b.objets_utilises
+        ));
+    }
+    s.push_str("\n## Journal du combat\n\n");
+    for (round, texte) in &c.journal {
+        s.push_str(&format!("- Round {round} : {texte}\n"));
+    }
+    s.push_str("\n## Pour rejouer ce combat\n\nLes actions et les dés saisis sont enregistrés dans le fichier `.json` de même nom.\n");
+    Some(s)
+}
+
+/// Actions du combat avec les dés saisis (JSON), de quoi le rejouer.
+pub fn exporter_actions(etat: &Etat, numero: u32) -> Option<String> {
+    etat.combats
+        .iter()
+        .find(|c| c.numero == numero)
+        .map(|c| c.actions.clone())
+}

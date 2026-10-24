@@ -335,11 +335,38 @@ fn un_combat_valide_entre_dans_le_journal() {
             fiche: res.sortie.fiche,
             minuits: res.sortie.minuits,
             resume: format!("{rounds} round"),
+            rounds,
+            bilan: vec![crate::evenements::BilanCombatPj {
+                pj: pj.0,
+                degats_subis: 3,
+                sorts_lances: 1,
+                ..Default::default()
+            }],
+            journal: combat
+                .etat()
+                .journal
+                .iter()
+                .map(|j| (j.round, j.texte.clone()))
+                .collect(),
+            actions: "[]".into(),
         },
         &r,
     )
     .unwrap();
     assert_eq!(c.journal.len(), 5);
+    // l'historique des combats garde le bilan, le journal et les actions
+    let passes = c.etat(&r).combats.clone();
+    assert_eq!(passes.len(), 1);
+    assert_eq!(
+        (
+            passes[0].numero,
+            passes[0].rounds,
+            passes[0].bilan[0].degats_subis
+        ),
+        (1, 1, 3)
+    );
+    assert!(passes[0].journal.iter().any(|(_, t)| t.contains("lance")));
+    assert_eq!(passes[0].actions, "[]");
     let e = c.etat(&r);
     let a = e.aventure.as_ref().unwrap();
     assert!(!a.horloge.en_combat());

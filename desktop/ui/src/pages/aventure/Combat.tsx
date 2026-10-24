@@ -23,6 +23,7 @@ import { Alertes, Dialogue, Gemmes, SaisieDe, SaisieNombre } from "../../composa
 import { act, ev } from "../../evenements-jeu";
 import { Demandes } from "../Aventure";
 import { CartePj } from "./CartePj";
+import { BlocRecompenses, EtatRecompenses, recompensesVides, versRecompenses } from "./Recompenses";
 import { ChoixDuree, DialogueEffet, DialogueObjet, DialogueSante, dureeDe, Envoyer } from "./dialogues";
 
 type Ouvert =
@@ -35,6 +36,7 @@ type Ouvert =
   | { g: "initiative"; pj: number }
   | { g: "concentration"; pj: number }
   | { g: "preparer"; pj: number }
+  | { g: "infliges"; pj: number }
   | { g: "fin" }
   | { g: "maintenir"; id: number; nom: string; pj: string }
   | null;
@@ -119,6 +121,7 @@ export function Combat({ outils, vue }: { outils: Outils; vue: CombatVue }) {
               onPreparer={() => setOuvert({ g: "preparer", pj: actif.id })}
               onConcentration={() => setOuvert({ g: "concentration", pj: actif.id })}
               onRetarder={() => setOuvert({ g: "initiative", pj: actif.id })}
+              onInfliges={() => setOuvert({ g: "infliges", pj: actif.id })}
             />
           )}
         </>
@@ -170,7 +173,8 @@ export function Combat({ outils, vue }: { outils: Outils; vue: CombatVue }) {
         {ouvert?.g === "objet" && <DialogueUtiliserObjet pj={pjs.find((p) => p.id === ouvert.pj)!} pjs={pjs} agir={agir} onFermer={() => setOuvert(null)} />}
         {ouvert?.g === "initiative" && <DialogueInitiative vue={vue} pj={ouvert.pj} nom={nom(ouvert.pj)} agir={agir} onFermer={() => setOuvert(null)} />}
         {ouvert?.g === "concentration" && <DialogueConcentration pj={pjs.find((p) => p.id === ouvert.pj)!} agir={agir} onFermer={() => setOuvert(null)} />}
-        {ouvert?.g === "preparer" && <DialoguePreparer pj={pjs.find((p) => p.id === ouvert.pj)!} agir={agir} onFermer={() => setOuvert(null)} />}
+        {ouvert?.g === "infliges" && <DialogueInfliges pj={pjs.find((p) => p.id === ouvert.pj)!} agir={agir} onFermer={() => setOuvert(null)} />}
+        {ouvert?.g === "preparer" &&<DialoguePreparer pj={pjs.find((p) => p.id === ouvert.pj)!} agir={agir} onFermer={() => setOuvert(null)} />}
         {ouvert?.g === "fin" && <DialogueFin vue={vue} outils={outils} onFermer={() => setOuvert(null)} />}
         {ouvert?.g === "maintenir" && <DialogueMaintenirCombat id={ouvert.id} nom={ouvert.nom} pj={ouvert.pj} envoyer={envoyer} onFermer={() => setOuvert(null)} />}
       </AnimatePresence>
@@ -325,6 +329,7 @@ function PanneauActif({
   onPreparer,
   onConcentration,
   onRetarder,
+  onInfliges,
 }: {
   pj: PjCombat;
   onAgir: () => void;
@@ -333,6 +338,7 @@ function PanneauActif({
   onPreparer: () => void;
   onConcentration: () => void;
   onRetarder: () => void;
+  onInfliges: () => void;
 }) {
   const incapable = ["mourant", "stable", "mort", "inconscient"].includes(pj.santeCode);
   return (
@@ -350,6 +356,7 @@ function PanneauActif({
           <button className="bouton" disabled={pj.inventaire.length === 0} onClick={onObjet}>Utiliser un objet…</button>
           <button className="bouton" onClick={onPreparer}>Préparer une action</button>
           <button className="bouton" onClick={onRetarder}>Retarder…</button>
+          <button className="bouton" onClick={onInfliges} title="Statistiques : aucun ennemi n'est modélisé, vous notez les dégâts à la main">Noter des dégâts infligés…</button>
           {pj.caster && <button className="bouton" onClick={onConcentration}>Test de concentration…</button>}
         </div>
       )}
@@ -905,6 +912,33 @@ function DialogueInitiative({
   );
 }
 
+function DialogueInfliges({ pj, agir, onFermer }: { pj: PjCombat; agir: (a: ActionCombat) => Promise<Retour | null>; onFermer: () => void }) {
+  const [n, setN] = useState<number | null>(null);
+  return (
+    <Dialogue
+      titre={`Dégâts infligés — ${pj.nom}`}
+      onFermer={onFermer}
+      actions={
+        <>
+          <button className="bouton" onClick={onFermer}>Annuler</button>
+          <button
+            className="bouton principal"
+            disabled={!n}
+            onClick={async () => {
+              const r = await agir(act.degatsInfliges(pj.id, n!));
+              if (r?.ok) onFermer();
+            }}
+          >
+            Noter
+          </button>
+        </>
+      }
+    >
+      <SaisieNombre etiquette="Dégâts infligés à l'adversaire" min={1} max={9999} valeur={n} onChange={setN} rappel="Pour les statistiques seulement : rien n'est appliqué à un ennemi." autoFocus />
+    </Dialogue>
+  );
+}
+
 function DialoguePreparer({ pj, agir, onFermer }: { pj: PjCombat; agir: (a: ActionCombat) => Promise<Retour | null>; onFermer: () => void }) {
   const [texte, setTexte] = useState("");
   return (
@@ -1052,6 +1086,8 @@ function DialogueFin({ vue, outils, onFermer }: { vue: CombatVue; outils: Outils
     api.combatApercuFin().then(setApercu).catch(() => setApercu(null));
   }, [vue.journal.length]);
 
+  const [recompenses, setRecompenses] = useState<EtatRecompenses>(recompensesVides());
+  const [partXp, setPartXp] = useState(0);
   const contestations: [number, Duree][] = Object.entries(maintenus)
     .map(([id, m]) => [Number(id), dureeDe(m.genre, m.n)] as [number, Duree | null])
     .filter((x): x is [number, Duree] => x[1] !== null);
@@ -1070,7 +1106,14 @@ function DialogueFin({ vue, outils, onFermer }: { vue: CombatVue; outils: Outils
             disabled={mode === "partiel" && choisis.length === 0}
             onClick={async () => {
               if (mode === "abandon" && !window.confirm("Abandonner le combat ? Rien ne sera reporté dans la campagne et l'horloge reste au début du combat.")) return;
-              const r = await outils.agir(api.combatTerminer(validation, mode === "abandon" ? [] : contestations));
+              const destinataires = mode === "partiel" ? choisis : vue.personnages.map((p) => p.id);
+              const r = await outils.agir(
+                api.combatTerminer(
+                  validation,
+                  mode === "abandon" ? [] : contestations,
+                  mode === "abandon" ? null : versRecompenses(recompenses, destinataires, partXp),
+                ),
+              );
               if (r?.ok) onFermer();
             }}
           >
@@ -1156,6 +1199,15 @@ function DialogueFin({ vue, outils, onFermer }: { vue: CombatVue; outils: Outils
             ))}
           </div>
         </>
+      )}
+      {mode !== "abandon" && (
+        <BlocRecompenses
+          pjs={vue.personnages}
+          destinataires={mode === "partiel" ? choisis : vue.personnages.map((p) => p.id)}
+          etat={recompenses}
+          onChange={setRecompenses}
+          onPartXp={setPartXp}
+        />
       )}
       <div className="bloc">
         <h3>Que faire du combat ?</h3>

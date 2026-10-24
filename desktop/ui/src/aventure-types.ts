@@ -238,3 +238,35 @@ export type ReculVue = {
   crees: [number, string, string][];
   avantMinuit: boolean;
 };
+
+export type CombatPasseVue = {
+  numero: number;
+  jour: number;
+  heureDeFin: string;
+  rounds: number;
+  resume: string;
+  bilan: BilanPj[];
+};
+
+export type StatsPjVue = {
+  id: number;
+  nom: string;
+  combats: number;
+  degatsSubis: number;
+  soinsRecus: number;
+  degatsInfliges: number;
+  sortsLances: number;
+  objetsUtilises: number;
+};
+
+export type HistoriqueVue = { combats: CombatPasseVue[]; totalRounds: number; statistiques: StatsPjVue[] };
+
+export type XpVue = { total: number; parPersonnage: number };
+
+/** XP, or et objets ramassés, reportés dans la campagne avec le combat. */
+export type Recompenses = {
+  xp: [number, number][];
+  motif: string;
+  or: [number, number][];
+  objets: [number, unknown][];
+};

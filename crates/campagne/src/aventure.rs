@@ -18,6 +18,21 @@ use fiches::{Carac, Referentiel as ReferentielFiches};
 use std::collections::BTreeMap;
 use temps::Instant;
 
+/// Un combat validé, gardé dans l'état de la campagne (historique, statistiques, export).
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct CombatPasse {
+    pub numero: u32,
+    /// Jour de campagne de la fin du combat.
+    pub jour: u32,
+    pub heure_de_fin: String,
+    pub rounds: u32,
+    pub resume: String,
+    pub bilan: Vec<crate::evenements::BilanCombatPj>,
+    pub journal: Vec<(u32, String)>,
+    /// Actions du combat avec les dés saisis (JSON) : de quoi le rejouer.
+    pub actions: String,
+}
+
 fn erreur(m: impl Into<String>) -> Erreur {
     Erreur::Aventure(m.into())
 }
@@ -199,11 +214,26 @@ impl Etat {
                 aventure,
                 fiche,
                 minuits,
-                ..
+                resume,
+                rounds,
+                bilan,
+                journal,
+                actions,
             } => {
                 if self.aventure.is_none() {
                     return Err(erreur("aucune aventure en cours"));
                 }
+                let h = aventure.horloge.maintenant;
+                self.combats.push(CombatPasse {
+                    numero: self.combats.len() as u32 + 1,
+                    jour: h.jour() as u32,
+                    heure_de_fin: format!("{:02}:{:02}", h.heure(), h.minute()),
+                    rounds: *rounds,
+                    resume: resume.clone(),
+                    bilan: bilan.clone(),
+                    journal: journal.clone(),
+                    actions: actions.clone(),
+                });
                 self.aventure = Some((**aventure).clone());
                 self.repercuter_sortie(
                     Sortie {

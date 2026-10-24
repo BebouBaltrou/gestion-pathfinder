@@ -10,6 +10,7 @@ pub mod economie;
 pub mod etat;
 pub mod objets;
 pub mod sorts;
+pub mod xp;
 
 #[cfg(feature = "serde")]
 pub use combat::persistance;
