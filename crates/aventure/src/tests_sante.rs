@@ -11,6 +11,7 @@ fn ctx(id: IdPj) -> Option<ContextePj> {
         pv_max: 31,
         con_score: 12,
         con_mod: 1,
+        vigueur: 4,
         initiative: 2,
         dommages: vec![],
     })
@@ -294,4 +295,142 @@ fn guerison_acceleree_au_debut_du_tour() {
     e.soins_de_debut_de_tour(1, &ctx);
     e.soins_de_debut_de_tour(1, &ctx);
     assert_eq!(e.pjs[&1].vital.degats, 0); // jamais plus que les dégâts
+}
+
+fn gros_pj() -> EtatAventure {
+    // 120 PV max : seuil de dégâts massifs = max(50, 60) = 60
+    let mut e = aventure();
+    e.degats_massifs = true;
+    e
+}
+
+fn ctx_gros(id: IdPj) -> Option<ContextePj> {
+    ctx(id).map(|mut c| {
+        c.pv_max = 120;
+        c
+    })
+}
+
+#[test]
+fn degats_massifs_seuil_et_jet_de_vigueur() {
+    let mut e = gros_pj();
+    let gros = |n| EvenementAventure::Degats {
+        pj: 1,
+        nombre: n,
+        letaux: true,
+    };
+    e.appliquer(&gros(59), &ctx_gros).unwrap();
+    assert!(e.massifs_demandes().is_empty()); // moins de la moitié des PV
+    e.appliquer(&gros(60), &ctx_gros).unwrap();
+    assert_eq!(e.massifs_demandes(), vec![1]);
+    // Vigueur +4 : d20 10 + 4 = 14 < 15 : raté, mort quels que soient les PV
+    e.appliquer(
+        &EvenementAventure::DegatsMassifs { pj: 1, d20: 10 },
+        &ctx_gros,
+    )
+    .unwrap();
+    assert!(e.massifs_demandes().is_empty());
+    let c = ctx_gros(1).unwrap();
+    assert_eq!(e.pjs[&1].vital.sante(c.pv_max, c.con_score), Sante::Mort);
+    assert!(e.pjs[&1].etats_fiche.contains("dead"));
+}
+
+#[test]
+fn degats_massifs_reussi() {
+    let mut e = gros_pj();
+    e.appliquer(
+        &EvenementAventure::Degats {
+            pj: 1,
+            nombre: 70,
+            letaux: true,
+        },
+        &ctx_gros,
+    )
+    .unwrap();
+    e.appliquer(
+        &EvenementAventure::DegatsMassifs { pj: 1, d20: 11 },
+        &ctx_gros,
+    )
+    .unwrap(); // 15
+    let c = ctx_gros(1).unwrap();
+    assert_eq!(
+        e.pjs[&1].vital.sante(c.pv_max, c.con_score),
+        Sante::Conscient
+    );
+    // plus de jet à saisir
+    assert!(e
+        .appliquer(
+            &EvenementAventure::DegatsMassifs { pj: 1, d20: 11 },
+            &ctx_gros
+        )
+        .is_err());
+}
+
+#[test]
+fn degats_massifs_inactifs_par_defaut_et_minimum_de_50() {
+    let mut e = aventure(); // règle désactivée
+    e.appliquer(
+        &EvenementAventure::Degats {
+            pj: 1,
+            nombre: 30,
+            letaux: true,
+        },
+        &ctx,
+    )
+    .unwrap();
+    assert!(e.massifs_demandes().is_empty());
+    // règle active mais 31 PV max : 50 minimum, donc 49 ne déclenche rien
+    e.degats_massifs = true;
+    e.appliquer(&EvenementAventure::Soin { pj: 1, nombre: 30 }, &ctx)
+        .unwrap();
+    e.appliquer(
+        &EvenementAventure::Degats {
+            pj: 1,
+            nombre: 20,
+            letaux: true,
+        },
+        &ctx,
+    )
+    .unwrap();
+    assert!(e.massifs_demandes().is_empty());
+}
+
+#[test]
+fn degats_massifs_n_arrivent_pas_si_l_attaque_tue() {
+    let mut e = gros_pj();
+    e.appliquer(
+        &EvenementAventure::Degats {
+            pj: 1,
+            nombre: 140,
+            letaux: true,
+        },
+        &ctx_gros,
+    )
+    .unwrap();
+    assert!(e.massifs_demandes().is_empty()); // 120 + 12 = mort d'office
+}
+
+#[test]
+fn degats_continus_il_faut_un_soin_puis_la_stabilisation() {
+    let mut e = aventure();
+    e.appliquer(&degats(35, true), &ctx).unwrap(); // -4
+    e.appliquer(
+        &EvenementAventure::DegatsContinus { pj: 1, actif: true },
+        &ctx,
+    )
+    .unwrap();
+    let jet = EvenementAventure::Stabilisation { pj: 1, d20: 19 };
+    let err = e.appliquer(&jet, &ctx).unwrap_err();
+    assert!(err.to_string().contains("d'abord un soin"));
+    // perte de début de tour : jet raté d'office (1) + 1 PV de plus
+    e.pertes_continues_de_debut_de_tour(1, &ctx);
+    assert_eq!(e.pjs[&1].vital.pv_actuels(31), -6);
+    // un soin arrête les dégâts continus et stabilise
+    e.appliquer(&EvenementAventure::Soin { pj: 1, nombre: 1 }, &ctx)
+        .unwrap();
+    assert!(!e.pjs[&1].vital.continu);
+    assert_eq!(sante(&e), Sante::Stable);
+    // plus de perte
+    e.pertes_continues_de_debut_de_tour(1, &ctx);
+    assert_eq!(e.pjs[&1].vital.pv_actuels(31), -5);
 }

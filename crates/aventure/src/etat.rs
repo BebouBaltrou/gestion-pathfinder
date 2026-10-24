@@ -30,6 +30,8 @@ pub struct ContextePj {
     pub pv_max: i32,
     pub con_score: i32,
     pub con_mod: i32,
+    /// Bonus de base au jet de Vigueur (fiche).
+    pub vigueur: i32,
     /// Modificateur d'initiative de la fiche.
     pub initiative: i32,
     /// Dommages de caractéristique en cours (pour la guérison au repos).
@@ -117,6 +119,17 @@ pub enum EvenementAventure {
     Stabilisation {
         pj: IdPj,
         d20: i32,
+    },
+    /// Jet de Vigueur DD 15 demandé après des dégâts massifs (règle optionnelle) : d20 physique.
+    DegatsMassifs {
+        pj: IdPj,
+        d20: i32,
+    },
+    /// Début ou fin de dégâts continus (saignement…) : un mourant ne peut pas se stabiliser tant
+    /// qu'ils durent ; un soin d'au moins 1 PV les arrête.
+    DegatsContinus {
+        pj: IdPj,
+        actif: bool,
     },
     EffetAjoute {
         pj: IdPj,
@@ -218,6 +231,9 @@ pub struct SuiviPj {
     pub survie: Survie,
     /// L'état « fatigué » a été donné par la faim ou la soif (et sera retiré avec elles).
     pub fatigue_de_survie: bool,
+    /// Un jet de Vigueur contre les dégâts massifs est demandé.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub massifs_en_attente: bool,
     /// États que ce moteur a déjà donnés à la fiche (santé, effets, fatigue) : sert à n'envoyer
     /// que les différences.
     #[cfg_attr(feature = "serde", serde(default))]
@@ -230,6 +246,9 @@ pub struct EtatAventure {
     pub horloge: Horloge,
     /// Règle de campagne : suivre la faim et la soif (désactivable).
     pub survie_active: bool,
+    /// Règle optionnelle de campagne : dégâts massifs (Core p. 189).
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub degats_massifs: bool,
     pub pjs: BTreeMap<IdPj, SuiviPj>,
     pub effets: Ensemble<Contenu>,
     /// Journal d'aventure, distinct du journal d'intermède et de celui des combats.
@@ -246,6 +265,7 @@ impl EtatAventure {
         EtatAventure {
             horloge: Horloge::nouvelle(debut),
             survie_active,
+            degats_massifs: false,
             pjs: BTreeMap::new(),
             effets: Ensemble::nouveau(),
             journal: Vec::new(),
@@ -600,6 +620,7 @@ impl EtatAventure {
                     vital: Vital::default(),
                     survie: Survie::nouvelle(maintenant),
                     fatigue_de_survie: false,
+                    massifs_en_attente: false,
                     etats_fiche: BTreeSet::new(),
                 });
                 self.noter(format!("{} rejoint l'aventure.", c.nom));
@@ -692,15 +713,20 @@ impl EtatAventure {
                     if *letaux { "létaux" } else { "non létaux" },
                     c.pv_max
                 ));
+                self.verifier_massifs(*pj, *nombre, *letaux, &c)?;
             }
             EvenementAventure::Soin { pj, nombre } => {
                 let c = Self::contexte(ctx, *pj)?;
                 let vital = &mut self.suivi(*pj)?.vital;
                 let avant = vital.pv_actuels(c.pv_max);
                 let r = vital.soigner(*nombre);
-                if avant < 0 && r.pv_rendus >= 1 {
-                    // tout soin qui rend au moins 1 PV stabilise un mourant (p. 190)
-                    vital.stable = true;
+                if r.pv_rendus >= 1 {
+                    // un soin d'au moins 1 PV arrête les dégâts continus (p. 190) ; sur un mourant
+                    // il le stabilise
+                    if avant < 0 {
+                        vital.stable = true;
+                    }
+                    vital.continu = false;
                 }
                 self.noter(format!(
                     "{} reçoit {nombre} point(s) de soin : {} PV rendus, {} non létaux retirés.",
@@ -925,6 +951,7 @@ impl EtatAventure {
                     if *letaux { "létaux" } else { "non létaux" },
                     c.pv_max
                 ));
+                self.verifier_massifs(*pj, finaux, *letaux, &c)?;
             }
             EvenementAventure::Stabilisation { pj, d20 } => {
                 let c = Self::contexte(ctx, *pj)?;
@@ -936,6 +963,12 @@ impl EtatAventure {
                 if v.sante(c.pv_max, c.con_score) != Sante::Mourant {
                     return Err(ErreurAventure::Invalide(format!(
                         "{} n'est pas mourant : pas de jet de stabilisation",
+                        c.nom
+                    )));
+                }
+                if v.continu {
+                    return Err(ErreurAventure::Invalide(format!(
+                        "{} subit des dégâts continus : il faut d'abord un soin, puis le jet de stabilisation",
                         c.nom
                     )));
                 }
@@ -959,9 +992,96 @@ impl EtatAventure {
                     }
                 ));
             }
+            EvenementAventure::DegatsMassifs { pj, d20 } => {
+                let c = Self::contexte(ctx, *pj)?;
+                if !(1..=20).contains(d20) {
+                    return Err(ErreurAventure::Invalide("d20 : de 1 à 20".into()));
+                }
+                let suivi = self.suivi(*pj)?;
+                if !suivi.massifs_en_attente {
+                    return Err(ErreurAventure::Invalide(format!(
+                        "aucun jet de dégâts massifs n'est demandé pour {}",
+                        c.nom
+                    )));
+                }
+                suivi.massifs_en_attente = false;
+                let total = *d20 + c.vigueur;
+                // jet de sauvegarde : 20 naturel réussit, 1 naturel rate
+                let reussi = *d20 == 20 || (*d20 != 1 && total >= 15);
+                if !reussi {
+                    // la mort, quels que soient les PV restants (p. 189)
+                    suivi.vital.degats = suivi.vital.degats.max(c.pv_max + c.con_score);
+                }
+                self.noter(format!(
+                    "{} : dégâts massifs, Vigueur {d20} + {} = {total} contre DD 15 : {}.",
+                    c.nom,
+                    c.vigueur,
+                    if reussi { "réussi" } else { "raté, il meurt" }
+                ));
+            }
+            EvenementAventure::DegatsContinus { pj, actif } => {
+                let c = Self::contexte(ctx, *pj)?;
+                self.suivi(*pj)?.vital.continu = *actif;
+                self.noter(format!(
+                    "{} : dégâts continus {}.",
+                    c.nom,
+                    if *actif { "en cours" } else { "arrêtés" }
+                ));
+            }
         }
         self.synchroniser(ctx, &mut s);
         Ok(s)
+    }
+
+    /// Un jet de Vigueur contre les dégâts massifs est-il demandé ? Règle optionnelle (p. 189) :
+    /// une seule attaque d'au moins 50 PV et d'au moins la moitié des PV du personnage, sans le tuer.
+    fn verifier_massifs(
+        &mut self,
+        pj: IdPj,
+        degats_finaux: i32,
+        letaux: bool,
+        c: &ContextePj,
+    ) -> Result<(), ErreurAventure> {
+        if !self.degats_massifs || !letaux {
+            return Ok(());
+        }
+        let seuil = 50.max((c.pv_max + 1) / 2);
+        let suivi = self.suivi(pj)?;
+        if degats_finaux >= seuil && suivi.vital.sante(c.pv_max, c.con_score) != Sante::Mort {
+            suivi.massifs_en_attente = true;
+            self.noter(format!(
+                "{} : dégâts massifs (au moins {seuil}) : jet de Vigueur DD 15 demandé.",
+                c.nom
+            ));
+        }
+        Ok(())
+    }
+
+    /// Jets de dégâts massifs demandés au joueur.
+    pub fn massifs_demandes(&self) -> Vec<IdPj> {
+        self.pjs
+            .iter()
+            .filter(|(_, s)| s.massifs_en_attente)
+            .map(|(id, _)| *id)
+            .collect()
+    }
+
+    /// Pertes de début de tour d'un mourant qui subit des dégâts continus : le jet de
+    /// stabilisation est raté d'office (1 PV) et 1 PV de plus est perdu (p. 190, lecture à valider).
+    pub fn pertes_continues_de_debut_de_tour(&mut self, pj: IdPj, ctx: Contexte) -> Sortie {
+        let mut s = Sortie::default();
+        if let (Some(c), Some(suivi)) = (ctx(pj), self.pjs.get_mut(&pj)) {
+            if suivi.vital.continu && suivi.vital.sante(c.pv_max, c.con_score) == Sante::Mourant {
+                suivi.vital.degats += 2;
+                let pv = suivi.vital.pv_actuels(c.pv_max);
+                self.noter(format!(
+                    "{} : dégâts continus, jet de stabilisation raté d'office et 1 PV de plus perdu ({pv}/{}).",
+                    c.nom, c.pv_max
+                ));
+            }
+        }
+        self.synchroniser(ctx, &mut s);
+        s
     }
 
     /// Soins de début de tour (guérison accélérée, régénération) donnés par les effets en cours.

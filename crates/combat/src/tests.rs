@@ -19,6 +19,7 @@ fn ctx(id: IdPj) -> Option<ContextePj> {
         pv_max,
         con_score: 12,
         con_mod: 1,
+        vigueur: 4,
         initiative: init,
         dommages: vec![],
     })

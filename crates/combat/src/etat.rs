@@ -100,6 +100,8 @@ fn invalide<T>(m: &str) -> Result<T, ErreurCombat> {
 pub enum Demande {
     /// Jet de stabilisation d'un mourant : d20 + Con. − |PV négatifs| contre DD 10.
     Stabilisation { pj: IdPj, malus: i32 },
+    /// Jet de Vigueur DD 15 après des dégâts massifs (règle optionnelle) : d20 + Vigueur.
+    DegatsMassifs { pj: IdPj },
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -278,6 +280,8 @@ impl EtatCombat {
         self.noter(format!("Tour de {n}."));
         let s = self.aventure.soins_de_debut_de_tour(pj, ctx);
         self.fusionner(s);
+        let s = self.aventure.pertes_continues_de_debut_de_tour(pj, ctx);
+        self.fusionner(s);
     }
 
     /// Ce que le moteur demande au joueur à ce moment (dé physique à saisir).
@@ -285,7 +289,8 @@ impl EtatCombat {
         let mut v = Vec::new();
         if let (Phase::EnCours, Some(pj)) = (self.phase, self.actif) {
             if let (Some(c), Some(s)) = (ctx(pj), self.aventure.pjs.get(&pj)) {
-                if s.vital.sante(c.pv_max, c.con_score) == Sante::Mourant {
+                // avec des dégâts continus, la stabilisation attend d'abord un soin
+                if s.vital.sante(c.pv_max, c.con_score) == Sante::Mourant && !s.vital.continu {
                     v.push(Demande::Stabilisation {
                         pj,
                         malus: s.vital.pv_actuels(c.pv_max),
@@ -293,6 +298,12 @@ impl EtatCombat {
                 }
             }
         }
+        v.extend(
+            self.aventure
+                .massifs_demandes()
+                .into_iter()
+                .map(|pj| Demande::DegatsMassifs { pj }),
+        );
         v
     }
 
@@ -594,6 +605,8 @@ fn pj_de(ev: &EvenementAventure) -> Option<IdPj> {
         | EvenementAventure::PvTemporaires { pj, .. }
         | EvenementAventure::DegatsTypes { pj, .. }
         | EvenementAventure::Stabilisation { pj, .. }
+        | EvenementAventure::DegatsMassifs { pj, .. }
+        | EvenementAventure::DegatsContinus { pj, .. }
         | EvenementAventure::EffetAjoute { pj, .. }
         | EvenementAventure::Manger { pj }
         | EvenementAventure::Boire { pj }

@@ -53,3 +53,17 @@ Source : tableau « Actions in Combat » relevé dans `data/combat/actions.json`
 | 15 | Action immédiate : utilisable hors de son tour | Une seule avant le prochain tour ; hors tour, elle prend l'action rapide du prochain tour ; sur son tour, elle compte comme l'action rapide | **point à confirmer** (non relevé dans le texte) |
 | 16 | Une action complexe peut aussi se faire avec un pas de 1,5 m avant, pendant ou après | Autorisé | sûr |
 | 17 | « Retarder » : aucune action | Déjà géré (phase 4) | validé |
+
+## Décisions d'Antoine du 24/10/2026
+
+- Lectures validées : 1, 4, 5, 9, 14, 15 (et 6 : un stable qui reprend des dégâts redevient mourant).
+- **Dégâts massifs (8)** : on suit la règle du Core (p. 189). Elle est **optionnelle** : activable par campagne
+  (`degats_massifs`), éteinte par défaut. Quand une seule attaque inflige au moins 50 PV **et** au moins la moitié
+  des PV maximum sans tuer, le moteur demande un jet de Vigueur DD 15 (d20 physique + bonus de la fiche ;
+  20 naturel réussit, 1 naturel rate). Échec : mort, quels que soient les PV restants.
+  Lecture à valider : « la moitié » arrondie vers le haut ; seuls les dégâts létaux comptent.
+- **Dégâts continus (10)** : tant qu'ils durent, un mourant ne fait pas de jet de stabilisation. Il faut **d'abord un
+  soin** (au moins 1 PV), qui les arrête, **puis** le jet de stabilisation (le soin stabilise déjà, lecture 5).
+  Au début de chaque tour d'un mourant qui subit des dégâts continus : jet raté d'office (1 PV) et 1 PV de plus,
+  soit 2 PV (lecture à valider d'après le texte « fail stabilization automatically and lose 1 extra hit point
+  per round »).

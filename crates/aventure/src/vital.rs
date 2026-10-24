@@ -21,6 +21,9 @@ pub struct Vital {
     /// Personnage mourant stabilisé : il ne perd plus de PV (p. 190).
     #[cfg_attr(feature = "serde", serde(default))]
     pub stable: bool,
+    /// Dégâts continus en cours : pas de jet de stabilisation avant d'être soigné (p. 190).
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub continu: bool,
 }
 
 /// État de santé d'un personnage (pour l'affichage ; les états de la fiche sont dans `etats_de_sante`).
