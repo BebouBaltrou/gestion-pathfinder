@@ -47,3 +47,12 @@ chaque fichier de données) et règles d'Archives of Nethys (Core Rulebook p. 83
 - **Convocations** : gabarit minimal prévu (phase suivante) ; les sorts de convocation sont décomptés seulement.
 - **Contresort et dissipation** : à faire ; **résistance à la magie** : le lanceur la jette physiquement.
 - **Sort lancé sur un personnage joué sans effet connu** : « appliquer un effet » à la main.
+
+## Décisions d'Antoine du 24/10/2026
+
+- **Métamagie (5)** : à intégrer plus tard. Le code et les données existent mais la métamagie est **désactivée par
+  défaut** (`metamagie_active` de l'incantation fournie par la fiche) : tant qu'elle ne l'est pas, le lancement la
+  refuse. La lecture sur l'action complexe d'un sort spontané avec métamagie reste donc à confirmer à ce moment-là.
+- Lectures validées : 7 (échec des sorts profanes si le d100 est ≤ au pourcentage), 8 (lancement défensif),
+  9 (sort « 1 round » traité comme action complexe).
+- **Durée (10)** : quand la formule du livre n'est pas claire, le joueur décide et la saisit (déjà le cas).

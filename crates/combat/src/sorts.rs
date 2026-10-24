@@ -381,6 +381,11 @@ impl EtatCombat {
                 sort.nom_en, inc.classe_en
             ))
         })?;
+        if !metamagies_choisies.is_empty() && !inc.metamagie_active {
+            return invalide(
+                "la métamagie n'est pas encore intégrée (réglage de la fiche à activer)",
+            );
+        }
         let mut metas = Vec::new();
         let mut delta = 0;
         for m in metamagies_choisies {

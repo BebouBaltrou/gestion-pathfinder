@@ -70,6 +70,8 @@ pub struct IncantationPj {
     pub metamagies: Vec<String>,
     /// Chance d'échec des sorts profanes due à l'armure et au bouclier (%).
     pub echec_arcanique_pct: u32,
+    /// Métamagie proposée au lancement (réglage : pas encore intégrée par défaut, décision du 24/10/2026).
+    pub metamagie_active: bool,
 }
 
 pub type Contexte<'a> = &'a dyn Fn(IdPj) -> Option<ContextePj>;

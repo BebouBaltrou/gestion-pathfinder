@@ -45,6 +45,7 @@ fn incantation(niveau_de_lanceur: u32, echec_pct: u32) -> IncantationPj {
         .map(String::from)
         .to_vec(),
         echec_arcanique_pct: echec_pct,
+        metamagie_active: true,
     }
 }
 
@@ -491,4 +492,28 @@ fn un_combat_avec_des_sorts_se_rejoue_et_se_sauvegarde() {
         .iter()
         .any(|(_, e)| matches!(e, EvenementFiche::SortLance { .. })));
     assert_eq!(r.aventure.effets.actifs.len(), 1);
+}
+
+#[test]
+fn la_metamagie_est_desactivee_tant_qu_elle_n_est_pas_integree() {
+    let base = ctx_avec(11, 0);
+    let ctx = move |id: IdPj| {
+        base(id).map(|mut c| {
+            if let Some(i) = c.incantation.as_mut() {
+                i.metamagie_active = false;
+            }
+            c
+        })
+    };
+    let c = combat(&ctx);
+    let e = c
+        .etat()
+        .apercu_sort(1, "Magic Missile", &metas(&["Empower Spell"]), None, &ctx)
+        .unwrap_err();
+    assert!(e.to_string().contains("pas encore intégrée"));
+    // sans métamagie, tout fonctionne comme avant
+    assert!(c
+        .etat()
+        .apercu_sort(1, "Magic Missile", &[], None, &ctx)
+        .is_ok());
 }
