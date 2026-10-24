@@ -217,7 +217,7 @@ export const apercuSortExemple = (sort: string): ApercuSort => ({
   description: "Description du sort tirée du livre (traduction non officielle).",
   effetAutomatique: sort === "Mage Armor",
   choixEnergie: false,
-  notes: null,
+  notes: null, source: null, noteLivre: null,
 });
 
 export const apercuFinExemple = (): ApercuFin => ({

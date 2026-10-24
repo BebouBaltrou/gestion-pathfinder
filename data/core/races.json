@@ -75,7 +75,7 @@
         "commun",
         "nain"
       ],
-      "langues_choix": "géant, gnome, gobelin, orque, terran, commun des profondeurs",
+      "langues_choix": "commun des profondeurs, élémentaire, géant, gnome, gobelin, orque",
       "effets": [],
       "nom_en": "Dwarf",
       "source": {
@@ -156,9 +156,9 @@
       ],
       "langues": [
         "commun",
-        "elfique"
+        "elfe"
       ],
-      "langues_choix": "céleste, draconique, gnoll, gnome, gobelin, orque, sylvestre",
+      "langues_choix": "céleste, draconien, gnoll, gnome, gobelin, orque, sylvestre",
       "effets": [
         {
           "cible": "comp.perception",
@@ -234,10 +234,9 @@
       ],
       "langues": [
         "commun",
-        "gnome",
-        "sylvestre"
+        "gnome"
       ],
-      "langues_choix": "draconique, nain, elfique, géant, gobelin, orque",
+      "langues_choix": "draconien, elfe, géant, gobelin, nain, orque",
       "effets": [
         {
           "cible": "ca",
@@ -343,7 +342,7 @@
       "choix_libre": 2,
       "langues": [
         "commun",
-        "elfique"
+        "elfe"
       ],
       "langues_choix": "toutes (sauf langues secrètes)",
       "deux_classes_de_predilection": true,
@@ -418,7 +417,7 @@
         "commun",
         "orque"
       ],
-      "langues_choix": "abyssal, draconique, géant, gnoll, gobelin",
+      "langues_choix": "abyssal, draconien, géant, gnoll, gobelin",
       "effets": [
         {
           "cible": "comp.intimidate",
@@ -496,7 +495,7 @@
         "commun",
         "halfelin"
       ],
-      "langues_choix": "nain, elfique, gnome, gobelin",
+      "langues_choix": "abyssal, elfe, gnome, gobelin, nain",
       "effets": [
         {
           "cible": "ca",

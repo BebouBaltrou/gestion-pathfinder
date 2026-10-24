@@ -763,6 +763,10 @@ pub struct ApercuSortVue {
     pub effet_automatique: bool,
     pub choix_energie: bool,
     pub notes: Option<String>,
+    /// Source dans le Manuel des joueurs (« Manuel des joueurs, p. 254 »).
+    pub source: Option<String>,
+    /// Erreur probable du livre, à afficher en petit.
+    pub note_livre: Option<String>,
 }
 
 pub fn apercu_sort(a: &combat::ApercuSort) -> ApercuSortVue {
@@ -797,6 +801,8 @@ pub fn apercu_sort(a: &combat::ApercuSort) -> ApercuSortVue {
         effet_automatique: a.effet_automatique,
         choix_energie: a.choix_energie,
         notes: a.notes.clone(),
+        source: Traductions::partage().source_vf("sorts", &a.nom_en),
+        note_livre: Traductions::partage().note_livre("sorts", &a.nom_en),
     }
 }
 

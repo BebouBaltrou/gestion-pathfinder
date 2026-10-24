@@ -73,6 +73,8 @@ vue! {
         /// Prestige saisi, ou niveau + modificateur de Charisme de la fiche.
         pub prestige: Option<i32>,
         pub prestige_calcule: bool,
+        /// Nom du maître, si ce personnage est l'acolyte d'un autre (don Prestige).
+        pub acolyte_de: Option<String>,
         pub fiche: Option<ResumeFiche>,
     }
 }
@@ -130,6 +132,11 @@ pub fn liste_personnages(etat: &Etat) -> Vec<LignePersonnage> {
                     .map(|l| l.nom.clone()),
                 prestige: etat.prestige_effectif(p.id),
                 prestige_calcule: p.prestige.is_none() && e.is_some(),
+                acolyte_de: etat
+                    .acolytes
+                    .get(&p.id)
+                    .and_then(|m| etat.personnages.get(m))
+                    .map(|m| m.nom.clone()),
                 fiche: e.as_ref().and_then(|e| resume(r, e)),
             }
         })
@@ -163,6 +170,8 @@ vue! {
         pub nom: String,
         pub resume: Option<String>,
         pub avantage: Option<String>,
+        pub source: Option<String>,
+        pub note_livre: Option<String>,
         /// Prérequis non remplis : le don est inutilisable (Core p. 111).
         pub inutilisable: Option<String>,
     }
@@ -404,6 +413,8 @@ pub fn fiche_complete(
             nom,
             resume: fr.and_then(|x| x.resume.clone()),
             avantage: fr.and_then(|x| x.avantage.clone()),
+            source: t.source_vf("dons", &d),
+            note_livre: t.note_livre("dons", &d),
             inutilisable,
         });
     }
@@ -716,6 +727,8 @@ vue! {
         pub ecole: String,
         pub niveau: u32,
         pub resume: String,
+        pub source: Option<String>,
+        pub note_livre: Option<String>,
     }
 }
 vue! {
@@ -724,6 +737,9 @@ vue! {
         pub nom: String,
         pub genre: String,
         pub poids_lb: Option<f64>,
+        pub source: Option<String>,
+        pub note_livre: Option<String>,
+        pub description: Option<String>,
     }
 }
 vue! {
@@ -903,6 +919,8 @@ pub fn catalogue_creation() -> CatalogueCreation {
                 resume: fr
                     .map(|x| x.description.chars().take(220).collect())
                     .unwrap_or_default(),
+                source: t.source_vf("sorts", &s.nom_en),
+                note_livre: t.note_livre("sorts", &s.nom_en),
             })
         })
         .collect();
@@ -922,6 +940,9 @@ pub fn catalogue_creation() -> CatalogueCreation {
                 nom: a.nom.clone(),
                 genre: a.genre.nom().to_string(),
                 poids_lb: a.poids_lb,
+                source: t.source_vf("armures", &a.nom_en),
+                note_livre: t.note_livre("armures", &a.nom_en),
+                description: t.description_equipement("armures", &a.nom_en),
             })
             .collect(),
         armes: eq
@@ -937,6 +958,9 @@ pub fn catalogue_creation() -> CatalogueCreation {
                 }
                 .to_string(),
                 poids_lb: a.poids_lb,
+                source: t.source_vf("armes", &a.nom_en),
+                note_livre: t.note_livre("armes", &a.nom_en),
+                description: t.description_equipement("armes", &a.nom_en),
             })
             .collect(),
         materiel: eq
@@ -947,6 +971,9 @@ pub fn catalogue_creation() -> CatalogueCreation {
                 nom: a.nom.clone(),
                 genre: a.categorie_en.clone().unwrap_or_default(),
                 poids_lb: a.poids_lb,
+                source: t.source_vf("materiel", &a.nom_en),
+                note_livre: t.note_livre("materiel", &a.nom_en),
+                description: t.description_equipement("materiel", &a.nom_en),
             })
             .collect(),
         etats: r
@@ -1042,7 +1069,7 @@ mod tests {
         assert!(c
             .competences
             .iter()
-            .any(|x| x.nom == "Connaissances (arcanes)"));
+            .any(|x| x.nom == "Connaissances (mystères)"));
         assert_eq!(c.dons.len(), 176);
         assert_eq!(c.sorts_ensorceleur.len(), 390);
         assert_eq!(c.classes[0].lignages.len(), 10);

@@ -557,7 +557,7 @@ fn fiche_equipe(
         effectif: etat.effectif_equipe(e, r),
         source: r.reference(&u.source),
         infos: format!(
-            "Coût : {} ({} po) · {} j · recettes : {}",
+            "Coût : {} ({} po) · {} j · recettes : {}{}",
             u.cout
                 .map(|c| c.to_string())
                 .unwrap_or("voir description".into()),
@@ -567,6 +567,9 @@ fn fiche_equipe(
                 .as_ref()
                 .map(|x| x.texte.as_str())
                 .unwrap_or("aucune"),
+            regles::niveaux_equipes::niveau_des_employes(&e.reference)
+                .map(|n| format!(" · employés de niveau {} (Prestige requis)", n.niveau))
+                .unwrap_or_default(),
         ),
         point_a_confirmer: u.point_a_confirmer.clone(),
         organisation: e.organisation.0,

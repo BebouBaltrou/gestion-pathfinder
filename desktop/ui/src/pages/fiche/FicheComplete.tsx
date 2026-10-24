@@ -4,10 +4,11 @@ import { api, formaterPo } from "../../api";
 import type { Charge, EffetDonnees, EvenementFiche, FicheVue, LignePersonnage } from "../../fiche-types";
 import { Chiffre, Choix, Detail, signe, useCatalogue } from "./commun";
 import { Montee } from "./Montee";
+import { PrestigeDon } from "./PrestigeDon";
 
 /** `niveauVise` : niveau choisi à la création ; l'assistant de montée s'ouvre tant qu'il n'est pas atteint. */
 type Props = { outils: Outils; pj: LignePersonnage; fiche: FicheVue; niveauVise?: number };
-type Onglet = "combat" | "competences" | "dons" | "sorts" | "equipement" | "etats" | "histoire";
+type Onglet = "combat" | "competences" | "dons" | "sorts" | "equipement" | "etats" | "histoire" | "prestige";
 
 const ONGLETS: [Onglet, string][] = [
   ["combat", "Combat"],
@@ -22,8 +23,12 @@ const ONGLETS: [Onglet, string][] = [
 export function FicheComplete(p: Props) {
   const [onglet, setOnglet] = useState<Onglet>("combat");
   const [monter, setMonter] = useState(false);
+  const [avecPrestige, setAvecPrestige] = useState(false);
   const f = p.fiche;
   const id = f.identite;
+  useEffect(() => {
+    api.prestigeDon(p.pj.id).then((v) => setAvecPrestige(!!v?.actif));
+  }, [p.pj.id, p.outils.version]);
   useEffect(() => {
     if ((p.niveauVise ?? 1) > id.niveau && id.niveauxEnAttente > 0) setMonter(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -78,7 +83,7 @@ export function FicheComplete(p: Props) {
       {monter && <Montee outils={p.outils} pj={p.pj} fiche={f} onFerme={() => setMonter(false)} />}
 
       <div className="onglets" role="tablist">
-        {ONGLETS.map(([k, nom]) => (
+        {[...ONGLETS, ...(avecPrestige ? ([["prestige", "Prestige"]] as [Onglet, string][]) : [])].map(([k, nom]) => (
           <button key={k} role="tab" aria-selected={onglet === k} className={"onglet" + (onglet === k ? " actif" : "")} onClick={() => setOnglet(k)}>
             {nom}
           </button>
@@ -92,6 +97,7 @@ export function FicheComplete(p: Props) {
       {onglet === "equipement" && <Equipement f={f} agir={agir} />}
       {onglet === "etats" && <Etats f={f} agir={agir} />}
       {onglet === "histoire" && <Histoire f={f} agir={agir} />}
+      {onglet === "prestige" && <PrestigeDon outils={p.outils} pj={p.pj} />}
     </div>
   );
 }
@@ -217,6 +223,8 @@ function Dons({ f }: { f: FicheVue }) {
                 <p>{d.avantage}</p>
               </details>
             )}
+            {d.source && <small className="doux">{d.source}</small>}
+            {d.noteLivre && <small className="doux"><em>{d.noteLivre}</em></small>}
           </div>
         ))}
       </div>
@@ -315,11 +323,31 @@ const CHARGES: [Charge, string][] = [
   ["Surcharge", "Surcharge"],
 ];
 
+function FicheObjet({ nomEn, onFermer }: { nomEn: string; onFermer: () => void }) {
+  const cat = useCatalogue();
+  if (!cat) return null;
+  const o = [...cat.armures, ...cat.armes, ...cat.materiel].find((x) => x.nomEn === nomEn);
+  if (!o) return null;
+  return (
+    <div className="carte fiche-objet">
+      <div className="ligne">
+        <strong>{o.nom}</strong>
+        <button className="bouton discret" onClick={onFermer}>Fermer</button>
+      </div>
+      {o.poidsLb != null && <p className="doux">Poids : {(o.poidsLb / 2).toLocaleString("fr-FR", { maximumFractionDigits: 2 })} kg</p>}
+      {o.description ? o.description.split("\n").map((t, i) => <p key={i}>{t}</p>) : <p className="doux">Pas de description dans le livre.</p>}
+      {o.source && <small className="doux">{o.source}</small>}
+      {o.noteLivre && <small className="doux"><em>{o.noteLivre}</em></small>}
+    </div>
+  );
+}
+
 function Equipement({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => void }) {
   const cat = useCatalogue();
   const [objet, setObjet] = useState("");
   const [quantite, setQuantite] = useState("1");
   const [arme, setArme] = useState("");
+  const [detail, setDetail] = useState("");
   const eq = f.equipement;
   if (!cat) return null;
   const protections = (genre: (g: string) => boolean) =>
@@ -372,6 +400,7 @@ function Equipement({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => voi
         ))}
       </div>
 
+      {detail && <FicheObjet nomEn={detail} onFermer={() => setDetail("")} />}
       <h2>Armure et bouclier</h2>
       <div className="ligne">
         <Choix
@@ -381,6 +410,7 @@ function Equipement({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => voi
           options={protections((g) => g.startsWith("armure"))}
           onChange={(v) => agir({ Equiper: { emplacement: "armure", objet: v || null } })}
         />
+        {eq.armure && <button className="bouton discret" onClick={() => setDetail(eq.armure!.nomEn)}>Voir l'armure</button>}
         <Choix
           etiquette="Bouclier"
           vide="Aucun bouclier"
@@ -388,13 +418,14 @@ function Equipement({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => voi
           options={protections((g) => g === "bouclier")}
           onChange={(v) => agir({ Equiper: { emplacement: "bouclier", objet: v || null } })}
         />
+        {eq.bouclier && <button className="bouton discret" onClick={() => setDetail(eq.bouclier!.nomEn)}>Voir le bouclier</button>}
       </div>
 
       <h2>Armes</h2>
       <div className="puces">
         {eq.armes.map((a) => (
           <span className="puce" key={a.nomEn}>
-            {a.nom}{" "}
+            <button className="bouton discret" onClick={() => setDetail(a.nomEn)}>{a.nom}</button>{" "}
             <button className="croix" aria-label={`Ranger ${a.nom}`} onClick={() => agir({ ArmeRetiree: a.nomEn })}>×</button>
           </span>
         ))}
@@ -415,7 +446,7 @@ function Equipement({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => voi
         <tbody>
           {eq.objets.map((o) => (
             <tr key={o.nomEn}>
-              <td>{o.nom}</td>
+              <td><button className="bouton discret" onClick={() => setDetail(o.nomEn)}>{o.nom}</button></td>
               <td className="num">× {o.quantite}</td>
               <td>
                 <button className="bouton discret" onClick={() => agir({ ObjetRetire: { nom_en: o.nomEn, quantite: 1 } })}>−1</button>

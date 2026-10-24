@@ -14,6 +14,9 @@ jargon, et on lui livre des choses qu'il peut lancer et tester.
 - **Inspecter et proposer avant de coder** ; ne pas écraser de fichier sans le signaler.
 - Toute lecture de règle non évidente est signalée comme « lecture à valider ».
 
+Noms et textes français des dons, sorts, races, états, équipement… : ceux du **Manuel des joueurs**
+(comparaison et points à confirmer : `docs/COMPARAISON_MANUEL_DES_JOUEURS.md`). Le livre fait foi.
+
 Passation (état détaillé et prochaines étapes) : `docs/REPRISE.md`.
 Exigences complètes : `docs/CAHIER_DES_CHARGES.md`. Décisions et lectures validées :
 `docs/A_TRAITER.md`. À faire avec les fiches de personnage : `docs/FICHES_PERSONNAGE.md`.

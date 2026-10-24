@@ -13,6 +13,28 @@ pub enum Evenement {
         compte_initial: Montant,
         prestige: Option<i32>,
     },
+    /// Modificateurs du score de Prestige du don (identifiant → nombre de fois).
+    PrestigeDonRegle {
+        pj: IdPersonnage,
+        modificateurs: std::collections::BTreeMap<String, u32>,
+    },
+    /// `acolyte` devient l'acolyte de `maitre` (don Prestige) ; sa fiche se crée ensuite.
+    AcolyteLie {
+        acolyte: IdPersonnage,
+        maitre: IdPersonnage,
+    },
+    AcolyteDelie {
+        acolyte: IdPersonnage,
+    },
+    PartisanAjoute {
+        maitre: IdPersonnage,
+        niveau: u32,
+        nom: String,
+    },
+    PartisanRetire {
+        maitre: IdPersonnage,
+        index: usize,
+    },
     PersonnageModifie {
         id: IdPersonnage,
         nom: String,

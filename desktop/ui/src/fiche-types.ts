@@ -35,6 +35,7 @@ export type LignePersonnage = {
   lieu: string | null;
   prestige: number | null;
   prestigeCalcule: boolean;
+  acolyteDe: string | null;
   fiche: ResumeFiche | null;
 };
 
@@ -49,7 +50,7 @@ export type CompetenceVue = {
   formationRequise: boolean;
   caracteristique: string;
 };
-export type DonVue = { nomEn: string; nom: string; resume: string | null; avantage: string | null; inutilisable: string | null };
+export type DonVue = { nomEn: string; nom: string; resume: string | null; avantage: string | null; source: string | null; noteLivre: string | null; inutilisable: string | null };
 export type EmplacementVue = {
   niveauDeSort: number;
   base: number | null;
@@ -191,8 +192,8 @@ export type DonCatalogue = {
   repetable: boolean;
   aUnChoix: boolean;
 };
-export type SortCatalogue = { nomEn: string; nom: string; ecole: string; niveau: number; resume: string };
-export type EquipementCatalogue = { nomEn: string; nom: string; genre: string; poidsLb: number | null };
+export type SortCatalogue = { nomEn: string; nom: string; ecole: string; niveau: number; resume: string; source: string | null; noteLivre: string | null };
+export type EquipementCatalogue = { nomEn: string; nom: string; genre: string; poidsLb: number | null; source: string | null; noteLivre: string | null; description: string | null };
 export type EtatCatalogue = { id: string; nom: string };
 export type CatalogueCreation = {
   races: RaceVue[];
@@ -335,4 +336,20 @@ export type ApercuImport = {
   dons: string[];
   lignes: LigneImport[];
   non_verifie: string[];
+};
+
+// ---- don Prestige
+export type ModificateurPrestige = { id: string; libelle: string; valeur: number; portee: "tous" | "acolyte" | "partisans"; cumulable: boolean; compte: number };
+export type PrestigeDonVue = {
+  actif: boolean;
+  niveauMinimal: number;
+  acolyte: { id: number; nom: string; niveau: number | null; xp: number | null; aUneFiche: boolean } | null;
+  scoreAcolyte: number | null;
+  scorePartisans: number | null;
+  niveauTableau: number;
+  niveauMaxAcolyte: number;
+  modificateurs: ModificateurPrestige[];
+  candidats: [number, string][];
+  partisans: { index: number; niveau: number; nom: string }[];
+  places: { niveau: number; permis: number; pris: number }[];
 };
