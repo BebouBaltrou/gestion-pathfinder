@@ -215,6 +215,9 @@ impl TableCharge {
 pub struct MaitrisesClasse {
     /// `simple`, `martial`, `exotic`.
     pub armes: Vec<String>,
+    /// Armes citées une à une (noms anglais du catalogue), pour les classes sans catégorie entière.
+    #[serde(default)]
+    pub armes_nommees: Vec<String>,
     pub armures: Vec<GenreProtection>,
     pub boucliers: bool,
     pub bouclier_pavois: bool,

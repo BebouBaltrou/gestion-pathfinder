@@ -410,6 +410,23 @@ impl Fiche {
             });
         }
         e.extend(self.effets.iter().cloned());
+        // Bonus chiffrés des capacités de classe, une fois le niveau de classe atteint.
+        let mut classes_vues: Vec<&str> = Vec::new();
+        for n in &self.niveaux {
+            if classes_vues.contains(&n.classe.as_str()) {
+                continue;
+            }
+            classes_vues.push(&n.classe);
+            if let Some(c) = r.classe(&n.classe) {
+                let nc = self.niveau_de_classe(&n.classe);
+                e.extend(
+                    c.effets
+                        .iter()
+                        .filter(|x| x.niveau_classe <= nc)
+                        .map(|x| Effet::new(&x.cible, x.type_bonus, x.valeur, &x.source)),
+                );
+            }
+        }
         // Objets magiques portés : leur bonus chiffré, avec son type (altération, parade…).
         for o in &self.equipement.objets {
             if let Some(m) = r.objets_magiques.objet(&o.nom_en) {
@@ -438,6 +455,8 @@ impl Fiche {
             vues.push(&n.classe);
             if let Some(c) = r.equipement.maitrises.classes.get(&n.classe) {
                 m.categories.extend(c.armes.iter().cloned());
+                m.armes
+                    .extend(c.armes_nommees.iter().map(|a| a.to_lowercase()));
                 m.armures.extend(c.armures.iter().copied());
                 m.boucliers |= c.boucliers;
                 m.pavois |= c.bouclier_pavois;

@@ -144,3 +144,69 @@ fn les_competences_de_classe_du_pretre() {
         .iter()
         .any(|t| t.libelle == "compétence de classe"));
 }
+
+fn druide(niveau: u32) -> Fiche {
+    let mut f = pretre(niveau, 16);
+    for (i, n) in f.niveaux.iter_mut().enumerate() {
+        n.classe = "druide".into();
+        n.de_vie_obtenu = if i == 0 { 8 } else { 5 };
+    }
+    f.classes_de_predilection = vec!["druide".into()];
+    f
+}
+
+#[test]
+fn table_3_5_du_druide() {
+    let r = Referentiel::core();
+    let c = r.classe("druide").expect("druide");
+    assert_eq!(
+        (c.de_vie, c.rangs_par_niveau, c.source.page),
+        (8, 4, Some(38))
+    );
+    let l = |n: usize| &c.progression[n - 1];
+    assert_eq!(
+        (l(1).bba.clone(), l(1).vigueur, l(1).reflexes, l(1).volonte),
+        (vec![0], 2, 0, 2)
+    );
+    assert_eq!(l(1).oraisons, Some(3));
+    assert_eq!(l(1).sorts_par_jour[0], Some(1));
+    assert!(!l(1).domaine);
+    assert_eq!(l(8).bba, vec![6, 1]);
+    assert_eq!((l(8).vigueur, l(8).reflexes, l(8).volonte), (6, 2, 6));
+    assert_eq!(l(20).bba, vec![15, 10, 5]);
+    assert!(l(20).sorts_par_jour.iter().all(|s| *s == Some(4)));
+    // Les sorts par jour du druide et du prêtre sont identiques (hors emplacement de domaine).
+    let p = r.classe("pretre").unwrap();
+    for n in 1..=20 {
+        assert_eq!(
+            c.progression[n - 1].sorts_par_jour,
+            p.progression[n - 1].sorts_par_jour
+        );
+    }
+}
+
+#[test]
+fn instinct_naturel_et_rangs_du_druide() {
+    let r = Referentiel::core();
+    let mut f = druide(4);
+    f.niveaux[0].rangs.insert("survival".into(), 1);
+    f.niveaux[0].rangs.insert("perception".into(), 1);
+    let v = f.calculer(&r).unwrap();
+    // Survie : 1 rang + SAG +4 (16 + 2 humain) + 3 (compétence de classe) + 2 (instinct naturel).
+    assert_eq!(v.competences["survival"].total, 1 + 4 + 3 + 2);
+    // Perception : pas d'instinct naturel.
+    assert_eq!(v.competences["perception"].total, 1 + 4 + 3);
+    // 4 + modificateur d'Intelligence (10 : 0) + 1 rang d'humain par niveau.
+    assert_eq!(v.rangs[0].disponibles, 4 + 1);
+}
+
+#[test]
+fn le_druide_ne_connait_que_ses_armes() {
+    let r = Referentiel::core();
+    let mut f = druide(1);
+    f.equipement.armes = vec!["Scimitar".into(), "Longsword".into()];
+    let v = f.calculer(&r).unwrap();
+    let maitrise = |nom: &str| v.armes.iter().find(|a| a.arme_en == nom).unwrap().maitrise;
+    assert!(maitrise("Scimitar"));
+    assert!(!maitrise("Longsword"));
+}

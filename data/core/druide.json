@@ -1,0 +1,569 @@
+{
+  "source": "Manuel des joueurs (version française), classe Druide, Table 3-5",
+  "classe": {
+    "id": "druide",
+    "nom": "Druide",
+    "nom_en": "Druid",
+    "source": {
+      "livre": "Manuel des joueurs (VF)",
+      "page": 38
+    },
+    "de_vie": 8,
+    "rangs_par_niveau": 4,
+    "caracteristique_rangs": "int",
+    "competences_de_classe_en": [
+      "Spellcraft",
+      "Craft",
+      "Knowledge (geography)",
+      "Knowledge (nature)",
+      "Handle Animal",
+      "Ride",
+      "Climb",
+      "Swim",
+      "Perception",
+      "Heal",
+      "Profession",
+      "Survival",
+      "Fly"
+    ],
+    "bba": "moyen",
+    "vigueur": "rapide",
+    "reflexes": "lente",
+    "volonte": "rapide",
+    "incantation": {
+      "type": "divin",
+      "mode": "préparé",
+      "caracteristique": "sag"
+    },
+    "don_bonus_niveau_1": null,
+    "effets": [
+      {
+        "niveau_classe": 1,
+        "cible": "comp.knowledge:nature",
+        "type": "sans_type",
+        "valeur": 2,
+        "source": "Instinct naturel (druide)"
+      },
+      {
+        "niveau_classe": 1,
+        "cible": "comp.survival",
+        "type": "sans_type",
+        "valeur": 2,
+        "source": "Instinct naturel (druide)"
+      }
+    ],
+    "progression": [
+      {
+        "niveau": 1,
+        "bba": [
+          0
+        ],
+        "vigueur": 2,
+        "reflexes": 0,
+        "volonte": 2,
+        "special_en": "empathie sauvage, instinct naturel, oraisons, pacte avec la nature",
+        "sorts_par_jour": [
+          1,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 3,
+        "domaine": false
+      },
+      {
+        "niveau": 2,
+        "bba": [
+          1
+        ],
+        "vigueur": 3,
+        "reflexes": 0,
+        "volonte": 3,
+        "special_en": "déplacement facilité",
+        "sorts_par_jour": [
+          2,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 3,
+        "bba": [
+          2
+        ],
+        "vigueur": 3,
+        "reflexes": 1,
+        "volonte": 3,
+        "special_en": "absence de traces",
+        "sorts_par_jour": [
+          2,
+          1,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 4,
+        "bba": [
+          3
+        ],
+        "vigueur": 4,
+        "reflexes": 1,
+        "volonte": 4,
+        "special_en": "forme animale (1/jour), résistance à l'appel de la nature",
+        "sorts_par_jour": [
+          3,
+          2,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 5,
+        "bba": [
+          3
+        ],
+        "vigueur": 4,
+        "reflexes": 1,
+        "volonte": 4,
+        "special_en": "—",
+        "sorts_par_jour": [
+          3,
+          2,
+          1,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 6,
+        "bba": [
+          4
+        ],
+        "vigueur": 5,
+        "reflexes": 2,
+        "volonte": 5,
+        "special_en": "forme animale (2/jour)",
+        "sorts_par_jour": [
+          3,
+          3,
+          2,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 7,
+        "bba": [
+          5
+        ],
+        "vigueur": 5,
+        "reflexes": 2,
+        "volonte": 5,
+        "special_en": "—",
+        "sorts_par_jour": [
+          4,
+          3,
+          2,
+          1,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 8,
+        "bba": [
+          6,
+          1
+        ],
+        "vigueur": 6,
+        "reflexes": 2,
+        "volonte": 6,
+        "special_en": "forme animale (3/jour)",
+        "sorts_par_jour": [
+          4,
+          3,
+          3,
+          2,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 9,
+        "bba": [
+          6,
+          1
+        ],
+        "vigueur": 6,
+        "reflexes": 3,
+        "volonte": 6,
+        "special_en": "immunité aux venins",
+        "sorts_par_jour": [
+          4,
+          4,
+          3,
+          2,
+          1,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 10,
+        "bba": [
+          7,
+          2
+        ],
+        "vigueur": 7,
+        "reflexes": 3,
+        "volonte": 7,
+        "special_en": "forme animale (4/jour)",
+        "sorts_par_jour": [
+          4,
+          4,
+          3,
+          3,
+          2,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 11,
+        "bba": [
+          8,
+          3
+        ],
+        "vigueur": 7,
+        "reflexes": 3,
+        "volonte": 7,
+        "special_en": "—",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          3,
+          2,
+          1,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 12,
+        "bba": [
+          9,
+          4
+        ],
+        "vigueur": 8,
+        "reflexes": 4,
+        "volonte": 8,
+        "special_en": "forme animale (5/jour)",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          3,
+          3,
+          2,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 13,
+        "bba": [
+          9,
+          4
+        ],
+        "vigueur": 8,
+        "reflexes": 4,
+        "volonte": 8,
+        "special_en": "mille visages",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          1,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 14,
+        "bba": [
+          10,
+          5
+        ],
+        "vigueur": 9,
+        "reflexes": 4,
+        "volonte": 9,
+        "special_en": "forme animale (6/jour)",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          4,
+          3,
+          3,
+          2,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 15,
+        "bba": [
+          11,
+          6,
+          1
+        ],
+        "vigueur": 9,
+        "reflexes": 5,
+        "volonte": 9,
+        "special_en": "éternelle jeunesse",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          1,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 16,
+        "bba": [
+          12,
+          7,
+          2
+        ],
+        "vigueur": 10,
+        "reflexes": 5,
+        "volonte": 10,
+        "special_en": "forme animale (7/jour)",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          3,
+          2,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 17,
+        "bba": [
+          12,
+          7,
+          2
+        ],
+        "vigueur": 10,
+        "reflexes": 5,
+        "volonte": 10,
+        "special_en": "—",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          1
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 18,
+        "bba": [
+          13,
+          8,
+          3
+        ],
+        "vigueur": 11,
+        "reflexes": 6,
+        "volonte": 11,
+        "special_en": "forme animale (8/jour)",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          3,
+          2
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 19,
+        "bba": [
+          14,
+          9,
+          4
+        ],
+        "vigueur": 11,
+        "reflexes": 6,
+        "volonte": 11,
+        "special_en": "—",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          3
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 20,
+        "bba": [
+          15,
+          10,
+          5
+        ],
+        "vigueur": 12,
+        "reflexes": 6,
+        "volonte": 12,
+        "special_en": "forme animale (à volonté)",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      }
+    ],
+    "capacites_en": {
+      "Armes et armures": "Armes : bâton, cimeterre, dague, épieu, faux, fléchette, fronde, gourdin, lance et serpe, ainsi que les attaques naturelles des formes qu'il peut prendre. Armures légères et intermédiaires, mais jamais métalliques (cuir, peau, matelassé) ; boucliers en bois uniquement (pas de pavois). Un druide qui porte un objet interdit perd l'accès à ses sorts et à ses aptitudes surnaturelles ou magiques pendant le port et les 24 heures suivantes.",
+      "Sorts": "Le druide lance des sorts divins de la liste des sorts de druide, qu'il prépare à l'avance après une heure de méditation. Il lui faut une Sagesse d'au moins 10 + le niveau du sort ; DD des jets de sauvegarde : 10 + niveau du sort + modificateur de Sagesse. Sorts en bonus avec une Sagesse élevée.",
+      "Incantation spontanée": "Il peut sacrifier un sort préparé pour lancer spontanément un sort de convocation d'alliés naturels de niveau égal ou inférieur.",
+      "Oraisons": "Il prépare un certain nombre d'oraisons chaque jour ; elles ne sont pas perdues quand elles sont lancées.",
+      "Langues supplémentaires": "Le sylvestre s'ajoute aux langues supplémentaires ; le druide apprend gratuitement le druidique (interdit d'enseignement aux non-druides).",
+      "Pacte avec la nature (Ext)": "Au niveau 1, au choix : un des domaines Air, Climat, Eau, Faune, Feu, Flore ou Terre (niveau de prêtre = niveau de druide, avec emplacements de domaine), ou un compagnon animal.",
+      "Instinct naturel (Ext)": "Bonus de +2 aux tests de Connaissances (nature) et de Survie.",
+      "Empathie sauvage (Ext)": "Améliore l'attitude d'un animal : 1d20 + niveau de druide + modificateur de Charisme (−4 sur une créature magique d'Intelligence 1 ou 2).",
+      "Forme animale (Sur)": "À partir du niveau 4 : se transforme en animal (forme bestiale I, puis II, III…), en élémentaire ou en plante selon le niveau ; 1 utilisation par jour au niveau 4, +1 au niveau 6 puis tous les deux niveaux, à volonté au niveau 20."
+    },
+    "notes_source": "Manuel des joueurs (VF) : description de la classe p. 38 à 41, Table 3-5 p. 40 (tableau lu et recoupé avec celui du prêtre pour les sorts par jour)."
+  }
+}

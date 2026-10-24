@@ -157,6 +157,20 @@ pub struct Classe {
     pub progression: Vec<ProgressionNiveau>,
     #[serde(default)]
     pub lignages: Vec<Lignage>,
+    /// Bonus chiffrés accordés par la classe (ex. instinct naturel du druide).
+    #[serde(default)]
+    pub effets: Vec<EffetClasse>,
+}
+
+/// Bonus chiffré d'une capacité de classe, acquis à partir d'un niveau de classe.
+#[derive(Debug, Clone, Deserialize)]
+pub struct EffetClasse {
+    pub niveau_classe: u32,
+    pub cible: String,
+    #[serde(rename = "type")]
+    pub type_bonus: TypeBonus,
+    pub valeur: i32,
+    pub source: String,
 }
 
 /// Ligne du tableau 3-1 (Core p. 31) : XP requis et gains du niveau.
@@ -217,6 +231,7 @@ impl Referentiel {
             &[
                 include_str!("../../../data/core/ensorceleur.json"),
                 include_str!("../../../data/core/pretre.json"),
+                include_str!("../../../data/core/druide.json"),
             ],
             include_str!("../../../data/core/progression.json"),
         )

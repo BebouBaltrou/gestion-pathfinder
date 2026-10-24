@@ -2,6 +2,14 @@
   "source": "Core Rulebook : description de la classe (Ensorceleur, p. 70), traits « Weapon Familiarity » des races, dons de maîtrise (p. 118, 133, 134, 135)",
   "classes": {
     "ensorceleur": { "armes": ["simple"], "armures": [], "boucliers": false, "bouclier_pavois": false },
+    "druide": {
+      "armes": [],
+      "armes_nommees": ["Club", "Dagger", "Dart", "Quarterstaff", "Scimitar", "Scythe", "Sickle", "Shortspear", "Sling", "Spear"],
+      "armures": ["legere", "intermediaire"],
+      "boucliers": true,
+      "bouclier_pavois": false,
+      "restrictions": "Armures et boucliers non métalliques seulement (non contrôlé par l'application)."
+    },
     "pretre": { "armes": ["simple"], "armures": ["legere", "intermediaire"], "boucliers": true, "bouclier_pavois": false }
   },
   "races": {
