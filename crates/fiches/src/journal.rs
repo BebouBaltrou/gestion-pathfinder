@@ -62,6 +62,11 @@ pub enum EvenementFiche {
     TempsEcoule {
         rounds: u32,
     },
+    /// Dommages de caractéristique subis (`delta` > 0) ou récupérés (`delta` < 0), jamais sous zéro.
+    DommagesCaracteristique {
+        carac: crate::caracteristiques::Carac,
+        delta: i32,
+    },
 }
 
 impl EvenementFiche {
@@ -101,6 +106,12 @@ impl EvenementFiche {
             EvenementFiche::EffetTemporaireAjoute(t) => format!("Effet temporaire : {}", t.nom),
             EvenementFiche::EffetTemporaireRetire(n) => format!("Effet temporaire terminé : {n}"),
             EvenementFiche::TempsEcoule { rounds } => format!("{rounds} round(s) écoulé(s)"),
+            EvenementFiche::DommagesCaracteristique { carac, delta } if *delta >= 0 => {
+                format!("Dommages de caractéristique : {} −{delta}", carac.abrege())
+            }
+            EvenementFiche::DommagesCaracteristique { carac, delta } => {
+                format!("Caractéristique récupérée : {} +{}", carac.abrege(), -delta)
+            }
         }
     }
 }
@@ -396,6 +407,10 @@ impl Journal {
                         }
                     }
                     fiche.temporaires.retain(|t| t.rounds_restants != Some(0));
+                }
+                EvenementFiche::DommagesCaracteristique { carac, delta } => {
+                    let d = fiche.dommages.entry(*carac).or_insert(0);
+                    *d = (*d + *delta).max(0);
                 }
                 EvenementFiche::MonteeDeNiveau(m) => {
                     let atteignable = niveau_atteignable(r, regles.vitesse, xp, jalon);

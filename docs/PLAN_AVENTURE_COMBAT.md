@@ -135,3 +135,9 @@ naturelle (pas de torches) ; ordre d'initiative = uniquement tes personnages.
   effets temporisés génériques, alertes, conversion de fin de combat, recul d'horloge). 26 tests dont 7 tests de
   propriétés. Reste, pour le branchement : remplacer `EffetTemporaire` dans `fiches` par ce modèle (migration de
   l'ancien format à la lecture), à coordonner avec le fil « Gestion de personnage ».
+- **Phase 3 (moteur) faite** : crate `crates/aventure` (état vital, faim et soif, repos, effets temporisés,
+  journal d'aventure, horloge) + événement `DommagesCaracteristique` dans `fiches`. 22 tests. Lectures de
+  règles à valider : `docs/POINTS_A_CONFIRMER_AVENTURE.md`. Le branchement dans la campagne
+  (`Evenement::Aventure`, `FORMAT = 2`) et les commandes Tauri viennent avec l'interface.
+  Écart avec le plan : au lieu de supprimer `EffetTemporaire`, il sert de simple porteur des effets actifs
+  dans la fiche (sans compte à rebours) ; le temps est suivi par `crates/temps`, seule source de vérité.

@@ -1,0 +1,18 @@
+[package]
+name = "aventure"
+description = "Mode aventure : horloge de campagne, état vital, effets temporisés, repos, faim et soif, journal d'aventure"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+
+[dependencies]
+fiches = { path = "../fiches", default-features = false }
+temps = { path = "../temps", default-features = false }
+serde = { version = "1", features = ["derive"], optional = true }
+
+[features]
+default = ["serde"]
+serde = ["dep:serde", "fiches/serde", "temps/serde"]
+
+[dev-dependencies]
+serde_json = "1"
