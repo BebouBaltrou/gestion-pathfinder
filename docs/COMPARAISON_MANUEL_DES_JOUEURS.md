@@ -26,7 +26,7 @@ Fait le 24/10/2026, d'après le PDF « Manuel des joueurs » (version française
 - **Faux** : type « P ou C » dans le livre (perforant ou contondant) ; l'anglais donne perforant ou tranchant.
 - **Flasque (vide)** : 2,25 kg dans le livre ; l'anglais donne 1,5 lb (0,75 kg).
 - **Séquestration / Dissimulation suprême** : noms échangés dans le livre par rapport à l'anglais (niveaux 7 et 8).
-- **Écoles de magie** : *Détection de la magie* (universel), *Souffle de vie* (transmutation) et *Voie végétale* (transmutation) diffèrent de l'anglais.
+- **Écoles de magie** : *Détection de la magie* (universel), *Souffle de vie* et *Voie végétale* (transmutation) diffèrent de l’anglais ; **confirmé par Antoine : le livre fait foi**, aucune note d’erreur.
 - **Fautes d'impression du livre** corrigées dans le nom : « Halllebarde » (Hallebarde), « Clepysdre » (Clepsydre).
 - **Gnome** : le livre ne lui donne pas le sylvestre d'office (l'anglais oui) ; **nain** : « élémentaire » à la place de « terran » dans les langues au choix.
 - **Atelier de cambrioleur de maître** : le livre répète « Outils de cambrioleur » (100 po) sans préciser « de maître » ; j'ai ajouté « (de maître) ».
@@ -36,7 +36,7 @@ Fait le 24/10/2026, d'après le PDF « Manuel des joueurs » (version française
 ## Ajouts du 24/10 (suite)
 
 - **Sources** : chaque don, sort, arme, armure et objet de matériel a maintenant sa page dans le Manuel des joueurs (`data/core/fr/pages_vf.json`). Elle s'affiche en petit sous les dons de la fiche et sous la description d'un sort en combat. Les anciennes sources (livre anglais) sont conservées dans les données.
-- **Notes « erreur du livre »** (`data/core/fr/notes_livre.json`) : affichées en petit et en italique pour les sorts concernés (Détection de la magie, Souffle de vie, Voie végétale, Séquestration, Dissimulation suprême). Pour les armes et le matériel (Gourdin, Marteau léger, Hache de lancer, Faux, Flasque, Hallebarde, Clepsydre), la note est enregistrée mais l'application n'a pas encore d'écran de détail pour les afficher.
+- **Notes « erreur du livre »** (`data/core/fr/notes_livre.json`) : affichées en petit et en italique pour les sorts concernés (Séquestration, Dissimulation suprême). Pour les armes et le matériel (Gourdin, Marteau léger, Hache de lancer, Faux, Flasque, Hallebarde, Clepsydre), la note est enregistrée mais l'application n'a pas encore d'écran de détail pour les afficher.
 - **Descriptions de l'équipement** (`data/core/fr/equipement_descriptions.json`) : 52 armes sur 87, 20 armures sur 21 et 37 objets de matériel sur 161. Les autres n'ont pas de texte dans le livre, ou celui-ci est coupé par un tableau (je n'ai gardé que les textes complets). Pas encore affichées dans l'application.
 - **Lignages draconique et élémentaire** : tableaux des types d'énergie, des souffles et des déplacements relus : identiques.
 

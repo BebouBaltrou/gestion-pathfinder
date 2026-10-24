@@ -14,10 +14,7 @@
  },
  "sorts": {
   "Sequester": "Erreur probable du livre : les noms « Dissimulation suprême » (niveau 7) et « Séquestration » (niveau 8) sont échangés par rapport à la version d’origine.",
-  "Trap the Soul": "Erreur probable du livre : les noms « Dissimulation suprême » (niveau 7) et « Séquestration » (niveau 8) sont échangés par rapport à la version d’origine.",
-  "Detect Magic": "Le livre classe ce sort dans l’école « universel » (divination dans la version d’origine).",
-  "Breath of Life": "Le livre classe ce sort dans l’école « transmutation » (invocation dans la version d’origine).",
-  "Transport via Plants": "Le livre classe ce sort dans l’école « transmutation » (invocation dans la version d’origine)."
+  "Trap the Soul": "Erreur probable du livre : les noms « Dissimulation suprême » (niveau 7) et « Séquestration » (niveau 8) sont échangés par rapport à la version d’origine."
  },
  "dons": {}
 }
