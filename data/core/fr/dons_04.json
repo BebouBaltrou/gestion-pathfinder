@@ -1,169 +1,169 @@
 {
   "Improved Bull Rush": {
-    "resume": "Vous savez bousculer vos ennemis.",
-    "prerequis": "For 13, Attaque en puissance, bonus de base à l'attaque +1",
-    "avantage": "Vous ne provoquez pas d'attaque d'opportunité quand vous effectuez une manœuvre de bousculade. De plus, vous recevez un bonus de +2 aux tests faits pour bousculer un ennemi. Vous recevez aussi un bonus de +2 à votre Défense contre les manœuvres de combat chaque fois qu'un adversaire essaie de vous bousculer.",
-    "normal": "Vous provoquez une attaque d'opportunité quand vous effectuez une manœuvre de bousculade."
+    "resume": "Le personnage est doué pour repousser ses adversaires.",
+    "prerequis": "For 13, Attaque en puissance, bonus de base à l’attaque de +1.",
+    "avantage": "Lors d’une manœuvre offensive, le personnage peut tenter une bousculade sans provoquer d’attaque d’opportunité. Le personnage bénéficie de plus d’un bonus de +2 aux tests destinés à bousculer un adversaire et un bonus de +2 à son degré de manœuvres défensives (DMD) quand un ennemi essaie de le bousculer.",
+    "normal": "Le personnage provoque une attaque d’opportunité quand il bouscule un adversaire lors d’une manœuvre offensive."
   },
   "Improved Channel": {
-    "resume": "Votre énergie canalisée est plus difficile à repousser.",
-    "prerequis": "Capacité de classe de canalisation d'énergie",
-    "avantage": "Ajoutez 2 au DD des jets de sauvegarde faits pour résister aux effets de votre faculté de canalisation d'énergie."
+    "resume": "Il est plus difficile de résister à l’énergie canalisée par le personnage.",
+    "prerequis": "Capacité de classe permettant de canaliser de l’énergie.",
+    "avantage": "Le personnage ajoute 2 au DD des jets de sauvegarde destinés à résister à l’énergie qu’il canalise."
   },
   "Improved Counterspell": {
-    "resume": "Vous savez contrer les sorts des autres avec des sorts similaires.",
-    "avantage": "Quand vous contrez un sort, vous pouvez utiliser un sort de la même école d'un ou plusieurs niveaux de sort supérieur au sort visé.",
-    "normal": "Sans ce don, vous ne pouvez contrer un sort qu'avec le même sort ou avec un sort spécifiquement désigné comme contrant le sort visé."
+    "resume": "Le personnage sait contrer les sorts ennemis en utilisant des sorts proches.",
+    "avantage": "Lorsque le personnage tente de contrer un sort, il peut remplacer le sort d’origine par n’importe quel sort de la même école ayant au moins un niveau de sort de plus.",
+    "normal": "Un lanceur de sorts qui ne possède pas ce don ne peut contrer un sort qu’en utilisant exactement le même sort ou un sort indiquant qu’il peut être utilisé comme contresort."
   },
   "Improved Critical": {
-    "resume": "Les attaques faites avec l'arme choisie sont assez mortelles.",
-    "prerequis": "Maniement de l'arme, bonus de base à l'attaque +8",
-    "avantage": "Quand vous utilisez l'arme que vous avez choisie, sa zone de menace est doublée.",
-    "special": "Vous pouvez prendre Critique amélioré plusieurs fois. Les effets ne se cumulent pas. Chaque fois que vous prenez le don, il s'applique à un nouveau type d'arme. Cet effet ne se cumule avec aucun autre effet qui étend la zone de menace d'une arme."
+    "resume": "Les attaques du personnage avec une arme de son choix sont particulièrement redoutable.",
+    "prerequis": "Maniement de l’arme choisie, bonus de base à l’attaque de +8.",
+    "avantage": "La zone de critique de l’arme choisie est doublée.",
+    "special": "Ce don peut être choisi plusieurs fois, mais ses effets ne se cumulent pas. Il s’applique à chaque fois à une arme nouvelle. Les effets de ce don ne se cumulent pas avec tout autre effet visant à étendre la zone de critique d’une arme."
   },
   "Improved Disarm": {
-    "resume": "Vous savez faire lâcher son arme à un ennemi.",
-    "prerequis": "Int 13, Expertise du combat",
-    "avantage": "Vous ne provoquez pas d'attaque d'opportunité quand vous effectuez une manœuvre de désarmement. De plus, vous recevez un bonus de +2 aux tests faits pour désarmer un ennemi. Vous recevez aussi un bonus de +2 à votre Défense contre les manœuvres de combat chaque fois qu'un adversaire essaie de vous désarmer.",
-    "normal": "Vous provoquez une attaque d'opportunité quand vous effectuez une manœuvre de désarmement."
+    "resume": "Le personnage a un don pour ôter l’arme des mains de son adversaire.",
+    "prerequis": "Int 13, Expertise du combat.",
+    "avantage": "Le personnage ne provoque pas d’attaque d’opportunité quand il tente de désarmer son ennemi. De plus, il reçoit un bonus de +2 aux tests destinés à désarmer un adversaire et un bonus de +2 à son dégré de manœuvres défensives (DMD) quand ses ennemis essaient de le désarmer.",
+    "normal": "Le personnage provoque une attaque d’opportunité quand il tente de désarmer son adversaire lors d’une manœuvre offensive."
   },
   "Improved Familiar": {
-    "resume": "Ce don vous permet d'acquérir un familier puissant, mais seulement quand vous pourriez normalement acquérir un nouveau familier.",
-    "prerequis": "Faculté d'acquérir un nouveau familier, alignement compatible, niveau suffisamment élevé (voir ci-dessous)",
-    "avantage": "Quand vous choisissez un familier, les créatures de la liste des familiers améliorés vous sont aussi accessibles. Vous pouvez choisir un familier dont l'alignement est éloigné d'au plus un cran sur chaque axe d'alignement (de loyal à chaotique, de bon à mauvais).\nLes familiers améliorés utilisent par ailleurs les règles des familiers ordinaires, avec deux exceptions : si le type de la créature est autre qu'animal, son type ne change pas ; et les familiers améliorés n'obtiennent pas la faculté de parler avec les autres créatures de leur espèce (bien que beaucoup d'entre eux aient déjà la faculté de communiquer)."
+    "resume": "Ce don permet au personnage d’acquérir un puissant familier mais seulement quand il a la possibilité d’acquérir un nouveau familier ordinaire.",
+    "prerequis": "Capacité à acquérir un nouveau familier, alignement compatible, niveau suffisant (voir plus bas).",
+    "avantage": "Quand le personnage choisit un nouveau familier, il peut choisir l’une des créatures indiquées ci-après (consultez le Bestiaire Pathfinder pour obtenir les statistiques de ces créatures). Il peut choisir un familier dont l’alignement ne diffère pas du sien de plus d’un cran sur chaque axe (de Loyal à Chaotique et de Bon à Mauvais). Les familiers supérieurs obéissent aux règles des familiers ordinaires à deux exceptions près : si le type de la créature n’est pas « animal » il ne change pas et les familiers supérieurs ne gagnent pas la capacité à parler avec d’autres créatures de leur espèce (bien que beaucoup possèdent une capacité innée à communiquer). Familier Alignement NLS Aigle céleste1 Neutre Bon 3 Rat sanguinaire Neutre 3 Vipère fiélone² Neutre Mauvais 3 Élémentaire P (n’importe quel type) Neutre 5 Strige Neutre 5 Homoncule3 N’importe 7 Diablotin Loyal Mauvais 7 Méphite (n’importe quel type) Neutre 7 Pseudodragon Neutre Bon 7 Quasit Chaotique Mauvais 7 1 - Ou l’équivalent céleste de toute autre créature de la liste des familiers ordinaires. 2 - Ou l’équivalent fiélon de toute autre créature de la liste des familiers ordinaires. 3 - Le maître de l’homoncule doit tout d’abord le fabriquer."
   },
   "Improved Feint": {
-    "resume": "Vous savez tromper vos adversaires au combat.",
-    "prerequis": "Int 13, Expertise du combat",
-    "avantage": "Vous pouvez faire un test de Bluff pour feinter au combat par une action de mouvement.",
-    "normal": "Feinter au combat est une action simple."
+    "resume": "Le personnage est très doué pour tromper ses adversaires au combat.",
+    "prerequis": "Int 13, Expertise du combat.",
+    "avantage": "Le personnage peut faire un test de Bluff pour tenter une feinte par une action de mouvement.",
+    "normal": "Normalement, une feinte en combat est une action simple."
   },
   "Improved Grapple": {
-    "resume": "Vous savez agripper vos adversaires.",
-    "prerequis": "Dex 13, Science du combat à mains nues",
-    "avantage": "Vous ne provoquez pas d'attaque d'opportunité quand vous effectuez une manœuvre d'empoignade. De plus, vous recevez un bonus de +2 aux tests faits pour agripper un ennemi. Vous recevez aussi un bonus de +2 à votre Défense contre les manœuvres de combat chaque fois qu'un adversaire essaie de vous agripper.",
-    "normal": "Vous provoquez une attaque d'opportunité quand vous effectuez une manœuvre d'empoignade."
+    "resume": "Le personnage a un don pour la lutte.",
+    "prerequis": "Dex 13, Science du combat à mains nues.",
+    "avantage": "Le personnage ne provoque pas d’attaque d’opportunité lorsqu’il fait une attaque de contact pour engager une lutte. Il bénéficie de plus d’un bonus de +2 aux tests de combat destinés à lutter avec un adversaire et un bonus de +2 à son degré de manœuvres défensives (DMD) quand un ennemi essaie de lutter avec lui.",
+    "normal": "L’attaque de contact nécessaire pour entamer la lutte provoque habituellement une attaque d’opportunité."
   },
   "Improved Great Fortitude": {
-    "resume": "Vous pouvez puiser dans une réserve intérieure pour résister aux maladies, aux poisons et à d'autres maux graves.",
-    "prerequis": "Vigueur surhumaine",
-    "avantage": "Une fois par jour, vous pouvez relancer un jet de Vigueur. Vous devez décider d'utiliser cette capacité avant que le résultat ne soit révélé. Vous devez garder le second jet, même s'il est pire."
+    "resume": "Le personnage peut puiser dans ses réserves intérieures pour résister aux maladies, aux poisons et autres effets néfastes.",
+    "prerequis": "Vigueur surhumaine.",
+    "avantage": "Une fois par jour, le personnage peut relancer un jet de Vigueur. Il doit décider de le faire avant que le résultat du premier jet soit connu et doit accepter le second résultat, même s’il est pire que le premier."
   },
   "Improved Initiative": {
-    "resume": "Vos réflexes rapides vous permettent de réagir vite au danger.",
-    "avantage": "Vous obtenez un bonus de +4 aux tests d'initiative."
+    "resume": "Les réflexes du personnage lui permettent de réagir rapidement en cas de danger.",
+    "avantage": "Le personnage bénéficie d’un bonus de +4 au test d’initiative."
   },
   "Improved Iron Will": {
-    "resume": "La clarté de votre pensée vous permet de résister aux attaques mentales.",
-    "prerequis": "Volonté de fer",
-    "avantage": "Une fois par jour, vous pouvez relancer un jet de Volonté. Vous devez décider d'utiliser cette capacité avant que le résultat ne soit révélé. Vous devez garder le second jet, même s'il est pire."
+    "resume": "Les pensées limpides du personnage lui permettent de résister aux attaques mentales.",
+    "prerequis": "Volonté de fer.",
+    "avantage": "Une fois par jour, le personnage peut relancer un jet de Volonté. Il doit décider de le faire avant que le résultat du premier jet soit connu et doit accepter le second résultat, même s’il est pire que le premier."
   },
   "Improved Lightning Reflexes": {
-    "resume": "Vous avez le don d'éviter les dangers qui vous entourent.",
-    "prerequis": "Réflexes éclair",
-    "avantage": "Une fois par jour, vous pouvez relancer un jet de Réflexes. Vous devez décider d'utiliser cette capacité avant que le résultat ne soit révélé. Vous devez garder le second jet, même s'il est pire."
+    "resume": "Le personnage a un don pour éviter les dangers qui l’entourent.",
+    "prerequis": "Réflexes surhumains.",
+    "avantage": "Une fois par jour, le personnage peut relancer un jet de Réflexes. Il doit décider de le faire avant que le résultat du premier jet soit connu et doit accepter le second résultat, même s’il est pire que le premier."
   },
   "Improved Overrun": {
-    "resume": "Vous savez piétiner vos ennemis.",
-    "prerequis": "For 13, Attaque en puissance, bonus de base à l'attaque +1",
-    "avantage": "Vous ne provoquez pas d'attaque d'opportunité quand vous effectuez une manœuvre de renversement. De plus, vous recevez un bonus de +2 aux tests faits pour renverser un ennemi. Vous recevez aussi un bonus de +2 à votre Défense contre les manœuvres de combat chaque fois qu'un adversaire essaie de vous renverser. Les cibles de votre tentative de renversement ne peuvent pas choisir de vous éviter.",
-    "normal": "Vous provoquez une attaque d'opportunité quand vous effectuez une manœuvre de renversement."
+    "resume": "Le personnage sait renverser ses adversaires.",
+    "prerequis": "For 13, Attaque en puissance, bonus de base à l’attaque +1.",
+    "avantage": "Le personnage ne provoque pas d’attaque d’opportunité quand il tente de renverser un adversaire lors d’une manœuvre offensive. Il bénéficie de plus d’un bonus de +2 aux tests de combat destinés à renverser un adversaire et un bonus de +2 à son degré de manœuvres défensives (DMD) quand un ennemi essaie de le renverser. Les cibles du personnage ne peuvent pas choisir de l’éviter.",
+    "normal": "Le renversement provoque habituellement une attaque d’opportunité."
   },
   "Improved Precise Shot": {
-    "resume": "Vos attaques à distance ignorent tout sauf le camouflage total et l'abri total.",
-    "prerequis": "Dex 19, Tir à bout portant, Tir de précision, bonus de base à l'attaque +11",
-    "avantage": "Vos attaques à distance ignorent le bonus à la CA conféré aux cibles par tout ce qui est inférieur à un abri total, et le pourcentage de chances de rater conféré aux cibles par tout ce qui est inférieur à un camouflage total. L'abri total et le camouflage total procurent leurs avantages normaux contre vos attaques à distance.",
-    "normal": "Voir les règles normales sur les effets de l'abri et du camouflage dans Combat."
+    "resume": "Les attaques du personnage ignorent tout sauf le camouflage et l’abri total.",
+    "prerequis": "Dex 19, Tir à bout portant, Tir de précision, bonus de base à l’attaque de +11.",
+    "avantage": "Les attaques à distance du personnage ignorent le bonus à la classe d’armure dont bénéficient les créatures cachées derrière un abri autre que total, ainsi que les chances d’échec liées à un camouflage autre que total. Un abri total ou un camouflage total conserve ses effets habituels.",
+    "normal": "Voir le Chapitre 8 à propos des abris et du camouflage dans."
   },
   "Improved Shield Bash": {
-    "resume": "Vous pouvez vous protéger avec votre bouclier, même si vous l'utilisez pour attaquer.",
-    "prerequis": "Maniement des boucliers",
-    "avantage": "Quand vous effectuez un coup de bouclier, vous pouvez toujours appliquer le bonus de bouclier à votre CA.",
-    "normal": "Sans ce don, un personnage qui effectue un coup de bouclier perd le bonus de bouclier à la CA jusqu'à son tour suivant (voir Équipement)."
+    "resume": "Le personnage peut se protéger à l’aide de son bouclier, même s’il s’en sert pour attaquer.",
+    "prerequis": "Maniement des boucliers.",
+    "avantage": "Lorsque le personnage donne un coup de bouclier, il peut tout de même appliquer son bonus de bouclier à sa classe d’armure.",
+    "normal": "Sans ce don, un personnage qui donne un coup de bouclier perd son bonus de bouclier à la CA jusqu’à son prochain tour de jeu (voir Chapitre 6)."
   },
   "Improved Sunder": {
-    "resume": "Vous savez endommager les armes et armures de vos ennemis.",
-    "prerequis": "For 13, Attaque en puissance, bonus de base à l'attaque +1",
-    "avantage": "Vous ne provoquez pas d'attaque d'opportunité quand vous effectuez une manœuvre de bris d'arme. De plus, vous recevez un bonus de +2 aux tests faits pour briser un objet. Vous recevez aussi un bonus de +2 à votre Défense contre les manœuvres de combat chaque fois qu'un adversaire essaie de briser votre équipement.",
-    "normal": "Vous provoquez une attaque d'opportunité quand vous effectuez une manœuvre de bris d'arme."
+    "resume": "Le personnage est habile pour détruire les armes de son adversaire.",
+    "prerequis": "For 13, Attaque en puissance, bonus de base à l’attaque de +1.",
+    "avantage": "Lorsque le personnage essaye de détruire un objet tenu ou porté par un adversaire (comme une arme ou un bouclier), il ne s’expose pas à une attaque d’opportunité. Il bénéficie de plus d’un bonus de +2 aux tests de combat destinés à briser un objet et un bonus de +2 à son degré de manœuvres défensives (DMD) quand un ennemi essaie de détruire son équipement.",
+    "normal": "Un personnage qui ne possède pas ce don provoque une attaque d’opportunité quand il attaque un objet tenu ou porté par une autre personne."
   },
   "Improved Trip": {
-    "resume": "Vous savez envoyer vos adversaires au sol.",
-    "prerequis": "Int 13, Expertise du combat",
-    "avantage": "Vous ne provoquez pas d'attaque d'opportunité quand vous effectuez une manœuvre de croc-en-jambe. De plus, vous recevez un bonus de +2 aux tests faits pour faire trébucher un ennemi. Vous recevez aussi un bonus de +2 à votre Défense contre les manœuvres de combat chaque fois qu'un adversaire essaie de vous faire trébucher.",
-    "normal": "Vous provoquez une attaque d'opportunité quand vous effectuez une manœuvre de croc-en-jambe."
+    "resume": "Le personnage est très doué pour envoyer son adversaire à terre.",
+    "prerequis": "Int 13, Expertise du combat.",
+    "avantage": "Le personnage ne provoque pas d’attaque d’opportunité lorsqu’il tente de faire un croc-en-jambe. Il bénéficie de plus d’un bonus de +2 aux tests de manœuvre destinés à faire un croc-en-jambe à un adversaire et un bonus de +2 à son degré de manœuvres défensives (DMD) quand un ennemi essaie de faire de même.",
+    "normal": "Sans ce don, un croc-en-jambe provoque une attaque d’opportunité."
   },
   "Improved Two-Weapon Fighting": {
-    "resume": "Vous savez combattre avec deux armes.",
-    "prerequis": "Dex 17, Combat à deux armes, bonus de base à l'attaque +6",
-    "avantage": "En plus de l'unique attaque supplémentaire standard que vous obtenez avec une arme de la main non directrice, vous obtenez une seconde attaque avec elle, quoique avec un malus de –5.",
-    "normal": "Sans ce don, vous ne pouvez obtenir qu'une seule attaque supplémentaire avec une arme de la main non directrice."
+    "resume": "Le personnage est doué pour le combat à deux armes.",
+    "prerequis": "Dex 17, Combat à deux armes, bonus de base à l’attaque de +6.",
+    "avantage": "Lorsque le personnage se bat à deux armes, il peut porter deux attaques supplémentaires à l’aide de son arme secondaire au lieu d’une seule. Cependant, cette deuxième attaque secondaire s’accompagne d’un malus de -5 au jet d’attaque.",
+    "normal": "Sans ce don, le personnage ne peut porter qu’une attaque supplémentaire avec son arme secondaire."
   },
   "Improved Unarmed Strike": {
-    "resume": "Vous savez combattre à mains nues.",
-    "avantage": "Vous êtes considéré comme armé même quand vous êtes désarmé : vous ne provoquez pas d'attaques d'opportunité quand vous attaquez des ennemis à mains nues. Vos attaques à mains nues peuvent infliger des dégâts létaux ou non létaux, à votre choix.",
-    "normal": "Sans ce don, vous êtes considéré comme désarmé quand vous attaquez à mains nues, et vous ne pouvez infliger que des dégâts non létaux avec une telle attaque."
+    "resume": "Le personnage sait se battre sans armes.",
+    "avantage": "Le personnage est considéré comme armé même s’il n’a pas d’arme. Cela signifie qu’il ne provoque pas d’attaque d’opportunité quand il attaque un adversaire armé à mains nues. Les attaques à mains nues du personnage peuvent infliger des dégâts létaux ou non-létaux, à sa guise.",
+    "normal": "Sans ce don, un personnage qui se bat à mains nues est considéré comme étant désarmé et inflige seulement des dégâts non-létaux."
   },
   "Improved Vital Strike": {
-    "resume": "Vous pouvez faire une seule attaque qui inflige une grande quantité de dégâts.",
-    "prerequis": "Frappe vitale, bonus de base à l'attaque +11",
-    "avantage": "Quand vous utilisez l'action d'attaque, vous pouvez faire une attaque avec votre plus haut bonus de base à l'attaque qui inflige des dégâts supplémentaires. Lancez trois fois les dés de dégâts de l'arme pour l'attaque et additionnez les résultats avant d'ajouter les bonus de Force, de capacités d'arme (comme enflammée), de dégâts de précision et d'autres bonus de dégâts. Ces dés de dégâts d'arme supplémentaires ne sont pas multipliés en cas de coup critique, mais s'ajoutent au total."
+    "resume": "Le personnage peut porter une unique attaque qui inflige des dégâts importants.",
+    "prerequis": "Frappe décisive, bonus de base à l’attaque de +11.",
+    "avantage": "Quand le personnage recourt à cette action, il porte une unique attaque avec son bonus de base à l’attaque le plus élevé. Cette attaque inflige alors des dégâts supplémentaires : le personnage lance trois fois les dés de dégâts et additionne leurs résultats. Il ne multiplie pas les dégâts supplémentaires issus de la Force, des aptitudes de son arme (comme une arme de feu) ni les dégâts basés sur la précision (comme les attaques sournoises). Ce bonus de dégâts n’est pas multiplié en cas de critique (bien que les autres bonus de dégâts le soient, comme à l’accoutumée)."
   },
   "Improvised Weapon Mastery": {
-    "resume": "Vous pouvez transformer presque n'importe quel objet en arme mortelle, d'un pied de chaise tranchant comme un rasoir à un sac de farine.",
-    "prerequis": "Prise au dépourvu ou Lancer n'importe quoi, bonus de base à l'attaque +8",
-    "avantage": "Vous ne subissez aucun malus pour l'utilisation d'une arme improvisée. Augmentez d'un cran les dégâts infligés par l'arme improvisée (par exemple 1d4 devient 1d6) jusqu'à un maximum de 1d8 (2d6 si l'arme improvisée est à deux mains). L'arme improvisée a une zone de menace de 19-20, avec un multiplicateur de critique de ×2."
+    "resume": "Le personnage peut transformer n’importe quel objet en arme, qu’il s’agisse d’un pied de chaise tranchant ou d’un sac de farine.",
+    "prerequis": "Lancer improvisé ou Surprise, bonus de base à l’attaque de +8.",
+    "avantage": "Le personnage ne subit aucun malus quand il utilise une arme improvisée. Il augmente les dégâts de cette arme d’un cran (par exemple de 1d4 à 1d6) jusqu’à un maximum de 1d8 (2d6 si l’arme improvisée est à deux mains). Cette arme inflige un éventuel coup critique sur 19-20 et possède un multiplicateur de critique de x2."
   },
   "Intimidating Prowess": {
-    "resume": "Votre puissance physique intimide les autres.",
-    "avantage": "Ajoutez votre modificateur de Force aux tests d'Intimidation, en plus de votre modificateur de Charisme."
+    "resume": "La force physique du personnage intimide les autres.",
+    "avantage": "Le personnage ajoute son modificateur de Force en plus de son modificateur de Charisme lors de ses tests d’Intimidation."
   },
   "Iron Will": {
-    "resume": "Vous résistez mieux aux effets mentaux.",
-    "avantage": "Vous obtenez un bonus de +2 à tous les jets de Volonté."
+    "resume": "Le personnage est plus résistant aux effets mentaux.",
+    "avantage": "Le personnage bénéficie d’un bonus de +2 à tous ses jets de Volonté."
   },
   "Leadership": {
-    "resume": "Vous attirez des partisans à votre cause et un compagnon pour vous rejoindre dans vos aventures.",
-    "prerequis": "Niveau de personnage 7",
-    "avantage": "Ce don vous permet d'attirer un acolyte loyal et un certain nombre de subordonnés dévoués qui vous assistent. Un acolyte est généralement un PNJ ayant des niveaux de classe, tandis que les partisans sont typiquement des PNJ de niveau inférieur. Voir le tableau « Commandement » pour savoir quel niveau d'acolyte et combien de partisans vous pouvez recruter.\nScore de commandement — Niveau de l'acolyte — Nombre de partisans par niveau (1er, 2e, 3e, 4e, 5e, 6e)\n1 ou moins — — — aucun\n2 — 1 — aucun\n3 — 2 — aucun\n4 — 3 — aucun\n5 — 3 — aucun\n6 — 4 — aucun\n7 — 5 — aucun\n8 — 5 — aucun\n9 — 6 — aucun\n10 — 7 — 5 / — / — / — / — / —\n11 — 7 — 6 / — / — / — / — / —\n12 — 8 — 8 / — / — / — / — / —\n13 — 9 — 10 / 1 / — / — / — / —\n14 — 10 — 15 / 1 / — / — / — / —\n15 — 10 — 20 / 2 / 1 / — / — / —\n16 — 11 — 25 / 2 / 1 / — / — / —\n17 — 12 — 30 / 3 / 1 / 1 / — / —\n18 — 12 — 35 / 3 / 1 / 1 / — / —\n19 — 13 — 40 / 4 / 2 / 1 / 1 / —\n20 — 14 — 50 / 5 / 3 / 2 / 1 / —\n21 — 15 — 60 / 6 / 3 / 2 / 1 / 1\n22 — 15 — 75 / 7 / 4 / 2 / 2 / 1\n23 — 16 — 90 / 9 / 5 / 3 / 2 / 1\n24 — 17 — 110 / 11 / 6 / 3 / 2 / 1\n25 ou plus — 17 — 135 / 13 / 7 / 4 / 2 / 2\nModificateurs de commandement : plusieurs facteurs peuvent affecter votre score de commandement, le faisant varier par rapport au score de base (niveau de personnage + modificateur de Cha). Votre réputation (du point de vue de l'acolyte ou du partisan que vous essayez d'attirer) augmente ou diminue votre score de commandement :\nRéputation du chef — Modificateur\nGrande renommée — +2\nÉquité et générosité — +1\nPouvoir spécial — +1\nÉchec — –1\nDistance — –1\nCruauté — –2\nD'autres modificateurs peuvent s'appliquer quand vous essayez d'attirer un acolyte, comme indiqué ci-dessous.\nLe chef… — Modificateur\nA un familier, une monture spéciale ou un compagnon animal — –2\nRecrute un acolyte d'un alignement différent — –1\nA causé la mort d'un acolyte — –2*\n*Cumulatif par acolyte tué.\nLes partisans ont des priorités différentes de celles des acolytes. Quand vous essayez d'attirer un partisan, utilisez les modificateurs suivants.\nLe chef… — Modificateur\nA une place forte, une base d'opérations, une maison de guilde, etc. — +2\nSe déplace beaucoup — –1\nA causé la mort d'autres partisans — –1\nScore de commandement : votre score de commandement de base est égal à votre niveau plus votre modificateur de Charisme. Pour tenir compte des modificateurs de Charisme négatifs, ce tableau prévoit des scores de commandement très bas, mais vous devez tout de même être de niveau 7 ou plus pour obtenir le don Commandement. Des facteurs extérieurs peuvent affecter votre score de commandement, comme détaillé ci-dessus.\nNiveau de l'acolyte : vous pouvez attirer un acolyte de ce niveau au plus. Quel que soit votre score de commandement, vous ne pouvez recruter qu'un acolyte de deux niveaux ou plus inférieur au vôtre. L'acolyte doit être équipé d'un matériel approprié à son niveau (voir Création de PNJ). Un acolyte peut être de n'importe quelle race ou classe. L'alignement de l'acolyte ne doit pas être opposé au vôtre sur l'axe loi/chaos ni sur l'axe bien/mal, et vous subissez un malus de –1 à votre score de commandement si vous recrutez un acolyte d'un alignement différent du vôtre.\nUn acolyte ne compte pas comme un membre du groupe pour déterminer les PX du groupe. Divisez plutôt le niveau de l'acolyte par votre niveau. Multipliez ce résultat par le total des PX qui vous sont accordés, puis ajoutez ce nombre de points d'expérience au total de l'acolyte.\nSi un acolyte gagne assez de PX pour atteindre un niveau inférieur d'un au vôtre, l'acolyte ne gagne pas le nouveau niveau : son nouveau total de PX est inférieur d'un point à celui nécessaire pour atteindre le niveau suivant.\nNombre de partisans par niveau : vous pouvez diriger jusqu'au nombre indiqué de personnages de chaque niveau. Les partisans sont semblables aux acolytes, sauf qu'ils sont généralement des PNJ de bas niveau. Comme ils ont généralement 5 niveaux de retard ou plus sur vous, ils sont rarement efficaces au combat.\nLes partisans ne gagnent pas d'expérience et ne gagnent donc pas de niveaux. Quand vous gagnez un nouveau niveau, consultez le tableau de commandement pour déterminer si vous obtenez plus de partisans, dont certains peuvent être de niveau supérieur aux partisans existants. Ne consultez pas le tableau pour voir si votre acolyte gagne des niveaux, toutefois, car les acolytes gagnent de l'expérience par eux-mêmes."
+    "resume": "Le personnage attire des suivants et un compagnon d’armes qui se joignent à sa cause et l’accompagnent au cours de ses aventures.",
+    "prerequis": "Personnage de niveau 7.",
+    "avantage": "Ce don permet au personnage de gagner les services d’un compagnon d’armes et de suivants qui l’aident de leur mieux. Le compagnon d’armes est souvent un PNJ avec des niveaux de classe tandis que les suivants sont des PNJ de bas niveau. Consultez la Table 5-2 pour connaître le niveau du compagnon d’armes et le nombre de suivants sur lesquels le personnage peut compter. Modificateurs de Prestige. Plusieurs facteurs sont susceptibles de modifier la valeur de Prestige d’un personnage, qui n’est alors plus égale à la valeur de base (niveau de personnage + modificateur de Cha). La réputation d’un personnage (du point de vue du compagnon d’armes ou du suivant dont il tente d’obtenir les services) augmente ou réduit sa valeur de Prestige. Le personnage a la réputation d’être Modificateur Un grand homme +2 Juste et généreux +1 Doté d’un pouvoir spécial +1 Accablé par les échecs multiples -1 Hautain -1 Cruel -2 D’autres modificateurs s’appliquent quand un personnage tente de gagner les services d’un compagnon d’armes. Le personnage Modificateur A un familier, destrier de paladin -2 ou compagnon animal Recrute un compagnon d’armes d’un -1 alignement autre que le sien A déjà causé la mort d’un compagnon d’armes –2* * Par compagnon d’armes tué à cause du PJ. Les suivants n’ont pas les mêmes propriétés que les compagnons d’armes. Quand le personnage tente de gagner les services d’un nouveau suivant, utilisez les modificateurs ci-dessous. Le personnage Possède une place forte, une base d’opérations, une guilde, etc. Voyage beaucoup A déjà causé la mort d’autres suivants Modificateur +2 –1 –1 Valeur de Prestige. La valeur de Prestige du personnage est égale à son niveau plus son modificateur de Charisme. La table propose des valeurs de Prestige très basses pour tenir compte de plus basses valeurs de Charisme, mais le personnage doit avoir atteint le niveau 7 au moins pour acquérir ce don. Des facteurs extérieurs peuvent modifier la valeur de Prestige, comme indiqué ci-dessus. Niveau du compagnon d’armes. Le personnage peut gagner les services d’un compagnon d’armes de ce niveau ou moins. À noter que, quelle que soit la valeur de Prestige du personnage, le niveau de son compagnon d’armes doit toujours être inférieur au sien de deux niveaux au moins. Le compagnon d’armes est équipé en fonction de son niveau (voir Chapitre 14). Le compagnon d’armes peut être de n’importe quelle race ou classe. Son alignement ne doit pas être opposé à celui du personnage, que ce soit sur l’axe Bien/Mal ou Loyal/ Chaotique. Le personnage subit un malus de -1 à sa valeur de Prestige s’il recrute un compagnon d’armes dont l’alignement diffère du sien. Le compagnon d’armes ne compte pas au nombre des membres du groupe quand il s’agit de répartir l’expérience. Le personnage divise le niveau de son compagnon d’armes par le sien et multiplie le résultat par le nombre total de PX qui lui ont été accordés. Il ajoute ensuite ce nombre au total d’expérience de son compagnon. Si le compagnon d’armes du personnage gagne suffisamment d’expérience pour accéder à un niveau inférieur de un à celui du PJ, il ne peut pas gagner ce niveau : on considère qu’il lui manque un point pour l’atteindre. Nombre de suivants par niveau. Le personnage peut diriger un total de suivants ne dépassant pas le nombre indiqué. Les suivants ressemblent aux compagnons d’armes mais ils sont d’un niveau bien Table 5–2 : Prestige Valeur de Niveau du Prestige compagnon Nombre de suivants par niveau d’armes 1 2 3 4 5 6 1 ou - — —— — — — — 2 1 —— — — — — 3 2 —— — — — — 4 3 —— — — — — 5 3 —— — — — — 6 4 —— — — — — 7 5 —— — — — — 8 5 —— — — — — 9 6 —— — — — — 10 7 5 ——— — — 11 7 6 ——— — — 12 8 8 ——— — — 13 9 10 1 — — — — 14 10 15 1 — — — — 15 10 20 2 1 — — — 16 11 25 2 1 — — — 17 12 30 3 1 1 — — 18 12 35 3 1 1 — — 19 13 40 4 2 1 1 — 20 14 50 5 3 2 1 — 21 15 60 6 3 2 1 1 22 15 75 7 4 2 2 1 23 16 90 9 5 3 2 1 24 17 110 11 6 3 2 1 25 ou + 17 135 13 7 4 2 2 inférieur à celui du personnage : comme ils ont généralement cinq niveaux de moins, ils ne sont pas très efficaces au combat. Les suivants ne gagnent pas d’expérience et ne gagnent donc pas de niveaux. Quand le personnage gagne un niveau, consultez la Table 5-2 pour savoir s’il acquiert de nouveaux suivants dont certains peuvent être de plus haut niveau que les précédents. En revanche, il n’est pas nécéssaire de consulter la table pour savoir si les cohortes gagnent des niveaux car ils gagnent leur expérience de leur côté."
   },
   "Lightning Reflexes": {
-    "resume": "Vous avez des réflexes plus rapides que la normale.",
-    "avantage": "Vous obtenez un bonus de +2 à tous les jets de Réflexes."
+    "resume": "Le personnage a des réflexes plus rapides que la normale.",
+    "avantage": "Le personnage bénéficie d’un bonus de +2 aux jets de Réflexes."
   },
   "Lightning Stance": {
-    "resume": "La vitesse à laquelle vous vous déplacez rend presque impossible à vos adversaires de vous frapper.",
-    "prerequis": "Dex 17, Esquive, Posture du vent, bonus de base à l'attaque +11",
-    "avantage": "Si vous entreprenez deux actions pour vous déplacer ou une action de retraite dans un tour, vous obtenez un camouflage de 50 % pendant 1 round."
+    "resume": "Le personnage se déplace à une telle vitesse que ses adversaires peinent à le toucher.",
+    "prerequis": "Dex 17, Comme le vent, Esquive, bonus de base à l’attaque de +11.",
+    "avantage": "Si le personnage consacre deux actions à un déplacement ou s’il bat en retraite, il gagne un bonus de camouflage de 50% pendant un round."
   },
   "Lunge": {
-    "resume": "Vous pouvez frapper des ennemis qui seraient normalement hors de portée.",
-    "prerequis": "Bonus de base à l'attaque +6",
-    "avantage": "Vous pouvez augmenter l'allonge de vos attaques de corps à corps de 1,50 m (5 pieds) jusqu'à la fin de votre tour en subissant un malus de –2 à votre CA jusqu'à votre tour suivant. Vous devez décider d'utiliser cette capacité avant que des attaques soient faites."
+    "resume": "Le personnage frappe des adversaires qui devraient être hors de portée.",
+    "prerequis": "Bonus de base à l’attaque de +6.",
+    "avantage": "Le personnage peut augmenter la portée de ses attaques de corps à corps d’un mètre cinquante jusqu’à la fin de son tour en acceptant un malus de -2 à la CA jusqu’au prochain tour. Il doit décider s’il veut utiliser ce don ou non avant la moindre attaque."
   },
   "Magical Aptitude": {
-    "resume": "Vous êtes doué pour lancer des sorts et utiliser des objets magiques.",
-    "avantage": "Vous obtenez un bonus de +2 à tous les tests d'Art de la magie et d'Utilisation d'objets magiques. Si vous avez 10 rangs ou plus dans l'une de ces compétences, le bonus passe à +4 pour cette compétence."
+    "resume": "Le personnage est doué pour lancer des sorts ou utiliser des objets magiques.",
+    "avantage": "Le personnage gagne un bonus de +2 aux tests d’Art de la magie et d’Utilisation d’objets magiques. Si le personnage a 10 rangs ou plus dans l’une de ces compétences, le bonus ajouté à cette compétence augmente de +4."
   },
   "Manyshot": {
-    "resume": "Vous pouvez tirer plusieurs flèches sur une seule cible.",
-    "prerequis": "Dex 17, Tir à bout portant, Tir rapide, bonus de base à l'attaque +6",
-    "avantage": "Quand vous faites une action d'attaque à outrance avec un arc, votre première attaque tire deux flèches. Si l'attaque touche, les deux flèches touchent. Appliquez les dégâts de précision (comme l'attaque sournoise) et les dégâts de coup critique une seule fois pour cette attaque. Les bonus de dégâts dus à l'emploi d'un arc composite avec un bonus de Force élevé s'appliquent à chaque flèche, de même que les autres bonus de dégâts, comme le bonus d'ennemi juré d'un rôdeur. La réduction des dégâts et les résistances s'appliquent séparément à chaque flèche."
+    "resume": "Le personnage peut tirer plusieurs flèches sur une cible unique.",
+    "prerequis": "Dex 17, Tir à bout portant, Tir rapide, bonus de base à l’attaque de +6.",
+    "avantage": "Quand le personnage fait une attaque à outrance avec un arc, il peut tirer deux flèches lors de sa première attaque. S’il touche, les deux flèches atteignent leur cible. Les dégâts de précision (comme les attaques sournoises) et les coups critiques s’appliquent à une seule flèche. Les bonus aux dégâts des arcs composites qui offrent un bonus de Force s’appliquent aux deux flèches, comme les autres bonus de dégâts (ennemi juré pour les rôdeurs par exemple). La réduction de dégâts et les résistances s’appliquent séparément à chaque flèche."
   },
   "Martial Weapon Proficiency": {
-    "resume": "Choisissez un type d'arme de guerre. Vous comprenez comment utiliser ce type d'arme de guerre au combat.",
-    "avantage": "Vous faites normalement les jets d'attaque avec l'arme choisie (sans le malus de non-maniement).",
-    "normal": "Quand vous utilisez une arme que vous ne maniez pas, vous subissez un malus de –4 aux jets d'attaque.",
-    "special": "Les barbares, guerriers, paladins et rôdeurs manient toutes les armes de guerre. Ils n'ont pas besoin de choisir ce don.\nVous pouvez prendre Maniement des armes de guerre plusieurs fois. Chaque fois que vous prenez le don, il s'applique à un nouveau type d'arme."
+    "resume": "Le personnage choisit une arme de guerre et sait se battre avec.",
+    "avantage": "Lorsqu’il utilise l’arme de guerre choisie, le personnage fait ses jets d’attaque normalement.",
+    "normal": "Un personnage qui utilise une arme sans être formé à son maniement subit un malus de -4 aux jets d’attaque.",
+    "special": "Les barbares, guerriers, paladins et rôdeurs sont formés au maniement de toutes les armes de guerre. Ils n’ont pas besoin de choisir ce don. Ce don peut être choisi plusieurs fois, mais ses effets ne se cumulent pas. Il s’applique à chaque fois à une nouvelle arme de guerre."
   },
   "Master Craftsman": {
-    "resume": "Votre habileté supérieure d'artisan vous permet de créer des objets magiques simples.",
-    "prerequis": "5 rangs dans une compétence d'Artisanat ou de Profession quelconque",
-    "avantage": "Choisissez une compétence d'Artisanat ou de Profession dans laquelle vous possédez au moins 5 rangs. Vous recevez un bonus de +2 à cette compétence d'Artisanat ou de Profession. Les rangs de la compétence choisie comptent comme votre niveau de lanceur pour remplir les conditions des dons Création d'armes et armures magiques et Création d'objets merveilleux. Vous pouvez créer des objets magiques avec ces dons, en substituant vos rangs dans la compétence choisie à votre niveau de lanceur total. Vous devez utiliser la compétence choisie pour le test de création de l'objet. Le DD de création de l'objet augmente toujours pour toute condition de sort nécessaire (voir les règles de création d'objets magiques dans Objets magiques). Vous ne pouvez pas utiliser ce don pour créer un objet à déclenchement de sort ou à activation de sort.",
-    "normal": "Seuls les lanceurs de sorts peuvent remplir les conditions des dons Création d'armes et armures magiques et Création d'objets merveilleux."
+    "resume": "Les talents d’artisan du personnage lui permettent de créer des objets magiques simples.",
+    "prerequis": "5 rangs en Artisanat ou Profession.",
+    "avantage": "Le personnage choisit une compétence d’Artisanat ou de Profession dans laquelle il a au moins 5 rangs. Il reçoit un bonus de +2 aux tests de cette compétence. Les rangs dont il dispose dans cette compétence comptent comme niveau de lanceur de sorts quand il s’agit de savoir s’il répond aux critères des dons de Création d’armes et d’armures magiques et de Création d’objets merveilleux. Il peut créer des objets magiques à l’aide de ces dons en utilisant son rang dans la compétence choisie comme niveau de lanceur de sorts. Il doit se servir de la compétence choisie pour faire le test de création de l’objet. Le DD de création augmente tout de même en fonction des conditions nécessaires pour lancer le sort (voir les règles de création d’objets magiques, Chapitre 15). Le personnage ne peut pas utiliser ce don pour créer un déclencheur de sorts ou un objet qui s’active avec un sort.",
+    "normal": "Seuls les lanceurs de sorts peuvent choisir les dons Création d’armes et d’armures magiques et Création d’objets merveilleux."
   },
   "Maximize Spell": {
-    "resume": "Vos sorts ont l'effet maximal possible.",
-    "avantage": "Tous les effets numériques variables d'un sort modifié par ce don sont maximisés. Les jets de sauvegarde et les jets opposés ne sont pas affectés, pas plus que les sorts sans variables aléatoires. Un sort maximisé utilise un emplacement de sort de trois niveaux supérieurs au niveau réel du sort.\nUn sort amplifié et maximisé obtient les avantages distincts de chaque don : le résultat maximal plus la moitié du résultat normalement lancé."
+    "resume": "Les sorts du personnage donnent un effet maximal.",
+    "avantage": "Tous les effets numériques aléatoires de la quintessence d’un sort prennent automatiquement leur valeur maximale. Les jets de sauvegarde et les jets opposés (comme celui que l’on joue en cas de dissipation de la magie) ne sont pas affectés, pas plus que les sorts sans données numériques et aléatoires. La quintessence d’un sort nécessite un emplacement de sort de trois niveaux de plus que son niveau réel."
   }
 }

@@ -1,132 +1,132 @@
 {
   "Acrobatic": {
-    "resume": "Vous êtes doué pour bondir, sauter et voler.",
-    "avantage": "Vous obtenez un bonus de +2 à tous les tests d'Acrobaties et de Vol. Si vous avez 10 rangs ou plus dans l'une de ces compétences, le bonus passe à +4 pour cette compétence."
+    "resume": "Le personnage est doué pour bondir, sauter et voltiger.",
+    "avantage": "Le personnage obtient un bonus de +2 sur tous ses tests d’Acrobaties et de Vol. Si le personnage a 10 rangs ou plus dans l’une de ces compétences, le bonus de cette compétence passe à +4. 6 L’’equipement"
   },
   "Acrobatic Steps": {
-    "resume": "Vous passez facilement au-dessus et à travers les obstacles.",
-    "prerequis": "Dex 15, Déplacements agiles",
-    "avantage": "Chaque fois que vous vous déplacez, vous pouvez traverser jusqu'à 4,50 m (15 pieds) de terrain difficile par round comme s'il s'agissait d'un terrain normal. Les effets de ce don se cumulent avec ceux de Déplacements agiles (ce qui vous permet de traverser normalement un total de 6 m, 20 pieds, de terrain difficile par round)."
+    "resume": "Le personnage peut facilement franchir les obstacles.",
+    "prerequis": "Dex 15, Aisance.",
+    "avantage": "Quand le personnage se déplace, il peut franchir 4,50 m par round sur un terrain difficile comme s’il s’agissait d’un terrain ordinaire. Les effets de ce don s’ajoutent à ceux accordés par Aisance (qui permettent au personnage de se déplacer normalement sur 6 m par round en terrain difficile)."
   },
   "Agile Maneuvers": {
-    "resume": "Vous avez appris à utiliser votre rapidité plutôt que la force brute pour effectuer des manœuvres de combat.",
-    "avantage": "Vous ajoutez votre bonus de Dextérité à votre bonus de base à l'attaque et à votre bonus de taille pour déterminer votre bonus de manœuvre offensive (voir Combat), au lieu de votre bonus de Force.",
-    "normal": "Vous ajoutez votre bonus de Force à votre bonus de base à l'attaque et à votre bonus de taille pour déterminer votre bonus de manœuvre offensive."
+    "resume": "Quand le personnage exécute une manœuvre offensive, il sait utiliser sa rapidité au lieu de recourir à la force brute.",
+    "avantage": "Le personnage ajoute son bonus de Dextérité à son bonus de base à l’attaque et à son bonus de taille quand il s’agit de déterminer son bonus de manœuvre offensive (BMO, voir chapitre 8) au lieu de son bonus de Force.",
+    "normal": "Le personnage ajoute son bonus de Force à son bonus de base à l’attaque et à son bonus de taille quand il détermine son bonus de manœuvre offensive (BMO)."
   },
   "Alertness": {
-    "resume": "Vous remarquez souvent des choses que d'autres pourraient manquer.",
-    "avantage": "Vous obtenez un bonus de +2 aux tests de Perception et de Psychologie. Si vous avez 10 rangs ou plus dans l'une de ces compétences, le bonus passe à +4 pour cette compétence."
+    "resume": "Le personnage remarque plus facilement les détails que les autres personnes.",
+    "avantage": "Le personnage obtient un bonus de +2 sur tous ses tests de Perception et de Psychologie. Si le personnage a 10 rangs ou plus dans l’une de ces compétences, le bonus ajouté à cette compétence augmente de +4."
   },
   "Alignment Channel": {
-    "resume": "Choisissez le chaos, le mal, le bien ou la loi. Vous pouvez canaliser de l'énergie divine pour affecter les extérieurs qui possèdent ce sous-type.",
-    "prerequis": "Faculté de canaliser l'énergie",
-    "avantage": "Au lieu de son effet normal, vous pouvez choisir que votre faculté de canaliser l'énergie soigne ou blesse les extérieurs du sous-type d'alignement choisi. Vous devez faire ce choix chaque fois que vous canalisez de l'énergie. Si vous choisissez de soigner ou de blesser les créatures du sous-type d'alignement choisi, votre canalisation d'énergie n'a aucun effet sur les autres créatures. La quantité de dégâts soignés ou infligés et le DD pour les réduire de moitié restent par ailleurs inchangés.",
-    "special": "Vous pouvez prendre ce don plusieurs fois. Ses effets ne se cumulent pas. Chaque fois que vous prenez ce don, il s'applique à un nouveau sous-type d'alignement. Chaque fois que vous canalisez de l'énergie, vous devez choisir quel type affecter."
+    "resume": "Le personnage choisit le Bien, le Chaos, la Loi ou le Mal. Il peut canaliser l’énergie divine pour affecter les extérieurs de ce sous-type.",
+    "prerequis": "Capacité de classe permettant de canaliser de l’énergie.",
+    "avantage": "L’énergie canalisée par le personnage soigne ou blesse les extérieurs du sous-type choisi au lieu de fonctionner comme à l’accoutumée. Le personnage doit choisir s’il souhaite utiliser ce don ou non à chaque fois qu’il canalise de l’énergie. S’il choisit de soigner ou de blesser une créature de l’alignement en question, cette énergie n’aura aucun effet sur les autres créatures. La quantité de dégâts soignés ou infligés et le DD à battre pour réduire les dégâts de moitié ne changent pas.",
+    "special": "Le personnage peut sélectionner ce don à plusieurs reprises mais ses effets ne se cumulent pas. À chaque fois que le personnage choisit ce don, celui-ci s’applique à un nouvel alignement. Le personnage doit décider le type d’alignement affecté à chaque fois qu’il canalise de l’énergie."
   },
   "Animal Affinity": {
-    "resume": "Vous êtes doué pour travailler avec les animaux et les montures.",
-    "avantage": "Vous obtenez un bonus de +2 à tous les tests de Dressage et d'Équitation. Si vous avez 10 rangs ou plus dans l'une de ces compétences, le bonus passe à +4 pour cette compétence."
+    "resume": "Le personnage travaille aisément avec les animaux et les montures.",
+    "avantage": "Le personnage obtient un bonus de +2 sur tous ses tests de Dressage et d’Équitation. Si le personnage a 10 rangs ou plus dans l’une de ces compétences, le bonus ajouté à cette compétence augmente de +4."
   },
   "Arcane Armor Mastery": {
-    "resume": "Vous maîtrisez la faculté de lancer des sorts en portant une armure.",
-    "prerequis": "Entraînement à l'armure arcanique, Maniement des armures intermédiaires, niveau de lanceur 7",
-    "avantage": "Par une action rapide, vous réduisez de 20 % le risque d'échec des sorts profanes dû à l'armure que vous portez, pour tous les sorts que vous lancez ce round. Ce bonus remplace, et ne se cumule pas avec, le bonus conféré par Entraînement à l'armure arcanique."
+    "resume": "Le personnage maîtrise l’art de lancer des sorts en armure.",
+    "prerequis": "Port d’armure intermédiaire, Port de l’armure magique, lanceur de sorts de niveau 7.",
+    "avantage": "Par une action rapide, le personnage réduit les risques d’échec des sorts dus à l’armure de 20% pour tout sort lancé au cours de ce round. Ce bonus remplace celui accordé par le Port de l’armure magique et ne se cumule pas avec lui."
   },
   "Arcane Armor Training": {
-    "resume": "Vous avez appris à lancer des sorts en portant une armure.",
-    "prerequis": "Maniement des armures légères, niveau de lanceur 3",
-    "avantage": "Par une action rapide, vous réduisez de 10 % le risque d'échec des sorts profanes dû à l'armure que vous portez, pour tous les sorts que vous lancez ce round."
+    "resume": "Le personnage sait lancer des sorts en armure.",
+    "prerequis": "Port des armures légères, niveau 3 de lanceur de sorts.",
+    "avantage": "Par une action rapide, le personnage réduit les risques d’échec des sorts dus à l’armure de 10% pour tout sort lancé au cours de ce round."
   },
   "Arcane Strike": {
-    "resume": "Vous puisez dans votre puissance arcanique pour imprégner vos armes d'énergie magique.",
-    "prerequis": "Faculté de lancer des sorts profanes",
-    "avantage": "Par une action rapide, vous pouvez imprégner vos armes d'une fraction de votre puissance. Pendant 1 round, vos armes infligent +1 point de dégâts et sont considérées comme magiques pour vaincre la réduction des dégâts. Pour chaque tranche de cinq niveaux de lanceur que vous possédez, ce bonus augmente de +1, jusqu'à un maximum de +5 au niveau 20."
+    "resume": "Le personnage puise dans ses pouvoirs magiques pour améliorer ses armes.",
+    "prerequis": "Capacité à lancer des sorts profanes.",
+    "avantage": "Par une action rapide, le personnage peut imprégner ses armes d’une partie de son pouvoir. Pendant un round, son arme inflige +1 point de dégâts et on la considère comme magique quand il s’agit de vaincre la réduction de dégâts. Ce bonus augmente de +1 pour chaque tranche de cinq niveaux de lanceur de sorts, avec un maximum de +5 au niveau 20."
   },
   "Armor Proficiency, Heavy": {
-    "resume": "Vous savez porter les armures lourdes.",
-    "prerequis": "Maniement des armures légères, Maniement des armures intermédiaires",
-    "avantage": "Voir Maniement des armures légères.",
-    "normal": "Voir Maniement des armures légères.",
-    "special": "Les guerriers et les paladins ont automatiquement le Maniement des armures lourdes comme don supplémentaire. Ils n'ont pas besoin de le choisir."
+    "resume": "Le personnage est formé au port des armures lourdes.",
+    "prerequis": "Port des armures intermédiaires, Port des armures légères.",
+    "avantage": "Voir « Port des armures légères ».",
+    "normal": "Voir « Port des armures légères ».",
+    "special": "Les guerriers et les paladins bénéficient automatiquement du Port des armures lourdes en tant que don supplémentaire. Ils n’ont pas besoin de le choisir."
   },
   "Armor Proficiency, Light": {
-    "resume": "Vous savez porter les armures légères.",
-    "avantage": "Quand vous portez un type d'armure que vous maniez, le malus d'armure aux tests de cette armure ne s'applique qu'aux tests de compétence basés sur la Dextérité et la Force.",
-    "normal": "Un personnage qui porte une armure qu'il ne manie pas applique son malus d'armure aux tests aux jets d'attaque et à tous les tests de compétence qui impliquent un déplacement.",
-    "special": "Tous les personnages sauf les moines, les ensorceleurs et les magiciens ont automatiquement le Maniement des armures légères comme don supplémentaire. Ils n'ont pas besoin de le choisir."
+    "resume": "Le personnage est formé au port des armures légères.",
+    "avantage": "Lorsqu’un personnage est formé au port d’une armure, le malus d’armure aux tests associés à celle-ci s’applique uniquement aux tests basés sur la Dextérité et la Force.",
+    "normal": "Le malus d’armure aux tests imposés par une armure pour laquelle le personnage n’est pas formé s’applique aux jets d’attaque et à tous les tests de compétence associés à la Force ou à la Dextérité.",
+    "special": "Toutes les classes de personnages à l’exception des ensorceleurs, des magiciens et des moines obtiennent automatiquement le Port des armures légères en tant que don supplémentaire. Ils n’ont pas besoin de le choisir."
   },
   "Armor Proficiency, Medium": {
-    "resume": "Vous savez porter les armures intermédiaires.",
-    "prerequis": "Maniement des armures légères",
-    "avantage": "Voir Maniement des armures légères.",
-    "normal": "Voir Maniement des armures légères.",
-    "special": "Les barbares, clercs, druides, guerriers, paladins et rôdeurs ont automatiquement le Maniement des armures intermédiaires comme don supplémentaire. Ils n'ont pas besoin de le choisir."
+    "resume": "Le personnage est formé au port des armures intermédiaires.",
+    "prerequis": "Port des armures légères.",
+    "avantage": "Voir « Port des armures légères ».",
+    "normal": "Voir « Port des armures légères ».",
+    "special": "Barbares, druides, guerriers, paladins, prêtres et rôdeurs obtiennent automatiquement Port des armures intermédiaires en tant que don supplémentaire. Ils n’ont pas besoin de le choisir."
   },
   "Athletic": {
-    "resume": "Vous possédez une prouesse physique innée.",
-    "avantage": "Vous obtenez un bonus de +2 aux tests d'Escalade et de Natation. Si vous avez 10 rangs ou plus dans l'une de ces compétences, le bonus passe à +4 pour cette compétence."
+    "resume": "Le personnage possède un potentiel athlétique inné.",
+    "avantage": "Le personnage obtient un bonus de +2 sur tous ses tests d’Escalade et de Natation. Si le personnage a 10 rangs ou plus dans l’une de ces compétences, le bonus ajouté à cette compétence augmente de +4."
   },
   "Augment Summoning": {
-    "resume": "Vos créatures convoquées sont plus puissantes et plus robustes.",
-    "prerequis": "Science des sorts (invocation)",
-    "avantage": "Chaque créature que vous invoquez avec un sort de convocation obtient un bonus d'altération de +4 en Force et en Constitution pendant la durée du sort qui l'a convoquée."
+    "resume": "Les créatures invoquées par le personnage sont plus puissantes et plus résistantes.",
+    "prerequis": "École renforcée (invocation).",
+    "avantage": "Toutes les créatures que le personnage convoque grâce à un sort de convocation bénéficient d’un bonus d’altération de +4 en Force et en Constitution pendant la durée du sort qui a permis de les convoquer."
   },
   "Bleeding Critical": {
-    "resume": "Vos coups critiques font saigner abondamment vos adversaires.",
-    "prerequis": "Succès critique, bonus de base à l'attaque +11",
-    "avantage": "Chaque fois que vous infligez un coup critique avec une arme tranchante ou perforante, votre adversaire subit 2d6 points de dégâts de saignement (voir Conditions) à chaque round pendant son tour, en plus des dégâts infligés par le coup critique. Les dégâts de saignement peuvent être arrêtés par un test de Premiers secours DD 15 ou par toute guérison magique. Les effets de ce don se cumulent.",
-    "special": "Vous ne pouvez appliquer les effets que d'un seul don de critique à un même coup critique, à moins de posséder Maîtrise du critique."
+    "resume": "Les coups critiques du personnage font saigner abondamment ses adversaires.",
+    "prerequis": "Don pour les critiques, bonus de base à l’attaque de +11.",
+    "avantage": "Quand le personnage réussit un coup critique avec une arme tranchante ou perforante, son adversaire subit 2d6 points de dégâts de saignement (voir Appendice 2) par round, à son tour de jeu, en plus des dégâts causés par le coup critique. On peut arrêter l’hémorragie à l’aide d’un test de Premiers secours DD 15 ou grâce à un soin magique. Les effets de ce don se cumulent.",
+    "special": "Le personnage applique un seul effet de critique à chacun de ses coups critiques, à moins qu’il dispose de la Maîtrise du critique."
   },
   "Blind-Fight": {
-    "resume": "Vous savez attaquer des adversaires que vous ne percevez pas clairement.",
-    "avantage": "Au corps à corps, chaque fois que vous ratez à cause d'un camouflage (voir Combat), vous pouvez relancer une fois votre jet de pourcentage de chances de rater pour voir si vous touchez réellement.\nUn attaquant invisible n'obtient aucun avantage lié au fait de vous toucher au corps à corps. C'est-à-dire que vous ne perdez pas votre bonus de Dextérité à la classe d'armure, et que l'attaquant n'obtient pas le bonus habituel de +2 pour être invisible. Les bonus de l'attaquant invisible s'appliquent toutefois toujours aux attaques à distance.\nVous n'avez pas besoin de faire de tests d'Acrobaties pour vous déplacer à pleine vitesse quand vous êtes aveuglé.",
-    "normal": "Les modificateurs normaux de jet d'attaque pour les attaquants invisibles qui essaient de vous toucher s'appliquent, et vous perdez votre bonus de Dextérité à la CA. La réduction de vitesse due à l'obscurité et à la mauvaise visibilité s'applique aussi.",
-    "special": "Le don Combat en aveugle est inutile contre un personnage qui est sous l'effet d'un sort de clignotement."
+    "resume": "Le personnage est très doué pour attaquer des adversaires qu’il distingue mal.",
+    "avantage": "Lors d’un combat au corps à corps, à chaque fois que le personnage rate son adversaire à cause de son camouflage, il peut à nouveau jeter 1d100 afin de savoir s’il touche (voir Chapitre 8). Un adversaire invisible ne bénéficie d’aucun avantage offensif contre le personnage. Autrement dit, ce dernier ne perd pas son bonus de Dextérité à la CA et son adversaire n’a pas droit au bonus habituel de +2 accordé aux créatures invisibles. Un ennemi invisible conserve cependant ses avantages pour les attaques à distance.",
+    "normal": "Les modificateurs de jet d’attaque liés aux assaillants invisibles s’appliquent au personnage, et il perd son bonus de Dextérité à la CA face à eux. La réduction de vitesse s’applique aussi dans les ténèbres et en cas de mauvaise visibilité.",
+    "special": "Ce don n’est d’aucune utilité contre un personnage affecté par le sort clignotement."
   },
   "Blinding Critical": {
-    "resume": "Vos coups critiques aveuglent vos adversaires.",
-    "prerequis": "Succès critique, bonus de base à l'attaque +15",
-    "avantage": "Chaque fois que vous infligez un coup critique, votre adversaire est aveuglé de façon permanente. Un jet de Vigueur réussi réduit cela à ébloui pendant 1d4 rounds. Le DD de ce jet de Vigueur est égal à 10 + votre bonus de base à l'attaque. Ce don n'a aucun effet sur les créatures qui ne dépendent pas des yeux pour voir ou les créatures qui ont plus de deux yeux (bien que plusieurs coups critiques puissent causer la cécité, à la discrétion du MJ). La cécité peut être guérie par guérison, régénération, guérison de la cécité/surdité ou des capacités similaires.",
-    "special": "Vous ne pouvez appliquer les effets que d'un seul don de critique à un même coup critique, à moins de posséder Maîtrise du critique."
+    "resume": "Les coups critiques du personnage aveuglent ses adversaires.",
+    "prerequis": "Don pour les critiques, bonus de base à l’attaque de +15.",
+    "avantage": "Quand le personnage inflige un coup critique, son adversaire est définitivement aveuglé. Un jet de Vigueur réussi permet de réduire la durée d’aveuglement à 1d4 rounds. Le DD du jet de sauvegarde est égal à 10 + bonus de base à l’attaque du personnage. Ce don n’a aucun effet sur les créatures qui ne dépendent pas de leur vue ou sur celles qui possèdent plus de deux yeux (bien que, si le MJ est d’accord, le personnage puisse aveugler la créature en répétant les critiques). On peut soigner une créature aveugle à l’aide d’un sort de guérison suprême, guérison de la cécité ou d’un pouvoir similaire.",
+    "special": "Le personnage applique un seul effet de critique à chacun de ses coups critiques, à moins qu’il dispose de la Maîtrise du critique."
   },
   "Brew Potion": {
-    "resume": "Vous pouvez créer des potions magiques.",
-    "prerequis": "Niveau de lanceur 3",
-    "avantage": "Vous pouvez créer une potion de n'importe quel sort de niveau 3 ou inférieur que vous connaissez et qui vise une ou plusieurs créatures ou objets. Préparer une potion prend 2 heures si son prix de base est de 250 po ou moins, sinon cela prend 1 jour par tranche de 1 000 po de son prix de base. Quand vous créez une potion, vous fixez le niveau de lanceur, qui doit être suffisant pour lancer le sort en question et pas supérieur à votre propre niveau. Pour préparer une potion, vous devez consommer des matières premières coûtant la moitié de ce prix de base. Voir les règles de création d'objets magiques dans Objets magiques pour plus d'informations.\nQuand vous créez une potion, vous faites tous les choix que vous feriez normalement en lançant le sort. Celui qui boit la potion est la cible du sort."
+    "resume": "Le personnage sait fabriquer des potions magiques.",
+    "prerequis": "Niveau 3 de lanceur de sorts.",
+    "avantage": "Le personnage peut fabriquer une potion reproduisant les effets de n’importe quel sort du 3e niveau maximum qu’il connaît et qui vise une ou plusieurs créatures ou objets. La préparation demande deux heures si elle coûte 250 po ou moins, sinon, il faut une journée par tranche de 1 000 po que coûte la potion. Le personnage décide du niveau de lanceur de sorts de la potion au moment où il la fabrique : il doit être suffisant pour pouvoir lancer le sort et ne doit pas dépasser le niveau de lanceur de sorts du préparateur. Pour fabriquer une potion, le personnage utilise des composantes qui valent la moitié du prix de base de ladite potion. Consultez les règles de création des objets magiques du Chapitre 15 pour plus d’informations. Lorsque le personnage prépare la potion, il fait tous les choix qu’il devrait normalement effectuer au moment de l’incantation. Quiconque boit la potion devient la cible du sort."
   },
   "Catch Off-Guard": {
-    "resume": "Vos adversaires sont surpris par votre usage habile d'armes non orthodoxes et improvisées.",
-    "avantage": "Vous ne subissez aucun malus pour l'utilisation d'une arme de corps à corps improvisée. Les adversaires désarmés sont pris au dépourvu contre toutes les attaques que vous faites avec une arme de corps à corps improvisée.",
-    "normal": "Vous subissez un malus de –4 aux jets d'attaque faits avec une arme improvisée."
+    "resume": "Les adversaires sont surpris par l’adresse avec laquelle le personnage se sert d’armes improvisées peu orthodoxes.",
+    "avantage": "Le personnage ne subit pas de malus quand il se sert d’une arme de corps à corps improvisée. Les adversaires sans armes sont pris au dépourvus quand le personnage les attaque avec une arme de corps à corps improvisée.",
+    "normal": "Le personnage subit un malus de -4 aux jets d’attaque quand il manie une arme improvisée."
   },
   "Channel Smite": {
-    "resume": "Vous pouvez canaliser votre énergie divine à travers une arme de corps à corps que vous maniez.",
-    "prerequis": "Capacité de classe de canalisation d'énergie",
-    "avantage": "Avant de faire un jet d'attaque au corps à corps, vous pouvez choisir de dépenser une utilisation de votre faculté de canalisation d'énergie par une action rapide. Si vous canalisez de l'énergie positive et touchez une créature morte-vivante, cette créature subit des dégâts supplémentaires égaux aux dégâts infligés par votre faculté de canalisation d'énergie positive. Si vous canalisez de l'énergie négative et touchez une créature vivante, cette créature subit des dégâts supplémentaires égaux aux dégâts infligés par votre faculté de canalisation d'énergie négative. Votre cible peut faire un jet de Volonté, comme d'habitude, pour réduire ces dégâts supplémentaires de moitié. Si votre attaque rate, la faculté de canalisation d'énergie est tout de même dépensée sans effet."
+    "resume": "Le personnage peut canaliser son énergie divine à travers l’arme de contact qu’il tient en main.",
+    "prerequis": "Capacité de classe de canalisation d’énergie.",
+    "avantage": "Avant de faire son jet d’attaque de contact, le personnage peut choisir de dépenser une utilisation de sa capacité de canalisation d’énergie, par une action rapide. Si le personnage canalise de l’énergie positive et qu’il frappe un mort-vivant, ce dernier encaisse un nombre de points de dégâts supplémentaires égal aux dégâts occasionnés par la capacité de canalisation d’énergie. Si le personnage canalise de l’énergie négative et qu’il frappe une créature vivante, cette dernièer encaisse un nombre de points de dégâts supplémentaires égal aux dégâts occasionnés par la capacité de canalisation d’énergie. La cible peut effectuer son jet de Volonté habituel pour réduire ces dégâts de moitié. Si l’attaque du personnage échoue, sa capacité de canalisation d’énergie a été utilisée sans effet."
   },
   "Cleave": {
-    "resume": "Vous pouvez frapper deux ennemis adjacents d'un seul coup.",
-    "prerequis": "For 13, Attaque en puissance, bonus de base à l'attaque +1",
-    "avantage": "Par une action simple, vous pouvez faire une seule attaque avec votre bonus de base à l'attaque complet contre un ennemi à portée. Si vous touchez, vous infligez des dégâts normalement et pouvez faire une attaque supplémentaire (avec votre bonus de base à l'attaque complet) contre un ennemi adjacent au premier et également à portée. Vous ne pouvez faire qu'une attaque supplémentaire par round avec ce don. Quand vous utilisez ce don, vous subissez un malus de –2 à votre classe d'armure jusqu'à votre tour suivant."
+    "resume": "Le personnage peut frapper deux adversaires adjacents d’un seul mouvement.",
+    "prerequis": "For 13, Attaque en puissance, bonus de base à l’attaque de +1.",
+    "avantage": "Par une action simple, le personnage porte une unique attaque avec la totalité de son bonus d’attaque à un adversaire situé à sa portée. S’il le touche, il lui inflige les dégâts habituels et peut faire une attaque supplémentaire (toujours avec son bonus d’attaque maximal) contre un adversaire adjacent au premier ennemi et situé à portée du personnage. Ce don ne permet qu’une attaque supplémentaire par round. Quand le personnage utilise ce don, il subit un malus de -2 à la CA jusqu’à son prochain tour."
   },
   "Combat Casting": {
-    "resume": "Vous êtes habile à lancer des sorts quand vous êtes menacé ou distrait.",
-    "avantage": "Vous obtenez un bonus de +4 aux tests de concentration faits pour lancer un sort ou utiliser une capacité magique en lançant sur la défensive ou quand vous êtes agrippé."
+    "resume": "Le personnage est doué pour lancer des sorts même s’il est menacé ou distrait.",
+    "avantage": "Le personnage bénéficie d’un bonus de +4 aux tests de Concentration lorsqu’il essaye de lancer un sort ou d’utiliser une capacité équivalente sur la défensive, ou lorsqu’il est agrippé ou immobilisé en situation de lutte."
   },
   "Combat Expertise": {
-    "resume": "Vous pouvez augmenter votre défense au détriment de votre précision.",
-    "prerequis": "Int 13",
-    "avantage": "Vous pouvez choisir de subir un malus de –1 aux jets d'attaque de corps à corps et aux tests de manœuvre offensive pour obtenir un bonus d'esquive de +1 à votre classe d'armure. Quand votre bonus de base à l'attaque atteint +4, puis tous les +4 ensuite, le malus augmente de –1 et le bonus d'esquive augmente de +1. Vous ne pouvez choisir d'utiliser ce don que lorsque vous déclarez que vous faites une attaque ou une action d'attaque à outrance avec une arme de corps à corps. Les effets de ce don durent jusqu'à votre tour suivant."
+    "resume": "Le personnage améliore sa défense au détriment de sa précision.",
+    "prerequis": "Int 13.",
+    "avantage": "Le personnage peut choisir de subir un malus de -1 aux jets d’attaque et aux manœuvres de combat en échange d’un bonus d’esquive de +1 à la CA. Quand son bonus de base à l’attaque atteint +4, et, par la suite, pour chaque tranche de bonus de +4, le malus augmente de -1 et le bonus d’esquive de +1. Le personnage ne peut utiliser ce don que s’il fait une attaque, à outrance ou non, avec une arme de mêlée. Les effets de ce don se poursuivent jusqu’au prochain tour du personnage."
   },
   "Combat Reflexes": {
-    "resume": "Vous pouvez faire des attaques d'opportunité supplémentaires.",
-    "avantage": "Vous pouvez faire un nombre d'attaques d'opportunité supplémentaires par round égal à votre bonus de Dextérité. Avec ce don, vous pouvez aussi faire des attaques d'opportunité quand vous êtes pris au dépourvu.",
-    "normal": "Un personnage sans ce don ne peut faire qu'une attaque d'opportunité par round et ne peut pas faire d'attaques d'opportunité quand il est pris au dépourvu.",
-    "special": "Le don Réflexes surhumains ne permet pas à un roublard d'utiliser sa capacité d'opportuniste plus d'une fois par round."
+    "resume": "Le personnage peut faire des attaques d’opportunité supplémentaires.",
+    "avantage": "À chaque round, le personnage a droit à un nombre d’attaques d’opportunité supplémentaires égal à son bonus de Dextérité. Le personnage peut faire une attaque d’opportunité même s’il est pris au dépourvu.",
+    "normal": "Un personnage ne possédant pas ce don n’a droit qu’à une attaque d’opportunité par round et il ne peut pas le faire s’il est pris au dépourvu.",
+    "special": "Ce don ne permet pas à un roublard d’utiliser son pouvoir spécial d’opportunisme plus d’une fois par round."
   },
   "Command Undead": {
-    "resume": "Grâce aux pouvoirs impies de la nécromancie, vous pouvez commander les créatures mortes-vivantes et en faire vos serviteurs.",
-    "prerequis": "Capacité de classe de canalisation d'énergie négative",
-    "avantage": "Par une action simple, vous pouvez utiliser l'une de vos utilisations de canalisation d'énergie négative pour asservir les morts-vivants situés à 9 m (30 pieds). Les morts-vivants ont droit à un jet de Volonté pour annuler l'effet. Le DD de ce jet de Volonté est égal à 10 + la moitié de votre niveau de clerc + votre modificateur de Charisme. Les morts-vivants qui ratent leur jet passent sous votre contrôle et obéissent à vos ordres du mieux qu'ils peuvent, comme sous l'effet de contrôle des morts-vivants. Les morts-vivants intelligents reçoivent un nouveau jet de sauvegarde chaque jour pour résister à votre commandement. Vous pouvez contrôler un nombre quelconque de morts-vivants, tant que leur total de dés de vie ne dépasse pas votre niveau de clerc. Si vous utilisez la canalisation d'énergie ainsi, elle n'a pas d'autre effet (elle ne soigne ni ne blesse les créatures proches). Si une créature morte-vivante est sous le contrôle d'une autre créature, vous devez faire un test de Charisme opposé chaque fois que vos ordres entrent en conflit."
+    "resume": "Le personnage peut recourir à d’immondes pouvoirs nécromantiques pour prendre le contrôle de créatures mortes-vivantes et en faire ses serviteurs.",
+    "prerequis": "Capacité de classe permettant de canaliser de l’énergie négative.",
+    "avantage": "Par une action simple, le personnage peut canaliser l’énergie négative pour réduire en esclavage des morts-vivants situés dans un rayon de neuf mètres. Les morts-vivants ont droit à un jet de Volonté pour annuler l’effet. Le DD de ce jet est égal à 10 + 1/2 niveau de lanceur de sorts du personnage + modificateur de Charisme. Les morts-vivants qui ratent leur jet de sauvegarde tombent sous le contrôle du personnage et font de leur mieux pour lui obéir, comme s’ils étaient sous l’effet d’un contrôle des morts-vivants. Les morts-vivants doués d’intelligence ont droit à un nouveau jet de sauvegarde par jour. Le personnage peut contrôler n’importe quel nombre de morts-vivants tant que le total de leurs DV ne dépasse pas son niveau de classe divine. Si le personnage choisit de canaliser l’énergie dans ce but, elle n’a pas d’autre effet (elle ne soigne ni ne blesse les créatures proches). Si un mort-vivant est sous le contrôle d’une autre créature, le personnage doit faire un test de Charisme opposé à celui de celle-ci quand les ordres entrent en conflit."
   }
 }

@@ -1,12 +1,13 @@
 //! Textes français du référentiel Core (`data/core/fr/*.json`).
 //!
-//! Ce sont des traductions **non officielles** des textes de l'Archives of Nethys (licence OGL),
-//! faites pour l'application ; le joueur peut en corriger les noms d'après le Manuel des joueurs.
+//! Les noms et textes des dons et des sorts sont ceux du **Manuel des joueurs** (version
+//! française). Le reste (races, compétences…) est une traduction non officielle des textes de
+//! l'Archives of Nethys (licence OGL).
 
 use serde_json::Value;
 
 /// Lots de traduction des sorts (`data/core/fr/sorts_NN.json`).
-const LOTS_SORTS: [&str; 30] = [
+const LOTS_SORTS: [&str; 31] = [
     include_str!("../../../data/core/fr/sorts_01.json"),
     include_str!("../../../data/core/fr/sorts_02.json"),
     include_str!("../../../data/core/fr/sorts_03.json"),
@@ -37,6 +38,7 @@ const LOTS_SORTS: [&str; 30] = [
     include_str!("../../../data/core/fr/sorts_28.json"),
     include_str!("../../../data/core/fr/sorts_29.json"),
     include_str!("../../../data/core/fr/sorts_30.json"),
+    include_str!("../../../data/core/fr/sorts_31.json"),
 ];
 
 /// Lots de traduction des dons (`data/core/fr/dons_NN.json`).
@@ -358,7 +360,10 @@ mod tests {
                     "{}",
                     s.nom_en
                 );
-                assert_eq!(fr.cible.is_some(), s.cible_en.is_some(), "{}", s.nom_en);
+                // les entrées abrégées du livre (« comme tel sort… ») n'ont pas toujours de cible
+                if fr.cible.is_some() {
+                    assert!(s.cible_en.is_some(), "{}", s.nom_en);
+                }
                 assert_eq!(fr.portee.is_some(), s.portee_en.is_some(), "{}", s.nom_en);
             }
         }
