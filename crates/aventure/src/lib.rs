@@ -10,10 +10,12 @@ pub mod vital;
 
 pub use etat::{
     nom_dans_la_fiche, Contenu, Contexte, ContextePj, Entree, ErreurAventure, EtatAventure,
-    EvenementAventure, IdPj, Sortie, SuiviPj,
+    EvenementAventure, IdPj, Protection, Sortie, SuiviPj, TYPES_D_ENERGIE,
 };
 pub use survie::{Besoin, Survie, TestDu};
-pub use vital::{SoinApplique, Vital};
+pub use vital::{Sante, SoinApplique, Vital};
 
 #[cfg(test)]
 mod tests;
+#[cfg(test)]
+mod tests_sante;

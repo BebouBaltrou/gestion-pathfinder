@@ -18,6 +18,39 @@ pub struct Vital {
     pub bloques_faim: i32,
     /// Rounds écoulés depuis le dernier point de guérison des dégâts non létaux.
     pub reste_non_letal: i64,
+    /// Personnage mourant stabilisé : il ne perd plus de PV (p. 190).
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub stable: bool,
+}
+
+/// État de santé d'un personnage (pour l'affichage ; les états de la fiche sont dans `etats_de_sante`).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde", serde(rename_all = "snake_case"))]
+pub enum Sante {
+    Conscient,
+    /// Dégâts non létaux égaux aux PV : chancelant.
+    Chancelant,
+    /// Exactement 0 PV : hors de combat.
+    HorsDeCombat,
+    Inconscient,
+    Mourant,
+    Stable,
+    Mort,
+}
+
+impl Sante {
+    pub fn nom(self) -> &'static str {
+        match self {
+            Sante::Conscient => "conscient",
+            Sante::Chancelant => "chancelant",
+            Sante::HorsDeCombat => "hors de combat",
+            Sante::Inconscient => "inconscient",
+            Sante::Mourant => "mourant",
+            Sante::Stable => "stable",
+            Sante::Mort => "mort",
+        }
+    }
 }
 
 /// Ce qu'un soin a réellement fait.
@@ -45,6 +78,10 @@ impl Vital {
         let reste = nombre - absorbe;
         if letaux {
             self.degats += reste;
+            if reste > 0 {
+                // lecture à valider : de nouveaux dégâts létaux rompent la stabilité
+                self.stable = false;
+            }
         } else {
             self.non_letaux += reste;
         }
@@ -99,6 +136,51 @@ impl Vital {
         } else {
             self.bloques_faim = 0;
         }
+    }
+
+    /// État de santé (Core p. 189-191). `con_score` : score de Constitution (mort à −Con).
+    pub fn sante(&self, pv_max: i32, con_score: i32) -> Sante {
+        let pv = self.pv_actuels(pv_max);
+        if pv <= -con_score {
+            Sante::Mort
+        } else if pv < 0 {
+            if self.stable {
+                Sante::Stable
+            } else {
+                Sante::Mourant
+            }
+        } else if self.non_letaux > pv {
+            Sante::Inconscient
+        } else if pv == 0 {
+            Sante::HorsDeCombat
+        } else if self.non_letaux == pv {
+            Sante::Chancelant
+        } else {
+            Sante::Conscient
+        }
+    }
+
+    /// États du Core (`data/core/etats.json`) qui découlent de la santé.
+    pub fn etats_de_sante(&self, pv_max: i32, con_score: i32) -> Vec<&'static str> {
+        let pv = self.pv_actuels(pv_max);
+        let mut v = Vec::new();
+        if pv <= -con_score {
+            v.push("dead");
+        } else if pv < 0 {
+            v.push(if self.stable { "stable" } else { "dying" });
+            v.push("unconscious");
+        } else {
+            if pv == 0 {
+                v.push("disabled");
+            }
+            if pv == 0 || self.non_letaux == pv {
+                v.push("staggered");
+            }
+            if self.non_letaux > pv {
+                v.push("unconscious");
+            }
+        }
+        v
     }
 
     pub fn a_des_degats_de_survie(&self) -> bool {

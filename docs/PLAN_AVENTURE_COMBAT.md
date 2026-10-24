@@ -147,3 +147,8 @@ naturelle (pas de torches) ; ordre d'initiative = uniquement tes personnages.
   partielle ou abandon, sauvegarde atomique et reprise). 15 tests. Reste pour les phases suivantes :
   régénération et guérison accélérée par round (phase 5), lancement de sorts (phase 6), consommables (phase 7),
   économie d'actions (phase 5), statistiques de campagne (phase 9).
+- **Phase 5 (santé, états, actions) faite** : états de santé (conscient, chancelant, hors de combat, inconscient,
+  mourant, stable, mort), jets de stabilisation, états du Core donnés par des effets à durée (partagés, retirés à
+  l'expiration), dégâts typés avec immunités, résistances et RD (détail dans le journal), soins par round,
+  économie d'actions avec catalogue de 58 actions (`data/combat/actions.json`). 228 tests dans le workspace.
+  Lectures à valider : `docs/POINTS_A_CONFIRMER_COMBAT.md`. Non modélisés : dégâts massifs, dégâts continus.

@@ -8,7 +8,7 @@
 //! qui les empile.
 
 use crate::survie::{Besoin, Survie, TestDu};
-use crate::vital::Vital;
+use crate::vital::{Sante, Vital};
 use fiches::etats::EffetTemporaire;
 use fiches::journal::EvenementFiche;
 use fiches::{Carac, Effet};
@@ -43,7 +43,31 @@ pub type Contexte<'a> = &'a dyn Fn(IdPj) -> Option<ContextePj>;
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Contenu {
     pub effets: Vec<Effet>,
+    /// États du Core (`data/core/etats.json`, ex. `shaken`) donnés tant que l'effet dure.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub etats: Vec<String>,
+    /// PV rendus au début de chaque tour de combat (guérison accélérée, régénération) : valeur
+    /// saisie par le joueur, jamais déduite.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub soin_par_round: i32,
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub protections: Vec<Protection>,
 }
+
+/// Protection contre les dégâts donnée par un effet.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub enum Protection {
+    /// Aucun dégât de ce type (ex. « feu »).
+    Immunite { type_degats: String },
+    /// Résistance à une énergie : retire `valeur` à chaque attaque de ce type.
+    Resistance { type_degats: String, valeur: i32 },
+    /// Réduction des dégâts (RD) : retire `valeur` aux dégâts physiques, sauf s'ils la contournent.
+    Reduction { valeur: i32 },
+}
+
+/// Types d'énergie du Core (acide, froid, électricité, feu, son) : les autres dégâts sont physiques.
+pub const TYPES_D_ENERGIE: [&str; 5] = ["acide", "froid", "électricité", "feu", "son"];
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -72,6 +96,15 @@ pub enum EvenementAventure {
         nombre: i32,
         letaux: bool,
     },
+    /// Dégâts d'un type donné (« feu », « tranchant »…) : immunités, résistances et RD du personnage
+    /// s'appliquent, avec décomposition dans le journal. `contourne_rd` : l'attaque passe la RD.
+    DegatsTypes {
+        pj: IdPj,
+        nombre: i32,
+        type_degats: String,
+        contourne_rd: bool,
+        letaux: bool,
+    },
     Soin {
         pj: IdPj,
         nombre: i32,
@@ -80,12 +113,23 @@ pub enum EvenementAventure {
         pj: IdPj,
         nombre: i32,
     },
+    /// Jet de stabilisation d'un mourant (d20 physique ; Con. et malus calculés par le moteur).
+    Stabilisation {
+        pj: IdPj,
+        d20: i32,
+    },
     EffetAjoute {
         pj: IdPj,
         nom: String,
         source: String,
         duree: Duree,
         effets: Vec<Effet>,
+        #[cfg_attr(feature = "serde", serde(default))]
+        etats: Vec<String>,
+        #[cfg_attr(feature = "serde", serde(default))]
+        soin_par_round: i32,
+        #[cfg_attr(feature = "serde", serde(default))]
+        protections: Vec<Protection>,
     },
     EffetRetire {
         id: IdEffet,
@@ -174,6 +218,10 @@ pub struct SuiviPj {
     pub survie: Survie,
     /// L'état « fatigué » a été donné par la faim ou la soif (et sera retiré avec elles).
     pub fatigue_de_survie: bool,
+    /// États que ce moteur a déjà donnés à la fiche (santé, effets, fatigue) : sert à n'envoyer
+    /// que les différences.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub etats_fiche: BTreeSet<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -244,7 +292,12 @@ impl EtatAventure {
     }
 
     /// Met fin aux effets « jusqu'au début / à la fin du prochain tour » du personnage.
-    pub fn terminer_effets_du_tour(&mut self, pj: IdPj, moment: temps::MomentDuTour) -> Sortie {
+    pub fn terminer_effets_du_tour(
+        &mut self,
+        pj: IdPj,
+        moment: temps::MomentDuTour,
+        ctx: Contexte,
+    ) -> Sortie {
         let mut s = Sortie::default();
         let maintenant = self.horloge.maintenant;
         // On repère les effets avant de les retirer, pour répercuter leur fin sur la fiche.
@@ -262,6 +315,7 @@ impl EtatAventure {
             let _ = self.effets.retirer(id, maintenant);
             self.noter(format!("Effet n° {id} terminé avec le tour."));
         }
+        self.synchroniser(ctx, &mut s);
         s
     }
 
@@ -277,6 +331,7 @@ impl EtatAventure {
     pub fn round_de_combat(&mut self, ctx: Contexte) -> Result<Sortie, ErreurAventure> {
         let mut s = Sortie::default();
         self.passer_le_temps(1, ctx, &mut s)?;
+        self.synchroniser(ctx, &mut s);
         Ok(s)
     }
 
@@ -286,6 +341,7 @@ impl EtatAventure {
     pub fn terminer_combat(
         &mut self,
         contestations: &[(IdEffet, Duree)],
+        ctx: Contexte,
     ) -> Result<(temps::BilanFinDeCombat, Sortie), ErreurAventure> {
         let mut s = Sortie::default();
         let maintenant = self.horloge.maintenant;
@@ -303,6 +359,7 @@ impl EtatAventure {
             self.effet_vers_fiche(*id, &mut s, true);
         }
         self.horloge.sortir_du_combat(true)?;
+        self.synchroniser(ctx, &mut s);
         self.noter(format!(
             "Fin du combat : {} effet(s) dissipé(s), {} maintenu(s) par le joueur.",
             bilan.dissipes.len(),
@@ -395,14 +452,126 @@ impl EtatAventure {
         Ok(())
     }
 
-    fn retirer_fatigue_si_fini(&mut self, pj: IdPj, s: &mut Sortie) -> Result<(), ErreurAventure> {
+    /// La fatigue due à la faim ou à la soif cesse quand plus aucun de leurs dégâts ne reste.
+    fn retirer_fatigue_si_fini(&mut self, pj: IdPj) -> Result<(), ErreurAventure> {
         let suivi = self.suivi(pj)?;
         if suivi.fatigue_de_survie && !suivi.vital.a_des_degats_de_survie() {
             suivi.fatigue_de_survie = false;
-            s.fiche
-                .push((pj, EvenementFiche::EtatRetire("fatigued".into())));
         }
         Ok(())
+    }
+
+    /// États que le personnage doit avoir sur sa fiche : santé, effets en cours, fatigue de survie.
+    fn etats_voulus(&self, pj: IdPj, ctx: Contexte) -> Option<BTreeSet<String>> {
+        let c = ctx(pj)?;
+        let suivi = self.pjs.get(&pj)?;
+        let mut v: BTreeSet<String> = suivi
+            .vital
+            .etats_de_sante(c.pv_max, c.con_score)
+            .into_iter()
+            .map(String::from)
+            .collect();
+        if suivi.fatigue_de_survie {
+            v.insert("fatigued".into());
+        }
+        let proprio = pj.to_string();
+        for e in self
+            .effets
+            .actifs
+            .iter()
+            .filter(|e| e.proprietaire == proprio)
+        {
+            v.extend(e.contenu.etats.iter().cloned());
+        }
+        Some(v)
+    }
+
+    /// Répercute sur les fiches les changements d'états (ajouts puis retraits, par personnage).
+    pub(crate) fn synchroniser(&mut self, ctx: Contexte, s: &mut Sortie) {
+        let ids: Vec<IdPj> = self.pjs.keys().copied().collect();
+        for pj in ids {
+            let Some(voulus) = self.etats_voulus(pj, ctx) else {
+                continue;
+            };
+            let Some(suivi) = self.pjs.get_mut(&pj) else {
+                continue;
+            };
+            for e in voulus.difference(&suivi.etats_fiche) {
+                s.fiche.push((pj, EvenementFiche::EtatAjoute(e.clone())));
+            }
+            for e in suivi.etats_fiche.difference(&voulus) {
+                s.fiche.push((pj, EvenementFiche::EtatRetire(e.clone())));
+            }
+            suivi.etats_fiche = voulus;
+        }
+    }
+
+    /// Protections actives d'un personnage, avec l'effet qui les donne.
+    fn protections(&self, pj: IdPj) -> Vec<(String, Protection)> {
+        let proprio = pj.to_string();
+        let mut v = Vec::new();
+        for e in self
+            .effets
+            .actifs
+            .iter()
+            .filter(|e| e.proprietaire == proprio)
+        {
+            for p in &e.contenu.protections {
+                v.push((e.nom.clone(), p.clone()));
+            }
+        }
+        v
+    }
+
+    /// Dégâts réellement subis après immunités, résistances et RD, et le détail du calcul.
+    /// Plusieurs résistances ou RD : la plus haute s'applique (lecture à valider).
+    fn degats_apres_protections(
+        &self,
+        pj: IdPj,
+        nombre: i32,
+        type_degats: &str,
+        contourne_rd: bool,
+    ) -> (i32, String) {
+        let t = type_degats.to_lowercase();
+        let energie = TYPES_D_ENERGIE.contains(&t.as_str());
+        let protections = self.protections(pj);
+        let mut detail = format!("{nombre} {type_degats}");
+        if let Some((source, _)) = protections.iter().find(
+            |(_, p)| matches!(p, Protection::Immunite { type_degats } if type_degats.to_lowercase() == t),
+        ) {
+            return (0, format!("{detail}, immunité ({source}) = 0"));
+        }
+        let (retrait, libelle) = if energie {
+            protections
+                .iter()
+                .filter_map(|(src, p)| match p {
+                    Protection::Resistance {
+                        type_degats,
+                        valeur,
+                    } if type_degats.to_lowercase() == t => {
+                        Some((*valeur, format!("résistance au {t} ({src})")))
+                    }
+                    _ => None,
+                })
+                .max_by_key(|(v, _)| *v)
+                .unwrap_or((0, String::new()))
+        } else if contourne_rd {
+            (0, String::new())
+        } else {
+            protections
+                .iter()
+                .filter_map(|(src, p)| match p {
+                    Protection::Reduction { valeur } => Some((*valeur, format!("RD ({src})"))),
+                    _ => None,
+                })
+                .max_by_key(|(v, _)| *v)
+                .unwrap_or((0, String::new()))
+        };
+        let final_ = (nombre - retrait).max(0);
+        if retrait > 0 {
+            detail.push_str(&format!(", −{retrait} {libelle}"));
+        }
+        (final_, format!("{detail} = {final_}"))
     }
 
     fn appliquer_interne(
@@ -431,6 +600,7 @@ impl EtatAventure {
                     vital: Vital::default(),
                     survie: Survie::nouvelle(maintenant),
                     fatigue_de_survie: false,
+                    etats_fiche: BTreeSet::new(),
                 });
                 self.noter(format!("{} rejoint l'aventure.", c.nom));
             }
@@ -525,7 +695,13 @@ impl EtatAventure {
             }
             EvenementAventure::Soin { pj, nombre } => {
                 let c = Self::contexte(ctx, *pj)?;
-                let r = self.suivi(*pj)?.vital.soigner(*nombre);
+                let vital = &mut self.suivi(*pj)?.vital;
+                let avant = vital.pv_actuels(c.pv_max);
+                let r = vital.soigner(*nombre);
+                if avant < 0 && r.pv_rendus >= 1 {
+                    // tout soin qui rend au moins 1 PV stabilise un mourant (p. 190)
+                    vital.stable = true;
+                }
                 self.noter(format!(
                     "{} reçoit {nombre} point(s) de soin : {} PV rendus, {} non létaux retirés.",
                     c.nom, r.pv_rendus, r.non_letaux_retires
@@ -542,6 +718,9 @@ impl EtatAventure {
                 source,
                 duree,
                 effets,
+                etats,
+                soin_par_round,
+                protections,
             } => {
                 let c = Self::contexte(ctx, *pj)?;
                 self.suivi(*pj)?;
@@ -554,6 +733,9 @@ impl EtatAventure {
                     &pj.to_string(),
                     Contenu {
                         effets: effets.clone(),
+                        etats: etats.clone(),
+                        soin_par_round: *soin_par_round,
+                        protections: protections.clone(),
                     },
                     duree.clone(),
                     maintenant,
@@ -591,7 +773,7 @@ impl EtatAventure {
                     suivi.survie.mange(maintenant);
                 }
                 suivi.vital.debloquer(boit);
-                self.retirer_fatigue_si_fini(*pj, &mut s)?;
+                self.retirer_fatigue_si_fini(*pj)?;
                 self.noter(format!(
                     "{} {}.",
                     c.nom,
@@ -641,11 +823,7 @@ impl EtatAventure {
                             Besoin::Eau => suivi.vital.bloques_soif += d,
                             Besoin::Nourriture => suivi.vital.bloques_faim += d,
                         }
-                        if !suivi.fatigue_de_survie {
-                            suivi.fatigue_de_survie = true;
-                            s.fiche
-                                .push((*pj, EvenementFiche::EtatAjoute("fatigued".into())));
-                        }
+                        suivi.fatigue_de_survie = true;
                     }
                 }
                 suivi.survie.test_passe(*besoin);
@@ -725,7 +903,92 @@ impl EtatAventure {
                     ));
                 }
             }
+            EvenementAventure::DegatsTypes {
+                pj,
+                nombre,
+                type_degats,
+                contourne_rd,
+                letaux,
+            } => {
+                let c = Self::contexte(ctx, *pj)?;
+                if *nombre < 0 {
+                    return Err(ErreurAventure::Invalide("dégâts négatifs".into()));
+                }
+                let (finaux, detail) =
+                    self.degats_apres_protections(*pj, *nombre, type_degats, *contourne_rd);
+                let v = &mut self.suivi(*pj)?.vital;
+                v.prendre_degats(finaux, *letaux);
+                let pv = v.pv_actuels(c.pv_max);
+                self.noter(format!(
+                    "{} : {detail} dégât(s) {} : {pv}/{} PV.",
+                    c.nom,
+                    if *letaux { "létaux" } else { "non létaux" },
+                    c.pv_max
+                ));
+            }
+            EvenementAventure::Stabilisation { pj, d20 } => {
+                let c = Self::contexte(ctx, *pj)?;
+                if !(1..=20).contains(d20) {
+                    return Err(ErreurAventure::Invalide("d20 : de 1 à 20".into()));
+                }
+                let v = &mut self.suivi(*pj)?.vital;
+                let pv = v.pv_actuels(c.pv_max);
+                if v.sante(c.pv_max, c.con_score) != Sante::Mourant {
+                    return Err(ErreurAventure::Invalide(format!(
+                        "{} n'est pas mourant : pas de jet de stabilisation",
+                        c.nom
+                    )));
+                }
+                // DD 10, malus égal au total négatif de PV ; 20 naturel : réussite (p. 190)
+                let total = *d20 + c.con_mod + pv;
+                let reussi = *d20 == 20 || total >= 10;
+                if reussi {
+                    v.stable = true;
+                } else {
+                    v.degats += 1;
+                }
+                let apres = v.pv_actuels(c.pv_max);
+                self.noter(format!(
+                    "{} : jet de stabilisation {d20} + {} (Con.) {pv} (PV négatifs) = {total} contre DD 10 : {}.",
+                    c.nom,
+                    c.con_mod,
+                    if reussi {
+                        "stabilisé".to_string()
+                    } else {
+                        format!("raté, perd 1 PV ({apres}/{})", c.pv_max)
+                    }
+                ));
+            }
         }
+        self.synchroniser(ctx, &mut s);
         Ok(s)
+    }
+
+    /// Soins de début de tour (guérison accélérée, régénération) donnés par les effets en cours.
+    pub fn soins_de_debut_de_tour(&mut self, pj: IdPj, ctx: Contexte) -> Sortie {
+        let mut s = Sortie::default();
+        let proprio = pj.to_string();
+        let total: i32 = self
+            .effets
+            .actifs
+            .iter()
+            .filter(|e| e.proprietaire == proprio)
+            .map(|e| e.contenu.soin_par_round)
+            .sum();
+        if total > 0 {
+            if let (Some(c), Some(suivi)) = (ctx(pj), self.pjs.get_mut(&pj)) {
+                let avant = suivi.vital.pv_actuels(c.pv_max);
+                let r = suivi.vital.soigner(total);
+                if avant < 0 && r.pv_rendus >= 1 {
+                    suivi.vital.stable = true;
+                }
+                self.noter(format!(
+                    "{} récupère {} PV (effets de soin par round : {total}).",
+                    c.nom, r.pv_rendus
+                ));
+            }
+        }
+        self.synchroniser(ctx, &mut s);
+        s
     }
 }

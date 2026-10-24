@@ -4,9 +4,11 @@
 //! enregistrée avec les dés saisis : rejouer la liste d'actions redonne exactement le même état
 //! (déterminisme), et annuler une action revient à rejouer jusqu'à l'action précédente.
 
+use crate::economie::{Depense, EconomieTour, TypeAction};
+use aventure::Sante;
 use aventure::{ContextePj, ErreurAventure, EtatAventure, EvenementAventure, IdPj, Sortie};
 use fiches::journal::EvenementFiche;
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
 use temps::{ErreurTemps, MomentDuTour};
 
@@ -38,6 +40,15 @@ pub enum ActionCombat {
     ModifierInitiative {
         pj: IdPj,
         total: i32,
+    },
+    /// Le personnage agit : l'économie d'actions du tour est contrôlée (libellé libre, souvent
+    /// pris dans le catalogue `data/combat/actions.json`). `deplacement` : l'action le déplace
+    /// réellement (incompatible avec un pas de 1,5 m).
+    Agir {
+        pj: IdPj,
+        type_action: TypeAction,
+        libelle: String,
+        deplacement: bool,
     },
     /// Action préparée (texte libre), gardée jusqu'au prochain tour du personnage.
     Preparer {
@@ -82,6 +93,13 @@ impl From<ErreurTemps> for ErreurCombat {
 
 fn invalide<T>(m: &str) -> Result<T, ErreurCombat> {
     Err(ErreurCombat::Invalide(m.to_string()))
+}
+
+/// Ce que le moteur demande au joueur de saisir.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum Demande {
+    /// Jet de stabilisation d'un mourant : d20 + Con. − |PV négatifs| contre DD 10.
+    Stabilisation { pj: IdPj, malus: i32 },
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -131,6 +149,11 @@ pub struct EtatCombat {
     pub round: u32,
     pub actif: Option<IdPj>,
     pub preparees: BTreeMap<IdPj, String>,
+    /// Actions dépensées par chacun dans son tour en cours.
+    pub economie: BTreeMap<IdPj, EconomieTour>,
+    /// Personnages qui ont déjà utilisé une action immédiate hors de leur tour (elle prend leur
+    /// prochaine action rapide).
+    pub immediates_hors_tour: BTreeSet<IdPj>,
     pub stats: BTreeMap<IdPj, Stats>,
     pub journal: Vec<EntreeCombat>,
     /// Événements à appliquer aux fiches à la validation, dans l'ordre.
@@ -164,6 +187,8 @@ impl EtatCombat {
             round: 1,
             actif: None,
             preparees: BTreeMap::new(),
+            economie: BTreeMap::new(),
+            immediates_hors_tour: BTreeSet::new(),
             stats: BTreeMap::new(),
             journal: Vec::new(),
             fiche: Vec::new(),
@@ -232,15 +257,56 @@ impl EtatCombat {
     fn debut_de_tour(&mut self, pj: IdPj, ctx: &dyn Fn(IdPj) -> Option<ContextePj>) {
         let s = self
             .aventure
-            .terminer_effets_du_tour(pj, MomentDuTour::Debut);
+            .terminer_effets_du_tour(pj, MomentDuTour::Debut, ctx);
         self.fusionner(s);
         self.actif = Some(pj);
+        // nouveau tour : économie d'actions remise à zéro ; une action immédiate prise hors
+        // tour a déjà pris l'action rapide
+        let rapide_prise = self.immediates_hors_tour.remove(&pj);
+        self.economie.insert(
+            pj,
+            EconomieTour {
+                rapide: rapide_prise,
+                ..EconomieTour::default()
+            },
+        );
         if let Some(a) = self.preparees.remove(&pj) {
             let n = Self::nom(ctx, pj);
             self.noter(format!("{n} : l'action préparée (« {a} ») est expirée."));
         }
         let n = Self::nom(ctx, pj);
         self.noter(format!("Tour de {n}."));
+        let s = self.aventure.soins_de_debut_de_tour(pj, ctx);
+        self.fusionner(s);
+    }
+
+    /// Ce que le moteur demande au joueur à ce moment (dé physique à saisir).
+    pub fn demandes(&self, ctx: &dyn Fn(IdPj) -> Option<ContextePj>) -> Vec<Demande> {
+        let mut v = Vec::new();
+        if let (Phase::EnCours, Some(pj)) = (self.phase, self.actif) {
+            if let (Some(c), Some(s)) = (ctx(pj), self.aventure.pjs.get(&pj)) {
+                if s.vital.sante(c.pv_max, c.con_score) == Sante::Mourant {
+                    v.push(Demande::Stabilisation {
+                        pj,
+                        malus: s.vital.pv_actuels(c.pv_max),
+                    });
+                }
+            }
+        }
+        v
+    }
+
+    /// Le personnage est-il limité à une seule action simple ou de mouvement (round de
+    /// surprise, chancelant, hors de combat) ?
+    fn limite(&self, pj: IdPj, ctx: &dyn Fn(IdPj) -> Option<ContextePj>) -> bool {
+        self.round == 0
+            || match (ctx(pj), self.aventure.pjs.get(&pj)) {
+                (Some(c), Some(s)) => matches!(
+                    s.vital.sante(c.pv_max, c.con_score),
+                    Sante::Chancelant | Sante::HorsDeCombat
+                ),
+                _ => false,
+            }
     }
 
     /// Applique une action. En cas d'erreur, l'état n'a pas changé.
@@ -346,7 +412,7 @@ impl EtatCombat {
                 };
                 let s = self
                     .aventure
-                    .terminer_effets_du_tour(actif, MomentDuTour::Fin);
+                    .terminer_effets_du_tour(actif, MomentDuTour::Fin, ctx);
                 self.fusionner(s);
                 let liste = self.ordre_du_round();
                 let position = liste.iter().position(|p| *p == actif).unwrap_or(0);
@@ -411,6 +477,84 @@ impl EtatCombat {
                 let n = Self::nom(ctx, *pj);
                 self.noter(format!("{n} : initiative corrigée à {total}."));
             }
+            ActionCombat::Agir {
+                pj,
+                type_action,
+                libelle,
+                deplacement,
+            } => {
+                self.verifier_engage(*pj)?;
+                if self.phase != Phase::EnCours {
+                    return invalide("le combat n'est pas commencé");
+                }
+                let c = ctx(*pj).ok_or(ErreurAventure::PjInconnu(*pj))?;
+                let sante = self
+                    .aventure
+                    .pjs
+                    .get(pj)
+                    .map(|s| s.vital.sante(c.pv_max, c.con_score))
+                    .ok_or(ErreurAventure::PjInconnu(*pj))?;
+                if matches!(
+                    sante,
+                    Sante::Mourant | Sante::Stable | Sante::Mort | Sante::Inconscient
+                ) {
+                    return Err(ErreurCombat::Invalide(format!(
+                        "{} est {} : il ne peut pas agir",
+                        c.nom,
+                        sante.nom()
+                    )));
+                }
+                let limite = self.limite(*pj, ctx);
+                let tour_de_pj = self.actif == Some(*pj);
+                if *type_action == TypeAction::Immediate && !tour_de_pj {
+                    // action immédiate hors de son tour : elle prend la prochaine action rapide
+                    if !self.immediates_hors_tour.insert(*pj) {
+                        return invalide("une action immédiate a déjà été utilisée avant ce tour");
+                    }
+                    self.noter(format!(
+                        "{} : {libelle} (action immédiate hors tour).",
+                        c.nom
+                    ));
+                } else {
+                    if !tour_de_pj {
+                        return invalide("ce n'est pas le tour de ce personnage");
+                    }
+                    let eco = self.economie.entry(*pj).or_default();
+                    let depense = eco
+                        .depenser(*type_action, *deplacement, limite)
+                        .map_err(ErreurCombat::Invalide)?;
+                    let note = match depense {
+                        Depense::Normale => String::new(),
+                        Depense::ConvertiEnMouvement => {
+                            " (l'action simple sert de mouvement)".into()
+                        }
+                    };
+                    self.noter(format!(
+                        "{} : {libelle} ({}){note}.",
+                        c.nom,
+                        type_action.nom()
+                    ));
+                    // à 0 PV, une action simple ou complexe inflige 1 dégât (p. 189, lecture à valider)
+                    if sante == Sante::HorsDeCombat
+                        && matches!(type_action, TypeAction::Simple | TypeAction::Complexe)
+                    {
+                        let s = self.aventure.appliquer(
+                            &EvenementAventure::Degats {
+                                pj: *pj,
+                                nombre: 1,
+                                letaux: true,
+                            },
+                            ctx,
+                        )?;
+                        self.stats.entry(*pj).or_default().degats_subis += 1;
+                        self.fusionner(s);
+                        self.noter(format!(
+                            "{} subit 1 dégât : effort alors qu'il est hors de combat.",
+                            c.nom
+                        ));
+                    }
+                }
+            }
             ActionCombat::Preparer { pj, action } => {
                 self.verifier_engage(*pj)?;
                 if self.phase != Phase::EnCours {
@@ -448,6 +592,8 @@ fn pj_de(ev: &EvenementAventure) -> Option<IdPj> {
         EvenementAventure::Degats { pj, .. }
         | EvenementAventure::Soin { pj, .. }
         | EvenementAventure::PvTemporaires { pj, .. }
+        | EvenementAventure::DegatsTypes { pj, .. }
+        | EvenementAventure::Stabilisation { pj, .. }
         | EvenementAventure::EffetAjoute { pj, .. }
         | EvenementAventure::Manger { pj }
         | EvenementAventure::Boire { pj }

@@ -138,7 +138,7 @@ impl Combat {
     pub fn apercu_fin(&self, ctx: Ctx) -> Result<ApercuFin, ErreurCombat> {
         let e = self.etat();
         let mut travail = e.aventure.clone();
-        let (bilan, _) = travail.terminer_combat(&[])?;
+        let (bilan, _) = travail.terminer_combat(&[], ctx)?;
         let par_pj = self
             .engages
             .iter()
@@ -173,6 +173,7 @@ impl Combat {
         &self,
         v: &Validation,
         contestations: &[(IdEffet, Duree)],
+        ctx: Ctx,
     ) -> Result<Resultat, ErreurCombat> {
         let e = self.etat();
         if let Validation::Abandon = v {
@@ -182,7 +183,7 @@ impl Combat {
             });
         }
         let mut travail = e.aventure.clone();
-        let (_, fin) = travail.terminer_combat(contestations)?;
+        let (_, fin) = travail.terminer_combat(contestations, ctx)?;
         let mut fiche = e.fiche.clone();
         fiche.extend(fin.fiche);
         let sortie_commune = |fiche| Sortie {

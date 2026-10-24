@@ -56,6 +56,9 @@ fn effet(pj: IdPj, nom: &str, duree: Duree) -> ActionCombat {
         source: "sort".into(),
         duree,
         effets: vec![Effet::new("ca", TypeBonus::Parade, 1, nom)],
+        etats: vec![],
+        soin_par_round: 0,
+        protections: vec![],
     })
 }
 
@@ -333,7 +336,7 @@ fn fin_de_combat_apercu_puis_validation() {
     );
 
     // validation complète
-    let r = c.valider(&Validation::Tout, &[]).unwrap();
+    let r = c.valider(&Validation::Tout, &[], &ctx).unwrap();
     assert_eq!(r.aventure.horloge.maintenant, debut.plus(1));
     assert!(!r.aventure.horloge.en_combat());
     assert_eq!(r.aventure.pjs[&2].vital.degats, 9);
@@ -344,15 +347,15 @@ fn fin_de_combat_apercu_puis_validation() {
     // contestation : on maintient la Bénédiction 5 minutes
     let id = ap.bilan.dissipes[0].id;
     let r = c
-        .valider(&Validation::Tout, &[(id, Duree::Minutes(5))])
+        .valider(&Validation::Tout, &[(id, Duree::Minutes(5))], &ctx)
         .unwrap();
     assert_eq!(r.aventure.effets.actifs.len(), 3);
     assert!(c
-        .valider(&Validation::Tout, &[(999, Duree::Minutes(5))])
+        .valider(&Validation::Tout, &[(999, Duree::Minutes(5))], &ctx)
         .is_err());
 
     // abandon : l'état d'avant, horloge au début
-    let r = c.valider(&Validation::Abandon, &[]).unwrap();
+    let r = c.valider(&Validation::Abandon, &[], &ctx).unwrap();
     assert_eq!(r.aventure, base());
     assert!(r.sortie.fiche.is_empty());
 }
@@ -373,12 +376,12 @@ fn validation_partielle() {
     }
     c.appliquer(effet(2, "Hâte", Duree::Heures(1)), &ctx)
         .unwrap();
-    let r = c.valider(&Validation::Partiel(vec![1]), &[]).unwrap();
+    let r = c.valider(&Validation::Partiel(vec![1]), &[], &ctx).unwrap();
     assert_eq!(r.aventure.pjs[&1].vital.degats, 6); // Mialee reporte
     assert_eq!(r.aventure.pjs[&2].vital.degats, 0); // Valéros revient à l'état d'avant
     assert!(r.aventure.effets.actifs.is_empty());
     assert!(r.sortie.fiche.iter().all(|(pj, _)| *pj == 1));
-    assert!(c.valider(&Validation::Partiel(vec![9]), &[]).is_err());
+    assert!(c.valider(&Validation::Partiel(vec![9]), &[], &ctx).is_err());
 }
 
 #[test]
@@ -391,7 +394,7 @@ fn minuit_pendant_un_combat() {
     c.appliquer(ActionCombat::Demarrer { surprise: None }, &ctx)
         .unwrap();
     tour(&mut c); // un seul combattant : le round s'achève, minuit est franchi
-    let r = c.valider(&Validation::Tout, &[]).unwrap();
+    let r = c.valider(&Validation::Tout, &[], &ctx).unwrap();
     assert_eq!(r.sortie.minuits, 1);
     assert_eq!(r.aventure.horloge.maintenant.jour(), 2);
 }

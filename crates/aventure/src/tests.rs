@@ -46,6 +46,9 @@ fn hate() -> EvenementAventure {
         source: "sort, lancé par Mialee".into(),
         duree: Duree::Minutes(10),
         effets: vec![Effet::new("ca", TypeBonus::Esquive, 1, "Hâte")],
+        etats: vec![],
+        soin_par_round: 0,
+        protections: vec![],
     }
 }
 
