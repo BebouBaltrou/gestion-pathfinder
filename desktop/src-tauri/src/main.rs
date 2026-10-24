@@ -3,6 +3,7 @@
 
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+mod aventure;
 mod personnages;
 mod session;
 
@@ -144,6 +145,20 @@ fn main() {
             retablir,
             resoudre_prestige,
             simulation,
+            aventure::aventure_vue,
+            aventure::aventure_demarrer,
+            aventure::aventure_terminer,
+            aventure::aventure_evenement,
+            aventure::aventure_actualiser_ressources,
+            aventure::combat_vue,
+            aventure::combat_demarrer,
+            aventure::combat_action,
+            aventure::combat_annuler,
+            aventure::combat_retablir,
+            aventure::combat_apercu_sort,
+            aventure::combat_apercu_fin,
+            aventure::combat_terminer,
+            aventure::catalogue_actions,
             personnages::liste_personnages,
             personnages::fiche_personnage,
             personnages::catalogue_creation,

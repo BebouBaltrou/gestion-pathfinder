@@ -5,7 +5,7 @@ use crate::economie::TypeAction;
 
 const JSON: &str = include_str!("../../../data/combat/actions.json");
 
-#[derive(Debug, Clone, PartialEq, Eq, serde::Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, serde::Deserialize, serde::Serialize)]
 pub struct ActionDef {
     pub id: String,
     pub nom_en: String,
