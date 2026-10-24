@@ -387,6 +387,7 @@ pub fn controler(f: &Feuille, r: &Referentiel) -> Rapport {
 
     // Les sorts de la feuille sont volontairement ignorés (décision du joueur).
     // ── Dons, objets ───────────────────────────────────────────────────────────
+    if !f.notes_dons.is_empty() {
         rap.non_verifie.push(
             "Dons écrits en texte libre : rapprochement avec le catalogue à l'étape suivante."
                 .into(),
