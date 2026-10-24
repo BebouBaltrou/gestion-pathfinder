@@ -1,19 +1,265 @@
 # Comparaison des données de l'application avec le Manuel des joueurs
 
-Fait le 24/10/2026, d'après le PDF « Manuel des joueurs » (version française). Les noms et textes des **dons** et des **sorts** de l'application sont maintenant ceux du livre.
+Fait le 24/10/2026, d'après le PDF « Manuel des joueurs » (version française). **Le livre fait foi** : quand l'application et le livre diffèrent, l'application a été corrigée d'après le livre.
 
 ## Résumé
 
-- **Dons** : 176 dons de l'application, tous retrouvés dans le livre. 104 noms français corrigés. Les résumés, conditions, avantages, « Normal » et « Spécial » sont repris mot pour mot du livre.
-- **Sorts** : 623 sorts de l'application, 623 retrouvés dans le livre. 281 noms français corrigés. Les descriptions du livre remplacent les anciennes traductions, et 224 sorts qui n'avaient aucun texte français en ont désormais un.
-- Les règles (valeurs, niveaux des sorts) n'ont pas changé : seuls les noms et les textes changent. Les niveaux de sorts du livre ont été comparés un à un : ils concordent (2 exceptions ci-dessous).
+| Domaine | Résultat |
+|---|---|
+| Dons (176) | tous retrouvés ; 104 noms et tous les textes remplacés par ceux du livre ; conditions chiffrées vérifiées : identiques |
+| Sorts (623) | tous retrouvés ; 281 noms, descriptions et caractéristiques (portée, durée…) remplacés par ceux du livre ; 224 sorts sans texte français en ont un ; niveaux de sorts vérifiés : identiques |
+| Races (7) | noms et textes des traits raciaux du livre ; listes de langues corrigées d'après le livre |
+| Compétences (26) | caractéristiques, « sans formation » et pénalité d'armure vérifiées : identiques ; nom « Connaissances (mystères) » corrigé |
+| Armes (81 vérifiées) | 77 identiques ; 4 valeurs corrigées d'après le livre ; 40 noms officiels |
+| Armures et boucliers (21) | valeurs identiques ; 18 noms officiels (par ex. « Clibanion », « Crevice », « Harnois ») |
+| Matériel (158) | 126 noms ou valeurs corrigés d'après la Table 6-9 (prix, poids) |
+| États préjudiciables (34) | noms et textes du livre (Appendice 2) |
+| Actions de combat (58) | 37 noms remplacés par ceux de la Table 8-2 |
+| Ensorceleur | lignages (noms, compétence, arcane, pouvoirs) et textes de classe du livre ; tables de sorts par jour et connus : identiques |
+| Points d'expérience, charge portée, PX par FP, métamagie | identiques au livre |
+| Guide de campagne (salles, équipes, bâtiments, organisations) | coûts, prix et durées vérifiés contre le Guide : identiques |
 
-## Points à confirmer
+## Points à confirmer (le livre est suivi, mais certains ressemblent à des coquilles)
 
-1. **Séquestration / Dissimulation suprême** : dans le livre, « Dissimulation suprême » est de niveau 7 (c'est *Sequester*) et « Séquestration » de niveau 8 (c'est *Trap the Soul*). Les noms semblent échangés par rapport à la version anglaise. J'ai suivi le livre.
-2. **Écoles de magie** : le livre classe *Détection de la magie* en « Universel » (anglais : divination), *Souffle de vie* en « Transmutation » (anglais : invocation/guérison) et *Voie végétale* en « Transmutation » (anglais : invocation/téléportation). J'ai suivi le livre.
-3. **Entrées abrégées** : pour environ 125 sorts, le livre ne répète pas tous les champs (« fonctionne comme tel sort »). Dans ce cas j'ai gardé l'ancienne valeur (temps d'incantation, portée…) à côté du texte du livre.
-4. **Mise en forme** : les tableaux du livre sont lus sous forme de texte à plat, et les paragraphes d'un même sort sont séparés par des retours à la ligne. Quelques sorts avec tableau (ex. *Décret*) méritent un coup d'œil.
+- **Gourdin** : 1d3 (P) / 1d4 (M) dans le livre ; la règle anglaise donne 1d4 / 1d6.
+- **Marteau, léger** et **Hache de lancer** : 2 kg dans le livre (4 lb) ; la règle anglaise donne 2 lb (1 kg).
+- **Faux** : type « P ou C » dans le livre (perforant ou contondant) ; l'anglais donne perforant ou tranchant.
+- **Flasque (vide)** : 2,25 kg dans le livre ; l'anglais donne 1,5 lb (0,75 kg).
+- **Séquestration / Dissimulation suprême** : noms échangés dans le livre par rapport à l'anglais (niveaux 7 et 8).
+- **Écoles de magie** : *Détection de la magie* (universel), *Souffle de vie* (transmutation) et *Voie végétale* (transmutation) diffèrent de l'anglais.
+- **Fautes d'impression du livre** corrigées dans le nom : « Halllebarde » (Hallebarde), « Clepysdre » (Clepsydre).
+- **Gnome** : le livre ne lui donne pas le sylvestre d'office (l'anglais oui) ; **nain** : « élémentaire » à la place de « terran » dans les langues au choix.
+- **Atelier de cambrioleur de maître** : le livre répète « Outils de cambrioleur » (100 po) sans préciser « de maître » ; j'ai ajouté « (de maître) ».
+- Les entrées abrégées du livre (« fonctionne comme tel sort ») n'ont pas tous leurs champs : l'ancienne valeur est conservée pour les champs absents.
+- Les tableaux de quelques sorts (par ex. *Décret*) sont lus à plat.
+
+## Pas fait / à décider
+
+- Les **numéros de page** des sources (dons, sorts…) renvoient encore aux pages du livre anglais ; je peux les remplacer par les pages du Manuel des joueurs.
+- Les **descriptions des armes, armures et objets** ne sont pas traduites dans l'application (seuls les noms le sont).
+- Les **tables de lignage draconique/élémentaire** (types d'énergie, souffles) ne sont pas relues mot pour mot.
+
+## Détail : armes et armures (noms)
+
+- Battleaxe: Hache d'armes -> Hache d’armes
+- Blowgun darts (10): Fléchettes de sarbacane (10) -> Dard, sarbacane (10)
+- Crossbow bolts (10): Carreaux d'arbalète (10) -> Carreaux (10)
+- Dart: Fléchette -> Dard
+- Elven curve blade: Lame courbe elfique -> Lame elfique incurvée
+- Gnome hooked hammer: Marteau à crochet gnome -> Marteau-piolet gnome
+- Halfling sling staff: Bâton-fronde halfelin -> Bâton de jet halfelin
+- Heavy flail: Fléau lourd -> Fléau d’armes lourd
+- Heavy mace: Masse d'armes lourde -> Masse d’armes lourde
+- Heavy shield: Grand bouclier (coup de bouclier) -> Écu
+- Javelin: Javelot -> Javeline
+- Lance: Lance d'arçon -> Lance d’arçon
+- Light flail: Fléau léger -> Fléau d’armes léger
+- Light hammer: Marteau léger -> Marteau, léger
+- Light mace: Masse d'armes légère -> Masse d’armes légère
+- Light pick: Pic de guerre léger -> Pic de guerre, léger
+- Light shield: Petit bouclier (coup de bouclier) -> Rondache
+- Morningstar: Étoile du matin -> Morgenstern
+- Punching dagger: Dague de poing -> Dague coup-de-poing
+- Shortspear: Lance courte -> Épieu
+- Sling bullets (10): Billes de fronde (10) -> Billes (10)
+- Spiked armor: Armure à pointes (attaque) -> Armure à pointes
+- Spiked heavy shield: Grand bouclier à pointes (attaque) -> Écu à pointes
+- Spiked light shield: Petit bouclier à pointes (attaque) -> Rondache à pointes
+- Starknife: Couteau étoilé -> Lamétoile
+- Two-bladed sword: Épée à deux lames -> Double-lame
+- Unarmed strike: Coup de poing -> Attaque à mains nues
+- Studded leather: Cuir clouté -> Armure de cuir cloutée
+- Hide: Armure de peaux -> Armure de peau
+- Scale mail: Armure d'écailles -> Armure d’écailles
+- Splint mail: Armure de lamelles -> Clibanion
+- Banded mail: Cotte de bandes -> Crevice
+- Half-plate: Demi-plate -> Armure de plaques
+- Light wooden: Petit bouclier en bois -> Rondache en bois
+- Light steel: Petit bouclier en acier -> Rondache en acier
+- Heavy wooden: Grand bouclier en bois -> Écu en bois
+- Heavy steel: Grand bouclier en acier -> Écu en acier
+- Locked gauntlet: Gantelet verrouillé -> Gantelet d’armes
+- Armor spikes: Pointes d'armure -> Pointes pour armure
+- Shield spikes: Pointes de bouclier -> Pointes pour bouclier
+
+## Détail : matériel (noms, prix, poids)
+
+- Acid : nom: Acide -> Acide (flasque)
+- Alchemist's fire : nom: Feu grégeois -> Feu grégeois (flasque)
+- Alchemist's lab : nom: Laboratoire d'alchimiste -> Laboratoire d’alchimie
+- Ale (gallon) : nom: Bière (gallon) -> Bière — Le litre; prix: 2 sp -> 7 cp; poids: 8 lb -> 2 lb
+- Ale (mug) : nom: Bière (chope) -> Bière — La chope; prix: 2 sp -> 4 cp; poids: 8 lb -> 1 lb
+- Antitoxin : nom: Antitoxine -> Antidote (fiole)
+- Artisan's outfit : nom: Tenue d'artisan -> Tenue d’artisan
+- Artisan's tools (common) : nom: Outils d'artisan (courants) -> Outils d’artisan
+- Artisan's tools (masterwork) : nom: Outils d'artisan (de maître) -> Outils de maître artisan; prix: 5 gp -> 55 gp
+- Backpack (common) : nom: Sac à dos (courant) -> Sac à dos (vide); prix: 25 gp -> 2 gp; poids: 5 lb -> 2 lb
+- Banquet (per person) : nom: Banquet (par personne) -> Banquet (par convive)
+- Barrel : nom: Tonneau -> Tonneau (vide)
+- Basket : nom: Panier -> Panier (vide)
+- Bedroll : nom: Sac de couchage -> Paillasse
+- Blanket : nom: Couverture -> Couverture d’hiver
+- Bottle : nom: Bouteille -> Bouteille de vin en verre; poids: 1 lb -> —
+- Bread : nom: Pain -> Pain, la miche
+- Bucket : nom: Seau -> Seau (vide)
+- Caltrops : nom: Chausse-trapes -> Chausse-trappes
+- Canvas (sq. yd.) : nom: Toile (yard carré) -> Toile (le m2); poids: 1 lb -> 2 lb
+- Carriage : nom: Carrosse -> Carriole; poids: — -> 600 lb
+- Cart : poids: — -> 200 lb
+- Chain (10 ft.) : nom: Chaîne (3 m) -> Chaîne, 3 m
+- Chalk : nom: Craie -> Craie, morceau
+- Cheese : nom: Fromage -> Fromage, la portion
+- Chest (small) : nom: Coffre (petit) -> Coffre, vide; prix: 25 gp -> 2 gp; poids: 250 lb -> 25 lb
+- Cleric's vestments : nom: Habits sacerdotaux -> Tenue sacerdotale
+- Climber's kit : nom: Matériel d'escalade -> Matériel d’escalade
+- Coach cab : nom: Fiacre (course) -> Diligence
+- Cold-weather outfit : nom: Tenue de grand froid -> Tenue polaire
+- Courtier's outfit : nom: Tenue de courtisan -> Habit de cour
+- Disguise kit : nom: Matériel de déguisement -> Trousse de déguisement
+- Dog (guard) : nom: Chien (de garde) -> Chien de garde; poids: 25 lb -> —
+- Dog (riding) : nom: Chien (de monte) -> Chien de selle; prix: 25 gp -> 150 gp; poids: 25 lb -> —
+- Entertainer's outfit : nom: Tenue d'artiste -> Costume d’artiste
+- Explorer's outfit : nom: Tenue d'explorateur -> Tenue d’explorateur
+- Feed (per day) : nom: Fourrage (par jour) -> Nourriture pour animaux (par jour)
+- Firewood (per day) : nom: Bois de chauffage (par jour) -> Bois de chauffage (pour un jour)
+- Fishing net : nom: Filet de pêche -> Filet de pêche, 2,5 m2
+- Flask : nom: Flasque -> Flasque (vide); poids: 0.5 lb -> 4.5 lb
+- Flint and steel : nom: Briquet à silex -> Silex et amorce
+- Galley : nom: Galère -> Trirème
+- Healer's kit : nom: Trousse de soins -> Trousse de premiers secours
+- Hireling (trained) : nom: Employé (qualifié) -> Employé qualifié
+- Hireling (untrained) : nom: Employé (non qualifié) -> Employé non-qualifié
+- Holy symbol (silver) : nom: Symbole sacré (argent) -> Symbole sacré en argent; prix: 100 gp -> 25 gp
+- Holy symbol (wooden) : nom: Symbole sacré (bois) -> Symbole sacré en bois; prix: 100 gp -> 1 gp; poids: 1 lb -> —
+- Holy water : nom: Eau bénite -> Eau bénite (flasque)
+- Hooded lantern : nom: Lanterne à capuchon -> Lanterne à capote
+- Horse (heavy) : nom: Cheval (lourd) -> Cheval — Cheval lourd; poids: 2000 lb -> —
+- Horse (heavy, combat trained) : nom: Cheval (lourd, dressé au combat) -> Cheval — Cheval lourd (entraîné au combat); prix: 200 gp -> 300 gp; poids: 2000 lb -> —
+- Horse (light) : nom: Cheval (léger) -> Cheval — Cheval léger; prix: 200 gp -> 75 gp; poids: 2000 lb -> —
+- Horse (light, combat trained) : nom: Cheval (léger, dressé au combat) -> Cheval — Cheval léger (entraîné au combat); poids: 2000 lb -> —
+- Horse (pony) : nom: Poney -> Cheval — Poney; prix: 200 gp -> 30 gp; poids: 2000 lb -> —
+- Horse (pony, combat trained) : nom: Poney (dressé au combat) -> Cheval — Poney (entraîné au combat); prix: 200 gp -> 45 gp; poids: 2000 lb -> —
+- Ink : nom: Encre -> Encre, la fiole
+- Inkpen : nom: Plume -> Plume d’écriture
+- Inn stay (common) : nom: Séjour à l'auberge (courant) -> Séjour à l’auberge (par jour) — Qualité convenable
+- Inn stay (good) : nom: Séjour à l'auberge (bon) -> Séjour à l’auberge (par jour) — Bonne qualité; prix: 5 sp -> 2 gp
+- Inn stay (poor) : nom: Séjour à l'auberge (pauvre) -> Séjour à l’auberge (par jour) — Qualité médiocre; prix: 5 sp -> 2 sp
+- Jug : nom: Cruche -> Jarre en terre cuite
+- Keelboat : nom: Bateau à quille -> Bateau à fond plat
+- Ladder : nom: Échelle -> Échelle, 3 m; prix: 2 sp -> 5 cp
+- Lock (average) : nom: Serrure (moyenne) -> Cadenas — Moyen
+- Lock (good) : nom: Serrure (bonne) -> Cadenas — Bon; prix: 40 gp -> 80 gp
+- Lock (simple) : nom: Serrure (simple) -> Cadenas — Très simple; prix: 40 gp -> 20 gp
+- Lock (superior) : nom: Serrure (supérieure) -> Cadenas — Excellent; prix: 40 gp -> 150 gp
+- Manacles (common) : nom: Menottes (courantes) -> Menottes
+- Manacles (masterwork) : nom: Menottes (de maître) -> Menottes de qualité supérieure; prix: 15 gp -> 50 gp
+- Masterwork tool : nom: Outil de maître -> Outil de qualité supérieure
+- Meal (common, per day) : nom: Repas (courant, par jour) -> Repas (par jour) — Qualité convenable
+- Meal (good, per day) : nom: Repas (bon, par jour) -> Repas (par jour) — Bonne qualité; prix: 3 sp -> 5 sp
+- Meal (poor, per day) : nom: Repas (pauvre, par jour) -> Repas (par jour) — Qualité médiocre; prix: 3 sp -> 1 sp
+- Meat : nom: Viande -> Viande, la portion; poids: 0.5 lb -> 1 lb
+- Merchant's scale : nom: Balance de marchand -> Balance
+- Mirror : nom: Miroir -> Petit miroir en acier
+- Monk's outfit : nom: Tenue de moine -> Habit de moine
+- Mug/tankard : nom: Chope -> Chope en terre cuite
+- Musical instrument (common) : nom: Instrument de musique (courant) -> Instrument de musique courant
+- Musical instrument (masterwork) : nom: Instrument de musique (de maître) -> Instrument de musique de maître; prix: 5 gp -> 100 gp
+- Noble's outfit : nom: Tenue de noble -> Habit de noble
+- Oil : nom: Huile -> Huile, la flasque
+- Pack animal (donkey/mule) : nom: Bête de somme (âne ou mule) -> Âne ou mulet; poids: 600 lb -> —
+- Paper (sheet) : nom: Papier (feuille) -> Papier, la feuille
+- Parchment (sheet) : nom: Parchemin vierge (feuille) -> Parchemin, la feuille
+- Peasant's outfit : nom: Tenue de paysan -> Habit de paysan
+- Pitcher : nom: Pichet -> Cruche en terre cuite
+- Pole : nom: Perche -> Perche, 3 m
+- Portable ram : nom: Bélier portatif -> Bélier portable
+- Pot (common) : nom: Marmite -> Pot en fer
+- Pouch, belt (empty) : nom: Bourse de ceinture (vide) -> Sacoche de ceinture (vide); poids: 0.5 lb -> 1 lb
+- Road or gate toll : nom: Péage de route ou de porte -> Droit de passage ou d’entrée
+- Rope (50 ft.) : nom: Corde (15 m) -> Corde en chanvre, 15 m
+- Rowboat : poids: — -> 100 lb
+- Royal outfit : nom: Tenue royale -> Toilette royale
+- Sack : nom: Sac -> Sac (vide)
+- Saddle (exotic, military) : nom: Selle (exotique, de guerre) -> Selle spéciale (de guerre)
+- Saddle (exotic, pack) : nom: Selle (exotique, de bât) -> Selle spéciale (de bât); prix: 60 gp -> 15 gp; poids: 40 lb -> 20 lb
+- Saddle (exotic, riding) : nom: Selle (exotique, de monte) -> Selle spéciale (d’équitation); prix: 60 gp -> 30 gp; poids: 40 lb -> 30 lb
+- Saddle (military) : prix: 60 gp -> 20 gp; poids: 40 lb -> 30 lb
+- Saddle (pack) : prix: 60 gp -> 5 gp; poids: 40 lb -> 15 lb
+- Saddle (riding) : nom: Selle (de monte) -> Selle (d’équitation); prix: 60 gp -> 10 gp; poids: 40 lb -> 25 lb
+- Saddlebags : nom: Sacoches de selle -> Fontes
+- Sailing ship : nom: Voilier -> Navire de haute mer
+- Scholar's outfit : nom: Tenue d'érudit -> Habit d’érudit
+- Scroll case : nom: Étui à parchemins -> Étui à carte ou à parchemin
+- Ship's passage : nom: Passage sur un navire -> Traversée en bateau
+- Shovel, common : prix: 2 cp -> 2 gp; poids: 3 lb -> 8 lb
+- Silk rope (50 ft.) : nom: Corde de soie (15 m) -> Corde en soie, 15 m
+- Sled : poids: — -> 300 lb
+- Sledge : nom: Masse de forgeron -> Masse
+- Soap : nom: Savon -> Savon, 1 livre; prix: 1 cp -> 5 sp; poids: 0.5 lb -> 1 lb
+- Spell component pouch : nom: Sacoche de composantes de sorts -> Sacoche à composantes
+- Spellbook : nom: Grimoire -> Grimoire (vierge)
+- Stabling (per day) : nom: Écurie (par jour) -> Écurie (pour une journée)
+- Tanglefoot bag : nom: Sac collant -> Sacoche immobilisante
+- Thieves' tools (common) : nom: Outils de voleur (courants) -> Outils de cambrioleur
+- Thieves' tools (masterwork) : nom: Outils de voleur (de maître) -> Outils de cambrioleur (de maître); prix: 30 gp -> 100 gp; poids: 1 lb -> 2 lb
+- Tindertwig : nom: Allumette -> Allume-feu
+- Trail rations : nom: Rations de voyage -> Rations de survie (par jour)
+- Traveler's outfit : nom: Tenue de voyageur -> Tenue de voyage
+- Vial : nom: Fiole -> Fiole pour encre ou potion; poids: — -> 0.1 lb
+- Wagon (light) : nom: Chariot (léger) -> Chariot; prix: 100 gp -> 35 gp; poids: — -> 400 lb
+- Warship : nom: Navire de guerre -> Vaisseau de guerre
+- Wine (common, pitcher) : nom: Vin (courant, pichet) -> Vin — De table (le pichet)
+- Wine (fine, bottle) : nom: Vin (fin, bouteille) -> Vin — Bon cru (la bouteille); prix: 2 sp -> 10 gp; poids: 6 lb -> 1.5 lb
+
+## Détail : lignages d'ensorceleur
+
+- aberrant: pouvoir Rayon acide (Mg) -> Rayon d’acide (Mag)
+- aberrant: pouvoir Membres allongés (Ex) -> Longs membres (Ext)
+- aberrant: pouvoir Anatomie inhabituelle (Ex) -> Anatomie hors du commun (Ext)
+- aberrant: pouvoir Résistance étrangère (Sur) -> Résistance de l’au-delà (Sur)
+- aberrant: pouvoir Forme aberrante (Ex) -> Forme aberrante (Ext)
+- abyssal: pouvoir Griffes (Sur) -> Griffes (Ext)
+- abyssal: pouvoir Résistances démoniaques (Ex) -> Résistances démoniaques (Ext)
+- abyssal: pouvoir Force de l'Abîme (Ex) -> Force de l’Abysse (Ext)
+- abyssal: pouvoir Convocations supplémentaires (Sur) -> Invocations supplémentaires (Sur)
+- arcane: lignage Arcanique -> Profane
+- arcane: pouvoir Lien arcanique (Sur) -> Pacte magique (Sur)
+- arcane: pouvoir Adepte de la métamagie (Ex) -> Adepte de la métamagie (Ext)
+- arcane: pouvoir Nouvelle arcane (Ex) -> Nouveaux arcanes (Ext)
+- arcane: pouvoir Puissance d'école (Ex) -> École privilégiée (Ext)
+- arcane: pouvoir Apothéose arcanique (Ex) -> Apothéose magique (Ext)
+- arcane: compétence Connaissances (au choix) -> Connaissances (un domaine au choix)
+- celestial: pouvoir Feu céleste (Mg) -> Feu céleste (Mag)
+- celestial: pouvoir Résistances célestes (Ex) -> Résistances célestes (Ext)
+- celestial: pouvoir Ailes du paradis (Sur) -> Ailes du Paradis (Sur)
+- destined: lignage Prédestiné -> Voué à un grand destin
+- destined: pouvoir Toucher du destin (Mg) -> Toucher de la destinée (Mag)
+- destined: pouvoir Voué au destin (Sur) -> Destiné (Sur)
+- destined: pouvoir C'était écrit (Sur) -> Accomplissement de la prophétie (Sur)
+- destined: pouvoir Au bout du chemin (Sur) -> Près du but (Sur)
+- destined: pouvoir Destin accompli (Sur) -> Réalisation du destin (Sur)
+- draconic: pouvoir Griffes (Sur) -> Griffes (Ext)
+- draconic: pouvoir Résistances draconiques (Ex) -> Résistances draconiques (Ext)
+- draconic: pouvoir Puissance des dragons (Sur) -> Pouvoir des dragons (Sur)
+- elemental: pouvoir Rayon élémentaire (Mg) -> Rayon élémentaire (Mag)
+- elemental: pouvoir Résistance élémentaire (Ex) -> Résistances élémentaires (Ext)
+- elemental: pouvoir Explosion élémentaire (Mg) -> Explosion élémentaire (Mag)
+- elemental: pouvoir Déplacement élémentaire (Sur) -> Mouvement élémentaire (Sur)
+- fey: pouvoir Toucher hilarant (Mg) -> Toucher rieur (Mag)
+- fey: pouvoir Déplacement facilité en forêt (Ex) -> Déplacement facilité (Ext)
+- fey: pouvoir Regard fugace (Mg) -> Regard furtif (Mag)
+- fey: pouvoir Magie féerique (Sur) -> Magie des fées (Sur)
+- fey: pouvoir Âme féerique (Sur) -> Âme des fées (Sur)
+- infernal: pouvoir Toucher corrupteur (Mg) -> Toucher corrupteur (Mag)
+- infernal: pouvoir Résistances infernales (Ex) -> Résistances infernales (Ext)
+- infernal: pouvoir Feu infernal (Mg) -> Feu infernal (Mag)
+- infernal: pouvoir Sur des ailes sombres (Sur) -> Ailes sombres (Sur)
+- infernal: pouvoir Puissance de l'Abîme infernal (Sur) -> Pouvoir de la Fosse (Sur)
+- undead: pouvoir Toucher du tombeau (Mg) -> Toucher du tombeau (Mag)
+- undead: pouvoir Don de la mort (Sur) -> Bienfait de la mort (Sur)
+- undead: pouvoir Étreinte des morts (Mg) -> Emprise de la mort (Mag)
+- undead: pouvoir Forme incorporelle (Mg) -> Forme intangible (Mag)
+- undead: pouvoir L'un des nôtres (Ex) -> Un d’entre nous (Ext)
 
 ## Dons : noms corrigés
 
