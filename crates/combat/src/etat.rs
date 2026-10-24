@@ -5,6 +5,7 @@
 //! (déterminisme), et annuler une action revient à rejouer jusqu'à l'action précédente.
 
 use crate::economie::{Depense, EconomieTour, TypeAction};
+use crate::sorts::{Distraction, ParamsLancer};
 use aventure::Sante;
 use aventure::{ContextePj, ErreurAventure, EtatAventure, EvenementAventure, IdPj, Sortie};
 use fiches::journal::EvenementFiche;
@@ -49,6 +50,16 @@ pub enum ActionCombat {
         type_action: TypeAction,
         libelle: String,
         deplacement: bool,
+    },
+    /// Lancement d'un sort (voir `EtatCombat::apercu_sort` pour ce qu'il faut lancer avant).
+    Lancer(ParamsLancer),
+    /// Test de concentration : sort à maintenir, ou distraction (Core p. 206).
+    Concentration {
+        pj: IdPj,
+        d20: i32,
+        cause: Distraction,
+        niveau_du_sort: u32,
+        effet: Option<temps::IdEffet>,
     },
     /// Action préparée (texte libre), gardée jusqu'au prochain tour du personnage.
     Preparer {
@@ -127,6 +138,7 @@ pub struct Init {
 pub struct Stats {
     pub degats_subis: i32,
     pub soins_recus: i32,
+    pub sorts_lances: u32,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -156,6 +168,8 @@ pub struct EtatCombat {
     /// Personnages qui ont déjà utilisé une action immédiate hors de leur tour (elle prend leur
     /// prochaine action rapide).
     pub immediates_hors_tour: BTreeSet<IdPj>,
+    /// Emplacements de sorts dépensés pendant ce combat : (personnage, niveau d'emplacement) → nombre.
+    pub emplacements_depenses: BTreeMap<(IdPj, u32), u32>,
     pub stats: BTreeMap<IdPj, Stats>,
     pub journal: Vec<EntreeCombat>,
     /// Événements à appliquer aux fiches à la validation, dans l'ordre.
@@ -191,6 +205,7 @@ impl EtatCombat {
             preparees: BTreeMap::new(),
             economie: BTreeMap::new(),
             immediates_hors_tour: BTreeSet::new(),
+            emplacements_depenses: BTreeMap::new(),
             stats: BTreeMap::new(),
             journal: Vec::new(),
             fiche: Vec::new(),
@@ -199,7 +214,7 @@ impl EtatCombat {
         })
     }
 
-    fn noter(&mut self, texte: String) {
+    pub(crate) fn noter(&mut self, texte: String) {
         self.journal.push(EntreeCombat {
             round: self.round,
             texte,
@@ -210,7 +225,7 @@ impl EtatCombat {
         ctx(pj).map_or_else(|| format!("PJ {pj}"), |c| c.nom)
     }
 
-    fn verifier_engage(&self, pj: IdPj) -> Result<(), ErreurCombat> {
+    pub(crate) fn verifier_engage(&self, pj: IdPj) -> Result<(), ErreurCombat> {
         if self.engages.contains(&pj) {
             Ok(())
         } else {
@@ -251,7 +266,7 @@ impl EtatCombat {
         }
     }
 
-    fn fusionner(&mut self, s: Sortie) {
+    pub(crate) fn fusionner(&mut self, s: Sortie) {
         self.fiche.extend(s.fiche);
         self.minuits += s.minuits;
     }
@@ -334,7 +349,7 @@ impl EtatCombat {
         r
     }
 
-    fn appliquer_interne(
+    pub(crate) fn appliquer_interne(
         &mut self,
         a: &ActionCombat,
         ctx: &dyn Fn(IdPj) -> Option<ContextePj>,
@@ -566,6 +581,14 @@ impl EtatCombat {
                     }
                 }
             }
+            ActionCombat::Lancer(params) => self.lancer(params, ctx)?,
+            ActionCombat::Concentration {
+                pj,
+                d20,
+                cause,
+                niveau_du_sort,
+                effet,
+            } => self.concentration(*pj, *d20, cause, *niveau_du_sort, *effet, ctx)?,
             ActionCombat::Preparer { pj, action } => {
                 self.verifier_engage(*pj)?;
                 if self.phase != Phase::EnCours {

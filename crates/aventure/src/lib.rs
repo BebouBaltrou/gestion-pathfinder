@@ -9,8 +9,9 @@ pub mod survie;
 pub mod vital;
 
 pub use etat::{
-    nom_dans_la_fiche, Contenu, Contexte, ContextePj, Entree, ErreurAventure, EtatAventure,
-    EvenementAventure, IdPj, Protection, Sortie, SuiviPj, TYPES_D_ENERGIE,
+    nom_dans_la_fiche, Contenu, Contexte, ContextePj, EmplacementPj, Entree, ErreurAventure,
+    EtatAventure, EvenementAventure, IdPj, IncantationPj, Protection, Sortie, SuiviPj,
+    TYPES_D_ENERGIE,
 };
 pub use survie::{Besoin, Survie, TestDu};
 pub use vital::{Sante, SoinApplique, Vital};

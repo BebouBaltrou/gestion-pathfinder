@@ -1,0 +1,14 @@
+{
+  "_note": "Dons de métamagie du Core : augmentation du niveau d'emplacement. Source : data/core/dons.json (texte du livre, page indiquée). `delta` absent : Heighten Spell, le niveau est choisi par le joueur (jusqu'à 9).",
+  "metamagies": [
+    { "nom_en": "Empower Spell", "delta": 2, "page": 122 },
+    { "nom_en": "Enlarge Spell", "delta": 1, "page": 122 },
+    { "nom_en": "Extend Spell", "delta": 1, "page": 123, "double_duree": true },
+    { "nom_en": "Heighten Spell", "page": 126 },
+    { "nom_en": "Maximize Spell", "delta": 3, "page": 130 },
+    { "nom_en": "Quicken Spell", "delta": 4, "page": 132, "rapide": true },
+    { "nom_en": "Silent Spell", "delta": 1, "page": 133, "sans_verbal": true },
+    { "nom_en": "Still Spell", "delta": 1, "page": 135, "sans_gestes": true },
+    { "nom_en": "Widen Spell", "delta": 3, "page": 137 }
+  ]
+}

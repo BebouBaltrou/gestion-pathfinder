@@ -152,3 +152,8 @@ naturelle (pas de torches) ; ordre d'initiative = uniquement tes personnages.
   l'expiration), dégâts typés avec immunités, résistances et RD (détail dans le journal), soins par round,
   économie d'actions avec catalogue de 58 actions (`data/combat/actions.json`). 228 tests dans le workspace.
   Lectures à valider : `docs/POINTS_A_CONFIRMER_COMBAT.md`. Non modélisés : dégâts massifs, dégâts continus.
+- **Phase 6 (sorts en combat) faite** : aperçu et lancement assistés (emplacements, métamagie, DD, niveau de
+  lanceur, lancement défensif, échec des sorts profanes, durée proposée par le livre), effets de 14 sorts sur les
+  personnages joués, tests de concentration (Core p. 206), journal rejouable. 253 tests dans le workspace.
+  Lectures à valider : `docs/POINTS_A_CONFIRMER_SORTS.md`. Reste : sorts préparés, convocations, contresort,
+  pouvoirs de lignage (phase 7).

@@ -13,6 +13,7 @@ fn ctx(id: IdPj) -> Option<ContextePj> {
         con_mod: 1,
         vigueur: 4,
         initiative: 2,
+        incantation: None,
         dommages: vec![],
     })
 }

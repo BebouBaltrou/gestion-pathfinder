@@ -36,6 +36,40 @@ pub struct ContextePj {
     pub initiative: i32,
     /// Dommages de caractéristique en cours (pour la guérison au repos).
     pub dommages: Vec<(Carac, i32)>,
+    /// Valeurs d'incantation de la fiche (lanceurs de sorts seulement).
+    pub incantation: Option<IncantationPj>,
+}
+
+/// Emplacements de sorts d'un niveau, tels que la fiche les donne au début du combat.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct EmplacementPj {
+    pub niveau_de_sort: u32,
+    pub restants: u32,
+    pub dd: i32,
+}
+
+/// Ce que le lancement de sorts demande à la fiche (calculé par la fiche, jamais par le combat).
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct IncantationPj {
+    /// Classe, nom anglais du catalogue des sorts (`sorcerer`).
+    pub classe_en: String,
+    /// Nom de la classe dans la fiche (pour décompter les emplacements).
+    pub classe: String,
+    pub arcanique: bool,
+    /// Lanceur spontané : le sort se choisit parmi les sorts connus, sans préparation.
+    pub spontane: bool,
+    pub niveau_de_lanceur: u32,
+    /// Modificateur de la caractéristique d'incantation.
+    pub mod_incantation: i32,
+    /// Bonus divers aux tests de concentration (dons…).
+    pub bonus_concentration: i32,
+    pub emplacements: Vec<EmplacementPj>,
+    /// Noms anglais des sorts connus (sorts de lignage compris).
+    pub sorts_connus: Vec<String>,
+    /// Dons de métamagie connus (noms anglais).
+    pub metamagies: Vec<String>,
+    /// Chance d'échec des sorts profanes due à l'armure et au bouclier (%).
+    pub echec_arcanique_pct: u32,
 }
 
 pub type Contexte<'a> = &'a dyn Fn(IdPj) -> Option<ContextePj>;

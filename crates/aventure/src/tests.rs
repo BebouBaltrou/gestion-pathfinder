@@ -15,6 +15,7 @@ fn ctx(id: IdPj) -> Option<ContextePj> {
             con_mod: 1,
             vigueur: 4,
             initiative: 2,
+            incantation: None,
             dommages: vec![(Carac::Int, 3)],
         }),
         2 => Some(ContextePj {
@@ -25,6 +26,7 @@ fn ctx(id: IdPj) -> Option<ContextePj> {
             con_mod: 3,
             vigueur: 4,
             initiative: 1,
+            incantation: None,
             dommages: vec![],
         }),
         _ => None,

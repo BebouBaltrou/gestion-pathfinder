@@ -21,6 +21,7 @@ fn ctx(id: IdPj) -> Option<ContextePj> {
         con_mod: 1,
         vigueur: 4,
         initiative: init,
+        incantation: None,
         dommages: vec![],
     })
 }
