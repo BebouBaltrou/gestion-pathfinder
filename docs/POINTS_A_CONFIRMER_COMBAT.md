@@ -69,7 +69,7 @@ Source : tableau « Actions in Combat » relevé dans `data/combat/actions.json`
   per round »).
 
 ## Expérience et récompenses de fin de combat (phase 9)
-
+- **XP** : saisi par le joueur pour chaque personnage. Aide facultative : total d'après les FP (tableau 12-2, Core p. 397, `data/combat/experience.json`), divisé entre les personnages (Core p. 399), simple suggestion. Lecture à valider : arrondi vers le bas.
   être saisi à la main.
 - Or et objets trouvés : saisis par le joueur, jamais calculés (aucun trésor n'est inventé).
 - Les récompenses sont rattachées au combat validé : annuler le combat les annule aussi.
