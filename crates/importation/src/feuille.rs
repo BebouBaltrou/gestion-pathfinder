@@ -50,6 +50,8 @@ pub struct Feuille {
     pub ca_depourvu: Option<i32>,
     pub competences: Vec<CompetenceLue>,
     pub notes_dons: String,
+    /// Objets portés écrits à la main : (champ du PDF, texte). Cases `Notes.0.0.*`.
+    pub objets: Vec<(String, String)>,
     pub richesse_po: Option<i32>,
 }
 
@@ -241,5 +243,14 @@ pub fn lire_feuille(c: &Champs) -> Feuille {
     }
 
     f.notes_dons = texte(c, "Notes.2.3");
+    for (champ, v) in c.range("Notes.0.0.".to_string()..) {
+        if !champ.starts_with("Notes.0.0.") {
+            break;
+        }
+        let v = v.trim();
+        if !v.is_empty() && v != "undefined" {
+            f.objets.push((champ.clone(), v.replace('\n', " ")));
+        }
+    }
     f
 }

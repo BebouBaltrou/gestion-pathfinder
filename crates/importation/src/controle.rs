@@ -466,10 +466,70 @@ pub fn controler(f: &Feuille, r: &Referentiel) -> Rapport {
             garde: None,
         });
     }
+    // ── Objets magiques ────────────────────────────────────────────────────────
+    for (champ, texte) in &f.objets {
+        let (regles, explication, gravite, libelle) =
+            match r.objets_magiques.objet_par_nom_francais(texte) {
+                Some(m) => {
+                    let effets: Vec<String> = m
+                        .effets
+                        .iter()
+                        .map(|e| {
+                            format!(
+                                "{:+} {} sur {}",
+                                e.valeur,
+                                e.type_bonus.nom(),
+                                cible_lisible(&e.cible.0)
+                            )
+                        })
+                        .collect();
+                    let mut explication = format!(
+                        "{} ({}), {} po.{}",
+                        m.nom,
+                        m.source,
+                        m.prix_po,
+                        if effets.is_empty() {
+                            " Aucun effet chiffré.".to_string()
+                        } else {
+                            format!(" Effets : {}.", effets.join(", "))
+                        }
+                    );
+                    let mut gravite = Gravite::Accord;
+                    if let Some(p) = prix_ecrit(texte) {
+                        if p != m.prix_po {
+                            gravite = Gravite::AValider;
+                            explication.push_str(&format!(
+                                " La feuille note {p} po, le livre donne {} po.",
+                                m.prix_po
+                            ));
+                        }
+                    }
+                    (m.nom_en.clone(), explication, gravite, m.nom.clone())
+                }
+                None => (
+                    "—".to_string(),
+                    "Objet absent du catalogue des objets à bonus chiffré : gardé comme note \
+                     personnalisée, ses effets ne sont pas appliqués."
+                        .to_string(),
+                    Gravite::AValider,
+                    texte.chars().take(40).collect(),
+                ),
+            };
+        rap.lignes.push(Ligne {
+            rubrique: "Objets magiques",
+            libelle,
+            champ: champ.clone(),
+            feuille: texte.clone(),
+            regles,
+            explication,
+            gravite,
+            cle: String::new(),
+            garde: None,
+        });
+    }
     rap.non_verifie.push(
-        "Objets magiques (bandeau, ceinturon, bracelets, anneau, amulette, baguettes, parchemins) \
-         écrits en texte libre : conservés comme notes ; leurs effets ne sont pas encore appliqués \
-         aux calculs."
+        "Baguettes, parchemins et objets sans bonus chiffré (ou absents du catalogue) restent des \
+         notes : leurs effets ne sont pas appliqués aux calculs."
             .into(),
     );
 
@@ -591,6 +651,8 @@ pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32, r: &Referentiel) -> Fiche 
     let race = "humain";
     let mut scores: BTreeMap<Carac, i32> = BTreeMap::new();
     let mut effets: Vec<Effet> = Vec::new();
+    // Objets magiques reconnus : ils portent leurs propres bonus (le catalogue du livre).
+    let objets = objets_reconnus(f, r);
     for cl in &f.caracs {
         let c = carac_de(cl.id);
         let mut base = cl.base.or(cl.val).unwrap_or(10);
@@ -598,7 +660,16 @@ pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32, r: &Referentiel) -> Fiche 
             base -= 2; // l'humain remet +2 racial
         }
         scores.insert(c, base);
-        if let Some(a) = cl.alteration.filter(|a| *a != 0) {
+        // La colonne « Altération » de la feuille : on n'ajoute que ce que les objets reconnus
+        // n'expliquent pas déjà.
+        let par_objets = objets
+            .iter()
+            .flat_map(|(_, o)| o.effets.iter())
+            .filter(|e| e.cible == c.cible() && e.type_bonus == TypeBonus::Alteration)
+            .map(|e| e.valeur)
+            .max()
+            .unwrap_or(0);
+        if let Some(a) = cl.alteration.filter(|a| *a > par_objets) {
             effets.push(Effet {
                 cible: c.cible(),
                 type_bonus: TypeBonus::Alteration,
@@ -661,7 +732,13 @@ pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32, r: &Referentiel) -> Fiche 
         connaissance_de_lignage: None,
         effets,
         sorts_connus: vec![],
-        equipement: Default::default(),
+        equipement: {
+            let mut eq = fiches::equipement::Equipement::default();
+            for (_, o) in &objets {
+                eq.ajouter_objet(&o.nom_en, 1);
+            }
+            eq
+        },
         etats: vec![],
         temporaires: vec![],
     };
@@ -848,5 +925,60 @@ mod tests_import {
         let r = Referentiel::partage();
         let p = proposer(&lire_feuille(&champs_ensorceleur_3()), r).unwrap();
         assert_eq!(p.fiche.calculer(r).unwrap().pv_max.total, 17);
+    }
+}
+
+/// Objets de la feuille reconnus par le catalogue : (champ, objet).
+fn objets_reconnus(
+    f: &Feuille,
+    r: &Referentiel,
+) -> Vec<(String, fiches::objets_magiques::ObjetMagiqueInstance)> {
+    f.objets
+        .iter()
+        .filter_map(|(champ, t)| {
+            r.objets_magiques
+                .objet_par_nom_francais(t)
+                .map(|o| (champ.clone(), o))
+        })
+        .collect()
+}
+
+/// « 16k po », « 2,5k po » ou « 8 000 po » dans le texte d'un objet : le prix noté par le joueur.
+fn prix_ecrit(texte: &str) -> Option<i64> {
+    let t = texte.to_lowercase();
+    let i = t.find(" po").or_else(|| t.find("po"))?;
+    let avant = t[..i].trim_end();
+    let (nombre, mille) = match avant.strip_suffix('k') {
+        Some(n) => (n, true),
+        None => (avant, false),
+    };
+    let chiffres: String = nombre
+        .chars()
+        .rev()
+        .take_while(|c| c.is_ascii_digit() || *c == ',' || *c == '.' || *c == ' ')
+        .collect::<Vec<_>>()
+        .into_iter()
+        .rev()
+        .collect();
+    let v: f64 = chiffres
+        .trim()
+        .replace(' ', "")
+        .replace(',', ".")
+        .parse()
+        .ok()?;
+    Some((v * if mille { 1000.0 } else { 1.0 }).round() as i64)
+}
+
+fn cible_lisible(cible: &str) -> String {
+    match cible {
+        "ca" => "la CA".into(),
+        "jds.vig" => "Vigueur".into(),
+        "jds.ref" => "Réflexes".into(),
+        "jds.vol" => "Volonté".into(),
+        c => match c.split_once('.') {
+            Some(("carac", x)) => x.to_uppercase(),
+            Some(("comp", x)) => x.replace('_', " "),
+            _ => c.to_string(),
+        },
     }
 }
