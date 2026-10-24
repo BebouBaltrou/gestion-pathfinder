@@ -169,7 +169,7 @@ naturelle (pas de torches) ; ordre d'initiative = uniquement tes personnages.
   concentration, fin de combat avec alertes). Essai automatique dans la vraie fenêtre : 62 vérifications.
   Palettes A et B choisissables dans Paramètres. Backlog : `ROADMAP.md`.
 - **Phase 9 (fin de combat, statistiques, intégration, export) faite** : à la validation d'un combat, récompenses
-  facultatives (XP saisis ou calculés d'après les FP des créatures vaincues, or au compte du personnage, objets
+  facultatives (XP saisis par le joueur pour chaque personnage (aide de calcul d'après les FP), or au compte du personnage, objets
   trouvés) enregistrées **dans le même événement** `CombatValide` : une seule annulation défait tout. Historique des
   combats passés (rounds, bilan par personnage), statistiques de campagne (dégâts subis et infligés, soins, sorts,
   objets), « dégâts infligés » notés à la main (aucun ennemi n'est modélisé), export Markdown et JSON d'un combat.

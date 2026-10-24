@@ -1,5 +1,6 @@
-// Récompenses de fin de combat : XP (total saisi ou calculé d'après les FP des créatures vaincues),
-// or ramassé et objets trouvés. Elles entrent dans la campagne avec le combat, en un seul bloc annulable.
+// Récompenses de fin de combat : XP saisi par le joueur pour chaque personnage (avec une aide de calcul
+// d'après les FP des créatures vaincues), or ramassé et objets trouvés. Elles entrent dans la campagne
+// avec le combat, en un seul bloc annulable.
 
 import { useEffect, useState } from "react";
 import { api } from "../../api";
@@ -9,18 +10,18 @@ import { DialogueObjet } from "./dialogues";
 import type { Consommable } from "../../evenements-jeu";
 
 export type EtatRecompenses = {
-  xpTotal: number | null;
+  xp: Record<number, number | null>;
   motif: string;
   or: Record<number, number | null>;
   objets: [number, Consommable][];
 };
 
-export const recompensesVides = (): EtatRecompenses => ({ xpTotal: null, motif: "", or: {}, objets: [] });
+export const recompensesVides = (): EtatRecompenses => ({ xp: {}, motif: "", or: {}, objets: [] });
 
-/** Convertit l'état saisi en message pour le cœur ; `destinataires` : personnages qui reçoivent l'XP. */
-export function versRecompenses(e: EtatRecompenses, destinataires: number[], parPersonnage: number): Recompenses {
+/** Convertit l'état saisi en message pour le cœur ; `destinataires` : personnages concernés par le combat. */
+export function versRecompenses(e: EtatRecompenses, destinataires: number[]): Recompenses {
   return {
-    xp: parPersonnage > 0 ? destinataires.map((id) => [id, parPersonnage] as [number, number]) : [],
+    xp: destinataires.map((id) => [id, e.xp[id] ?? 0] as [number, number]).filter(([, v]) => v > 0),
     motif: e.motif,
     or: Object.entries(e.or)
       .filter(([, v]) => v !== null && v !== 0)
@@ -34,15 +35,12 @@ export function BlocRecompenses({
   destinataires,
   etat,
   onChange,
-  onPartXp,
 }: {
   pjs: PjCombat[];
   destinataires: number[];
   etat: EtatRecompenses;
   onChange: (e: EtatRecompenses) => void;
-  onPartXp: (xp: number) => void;
 }) {
-  const [mode, setMode] = useState<"total" | "fp">("total");
   const [fps, setFps] = useState<string[]>([]);
   const [catalogue, setCatalogue] = useState<string[]>([]);
   const [calcul, setCalcul] = useState<{ total: number; parPersonnage: number } | null>(null);
@@ -52,33 +50,20 @@ export function BlocRecompenses({
     api.catalogueFp().then(setCatalogue);
   }, []);
 
-  const n = Math.max(1, destinataires.length);
-  // part de chaque personnage, calculée par le cœur
+  const concernes = pjs.filter((p) => destinataires.includes(p.id));
+  const n = Math.max(1, concernes.length);
+  // aide facultative : le cœur calcule le total d'XP des créatures vaincues (Core p. 397)
   useEffect(() => {
     setErreur(null);
-    if (mode === "fp") {
-      if (fps.length === 0) {
-        setCalcul(null);
-        onPartXp(0);
-        return;
-      }
-      api
-        .combatXp(fps, n)
-        .then((x) => {
-          setCalcul(x);
-          onPartXp(x.parPersonnage);
-        })
-        .catch((e) => setErreur(String(e)));
-    } else if (etat.xpTotal !== null && etat.xpTotal > 0) {
-      const part = Math.floor(etat.xpTotal / n);
-      setCalcul({ total: etat.xpTotal, parPersonnage: part });
-      onPartXp(part);
-    } else {
+    if (fps.length === 0) {
       setCalcul(null);
-      onPartXp(0);
+      return;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode, fps, etat.xpTotal, n]);
+    api
+      .combatXp(fps, n)
+      .then(setCalcul)
+      .catch((e) => setErreur(String(e)));
+  }, [fps, n]);
 
   return (
     <div className="bloc">
@@ -89,20 +74,14 @@ export function BlocRecompenses({
       </label>
 
       <div className="bloc">
-        <h3>Expérience</h3>
-        <div className="rangee-boutons">
-          <label className="interrupteur">
-            <input type="radio" name="xp" checked={mode === "total"} onChange={() => setMode("total")} />
-            Je saisis le total d'XP
-          </label>
-          <label className="interrupteur">
-            <input type="radio" name="xp" checked={mode === "fp"} onChange={() => setMode("fp")} />
-            Calculer d'après les FP des créatures vaincues (tableau du Core p. 397)
-          </label>
+        <h3>Expérience gagnée par personnage</h3>
+        <div className="champs">
+          {concernes.map((p) => (
+            <SaisieNombre key={p.id} etiquette={p.nom} min={0} max={10_000_000} valeur={etat.xp[p.id] ?? null} onChange={(v) => onChange({ ...etat, xp: { ...etat.xp, [p.id]: v } })} />
+          ))}
         </div>
-        {mode === "total" ? (
-          <SaisieNombre etiquette="XP à partager" min={0} max={10_000_000} valeur={etat.xpTotal} onChange={(v) => onChange({ ...etat, xpTotal: v })} />
-        ) : (
+        <details>
+          <summary>Aide : calculer d'après les FP des créatures vaincues (tableau du Core p. 397)</summary>
           <div className="bloc">
             {fps.map((fp, i) => (
               <div className="rangee-boutons" key={i}>
@@ -117,15 +96,18 @@ export function BlocRecompenses({
             <div className="rangee-boutons">
               <button className="bouton mini" onClick={() => setFps([...fps, "1"])}>+ Une créature vaincue</button>
             </div>
+            {erreur && <div className="avertissement">{erreur}</div>}
+            {calcul && (
+              <p>
+                Total des créatures : <strong>{calcul.total} XP</strong>, soit <strong>{calcul.parPersonnage} XP</strong> par personnage si on partage entre {n}{" "}
+                <span className="doux">(simple suggestion, arrondie vers le bas : c'est toi qui décides de ce que chacun reçoit)</span>.{" "}
+                <button className="bouton mini" onClick={() => onChange({ ...etat, xp: Object.fromEntries(concernes.map((p) => [p.id, calcul.parPersonnage])) })}>
+                  Reporter cette part à chacun
+                </button>
+              </p>
+            )}
           </div>
-        )}
-        {erreur && <div className="avertissement">{erreur}</div>}
-        {calcul && (
-          <p>
-            Total : <strong>{calcul.total} XP</strong>, soit <strong>{calcul.parPersonnage} XP</strong> pour chacun des {n} personnage(s) concerné(s)
-            {" "}<span className="doux">(méthode exacte : le total est divisé par le nombre de personnages, arrondi vers le bas)</span>.
-          </p>
-        )}
+        </details>
       </div>
 
       <div className="bloc">

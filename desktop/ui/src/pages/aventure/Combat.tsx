@@ -1087,7 +1087,6 @@ function DialogueFin({ vue, outils, onFermer }: { vue: CombatVue; outils: Outils
   }, [vue.journal.length]);
 
   const [recompenses, setRecompenses] = useState<EtatRecompenses>(recompensesVides());
-  const [partXp, setPartXp] = useState(0);
   const contestations: [number, Duree][] = Object.entries(maintenus)
     .map(([id, m]) => [Number(id), dureeDe(m.genre, m.n)] as [number, Duree | null])
     .filter((x): x is [number, Duree] => x[1] !== null);
@@ -1111,7 +1110,7 @@ function DialogueFin({ vue, outils, onFermer }: { vue: CombatVue; outils: Outils
                 api.combatTerminer(
                   validation,
                   mode === "abandon" ? [] : contestations,
-                  mode === "abandon" ? null : versRecompenses(recompenses, destinataires, partXp),
+                  mode === "abandon" ? null : versRecompenses(recompenses, destinataires),
                 ),
               );
               if (r?.ok) onFermer();
@@ -1206,7 +1205,6 @@ function DialogueFin({ vue, outils, onFermer }: { vue: CombatVue; outils: Outils
           destinataires={mode === "partiel" ? choisis : vue.personnages.map((p) => p.id)}
           etat={recompenses}
           onChange={setRecompenses}
-          onPartXp={setPartXp}
         />
       )}
       <div className="bloc">

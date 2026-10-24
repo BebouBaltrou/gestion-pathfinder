@@ -70,9 +70,6 @@ Source : tableau « Actions in Combat » relevé dans `data/combat/actions.json`
 
 ## Expérience et récompenses de fin de combat (phase 9)
 
-- **XP d'après les FP** : colonne « XP total » du tableau 12-2 (Core p. 397), données dans
-  `data/combat/experience.json`. Le total est divisé par le nombre de personnages qui reçoivent l'XP (méthode
-  exacte, Core p. 399). Lecture à valider : **arrondi vers le bas** (le livre ne l'indique pas). Le total peut aussi
   être saisi à la main.
 - Or et objets trouvés : saisis par le joueur, jamais calculés (aucun trésor n'est inventé).
 - Les récompenses sont rattachées au combat validé : annuler le combat les annule aussi.
