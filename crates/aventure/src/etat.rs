@@ -258,6 +258,78 @@ pub enum EvenementAventure {
     },
 }
 
+impl EvenementAventure {
+    /// Ligne lisible pour l'historique de la campagne.
+    pub fn description(&self) -> String {
+        use EvenementAventure::*;
+        match self {
+            Entree { pj } => format!("Aventure : PJ-{pj} rejoint l'aventure"),
+            Pas { pas } => format!("Aventure : {} minute(s) passent", pas.rounds() / 10),
+            AvancerTemps { rounds } => {
+                format!("Aventure : {} passe(nt)", temps::texte_rounds(*rounds))
+            }
+            RegleHeure { instant, .. } => format!("Aventure : heure réglée à {instant}"),
+            Degats { pj, nombre, letaux } => format!(
+                "Aventure : PJ-{pj} subit {nombre} dégât(s) {}",
+                if *letaux { "létaux" } else { "non létaux" }
+            ),
+            DegatsTypes {
+                pj,
+                nombre,
+                type_degats,
+                ..
+            } => format!("Aventure : PJ-{pj} subit {nombre} dégât(s) de {type_degats}"),
+            Soin { pj, nombre } => format!("Aventure : PJ-{pj} reçoit {nombre} point(s) de soin"),
+            PvTemporaires { pj, nombre } => {
+                format!("Aventure : PJ-{pj} reçoit {nombre} PV temporaires")
+            }
+            Stabilisation { pj, d20 } => {
+                format!("Aventure : PJ-{pj} jet de stabilisation ({d20})")
+            }
+            DegatsMassifs { pj, d20 } => {
+                format!("Aventure : PJ-{pj} jet de Vigueur, dégâts massifs ({d20})")
+            }
+            DegatsContinus { pj, actif } => format!(
+                "Aventure : PJ-{pj}, dégâts continus {}",
+                if *actif { "en cours" } else { "arrêtés" }
+            ),
+            EffetAjoute { pj, nom, duree, .. } => {
+                format!(
+                    "Aventure : PJ-{pj} reçoit l'effet « {nom} » ({})",
+                    duree.texte()
+                )
+            }
+            EffetRetire { id } => format!("Aventure : effet n° {id} retiré"),
+            EffetRetabli { id, .. } => format!("Aventure : effet n° {id} maintenu"),
+            AlerteConfirmee { id } => format!("Aventure : alerte de l'effet n° {id} confirmée"),
+            Manger { pj } => format!("Aventure : PJ-{pj} mange"),
+            Boire { pj } => format!("Aventure : PJ-{pj} boit"),
+            TestSurvie { pj, besoin, .. } => {
+                format!("Aventure : PJ-{pj} test de Constitution ({})", besoin.nom())
+            }
+            Repos { pjs, heures, .. } => {
+                format!(
+                    "Aventure : repos de {heures} h pour {} personnage(s)",
+                    pjs.len()
+                )
+            }
+            ObjetAjoute { pj, objet } => format!("Aventure : PJ-{pj} reçoit {}", objet.nom),
+            ObjetRetire { pj, id } => format!("Aventure : PJ-{pj} se défait de l'objet n° {id}"),
+            ObjetUtilise { pj, id, .. } => format!("Aventure : PJ-{pj} utilise l'objet n° {id}"),
+            ObjetRecupere { pj, id, nombre } => {
+                format!("Aventure : PJ-{pj} récupère {nombre} × objet n° {id}")
+            }
+            RessourcesDefinies { pj, .. } => format!("Aventure : PJ-{pj}, ressources mises à jour"),
+            RessourceUtilisee { pj, nom, quantite } => {
+                format!("Aventure : PJ-{pj} utilise {quantite} × {nom}")
+            }
+            RessourceRendue { pj, nom, quantite } => {
+                format!("Aventure : PJ-{pj} récupère {quantite} × {nom}")
+            }
+        }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ErreurAventure {
     Temps(ErreurTemps),

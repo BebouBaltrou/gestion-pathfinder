@@ -71,6 +71,8 @@ pub enum Erreur {
     Recettes(String),
     /// Vente, abandon ou réparation refusés.
     Actif(String),
+    /// Mode aventure ou combat refusé (message déjà lisible).
+    Aventure(String),
 }
 
 impl std::fmt::Display for Erreur {
@@ -158,6 +160,7 @@ impl std::fmt::Display for Erreur {
             Erreur::OrganisationNonVide(o) => write!(f, "l'organisation {o} contient encore des équipes"),
             Erreur::Recettes(m) => write!(f, "recettes : {m}"),
             Erreur::Actif(m) => f.write_str(m),
+            Erreur::Aventure(m) => write!(f, "aventure : {m}"),
             Erreur::DelocalisationVersElleMeme => {
                 f.write_str("l'équipe se trouve déjà dans cette localité")
             }
@@ -202,6 +205,8 @@ pub struct Etat {
     /// Fiches de personnage des PJ, par journal de fiche.
     pub fiches: BTreeMap<IdPersonnage, fiches::journal::Journal>,
     pub regles_personnages: crate::personnages::ReglesPersonnages,
+    /// Mode aventure : horloge, santé, effets, ressources (`None` tant que le joueur ne l'a pas démarré).
+    pub aventure: Option<aventure::EtatAventure>,
 }
 
 /// Effet notable d'un événement, pour l'historique (ex. arrivée d'un transfert).
@@ -250,6 +255,34 @@ impl Etat {
             jour: 1,
             ..Etat::default()
         }
+    }
+
+    /// Fait passer `nombre` jours de calendrier : arrivées des transferts, chantiers, salaires,
+    /// présence, ventes (jour par jour), puis le temps des fiches.
+    pub(crate) fn avancer_jours(
+        &mut self,
+        nombre: u32,
+        r: &regles::Referentiel,
+    ) -> Result<Vec<Consequence>, Erreur> {
+        let mut out = Vec::new();
+        for _ in 0..nombre {
+            self.jour += 1;
+            let (arrives, restants): (Vec<_>, Vec<_>) = std::mem::take(&mut self.transferts)
+                .into_iter()
+                .partition(|t| t.jour_arrivee <= self.jour);
+            self.transferts = restants;
+            for t in arrives {
+                self.livrer(&t)?;
+                out.push(Consequence::TransfertArrive(t));
+            }
+            out.extend(self.avancer_chantiers(r));
+            out.extend(self.avancer_delocalisations(r));
+            out.extend(self.payer_salaires());
+            out.extend(self.suivre_presence());
+            out.extend(self.conclure_ventes());
+        }
+        self.faire_passer_le_temps_des_fiches(nombre);
+        Ok(out)
     }
 
     pub fn pj(&self, id: IdPersonnage) -> Result<&Personnage, Erreur> {
@@ -555,25 +588,12 @@ impl Etat {
                 }
             }
             JoursAvances { nombre } => {
-                // Jour par jour : arrivées des transferts, puis avancement des chantiers.
-                for _ in 0..*nombre {
-                    self.jour += 1;
-                    let (arrives, restants): (Vec<_>, Vec<_>) =
-                        std::mem::take(&mut self.transferts)
-                            .into_iter()
-                            .partition(|t| t.jour_arrivee <= self.jour);
-                    self.transferts = restants;
-                    for t in arrives {
-                        self.livrer(&t)?;
-                        out.push(Consequence::TransfertArrive(t));
-                    }
-                    out.extend(self.avancer_chantiers(r));
-                    out.extend(self.avancer_delocalisations(r));
-                    out.extend(self.payer_salaires());
-                    out.extend(self.suivre_presence());
-                    out.extend(self.conclure_ventes());
-                }
-                self.faire_passer_le_temps_des_fiches(*nombre);
+                // Si une aventure est en cours, son horloge suit : les effets en cours expirent.
+                self.suivre_les_jours_dans_l_aventure(*nombre, r)?;
+                out.extend(self.avancer_jours(*nombre, r)?);
+            }
+            AventureDemarree { .. } | Aventure(_) | CombatValide { .. } | AventureTerminee => {
+                out.extend(self.appliquer_aventure(ev, r)?)
             }
             Groupe { evenements, .. } => {
                 for e in evenements {

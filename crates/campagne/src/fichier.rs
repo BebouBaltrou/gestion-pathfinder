@@ -7,7 +7,10 @@ use crate::Campagne;
 use std::path::Path;
 
 /// Version du format de fichier ; à incrémenter en cas de changement incompatible.
-pub const FORMAT: u32 = 1;
+pub const FORMAT: u32 = 2;
+
+/// Format écrit quand la campagne n'utilise pas le mode aventure : l'ancienne application la lit encore.
+pub const FORMAT_SANS_AVENTURE: u32 = 1;
 
 #[derive(serde::Serialize, serde::Deserialize)]
 struct Fichier {
@@ -39,7 +42,11 @@ impl std::error::Error for ErreurFichier {}
 
 pub fn vers_json(c: &Campagne) -> Result<String, ErreurFichier> {
     let f = Fichier {
-        format: FORMAT,
+        format: if c.utilise_aventure() {
+            FORMAT
+        } else {
+            FORMAT_SANS_AVENTURE
+        },
         application: "gestion-pathfinder".into(),
         campagne: c.clone(),
     };

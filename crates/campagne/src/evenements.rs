@@ -343,9 +343,48 @@ pub enum Evenement {
     ReglagePersonnages {
         regles: crate::personnages::ReglesPersonnages,
     },
+    /// Le joueur démarre le mode aventure : l'horloge de campagne part du jour courant à
+    /// `heure`:`minute`.
+    AventureDemarree {
+        heure: u32,
+        minute: u32,
+        /// Suivre la faim et la soif (règle activable).
+        survie: bool,
+        /// Règle optionnelle des dégâts massifs.
+        degats_massifs: bool,
+    },
+    /// Événement du mode aventure (temps, santé, effets, repos, objets, ressources…). Les
+    /// événements à envoyer aux fiches et les minuits franchis sont répercutés automatiquement.
+    Aventure(aventure::EvenementAventure),
+    /// Un combat est validé : état d'aventure obtenu, événements à répercuter sur les fiches
+    /// et minuits franchis (résumé du combat, qui lui vit dans un fichier à part).
+    CombatValide {
+        aventure: Box<aventure::EtatAventure>,
+        fiche: Vec<(aventure::IdPj, fiches::journal::EvenementFiche)>,
+        minuits: i64,
+        /// Récapitulatif lisible du combat, pour l'historique.
+        resume: String,
+    },
+    AventureTerminee,
     Note {
         texte: String,
     },
+}
+
+impl Evenement {
+    /// Le mode aventure ou combat intervient-il dans cet événement ? (Détermine le format de fichier.)
+    pub fn utilise_aventure(&self) -> bool {
+        match self {
+            Evenement::AventureDemarree { .. }
+            | Evenement::Aventure(_)
+            | Evenement::CombatValide { .. }
+            | Evenement::AventureTerminee => true,
+            Evenement::Groupe { evenements, .. } => {
+                evenements.iter().any(Evenement::utilise_aventure)
+            }
+            _ => false,
+        }
+    }
 }
 
 /// Entrée du journal : numéro d'ordre et jour de jeu où l'événement a eu lieu.
