@@ -386,12 +386,68 @@ pub fn controler(f: &Feuille, r: &Referentiel) -> Rapport {
     }
 
     // Les sorts de la feuille sont volontairement ignorés (décision du joueur).
-    // ── Dons, objets ───────────────────────────────────────────────────────────
+    // ── Dons ───────────────────────────────────────────────────────────────────
     if !f.notes_dons.is_empty() {
-        rap.non_verifie.push(
-            "Dons écrits en texte libre : rapprochement avec le catalogue à l'étape suivante."
-                .into(),
-        );
+        let dons = crate::dons::rapprocher(&f.notes_dons);
+        let attendus: u32 = fiche
+            .valider(r)
+            .iter()
+            .filter_map(|p| match p {
+                fiches::Probleme::DonsAuNiveau { attendus, .. } => Some(*attendus),
+                _ => None,
+            })
+            .sum();
+        let mut reconnus = 0;
+        for d in &dons {
+            let (regles, explication, gravite) = match (&d.nom_en, d.par_alias) {
+                (Some(en), false) => (
+                    en.clone(),
+                    "Reconnu dans le catalogue.".to_string(),
+                    Gravite::Accord,
+                ),
+                (Some(en), true) => (
+                    en.clone(),
+                    "Nom français de la feuille rapproché du don du Manuel de base : à confirmer."
+                        .to_string(),
+                    Gravite::AValider,
+                ),
+                (None, _) => (
+                    "—".to_string(),
+                    "Ce don n'est pas dans le catalogue du Manuel de base : il sera gardé comme \
+                     don personnalisé si tu le souhaites."
+                        .to_string(),
+                    Gravite::AValider,
+                ),
+            };
+            if d.nom_en.is_some() {
+                reconnus += 1;
+            }
+            rap.lignes.push(Ligne {
+                rubrique: "Dons",
+                libelle: d.texte.clone(),
+                champ: "Notes.2.3".into(),
+                feuille: d.texte.clone(),
+                regles,
+                explication,
+                gravite,
+            });
+        }
+        rap.lignes.push(Ligne {
+            rubrique: "Dons",
+            libelle: "Nombre de dons".into(),
+            champ: "Notes.2.3".into(),
+            feuille: dons.len().to_string(),
+            regles: attendus.to_string(),
+            explication: format!(
+                "Au niveau {niveau}, le moteur attend {attendus} dons choisis (niveau, humain, \
+                 lignage), plus le don gratuit « Écarter les composantes ». {reconnus} reconnus sur la feuille."
+            ),
+            gravite: if dons.len() as u32 == attendus {
+                Gravite::Accord
+            } else {
+                Gravite::Ecart
+            },
+        });
     }
     rap.non_verifie.push(
         "Objets magiques (bandeau, ceinturon, bracelets, anneau, amulette, baguettes, parchemins) \

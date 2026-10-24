@@ -5,6 +5,7 @@
 //! ligne (corriger / garder).
 
 pub mod controle;
+pub mod dons;
 pub mod feuille;
 pub mod lecteur;
 
