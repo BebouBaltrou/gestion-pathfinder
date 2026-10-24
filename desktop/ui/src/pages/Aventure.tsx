@@ -4,7 +4,7 @@
 import { useCallback, useEffect, useState } from "react";
 import type { Outils } from "../App";
 import { api, Retour } from "../api";
-import type { AlerteVue, AventureVue, CombatVue, DemandeVue, EffetVue, EvenementAventure, ObjetVue, RessourceVue } from "../aventure-types";
+import type { AlerteVue, AventureVue, CombatVue, DemandeVue, EffetVue, EvenementAventure, ObjetVue, RegleOptionnelle, RessourceVue } from "../aventure-types";
 import { Alertes, Dialogue, SaisieDe } from "../composants/jeu";
 import { ev, PasHoraire } from "../evenements-jeu";
 import { CartePj } from "./aventure/CartePj";
@@ -170,7 +170,15 @@ export function Aventure({ outils }: { outils: Outils }) {
 function Demarrage({ outils }: { outils: Outils }) {
   const [heure, setHeure] = useState<number | null>(8);
   const [minute, setMinute] = useState<number | null>(0);
-  const [massifs, setMassifs] = useState(false);
+  const [regles, setRegles] = useState<RegleOptionnelle[]>([]);
+  const [actives, setActives] = useState<string[]>([]);
+  useEffect(() => {
+    api.catalogueRegles().then((r) => {
+      setRegles(r);
+      setActives(r.filter((x) => x.par_defaut).map((x) => x.id));
+    });
+  }, []);
+  const massifs = actives.includes("degats_massifs");
   return (
     <div className="page aventure">
       <div className="titre-page">
@@ -191,10 +199,19 @@ function Demarrage({ outils }: { outils: Outils }) {
             <SaisieNombre etiquette="Heure de départ" min={0} max={23} valeur={heure} onChange={setHeure} />
             <SaisieNombre etiquette="Minute" min={0} max={59} valeur={minute} onChange={setMinute} />
           </div>
-          <label className="interrupteur">
-            <input type="checkbox" checked={massifs} onChange={(e) => setMassifs(e.target.checked)} />
-            Règle optionnelle des dégâts massifs (jet de Vigueur DD 15 après une attaque d'au moins 50 PV et la moitié des PV)
-          </label>
+          {regles.length > 0 && <h3>Règles optionnelles de combat</h3>}
+          {regles.map((r) => (
+            <label className="interrupteur" key={r.id}>
+              <input
+                type="checkbox"
+                checked={actives.includes(r.id)}
+                onChange={(e) => setActives(e.target.checked ? [...actives, r.id] : actives.filter((x) => x !== r.id))}
+              />
+              <span>
+                {r.nom} <span className="doux">({r.source})</span> : {r.description}
+              </span>
+            </label>
+          ))}
           <div className="rangee-boutons">
             <button
               className="bouton principal"

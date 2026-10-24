@@ -164,6 +164,7 @@ fn main() {
             aventure::combat_terminer,
             aventure::catalogue_actions,
             aventure::catalogue_fp,
+            aventure::catalogue_regles,
             aventure::combat_xp,
             aventure::combat_historique,
             aventure::combat_exporter,

@@ -124,6 +124,7 @@ export async function autotest(): Promise<void> {
     const calcXp = await api.combatXp(["1", "1/2"], 2);
     verifier(calcXp.total === 600 && calcXp.parPersonnage === 300, `XP d'après les FP (${calcXp.total} / ${calcXp.parPersonnage})`);
     verifier((await api.combatXp(["99"], 1).then(() => false, () => true)), "FP inconnu refusé");
+    verifier((await api.catalogueRegles()).some((r) => r.id === "degats_massifs" && r.source.includes("189")), "registre des règles optionnelles");
     const xpAvant = (await api.listePersonnages())[0].fiche?.xp ?? 0;
     const poAvant = (await api.listePersonnages())[0].compte.pa;
     const potion = {

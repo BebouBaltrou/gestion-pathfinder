@@ -14,6 +14,7 @@ import type {
   ReculVue,
   Validation,
   XpVue,
+  RegleOptionnelle,
 } from "./aventure-types";
 import type {
   ApercuMontee,
@@ -158,6 +159,7 @@ export const api = {
     appeler<Retour>("combat_terminer", { validation, contestations, recompenses }),
   combatXp: (fps: string[], personnages: number) => appeler<XpVue>("combat_xp", { fps, personnages }),
   catalogueFp: () => appeler<string[]>("catalogue_fp"),
+  catalogueRegles: () => appeler<RegleOptionnelle[]>("catalogue_regles"),
   combatHistorique: () => appeler<HistoriqueVue>("combat_historique"),
   combatExporter: (numero: number) => appeler<string[]>("combat_exporter", { numero }),
   catalogueActions: () => appeler<ActionDef[]>("catalogue_actions"),
@@ -305,6 +307,16 @@ function simule(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
     case "combat_terminer":
       mockCombat = "non";
       return Promise.resolve(ok("Combat validé"));
+    case "catalogue_regles":
+      return Promise.resolve<RegleOptionnelle[]>([
+        {
+          id: "degats_massifs",
+          nom: "Dégâts massifs",
+          description: "Quand une seule attaque inflige au moins 50 PV et au moins la moitié des PV maximum sans tuer, un jet de Vigueur DD 15 est demandé ; un échec est la mort.",
+          source: "Core Rulebook p. 189",
+          par_defaut: false,
+        },
+      ]);
     case "catalogue_fp":
       return Promise.resolve(["1/8", "1/4", "1/2", "1", "2", "3", "4", "5"]);
     case "combat_xp":

@@ -502,3 +502,9 @@ pub fn catalogue_etats() -> Vec<(String, String)> {
         .map(|e| (e.id.clone(), e.nom.clone()))
         .collect()
 }
+
+/// Règles optionnelles de combat connues (registre de données, avec leur source).
+#[tauri::command]
+pub fn catalogue_regles() -> Vec<combat::regles::RegleOptionnelle> {
+    combat::regles::catalogue().to_vec()
+}

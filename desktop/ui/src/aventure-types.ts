@@ -270,3 +270,6 @@ export type Recompenses = {
   or: [number, number][];
   objets: [number, unknown][];
 };
+
+/** Règle optionnelle de combat du registre de données. */
+export type RegleOptionnelle = { id: string; nom: string; description: string; source: string; par_defaut: boolean };

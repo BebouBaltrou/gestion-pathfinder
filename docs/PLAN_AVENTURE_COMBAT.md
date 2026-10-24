@@ -175,3 +175,8 @@ naturelle (pas de torches) ; ordre d'initiative = uniquement tes personnages.
   objets), « dégâts infligés » notés à la main (aucun ennemi n'est modélisé), export Markdown et JSON d'un combat.
   Essai automatique dans la vraie fenêtre : 73 vérifications. 285 tests dans le workspace.
   Lectures à valider : `docs/POINTS_A_CONFIRMER_COMBAT.md` (section « Expérience »).
+- **Phase 10 (règles optionnelles, accessibilité, finitions) faite** : registre des règles optionnelles de combat
+  (`data/combat/regles_optionnelles.json`, avec source ; pour l'instant seulement les dégâts massifs, Core p. 189),
+  affiché au démarrage de l'aventure ; le focus entre dans les fenêtres et y revient à la fermeture, Échap ferme,
+  animations réduites si le système le demande, jauges et états lisibles sans la couleur. Taille du texte inchangée
+  (décision de l'utilisateur). Essai dans la vraie fenêtre : 74 vérifications. 286 tests.

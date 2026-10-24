@@ -9,6 +9,7 @@ pub mod combat;
 pub mod economie;
 pub mod etat;
 pub mod objets;
+pub mod regles;
 pub mod sorts;
 pub mod xp;
 
