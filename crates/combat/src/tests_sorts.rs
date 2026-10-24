@@ -13,6 +13,8 @@ fn incantation(niveau_de_lanceur: u32, echec_pct: u32) -> IncantationPj {
         spontane: true,
         niveau_de_lanceur,
         mod_incantation: 3,
+        score_incantation: 16,
+        mod_sagesse: 1,
         bonus_concentration: 0,
         emplacements: (1..=6)
             .map(|n| EmplacementPj {
@@ -49,7 +51,10 @@ fn incantation(niveau_de_lanceur: u32, echec_pct: u32) -> IncantationPj {
     }
 }
 
-fn ctx_avec(niveau_de_lanceur: u32, echec_pct: u32) -> impl Fn(IdPj) -> Option<ContextePj> {
+pub(crate) fn ctx_avec(
+    niveau_de_lanceur: u32,
+    echec_pct: u32,
+) -> impl Fn(IdPj) -> Option<ContextePj> {
     move |id| {
         let (nom, inc) = match id {
             1 => ("Mialee", Some(incantation(niveau_de_lanceur, echec_pct))),
@@ -94,7 +99,7 @@ fn lancer(sort: &str) -> ParamsLancer {
     }
 }
 
-fn metas(l: &[&str]) -> Vec<String> {
+pub(crate) fn metas(l: &[&str]) -> Vec<String> {
     l.iter().map(|s| s.to_string()).collect()
 }
 

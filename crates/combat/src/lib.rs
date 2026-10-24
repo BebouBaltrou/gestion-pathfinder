@@ -8,6 +8,7 @@ pub mod catalogue;
 pub mod combat;
 pub mod economie;
 pub mod etat;
+pub mod objets;
 pub mod sorts;
 
 #[cfg(feature = "serde")]
@@ -15,11 +16,14 @@ pub use combat::persistance;
 pub use combat::{ApercuFin, Combat, Ctx, RecapPj, Resultat, Validation, FORMAT_COMBAT};
 pub use economie::{Depense, EconomieTour, TypeAction};
 pub use etat::{ActionCombat, Demande, EntreeCombat, ErreurCombat, EtatCombat, Init, Phase, Stats};
+pub use objets::ParamsObjet;
 pub use sorts::{ApercuSort, Distraction, ParamsLancer};
 
 #[cfg(test)]
 mod tests;
 #[cfg(test)]
 mod tests_actions;
+#[cfg(test)]
+mod tests_objets;
 #[cfg(test)]
 mod tests_sorts;

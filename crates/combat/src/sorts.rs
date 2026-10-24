@@ -83,7 +83,7 @@ struct FichierEffets {
     sorts: Vec<EffetSort>,
 }
 
-fn referentiel() -> &'static Referentiel {
+pub(crate) fn referentiel() -> &'static Referentiel {
     static R: OnceLock<Referentiel> = OnceLock::new();
     R.get_or_init(Referentiel::core)
 }
@@ -167,7 +167,7 @@ fn doubler(d: Duree) -> Duree {
 }
 
 /// Composantes verbale et gestuelle d'après « V, S, M (…) ».
-fn composantes(texte: Option<&str>) -> (bool, bool) {
+pub(crate) fn composantes(texte: Option<&str>) -> (bool, bool) {
     let t = texte.unwrap_or("");
     let avant = t.split('(').next().unwrap_or("");
     let jetons: Vec<&str> = avant.split(',').map(str::trim).collect();
@@ -555,49 +555,9 @@ impl EtatCombat {
             ));
         }
         let cl = p.inc.niveau_de_lanceur;
-        let effet = effet_du_sort(&p.sort.nom_en);
-        let accepte_cibles = effet.is_some() && !a.cibles.is_empty();
         for cible in &a.cibles {
             self.verifier_engage(*cible)?;
         }
-        // durée de l'effet : saisie, sinon proposée d'après le livre
-        let duree = if accepte_cibles {
-            let mut d = a.duree.clone().or_else(|| {
-                let s = p
-                    .sort
-                    .duree_en
-                    .as_deref()
-                    .and_then(|t| duree_suggeree(t, cl));
-                if p.metas.iter().any(|m| m.double_duree) {
-                    s.map(doubler)
-                } else {
-                    s
-                }
-            });
-            if d == Some(Duree::Instantanee) {
-                d = None;
-            }
-            Some(d.ok_or_else(|| {
-                ErreurCombat::Invalide(format!(
-                    "durée à saisir pour {} (« {} » n'est pas une formule simple)",
-                    p.sort.nom_en,
-                    p.sort.duree_en.clone().unwrap_or_default()
-                ))
-            })?)
-        } else {
-            None
-        };
-        let energie = match (effet.is_some_and(|e| e.choix_energie), &a.choix_energie) {
-            (true, Some(e)) if TYPES_D_ENERGIE.contains(&e.to_lowercase().as_str()) => {
-                Some(e.to_lowercase())
-            }
-            (true, _) if accepte_cibles => {
-                return invalide(
-                    "choisir le type d'énergie : acide, froid, électricité, feu ou son",
-                );
-            }
-            _ => None,
-        };
         // contrôles saisis (avant de dépenser quoi que ce soit : une erreur ne change rien)
         if p.echec_pct > 0 && a.echec_arcanique_d100.is_none() {
             return invalide(format!(
@@ -693,62 +653,115 @@ impl EtatCombat {
                 ));
             }
         }
-        // effets sur les personnages joués
-        match (effet, duree) {
-            (Some(e), Some(duree)) => {
-                let effets: Vec<Effet> = e
-                    .effets
-                    .iter()
-                    .map(|d| Effet::new(&d.cible, d.type_bonus, d.valeur, &p.sort.nom_en))
-                    .collect();
-                let mut protections = Vec::new();
-                for pr in &e.protections {
-                    protections.push(match pr {
-                        ProtectionData::Reduction { valeur } => {
-                            Protection::Reduction { valeur: *valeur }
-                        }
-                        ProtectionData::Immunite { type_degats } => Protection::Immunite {
-                            type_degats: type_degats.clone(),
-                        },
-                        ProtectionData::Resistance { paliers } => {
-                            let valeur = paliers
-                                .iter()
-                                .filter(|(n, _)| *n <= cl)
-                                .map(|(_, v)| *v)
-                                .max()
-                                .unwrap_or(0);
-                            Protection::Resistance {
-                                type_degats: energie.clone().unwrap_or_default(),
-                                valeur,
-                            }
-                        }
-                    });
-                }
-                for cible in &a.cibles {
-                    let ev = EvenementAventure::EffetAjoute {
-                        pj: *cible,
-                        nom: p.sort.nom_en.clone(),
-                        source: format!("sort {}, lancé par {}", p.sort.nom_en, c.nom),
-                        duree: duree.clone(),
-                        effets: effets.clone(),
-                        etats: e.etats.clone(),
-                        soin_par_round: 0,
-                        protections: protections.clone(),
-                    };
-                    let s = self.aventure.appliquer(&ev, ctx)?;
-                    self.fusionner(s);
-                }
-                if let Some(n) = &e.notes {
-                    self.noter(format!("{} : {n}", p.sort.nom_en));
-                }
+        self.effet_de_sort(
+            &p.sort.nom_en,
+            cl,
+            &c.nom,
+            &a.cibles,
+            a.duree.clone(),
+            a.choix_energie.as_deref(),
+            p.metas.iter().any(|m| m.double_duree),
+            ctx,
+        )?;
+        Ok(())
+    }
+
+    /// Applique les effets automatiques d'un sort (s'il en a) aux personnages joués visés : durée
+    /// saisie, sinon proposée d'après le livre (doublée si `doubler_duree`) ; sinon le joueur
+    /// doit la saisir. Un sort sans effet connu est seulement noté.
+    #[allow(clippy::too_many_arguments)]
+    pub(crate) fn effet_de_sort(
+        &mut self,
+        nom_sort: &str,
+        cl: u32,
+        lanceur: &str,
+        cibles: &[IdPj],
+        duree: Option<Duree>,
+        choix_energie: Option<&str>,
+        doubler_duree: bool,
+        ctx: &dyn Fn(IdPj) -> Option<ContextePj>,
+    ) -> Result<(), ErreurCombat> {
+        if cibles.is_empty() {
+            return Ok(());
+        }
+        let Some(e) = effet_du_sort(nom_sort) else {
+            self.noter(format!(
+                "{nom_sort} n'a pas d'effet automatique : l'appliquer à la main (« appliquer un effet »)."
+            ));
+            return Ok(());
+        };
+        let texte_duree = referentiel()
+            .sort(nom_sort)
+            .and_then(|s| s.duree_en.clone())
+            .unwrap_or_default();
+        let mut d = duree.or_else(|| {
+            let s = duree_suggeree(&texte_duree, cl);
+            if doubler_duree {
+                s.map(doubler)
+            } else {
+                s
             }
-            (None, _) if !a.cibles.is_empty() => {
-                self.noter(format!(
-                    "{} n'a pas d'effet automatique : l'appliquer à la main (« appliquer un effet »).",
-                    p.sort.nom_en
-                ));
+        });
+        if d == Some(Duree::Instantanee) {
+            d = None;
+        }
+        let duree = d.ok_or_else(|| {
+            ErreurCombat::Invalide(format!(
+                "durée à saisir pour {nom_sort} (« {texte_duree} » n'est pas une formule simple)"
+            ))
+        })?;
+        let energie = match (e.choix_energie, choix_energie) {
+            (true, Some(x)) if TYPES_D_ENERGIE.contains(&x.to_lowercase().as_str()) => {
+                Some(x.to_lowercase())
             }
-            _ => {}
+            (true, _) => {
+                return invalide(
+                    "choisir le type d'énergie : acide, froid, électricité, feu ou son",
+                );
+            }
+            _ => None,
+        };
+        let effets: Vec<Effet> = e
+            .effets
+            .iter()
+            .map(|d| Effet::new(&d.cible, d.type_bonus, d.valeur, nom_sort))
+            .collect();
+        let protections: Vec<Protection> = e
+            .protections
+            .iter()
+            .map(|pr| match pr {
+                ProtectionData::Reduction { valeur } => Protection::Reduction { valeur: *valeur },
+                ProtectionData::Immunite { type_degats } => Protection::Immunite {
+                    type_degats: type_degats.clone(),
+                },
+                ProtectionData::Resistance { paliers } => Protection::Resistance {
+                    type_degats: energie.clone().unwrap_or_default(),
+                    valeur: paliers
+                        .iter()
+                        .filter(|(n, _)| *n <= cl)
+                        .map(|(_, v)| *v)
+                        .max()
+                        .unwrap_or(0),
+                },
+            })
+            .collect();
+        for cible in cibles {
+            self.verifier_engage(*cible)?;
+            let ev = EvenementAventure::EffetAjoute {
+                pj: *cible,
+                nom: nom_sort.to_string(),
+                source: format!("sort {nom_sort}, lancé par {lanceur}"),
+                duree: duree.clone(),
+                effets: effets.clone(),
+                etats: e.etats.clone(),
+                soin_par_round: 0,
+                protections: protections.clone(),
+            };
+            let s = self.aventure.appliquer(&ev, ctx)?;
+            self.fusionner(s);
+        }
+        if let Some(n) = &e.notes {
+            self.noter(format!("{nom_sort} : {n}"));
         }
         Ok(())
     }

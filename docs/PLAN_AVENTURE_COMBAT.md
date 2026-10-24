@@ -157,3 +157,6 @@ naturelle (pas de torches) ; ordre d'initiative = uniquement tes personnages.
   personnages joués, tests de concentration (Core p. 206), journal rejouable. 253 tests dans le workspace.
   Lectures à valider : `docs/POINTS_A_CONFIRMER_SORTS.md`. Reste : sorts préparés, convocations, contresort,
   pouvoirs de lignage (phase 7).
+- **Phase 7 (consommables et ressources) faite** : inventaire d'objets (potions, parchemins, baguettes, bâtons, objets
+  à charges, munitions), utilisation en combat avec effet du sort, ressources quotidiennes des 10 lignages rendues
+  par le repos. Lectures à valider : `docs/POINTS_A_CONFIRMER_OBJETS.md`.

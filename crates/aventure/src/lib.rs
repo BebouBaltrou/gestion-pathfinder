@@ -5,6 +5,8 @@
 //! campagne quels événements appliquer aux fiches.
 
 pub mod etat;
+pub mod objets;
+pub mod ressources;
 pub mod survie;
 pub mod vital;
 
@@ -13,6 +15,8 @@ pub use etat::{
     EtatAventure, EvenementAventure, IdPj, IncantationPj, Protection, Sortie, SuiviPj,
     TYPES_D_ENERGIE,
 };
+pub use objets::{Charges, Consommable, GenreObjet, IdObjet, Ressource, UniteRessource};
+pub use ressources::ressources_de_lignage;
 pub use survie::{Besoin, Survie, TestDu};
 pub use vital::{Sante, SoinApplique, Vital};
 

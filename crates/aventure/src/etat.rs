@@ -7,6 +7,7 @@
 //! Le moteur ne recalcule aucun bonus : les effets gardent leurs valeurs typées et c'est la fiche
 //! qui les empile.
 
+use crate::objets::{Consommable, IdObjet, Ressource};
 use crate::survie::{Besoin, Survie, TestDu};
 use crate::vital::{Sante, Vital};
 use fiches::etats::EffetTemporaire;
@@ -61,6 +62,10 @@ pub struct IncantationPj {
     pub niveau_de_lanceur: u32,
     /// Modificateur de la caractéristique d'incantation.
     pub mod_incantation: i32,
+    /// Score de la caractéristique d'incantation (un parchemin demande 10 + niveau du sort).
+    pub score_incantation: i32,
+    /// Modificateur de Sagesse (test pour éviter un accident de parchemin).
+    pub mod_sagesse: i32,
     /// Bonus divers aux tests de concentration (dons…).
     pub bonus_concentration: i32,
     pub emplacements: Vec<EmplacementPj>,
@@ -155,6 +160,44 @@ pub enum EvenementAventure {
     Stabilisation {
         pj: IdPj,
         d20: i32,
+    },
+    /// Le personnage reçoit un objet (potion, parchemin, baguette, bâton, munitions…).
+    ObjetAjoute {
+        pj: IdPj,
+        objet: Consommable,
+    },
+    ObjetRetire {
+        pj: IdPj,
+        id: IdObjet,
+    },
+    /// Dépense d'un objet : un exemplaire, ou `charges` charges (bâton), et une utilisation
+    /// quotidienne s'il en a. En combat, `UtiliserObjet` applique en plus les effets du sort.
+    ObjetUtilise {
+        pj: IdPj,
+        id: IdObjet,
+        charges: u32,
+    },
+    /// Munitions récupérées après le combat ou charges rendues (jamais au-delà du maximum).
+    ObjetRecupere {
+        pj: IdPj,
+        id: IdObjet,
+        nombre: u32,
+    },
+    /// Définit (ou remet à jour) les ressources quotidiennes du personnage ; ce qui est déjà
+    /// utilisé est conservé.
+    RessourcesDefinies {
+        pj: IdPj,
+        ressources: Vec<(String, Ressource)>,
+    },
+    RessourceUtilisee {
+        pj: IdPj,
+        nom: String,
+        quantite: u32,
+    },
+    RessourceRendue {
+        pj: IdPj,
+        nom: String,
+        quantite: u32,
     },
     /// Jet de Vigueur DD 15 demandé après des dégâts massifs (règle optionnelle) : d20 physique.
     DegatsMassifs {
@@ -274,6 +317,12 @@ pub struct SuiviPj {
     /// que les différences.
     #[cfg_attr(feature = "serde", serde(default))]
     pub etats_fiche: BTreeSet<String>,
+    /// Consommables et objets à charges du personnage.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub inventaire: BTreeMap<IdObjet, Consommable>,
+    /// Ressources à usages quotidiens (pouvoirs de lignage…), par nom.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub ressources: BTreeMap<String, Ressource>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -289,6 +338,9 @@ pub struct EtatAventure {
     pub effets: Ensemble<Contenu>,
     /// Journal d'aventure, distinct du journal d'intermède et de celui des combats.
     pub journal: Vec<Entree>,
+    /// Prochain identifiant d'objet.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub prochain_objet: IdObjet,
 }
 
 /// Nom de l'effet dans la fiche : unique, pour qu'un même sort lancé deux fois reste deux effets.
@@ -305,6 +357,7 @@ impl EtatAventure {
             pjs: BTreeMap::new(),
             effets: Ensemble::nouveau(),
             journal: Vec::new(),
+            prochain_objet: 1,
         }
     }
 
@@ -658,6 +711,8 @@ impl EtatAventure {
                     fatigue_de_survie: false,
                     massifs_en_attente: false,
                     etats_fiche: BTreeSet::new(),
+                    inventaire: BTreeMap::new(),
+                    ressources: BTreeMap::new(),
                 });
                 self.noter(format!("{} rejoint l'aventure.", c.nom));
             }
@@ -953,6 +1008,16 @@ impl EtatAventure {
                         }
                     }
                     s.fiche.push((*pj, EvenementFiche::Repos));
+                    // une nuit complète rend aussi les usages quotidiens des pouvoirs et des objets
+                    let suivi = self.suivi(*pj)?;
+                    for r in suivi.ressources.values_mut() {
+                        r.utilisees = 0;
+                    }
+                    for o in suivi.inventaire.values_mut() {
+                        if let Some(j) = o.par_jour.as_mut() {
+                            j.restantes = j.max;
+                        }
+                    }
                     self.noter(format!(
                         "{} se repose {heures} h{} : {rendus} PV rendus{}, emplacements de sorts rendus.",
                         c.nom,
@@ -1054,6 +1119,99 @@ impl EtatAventure {
                     c.vigueur,
                     if reussi { "réussi" } else { "raté, il meurt" }
                 ));
+            }
+            EvenementAventure::ObjetAjoute { pj, objet } => {
+                let c = Self::contexte(ctx, *pj)?;
+                objet.verifier()?;
+                let id = self.prochain_objet;
+                self.prochain_objet += 1;
+                self.suivi(*pj)?.inventaire.insert(id, objet.clone());
+                self.noter(format!(
+                    "{} reçoit : {} ({}, n° {id}).",
+                    c.nom,
+                    objet.nom,
+                    objet.genre.nom()
+                ));
+            }
+            EvenementAventure::ObjetRetire { pj, id } => {
+                let c = Self::contexte(ctx, *pj)?;
+                let o =
+                    self.suivi(*pj)?.inventaire.remove(id).ok_or_else(|| {
+                        ErreurAventure::Invalide(format!("objet n° {id} inconnu"))
+                    })?;
+                self.noter(format!("{} se défait de : {}.", c.nom, o.nom));
+            }
+            EvenementAventure::ObjetUtilise { pj, id, charges } => {
+                let c = Self::contexte(ctx, *pj)?;
+                let o =
+                    self.suivi(*pj)?.inventaire.get_mut(id).ok_or_else(|| {
+                        ErreurAventure::Invalide(format!("objet n° {id} inconnu"))
+                    })?;
+                o.depenser(*charges)?;
+                let reste = match (o.charges, o.genre) {
+                    (Some(ch), _) => format!("{}/{} charges", ch.restantes, ch.max),
+                    (None, _) => format!("{} restant(s)", o.quantite),
+                };
+                let nom = o.nom.clone();
+                let epuise = o.epuise();
+                if epuise {
+                    self.suivi(*pj)?.inventaire.remove(id);
+                }
+                self.noter(format!("{} utilise : {nom} ({reste}).", c.nom));
+            }
+            EvenementAventure::ObjetRecupere { pj, id, nombre } => {
+                let c = Self::contexte(ctx, *pj)?;
+                let o =
+                    self.suivi(*pj)?.inventaire.get_mut(id).ok_or_else(|| {
+                        ErreurAventure::Invalide(format!("objet n° {id} inconnu"))
+                    })?;
+                match o.charges.as_mut() {
+                    Some(ch) => ch.restantes = (ch.restantes + nombre).min(ch.max),
+                    None => o.quantite += nombre,
+                }
+                let nom = o.nom.clone();
+                self.noter(format!("{} récupère {nombre} × {nom}.", c.nom));
+            }
+            EvenementAventure::RessourcesDefinies { pj, ressources } => {
+                let c = Self::contexte(ctx, *pj)?;
+                let suivi = self.suivi(*pj)?;
+                for (nom, r) in ressources {
+                    let utilisees = suivi.ressources.get(nom).map_or(0, |a| a.utilisees);
+                    suivi.ressources.insert(
+                        nom.clone(),
+                        Ressource {
+                            utilisees: utilisees.min(r.max),
+                            ..r.clone()
+                        },
+                    );
+                }
+                self.noter(format!("{} : ressources quotidiennes mises à jour.", c.nom));
+            }
+            EvenementAventure::RessourceUtilisee { pj, nom, quantite } => {
+                let c = Self::contexte(ctx, *pj)?;
+                let r = self.suivi(*pj)?.ressources.get_mut(nom).ok_or_else(|| {
+                    ErreurAventure::Invalide(format!("ressource inconnue : {nom}"))
+                })?;
+                if *quantite == 0 || *quantite > r.restantes() {
+                    return Err(ErreurAventure::Invalide(format!(
+                        "{nom} : {quantite} demandée(s), {} restante(s)",
+                        r.restantes()
+                    )));
+                }
+                r.utilisees += quantite;
+                let reste = r.restantes();
+                self.noter(format!(
+                    "{} utilise {nom} ({reste} restant(s) aujourd'hui).",
+                    c.nom
+                ));
+            }
+            EvenementAventure::RessourceRendue { pj, nom, quantite } => {
+                let c = Self::contexte(ctx, *pj)?;
+                let r = self.suivi(*pj)?.ressources.get_mut(nom).ok_or_else(|| {
+                    ErreurAventure::Invalide(format!("ressource inconnue : {nom}"))
+                })?;
+                r.utilisees = r.utilisees.saturating_sub(*quantite);
+                self.noter(format!("{} récupère {quantite} usage(s) de {nom}.", c.nom));
             }
             EvenementAventure::DegatsContinus { pj, actif } => {
                 let c = Self::contexte(ctx, *pj)?;

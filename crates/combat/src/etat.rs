@@ -5,6 +5,7 @@
 //! (déterminisme), et annuler une action revient à rejouer jusqu'à l'action précédente.
 
 use crate::economie::{Depense, EconomieTour, TypeAction};
+use crate::objets::ParamsObjet;
 use crate::sorts::{Distraction, ParamsLancer};
 use aventure::Sante;
 use aventure::{ContextePj, ErreurAventure, EtatAventure, EvenementAventure, IdPj, Sortie};
@@ -53,6 +54,8 @@ pub enum ActionCombat {
     },
     /// Lancement d'un sort (voir `EtatCombat::apercu_sort` pour ce qu'il faut lancer avant).
     Lancer(ParamsLancer),
+    /// Utilisation d'un objet de l'inventaire (potion, parchemin, baguette, bâton, objet à charges).
+    UtiliserObjet(ParamsObjet),
     /// Test de concentration : sort à maintenir, ou distraction (Core p. 206).
     Concentration {
         pj: IdPj,
@@ -139,6 +142,7 @@ pub struct Stats {
     pub degats_subis: i32,
     pub soins_recus: i32,
     pub sorts_lances: u32,
+    pub objets_utilises: u32,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -582,6 +586,7 @@ impl EtatCombat {
                 }
             }
             ActionCombat::Lancer(params) => self.lancer(params, ctx)?,
+            ActionCombat::UtiliserObjet(params) => self.utiliser_objet(params, ctx)?,
             ActionCombat::Concentration {
                 pj,
                 d20,

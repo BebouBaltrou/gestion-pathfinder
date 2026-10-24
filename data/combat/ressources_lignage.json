@@ -1,0 +1,28 @@
+{
+  "_note": "Utilisations quotidiennes des pouvoirs de lignage de l'ensorceleur (Core, pages 72 à 77). Chaque formule est recopiée du texte du pouvoir dans data/core/ensorceleur.json et vérifiée par un test. unite : utilisations | rounds | minutes. Formules : trois_plus_cha (3 + modificateur de Charisme), fixe (n fois), niveau (autant que le niveau d'ensorceleur), paliers ([niveau, valeur]), un_par_4_niveaux (1 au niveau `debut`, +1 tous les 4 niveaux au-delà, jusqu'à `plafond`).",
+  "ressources": [
+    { "lignage": "aberrant", "pouvoir": "Acidic Ray", "niveau_classe": 1, "unite": "utilisations", "formule": { "genre": "trois_plus_cha" } },
+    { "lignage": "abyssal", "pouvoir": "Claws", "niveau_classe": 1, "unite": "rounds", "formule": { "genre": "trois_plus_cha" } },
+    { "lignage": "arcane", "pouvoir": "Arcane Bond", "niveau_classe": 1, "unite": "utilisations", "formule": { "genre": "fixe", "n": 1 } },
+    { "lignage": "arcane", "pouvoir": "Metamagic Adept", "niveau_classe": 3, "unite": "utilisations", "formule": { "genre": "un_par_4_niveaux", "debut": 3, "plafond": 5 } },
+    { "lignage": "celestial", "pouvoir": "Heavenly Fire", "niveau_classe": 1, "unite": "utilisations", "formule": { "genre": "trois_plus_cha" } },
+    { "lignage": "celestial", "pouvoir": "Wings of Heaven", "niveau_classe": 9, "unite": "minutes", "formule": { "genre": "niveau" } },
+    { "lignage": "celestial", "pouvoir": "Conviction", "niveau_classe": 15, "unite": "utilisations", "formule": { "genre": "fixe", "n": 1 } },
+    { "lignage": "destined", "pouvoir": "Touch of Destiny", "niveau_classe": 1, "unite": "utilisations", "formule": { "genre": "trois_plus_cha" } },
+    { "lignage": "destined", "pouvoir": "It Was Meant To Be", "niveau_classe": 9, "unite": "utilisations", "formule": { "genre": "paliers", "paliers": [[9, 1], [17, 2]] } },
+    { "lignage": "destined", "pouvoir": "Within Reach", "niveau_classe": 15, "unite": "utilisations", "formule": { "genre": "fixe", "n": 1 } },
+    { "lignage": "destined", "pouvoir": "Destiny Realized", "niveau_classe": 20, "unite": "utilisations", "formule": { "genre": "fixe", "n": 1 } },
+    { "lignage": "draconic", "pouvoir": "Claws", "niveau_classe": 1, "unite": "rounds", "formule": { "genre": "trois_plus_cha" } },
+    { "lignage": "draconic", "pouvoir": "Breath Weapon", "niveau_classe": 9, "unite": "utilisations", "formule": { "genre": "paliers", "paliers": [[9, 1], [17, 2], [20, 3]] } },
+    { "lignage": "elemental", "pouvoir": "Elemental Ray", "niveau_classe": 1, "unite": "utilisations", "formule": { "genre": "trois_plus_cha" } },
+    { "lignage": "elemental", "pouvoir": "Elemental Blast", "niveau_classe": 9, "unite": "utilisations", "formule": { "genre": "paliers", "paliers": [[9, 1], [17, 2], [20, 3]] } },
+    { "lignage": "fey", "pouvoir": "Laughing Touch", "niveau_classe": 1, "unite": "utilisations", "formule": { "genre": "trois_plus_cha" } },
+    { "lignage": "fey", "pouvoir": "Fleeting Glance", "niveau_classe": 9, "unite": "rounds", "formule": { "genre": "niveau" } },
+    { "lignage": "fey", "pouvoir": "Soul of the Fey", "niveau_classe": 20, "unite": "utilisations", "formule": { "genre": "fixe", "n": 1 } },
+    { "lignage": "infernal", "pouvoir": "Corrupting Touch", "niveau_classe": 1, "unite": "utilisations", "formule": { "genre": "trois_plus_cha" } },
+    { "lignage": "infernal", "pouvoir": "Hellfire", "niveau_classe": 9, "unite": "utilisations", "formule": { "genre": "paliers", "paliers": [[9, 1], [17, 2], [20, 3]] } },
+    { "lignage": "undead", "pouvoir": "Grave Touch", "niveau_classe": 1, "unite": "utilisations", "formule": { "genre": "trois_plus_cha" } },
+    { "lignage": "undead", "pouvoir": "Grasp of the Dead", "niveau_classe": 9, "unite": "utilisations", "formule": { "genre": "fixe", "n": 1 } },
+    { "lignage": "undead", "pouvoir": "Incorporeal Form", "niveau_classe": 15, "unite": "utilisations", "formule": { "genre": "fixe", "n": 1 } }
+  ]
+}

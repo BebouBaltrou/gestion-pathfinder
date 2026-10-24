@@ -1,18 +1,17 @@
 [package]
 name = "aventure"
-description = "Mode aventure : horloge de campagne, état vital, effets temporisés, repos, faim et soif, journal d'aventure"
+description = "Mode aventure : horloge de campagne, état vital, effets temporisés, repos, faim et soif, objets et ressources, journal d'aventure"
 edition.workspace = true
 version.workspace = true
 license.workspace = true
 
 [dependencies]
-fiches = { path = "../fiches", default-features = false }
-temps = { path = "../temps", default-features = false }
-serde = { version = "1", features = ["derive"], optional = true }
+fiches = { path = "../fiches" }
+temps = { path = "../temps" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
 
 [features]
 default = ["serde"]
-serde = ["dep:serde", "fiches/serde", "temps/serde"]
-
-[dev-dependencies]
-serde_json = "1"
+# Les crates du moteur sont toujours compilées avec leur sérialisation (sauvegarde, données).
+serde = []
