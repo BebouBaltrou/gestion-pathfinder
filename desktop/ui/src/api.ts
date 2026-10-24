@@ -24,6 +24,7 @@ import type {
   FicheDonnees,
   FicheVue,
   LignePersonnage,
+  PrestigeDonVue,
   Montee,
   RegleInfo,
 } from "./fiche-types";
@@ -642,6 +643,9 @@ export const api = {
   apercuFiche: (fiche: FicheDonnees) => appeler<FicheVue>("apercu_fiche", { fiche }),
   creerPersonnage: (nom: string, po: number) => appeler<Retour>("creer_personnage", { nom, po }),
   creerFiche: (pj: number, fiche: FicheDonnees) => appeler<Retour>("creer_fiche", { pj, fiche }),
+  prestigeDon: (pj: number) => appeler<PrestigeDonVue | null>("prestige_don", { pj }),
+  prestigeEvenement: (evenement: unknown) => appeler<Retour>("prestige_evenement", { evenement }),
+  recruterAcolyte: (maitre: number, nom: string) => appeler<Retour>("recruter_acolyte", { maitre, nom }),
   accorderNiveauDeDepart: (pj: number, niveau: number) => appeler<Retour>("accorder_niveau_de_depart", { pj, niveau }),
   evenementFiche: (pj: number, evenement: EvenementFiche) =>
     appeler<Retour>("evenement_fiche", { pj, evenement }),
@@ -869,6 +873,8 @@ function simule(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
     case "combat_terminer":
       mockCombat = "non";
       return Promise.resolve(ok("Combat validé"));
+    case "prestige_don":
+      return Promise.resolve(null);
     case "catalogue_regles":
       return Promise.resolve<RegleOptionnelle[]>([
         {

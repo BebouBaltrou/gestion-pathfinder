@@ -323,6 +323,12 @@ export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePers
                 <p>La fiche est valide.</p>
               )}
               <SaisieNombre etiquette="Niveau du personnage à la création" min={1} max={20} valeur={niveauVise} onChange={setNiveauVise} />
+              {pj.acolyteDe && (
+                <p className="doux">
+                  {pj.nom} est l'acolyte de {pj.acolyteDe} : son niveau est limité par le tableau du don Prestige et par le niveau de son maître (au
+                  moins deux niveaux de moins).
+                </p>
+              )}
               {(niveauVise ?? 1) > 1 && (
                 <p className="doux">
                   La fiche est créée au niveau 1, puis les XP du niveau {niveauVise} (selon la vitesse de progression de la campagne, ou le

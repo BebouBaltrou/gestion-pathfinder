@@ -158,3 +158,60 @@ pub fn changer_regle(s: S, id: String, valeur: String) -> Retour {
         Ok(Reglage::Intermede(n)) => x.regler_options(n, "Règle modifiée"),
     }
 }
+
+// ------------------------------------------------------------------ don Prestige
+
+/// Le don Prestige d'un personnage : score, tableau, acolyte et partisans.
+#[tauri::command]
+pub fn prestige_don(s: S, pj: u32) -> Option<vues::prestige_don::PrestigeDonVue> {
+    session(&s).avec_etat(|e| vues::prestige_don::prestige_don(e, IdPersonnage(pj)))
+}
+
+/// Un événement du don (modificateurs, acolyte, partisans) : le cœur contrôle tout.
+#[tauri::command]
+pub fn prestige_evenement(s: S, evenement: Evenement) -> Retour {
+    use Evenement::*;
+    if !matches!(
+        evenement,
+        PrestigeDonRegle { .. }
+            | AcolyteLie { .. }
+            | AcolyteDelie { .. }
+            | PartisanAjoute { .. }
+            | PartisanRetire { .. }
+    ) {
+        return Retour::erreur("Événement non autorisé ici");
+    }
+    session(&s).executer(evenement, "Don Prestige mis à jour")
+}
+
+/// Crée un nouveau personnage et en fait l'acolyte de `maitre`, en un seul bloc annulable.
+#[tauri::command]
+pub fn recruter_acolyte(s: S, maitre: u32, nom: String) -> Retour {
+    let mut x = session(&s);
+    let Some(id) =
+        x.avec_etat(|e| IdPersonnage(e.personnages.keys().map(|k| k.0).max().unwrap_or(0) + 1))
+    else {
+        return Retour::erreur("Aucune campagne ouverte");
+    };
+    let nom = nom.trim().to_string();
+    let libelle = format!("Acolyte « {nom} » recruté");
+    let message = libelle.clone();
+    x.executer(
+        Evenement::Groupe {
+            libelle,
+            evenements: vec![
+                Evenement::PersonnageCree {
+                    id,
+                    nom,
+                    compte_initial: Montant::po(0),
+                    prestige: None,
+                },
+                Evenement::AcolyteLie {
+                    acolyte: id,
+                    maitre: IdPersonnage(maitre),
+                },
+            ],
+        },
+        &message,
+    )
+}

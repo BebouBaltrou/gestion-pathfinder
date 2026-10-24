@@ -70,3 +70,23 @@ Charisme, ou la valeur saisie sur le personnage.)
   ou veux-tu les nommer un par un ? Je propose les deux : compteur par niveau, noms facultatifs.
 - D. Quand le maître gagne de l'XP, l'acolyte doit-il être présent/actif ? Le livre ne le demande pas :
   je propose de toujours le donner.
+
+## 3. Fait (décisions du joueur : A oui, B non, C oui, D oui)
+
+- Code : `crates/campagne/src/prestige.rs` (règles, tableau, modificateurs, XP partagé), événements
+  `PrestigeDonRegle`, `AcolyteLie`, `AcolyteDelie`, `PartisanAjoute`, `PartisanRetire` ; vue
+  `crates/vues/src/prestige_don.rs` ; onglet « Prestige » de la fiche (visible avec le don).
+- Recruter un acolyte crée le personnage et le lie à son maître en un seul bloc annulable ; sa fiche
+  se crée ensuite avec le même assistant (niveau limité par le tableau et par « maître − 2 »).
+- L'acolyte est un personnage comme les autres : il entre dans l'aventure et le combat (A).
+- Un acolyte ne peut pas avoir le don Prestige (B). Un seul acolyte par maître.
+- Partisans : effectifs par niveau, bornés par le tableau, noms facultatifs (C).
+- L'acolyte reçoit sa part d'XP à chaque gain du maître, présent ou non (D).
+
+### Lectures à valider
+1. Part d'XP de l'acolyte arrondie vers le bas ; sans effet en mode jalons (pas de points d'XP).
+2. Les facteurs de réputation se cumulent (le texte les liste sans dire s'ils s'excluent).
+3. Seule la « mort d'un acolyte » est comptée par acolyte ; les autres modificateurs valent une fois.
+4. Si le score baisse, rien n'est retiré automatiquement : seul l'ajout est refusé au-delà du tableau.
+5. Le niveau de l'acolyte ne dépasse jamais « niveau du maître − 2 » (texte du don) ; son XP s'arrête
+   à 1 de moins que le niveau « maître − 1 ».

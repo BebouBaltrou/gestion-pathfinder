@@ -12,6 +12,7 @@ pub mod parametres;
 pub mod personnage;
 pub mod personnages;
 pub mod points;
+pub mod prestige_don;
 pub mod recettes;
 pub mod referentiel;
 pub mod tableau;

@@ -15,6 +15,7 @@ pub mod modele;
 pub mod modeles_perso;
 pub mod organisation;
 pub mod personnages;
+pub mod prestige;
 pub mod rapport;
 pub mod recettes;
 pub mod ventes;
@@ -277,6 +278,19 @@ impl Campagne {
                 ..
             } => format!("Création du personnage {nom} (compte : {compte_initial})"),
             PersonnageModifie { id, .. } => format!("Modification du personnage {}", pj(id)),
+            PrestigeDonRegle { pj: p, .. } => {
+                format!("Prestige (don) : modificateurs de {} modifiés", pj(p))
+            }
+            AcolyteLie { acolyte, maitre } => {
+                format!("{} devient l'acolyte de {}", pj(acolyte), pj(maitre))
+            }
+            AcolyteDelie { acolyte } => format!("{} n'est plus acolyte", pj(acolyte)),
+            PartisanAjoute {
+                maitre,
+                niveau,
+                nom,
+            } => format!("{} recrute le partisan {nom} (niveau {niveau})", pj(maitre)),
+            PartisanRetire { maitre, .. } => format!("{} retire un partisan", pj(maitre)),
             PersonnageDeplace { id, vers } => match vers {
                 Some(l) => format!("{} se rend à {}", pj(id), lo(l)),
                 None => format!("{} quitte toute localité", pj(id)),

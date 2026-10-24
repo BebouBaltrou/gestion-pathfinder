@@ -125,6 +125,8 @@ export async function autotest(): Promise<void> {
     verifier((await api.accorderNiveauDeDepart(pj.id, 5)).ok && ((await api.listePersonnages())[0].fiche?.niveauxEnAttente ?? 0) === 4, "niveau de départ 5 : quatre niveaux à monter");
     verifier((await api.annuler()).ok && ((await api.listePersonnages())[0].fiche?.niveauxEnAttente ?? 0) === 1, "niveau de départ annulé");
     verifier((await api.accorderNiveauDeDepart(pj.id, 25)).ok === false, "niveau de départ hors limites refusé");
+    verifier((await api.prestigeDon(pj.id))?.actif === false, "pas de don Prestige au niveau 1");
+    verifier((await api.recruterAcolyte(pj.id, "Kyra")).ok === false, "acolyte refusé sans le don Prestige");
     const ap = await api.apercuMontee(pj.id, "ensorceleur");
     verifier(ap !== null && ap.niveauDePersonnage === 2, "aperçu de montée de niveau");
     verifier((await api.reglesCampagne()).length > 5, "registre des règles");

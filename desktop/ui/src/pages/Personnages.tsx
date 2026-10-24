@@ -71,6 +71,7 @@ export function Personnages({ outils }: { outils: Outils }) {
                       {p.fiche ? `${p.fiche.race} · ${p.fiche.classes}` : "pas encore de fiche"}
                     </small>
                   </span>
+                  {p.acolyteDe && <span className="puce">acolyte de {p.acolyteDe}</span>}
                   {p.fiche && p.fiche.niveauxEnAttente > 0 && <span className="puce or">niveau à monter</span>}
                 </button>
               ))}

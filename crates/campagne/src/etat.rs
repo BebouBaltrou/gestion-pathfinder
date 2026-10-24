@@ -38,6 +38,8 @@ pub enum Erreur {
     SalleInconnue(IdSalle),
     SalleReferentielInconnue(String),
     AucunPjPresent(String),
+    /// Règle du don Prestige.
+    Prestige(String),
     /// Limite de recrutement par le Prestige (GC p. 93).
     PrestigeInsuffisant {
         equipe: String,
@@ -144,6 +146,7 @@ impl std::fmt::Display for Erreur {
                 f,
                 "{equipe} : ses employés sont de niveau {niveau}, mais le meilleur Prestige parmi les                  personnages présents est {prestige} ; un personnage ne peut recruter que des employés                  de niveau inférieur ou égal à son Prestige (Guide de campagne p. 93)"
             ),
+            Erreur::Prestige(m) => write!(f, "{m}"),
             Erreur::StatutIncompatible { salle, attendu } => {
                 write!(f, "{salle} doit être {attendu}")
             }
@@ -218,6 +221,10 @@ pub struct Etat {
     pub limite_par_pj: bool,
     /// Fiches de personnage des PJ, par journal de fiche.
     pub fiches: BTreeMap<IdPersonnage, fiches::journal::Journal>,
+    /// Acolytes du don Prestige : acolyte → maître.
+    pub acolytes: BTreeMap<IdPersonnage, IdPersonnage>,
+    /// Don Prestige : modificateurs cochés et partisans, par maître.
+    pub prestige_don: BTreeMap<IdPersonnage, crate::prestige::PrestigeDon>,
     pub regles_personnages: crate::personnages::ReglesPersonnages,
     /// Mode aventure : horloge, santé, effets, ressources (`None` tant que le joueur ne l'a pas démarré).
     pub aventure: Option<aventure::EtatAventure>,
@@ -681,6 +688,11 @@ impl Etat {
             | GestionnaireEmbauche { .. }
             | GestionnaireModifie { .. }
             | GestionnaireRenvoye { .. } => self.appliquer_organisation(ev, r)?,
+            PrestigeDonRegle { .. }
+            | AcolyteLie { .. }
+            | AcolyteDelie { .. }
+            | PartisanAjoute { .. }
+            | PartisanRetire { .. } => self.appliquer_prestige(ev)?,
             Note { .. } => {}
         }
         Ok(out)
