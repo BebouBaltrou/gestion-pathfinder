@@ -580,7 +580,7 @@ impl EtatCombat {
             &ActionCombat::Agir {
                 pj: a.pj,
                 type_action: p.type_action,
-                libelle: format!("Lancer {}", p.sort.nom_en),
+                libelle: format!("Lancer {}", nom_fr(&p.sort.nom_en)),
                 deplacement: false,
             },
             ctx,
@@ -615,7 +615,10 @@ impl EtatCombat {
         };
         self.noter(format!(
             "{} lance {}{metas_txt} : emplacement de niveau {}, DD {}, niveau de lanceur {cl}.",
-            c.nom, p.sort.nom_en, p.niveau_emplacement, p.dd
+            c.nom,
+            nom_fr(&p.sort.nom_en),
+            p.niveau_emplacement,
+            p.dd
         ));
         if let Some(r) = a.resultat_de {
             self.noter(format!("{} : résultat du dé du sort : {r}.", c.nom));
@@ -686,7 +689,8 @@ impl EtatCombat {
         }
         let Some(e) = effet_du_sort(nom_sort) else {
             self.noter(format!(
-                "{nom_sort} n'a pas d'effet automatique : l'appliquer à la main (« appliquer un effet »)."
+                "{} n'a pas d'effet automatique : l'appliquer à la main (« appliquer un effet »).",
+                nom_fr(nom_sort)
             ));
             return Ok(());
         };
@@ -749,8 +753,8 @@ impl EtatCombat {
             self.verifier_engage(*cible)?;
             let ev = EvenementAventure::EffetAjoute {
                 pj: *cible,
-                nom: nom_sort.to_string(),
-                source: format!("sort {nom_sort}, lancé par {lanceur}"),
+                nom: nom_fr(nom_sort),
+                source: format!("sort {}, lancé par {lanceur}", nom_fr(nom_sort)),
                 duree: duree.clone(),
                 effets: effets.clone(),
                 etats: e.etats.clone(),
@@ -761,7 +765,7 @@ impl EtatCombat {
             self.fusionner(s);
         }
         if let Some(n) = &e.notes {
-            self.noter(format!("{nom_sort} : {n}"));
+            self.noter(format!("{} : {n}", nom_fr(nom_sort)));
         }
         Ok(())
     }
@@ -919,4 +923,11 @@ mod tests {
             }
         }
     }
+}
+
+/// Nom français d'un sort (traduction non officielle), à défaut le nom anglais.
+pub(crate) fn nom_fr(nom_en: &str) -> String {
+    fiches::traductions::Traductions::partage()
+        .sort(nom_en)
+        .map_or_else(|| nom_en.to_string(), |s| s.nom.clone())
 }

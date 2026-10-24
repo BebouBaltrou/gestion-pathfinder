@@ -343,7 +343,7 @@ impl EtatCombat {
 
     /// Le personnage est-il limité à une seule action simple ou de mouvement (round de
     /// surprise, chancelant, hors de combat) ?
-    fn limite(&self, pj: IdPj, ctx: &dyn Fn(IdPj) -> Option<ContextePj>) -> bool {
+    pub fn limite(&self, pj: IdPj, ctx: &dyn Fn(IdPj) -> Option<ContextePj>) -> bool {
         self.round == 0
             || match (ctx(pj), self.aventure.pjs.get(&pj)) {
                 (Some(c), Some(s)) => matches!(

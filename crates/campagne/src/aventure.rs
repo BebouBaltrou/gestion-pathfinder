@@ -55,6 +55,7 @@ impl Etat {
                         .iter()
                         .find(|(c, n, _, _)| c == &inc.classe && *n == e.niveau_de_sort)
                         .map_or(0, |(_, _, rest, _)| *rest),
+                    total: e.par_jour.unwrap_or(0),
                     dd: e.dd,
                 })
                 .collect();

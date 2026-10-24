@@ -20,6 +20,7 @@ fn incantation(niveau_de_lanceur: u32, echec_pct: u32) -> IncantationPj {
             .map(|n| EmplacementPj {
                 niveau_de_sort: n,
                 restants: if n == 1 { 2 } else { 3 },
+                total: 4,
                 dd: 10 + n as i32 + 3,
             })
             .collect(),

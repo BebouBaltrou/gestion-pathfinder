@@ -46,6 +46,8 @@ pub struct ContextePj {
 pub struct EmplacementPj {
     pub niveau_de_sort: u32,
     pub restants: u32,
+    /// Emplacements par jour (maximum).
+    pub total: u32,
     pub dd: i32,
 }
 
