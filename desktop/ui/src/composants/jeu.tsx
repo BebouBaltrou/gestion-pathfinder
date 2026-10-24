@@ -384,6 +384,13 @@ export function Dialogue({
   actions?: ReactNode;
   large?: boolean;
 }) {
+  const racine = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    // le focus entre dans la fenêtre à l'ouverture et revient à l'élément précédent à la fermeture
+    const avant = document.activeElement as HTMLElement | null;
+    racine.current?.querySelector<HTMLElement>("input, select, textarea, button:not([aria-label='Fermer'])")?.focus();
+    return () => avant?.focus?.();
+  }, []);
   useEffect(() => {
     const clavier = (e: KeyboardEvent) => {
       if (e.key === "Escape") onFermer();
@@ -394,6 +401,7 @@ export function Dialogue({
   return (
     <motion.div className="voile" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onMouseDown={onFermer}>
       <motion.div
+        ref={racine}
         className={"dialogue" + (large ? " large" : "")}
         role="dialog"
         aria-modal="true"
