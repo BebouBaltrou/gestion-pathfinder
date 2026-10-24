@@ -385,16 +385,8 @@ pub fn controler(f: &Feuille, r: &Referentiel) -> Rapport {
         }
     }
 
-    // ── Sorts, dons, objets ────────────────────────────────────────────────────
-    if !f.sorts.is_empty() {
-        rap.non_verifie.push(format!(
-            "{} sorts écrits en texte libre (ex. « {} ») : rapprochement avec le catalogue du Manuel \
-             de base à faire à l'étape suivante.",
-            f.sorts.len(),
-            f.sorts[0]
-        ));
-    }
-    if !f.notes_dons.is_empty() {
+    // Les sorts de la feuille sont volontairement ignorés (décision du joueur).
+    // ── Dons, objets ───────────────────────────────────────────────────────────
         rap.non_verifie.push(
             "Dons écrits en texte libre : rapprochement avec le catalogue à l'étape suivante."
                 .into(),

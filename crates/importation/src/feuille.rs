@@ -49,7 +49,6 @@ pub struct Feuille {
     pub ca_contact: Option<i32>,
     pub ca_depourvu: Option<i32>,
     pub competences: Vec<CompetenceLue>,
-    pub sorts: Vec<String>,
     pub notes_dons: String,
     pub richesse_po: Option<i32>,
 }
@@ -241,13 +240,6 @@ pub fn lire_feuille(c: &Champs) -> Feuille {
         });
     }
 
-    // Sorts connus : cases `Sorts.1.0.N` de la forme « 1 Armure de mage ».
-    for n in 0..40 {
-        let s = texte(c, &format!("Sorts.1.0.{n}"));
-        if !s.is_empty() {
-            f.sorts.push(s);
-        }
-    }
     f.notes_dons = texte(c, "Notes.2.3");
     f
 }
