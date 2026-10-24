@@ -1,7 +1,8 @@
 {
   "source": "Core Rulebook : description de la classe (Ensorceleur, p. 70), traits « Weapon Familiarity » des races, dons de maîtrise (p. 118, 133, 134, 135)",
   "classes": {
-    "ensorceleur": { "armes": ["simple"], "armures": [], "boucliers": false, "bouclier_pavois": false }
+    "ensorceleur": { "armes": ["simple"], "armures": [], "boucliers": false, "bouclier_pavois": false },
+    "pretre": { "armes": ["simple"], "armures": ["legere", "intermediaire"], "boucliers": true, "bouclier_pavois": false }
   },
   "races": {
     "nain": { "armes": ["Battleaxe", "Heavy pick", "Warhammer"], "assimile_martiales": ["dwarven"] },

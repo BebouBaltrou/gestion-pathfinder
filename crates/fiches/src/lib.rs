@@ -39,4 +39,6 @@ pub use effet::{Cible, Effet, TypeBonus};
 #[cfg(feature = "serde")]
 pub use fiche::{Fiche, Probleme, Valeurs};
 #[cfg(all(test, feature = "serde"))]
+mod tests_classes;
+#[cfg(all(test, feature = "serde"))]
 mod tests_equipement;

@@ -1,0 +1,551 @@
+{
+  "source": "Manuel des joueurs (version française), classe Prêtre, Table 3-13",
+  "classe": {
+    "id": "pretre",
+    "nom": "Prêtre",
+    "nom_en": "Cleric",
+    "source": {
+      "livre": "Manuel des joueurs (VF)",
+      "page": 67
+    },
+    "de_vie": 8,
+    "rangs_par_niveau": 2,
+    "caracteristique_rangs": "int",
+    "competences_de_classe_en": [
+      "Appraise",
+      "Craft",
+      "Diplomacy",
+      "Heal",
+      "Knowledge (history)",
+      "Knowledge (arcana)",
+      "Knowledge (nobility)",
+      "Knowledge (planes)",
+      "Knowledge (religion)",
+      "Linguistics",
+      "Profession",
+      "Sense Motive",
+      "Spellcraft"
+    ],
+    "bba": "moyen",
+    "vigueur": "rapide",
+    "reflexes": "lente",
+    "volonte": "rapide",
+    "maitrises_fr": "Toutes les armes courantes, armures légères et intermédiaires, boucliers (sauf pavois), arme de prédilection de son dieu.",
+    "incantation": {
+      "type": "divin",
+      "mode": "préparé",
+      "caracteristique": "sag"
+    },
+    "don_bonus_niveau_1": null,
+    "progression": [
+      {
+        "niveau": 1,
+        "bba": [
+          0
+        ],
+        "vigueur": 2,
+        "reflexes": 0,
+        "volonte": 2,
+        "special_en": "aura, canalisation d'énergie 1d6, domaines, oraisons",
+        "sorts_par_jour": [
+          1,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 3,
+        "domaine": true
+      },
+      {
+        "niveau": 2,
+        "bba": [
+          1
+        ],
+        "vigueur": 3,
+        "reflexes": 0,
+        "volonte": 3,
+        "special_en": "—",
+        "sorts_par_jour": [
+          2,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": true
+      },
+      {
+        "niveau": 3,
+        "bba": [
+          2
+        ],
+        "vigueur": 3,
+        "reflexes": 1,
+        "volonte": 3,
+        "special_en": "canalisation d'énergie 2d6",
+        "sorts_par_jour": [
+          2,
+          1,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": true
+      },
+      {
+        "niveau": 4,
+        "bba": [
+          3
+        ],
+        "vigueur": 4,
+        "reflexes": 1,
+        "volonte": 4,
+        "special_en": "—",
+        "sorts_par_jour": [
+          3,
+          2,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": true
+      },
+      {
+        "niveau": 5,
+        "bba": [
+          3
+        ],
+        "vigueur": 4,
+        "reflexes": 1,
+        "volonte": 4,
+        "special_en": "canalisation d'énergie 3d6",
+        "sorts_par_jour": [
+          3,
+          2,
+          1,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": true
+      },
+      {
+        "niveau": 6,
+        "bba": [
+          4
+        ],
+        "vigueur": 5,
+        "reflexes": 2,
+        "volonte": 5,
+        "special_en": "—",
+        "sorts_par_jour": [
+          3,
+          3,
+          2,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": true
+      },
+      {
+        "niveau": 7,
+        "bba": [
+          5
+        ],
+        "vigueur": 5,
+        "reflexes": 2,
+        "volonte": 5,
+        "special_en": "canalisation d'énergie 4d6",
+        "sorts_par_jour": [
+          4,
+          3,
+          2,
+          1,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": true
+      },
+      {
+        "niveau": 8,
+        "bba": [
+          6,
+          1
+        ],
+        "vigueur": 6,
+        "reflexes": 2,
+        "volonte": 6,
+        "special_en": "—",
+        "sorts_par_jour": [
+          4,
+          3,
+          3,
+          2,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": true
+      },
+      {
+        "niveau": 9,
+        "bba": [
+          6,
+          1
+        ],
+        "vigueur": 6,
+        "reflexes": 3,
+        "volonte": 6,
+        "special_en": "canalisation d'énergie 5d6",
+        "sorts_par_jour": [
+          4,
+          4,
+          3,
+          2,
+          1,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": true
+      },
+      {
+        "niveau": 10,
+        "bba": [
+          7,
+          2
+        ],
+        "vigueur": 7,
+        "reflexes": 3,
+        "volonte": 7,
+        "special_en": "—",
+        "sorts_par_jour": [
+          4,
+          4,
+          3,
+          3,
+          2,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": true
+      },
+      {
+        "niveau": 11,
+        "bba": [
+          8,
+          3
+        ],
+        "vigueur": 7,
+        "reflexes": 3,
+        "volonte": 7,
+        "special_en": "canalisation d'énergie 6d6",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          3,
+          2,
+          1,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": true
+      },
+      {
+        "niveau": 12,
+        "bba": [
+          9,
+          4
+        ],
+        "vigueur": 8,
+        "reflexes": 4,
+        "volonte": 8,
+        "special_en": "—",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          3,
+          3,
+          2,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": true
+      },
+      {
+        "niveau": 13,
+        "bba": [
+          9,
+          4
+        ],
+        "vigueur": 8,
+        "reflexes": 4,
+        "volonte": 8,
+        "special_en": "canalisation d'énergie 7d6",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          1,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": true
+      },
+      {
+        "niveau": 14,
+        "bba": [
+          10,
+          5
+        ],
+        "vigueur": 9,
+        "reflexes": 4,
+        "volonte": 9,
+        "special_en": "—",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          4,
+          3,
+          3,
+          2,
+          null,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": true
+      },
+      {
+        "niveau": 15,
+        "bba": [
+          11,
+          6,
+          1
+        ],
+        "vigueur": 9,
+        "reflexes": 5,
+        "volonte": 9,
+        "special_en": "canalisation d'énergie 8d6",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          1,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": true
+      },
+      {
+        "niveau": 16,
+        "bba": [
+          12,
+          7,
+          2
+        ],
+        "vigueur": 10,
+        "reflexes": 5,
+        "volonte": 10,
+        "special_en": "—",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          3,
+          2,
+          null
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": true
+      },
+      {
+        "niveau": 17,
+        "bba": [
+          12,
+          7,
+          2
+        ],
+        "vigueur": 10,
+        "reflexes": 5,
+        "volonte": 10,
+        "special_en": "canalisation d'énergie 9d6",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          1
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": true
+      },
+      {
+        "niveau": 18,
+        "bba": [
+          13,
+          8,
+          3
+        ],
+        "vigueur": 11,
+        "reflexes": 6,
+        "volonte": 11,
+        "special_en": "—",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          3,
+          2
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": true
+      },
+      {
+        "niveau": 19,
+        "bba": [
+          14,
+          9,
+          4
+        ],
+        "vigueur": 11,
+        "reflexes": 6,
+        "volonte": 11,
+        "special_en": "canalisation d'énergie 10d6",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          3
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": true
+      },
+      {
+        "niveau": 20,
+        "bba": [
+          15,
+          10,
+          5
+        ],
+        "vigueur": 12,
+        "reflexes": 6,
+        "volonte": 12,
+        "special_en": "—",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": true
+      }
+    ],
+    "capacites_en": {
+      "Aura": "Le prêtre d'un dieu Chaotique, Mauvais, Bon ou Loyal possède une aura particulièrement puissante correspondant à l'alignement de la divinité.",
+      "Sorts": "Le prêtre lance des sorts divins de la liste des sorts de prêtre. Il doit choisir et préparer ses sorts à l'avance. Pour préparer ou lancer un sort, sa Sagesse doit valoir au moins 10 + le niveau du sort ; le DD des jets de sauvegarde vaut 10 + le niveau du sort + son modificateur de Sagesse. Il reçoit des sorts en bonus avec une Sagesse élevée.",
+      "Canalisation d'énergie": "3 + modificateur de Charisme fois par jour, action simple : 1d6 plus 1d6 par tranche de deux niveaux au-delà du premier, dans un rayon de 9 m. DD du jet de Volonté : 10 + la moitié du niveau + modificateur de Charisme.",
+      "Domaines": "Le prêtre choisit deux domaines parmi ceux de sa divinité ; il gagne un emplacement de sort de domaine par niveau de sort accessible (sauf le niveau 0) et les pouvoirs de ses domaines.",
+      "Oraisons": "Il prépare un certain nombre d'oraisons chaque jour ; elles ne sont pas dépensées quand elles sont lancées.",
+      "Incantation spontanée": "Un prêtre Bon peut convertir un sort préparé (hors oraisons et sorts de domaine) en sort de soins de niveau égal ou inférieur ; un prêtre Mauvais, en sort de blessure ; un prêtre Neutre d'un dieu Neutre choisit une fois pour toutes."
+    },
+    "notes_source": "Manuel des joueurs (VF) : description de la classe p. 67 à 69, Table 3-13 p. 70."
+  }
+}

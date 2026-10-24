@@ -259,6 +259,8 @@ pub struct EmplacementsDeSorts {
     pub par_jour: Option<u32>,
     pub connus: u32,
     pub dd: i32,
+    /// Emplacement de sort de domaine en plus (prêtre) : 0 ou 1.
+    pub domaine: u32,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -816,6 +818,11 @@ impl Fiche {
                     }
                 }
             }
+            // Un lanceur qui prépare ses sorts ne « connaît » pas un nombre fixe de sorts : il
+            // choisit chaque jour parmi toute sa liste.
+            if inc.prepare() {
+                continue;
+            }
             for (sn, nb) in choisis.iter().enumerate() {
                 let attendus = ligne.sorts_connus.get(sn).copied().flatten().unwrap_or(0);
                 if attendus != *nb {
@@ -1104,9 +1111,16 @@ impl Fiche {
             let score = scores[&car].total;
             let mut emplacements = Vec::new();
             for sn in 0..=9u32 {
-                let connus = ligne.sorts_connus.get(sn as usize).copied().flatten();
-                let base = if sn == 0 {
+                let prepare = inc.prepare();
+                let connus = if prepare && sn == 0 {
+                    ligne.oraisons
+                } else if prepare {
                     None
+                } else {
+                    ligne.sorts_connus.get(sn as usize).copied().flatten()
+                };
+                let base = if sn == 0 {
+                    ligne.oraisons.filter(|_| prepare)
                 } else {
                     ligne.sorts_par_jour.get(sn as usize - 1).copied().flatten()
                 };
@@ -1129,6 +1143,7 @@ impl Fiche {
                     },
                     connus: connus.unwrap_or(0),
                     dd: 10 + sn as i32 + m(car),
+                    domaine: u32::from(ligne.domaine && sn > 0),
                 });
             }
             let sorts_de_lignage = self

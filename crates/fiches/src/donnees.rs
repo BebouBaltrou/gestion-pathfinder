@@ -84,7 +84,14 @@ pub struct ProgressionNiveau {
     /// Sorts par jour de niveau 1 à 9 (`None` : aucun de ce niveau).
     pub sorts_par_jour: Vec<Option<u32>>,
     /// Sorts connus de niveau 0 à 9.
+    #[serde(default)]
     pub sorts_connus: Vec<Option<u32>>,
+    /// Lanceurs qui préparent leurs sorts : oraisons (niveau 0) préparées chaque jour.
+    #[serde(default)]
+    pub oraisons: Option<u32>,
+    /// Un emplacement de sort de domaine en plus pour chaque niveau de sort accessible (1 à 9).
+    #[serde(default)]
+    pub domaine: bool,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -124,6 +131,14 @@ pub struct Incantation {
     /// Échange d’un sort connu : à partir de ce niveau de classe, puis tous les `echange_pas` niveaux.
     pub echange_niveau_min: Option<u32>,
     pub echange_pas: Option<u32>,
+}
+
+impl Incantation {
+    /// Le lanceur choisit et prépare ses sorts à l'avance (prêtre, druide) au lieu d'en connaître
+    /// un nombre limité (ensorceleur).
+    pub fn prepare(&self) -> bool {
+        self.mode.starts_with("prépar")
+    }
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -199,7 +214,10 @@ impl Referentiel {
         Self::depuis_json(
             include_str!("../../../data/core/races.json"),
             include_str!("../../../data/core/competences.json"),
-            &[include_str!("../../../data/core/ensorceleur.json")],
+            &[
+                include_str!("../../../data/core/ensorceleur.json"),
+                include_str!("../../../data/core/pretre.json"),
+            ],
             include_str!("../../../data/core/progression.json"),
         )
         .and_then(|r| {
