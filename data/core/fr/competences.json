@@ -1,5 +1,5 @@
 {
-  "avertissement": "Noms français non officiels (repris de docs/FICHES_PERSONNAGE.md quand ils y figurent) : à corriger d'après le Manuel des joueurs.",
+  "avertissement": "Noms des compétences repris du Manuel des joueurs (version française).",
   "competences": {
     "acrobatics": "Acrobaties",
     "appraise": "Estimation",
@@ -26,10 +26,10 @@
     "stealth": "Discrétion",
     "survival": "Survie",
     "swim": "Natation",
-    "use_magic_device": "Utilisation d'objets magiques"
+    "use_magic_device": "Utilisation d’objets magiques"
   },
   "sous_types_connaissances": {
-    "arcana": "arcanes",
+    "arcana": "mystères",
     "dungeoneering": "exploration souterraine",
     "engineering": "ingénierie",
     "geography": "géographie",

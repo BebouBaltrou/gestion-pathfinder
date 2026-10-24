@@ -1042,7 +1042,7 @@ mod tests {
         assert!(c
             .competences
             .iter()
-            .any(|x| x.nom == "Connaissances (arcanes)"));
+            .any(|x| x.nom == "Connaissances (mystères)"));
         assert_eq!(c.dons.len(), 176);
         assert_eq!(c.sorts_ensorceleur.len(), 390);
         assert_eq!(c.classes[0].lignages.len(), 10);

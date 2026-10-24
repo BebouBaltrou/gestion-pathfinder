@@ -208,7 +208,7 @@ impl Traductions {
         self.competences["competences"][id].as_str()
     }
 
-    /// Nom français d'une compétence avec son sous-type : `knowledge:arcana` → « Connaissances (arcanes) ».
+    /// Nom français d'une compétence avec son sous-type : `knowledge:arcana` → « Connaissances (mystères) ».
     pub fn competence_avec_sous_type(&self, cle: &str) -> Option<String> {
         match cle.split_once(':') {
             None => self.competence(cle).map(str::to_string),
