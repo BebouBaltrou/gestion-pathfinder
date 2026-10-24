@@ -1,6 +1,7 @@
 // Essai de bout en bout lancé uniquement par la compilation sur GitHub
 // (variable GESTION_PATHFINDER_AUTOTEST) : vérifie le pont interface ↔ cœur Rust.
 import { api } from "./api";
+import { act, ev } from "./evenements-jeu";
 import type { FicheDonnees } from "./fiche-types";
 
 const FICHE_EXEMPLE: FicheDonnees = {
@@ -75,6 +76,58 @@ export async function autotest(): Promise<void> {
     verifier((await api.changerRegle("pj.vitesse", "lente")).ok, "règle modifiée");
     verifier(((await api.listePersonnages())[0].fiche?.niveauxEnAttente ?? 9) === 0, "vitesse lente : plus de niveau en attente");
     verifier((await api.catalogueCreation()).dons.length === 176, "catalogue de création");
+    // ---- aventure et combat
+    verifier((await api.aventureEvenement(ev.entree(pj.id))).ok === false, "aventure : rien avant le démarrage");
+    verifier((await api.aventureDemarrer(8, 0, false, false)).ok, "aventure démarrée");
+    verifier((await api.aventureEvenement(ev.entree(pj.id))).ok, "le personnage rejoint l'aventure");
+    verifier((await api.aventureEvenement(ev.pas("heure1"))).ok, "une heure passe");
+    const a1 = await api.aventureVue();
+    verifier(a1.actif && a1.horloge?.heure === 9 && a1.personnages.length === 1, `aventure : 09:00, un personnage (${a1.horloge?.texte})`);
+    verifier(a1.personnages[0].caster && a1.personnages[0].sortsConnus.some((x) => x.nomEn === "Mage Armor"), "sorts connus du personnage");
+    const ca0 = (await api.fichePersonnage(pj.id))?.ca.total ?? 0;
+    verifier(
+      (
+        await api.aventureEvenement(
+          ev.effet({ pj: pj.id, nom: "Bouclier test", source: "essai", duree: { minutes: 10 }, effets: [{ cible: "ca", type_bonus: "bouclier", valeur: 4, source: "essai" }] }),
+        )
+      ).ok,
+      "effet temporaire appliqué",
+    );
+    verifier((await api.fichePersonnage(pj.id))?.ca.total === ca0 + 4, `CA avec l'effet (${ca0} + 4)`);
+    verifier((await api.aventureEvenement(ev.pas("minutes10"))).ok, "dix minutes passent");
+    const a2 = await api.aventureVue();
+    verifier(a2.alertes.length === 1 && a2.personnages[0].effets.length === 0, "l'effet a expiré : alerte");
+    verifier((await api.fichePersonnage(pj.id))?.ca.total === ca0, "CA revenue après l'expiration");
+    verifier((await api.aventureEvenement(ev.alerteConfirmee(a2.alertes[0].id))).ok, "alerte confirmée");
+    // combat
+    verifier((await api.combatDemarrer([pj.id])).ok, "combat commencé");
+    verifier((await api.etatApp()).combatEnCours === true, "campagne verrouillée pendant le combat");
+    verifier((await api.avancer(1)).ok === false, "pas de jour d'intermède pendant un combat");
+    verifier((await api.combatAction(act.initiative(pj.id, 12))).ok, "initiative saisie");
+    verifier((await api.combatAction(act.demarrer(null))).ok, "combat démarré");
+    const ap2 = await api.combatApercuSort(pj.id, "Mage Armor");
+    verifier(ap2.niveauEmplacement === 1 && ap2.dd === 14 && ap2.dureeSuggeree !== null, `aperçu du sort (DD ${ap2.dd}, emplacement ${ap2.niveauEmplacement})`);
+    const sansMunition = await api.combatAction(
+      act.attaquer({ pj: pj.id, typeAction: "simple", libelle: "Tir", tirs: 1, munition: null, aDistanceAvecMunitions: true }),
+    );
+    verifier(sansMunition.ok === false, "attaque à distance refusée sans munition");
+    verifier((await api.combatAction(act.lancer({ pj: pj.id, sort: "Mage Armor", cibles: [pj.id], echecArcaniqueD100: 90 }))).ok, "sort lancé sur soi");
+    const c1 = await api.combatVue();
+    verifier((c1?.personnages[0].effets.length ?? 0) === 1 && c1?.personnages[0].sortsLances === 1, "effet du sort créé dans le combat");
+    verifier((await api.combatAction(act.aventure(ev.degats(pj.id, 3, true)))).ok, "dégâts subis en combat");
+    verifier((await api.combatAction(act.tourSuivant())).ok, "tour suivant");
+    verifier((await api.combatAnnuler()).ok, "annulation dans le combat");
+    verifier((await api.combatAction(act.tourSuivant())).ok, "tour suivant (après annulation)");
+    const fin = await api.combatApercuFin();
+    verifier(fin.roundsJoues === 1 && fin.personnages.length === 1, "aperçu de fin de combat");
+    verifier((await api.combatTerminer({ genre: "tout" }, [])).ok, "combat validé");
+    verifier((await api.etatApp()).combatEnCours === false, "campagne déverrouillée");
+    const a3 = await api.aventureVue();
+    verifier(a3.personnages[0].effets.length === 1 && a3.personnages[0].pv === a3.personnages[0].pvMax - 3, "état d'aventure mis à jour par le combat");
+    verifier((await api.aventureEvenement(ev.repos([pj.id], 8, false, false))).ok, "repos de 8 heures");
+    verifier((await api.avancer(1)).ok, "un jour d'intermède pendant l'aventure");
+    verifier((await api.annuler()).ok, "annuler");
+    verifier((await api.aventureTerminer()).ok, "aventure terminée");
     await pause(1500);
     const titre = document.querySelector("h1")?.textContent ?? "";
     verifier(titre.length > 0, `interface affichée (titre : « ${titre} »)`);

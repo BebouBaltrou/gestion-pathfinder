@@ -160,3 +160,11 @@ naturelle (pas de torches) ; ordre d'initiative = uniquement tes personnages.
 - **Phase 7 (consommables et ressources) faite** : inventaire d'objets (potions, parchemins, baguettes, bâtons, objets
   à charges, munitions), utilisation en combat avec effet du sort, ressources quotidiennes des 10 lignages rendues
   par le repos. Lectures à valider : `docs/POINTS_A_CONFIRMER_OBJETS.md`.
+- **Phase 8 (interface) faite pour l'aventure et le combat** : la campagne contient l'état d'aventure
+  (événements `AventureDemarree`, `Aventure`, `CombatValide`, `AventureTerminee` ; format de fichier 2 écrit
+  seulement si l'aventure est utilisée), l'application Tauri expose les commandes (`desktop/src-tauri/src/aventure.rs`),
+  le combat est sauvegardé après chaque action (`<campagne>.combat.json`) et repris après un plantage, et l'interface
+  React (+ `motion`) a deux écrans : « Aventure » (horloge, repos, personnages, effets, ressources, objets, journal)
+  et « Combat » (initiative et départage, round de surprise, barre d'initiative, actions, sorts, objets, santé,
+  concentration, fin de combat avec alertes). Essai automatique dans la vraie fenêtre : 62 vérifications.
+  Palettes A et B choisissables dans Paramètres. Backlog : `ROADMAP.md`.
