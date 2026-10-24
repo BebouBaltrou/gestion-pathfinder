@@ -16,7 +16,7 @@ Charisme, ou la valeur saisie sur le personnage.)
   l'**achat** d'une équipe et à son **amélioration** (l'équipe obtenue doit respecter la limite).
 - L'écran des équipes affiche « employés de niveau N (Prestige requis) ».
 
-### Lectures à valider
+### Lectures (validées par le joueur le 24/10/2026)
 
 1. **Quel personnage recrute ?** Le livre dit « votre personnage ». L'application ne demande pas
    encore qui recrute : on prend le **meilleur Prestige parmi les PJ présents** dans la localité.
