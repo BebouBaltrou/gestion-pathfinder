@@ -1,0 +1,23 @@
+{
+ "armes": {
+  "Club": "Erreur probable du livre : dégâts 1d3 / 1d4 (la règle d’origine donne 1d4 / 1d6).",
+  "Light hammer": "Erreur probable du livre : poids 2 kg (la règle d’origine donne 1 kg).",
+  "Throwing axe": "Erreur probable du livre : poids 2 kg (la règle d’origine donne 1 kg).",
+  "Scythe": "Erreur probable du livre : type « perforant ou contondant » (la règle d’origine donne perforant ou tranchant).",
+  "Halberd": "Le livre écrit « Halllebarde » (faute d’impression)."
+ },
+ "armures": {},
+ "materiel": {
+  "Flask": "Erreur probable du livre : poids 2,25 kg (la règle d’origine donne 0,75 kg).",
+  "Water clock": "Le livre écrit « Clepysdre » (faute d’impression).",
+  "Thieves' tools (masterwork)": "Le livre écrit seulement « Outils de cambrioleur » à 100 po ; « (de maître) » est ajouté pour distinguer les deux lignes."
+ },
+ "sorts": {
+  "Sequester": "Erreur probable du livre : les noms « Dissimulation suprême » (niveau 7) et « Séquestration » (niveau 8) sont échangés par rapport à la version d’origine.",
+  "Trap the Soul": "Erreur probable du livre : les noms « Dissimulation suprême » (niveau 7) et « Séquestration » (niveau 8) sont échangés par rapport à la version d’origine.",
+  "Detect Magic": "Le livre classe ce sort dans l’école « universel » (divination dans la version d’origine).",
+  "Breath of Life": "Le livre classe ce sort dans l’école « transmutation » (invocation dans la version d’origine).",
+  "Transport via Plants": "Le livre classe ce sort dans l’école « transmutation » (invocation dans la version d’origine)."
+ },
+ "dons": {}
+}

@@ -628,6 +628,8 @@ function DialogueSort({
               {apercu.dureeTexte && <span>Durée : {apercu.dureeTexte}</span>}
             </div>
             <div className="descr">{apercu.description}</div>
+            {apercu.source && <small className="doux">{apercu.source}</small>}
+            {apercu.noteLivre && <small className="doux"><em>{apercu.noteLivre}</em></small>}
             {apercu.notes && <span className="doux">{apercu.notes}</span>}
             {!apercu.effetAutomatique && <span className="doux">Pas d'effet appliqué automatiquement : l'emplacement est décompté et le lancement noté ; appliquez l'effet à la main si besoin.</span>}
           </div>

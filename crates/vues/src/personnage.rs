@@ -163,6 +163,8 @@ vue! {
         pub nom: String,
         pub resume: Option<String>,
         pub avantage: Option<String>,
+        pub source: Option<String>,
+        pub note_livre: Option<String>,
         /// Prérequis non remplis : le don est inutilisable (Core p. 111).
         pub inutilisable: Option<String>,
     }
@@ -404,6 +406,8 @@ pub fn fiche_complete(
             nom,
             resume: fr.and_then(|x| x.resume.clone()),
             avantage: fr.and_then(|x| x.avantage.clone()),
+            source: t.source_vf("dons", &d),
+            note_livre: t.note_livre("dons", &d),
             inutilisable,
         });
     }
@@ -716,6 +720,8 @@ vue! {
         pub ecole: String,
         pub niveau: u32,
         pub resume: String,
+        pub source: Option<String>,
+        pub note_livre: Option<String>,
     }
 }
 vue! {
@@ -724,6 +730,9 @@ vue! {
         pub nom: String,
         pub genre: String,
         pub poids_lb: Option<f64>,
+        pub source: Option<String>,
+        pub note_livre: Option<String>,
+        pub description: Option<String>,
     }
 }
 vue! {
@@ -903,6 +912,8 @@ pub fn catalogue_creation() -> CatalogueCreation {
                 resume: fr
                     .map(|x| x.description.chars().take(220).collect())
                     .unwrap_or_default(),
+                source: t.source_vf("sorts", &s.nom_en),
+                note_livre: t.note_livre("sorts", &s.nom_en),
             })
         })
         .collect();
@@ -922,6 +933,9 @@ pub fn catalogue_creation() -> CatalogueCreation {
                 nom: a.nom.clone(),
                 genre: a.genre.nom().to_string(),
                 poids_lb: a.poids_lb,
+                source: t.source_vf("armures", &a.nom_en),
+                note_livre: t.note_livre("armures", &a.nom_en),
+                description: t.description_equipement("armures", &a.nom_en),
             })
             .collect(),
         armes: eq
@@ -937,6 +951,9 @@ pub fn catalogue_creation() -> CatalogueCreation {
                 }
                 .to_string(),
                 poids_lb: a.poids_lb,
+                source: t.source_vf("armes", &a.nom_en),
+                note_livre: t.note_livre("armes", &a.nom_en),
+                description: t.description_equipement("armes", &a.nom_en),
             })
             .collect(),
         materiel: eq
@@ -947,6 +964,9 @@ pub fn catalogue_creation() -> CatalogueCreation {
                 nom: a.nom.clone(),
                 genre: a.categorie_en.clone().unwrap_or_default(),
                 poids_lb: a.poids_lb,
+                source: t.source_vf("materiel", &a.nom_en),
+                note_livre: t.note_livre("materiel", &a.nom_en),
+                description: t.description_equipement("materiel", &a.nom_en),
             })
             .collect(),
         etats: r

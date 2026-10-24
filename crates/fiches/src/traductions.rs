@@ -84,6 +84,12 @@ pub struct Traductions {
     races: Value,
     competences: Value,
     ensorceleur: Value,
+    /// Pages du Manuel des joueurs (`pages_vf.json`).
+    pages: Value,
+    /// Notes sur les erreurs du livre (`notes_livre.json`).
+    notes: Value,
+    /// Descriptions de l'équipement (`equipement_descriptions.json`).
+    descriptions: Value,
     sorts: std::collections::BTreeMap<String, SortFr>,
     dons: std::collections::BTreeMap<String, DonFr>,
 }
@@ -107,9 +113,47 @@ impl Traductions {
                 "../../../data/core/fr/ensorceleur.json"
             ))
             .expect("ensorceleur.json (fr) valide"),
+            pages: serde_json::from_str(include_str!("../../../data/core/fr/pages_vf.json"))
+                .expect("pages_vf.json valide"),
+            notes: serde_json::from_str(include_str!("../../../data/core/fr/notes_livre.json"))
+                .expect("notes_livre.json valide"),
+            descriptions: serde_json::from_str(include_str!(
+                "../../../data/core/fr/equipement_descriptions.json"
+            ))
+            .expect("equipement_descriptions.json valide"),
             sorts: Self::charger_sorts(),
             dons: Self::charger_dons(),
         }
+    }
+
+    /// Source dans le Manuel des joueurs (« Manuel des joueurs, p. 121 »).
+    /// `categorie` : dons, sorts, armes, armures ou materiel.
+    pub fn source_vf(&self, categorie: &str, nom_en: &str) -> Option<String> {
+        let cle = if categorie == "dons" {
+            crate::catalogue::nom_de_base(nom_en)
+        } else {
+            nom_en
+        };
+        let page = self.pages[categorie][cle].as_u64()?;
+        let livre = self.pages["livre"].as_str().unwrap_or("Manuel des joueurs");
+        Some(format!("{livre}, p. {page}"))
+    }
+
+    /// Note signalant une erreur probable du livre (affichée en petit).
+    pub fn note_livre(&self, categorie: &str, nom_en: &str) -> Option<String> {
+        let cle = if categorie == "dons" {
+            crate::catalogue::nom_de_base(nom_en)
+        } else {
+            nom_en
+        };
+        self.notes[categorie][cle].as_str().map(str::to_string)
+    }
+
+    /// Description d'un objet (arme, armure ou matériel) d'après le livre.
+    pub fn description_equipement(&self, categorie: &str, nom_en: &str) -> Option<String> {
+        self.descriptions[categorie][nom_en]
+            .as_str()
+            .map(str::to_string)
     }
 
     fn charger_dons() -> std::collections::BTreeMap<String, DonFr> {
@@ -421,6 +465,23 @@ mod tests {
             t.competence_avec_sous_type("craft:armes").as_deref(),
             Some("Artisanat (armes)")
         );
+    }
+
+    #[test]
+    fn pages_notes_et_descriptions_du_livre() {
+        let t = Traductions::core();
+        assert_eq!(
+            t.source_vf("sorts", "Magic Missile").as_deref(),
+            Some("Manuel des joueurs, p. 342")
+        );
+        assert!(t.source_vf("dons", "Dodge").is_some());
+        assert!(t.source_vf("dons", "Weapon Focus (longsword)").is_some());
+        assert!(t.note_livre("sorts", "Sequester").is_some());
+        assert!(t.note_livre("armes", "Club").is_some());
+        assert!(t.description_equipement("armures", "Padded").is_some());
+        assert!(t
+            .description_equipement("armes", "Heavy crossbow")
+            .is_some());
     }
 
     #[test]

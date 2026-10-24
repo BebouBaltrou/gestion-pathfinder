@@ -217,6 +217,8 @@ function Dons({ f }: { f: FicheVue }) {
                 <p>{d.avantage}</p>
               </details>
             )}
+            {d.source && <small className="doux">{d.source}</small>}
+            {d.noteLivre && <small className="doux"><em>{d.noteLivre}</em></small>}
           </div>
         ))}
       </div>

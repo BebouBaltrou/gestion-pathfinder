@@ -33,11 +33,17 @@ Fait le 24/10/2026, d'après le PDF « Manuel des joueurs » (version française
 - Les entrées abrégées du livre (« fonctionne comme tel sort ») n'ont pas tous leurs champs : l'ancienne valeur est conservée pour les champs absents.
 - Les tableaux de quelques sorts (par ex. *Décret*) sont lus à plat.
 
-## Pas fait / à décider
+## Ajouts du 24/10 (suite)
 
-- Les **numéros de page** des sources (dons, sorts…) renvoient encore aux pages du livre anglais ; je peux les remplacer par les pages du Manuel des joueurs.
-- Les **descriptions des armes, armures et objets** ne sont pas traduites dans l'application (seuls les noms le sont).
-- Les **tables de lignage draconique/élémentaire** (types d'énergie, souffles) ne sont pas relues mot pour mot.
+- **Sources** : chaque don, sort, arme, armure et objet de matériel a maintenant sa page dans le Manuel des joueurs (`data/core/fr/pages_vf.json`). Elle s'affiche en petit sous les dons de la fiche et sous la description d'un sort en combat. Les anciennes sources (livre anglais) sont conservées dans les données.
+- **Notes « erreur du livre »** (`data/core/fr/notes_livre.json`) : affichées en petit et en italique pour les sorts concernés (Détection de la magie, Souffle de vie, Voie végétale, Séquestration, Dissimulation suprême). Pour les armes et le matériel (Gourdin, Marteau léger, Hache de lancer, Faux, Flasque, Hallebarde, Clepsydre), la note est enregistrée mais l'application n'a pas encore d'écran de détail pour les afficher.
+- **Descriptions de l'équipement** (`data/core/fr/equipement_descriptions.json`) : 52 armes sur 87, 20 armures sur 21 et 37 objets de matériel sur 161. Les autres n'ont pas de texte dans le livre, ou celui-ci est coupé par un tableau (je n'ai gardé que les textes complets). Pas encore affichées dans l'application.
+- **Lignages draconique et élémentaire** : tableaux des types d'énergie, des souffles et des déplacements relus : identiques.
+
+## Ce qui reste
+
+- Afficher les descriptions et les notes de l'équipement dans l'application (il faut d'abord un écran de détail d'objet).
+- Descriptions du matériel manquantes (mise en page du livre en colonnes autour du tableau).
 
 ## Détail : armes et armures (noms)
 

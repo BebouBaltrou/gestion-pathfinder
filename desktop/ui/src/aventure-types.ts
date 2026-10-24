@@ -145,6 +145,8 @@ export type Duree =
   | { lie_a_un_evenement: string };
 
 export type ApercuSort = {
+  source: string | null;
+  noteLivre: string | null;
   nomEn: string;
   nom: string;
   niveauDuSort: number;
