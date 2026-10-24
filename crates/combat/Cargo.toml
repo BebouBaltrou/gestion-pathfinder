@@ -1,0 +1,17 @@
+[package]
+name = "combat"
+description = "Mode combat : état de travail transactionnel, initiative, tours, annulation action par action, journal rejouable"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+
+[dependencies]
+aventure = { path = "../aventure", default-features = false }
+fiches = { path = "../fiches", default-features = false }
+temps = { path = "../temps", default-features = false }
+serde = { version = "1", features = ["derive"], optional = true }
+serde_json = { version = "1", optional = true }
+
+[features]
+default = ["serde"]
+serde = ["dep:serde", "dep:serde_json", "aventure/serde", "fiches/serde", "temps/serde"]

@@ -297,6 +297,30 @@ impl<T: Clone> Ensemble<T> {
         bilan
     }
 
+    /// Remplace les effets des `proprietaires` par ceux de `autre` (validation partielle d'un
+    /// combat : seuls certains personnages reportent leur état de travail).
+    pub fn remplacer_pour(&mut self, autre: &Ensemble<T>, proprietaires: &[String]) {
+        self.actifs
+            .retain(|e| !proprietaires.contains(&e.proprietaire));
+        self.termines
+            .retain(|t| !proprietaires.contains(&t.effet.proprietaire));
+        self.actifs.extend(
+            autre
+                .actifs
+                .iter()
+                .filter(|e| proprietaires.contains(&e.proprietaire))
+                .cloned(),
+        );
+        self.termines.extend(
+            autre
+                .termines
+                .iter()
+                .filter(|t| proprietaires.contains(&t.effet.proprietaire))
+                .cloned(),
+        );
+        self.prochain_id = self.prochain_id.max(autre.prochain_id);
+    }
+
     /// Ce qu'un recul d'horloge à `nouvel` toucherait (rien n'est modifié).
     pub fn apercu_recul(&self, nouvel: Instant) -> ApercuRecul {
         let reactivables = self

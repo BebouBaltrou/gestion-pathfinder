@@ -30,6 +30,8 @@ pub struct ContextePj {
     pub pv_max: i32,
     pub con_score: i32,
     pub con_mod: i32,
+    /// Modificateur d'initiative de la fiche.
+    pub initiative: i32,
     /// Dommages de caractéristique en cours (pour la guérison au repos).
     pub dommages: Vec<(Carac, i32)>,
 }
@@ -241,6 +243,74 @@ impl EtatAventure {
         v
     }
 
+    /// Met fin aux effets « jusqu'au début / à la fin du prochain tour » du personnage.
+    pub fn terminer_effets_du_tour(&mut self, pj: IdPj, moment: temps::MomentDuTour) -> Sortie {
+        let mut s = Sortie::default();
+        let maintenant = self.horloge.maintenant;
+        // On repère les effets avant de les retirer, pour répercuter leur fin sur la fiche.
+        let ids: Vec<IdEffet> = self
+            .effets
+            .actifs
+            .iter()
+            .filter(|e| {
+                e.proprietaire == pj.to_string() && e.duree == Duree::JusquauProchainTour(moment)
+            })
+            .map(|e| e.id)
+            .collect();
+        for id in ids {
+            self.effet_vers_fiche(id, &mut s, false);
+            let _ = self.effets.retirer(id, maintenant);
+            self.noter(format!("Effet n° {id} terminé avec le tour."));
+        }
+        s
+    }
+
+    /// Entrée en combat : l'horloge horaire est suspendue, elle avance maintenant round par round.
+    pub fn entrer_en_combat(&mut self) -> Result<(), ErreurAventure> {
+        self.horloge.entrer_en_combat()?;
+        self.noter("Début d'un combat.".into());
+        Ok(())
+    }
+
+    /// Un round de combat s'achève : l'horloge avance de 6 secondes, les effets arrivés à
+    /// échéance prennent fin, les dégâts non létaux guérissent avec le temps.
+    pub fn round_de_combat(&mut self, ctx: Contexte) -> Result<Sortie, ErreurAventure> {
+        let mut s = Sortie::default();
+        self.passer_le_temps(1, ctx, &mut s)?;
+        Ok(s)
+    }
+
+    /// Fin d'un combat validé : conversion des durées (spécification §1.2), alertes pour les
+    /// effets dissipés, puis retour à l'horloge d'aventure. `contestations` maintient des
+    /// effets dissipés avec la durée saisie par le joueur.
+    pub fn terminer_combat(
+        &mut self,
+        contestations: &[(IdEffet, Duree)],
+    ) -> Result<(temps::BilanFinDeCombat, Sortie), ErreurAventure> {
+        let mut s = Sortie::default();
+        let maintenant = self.horloge.maintenant;
+        let bilan = self.effets.fin_de_combat(maintenant);
+        for d in &bilan.dissipes {
+            self.effet_vers_fiche(d.id, &mut s, false);
+        }
+        for (id, duree) in contestations {
+            if !bilan.dissipes.iter().any(|d| d.id == *id) {
+                return Err(ErreurAventure::Invalide(format!(
+                    "l'effet {id} n'a pas été dissipé"
+                )));
+            }
+            self.effets.retablir(*id, duree.clone(), maintenant)?;
+            self.effet_vers_fiche(*id, &mut s, true);
+        }
+        self.horloge.sortir_du_combat(true)?;
+        self.noter(format!(
+            "Fin du combat : {} effet(s) dissipé(s), {} maintenu(s) par le joueur.",
+            bilan.dissipes.len(),
+            contestations.len()
+        ));
+        Ok((bilan, s))
+    }
+
     pub fn apercu_recul(&self, nouvel: Instant) -> ApercuRecul {
         self.effets.apercu_recul(nouvel)
     }
@@ -292,7 +362,11 @@ impl EtatAventure {
         ctx: Contexte,
         s: &mut Sortie,
     ) -> Result<(), ErreurAventure> {
-        s.minuits += self.horloge.avancer_de(rounds)?;
+        s.minuits += if self.horloge.en_combat() {
+            self.horloge.round_suivant()?
+        } else {
+            self.horloge.avancer_de(rounds)?
+        };
         let maintenant = self.horloge.maintenant;
         for id in self.effets.avancer_a(maintenant) {
             self.effet_vers_fiche(id, s, false);
@@ -338,6 +412,18 @@ impl EtatAventure {
     ) -> Result<Sortie, ErreurAventure> {
         let mut s = Sortie::default();
         let maintenant = self.horloge.maintenant;
+        if self.horloge.en_combat()
+            && matches!(
+                ev,
+                EvenementAventure::Entree { .. }
+                    | EvenementAventure::Pas { .. }
+                    | EvenementAventure::AvancerTemps { .. }
+                    | EvenementAventure::RegleHeure { .. }
+                    | EvenementAventure::Repos { .. }
+            )
+        {
+            return Err(ErreurTemps::HorlogeSuspendue.into());
+        }
         match ev {
             EvenementAventure::Entree { pj } => {
                 let c = Self::contexte(ctx, *pj)?;

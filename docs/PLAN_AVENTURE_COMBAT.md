@@ -141,3 +141,9 @@ naturelle (pas de torches) ; ordre d'initiative = uniquement tes personnages.
   (`Evenement::Aventure`, `FORMAT = 2`) et les commandes Tauri viennent avec l'interface.
   Écart avec le plan : au lieu de supprimer `EffetTemporaire`, il sert de simple porteur des effets actifs
   dans la fiche (sans compte à rebours) ; le temps est suivi par `crates/temps`, seule source de vérité.
+- **Phase 4 (machine à états du combat) faite** : crate `crates/combat` (copie de travail transactionnelle,
+  initiative avec départage, round de surprise, tours, retarder, modifier l'initiative, action préparée,
+  annuler/rétablir action par action, aperçu de fin avec conversion §1.2 et contestation, validation totale,
+  partielle ou abandon, sauvegarde atomique et reprise). 15 tests. Reste pour les phases suivantes :
+  régénération et guérison accélérée par round (phase 5), lancement de sorts (phase 6), consommables (phase 7),
+  économie d'actions (phase 5), statistiques de campagne (phase 9).
