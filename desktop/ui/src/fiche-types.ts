@@ -311,6 +311,7 @@ export type EvenementFiche =
   | { JalonAccorde: { niveau: number } }
   | { MonteeDeNiveau: Montee }
   | { SortRemplace: { ancien: string; nouveau: string } }
+  | { RangsReattribues: { niveau: number; rangs: Record<string, number> } }
   | { SortLance: { classe: string; niveau_de_sort: number; sort: string } }
   | { Equiper: { emplacement: "armure" | "bouclier"; objet: string | null } }
   | { ArmeAjoutee: string }
