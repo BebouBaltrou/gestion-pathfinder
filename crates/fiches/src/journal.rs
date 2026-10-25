@@ -78,6 +78,13 @@ pub enum EvenementFiche {
     PouvoirUtilise {
         cle: String,
     },
+    /// Le druide prend une forme (forme animale) : consomme une utilisation du jour et ajoute les
+    /// bonus de la forme comme effet temporaire (1 heure par niveau de druide).
+    FormeAdoptee {
+        forme: String,
+    },
+    /// Le druide reprend sa forme normale.
+    FormeQuittee,
     /// Un prêtre sacrifie un sort préparé (ni oraison ni sort de domaine) pour lancer
     /// spontanément un sort de soins ou de blessure de niveau égal ou inférieur.
     SortConverti {
@@ -131,6 +138,8 @@ impl EvenementFiche {
                 format!("Caractéristique récupérée : {} +{}", carac.abrege(), -delta)
             }
             EvenementFiche::PouvoirUtilise { cle } => format!("Pouvoir utilisé : {cle}"),
+            EvenementFiche::FormeAdoptee { forme } => format!("Forme animale prise : {forme}"),
+            EvenementFiche::FormeQuittee => "Forme normale retrouvée".to_string(),
             EvenementFiche::Preparation { sorts, .. } => {
                 format!("Sorts préparés : {} sort(s)", sorts.len())
             }
@@ -249,6 +258,30 @@ impl std::fmt::Display for ErreurJournal {
     }
 }
 
+/// Consomme une utilisation d'un pouvoir limité par jour ; Err explique le refus.
+fn consommer_pouvoir(
+    fiche: &Fiche,
+    r: &Referentiel,
+    cle: &str,
+    utilises: &mut std::collections::BTreeMap<String, u32>,
+) -> Result<(), String> {
+    let valeurs = fiche.calculer(r).map_err(|p| p.to_string())?;
+    let pouvoir = valeurs
+        .pouvoirs
+        .iter()
+        .find(|p| p.cle == cle)
+        .ok_or_else(|| format!("pouvoir inconnu ou pas encore accordé : {cle}"))?;
+    let n = utilises.entry(cle.to_string()).or_default();
+    if pouvoir.max.is_some_and(|m| *n as i32 >= m) {
+        return Err(format!(
+            "plus d'utilisation de « {} » aujourd'hui",
+            pouvoir.nom
+        ));
+    }
+    *n += 1;
+    Ok(())
+}
+
 /// Refuse un événement d'équipement ou d'état qui nomme un objet ou un état inconnu.
 fn verifier_equipement(r: &Referentiel, fiche: &Fiche, i: usize) -> Result<(), ErreurJournal> {
     match fiche.problemes_equipement(r).first() {
@@ -303,27 +336,50 @@ impl Journal {
                     jalon = jalon.max(*niveau);
                 }
                 EvenementFiche::PouvoirUtilise { cle } => {
+                    consommer_pouvoir(&fiche, r, cle, &mut pouvoirs_utilises).map_err(
+                        |raison| ErreurJournal::SortLanceImpossible {
+                            evenement: i,
+                            raison,
+                        },
+                    )?;
+                }
+                EvenementFiche::FormeAdoptee { forme } => {
                     let erreur = |raison: String| ErreurJournal::SortLanceImpossible {
                         evenement: i,
                         raison,
                     };
-                    let valeurs = fiche.calculer(r).map_err(|p| erreur(p.to_string()))?;
-                    let pouvoir =
-                        valeurs
-                            .pouvoirs
-                            .iter()
-                            .find(|p| &p.cle == cle)
-                            .ok_or_else(|| {
-                                erreur(format!("pouvoir inconnu ou pas encore accordé : {cle}"))
-                            })?;
-                    let n = pouvoirs_utilises.entry(cle.clone()).or_default();
-                    if pouvoir.max.is_some_and(|m| *n as i32 >= m) {
+                    let def = r
+                        .forme(forme)
+                        .ok_or_else(|| erreur(format!("forme inconnue : {forme}")))?;
+                    let classe = fiche
+                        .niveaux
+                        .iter()
+                        .filter_map(|n| r.classe(&n.classe))
+                        .find(|c| c.pouvoirs.iter().any(|p| p.cle == "forme_animale"))
+                        .ok_or_else(|| erreur("ce personnage n'a pas de forme animale".into()))?;
+                    let nc = fiche.niveau_de_classe(&classe.id);
+                    if nc < def.niveau_druide {
                         return Err(erreur(format!(
-                            "plus d'utilisation de « {} » aujourd'hui",
-                            pouvoir.nom
+                            "{} demande le niveau {} de {}",
+                            def.nom, def.niveau_druide, classe.nom
                         )));
                     }
-                    *n += 1;
+                    consommer_pouvoir(&fiche, r, "forme_animale", &mut pouvoirs_utilises)
+                        .map_err(erreur)?;
+                    fiche
+                        .temporaires
+                        .retain(|t| !t.nom.starts_with(crate::formes::PREFIXE_FORME));
+                    fiche.temporaires.push(EffetTemporaire {
+                        nom: def.nom_effet(),
+                        effets: def.effets_chiffres(),
+                        // 1 heure par niveau de druide ; 1 round = 6 secondes.
+                        rounds_restants: Some(nc * 600),
+                    });
+                }
+                EvenementFiche::FormeQuittee => {
+                    fiche
+                        .temporaires
+                        .retain(|t| !t.nom.starts_with(crate::formes::PREFIXE_FORME));
                 }
                 EvenementFiche::Repos => {
                     pouvoirs_utilises.clear();

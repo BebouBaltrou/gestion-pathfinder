@@ -21,6 +21,8 @@ pub mod etats;
 pub mod exemple;
 #[cfg(feature = "serde")]
 pub mod fiche;
+#[cfg(feature = "serde")]
+pub mod formes;
 pub mod generation;
 #[cfg(feature = "serde")]
 pub mod journal;

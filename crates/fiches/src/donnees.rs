@@ -258,6 +258,7 @@ pub struct Referentiel {
     pub objets_magiques: crate::objets_magiques::CatalogueMagique,
     pub domaines: Vec<crate::divin::Domaine>,
     pub divinites: Vec<crate::divin::Divinite>,
+    pub formes: Vec<crate::formes::FormeAnimale>,
 }
 
 impl Referentiel {
@@ -298,6 +299,7 @@ impl Referentiel {
         .and_then(|r| {
             r.avec_objets_magiques(include_str!("../../../data/core/objets_magiques.json"))
         })
+        .and_then(|r| r.avec_formes(include_str!("../../../data/core/formes_animales.json")))
         .and_then(|r| {
             r.avec_divinites(
                 include_str!("../../../data/core/domaines.json"),
@@ -333,6 +335,7 @@ impl Referentiel {
             objets_magiques: Default::default(),
             domaines: Vec::new(),
             divinites: Vec::new(),
+            formes: Vec::new(),
         })
     }
 
@@ -359,6 +362,16 @@ impl Referentiel {
         self.divinites =
             serde_json::from_str::<crate::divin::FichierDivinites>(divinites)?.divinites;
         Ok(self)
+    }
+
+    /// Ajoute les formes de la forme animale du druide.
+    pub fn avec_formes(mut self, json: &str) -> Result<Referentiel, serde_json::Error> {
+        self.formes = serde_json::from_str::<crate::formes::FichierFormes>(json)?.formes;
+        Ok(self)
+    }
+
+    pub fn forme(&self, id: &str) -> Option<&crate::formes::FormeAnimale> {
+        self.formes.iter().find(|f| f.id == id)
     }
 
     pub fn domaine(&self, id: &str) -> Option<&crate::divin::Domaine> {

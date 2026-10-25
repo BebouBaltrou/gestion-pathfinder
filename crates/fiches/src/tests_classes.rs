@@ -717,3 +717,46 @@ fn le_pacte_avec_la_nature_du_druide() {
         .iter()
         .any(|p| matches!(p, crate::Probleme::PacteInvalide(_))));
 }
+
+#[test]
+fn le_druide_prend_une_forme_animale() {
+    let r = Referentiel::core();
+    let regles = ReglesFiche::default();
+    let mut j = Journal::nouveau(druide(4));
+    let ajouter = |j: &mut Journal, e| j.ajouter(e, &r, &regles);
+    let adopter = |id: &str| EvenementFiche::FormeAdoptee { forme: id.into() };
+    let sans = j.etat(&r, &regles).unwrap().fiche.calculer(&r).unwrap();
+    // Niveau 4 : animal de taille P ou M seulement ; pas de taille TG (niveau 8).
+    assert!(ajouter(&mut j, adopter("beast_shape_iii_animal_de_taille_tg")).is_err());
+    assert!(ajouter(&mut j, adopter("forme_inconnue")).is_err());
+    // Animal de taille M : +2 Force (taille), +2 armure naturelle, pendant 1 heure par niveau (4 h = 2 400 rounds).
+    ajouter(&mut j, adopter("beast_shape_i_animal_de_taille_m")).expect("forme permise");
+    let e = j.etat(&r, &regles).unwrap();
+    let v = e.fiche.calculer(&r).unwrap();
+    assert_eq!(
+        v.scores[&Carac::For].total,
+        sans.scores[&Carac::For].total + 2
+    );
+    assert_eq!(v.ca.total, sans.ca.total + 2);
+    let t = e
+        .fiche
+        .temporaires
+        .iter()
+        .find(|t| t.nom.starts_with("Forme animale"))
+        .expect("effet temporaire");
+    assert_eq!(t.rounds_restants, Some(4 * 600));
+    // Une seule utilisation par jour au niveau 4 : pas de seconde transformation avant le repos.
+    assert!(ajouter(&mut j, adopter("beast_shape_i_animal_de_taille_p")).is_err());
+    // Redevenir normal rend les valeurs, mais pas l'utilisation du jour.
+    ajouter(&mut j, EvenementFiche::FormeQuittee).unwrap();
+    let v = j.etat(&r, &regles).unwrap().fiche.calculer(&r).unwrap();
+    assert_eq!(v.scores[&Carac::For].total, sans.scores[&Carac::For].total);
+    assert!(ajouter(&mut j, adopter("beast_shape_i_animal_de_taille_p")).is_err());
+    ajouter(&mut j, EvenementFiche::Repos).unwrap();
+    ajouter(&mut j, adopter("beast_shape_i_animal_de_taille_p")).expect("rendu au repos");
+    // Un prêtre n'a pas de forme animale.
+    let mut p = Journal::nouveau(pretre(4, 14));
+    assert!(p
+        .ajouter(adopter("beast_shape_i_animal_de_taille_m"), &r, &regles)
+        .is_err());
+}
