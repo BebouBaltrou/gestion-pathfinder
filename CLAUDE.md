@@ -36,7 +36,7 @@ data/            referentiel_officiel.json (source de vérité des données du l
   ce que `crates/vues` calcule et agit via les commandes de `desktop/src-tauri/src/main.rs`.
 - Chaque action est un `Evenement` du journal ; un ensemble d'actions atomique est un
   `Evenement::Groupe`. Les identifiants nouveaux se calculent par `nouvel_id_*`.
-- Les montants sont en pièces d'argent (`Montant`, i64).
+- Les montants sont en pièces de cuivre (`Montant`, i64 : 1 pa = 10 pc, 1 po = 100 pc, 1 pp = 1 000 pc).
 - Les deux applications lisent et écrivent les mêmes fichiers de campagne
   (`%APPDATA%\GestionPathfinder\campagnes`).
 

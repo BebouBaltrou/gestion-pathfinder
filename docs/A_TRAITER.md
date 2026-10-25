@@ -67,3 +67,14 @@ confirmer, import/export, modèles personnels. Puis retrait de l'ancienne applic
   servies avant les équipes.
 - Délocalisation équipe par équipe (1d6 par groupe, règle officielle) ; option personnalisée
   « un seul jet pour toute l'organisation ».
+
+## Inventaire : règles d'empilement des bonus et pénalités (validées par Antoine, 25/10/2026)
+
+Règles PF1 (Core) à appliquer par le moteur d'effets. Pages du Manuel des joueurs à ajouter :
+
+1. Deux bonus de même type ne s'additionnent pas : on retient le plus élevé.
+2. Les bonus sans type s'additionnent toujours.
+3. Les bonus d'esquive s'additionnent entre eux.
+4. Les pénalités de même type ne s'additionnent pas.
+5. Types de bonus stockés dès la v1 : altération, armure, armure magique, armure naturelle, bouclier, parade, moral, chance, circonstance, compétence, intuition, profane, racial, résistance, sacré, taille, sans type, etc. Distinguer « armure », « armure magique » et « armure naturelle ».
+   - **À confirmer** : « qi » augmente la CA. Stocké comme type séparé « qi » en attendant la règle exacte et sa page.

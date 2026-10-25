@@ -124,7 +124,7 @@ impl Etat {
     /// Produit de vente proposé : moitié du prix en po, ou moitié du coût en capitaux.
     pub fn produit_vente(&self, a: Actif, r: &Referentiel) -> (Montant, CoutCapitaux) {
         let (po, cout) = self.valeur_actif(a, r);
-        (Montant::pa(po.pa / 2), moitie(cout))
+        (Montant::pa(po.pc / 20), moitie(cout))
     }
 
     /// Coût de réparation proposé d'une salle : moitié du prix en po ou du coût en capitaux.
@@ -262,7 +262,7 @@ impl Etat {
                         });
                     }
                 }
-                if po.pa > 0 {
+                if po.pc > 0 {
                     self.debiter(payeur.unwrap_or(Payeur::Localite(l)), *po)?;
                 }
                 let loc = self.localite_mut(l)?;

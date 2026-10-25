@@ -7,6 +7,7 @@ use std::collections::BTreeMap;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Erreur {
+    Inventaire(inventaire::Erreur),
     PersonnageInconnu(IdPersonnage),
     LocaliteInconnue(IdLocalite),
     IdDejaUtilise(String),
@@ -74,6 +75,7 @@ pub enum Erreur {
 impl std::fmt::Display for Erreur {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
+            Erreur::Inventaire(e) => write!(f, "{e}"),
             Erreur::PersonnageInconnu(id) => write!(f, "personnage inconnu ({id})"),
             Erreur::LocaliteInconnue(id) => write!(f, "localité inconnue ({id})"),
             Erreur::IdDejaUtilise(id) => write!(f, "identifiant déjà utilisé ({id})"),
@@ -196,6 +198,8 @@ pub struct Etat {
     pub ventes: Vec<Vente>,
     /// Limite des dépenses par PJ présent plutôt que par localité (PC-14, option).
     pub limite_par_pj: bool,
+    /// Inventaires, objets et conteneurs (recalculés à partir du journal).
+    pub inventaire: inventaire::Registre,
 }
 
 /// Effet notable d'un événement, pour l'historique (ex. arrivée d'un transfert).
@@ -377,6 +381,11 @@ impl Etat {
                 p.nom = nom.clone();
                 p.prestige = *prestige;
             }
+            Inventaire(commande) => {
+                self.inventaire
+                    .appliquer(commande)
+                    .map_err(Erreur::Inventaire)?;
+            }
             PersonnageDeplace { id, vers } => {
                 if let Some(l) = vers {
                     self.localite(*l)?;
@@ -439,7 +448,7 @@ impl Etat {
                 localite,
                 montant,
             } => {
-                if montant.pa <= 0 {
+                if montant.pc <= 0 {
                     return Err(Erreur::MontantNonPositif);
                 }
                 self.localite(*localite)?;
@@ -460,7 +469,7 @@ impl Etat {
                 pj,
                 montant,
             } => {
-                if montant.pa <= 0 {
+                if montant.pc <= 0 {
                     return Err(Erreur::MontantNonPositif);
                 }
                 self.pj(*pj)?;
@@ -520,7 +529,7 @@ impl Etat {
                         Self::retirer_capitaux(l, &retrait)?;
                     }
                     Lot::Po(m) => {
-                        if m.pa <= 0 {
+                        if m.pc <= 0 {
                             return Err(Erreur::MontantNonPositif);
                         }
                         if l.tresorerie < *m {
@@ -590,7 +599,7 @@ impl Etat {
             Paiement {
                 payeur, montant, ..
             } => {
-                if montant.pa <= 0 {
+                if montant.pc <= 0 {
                     return Err(Erreur::MontantNonPositif);
                 }
                 self.debiter(*payeur, *montant)?;

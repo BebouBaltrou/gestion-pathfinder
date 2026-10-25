@@ -1,0 +1,14 @@
+[package]
+name = "inventaire"
+description = "Moteur de l'inventaire : modèles d'objets, exemplaires, conteneurs, poids et transferts"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+
+[dependencies]
+domaine = { path = "../domaine" }
+serde = { version = "1", features = ["derive"], optional = true }
+
+[features]
+# Sauvegarde : dérive Serialize/Deserialize sur les types de l'inventaire.
+serde = ["dep:serde", "domaine/serde"]

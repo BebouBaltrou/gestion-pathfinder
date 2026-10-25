@@ -49,8 +49,8 @@ export function Tableau({ outils }: { outils: Outils }) {
       <section className="grille-chiffres" aria-label="Chiffres clés">
         <div className="carte chiffre">
           <span className="etiquette">Trésoreries des localités</span>
-          <span className="valeur" style={{ color: "var(--po)" }}>{formaterPo(t.tresorerieLocalites.pa)}</span>
-          <span className="detail">Comptes des PJ : {formaterPo(t.comptesPersonnages.pa)}</span>
+          <span className="valeur" style={{ color: "var(--po)" }}>{formaterPo(t.tresorerieLocalites.pc)}</span>
+          <span className="detail">Comptes des PJ : {formaterPo(t.comptesPersonnages.pc)}</span>
         </div>
         <div className="carte chiffre">
           <span className="etiquette">Capitaux en réserve</span>
@@ -110,8 +110,8 @@ export function Tableau({ outils }: { outils: Outils }) {
               <div className="ligne">
                 <div className="tresor">
                   <span className="etiquette">Trésorerie</span>
-                  <span className={"montant" + (l.tresorerie.pa < 0 ? " negatif" : "")}>{formaterPo(l.tresorerie.pa)}</span>
-                  {l.salairesJour && <span className="sous">salaires −{formaterPo(l.salairesJour.pa)}/jour</span>}
+                  <span className={"montant" + (l.tresorerie.pc < 0 ? " negatif" : "")}>{formaterPo(l.tresorerie.pc)}</span>
+                  {l.salairesJour && <span className="sous">salaires −{formaterPo(l.salairesJour.pc)}/jour</span>}
                 </div>
                 <BlocCapitaux c={l.capitaux} />
               </div>
@@ -180,7 +180,7 @@ export function Tableau({ outils }: { outils: Outils }) {
                   <div className="travail" key={p.id}>
                     <div className="tete">
                       <span style={{ flex: 1, fontWeight: 500 }}>{p.nom}</span>
-                      <span style={{ color: "var(--po)", fontWeight: 600 }}>{formaterPo(p.compte.pa)}</span>
+                      <span style={{ color: "var(--po)", fontWeight: 600 }}>{formaterPo(p.compte.pc)}</span>
                     </div>
                     <span className="doux">{p.lieu ?? "en voyage / hors localité"}</span>
                   </div>

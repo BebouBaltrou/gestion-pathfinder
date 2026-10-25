@@ -7,7 +7,7 @@ use crate::Campagne;
 use std::path::Path;
 
 /// Version du format de fichier ; à incrémenter en cas de changement incompatible.
-pub const FORMAT: u32 = 1;
+pub const FORMAT: u32 = 2;
 
 #[derive(serde::Serialize, serde::Deserialize)]
 struct Fichier {
@@ -75,6 +75,20 @@ pub fn charger(chemin: &Path) -> Result<Campagne, ErreurFichier> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn montant_ancien_format_en_pa_est_converti() {
+        use domaine::Montant;
+        let ancien: Montant = serde_json::from_str(r#"{"pa":47}"#).unwrap();
+        assert_eq!(ancien, Montant::pa(47));
+        let nouveau: Montant = serde_json::from_str(r#"{"pc":473}"#).unwrap();
+        assert_eq!(nouveau, Montant::pc(473));
+        assert!(serde_json::from_str::<Montant>("{}").is_err());
+        assert_eq!(
+            serde_json::to_string(&Montant::pa(47)).unwrap(),
+            r#"{"pc":470}"#
+        );
+    }
     use crate::evenements::Evenement;
     use crate::modele::*;
     use domaine::Montant;

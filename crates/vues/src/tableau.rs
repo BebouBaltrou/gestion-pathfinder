@@ -185,7 +185,7 @@ fn carte_localite(etat: &Etat, l: &Localite, r: &Referentiel) -> CarteLocalite {
         genre: l.genre.clone(),
         categorie: libelle_categorie(&l.categorie, r),
         tresorerie: l.tresorerie.into(),
-        salaires_jour: (salaires.pa > 0).then(|| salaires.into()),
+        salaires_jour: (salaires.pc > 0).then(|| salaires.into()),
         capitaux: l.capitaux.into(),
         recettes_en_attente: attente,
         absence,
@@ -224,8 +224,8 @@ pub fn alertes(etat: &Etat, r: &Referentiel) -> Vec<Alerte> {
             ));
         }
         let salaires = etat.salaires_localite(l.id);
-        if salaires.pa > 0 && !l.tresorerie.est_negatif() {
-            let jours = l.tresorerie.pa / salaires.pa;
+        if salaires.pc > 0 && !l.tresorerie.est_negatif() {
+            let jours = l.tresorerie.pc / salaires.pc;
             if jours < 7 {
                 v.push(alerte(
                     format!(
@@ -560,7 +560,7 @@ mod tests {
             c.executer(ev, &r).unwrap();
         }
         let t = tableau_de_bord(&mut c, &r);
-        assert_eq!(t.tresorerie_localites.pa, 1000);
+        assert_eq!(t.tresorerie_localites.pc, 10000);
         assert_eq!(t.comptes_personnages.texte, "50 po");
         assert_eq!(t.localites.len(), 1);
         assert_eq!(t.localites[0].presents, vec!["Seoni".to_string()]);

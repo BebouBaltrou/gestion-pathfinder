@@ -23,6 +23,8 @@ pub enum Evenement {
         id: IdPersonnage,
         vers: Option<IdLocalite>,
     },
+    /// Opération sur l'inventaire (objets, conteneurs, transferts).
+    Inventaire(inventaire::Commande),
     LocaliteCreee {
         id: IdLocalite,
         nom: String,

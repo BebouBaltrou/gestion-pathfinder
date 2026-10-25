@@ -1,0 +1,34 @@
+# Catalogue Core : armures, boucliers et suppléments. Transcrit par Antoine depuis son Manuel des joueurs.
+# Poids pour un personnage de taille M (note 1 du livre).
+#source=Manuel des joueurs, Table 6-6 : Armures et boucliers, p. 151 (page à vérifier)
+#type=armure
+#prefixe=armure
+#colonnes=nom|prix|bonus_ca|dex_max|malus_armure|echec_sorts|vitesse_9m|vitesse_6m|poids|note
+@categorie=Armures légères
+Armure matelassée|5 po|+1|+8|0|5%|9 m|6 m|5 kg|
+Armure de cuir|10 po|+2|+6|0|10%|9 m|6 m|7,5 kg|
+Armure de cuir cloutée|25 po|+3|+5|–1|15%|9 m|6 m|10 kg|
+Chemise de mailles|100 po|+4|+4|–2|20%|9 m|6 m|12,5 kg|
+@categorie=Armures intermédiaires
+Armure de peau|15 po|+4|+4|–3|20%|6 m|4,50 m|12,5 kg|
+Armure d’écailles|50 po|+5|+3|–4|25%|6 m|4,50 m|15 kg|
+Cotte de mailles|150 po|+6|+2|–5|30%|6 m|4,50 m|20 kg|
+Cuirasse|200 po|+6|+3|–4|25%|6 m|4,50 m|15 kg|
+@categorie=Armures lourdes
+Clibanion|200 po|+7|+0|–7|40%|6 m|4,50 m|22,5 kg|Course en armure lourde : vitesse ×3 au lieu de ×4 (note 2 du livre).
+Crevice|250 po|+7|+1|–6|35%|6 m|4,50 m|17,5 kg|Course en armure lourde : vitesse ×3 au lieu de ×4 (note 2 du livre).
+Armure de plaques|600 po|+8|+0|–7|40%|6 m|4,50 m|25 kg|Course en armure lourde : vitesse ×3 au lieu de ×4 (note 2 du livre).
+Harnois|1 500 po|+9|+1|–6|35%|6 m|4,50 m|25 kg|Course en armure lourde : vitesse ×3 au lieu de ×4 (note 2 du livre).
+@type_objet=bouclier
+@categorie=Boucliers
+Targe|5 po|+1|—|–1|5%|—|—|2,5 kg|
+Rondache en bois|3 po|+1|—|–1|5%|—|—|2,5 kg|
+Rondache en acier|9 po|+1|—|–1|5%|—|—|3 kg|
+Écu en bois|7 po|+2|—|–2|15%|—|—|5 kg|
+Écu en acier|20 po|+2|—|–2|15%|—|—|7,5 kg|
+Pavois|30 po|+4|+2|–10|50%|—|—|22,5 kg|Permet de se mettre à couvert (note 3 du livre).
+@type_objet=supplement-armure
+@categorie=Suppléments
+Gantelet d’armes|8 po|—|—|—|spécial|—|—|+2,5 kg|Impossible de lancer des sorts si les mains du magicien ne sont pas libres (note 4 du livre). Colonnes du livre : « — — spécial 4 — — » : à vérifier.
+Pointes pour armure|+50 po|—|—|—|—|—|—|+5 kg|Poids et prix en supplément de l'armure.
+Pointes pour bouclier|+10 po|—|—|—|—|—|—|+2,5 kg|Poids et prix en supplément du bouclier.
