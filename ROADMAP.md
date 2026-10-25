@@ -50,5 +50,5 @@ Le plan et l'état d'avancement sont dans `docs/PLAN_AVENTURE_COMBAT.md`.
 8. Gestion de l'identification d'objets magiques.
 9. Jet de récupération des munitions (bris à 50 %).
 
-Absents du catalogue du Manuel des joueurs du catalogue d'équipement (`data/core/`) parce que relevant de ces points :
+Absents du catalogue d'équipement (`data/core/`) parce que relevant de ces points :
 services, animaux, barde, moyens de transport, lancement de sorts.
