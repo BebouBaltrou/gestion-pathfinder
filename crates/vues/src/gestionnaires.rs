@@ -127,7 +127,7 @@ pub fn page_gestionnaires(c: &mut campagne::Campagne, r: &Referentiel) -> PageGe
     let mut payeuses: Vec<&Localite> = etat
         .localites
         .values()
-        .filter(|l| etat.salaires_localite(l.id).pa > 0)
+        .filter(|l| etat.salaires_localite(l.id).pc > 0)
         .collect();
     payeuses.sort_by_key(|l| l.nom.clone());
     let tous: Vec<Affectation> = etat
@@ -151,7 +151,7 @@ pub fn page_gestionnaires(c: &mut campagne::Campagne, r: &Referentiel) -> PageGe
                     tresorerie: l.tresorerie.into(),
                     negative: l.tresorerie.est_negatif(),
                     jours_d_avance: (!l.tresorerie.est_negatif())
-                        .then(|| l.tresorerie.pa / jour.pa),
+                        .then(|| l.tresorerie.pc / jour.pc),
                 }
             })
             .collect(),

@@ -1806,7 +1806,7 @@ pub fn apercu_fiche(f: &Fiche) -> Result<FicheVue, String> {
         (
             f.nom.clone(),
             Somme {
-                pa: 0,
+                pc: 0,
                 texte: String::new(),
             },
             None,

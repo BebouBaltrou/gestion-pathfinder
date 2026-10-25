@@ -30,7 +30,7 @@ import type {
   RegleInfo,
 } from "./fiche-types";
 
-export type Somme = { pa: number; texte: string };
+export type Somme = { pc: number; texte: string };
 export type Capitaux = { marchandises: number; influence: number; travail: number; magie: number };
 
 export type Entete = {
@@ -712,17 +712,20 @@ export const api = {
 
 // ------------------------------------------------------------------ montants
 
-/** « 1 052 po 3 pa » avec séparateur de milliers. */
-export function formaterPo(pa: number): string {
-  const signe = pa < 0 ? "−" : "";
-  const abs = Math.abs(pa);
-  const po = Math.trunc(abs / 10);
-  const reste = abs % 10;
-  const txtPo = po.toLocaleString("fr-FR");
-  if (po === 0 && reste === 0) return "0 po";
-  if (po === 0) return `${signe}${reste} pa`;
-  if (reste === 0) return `${signe}${txtPo} po`;
-  return `${signe}${txtPo} po ${reste} pa`;
+/** « 1 052 po 3 pa 4 pc » (montant en pièces de cuivre), séparateur de milliers. */
+export function formaterPo(pc: number): string {
+  const signe = pc < 0 ? "−" : "";
+  const abs = Math.abs(pc);
+  const po = Math.trunc(abs / 100);
+  const pa = Math.trunc((abs % 100) / 10);
+  const cuivre = abs % 10;
+  const morceaux = [
+    po > 0 ? `${po.toLocaleString("fr-FR")} po` : "",
+    pa > 0 ? `${pa} pa` : "",
+    cuivre > 0 ? `${cuivre} pc` : "",
+  ].filter(Boolean);
+  if (morceaux.length === 0) return "0 po";
+  return `${signe}${morceaux.join(" ")}`;
 }
 
 // ------------------------------------------------------------------ données d'exemple
@@ -778,8 +781,8 @@ function simule(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
       const t: TableauDeBord = {
         date: date(jourSimule),
         jour: jourSimule,
-        tresorerieLocalites: { pa: 12843, texte: "1284 po 3 pa" },
-        comptesPersonnages: { pa: 3120, texte: "312 po" },
+        tresorerieLocalites: { pc: 128430, texte: "1284 po 3 pa" },
+        comptesPersonnages: { pc: 31200, texte: "312 po" },
         capitaux: cap(16, 9, 14, 2),
         employes: 23,
         employesAVenir: 5,
@@ -787,13 +790,13 @@ function simule(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
         localites: [
           {
             id: 1, nom: "Sandpoint", genre: "ville", categorie: "Petite bourgade · limite 15/jour",
-            tresorerie: { pa: 10523, texte: "1052 po 3 pa" }, salairesJour: { pa: 20, texte: "2 po" },
+            tresorerie: { pc: 105230, texte: "1052 po 3 pa" }, salairesJour: { pc: 200, texte: "2 po" },
             capitaux: cap(12, 6, 9, 2), recettesEnAttente: jourSimule - 15, absence: null,
             batiments: 2, organisations: 1, employes: 18, presents: ["Seoni", "Valeros", "Kyra"], enRoute: [],
           },
           {
             id: 2, nom: "Magnimar", genre: "cité", categorie: "Grande cité · limite 60/jour",
-            tresorerie: { pa: 2320, texte: "232 po" }, salairesJour: null,
+            tresorerie: { pc: 23200, texte: "232 po" }, salairesJour: null,
             capitaux: cap(4, 3, 5, 0), recettesEnAttente: 0, absence: "Aucun PJ depuis 12 j — prochaine usure dans 2 j",
             batiments: 1, organisations: 0, employes: 5, presents: [], enRoute: ["3 Marchandises arrive le jour 27"],
           },
@@ -811,9 +814,9 @@ function simule(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
         ],
         prestige: [],
         personnages: [
-          { id: 1, nom: "Seoni", compte: { pa: 1450, texte: "145 po" }, lieu: "Sandpoint" },
-          { id: 2, nom: "Valeros", compte: { pa: 870, texte: "87 po" }, lieu: "Sandpoint" },
-          { id: 3, nom: "Kyra", compte: { pa: 800, texte: "80 po" }, lieu: "Sandpoint" },
+          { id: 1, nom: "Seoni", compte: { pc: 14500, texte: "145 po" }, lieu: "Sandpoint" },
+          { id: 2, nom: "Valeros", compte: { pc: 8700, texte: "87 po" }, lieu: "Sandpoint" },
+          { id: 3, nom: "Kyra", compte: { pc: 8000, texte: "80 po" }, lieu: "Sandpoint" },
         ],
       };
       return Promise.resolve(t);
@@ -821,7 +824,7 @@ function simule(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
     case "lire_montant": {
       const t = String(args?.texte ?? "").trim().replace(",", ".");
       const n = Number(t);
-      return Promise.resolve(t && !Number.isNaN(n) ? { pa: Math.round(n * 10), texte: formaterPo(Math.round(n * 10)) } : null);
+      return Promise.resolve(t && !Number.isNaN(n) ? { pc: Math.round(n * 100), texte: formaterPo(Math.round(n * 100)) } : null);
     }
     case "categorie_suggeree":
       return Promise.resolve(Number(String(args?.population ?? "").replace(/\s/g, "")) > 0 ? CATEGORIES_EXEMPLE[1] : null);
@@ -834,21 +837,21 @@ function simule(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
         localites: [
           {
             id: 1, nom: "Sandpoint", genre: "ville", population: 1240, categorie: "Petite bourgade · limite 15/jour",
-            personnalisee: false, tresorerie: { pa: 10523, texte: "1052 po 3 pa" },
+            personnalisee: false, tresorerie: { pc: 105230, texte: "1052 po 3 pa" },
             capitaux: { marchandises: 12, influence: 6, travail: 9, magie: 2 },
             transferts: ["3 Marchandises part vers Magnimar — arrivée le jour 27 (astredi 17 Rova 4712 AR)"],
             notes: "Port de pêche de la Côte perdue.", saisie: { ...saisie("Sandpoint", "petite-bourgade"), population: "1240" },
           },
           {
             id: 2, nom: "Magnimar", genre: "cité", population: null, categorie: "Grande cité · limite 60/jour",
-            personnalisee: false, tresorerie: { pa: 2320, texte: "232 po" },
+            personnalisee: false, tresorerie: { pc: 23200, texte: "232 po" },
             capitaux: { marchandises: 4, influence: 3, travail: 5, magie: 0 },
             transferts: ["3 Marchandises arrive de Sandpoint — arrivée le jour 27 (astredi 17 Rova 4712 AR)"],
             notes: "", saisie: saisie("Magnimar", "grande-cite"),
           },
           {
             id: 3, nom: "Tour de Thistletop", genre: "lieu-dit", population: null, categorie: "Avant-poste (personnalisée) · limite 2/jour",
-            personnalisee: true, tresorerie: { pa: -40, texte: "-4 po" },
+            personnalisee: true, tresorerie: { pc: -400, texte: "-4 po" },
             capitaux: { marchandises: 0, influence: 0, travail: 1, magie: 0 },
             transferts: [], notes: "",
             saisie: { ...saisie("Tour de Thistletop", ""), officielle: false, categoriePersoNom: "Avant-poste", categoriePersoLimite: "2" },
@@ -877,14 +880,14 @@ function simule(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
     }
     case "page_personnages":
       return Promise.resolve({
-        personnages: [{ id: 1, nom: "Lyra", compte: { pa: 1000, texte: "100 po" }, localite: 1, lieu: "Sandpoint", prestige: 4 }],
+        personnages: [{ id: 1, nom: "Lyra", compte: { pc: 10000, texte: "100 po" }, localite: 1, lieu: "Sandpoint", prestige: 4 }],
         localites: [{ id: 1, libelle: "Sandpoint" }],
       });
     case "liste_personnages":
       return Promise.resolve([
-        { id: 1, nom: "Lyra", compte: { pa: 1000, texte: "100 po" }, lieu: "Sandpoint", prestige: 4, prestigeCalcule: true,
+        { id: 1, nom: "Lyra", compte: { pc: 10000, texte: "100 po" }, lieu: "Sandpoint", prestige: 4, prestigeCalcule: true,
           fiche: { race: "Elfe", classes: "Ensorceleur 1", niveau: 1, pv: 7, ca: 13, xp: 0, niveauAtteignable: 1, niveauxEnAttente: 0 } },
-        { id: 2, nom: "Valeros", compte: { pa: 870, texte: "87 po" }, lieu: null, prestige: null, prestigeCalcule: false, fiche: null },
+        { id: 2, nom: "Valeros", compte: { pc: 8700, texte: "87 po" }, lieu: null, prestige: null, prestigeCalcule: false, fiche: null },
       ]);
     case "fiche_personnage":
       return args?.id === 1 ? fetch("mock/fiche.json").then((r) => r.json()) : Promise.resolve(null);

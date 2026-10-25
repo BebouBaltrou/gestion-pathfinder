@@ -65,7 +65,7 @@ export async function autotest(): Promise<void> {
     const id = pl?.localites[0]?.id ?? 0;
     verifier((await api.ajustement(id, "12,5", { marchandises: 2, influence: 0, travail: 0, magie: 0 },
       { marchandises: 0, influence: 0, travail: 0, magie: 0 }, "autotest")).ok, "ajustement de la localité");
-    verifier((await api.pageLocalites())?.localites[0]?.tresorerie.pa === 125, "trésorerie après ajustement");
+    verifier((await api.pageLocalites())?.localites[0]?.tresorerie.pc === 1250, "trésorerie après ajustement");
     verifier(!(await api.mouvementPo(true, 1, id, "abc")).ok, "montant illisible refusé");
     verifier(
       (await api.creerBatiment({
@@ -189,7 +189,7 @@ export async function autotest(): Promise<void> {
     verifier((await api.combatXp(["99"], 1).then(() => false, () => true)), "FP inconnu refusé");
     verifier((await api.catalogueRegles()).some((r) => r.id === "degats_massifs" && r.source.includes("189")), "registre des règles optionnelles");
     const xpAvant = (await api.listePersonnages())[0].fiche?.xp ?? 0;
-    const poAvant = (await api.listePersonnages())[0].compte.pa;
+    const poAvant = (await api.listePersonnages())[0].compte.pc;
     const potion = {
       nom: "Potion de soins légers",
       genre: "potion" as const,
@@ -216,7 +216,7 @@ export async function autotest(): Promise<void> {
     verifier((await api.etatApp()).combatEnCours === false, "campagne déverrouillée");
     const fiche1 = (await api.listePersonnages())[0];
     verifier((fiche1.fiche?.xp ?? 0) === xpAvant + 300, "XP reportés sur la fiche");
-    verifier(fiche1.compte.pa === poAvant + 50, "or ajouté au compte du personnage");
+    verifier(fiche1.compte.pc === poAvant + 500, "or ajouté au compte du personnage");
     verifier((await api.aventureVue()).personnages[0].inventaire.some((o) => o.nom === "Potion de soins légers" && o.quantite === 2), "objet ajouté à l'inventaire");
     const histo = await api.combatHistorique();
     verifier(histo.combats.length === 1 && histo.combats[0].rounds === 1 && histo.statistiques[0].degatsInfliges === 11, "historique et statistiques du combat");

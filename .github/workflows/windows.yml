@@ -23,32 +23,10 @@ jobs:
       - name: Formatage
         run: |
           cargo fmt --all -- --check
-          rustfmt --check --edition 2021 app/src/main.rs
       - name: Analyse (clippy)
         run: outils/ci/annoter.sh cargo clippy --workspace --all-targets --all-features -- -D warnings
       - name: Tests (avec la sauvegarde JSON)
         run: outils/ci/annoter.sh cargo test --workspace --all-features
-
-  windows:
-    name: Application Windows
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v5
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
-        with:
-          workspaces: |
-            . -> target
-            app -> target
-      - name: Compilation de l'application
-        shell: bash
-        run: outils/ci/annoter.sh cargo build --release --manifest-path app/Cargo.toml
-      - name: Exécutable
-        uses: actions/upload-artifact@v4
-        with:
-          name: gestion-pathfinder-windows
-          path: app/target/release/gestion-pathfinder.exe
-          if-no-files-found: error
 
   bureau-windows:
     name: Nouvelle application — Windows

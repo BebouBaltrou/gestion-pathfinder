@@ -116,7 +116,7 @@ export function Personnages({ outils }: { outils: Outils }) {
             <div className="carte vide">
               <h2>{pj.nom}</h2>
               <p>
-                Compte : {formaterPo(pj.compte.pa)}
+                Compte : {formaterPo(pj.compte.pc)}
                 {pj.lieu ? ` · à ${pj.lieu}` : ""}. Ce personnage n'a pas encore de fiche.
               </p>
               <button className="bouton principal" onClick={() => setCreation(true)}>Créer la fiche</button>

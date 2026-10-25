@@ -116,7 +116,7 @@ pub fn deplacement(id: u32, vers: Option<u32>) -> Evenement {
 pub fn ajustement_compte(pj: u32, delta: &str, motif: &str) -> Result<Evenement, String> {
     let delta = Montant::depuis_texte(delta)
         .ok_or("Montant illisible : écrivez par exemple -25, 12,5 ou 4 po 7 pa")?;
-    if delta.pa == 0 {
+    if delta.pc == 0 {
         return Err("Le montant ne doit pas être nul".into());
     }
     if motif.trim().is_empty() {
@@ -157,7 +157,7 @@ mod tests {
         let p = page_personnages(&mut c, &r);
         let f = &p.personnages[0];
         assert_eq!(f.nom, "Seoni la mage");
-        assert_eq!(f.compte.pa, -25);
+        assert_eq!(f.compte.pc, -250);
         assert_eq!(f.lieu, "Sandpoint");
         assert_eq!(f.prestige, None);
         assert_eq!(p.localites.len(), 1);

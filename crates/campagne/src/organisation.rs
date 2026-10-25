@@ -152,7 +152,7 @@ impl Etat {
         } else {
             1
         };
-        Montant::pa(g.salaire.pa * n)
+        Montant::pc(g.salaire.pc * n)
     }
 
     /// Total des salaires prélevés chaque jour sur la trésorerie d'une localité.
@@ -376,7 +376,7 @@ impl Etat {
                 if prix.est_negatif() {
                     return Err(Erreur::MontantNonPositif);
                 }
-                if prix.pa > 0 {
+                if prix.pc > 0 {
                     self.debiter(payeur.unwrap_or(Payeur::Localite(e.localite)), prix)?;
                 }
                 self.equipe_mut(*equipe)?.statut = StatutEquipe::Recrutee;
@@ -450,7 +450,7 @@ impl Etat {
                 if prix.est_negatif() {
                     return Err(Erreur::MontantNonPositif);
                 }
-                if prix.pa > 0 {
+                if prix.pc > 0 {
                     self.debiter(*payeur, *prix)?;
                 }
                 let m = self.equipe_mut(*equipe)?;
@@ -620,7 +620,7 @@ impl Etat {
             .gestionnaires
             .values()
             .map(|g| (g.localite, self.salaire_quotidien(g)))
-            .filter(|(_, m)| m.pa > 0)
+            .filter(|(_, m)| m.pc > 0)
             .collect();
         for (l, m) in dus {
             if let Some(loc) = self.localites.get_mut(&l) {

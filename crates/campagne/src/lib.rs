@@ -292,6 +292,7 @@ impl Campagne {
                 nom,
             } => format!("{} recrute le partisan {nom} (niveau {niveau})", pj(maitre)),
             PartisanRetire { maitre, .. } => format!("{} retire un partisan", pj(maitre)),
+            Inventaire(_) => "Opération sur l'inventaire".to_string(),
             PersonnageDeplace { id, vers } => match vers {
                 Some(l) => format!("{} se rend à {}", pj(id), lo(l)),
                 None => format!("{} quitte toute localité", pj(id)),
@@ -335,7 +336,7 @@ impl Campagne {
                 motif,
             } => {
                 let mut parts = Vec::new();
-                if delta_po.pa != 0 {
+                if delta_po.pc != 0 {
                     parts.push(format!("{delta_po}"));
                 }
                 if ajout.unites() > 0 {
@@ -847,6 +848,49 @@ mod tests {
         )
         .unwrap();
         assert!(c.etat(&r).localite(a).unwrap().tresorerie.est_negatif());
+    }
+
+    #[test]
+    fn inventaire_annulable_et_rejouable() {
+        use inventaire::{Commande, Conteneur, Modele, Poids, Proprietaire};
+        let (mut c, r, _pj, _a, _) = base();
+        let modele = Modele {
+            id: "epee".into(),
+            nom: "Épée".into(),
+            type_objet: "arme".into(),
+            valeur: Some(Montant::po(15)),
+            poids: Some(Poids(150)),
+            source: "saisie libre".into(),
+            proprietes: Default::default(),
+        };
+        let conteneur = Conteneur {
+            capacite: None,
+            types_autorises: None,
+            contenu_compte: true,
+        };
+        let proprietaire = Proprietaire {
+            type_id: "personnage".into(),
+            ref_id: "1".into(),
+        };
+        for commande in [
+            Commande::AjouterModele(modele),
+            Commande::CreerInventaire {
+                proprietaire,
+                conteneur,
+            },
+            Commande::Ajouter {
+                modele: "epee".into(),
+                quantite: 1,
+                dans: 1,
+            },
+        ] {
+            c.executer(Evenement::Inventaire(commande), &r).unwrap();
+        }
+        assert_eq!(c.etat(&r).inventaire.poids_total(1), Poids(150));
+        c.annuler();
+        assert!(c.etat(&r).inventaire.exemplaire(2).is_err());
+        c.retablir();
+        assert_eq!(c.etat(&r).inventaire.poids_total(1), Poids(150));
     }
 
     #[test]

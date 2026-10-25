@@ -35,3 +35,20 @@ Le plan et l'état d'avancement sont dans `docs/PLAN_AVENTURE_COMBAT.md`.
 - Export du combat (journal rejouable), règles optionnelles de combat (initiative variable, critiques optionnels…).
 - Disposition des panneaux enregistrable et réorganisable, accessibilité complète (navigation clavier à parcourir
   partout, tailles ajustables).
+
+## Hors périmètre v1 de l'inventaire
+
+À faire plus tard, sans être implémenté en v1 (décision d'Antoine, 25/10/2026) :
+
+1. Inventaire des montures (capacité de charge, sacoches, barde, effet du poids sur la vitesse).
+2. Véhicules (soutes, passagers, équipage, vitesse, entretien).
+3. Durabilité et réparation d'objets.
+4. Marchands, boutiques, taux de vente régionaux.
+5. Fabrication d'objets magiques détaillée (liée à l'intermède).
+6. Silhouettes personnalisées par race ou taille.
+7. Icônes et images d'objets personnalisées.
+8. Gestion de l'identification d'objets magiques.
+9. Jet de récupération des munitions (bris à 50 %).
+
+Absents du catalogue du Manuel des joueurs (`data/catalogue/core/`) parce que relevant de ces points :
+services, animaux, barde, moyens de transport, lancement de sorts.

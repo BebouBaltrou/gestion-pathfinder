@@ -49,7 +49,7 @@ export function FicheComplete(p: Props) {
             {id.lignage ? ` · lignage ${id.lignage.toLowerCase()}` : ""} · niveau {id.niveau}
           </p>
           <p className="doux">
-            Compte : {formaterPo(id.compte.pa)}
+            Compte : {formaterPo(id.compte.pc)}
             {id.prestige !== null && (
               <>
                 {" "}· Prestige {id.prestige}

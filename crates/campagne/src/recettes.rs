@@ -469,7 +469,7 @@ impl Etat {
             .map(|s| s.range(du..=au).count() as u32)
             .unwrap_or(0);
         let tranches = jours_absents / 7;
-        let po_net = Montant::pa((po_brut.pa - tranches as i64 * 70).max(0));
+        let po_net = Montant::pc((po_brut.pc - tranches as i64 * 700).max(0));
         let mut capitaux_nets = capitaux_bruts;
         for t in TypeCapital::TOUS {
             let v = capitaux_nets.get_mut(t);
@@ -536,7 +536,7 @@ impl Etat {
         // les recettes en po arrivent avant le paiement des capitaux produits
         let l = self.localite_mut(*localite)?;
         l.tresorerie = l.tresorerie + bilan.po_net;
-        if bilan.cout_conserves.pa > 0 {
+        if bilan.cout_conserves.pc > 0 {
             self.debiter(
                 payeur.unwrap_or(Payeur::Localite(*localite)),
                 bilan.cout_conserves,
@@ -803,7 +803,7 @@ mod tests {
         let d = demande(&m, 15, Ressource::Po, vec![None; 15]);
         let bilan = m.etat().calculer_recettes(&d, &m.r).unwrap();
         assert_eq!(bilan.tranches_absence, 2);
-        assert_eq!(bilan.po_net, Montant::pa((bilan.po_brut.pa - 140).max(0)));
+        assert_eq!(bilan.po_net, Montant::pc((bilan.po_brut.pc - 1400).max(0)));
     }
 
     #[test]

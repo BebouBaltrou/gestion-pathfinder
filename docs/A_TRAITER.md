@@ -105,3 +105,28 @@ fiches, compatibilité des sauvegardes.
 - **Armes et objets** : « mains nues » et « masse » à confirmer ; Bottes elfiques = Acrobaties dans le livre français à confirmer ; type du bonus de forme bestiale (taille) à confirmer.
 - **Importation PDF** : domaines, divinité, alignement et pacte de nature ne sont pas lus (fonctionnalité en développement).
 - **Autres classes du créateur de fiche** : toutes les classes restantes sont à implémenter (seuls Ensorceleur, Prêtre et Druide existent).
+
+## Inventaire et équipement : empilement des bonus (25/10/2026)
+
+Règles données par Antoine, à appliquer par le moteur d'effets (`crates/fiches/src/effet.rs`) :
+
+1. Deux bonus du même type ne s'additionnent pas : on retient le plus élevé.
+2. Les bonus sans type s'additionnent toujours.
+3. Les bonus d'esquive s'additionnent entre eux.
+4. Les pénalités de même type ne s'additionnent pas.
+5. Distinguer « armure », « armure magique » (bonus d'altération) et « armure naturelle ».
+
+**À confirmer** (pages du Manuel des joueurs à citer) :
+
+- Le moteur actuel garde tous les malus (« les malus se cumulent toujours ») : cela contredit la règle 4.
+  Il n'a pas été modifié en attendant la réponse d'Antoine.
+- Le moteur actuel cumule aussi les bonus de circonstance (comme `POINTS_A_CONFIRMER_FICHES.md` n° 29) ;
+  la règle 1 d'Antoine ne les cite pas parmi les exceptions.
+- « qi » augmente la CA : ce type n'existe pas dans `TypeBonus` ; règle exacte et page à fournir.
+
+## Monnaie (25/10/2026)
+
+`Montant` compte en pièces de cuivre (1 pa = 10 pc, 1 po = 100 pc, 1 pp = 1 000 pc), pour que les prix du
+Manuel des joueurs (une bougie : 1 pc) soient exacts, sans arrondi. Format de fichier 3 ; l'ancien format
+(`{"pa": n}`) est converti à la lecture. La vente à moitié prix garde l'arrondi à la pièce d'argent d'avant
+(`ventes.rs`) : à confirmer si Antoine préfère la moitié exacte en pc.

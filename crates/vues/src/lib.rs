@@ -36,14 +36,14 @@ pub mod page {
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize))]
 pub struct Somme {
-    pub pa: i64,
+    pub pc: i64,
     pub texte: String,
 }
 
 impl From<Montant> for Somme {
     fn from(m: Montant) -> Self {
         Somme {
-            pa: m.pa,
+            pc: m.pc,
             texte: m.to_string(),
         }
     }

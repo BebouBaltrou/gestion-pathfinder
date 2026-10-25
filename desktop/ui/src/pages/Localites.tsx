@@ -80,7 +80,7 @@ export function Localites({ outils }: { outils: Outils }) {
               }}
             >
               <span className="nom">{l.nom}</span>
-              <span className={"montant" + (l.tresorerie.pa < 0 ? " negatif" : "")}>{formaterPo(l.tresorerie.pa)}</span>
+              <span className={"montant" + (l.tresorerie.pc < 0 ? " negatif" : "")}>{formaterPo(l.tresorerie.pc)}</span>
               <span className="doux">{l.genre || l.categorie.split(" · ")[0]}</span>
             </button>
           ))}
@@ -160,7 +160,7 @@ function Detail({ l, p, outils }: { l: FicheLocalite; p: PageLocalites; outils: 
         <div className="ligne">
           <div className="tresor">
             <span className="etiquette">Trésorerie</span>
-            <span className={"montant" + (l.tresorerie.pa < 0 ? " negatif" : "")}>{formaterPo(l.tresorerie.pa)}</span>
+            <span className={"montant" + (l.tresorerie.pc < 0 ? " negatif" : "")}>{formaterPo(l.tresorerie.pc)}</span>
           </div>
           <BlocCapitaux c={l.capitaux} />
         </div>
@@ -383,7 +383,7 @@ export function ChampMontant(props: { id: string; valeur: string; changer: (v: s
         onChange={(e) => props.changer(e.target.value)}
       />
       <span className={"lecture" + (illisible ? " invalide" : "")}>
-        {illisible ? "montant illisible" : lu ? `= ${formaterPo(lu.pa)}` : ""}
+        {illisible ? "montant illisible" : lu ? `= ${formaterPo(lu.pc)}` : ""}
       </span>
     </span>
   );
