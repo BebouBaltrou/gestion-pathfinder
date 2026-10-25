@@ -103,7 +103,7 @@ export function FicheComplete(p: Props) {
       </div>
 
       {onglet === "combat" && <Combat f={f} />}
-      {onglet === "competences" && <Competences f={f} />}
+      {onglet === "competences" && <Competences f={f} agir={agir} />}
       {onglet === "dons" && <Dons f={f} />}
       {onglet === "sorts" && <Sorts f={f} agir={agir} />}
       {onglet === "equipement" && <Equipement f={f} agir={agir} />}
@@ -174,13 +174,49 @@ function Combat({ f }: { f: FicheVue }) {
 
 // ------------------------------------------------------------------ compétences
 
-function Competences({ f }: { f: FicheVue }) {
+function Competences({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => void }) {
   const [tout, setTout] = useState(false);
+  const [edition, setEdition] = useState<Record<string, number> | null>(null);
   const [ouverte, setOuverte] = useState<string | null>(null);
   const liste = f.competences.filter((c) => tout || c.rangs > 0 || c.deClasse);
   const bilan = f.rangsParNiveau;
+  const dispo = bilan.reduce((t, [, , d]) => t + d, 0);
+  if (edition) {
+    const total = Object.values(edition).reduce((t, v) => t + v, 0);
+    const niveau = bilan.length;
+    const valide = total <= dispo && Object.values(edition).every((v) => v <= niveau);
+    return (
+      <div className="section">
+        <p>
+          Rangs placés : <strong>{total}</strong> / {dispo} disponibles (maximum {niveau} par compétence)
+        </p>
+        <table className="tableau">
+          <thead><tr><th>Compétence</th><th>Rangs</th></tr></thead>
+          <tbody>
+            {f.competences.map((c) => (
+              <tr key={c.cle}>
+                <td>{c.nom}</td>
+                <td>
+                  <input type="number" min={0} max={niveau} value={edition[c.cle] ?? 0}
+                    onChange={(e) => setEdition({ ...edition, [c.cle]: Math.max(0, Number(e.target.value) || 0) })} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <button className="bouton principal" disabled={!valide}
+          onClick={() => { agir({ RangsReattribuesGlobal: { rangs: edition } }); setEdition(null); }}>
+          Valider
+        </button>{" "}
+        <button className="bouton" onClick={() => setEdition(null)}>Annuler</button>
+      </div>
+    );
+  }
   return (
     <div className="section">
+      <button className="bouton" onClick={() => setEdition(Object.fromEntries(f.competences.map((c) => [c.cle, c.rangs])))}>
+        Réattribuer les rangs
+      </button>
       <label className="case">
         <input type="checkbox" checked={tout} onChange={(e) => setTout(e.target.checked)} /> Montrer toutes les compétences
       </label>

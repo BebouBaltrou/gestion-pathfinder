@@ -78,6 +78,11 @@ pub enum EvenementFiche {
         niveau: u32,
         rangs: std::collections::BTreeMap<String, u32>,
     },
+    /// Rangs réattribués globalement : total voulu par compétence, réparti automatiquement
+    /// sur les niveaux selon les rangs disponibles à chacun.
+    RangsReattribuesGlobal {
+        rangs: std::collections::BTreeMap<String, u32>,
+    },
 }
 
 impl EvenementFiche {
@@ -125,6 +130,9 @@ impl EvenementFiche {
             }
             EvenementFiche::DommagesCaracteristique { carac, delta } => {
                 format!("Caractéristique récupérée : {} +{}", carac.abrege(), -delta)
+            }
+            EvenementFiche::RangsReattribuesGlobal { .. } => {
+                "Rangs de compétence réattribués (tous niveaux)".to_string()
             }
             EvenementFiche::RangsReattribues { niveau, .. } => {
                 format!("Rangs de compétence réattribués (niveau {niveau})")
@@ -463,6 +471,53 @@ impl Journal {
                         fiche.sorts_connus[pos] = nouveau.clone();
                     }
                 }
+                EvenementFiche::RangsReattribuesGlobal { rangs } => {
+                    for n in &mut fiche.niveaux {
+                        n.rangs.clear();
+                    }
+                    let budgets: Vec<u32> = match fiche.calculer(r) {
+                        Ok(v) => v.rangs.iter().map(|b| b.disponibles).collect(),
+                        Err(p) => {
+                            return Err(ErreurJournal::Rangs {
+                                evenement: i,
+                                raison: p.to_string(),
+                            })
+                        }
+                    };
+                    let total: u32 = rangs.values().sum();
+                    if total > budgets.iter().sum::<u32>() {
+                        return Err(ErreurJournal::Rangs {
+                            evenement: i,
+                            raison: format!(
+                                "{total} rangs demandés pour {} disponibles",
+                                budgets.iter().sum::<u32>()
+                            ),
+                        });
+                    }
+                    // remplissage du premier niveau qui a encore de la place
+                    let mut restants = budgets;
+                    for (c, v) in rangs.iter().filter(|(_, v)| **v > 0) {
+                        for _ in 0..*v {
+                            if let Some(k) = restants.iter().position(|b| *b > 0) {
+                                restants[k] -= 1;
+                                *fiche.niveaux[k].rangs.entry(c.clone()).or_default() += 1;
+                            }
+                        }
+                    }
+                    if let Some(p) = fiche.valider(r).into_iter().find(|p| {
+                        matches!(
+                            p,
+                            Probleme::RangsDepasses { .. }
+                                | Probleme::RangAuDessusDuNiveau { .. }
+                                | Probleme::CompetenceInconnue(_)
+                        )
+                    }) {
+                        return Err(ErreurJournal::Rangs {
+                            evenement: i,
+                            raison: p.to_string(),
+                        });
+                    }
+                }
                 EvenementFiche::RangsReattribues { niveau, rangs } => {
                     let Some(pris) = (*niveau as usize)
                         .checked_sub(1)
@@ -580,6 +635,27 @@ mod tests {
         let avant = j.clone();
         j.ajouter(rangs(&[("bluff", 1)]), &r, &regles).unwrap();
         assert!(j.annuler_dernier().is_some());
+        assert_eq!(j, avant);
+    }
+
+    #[test]
+    fn rangs_reattribues_globalement() {
+        let r = Referentiel::core();
+        let regles = ReglesFiche::default();
+        let mut j = journal();
+        let global = |l: &[(&str, u32)]| EvenementFiche::RangsReattribuesGlobal {
+            rangs: l.iter().map(|(c, v)| (c.to_string(), *v)).collect(),
+        };
+        j.ajouter(global(&[("bluff", 1), ("perception", 1)]), &r, &regles)
+            .unwrap();
+        let e = j.etat(&r, &regles).unwrap();
+        assert_eq!(e.fiche.niveaux[0].rangs.values().sum::<u32>(), 2);
+        // trop de rangs, rang au-dessus du niveau, compétence inconnue : refusés
+        let avant = j.clone();
+        let quatre = [("bluff", 1), ("perception", 1), ("climb", 1), ("swim", 1)];
+        assert!(j.ajouter(global(&quatre), &r, &regles).is_err());
+        assert!(j.ajouter(global(&[("bluff", 2)]), &r, &regles).is_err());
+        assert!(j.ajouter(global(&[("inconnue", 1)]), &r, &regles).is_err());
         assert_eq!(j, avant);
     }
 
