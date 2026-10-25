@@ -186,6 +186,9 @@ pub struct Etat {
     pub jours_absents: BTreeMap<IdLocalite, std::collections::BTreeSet<u32>>,
     /// Dernier jour dont les recettes ont été perçues, par localité.
     pub derniere_recette: BTreeMap<IdLocalite, u32>,
+    /// Premier jour de production de chaque unité (construite, achetée, recrutée…) : pas de
+    /// recette pour les jours qui la précèdent.
+    pub debut_production: BTreeMap<CleUnite, u32>,
     /// Dernière affectation de chaque unité, pour la reproposer.
     pub repartitions: BTreeMap<CleUnite, Vec<(domaine::Ressource, u32)>>,
     /// Réglage personnalisé : pas d'usure dans une localité qui a un gestionnaire payé.
@@ -334,8 +337,53 @@ impl Etat {
     ) -> Result<Vec<Consequence>, Erreur> {
         let mut copie = self.clone();
         let c = copie.appliquer_sur_place(ev, r)?;
+        copie.marquer_debuts(self);
         *self = copie;
         Ok(c)
+    }
+
+    /// Unités qui produisent (ou produiraient avec l'option) et leur localité. Une délocalisation
+    /// en voyage ne compte pas : la production reprend à l'arrivée.
+    fn unites_candidates(&self) -> BTreeMap<CleUnite, IdLocalite> {
+        let salles = self.salles.values().filter_map(|s| {
+            let produit = match &s.statut {
+                StatutSalle::Construite => true,
+                StatutSalle::EnTravaux(c) => {
+                    matches!(c.nature, NatureChantier::Amelioration { .. })
+                }
+                StatutSalle::AConstruire => false,
+            };
+            let l = self.batiments.get(&s.batiment)?.localite;
+            produit.then_some((CleUnite::Salle(s.id), l))
+        });
+        let equipes = self.equipes.values().filter_map(|e| {
+            let produit = match &e.statut {
+                StatutEquipe::Recrutee => true,
+                StatutEquipe::EnDelocalisation(d) => !d.en_voyage(),
+                StatutEquipe::EnRecrutement(c) => {
+                    matches!(c.nature, NatureChantier::Amelioration { .. })
+                }
+                StatutEquipe::ARecruter => false,
+            };
+            produit.then_some((CleUnite::Equipe(e.id), e.localite))
+        });
+        salles.chain(equipes).collect()
+    }
+
+    /// Enregistre le premier jour de production d'une unité qui devient productrice : le jour
+    /// suivant la construction ou l'achat. Si la localité n'avait encore aucune unité productrice,
+    /// ses recettes en attente commencent à ce jour-là (pas avant la construction ou l'achat).
+    fn marquer_debuts(&mut self, avant: &Etat) {
+        let anciennes = avant.unites_candidates();
+        for (cle, l) in self.unites_candidates() {
+            if anciennes.contains_key(&cle) {
+                continue;
+            }
+            if !anciennes.values().any(|x| *x == l) && !self.derniere_recette.contains_key(&l) {
+                self.derniere_recette.insert(l, self.jour);
+            }
+            self.debut_production.insert(cle, self.jour + 1);
+        }
     }
 
     pub(crate) fn appliquer_sur_place(
