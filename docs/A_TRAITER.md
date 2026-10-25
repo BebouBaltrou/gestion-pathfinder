@@ -106,27 +106,19 @@ fiches, compatibilité des sauvegardes.
 - **Importation PDF** : domaines, divinité, alignement et pacte de nature ne sont pas lus (fonctionnalité en développement).
 - **Autres classes du créateur de fiche** : toutes les classes restantes sont à implémenter (seuls Ensorceleur, Prêtre et Druide existent).
 
-## Inventaire et équipement : empilement des bonus (25/10/2026)
-
-Règles données par Antoine, à appliquer par le moteur d'effets (`crates/fiches/src/effet.rs`) :
-
-1. Deux bonus du même type ne s'additionnent pas : on retient le plus élevé.
-2. Les bonus sans type s'additionnent toujours.
-3. Les bonus d'esquive s'additionnent entre eux.
-4. Les pénalités de même type ne s'additionnent pas.
-5. Distinguer « armure », « armure magique » (bonus d'altération) et « armure naturelle ».
-
-**À confirmer** (pages du Manuel des joueurs à citer) :
-
-- Le moteur actuel garde tous les malus (« les malus se cumulent toujours ») : cela contredit la règle 4.
-  Il n'a pas été modifié en attendant la réponse d'Antoine.
-- Le moteur actuel cumule aussi les bonus de circonstance (comme `POINTS_A_CONFIRMER_FICHES.md` n° 29) ;
-  la règle 1 d'Antoine ne les cite pas parmi les exceptions.
-- « qi » augmente la CA : ce type n'existe pas dans `TypeBonus` ; règle exacte et page à fournir.
-
 ## Monnaie (25/10/2026)
 
 `Montant` compte en pièces de cuivre (1 pa = 10 pc, 1 po = 100 pc, 1 pp = 1 000 pc), pour que les prix du
 Manuel des joueurs (une bougie : 1 pc) soient exacts, sans arrondi. Format de fichier 3 ; l'ancien format
 (`{"pa": n}`) est converti à la lecture. La vente à moitié prix garde l'arrondi à la pièce d'argent d'avant
 (`ventes.rs`) : à confirmer si Antoine préfère la moitié exacte en pc.
+
+## Inventaire et équipement : empilement des bonus (décidé par Antoine, 25/10/2026)
+
+Le moteur d'effets existant (`crates/fiches/src/effet.rs`) est conservé tel quel :
+
+1. Deux bonus du même type ne s'additionnent pas : on retient le plus élevé.
+2. Les bonus d'esquive, de circonstance et sans type s'additionnent.
+3. Les malus s'additionnent toujours. Antoine avait proposé que deux pénalités de même type ne
+   s'additionnent pas, puis a répondu « si tout fonctionne, inutile de changer » : le moteur actuel reste.
+4. Distinguer « armure » (type armure), « armure magique » (altération) et « armure naturelle » (naturel).
