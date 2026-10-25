@@ -325,7 +325,7 @@ pub fn chronologie(c: &mut Campagne, r: &Referentiel, filtre: &FiltreChrono) -> 
         .split_whitespace()
         .map(str::to_string)
         .collect();
-    lignes.sort_by(|a, b| b.0.cmp(&a.0));
+    lignes.sort_by_key(|l| std::cmp::Reverse(l.0));
     lignes
         .into_iter()
         .map(|(_, l)| l)
