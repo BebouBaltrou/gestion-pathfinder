@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Outils } from "../App";
 import { api } from "../api";
 import type { CommandeInventaire, ObjetVue, PageInventaire } from "../inventaire-types";
@@ -7,6 +7,7 @@ import { AjoutRapide } from "./inventaire/AjoutRapide";
 import { Equipement } from "./inventaire/Equipement";
 import { FicheObjet, type Contenant } from "./inventaire/FicheObjet";
 import { ListeObjets } from "./inventaire/ListeObjets";
+import { prendreDemande } from "../lien-interne";
 
 /** Inventaire et équipement des personnages : conteneurs, objets, poids, vue « RPG » de l'équipement. */
 export function Inventaire({ outils }: { outils: Outils }) {
@@ -17,6 +18,7 @@ export function Inventaire({ outils }: { outils: Outils }) {
   const [selection, setSelection] = useState<number | null>(null);
   const [glisse, setGlisse] = useState<ObjetVue | null>(null);
   const [cible, setCible] = useState(0);
+  const aSelectionner = useRef<number | null>(null);
 
   useEffect(() => {
     api.pageInventaire().then(setPage, () => setPage(null));
@@ -29,9 +31,27 @@ export function Inventaire({ outils }: { outils: Outils }) {
 
   useEffect(() => {
     setConteneur(null);
-    setSelection(null);
+    setSelection(aSelectionner.current);
+    aSelectionner.current = null;
     setCible(inventaire?.racine ?? 0);
   }, [inventaire?.racine]);
+
+  // Un objet cité dans une note s'ouvre à l'arrivée sur la page.
+  useEffect(() => {
+    if (!page) return;
+    const cibleLien = prendreDemande("objet");
+    if (cibleLien === null) return;
+    const id = Number(cibleLien);
+    const inv = page.inventaires.find((i) => i.objets.some((o) => o.id === id));
+    if (!inv) return;
+    setMode("inventaire");
+    if (inv.racine === inventaire?.racine) {
+      setSelection(id);
+    } else {
+      aSelectionner.current = id;
+      setRacine(inv.racine);
+    }
+  }, [page]);
 
   const cmd = (c: CommandeInventaire, message: string) => {
     outils.agir(api.inventaireCommande(c, message));
@@ -153,7 +173,7 @@ export function Inventaire({ outils }: { outils: Outils }) {
               </div>
 
               {choisi ? (
-                <FicheObjet objet={choisi} objets={objets} racine={inventaire.racine} emplacements={page.emplacements} cmd={cmd} />
+                <FicheObjet objet={choisi} objets={objets} racine={inventaire.racine} emplacements={page.emplacements} cmd={cmd} onNote={(id, note) => outils.agir(api.noterObjet(id, note))} />
               ) : (
                 <aside className="fiche-objet vide">
                   <p className="doux">Choisissez un objet pour voir sa fiche, l'équiper, le ranger ou le jeter. Glissez un objet sur un conteneur pour l'y ranger.</p>

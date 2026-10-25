@@ -111,3 +111,5 @@
 .objet.a-equiper .nom-objet { max-width: 100%; }
 .boutons-slots { display: flex; flex-wrap: wrap; gap: 2px; }
 .boutons-slots .bouton { height: 24px; padding: 0 6px; font-size: 12px; }
+
+.note-objet-saisie { display: flex; flex-direction: column; gap: 6px; }

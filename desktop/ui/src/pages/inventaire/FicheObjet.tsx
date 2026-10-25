@@ -10,8 +10,10 @@ export function FicheObjet(props: {
   racine: number;
   emplacements: EmplacementVue[];
   cmd: (c: CommandeInventaire, message: string) => void;
+  onNote: (id: number, note: string) => void;
 }) {
-  const { objet: o, objets, racine, emplacements, cmd } = props;
+  const { objet: o, objets, racine, emplacements, cmd, onNote } = props;
+  const [note, setNote] = useState(o.note);
   const [vers, setVers] = useState(String(racine));
   const [part, setPart] = useState("1");
   const [confirmer, setConfirmer] = useState(false);
@@ -19,8 +21,9 @@ export function FicheObjet(props: {
   useEffect(() => {
     setVers(String(o.parent ?? racine));
     setPart("1");
+    setNote(o.note);
     setConfirmer(false);
-  }, [o.id, o.parent, racine]);
+  }, [o.id, o.parent, o.note, racine]);
 
   // Où on peut le ranger : l'inventaire et les conteneurs, sauf lui-même et ce qu'il contient.
   const interdits = new Set<number>([o.id]);
@@ -66,7 +69,11 @@ export function FicheObjet(props: {
           </div>
         ))}
       </dl>
-      {o.note && <p className="note-objet">{o.note}</p>}
+      <label className="note-objet-saisie">
+        <span className="doux">Note de l'objet (provenance, histoire)</span>
+        <textarea className="champ zone large" rows={3} value={note} onChange={(e) => setNote(e.target.value)} placeholder="Trouvée dans la crypte de Sandpoint…" aria-label="Note de l'objet" />
+        <button className="bouton" disabled={note.trim() === o.note.trim()} onClick={() => onNote(o.id, note)}>Enregistrer la note</button>
+      </label>
 
       <div className="actions-objet">
         {o.equipe.length > 0 ? (

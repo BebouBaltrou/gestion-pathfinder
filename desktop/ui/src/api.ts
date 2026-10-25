@@ -31,6 +31,8 @@ import type {
 } from "./fiche-types";
 import type { CommandeInventaire, ModeleObjetVue, PageInventaire } from "./inventaire-types";
 import { simulerInventaire } from "./mock-inventaire";
+import { simulerNotes } from "./mock-notes";
+import type { CritereNotes, FiltreChrono, GenreNote, LigneChrono, NoteVue, PageNotes } from "./notes-types";
 
 export type Somme = { pc: number; texte: string };
 export type Capitaux = { marchandises: number; influence: number; travail: number; magie: number };
@@ -592,6 +594,17 @@ const appeler = <T>(cmd: string, args?: Record<string, unknown>) => pont()(cmd, 
 
 export const api = {
   etatApp: () => appeler<EtatApp>("etat_app"),
+  pageNotes: () => appeler<PageNotes | null>("page_notes"),
+  listeNotes: (critere: CritereNotes) => appeler<NoteVue[]>("liste_notes", { critere }),
+  chronologie: (filtre: FiltreChrono) => appeler<LigneChrono[]>("chronologie", { filtre }),
+  creerNote: (genre: GenreNote, rubrique: string | null, titre: string, texte: string, etiquettes: string[]) =>
+    appeler<Retour>("creer_note", { genre, rubrique, titre, texte, etiquettes }),
+  modifierNote: (id: number, rubrique: string | null, titre: string, texte: string, etiquettes: string[]) =>
+    appeler<Retour>("modifier_note", { id, rubrique, titre, texte, etiquettes }),
+  epinglerNote: (id: number, epingle: boolean) => appeler<Retour>("epingler_note", { id, epingle }),
+  supprimerNote: (id: number) => appeler<Retour>("supprimer_note", { id }),
+  noterObjet: (id: number, note: string) => appeler<Retour>("noter_objet", { id, note }),
+  exporterNotes: (critere: CritereNotes) => appeler<Retour>("exporter_notes", { critere }),
   pageInventaire: () => appeler<PageInventaire | null>("page_inventaire"),
   catalogueObjets: (requete: string, typeObjet: string | null, limite = 60) =>
     appeler<ModeleObjetVue[]>("catalogue_objets", { requete, typeObjet, limite }),
@@ -762,6 +775,8 @@ let annulables = 3;
 
 function simule(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
   const ok = (message: string): Retour => ({ ok: true, alerte: false, message });
+  const notes = simulerNotes(cmd, args);
+  if (notes) return notes;
   const inventaire = simulerInventaire(cmd, args);
   if (inventaire) return inventaire;
   const date = (j: number) => `${["lunedi", "marnedi", "mercantdi", "juredi", "ventdi", "astredi", "solardi"][j % 7]} ${j - 10} Rova 4712 AR`;

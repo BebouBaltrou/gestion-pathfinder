@@ -51,3 +51,11 @@ Le plan et l'état d'avancement sont dans `docs/PLAN_AVENTURE_COMBAT.md`.
 9. Jet de récupération des munitions (bris à 50 %).
 Présents dans le catalogue d'équipement (`data/core/`) mais sans traitement particulier en v1 (simples entrées) :
 services, animaux, barde, moyens de transport, lancement de sorts.
+
+## Notes : à faire plus tard
+
+- Liens internes vers les sorts, les lieux, les PNJ et les combats : la syntaxe `[[genre:cible|libellé]]`
+  est reconnue pour tous les genres, mais seuls `objet:` (ouvre l'objet dans l'inventaire) et `note:` (ouvre
+  une note) ont une destination en v1.
+- Sélecteur de liens dans l'éditeur (aujourd'hui on écrit le lien à la main).
+- Aperçu Markdown en direct dans l'éditeur.

@@ -1,0 +1,53 @@
+/* Notes : page, panneau repliable, liens internes et chronologie. Mêmes jetons que le reste de
+   l'application ; aucune information portée par la couleur seule (le genre de chaque ligne est écrit). */
+
+.onglets-notes { margin-bottom: 8px; flex-wrap: wrap; }
+
+.disposition-notes { display: grid; grid-template-columns: 360px minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 1000px) { .disposition-notes { grid-template-columns: 1fr; } }
+
+.colonne-liste-notes { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.saisie-rapide { display: flex; flex-direction: column; gap: 8px; background: var(--carte); border: 1px solid var(--bord); border-radius: var(--rayon); padding: 12px; }
+.liste-notes { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; max-height: calc(100vh - 460px); min-height: 200px; overflow: auto; }
+.carte-note {
+  display: flex; flex-direction: column; gap: 2px; width: 100%; text-align: left; font: inherit; color: var(--texte);
+  background: var(--carte); border: 1px solid var(--bord); border-radius: var(--rayon-petit); padding: 8px 12px; cursor: pointer;
+}
+.carte-note:hover { background: var(--carte-survol); }
+.carte-note.choisie { border-color: var(--or); }
+.carte-note .titre-note { color: var(--texte-fort); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.meta-note { color: var(--texte-doux); font-size: 12px; }
+.etiquettes { color: var(--turquoise, var(--magie)); font-size: 12px; }
+
+.lecteur-note { background: var(--carte); border: 1px solid var(--bord); border-radius: var(--rayon); padding: 18px; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.lecteur-note h3 { font-size: 18px; color: var(--texte-fort); }
+.editeur-note { display: flex; flex-direction: column; gap: 10px; }
+
+.markdown { color: var(--texte-moyen); font-size: 14px; line-height: 1.55; }
+.markdown p { margin: 0 0 8px; }
+.markdown ul { margin: 0 0 8px; padding-left: 20px; }
+.markdown h4, .markdown h5 { margin: 10px 0 4px; color: var(--texte-fort); }
+.markdown code { background: var(--carte-2); border-radius: 4px; padding: 0 4px; font-size: 13px; }
+.lien-interne {
+  display: inline; font: inherit; color: var(--or); background: transparent; border: none; border-bottom: 1px dashed var(--or);
+  padding: 0; cursor: pointer;
+}
+.lien-interne:hover { color: var(--or-clair); }
+
+.chronologie { display: flex; flex-direction: column; gap: 10px; }
+.sources-chrono { display: flex; flex-wrap: wrap; gap: 6px 18px; border: 1px solid var(--bord); border-radius: var(--rayon-petit); padding: 8px 12px; }
+.sources-chrono legend { color: var(--texte-doux); font-size: 12px; padding: 0 6px; }
+.lignes-chrono { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.ligne-chrono { display: grid; grid-template-columns: 190px 150px minmax(0, 1fr); gap: 10px; align-items: baseline; padding: 6px 10px; background: var(--carte); border: 1px solid var(--bord); border-radius: 8px; }
+.ligne-chrono .quand { color: var(--texte-doux); font-size: 13px; }
+.ligne-chrono.note-session, .ligne-chrono.note-journal, .ligne-chrono.note-mj { border-left: 3px solid var(--or); }
+
+.panneau-notes {
+  position: fixed; top: 0; right: 0; bottom: 0; width: 380px; max-width: 100vw; z-index: 40;
+  background: var(--panneau); border-left: 1px solid var(--bord-fort); box-shadow: -8px 0 24px rgba(0, 0, 0, 0.35);
+  padding: 16px; display: flex; flex-direction: column; gap: 10px; overflow: auto;
+}
+.panneau-notes header { display: flex; align-items: center; justify-content: space-between; }
+.panneau-notes h2 { font-size: 18px; }
+.panneau-notes .recentes { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.panneau-notes .recentes li { background: var(--carte); border: 1px solid var(--bord); border-radius: var(--rayon-petit); padding: 8px 12px; }
