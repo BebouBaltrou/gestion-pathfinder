@@ -53,7 +53,17 @@ impl Rapport {
     }
 }
 
-/// Niveau d'ensorceleur lu dans « Ensorceleur 11 » (seule classe prise en charge pour l'instant).
+/// Identifiant de classe du moteur d'après le nom écrit sur la feuille (classes prises en charge).
+fn classe_id(nom: &str) -> Option<&'static str> {
+    match crate::dons::normaliser(nom).as_str() {
+        "ensorceleur" => Some("ensorceleur"),
+        "pretre" => Some("pretre"),
+        "druide" => Some("druide"),
+        _ => None,
+    }
+}
+
+/// Niveau lu dans « Ensorceleur 11 » : nom de la classe et niveau.
 fn niveau_lu(texte: &str) -> Option<(String, u32)> {
     let mut mots: Vec<&str> = texte.split_whitespace().collect();
     let n: u32 = mots.pop()?.parse().ok()?;
@@ -94,13 +104,14 @@ pub fn controler(f: &Feuille, r: &Referentiel) -> Rapport {
         ));
         return rap;
     };
-    if classe != "ensorceleur" {
+    let Some(classe_id) = classe_id(&classe) else {
         rap.non_verifie.push(format!(
-            "Classe « {classe} » : pas encore prise en charge par le moteur (Ensorceleur seulement). \
-             Les valeurs de la feuille sont lues mais ne peuvent pas être vérifiées."
+            "Classe « {classe} » : pas encore prise en charge par le moteur (ensorceleur, prêtre et \
+             druide seulement). Les valeurs de la feuille sont lues mais ne peuvent pas être vérifiées."
         ));
         return rap;
-    }
+    };
+    let dv = r.classe(classe_id).map(|c| c.de_vie as i32).unwrap_or(6);
     if !f.classe_et_niveau_bis.is_empty() && f.classe_et_niveau_bis != f.classes_et_niveaux {
         ajoute(
             "Identité",
@@ -116,7 +127,13 @@ pub fn controler(f: &Feuille, r: &Referentiel) -> Rapport {
     }
 
     // ── Personnage dans le moteur ──────────────────────────────────────────────
-    let fiche = fiche_depuis_feuille(f, niveau, r);
+    let fiche = match fiche_depuis_feuille(f, niveau, r) {
+        Ok(fiche) => fiche,
+        Err(m) => {
+            rap.non_verifie.push(m);
+            return rap;
+        }
+    };
 
     // ── Caractéristiques ───────────────────────────────────────────────────────
     let valeurs_a = fiche.calculer(r);
@@ -277,9 +294,9 @@ pub fn controler(f: &Feuille, r: &Referentiel) -> Rapport {
     if let Some(pv) = f.pv_max {
         let con = v.modificateurs[&Carac::Con];
         let n = niveau as i32;
-        // Niveau 1 au maximum (6), puis 1 à 6 par niveau, plus CON à chaque niveau.
-        let mini = 6 + (n - 1) + n * con;
-        let maxi = 6 + (n - 1) * 6 + n * con;
+        // Niveau 1 au maximum, puis 1 au dé de vie par niveau, plus CON à chaque niveau.
+        let mini = dv + (n - 1) + n * con;
+        let maxi = dv + (n - 1) * dv + n * con;
         // Le moteur ajoute lui-même les bonus de classe de prédilection ou de dons (Robustesse) :
         // on les compte comme marge haute.
         let marge = n + 3;
@@ -291,7 +308,7 @@ pub fn controler(f: &Feuille, r: &Referentiel) -> Rapport {
             pv.to_string(),
             format!("entre {mini} et {}", maxi + marge),
             format!(
-                "d6 d'ensorceleur (niveau 1 au maximum), niveau {niveau}, CON {con:+} par niveau ; \
+                "d{dv} de la classe (niveau 1 au maximum), niveau {niveau}, CON {con:+} par niveau ; \
                  jusqu'à {marge} de plus avec la classe de prédilection et Robustesse. La feuille ne \
                  garde pas les jets de dé : le moteur ne peut donner qu'un intervalle."
             ),
@@ -593,13 +610,13 @@ pub fn proposer(f: &Feuille, r: &Referentiel) -> Result<Proposition, String> {
             f.classes_et_niveaux
         )
     })?;
-    if classe != "ensorceleur" {
+    if classe_id(&classe).is_none() {
         return Err(format!(
-            "Classe « {classe} » : pas encore prise en charge (ensorceleur seulement)."
+            "Classe « {classe} » : pas encore prise en charge (ensorceleur, prêtre et druide seulement)."
         ));
     }
     Ok(Proposition {
-        fiche: fiche_depuis_feuille(f, niveau, r),
+        fiche: fiche_depuis_feuille(f, niveau, r)?,
         niveau,
         rapport: controler(f, r),
     })
@@ -647,8 +664,35 @@ fn index_carac(id: &str) -> usize {
 /// la colonne « Base » inclut déjà l'ajustement racial ; le +2 libre de l'humain est en CHA ;
 /// la colonne « Altération » vient d'objets (bonus d'altération) ; tous les rangs sont posés
 /// au niveau 1 (la feuille ne dit pas à quel niveau ils ont été pris).
-pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32, r: &Referentiel) -> Fiche {
-    let race = "humain";
+pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32, r: &Referentiel) -> Result<Fiche, String> {
+    let (nom_classe, _) = niveau_lu(&f.classes_et_niveaux).ok_or_else(|| {
+        format!(
+            "Classe et niveau illisibles : « {} ».",
+            f.classes_et_niveaux
+        )
+    })?;
+    let classe_id = classe_id(&nom_classe)
+        .ok_or_else(|| format!("Classe « {nom_classe} » non prise en charge."))?;
+    let classe = r
+        .classe(classe_id)
+        .ok_or_else(|| format!("Classe « {classe_id} » absente du catalogue."))?;
+    // Race : celle dont le nom commence la case « Race » (« Humain (chélaxien), M »).
+    let race_lue = crate::dons::normaliser(&f.race);
+    let race = r
+        .races
+        .iter()
+        .find(|x| {
+            let n = crate::dons::normaliser(&x.nom);
+            race_lue == n || race_lue.starts_with(&format!("{n} "))
+        })
+        .ok_or_else(|| format!("Race « {} » non reconnue par le catalogue.", f.race))?;
+    // Le bonus libre (humain, demi-elfe, demi-orque) va à la caractéristique d'incantation :
+    // hypothèse signalée au joueur.
+    let carac_libre = classe
+        .incantation
+        .as_ref()
+        .map(|i| carac_incantation(&i.caracteristique))
+        .unwrap_or(Carac::Cha);
     let mut scores: BTreeMap<Carac, i32> = BTreeMap::new();
     let mut effets: Vec<Effet> = Vec::new();
     // Objets magiques reconnus : ils portent leurs propres bonus (le catalogue du livre).
@@ -656,8 +700,15 @@ pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32, r: &Referentiel) -> Fiche 
     for cl in &f.caracs {
         let c = carac_de(cl.id);
         let mut base = cl.base.or(cl.val).unwrap_or(10);
-        if c == Carac::Cha {
-            base -= 2; // l'humain remet +2 racial
+        // La colonne « Base » inclut déjà la race : on retire les ajustements raciaux que le
+        // moteur remet lui-même.
+        for (id, v) in &race.ajustements {
+            if carac_incantation(id) == c {
+                base -= v;
+            }
+        }
+        if c == carac_libre {
+            base -= race.choix_libre.unwrap_or(0);
         }
         scores.insert(c, base);
         // La colonne « Altération » de la feuille : on n'ajoute que ce que les objets reconnus
@@ -694,7 +745,8 @@ pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32, r: &Referentiel) -> Fiche 
             .unwrap_or(10),
     );
     let n = niveau as i32;
-    let reste = (f.pv_max.unwrap_or(0) - n * con - 6).clamp(n - 1, 6 * (n - 1).max(1));
+    let dv = classe.de_vie as i32;
+    let reste = (f.pv_max.unwrap_or(0) - n * con - dv).clamp(n - 1, dv * (n - 1).max(1));
     let (socle, supplement) = if n > 1 {
         (reste / (n - 1), reste % (n - 1))
     } else {
@@ -702,7 +754,7 @@ pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32, r: &Referentiel) -> Fiche 
     };
     let de_vie = |i: u32| -> u32 {
         if i == 0 {
-            6
+            dv as u32
         } else if (i as i32) <= supplement {
             (socle + 1) as u32
         } else {
@@ -711,7 +763,7 @@ pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32, r: &Referentiel) -> Fiche 
     };
     let mut niveaux: Vec<fiches::fiche::NiveauPris> = (0..niveau)
         .map(|i| fiches::fiche::NiveauPris {
-            classe: "ensorceleur".into(),
+            classe: classe_id.into(),
             de_vie_obtenu: de_vie(i),
             rangs: BTreeMap::new(),
             predilection: Some(fiches::fiche::BonusPredilection::Rang),
@@ -720,15 +772,19 @@ pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32, r: &Referentiel) -> Fiche 
         .collect();
     let mut fiche = Fiche {
         nom: f.nom.clone(),
-        race: race.into(),
-        bonus_racial_libre: Some(Carac::Cha),
+        race: race.id.clone(),
+        bonus_racial_libre: race.choix_libre.map(|_| carac_libre),
         scores_base: scores,
         dommages: BTreeMap::new(),
         drain: BTreeMap::new(),
         augmentations: vec![],
         niveaux: std::mem::take(&mut niveaux),
-        classes_de_predilection: vec!["ensorceleur".into()],
-        lignage: Some("infernal".into()),
+        classes_de_predilection: vec![classe_id.into()],
+        lignage: if classe.lignages.is_empty() {
+            None
+        } else {
+            Some(lignage_lu(f, classe, r)?)
+        },
         connaissance_de_lignage: None,
         effets,
         sorts_connus: vec![],
@@ -800,7 +856,7 @@ pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32, r: &Referentiel) -> Fiche 
             }
         }
     }
-    fiche
+    Ok(fiche)
 }
 
 /// École de magie en anglais minuscule, comme dans les choix du catalogue (« Spell Focus (evocation) »).
@@ -881,6 +937,8 @@ mod tests_import {
             c.insert(k.to_string(), v.to_string());
         };
         mets("Nom", "Test");
+        mets("Race", "Humain (test), M");
+        mets("Notes.1.1.1.2", "Résistance infernale");
         mets("Classes&Niveaux", "Ensorceleur 3");
         // FOR 10, DEX 10, CON 12, INT 10, SAG 10, CHA 16 (14 + 2 humain)
         for (n, v) in [(1, 10), (2, 10), (3, 12), (4, 10), (5, 10), (6, 16)] {
@@ -925,6 +983,57 @@ mod tests_import {
         let r = Referentiel::partage();
         let p = proposer(&lire_feuille(&champs_ensorceleur_3()), r).unwrap();
         assert_eq!(p.fiche.calculer(r).unwrap().pv_max.total, 17);
+    }
+
+    /// Feuille minimale d'un lanceur de sorts divins : SAG 16 de base (humain : +2 libre → 18).
+    fn champs_divin(classe: &str, niveau: u32, vigueur: i32, pv: i32) -> Champs {
+        let mut c = Champs::new();
+        let mut mets = |k: &str, v: &str| {
+            c.insert(k.to_string(), v.to_string());
+        };
+        mets("Nom", "Divin");
+        mets("Race", "Humain, M");
+        mets("Classes&Niveaux", &format!("{classe} {niveau}"));
+        // FOR 12, DEX 10, CON 14, INT 10, SAG 18 (16 + 2), CHA 12.
+        for (n, v) in [(1, 12), (2, 10), (3, 14), (4, 10), (5, 18), (6, 12)] {
+            mets(&format!("Base{n}"), &v.to_string());
+            mets(&format!("Val{n}"), &v.to_string());
+        }
+        mets("JdS2", &vigueur.to_string());
+        mets("MaxPV", &pv.to_string());
+        c
+    }
+
+    #[test]
+    fn un_pretre_est_importe_avec_les_regles_de_sa_classe() {
+        let r = Referentiel::partage();
+        // Prêtre niveau 3 : Vigueur 3 (table) + CON +2 = 5 ; PV entre 8+2+2 et 8+16+... : on donne 30.
+        let p = proposer(&lire_feuille(&champs_divin("Prêtre", 3, 5, 30)), r).unwrap();
+        assert_eq!(p.niveau, 3);
+        assert_eq!(p.fiche.niveaux[0].classe, "pretre");
+        let v = p.fiche.calculer(r).unwrap();
+        assert_eq!(v.vigueur.total, 5);
+        assert_eq!(v.pv_max.total, 30);
+        // Le bonus libre de l'humain est allé à la Sagesse (caractéristique d'incantation).
+        assert_eq!(v.scores[&Carac::Sag].total, 18);
+        assert!(p
+            .rapport
+            .lignes
+            .iter()
+            .any(|l| l.champ == "JdS2" && l.gravite == Gravite::Accord));
+    }
+
+    #[test]
+    fn un_druide_est_importe_et_le_lignage_n_est_demande_qu_a_l_ensorceleur() {
+        let r = Referentiel::partage();
+        let p = proposer(&lire_feuille(&champs_divin("Druide", 2, 5, 20)), r).unwrap();
+        assert_eq!(p.fiche.niveaux[0].classe, "druide");
+        assert!(p.fiche.lignage.is_none());
+        // Un ensorceleur sans lignage écrit sur la feuille : refus clair, rien n'est deviné.
+        let e = proposer(&lire_feuille(&champs_divin("Ensorceleur", 2, 5, 20)), r).unwrap_err();
+        assert!(e.contains("lignage"), "{e}");
+        // Classe ou race inconnue : refus clair.
+        assert!(proposer(&lire_feuille(&champs_divin("Barde", 2, 5, 20)), r).is_err());
     }
 }
 
@@ -980,5 +1089,47 @@ fn cible_lisible(cible: &str) -> String {
             Some(("comp", x)) => x.replace('_', " "),
             _ => c.to_string(),
         },
+    }
+}
+
+/// Caractéristique désignée par un identifiant du catalogue (`sag`, `wis`, `cha`…).
+fn carac_incantation(id: &str) -> Carac {
+    match id.to_lowercase().as_str() {
+        "for" | "str" => Carac::For,
+        "dex" => Carac::Dex,
+        "con" => Carac::Con,
+        "int" => Carac::Int,
+        "sag" | "wis" => Carac::Sag,
+        _ => Carac::Cha,
+    }
+}
+
+/// Lignage d'ensorceleur reconnu dans le texte libre de la feuille (« Résistance infernale »…).
+/// La feuille ne le dit pas dans une case dédiée : on n'en choisit un que s'il est le seul cité.
+fn lignage_lu(
+    f: &Feuille,
+    classe: &fiches::donnees::Classe,
+    _r: &Referentiel,
+) -> Result<String, String> {
+    let texte = crate::dons::normaliser(&f.texte_libre);
+    let t = fiches::traductions::Traductions::partage();
+    let trouves: Vec<&str> = classe
+        .lignages
+        .iter()
+        .filter(|l| {
+            let nom = t.lignage(&l.id).map(|x| x.nom).unwrap_or(&l.nom_en);
+            let nom = crate::dons::normaliser(nom);
+            // « infernal » se retrouve dans « résistance infernale ».
+            nom.len() >= 4 && texte.contains(&nom)
+        })
+        .map(|l| l.id.as_str())
+        .collect();
+    match trouves.as_slice() {
+        [un] => Ok((*un).to_string()),
+        [] => Err("Le lignage de l'ensorceleur n'est pas écrit sur la feuille : à choisir.".into()),
+        plusieurs => Err(format!(
+            "Plusieurs lignages sont cités sur la feuille ({}) : à choisir.",
+            plusieurs.join(", ")
+        )),
     }
 }

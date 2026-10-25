@@ -19,7 +19,7 @@ pub struct DonLu {
 }
 
 /// Minuscules, sans accents ni ponctuation, pour comparer sans se soucier de la saisie.
-fn normaliser(s: &str) -> String {
+pub(crate) fn normaliser(s: &str) -> String {
     let mut out = String::new();
     for c in s.to_lowercase().chars() {
         let c = match c {

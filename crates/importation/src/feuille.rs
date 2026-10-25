@@ -52,6 +52,8 @@ pub struct Feuille {
     pub notes_dons: String,
     /// Objets portés écrits à la main : (champ du PDF, texte). Cases `Notes.0.0.*`.
     pub objets: Vec<(String, String)>,
+    /// Tout le texte libre de la feuille (cases `Notes.*`), pour y reconnaître un lignage.
+    pub texte_libre: String,
     pub richesse_po: Option<i32>,
 }
 
@@ -243,6 +245,12 @@ pub fn lire_feuille(c: &Champs) -> Feuille {
     }
 
     f.notes_dons = texte(c, "Notes.2.3");
+    f.texte_libre = c
+        .iter()
+        .filter(|(k, _)| k.starts_with("Notes."))
+        .map(|(_, v)| v.as_str())
+        .collect::<Vec<_>>()
+        .join(" ");
     for (champ, v) in c.range("Notes.0.0.".to_string()..) {
         if !champ.starts_with("Notes.0.0.") {
             break;
