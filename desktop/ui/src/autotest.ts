@@ -232,6 +232,28 @@ export async function autotest(): Promise<void> {
     verifier((await api.avancer(1)).ok, "un jour d'intermède pendant l'aventure");
     verifier((await api.annuler()).ok, "annuler");
     verifier((await api.aventureTerminer()).ok, "aventure terminée");
+    // inventaire, équipement et notes
+    verifier((await api.creerInventairePersonnage(pj.id)).ok, "inventaire du personnage créé");
+    const inv0 = (await api.pageInventaire())?.inventaires[0];
+    verifier(!!inv0, "page d'inventaire");
+    const trouvees = await api.catalogueObjets("armure de cuir", "armure", 5);
+    const modeleArmure = trouvees.find((m) => m.nom === "Armure de cuir");
+    verifier(!!modeleArmure && modeleArmure.valeur?.pc === 1000 && modeleArmure.poids?.grammes === 7500, "catalogue : armure de cuir (10 po, 7,5 kg)");
+    verifier((await api.ajouterObjetCatalogue(inv0!.racine, modeleArmure!.id, 1)).ok, "armure ajoutée à l'inventaire");
+    const armure = (await api.pageInventaire())?.inventaires[0].objets.find((o) => o.nom === "Armure de cuir");
+    verifier(!!armure && armure.poids.grammes === 7500, "poids de l'armure dans l'inventaire");
+    verifier((await api.inventaireCommande({ Equiper: { id: armure!.id, emplacement: "corps" } }, "armure équipée")).ok, "armure équipée dans l'emplacement « corps »");
+    verifier((await api.fichePersonnage(pj.id))?.equipement.armure?.nomEn === "Leather", "l'équipement de l'inventaire alimente la fiche");
+    verifier((await api.annuler()).ok && (await api.fichePersonnage(pj.id))?.equipement.armure === null, "une annulation défait l'inventaire et la fiche");
+    verifier((await api.retablir()).ok && (await api.fichePersonnage(pj.id))?.equipement.armure?.nomEn === "Leather", "rétablir remet l'armure");
+    verifier((await api.noterObjet(armure!.id, "Trouvée dans la crypte")).ok, "note attachée à l'objet");
+    verifier((await api.creerNote("mj", null, "Le MJ a dit", "Le pont est piégé la nuit", ["piège"])).ok, "note de MJ créée");
+    verifier((await api.creerNote("journal", "pnj", "Ameiko", "Aubergiste de [[objet:" + armure!.id + "|Sandpoint]]", [])).ok, "entrée de journal de campagne créée");
+    verifier((await api.creerNote("journal", null, "Sans rubrique", "x", [])).ok === false, "journal sans rubrique refusé");
+    verifier((await api.listeNotes({ texte: "PIÉGÉ" })).length === 1, "recherche plein texte sans accents ni casse");
+    verifier((await api.listeNotes({ genre: "journal", rubrique: "pnj" })).length === 1, "notes du journal par rubrique");
+    verifier((await api.chronologie({ sources: ["note-mj"] })).length === 1, "chronologie filtrée par source");
+    verifier((await api.chronologie({ sources: [] })).some((l) => l.source === "inventaire"), "chronologie : actions d'inventaire");
     await pause(1500);
     const titre = document.querySelector("h1")?.textContent ?? "";
     verifier(titre.length > 0, `interface affichée (titre : « ${titre} »)`);
