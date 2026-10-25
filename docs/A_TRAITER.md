@@ -94,3 +94,14 @@ tard : bonus de compétence dans les jets de recettes, Prestige calculé, temps 
 fiches, compatibilité des sauvegardes.
 
 - **Importation de fiche PDF** : fonctionnalité en développement, à reprendre plus tard (voir `docs/IMPORT_PDF.md`). Priorité : toutes les classes dans le créateur de fiche (Prêtre, puis Druide).
+
+## Prêtre et Druide : ce qui reste à faire plus tard (24/10/2026)
+
+- **Combat** : les lanceurs qui préparent leurs sorts (Prêtre, Druide) sont encore refusés par le combat (garde-fou existant).
+- **Forme animale du Druide** : vitesses, attaques naturelles et aptitudes de chaque forme restent en texte (suivre le sort forme bestiale, corps élémentaire ou forme végétale) ; seuls les bonus chiffrés sont calculés.
+- **Compagnon animal** : compétences, dons et tours ne sont que des nombres, sans choix ; PV en moyenne arrondie (4,5 par d8, à confirmer).
+- **Druide** : conversion spontanée des sorts en « convocation d'alliés naturels » (celle du Prêtre est faite).
+- **Domaines** : résistances (Air, Eau, Feu, Terre) en texte seulement ; domaines de Calistria (table et pages du livre ne concordent pas), sorts de domaine non résolus (Obscurité 8e, Runes 6e) : points à confirmer.
+- **Armes et objets** : « mains nues » et « masse » à confirmer ; Bottes elfiques = Acrobaties dans le livre français à confirmer ; type du bonus de forme bestiale (taille) à confirmer.
+- **Importation PDF** : domaines, divinité, alignement et pacte de nature ne sont pas lus (fonctionnalité en développement).
+- **Autres classes du créateur de fiche** : toutes les classes restantes sont à implémenter (seuls Ensorceleur, Prêtre et Druide existent).
