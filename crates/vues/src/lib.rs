@@ -7,6 +7,7 @@ pub mod batiments;
 pub mod gestionnaires;
 pub mod historique;
 pub mod localites;
+pub mod localites_modeles;
 pub mod organisations;
 pub mod parametres;
 pub mod personnage;
