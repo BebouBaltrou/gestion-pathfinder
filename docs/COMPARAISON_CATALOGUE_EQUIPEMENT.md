@@ -44,3 +44,12 @@ Rapprochements par le prix et le poids :
 - Gantelet d’armes ↔ Gantelet verrouillé
 - Pointes pour armure ↔ Pointes d'armure
 - Pointes pour bouclier ↔ Pointes de bouclier
+
+## Décision d'Antoine (25/10/2026) : fusion
+
+La v1.0 (`data/core/`) est la source unique. Ses noms ont été remplacés par ceux de la transcription du
+Manuel des joueurs en cas de conflit (17 noms dans `data/core/fr/equipement_noms.json`, puis
+`node outils/fusionner_traductions_equipement.js data/core` pour réécrire les noms dans les données).
+Deux fautes de frappe évidentes du livre n'ont pas été reprises : « Halllebarde » (gardé : « Hallebarde ») et
+« Clepysdre » (gardé : « Clepsydre »). La transcription en texte a été supprimée ; l'inventaire construit ses
+modèles depuis `data/core/` (`campagne::catalogue_inventaire`).

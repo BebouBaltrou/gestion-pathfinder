@@ -87,7 +87,7 @@
       "maniement_en": "Martial",
       "groupes_en": "Axes",
       "description_en": "The handle of this axe is long enough that you can wield it one-handed or two-handed. The head may have one blade or two, with blade shapes ranging from half-moons to squared edges like narrower versions of woodcutting axes. The wooden haft may be protected and strengthened with metal bands called langets.",
-      "nom": "Hache d'armes"
+      "nom": "Hache d’armes"
     },
     {
       "nom_en": "Blowgun",
@@ -131,7 +131,7 @@
       "maniement_en": null,
       "groupes_en": null,
       "description_en": "The thin, light darts used in a blowgun are usually made of hardwood with a stabilizing fletching of down or fur. A dart is usually loaded from the back end just before firing.",
-      "nom": "Fléchettes de sarbacane (10)"
+      "nom": "Dard, sarbacane (10)"
     },
     {
       "nom_en": "Bolas",
@@ -282,7 +282,7 @@
       "maniement_en": null,
       "groupes_en": null,
       "description_en": "A crossbow bolt used as a melee weapon is treated as a light improvised weapon (–4 penalty on attack rolls) and deals damage as a dagger of its size (critical multiplier ×2). Bolts come in a case or quiver that holds 10 bolts. All crossbows except repeating crossbows use these kinds of crossbow bolts, which are sometimes called “quarrels.”",
-      "nom": "Carreaux d'arbalète (10)"
+      "nom": "Carreaux (10)"
     },
     {
       "nom_en": "Dagger",
@@ -326,7 +326,7 @@
       "maniement_en": "Simple",
       "groupes_en": "Thrown",
       "description_en": "This thrown weapon is larger than an arrow and shorter than a javelin, with a weighted tip and a shorter range than a javelin. Most darts are wooden shafts with a thick metal point.",
-      "nom": "Fléchette"
+      "nom": "Dard"
     },
     {
       "nom_en": "Dire flail",
@@ -414,7 +414,7 @@
       "maniement_en": "Exotic",
       "groupes_en": "Blades, Heavy",
       "description_en": "Essentially a longer version of a scimitar, but with a thinner blade, the elven curve blade is exceptionally rare. You receive a +2 circumstance bonus to your CMD whenever a foe attempts to sunder your elven curve blade because of its flexible metal.\nYou can use the Weapon Finesse feat to apply your Dexterity modifier instead of your Strength modifier on attack rolls with an elven curve blade that is sized for you, even though it isn’t a light weapon.",
-      "nom": "Lame courbe elfique"
+      "nom": "Lame elfique incurvée"
     },
     {
       "nom_en": "Falchion",
@@ -502,7 +502,7 @@
       "maniement_en": "Exotic",
       "groupes_en": "Double",
       "description_en": "A gnome hooked hammer is a double weapon—an ingenious tool with a hammer head at one end of its haft and a long, curved pick at the other. The hammer’s blunt head is a bludgeoning weapon that deals 1d6 points of damage (critical multiplier ×3). Its hook is a piercing weapon that deals 1d4 points of damage (critical multiplier ×4). You can use either head as the primary weapon. Gnomes treat hooked hammers as martial weapons.",
-      "nom": "Marteau à crochet gnome"
+      "nom": "Marteau-piolet gnome"
     },
     {
       "nom_en": "Greataxe",
@@ -634,7 +634,7 @@
       "maniement_en": "Exotic",
       "groupes_en": "Thrown",
       "description_en": "Made from a specially designed sling attached to a short club, a halfling sling staff can be used by a proficient wielder to devastating effect. Your Strength modifier applies to damage rolls when you use a halfling sling staff, just as it does for thrown weapons. You can fire, but not load, a halfling sling staff with one hand. Loading a halfling sling staff is a move action that requires two hands and provokes attacks of opportunity.\nA halfling sling staff fires bullets. You can hurl ordinary stones with a halfling sling staff, but stones are not as dense or as round as bullets. Thus, such an attack deals damage as if the weapon were designed for a creature one size category smaller than you and you take a –1 penalty on attack rolls.\nA halfling sling staff can be used as a simple weapon that deals bludgeoning damage equal to that of a club of its size. Halflings treat halfling sling staves as martial weapons.",
-      "nom": "Bâton-fronde halfelin"
+      "nom": "Bâton de jet halfelin"
     },
     {
       "nom_en": "Hand crossbow",
@@ -722,7 +722,7 @@
       "maniement_en": "Martial",
       "groupes_en": "Flails",
       "description_en": "Similar to a light flail, a heavy flail has a larger metal ball and a longer handle.",
-      "nom": "Fléau lourd"
+      "nom": "Fléau d’armes lourd"
     },
     {
       "nom_en": "Heavy mace",
@@ -744,7 +744,7 @@
       "maniement_en": "Simple",
       "groupes_en": "Hammers",
       "description_en": "A heavy mace has a larger head and a longer handle than a light mace.",
-      "nom": "Masse d'armes lourde"
+      "nom": "Masse d’armes lourde"
     },
     {
       "nom_en": "Heavy pick",
@@ -788,7 +788,7 @@
       "maniement_en": "Martial",
       "groupes_en": "Close ; Tribal",
       "description_en": "You can bash with a heavy shield instead of using it for defense. The shield entries for heavy shields appear on page 11.",
-      "nom": "Grand bouclier (coup de bouclier)"
+      "nom": "Écu"
     },
     {
       "nom_en": "Javelin",
@@ -810,7 +810,7 @@
       "maniement_en": "Simple",
       "groupes_en": "Spears ; Thrown",
       "description_en": "A javelin is a thin throwing spear . Since it is not designed for melee, you are treated as nonproficient with it and take a –4 penalty on attack rolls if you use a javelin as a melee weapon.",
-      "nom": "Javelot"
+      "nom": "Javeline"
     },
     {
       "nom_en": "Kama",
@@ -876,7 +876,7 @@
       "maniement_en": "Martial",
       "groupes_en": "Spears",
       "description_en": "A lance deals double damage when used from the back of a charging mount. While mounted, you can wield a lance with one hand.",
-      "nom": "Lance d'arçon"
+      "nom": "Lance d’arçon"
     },
     {
       "nom_en": "Light crossbow",
@@ -920,7 +920,7 @@
       "maniement_en": "Martial",
       "groupes_en": "Flails",
       "description_en": "A light flail consists of a weighted striking end connected to a handle by a sturdy chain. Though often imagined as a ball, sometimes spiked like the head of a morningstar, the head of a light flail can actually take many different shapes, such as short bars. Military flails are sturdier evolutions of agricultural flails, which are used for threshing—beating stacks of grains to separate the useful grains from their husks.",
-      "nom": "Fléau léger"
+      "nom": "Fléau d’armes léger"
     },
     {
       "nom_en": "Light hammer",
@@ -942,7 +942,7 @@
       "maniement_en": "Martial",
       "groupes_en": "Hammers ; Thrown",
       "description_en": "A lighter version of a warhammer, this weapon usually has a sleek metal head with one striking surface.",
-      "nom": "Marteau léger"
+      "nom": "Marteau, léger"
     },
     {
       "nom_en": "Light mace",
@@ -964,7 +964,7 @@
       "maniement_en": "Simple",
       "groupes_en": "Hammers",
       "description_en": "A mace is made up of an ornate metal head attached to a simple wooden or metal shaft. The mace’s head is usually flanged to cause more pain or damage. Some more primitive maces are made with stone bound to a wooden haft with leather straps.",
-      "nom": "Masse d'armes légère"
+      "nom": "Masse d’armes légère"
     },
     {
       "nom_en": "Light pick",
@@ -986,7 +986,7 @@
       "maniement_en": "Martial",
       "groupes_en": "Axes",
       "description_en": "This weapon, adapted from the pickaxe tool, has a head with a slightly curved, armorpiercing spike and a hammerlike counterweight.",
-      "nom": "Pic de guerre léger"
+      "nom": "Pic de guerre, léger"
     },
     {
       "nom_en": "Light shield",
@@ -1008,7 +1008,7 @@
       "maniement_en": "Martial",
       "groupes_en": "Close ; Tribal",
       "description_en": "You can bash with a light shield instead of using it for defense. The shield entries for light shields appear on page 12.",
-      "nom": "Petit bouclier (coup de bouclier)"
+      "nom": "Rondache"
     },
     {
       "nom_en": "Longbow",
@@ -1096,7 +1096,7 @@
       "maniement_en": "Simple",
       "groupes_en": "Flails",
       "description_en": "A morningstar is a spiked metal ball affixed to a handle.",
-      "nom": "Étoile du matin"
+      "nom": "Morgenstern"
     },
     {
       "nom_en": "Net",
@@ -1184,7 +1184,7 @@
       "maniement_en": "Simple",
       "groupes_en": "Close",
       "description_en": "A punching dagger’s blade is attached to a horizontal handle that projects out from the fist when held.",
-      "nom": "Dague de poing"
+      "nom": "Dague coup-de-poing"
     },
     {
       "nom_en": "Quarterstaff",
@@ -1489,7 +1489,7 @@
       "maniement_en": "Simple",
       "groupes_en": "Spears ; Thrown ; Tribal",
       "description_en": "A shortspear is about 3 feet in length, making it a suitable thrown weapon.",
-      "nom": "Lance courte"
+      "nom": "Épieu"
     },
     {
       "nom_en": "Shuriken (5)",
@@ -1618,7 +1618,7 @@
       "maniement_en": null,
       "groupes_en": null,
       "description_en": "Sling bullets are shaped metal balls, designed to be used by a sling or halfling sling staff. Bullets come in a leather pouch that holds 10 bullets.",
-      "nom": "Billes de fronde (10)"
+      "nom": "Billes (10)"
     },
     {
       "nom_en": "Spear",
@@ -1662,7 +1662,7 @@
       "maniement_en": "Martial",
       "groupes_en": "Close",
       "description_en": "You can outfit your armor with spikes, which can deal damage in a grapple or as a separate attack. See the armor spikes entry on page 10 for details. Armor spikes can’t be disarmed.",
-      "nom": "Armure à pointes (attaque)"
+      "nom": "Armure à pointes"
     },
     {
       "nom_en": "Spiked chain",
@@ -1728,7 +1728,7 @@
       "maniement_en": "Martial",
       "groupes_en": "Close",
       "description_en": "Spiked shields are intimidating weapons, and can have a single protruding central spike, razored shield edges, or a whole forest of deadly protrusions. You can bash with a spiked heavy shield instead of using it for defense. A spiked heavy shield can’t be disarmed. See the armor spikes entry on page 10 for details.",
-      "nom": "Grand bouclier à pointes (attaque)"
+      "nom": "Écu à pointes"
     },
     {
       "nom_en": "Spiked light shield",
@@ -1750,7 +1750,7 @@
       "maniement_en": "Martial",
       "groupes_en": null,
       "description_en": "You can bash with a spiked light shield instead of using it for defense. A spiked light shield can’t be disarmed. See the armor spikes entry on page 10 for details.",
-      "nom": "Petit bouclier à pointes (attaque)"
+      "nom": "Rondache à pointes"
     },
     {
       "nom_en": "Starknife",
@@ -1772,7 +1772,7 @@
       "maniement_en": "Martial",
       "groupes_en": "Blades, Light ; Thrown",
       "description_en": "From a central metal ring, four tapering metal blades extend from this weapon like points on a compass rose. By gripping the crossbar that runs through the weapon’s open middle, a wielder can strike with it as a deadly melee weapon. Alternatively, by gripping it by the outer rim, a starknife’s light, aerodynamic design allows it to be thrown short distances in a manner similar to a chakram.",
-      "nom": "Couteau étoilé"
+      "nom": "Lamétoile"
     },
     {
       "nom_en": "Throwing axe",
@@ -1838,7 +1838,7 @@
       "maniement_en": "Exotic",
       "groupes_en": "Blades, Heavy ; Double",
       "description_en": "A two-bladed sword is a double weapon—twin blades extend from either side of a central, short haft, allowing the wielder to attack with graceful but deadly flourishes.",
-      "nom": "Épée à deux lames"
+      "nom": "Double-lame"
     },
     {
       "nom_en": "Unarmed strike",
@@ -1857,7 +1857,7 @@
       "maniement_en": "Simple",
       "groupes_en": "Close ; Monk ; Tribal",
       "description_en": "A Medium character deals 1d3 points of nonlethal damage with an unarmed strike. A Small character deals 1d2 points of nonlethal damage. A monk or any character with the Improved Unarmed Strike feat can deal lethal or nonlethal damage with unarmed strikes, at his discretion. The damage from an unarmed strike is considered weapon damage for the purposes of effects that give you a bonus on weapon damage rolls.\nAn unarmed strike is always considered a light weapon. Therefore, you can use the Weapon Finesse feat to apply your Dexterity modifier instead of your Strength modifier to attack rolls with an unarmed strike. Unarmed strikes do not count as natural weapons (see Combat).",
-      "nom": "Coup de poing"
+      "nom": "Attaque à mains nues"
     },
     {
       "nom_en": "Warhammer",

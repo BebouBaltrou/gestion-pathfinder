@@ -5,6 +5,7 @@
 
 pub mod aventure;
 pub mod calendrier;
+pub mod catalogue_inventaire;
 pub mod construction;
 pub mod etat;
 pub mod evenements;

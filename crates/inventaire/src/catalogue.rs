@@ -196,16 +196,18 @@ pub fn charger(texte: &str) -> Result<Vec<Modele>, ErreurCatalogue> {
 mod tests {
     use super::*;
 
-    const ARMES: &str = include_str!("../../../data/catalogue/core/armes.txt");
-    const ARMURES: &str = include_str!("../../../data/catalogue/core/armures.txt");
-    const EQUIPEMENT: &str = include_str!("../../../data/catalogue/core/equipement.txt");
-
-    fn trouver<'a>(modeles: &'a [Modele], nom: &str) -> &'a Modele {
-        modeles
-            .iter()
-            .find(|m| m.nom == nom)
-            .unwrap_or_else(|| panic!("« {nom} » absent"))
-    }
+    const EXEMPLE: &str = "\
+#source=Exemple, Table 1
+#type=materiel
+#prefixe=exemple
+#colonnes=nom|prix|poids|note
+@section=Matériel
+Bougie|1 pc|—|
+Corde en chanvre, 15 m|1 po|5 kg|Une note
+Bougie|1 pc|—|
+Houx et gui|—|—|
+Armure spéciale|spécial|spécial|
+";
 
     #[test]
     fn prix_et_poids() {
@@ -234,60 +236,22 @@ mod tests {
     }
 
     #[test]
-    fn armes() {
-        let m = charger(ARMES).unwrap();
-        assert_eq!(m.len(), NB_ARMES);
-        let dague = trouver(&m, "Dague");
-        assert_eq!(dague.valeur, Some(Montant::pc(200)));
-        assert_eq!(dague.poids, Some(Poids(500)));
-        assert_eq!(dague.type_objet, "arme");
-        assert_eq!(dague.proprietes["critique"], "19–20/×2");
-        assert_eq!(dague.proprietes["categorie"], "Armes courantes");
-        assert!(dague.source.contains("Table 6-4"));
-        // Prix « — » : non précisé, pas zéro.
-        assert_eq!(trouver(&m, "Gourdin").valeur, None);
-        assert_eq!(trouver(&m, "Épée longue").valeur, Some(Montant::pc(1500)));
-        assert_eq!(trouver(&m, "Bâton").proprietes["degats_p"], "1d4/1d4");
+    fn chargement_d_un_exemple() {
+        let m = charger(EXEMPLE).unwrap();
+        assert_eq!(m.len(), 5);
+        let corde = &m[1];
+        assert_eq!(corde.id, "exemple:corde-en-chanvre-15-m");
+        assert_eq!(corde.valeur, Some(Montant::po(1)));
+        assert_eq!(corde.poids, Some(Poids(5000)));
+        assert_eq!(corde.source, "Exemple, Table 1");
+        assert_eq!(corde.proprietes["section"], "Matériel");
+        assert_eq!(corde.proprietes["note"], "Une note");
+        // Deux lignes du même nom : identifiants distincts.
+        assert_eq!(m[0].id, "exemple:bougie");
+        assert_eq!(m[2].id, "exemple:bougie-2");
+        // « — » en prix = non précisé ; « — » en poids = zéro ; « spécial » = non précisé.
+        assert_eq!(m[3].valeur, None);
+        assert_eq!(m[3].poids, Some(Poids::ZERO));
+        assert_eq!(m[4].poids, None);
     }
-
-    #[test]
-    fn armures() {
-        let m = charger(ARMURES).unwrap();
-        assert_eq!(m.len(), NB_ARMURES);
-        let harnois = trouver(&m, "Harnois");
-        assert_eq!(harnois.valeur, Some(Montant::pc(150_000)));
-        assert_eq!(harnois.poids, Some(Poids(25_000)));
-        assert_eq!(harnois.proprietes["bonus_ca"], "+9");
-        assert_eq!(harnois.proprietes["categorie"], "Armures lourdes");
-        assert_eq!(trouver(&m, "Targe").type_objet, "bouclier");
-    }
-
-    #[test]
-    fn equipement() {
-        let m = charger(EQUIPEMENT).unwrap();
-        assert_eq!(m.len(), NB_EQUIPEMENT);
-        let bougie = trouver(&m, "Bougie");
-        assert_eq!(bougie.valeur, Some(Montant::pc(1)));
-        assert_eq!(bougie.poids, Some(Poids::ZERO));
-        assert_eq!(
-            trouver(&m, "Corde en chanvre, 15 m").poids,
-            Some(Poids(5000))
-        );
-    }
-
-    #[test]
-    fn identifiants_uniques() {
-        for texte in [ARMES, ARMURES, EQUIPEMENT] {
-            let m = charger(texte).unwrap();
-            let mut ids: Vec<&str> = m.iter().map(|x| x.id.as_str()).collect();
-            ids.sort_unstable();
-            let n = ids.len();
-            ids.dedup();
-            assert_eq!(ids.len(), n);
-        }
-    }
-
-    const NB_ARMES: usize = 87;
-    const NB_ARMURES: usize = 21;
-    const NB_EQUIPEMENT: usize = 124;
 }
