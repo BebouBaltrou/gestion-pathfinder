@@ -61,6 +61,15 @@ pub enum Evenement {
         categorie: CategorieLocalite,
         notes: String,
     },
+    /// Supprime la localité avec ses bâtiments, organisations, équipes et gestionnaires ;
+    /// les personnages présents sont conservés, sans localité.
+    LocaliteSupprimee {
+        id: IdLocalite,
+    },
+    /// Supprime le personnage, sa fiche et ses liens (acolyte, don Prestige).
+    PersonnageSupprime {
+        id: IdPersonnage,
+    },
     /// Compte du PJ → trésorerie de la localité.
     InjectionPo {
         pj: IdPersonnage,

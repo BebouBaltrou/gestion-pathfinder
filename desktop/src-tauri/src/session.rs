@@ -176,6 +176,52 @@ impl Session {
         Retour::ok(format!("Campagne « {nom} » créée"))
     }
 
+    /// Supprime une campagne : son fichier (et celui d'un éventuel combat interrompu) est rangé
+    /// dans le sous-dossier `corbeille`, d'où on peut le récupérer à la main.
+    pub fn supprimer_campagne(&mut self, chemin: &Path) -> Retour {
+        let est_dans_le_dossier = chemin.parent() == Some(self.dossier.as_path())
+            && chemin.extension().is_some_and(|x| x == "json")
+            && chemin.is_file();
+        if !est_dans_le_dossier {
+            return Retour::erreur("Cette campagne n'existe plus");
+        }
+        let ouverte = self.chemin.as_deref() == Some(chemin);
+        if ouverte && self.simulation.is_some() {
+            return Retour::erreur(
+                "Une simulation est en cours : gardez-la ou abandonnez-la avant de supprimer la campagne",
+            );
+        }
+        let corbeille = self.dossier.join("corbeille");
+        if let Err(e) = std::fs::create_dir_all(&corbeille) {
+            return Retour::erreur(format!("Dossier « corbeille » impossible à créer : {e}"));
+        }
+        let stamp = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .map_or(0, |d| d.as_secs());
+        let nom = chemin
+            .file_stem()
+            .map(|s| s.to_string_lossy().to_string())
+            .unwrap_or_default();
+        let ranger = |source: &Path, extension: &str| {
+            std::fs::rename(source, corbeille.join(format!("{nom}.{stamp}.{extension}")))
+        };
+        if let Err(e) = ranger(chemin, "json") {
+            return Retour::erreur(format!("Suppression impossible : {e}"));
+        }
+        let combat = chemin.with_extension("combat.json");
+        if combat.is_file() {
+            let _ = ranger(&combat, "combat.json");
+        }
+        if ouverte {
+            self.campagne = None;
+            self.chemin = None;
+            self.combat = None;
+        }
+        Retour::ok(format!(
+            "Campagne « {nom} » supprimée (rangée dans le dossier « corbeille »)"
+        ))
+    }
+
     /// Enregistre les modèles personnels (fichier commun aux deux applications).
     pub fn enregistrer_modeles(&self) -> Result<(), String> {
         self.modeles
@@ -318,5 +364,50 @@ impl Session {
         let c = self.campagne.as_mut()?;
         let (n_sim, j_sim) = (c.curseur, c.etat(&self.r).jour);
         Some((n_sim as i64 - n_reel as i64, j_sim as i64 - j_reel as i64))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn session_dans(dossier: &Path) -> Session {
+        Session {
+            r: regles::referentiel_officiel(),
+            dossier: dossier.to_path_buf(),
+            campagne: None,
+            simulation: None,
+            chemin: None,
+            modeles: Default::default(),
+            combat: None,
+        }
+    }
+
+    #[test]
+    fn supprimer_une_campagne_la_range_dans_la_corbeille() {
+        let d = std::env::temp_dir().join(format!("gp-suppression-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&d);
+        std::fs::create_dir_all(&d).unwrap();
+        let mut s = session_dans(&d);
+        assert!(s.creer("Ancienne", None).ok);
+        assert!(s.creer("Autre", None).ok);
+        let chemin = d.join("Ancienne.json");
+        assert!(chemin.is_file());
+        // « Autre » est ouverte ; on supprime « Ancienne » sans toucher à l'ouverte
+        assert!(s.supprimer_campagne(&chemin).ok);
+        assert!(!chemin.exists());
+        assert_eq!(s.lister().len(), 1);
+        assert!(s.campagne.is_some());
+        let rangees = std::fs::read_dir(d.join("corbeille")).unwrap().count();
+        assert_eq!(rangees, 1);
+        // supprimer la campagne ouverte la ferme
+        let ouverte = d.join("Autre.json");
+        assert!(s.supprimer_campagne(&ouverte).ok);
+        assert!(s.campagne.is_none() && s.chemin.is_none());
+        assert!(s.lister().is_empty());
+        // fichier inexistant ou hors du dossier : refusé
+        assert!(!s.supprimer_campagne(&ouverte).ok);
+        assert!(!s.supprimer_campagne(Path::new("C:/Windows/notepad.exe")).ok);
+        let _ = std::fs::remove_dir_all(&d);
     }
 }

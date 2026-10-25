@@ -391,6 +391,49 @@ pub fn ajustement(
     })
 }
 
+/// Texte de confirmation avant de supprimer une localité : ce qui disparaît avec elle.
+pub fn avertissement_suppression(c: &mut campagne::Campagne, r: &Referentiel, id: u32) -> String {
+    let etat = c.etat(r);
+    let id = IdLocalite(id);
+    let Ok(l) = etat.localite(id) else {
+        return "Cette localité n'existe plus.".into();
+    };
+    let k = etat.contenu_localite(id);
+    let mut perdu = Vec::new();
+    let mut ajoute = |n: usize, un: &str, plusieurs: &str| {
+        if n > 0 {
+            perdu.push(format!("{n} {}", if n == 1 { un } else { plusieurs }));
+        }
+    };
+    ajoute(k.batiments, "bâtiment", "bâtiments");
+    ajoute(k.organisations, "organisation", "organisations");
+    ajoute(k.equipes, "équipe", "équipes");
+    ajoute(k.gestionnaires, "gestionnaire", "gestionnaires");
+    ajoute(k.transferts, "transfert en route", "transferts en route");
+    ajoute(k.ventes, "vente en cours", "ventes en cours");
+    let mut t = format!("Supprimer la localité « {} » ?", l.nom);
+    if perdu.is_empty() {
+        t.push_str("\n\nElle est vide.");
+    } else {
+        t.push_str(&format!(
+            "\n\nDisparaissent avec elle : {}.",
+            perdu.join(", ")
+        ));
+    }
+    t.push_str(&format!(
+        "\nSa trésorerie ({}) et ses capitaux sont perdus.",
+        l.tresorerie
+    ));
+    if k.personnages_presents > 0 {
+        t.push_str(&format!(
+            "\n{} personnage(s) présent(s) sont conservés, sans localité.",
+            k.personnages_presents
+        ));
+    }
+    t.push_str("\n\nVous pourrez annuler juste après avec le bouton « Annuler ».");
+    t
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -405,6 +448,19 @@ mod tests {
             categorie_officielle: "petite-bourgade".into(),
             ..SaisieLocalite::default()
         }
+    }
+
+    #[test]
+    fn avertissement_avant_suppression() {
+        let r = regles::referentiel_officiel();
+        let mut c = Campagne::nouvelle("Test");
+        let id = c.nouvel_id_localite();
+        c.executer(saisie("Sandpoint", "1 240").creation(id, &r).unwrap(), &r)
+            .unwrap();
+        let t = avertissement_suppression(&mut c, &r, id.0);
+        assert!(t.contains("« Sandpoint »") && t.contains("Elle est vide"));
+        c.executer(Evenement::LocaliteSupprimee { id }, &r).unwrap();
+        assert!(avertissement_suppression(&mut c, &r, id.0).contains("n'existe plus"));
     }
 
     #[test]

@@ -81,6 +81,22 @@ export function SuiviPersonnage({ outils, pj }: { outils: Outils; pj: LignePerso
           <button type="submit" className="bouton" disabled={!nom.trim() || nom.trim() === pj.nom}>Enregistrer</button>
         </form>
       </details>
+
+      <details className="carte repli">
+        <summary>Supprimer le personnage</summary>
+        <div className="ligne operation">
+          <button
+            className="bouton danger"
+            onClick={() => {
+              if (window.confirm(`Supprimer ${pj.nom} ?\n\nSon compte, sa fiche et ses liens (acolyte, partisans) disparaissent de la campagne.\n\nVous pourrez annuler juste après avec le bouton « Annuler ».`)) {
+                outils.agir(api.supprimerPersonnage(pj.id));
+              }
+            }}
+          >
+            Supprimer {pj.nom}…
+          </button>
+        </div>
+      </details>
     </>
   );
 }

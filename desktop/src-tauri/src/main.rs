@@ -157,6 +157,39 @@ fn modifier_localite(s: S, id: u32, saisie: vues::localites::SaisieLocalite) -> 
 }
 
 #[tauri::command]
+fn avertissement_suppression_localite(s: S, id: u32) -> String {
+    let mut x = session(&s);
+    let r = x.r.clone();
+    match x.campagne.as_mut() {
+        Some(c) => vues::localites::avertissement_suppression(c, &r, id),
+        None => "Aucune campagne ouverte".into(),
+    }
+}
+
+#[tauri::command]
+fn supprimer_localite(s: S, id: u32) -> Retour {
+    session(&s).executer(
+        Evenement::LocaliteSupprimee { id: IdLocalite(id) },
+        "Localité supprimée (« Annuler » la ramène)",
+    )
+}
+
+#[tauri::command]
+fn supprimer_personnage(s: S, id: u32) -> Retour {
+    session(&s).executer(
+        Evenement::PersonnageSupprime {
+            id: campagne::modele::IdPersonnage(id),
+        },
+        "Personnage supprimé (« Annuler » le ramène)",
+    )
+}
+
+#[tauri::command]
+fn supprimer_campagne(s: S, chemin: String) -> Retour {
+    session(&s).supprimer_campagne(Path::new(&chemin))
+}
+
+#[tauri::command]
 fn mouvement_po(s: S, injection: bool, pj: u32, localite: u32, montant: String) -> Retour {
     let mut x = session(&s);
     let ev = vues::localites::mouvement_po(injection, pj, localite, &montant);
@@ -649,6 +682,10 @@ fn main() {
             lire_montant,
             creer_localite,
             modifier_localite,
+            avertissement_suppression_localite,
+            supprimer_localite,
+            supprimer_personnage,
+            supprimer_campagne,
             mouvement_po,
             transfert,
             ajustement,
