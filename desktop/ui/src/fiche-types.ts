@@ -60,7 +60,25 @@ export type EmplacementVue = {
   connus: number;
   dd: number;
 };
-export type SortVue = { nomEn: string; nom: string; niveau: number; ecole: string; deLignage: boolean };
+export type StatsSortFiche = {
+  niveauDeLanceur: number;
+  tempsDIncantation: string | null;
+  composantes: string | null;
+  portee: string | null;
+  porteeCalculee: string | null;
+  cible: string | null;
+  duree: string | null;
+  dureeCalculee: string | null;
+  jetDeSauvegarde: string | null;
+  dd: number | null;
+  resistanceALaMagie: string | null;
+  nombre: string | null;
+  degats: { libelle: string; formule: string; regle: string; aConfirmer: boolean }[];
+  description: string;
+  source: string | null;
+  noteLivre: string | null;
+};
+export type SortVue = { nomEn: string; nom: string; niveau: number; ecole: string; deLignage: boolean; stats: StatsSortFiche | null };
 export type IncantateurVue = {
   classe: string;
   niveauDeLanceur: number;
@@ -136,6 +154,8 @@ export type FicheVue = {
   etats: EtatVue[];
   temporaires: TemporaireVue[];
   notesEtats: string[];
+  /** Sorts connus à remplacer (doublon ou sort déjà accordé par le lignage). */
+  remplacementsDeSorts: { ancienEn: string; ancien: string; niveauDeSort: number; propositions: { nomEn: string; nom: string }[] }[];
   problemes: string[];
   historique: string[];
 };
@@ -290,6 +310,7 @@ export type EvenementFiche =
   | { XpGagnes: { nombre: number; motif: string } }
   | { JalonAccorde: { niveau: number } }
   | { MonteeDeNiveau: Montee }
+  | { SortRemplace: { ancien: string; nouveau: string } }
   | { SortLance: { classe: string; niveau_de_sort: number; sort: string } }
   | { Equiper: { emplacement: "armure" | "bouclier"; objet: string | null } }
   | { ArmeAjoutee: string }

@@ -29,6 +29,12 @@ pub enum EvenementFiche {
         niveau: u32,
     },
     MonteeDeNiveau(Montee),
+    /// Un sort connu en double (ou déjà accordé par le lignage) est remplacé par un autre
+    /// sort du même niveau, de la liste de la classe.
+    SortRemplace {
+        ancien: String,
+        nouveau: String,
+    },
     /// Un emplacement de sort dépensé (niveau de sort 1 à 9). Les tours de magie sont à volonté.
     SortLance {
         classe: String,
@@ -80,6 +86,9 @@ impl EvenementFiche {
             EvenementFiche::XpGagnes { nombre, motif } => format!("+{nombre} XP ({motif})"),
             EvenementFiche::JalonAccorde { niveau } => format!("Jalon : niveau {niveau} accordé"),
             EvenementFiche::MonteeDeNiveau(m) => format!("Montée de niveau en {}", m.classe),
+            EvenementFiche::SortRemplace { ancien, nouveau } => {
+                format!("Sort remplacé : {ancien} → {nouveau}")
+            }
             EvenementFiche::SortLance {
                 niveau_de_sort,
                 sort,
@@ -411,6 +420,35 @@ impl Journal {
                 EvenementFiche::DommagesCaracteristique { carac, delta } => {
                     let d = fiche.dommages.entry(*carac).or_insert(0);
                     *d = (*d + *delta).max(0);
+                }
+                EvenementFiche::SortRemplace { ancien, nouveau } => {
+                    let permis = fiche.remplacements_de_sorts(r).into_iter().any(|x| {
+                        x.ancien.eq_ignore_ascii_case(ancien)
+                            && x.propositions
+                                .iter()
+                                .any(|p| p.eq_ignore_ascii_case(nouveau))
+                    });
+                    if !permis {
+                        return Err(ErreurJournal::SortLanceImpossible {
+                            evenement: i,
+                            raison: format!(
+                                "{ancien} ne peut pas être remplacé par {nouveau} (même niveau, liste de la classe, pas de doublon)"
+                            ),
+                        });
+                    }
+                    if let Some(pos) = fiche
+                        .sorts_connus
+                        .iter()
+                        .position(|s| s.eq_ignore_ascii_case(ancien))
+                    {
+                        // le doublon retiré est la dernière occurrence : la première reste
+                        let pos = fiche
+                            .sorts_connus
+                            .iter()
+                            .rposition(|s| s.eq_ignore_ascii_case(ancien))
+                            .unwrap_or(pos);
+                        fiche.sorts_connus[pos] = nouveau.clone();
+                    }
                 }
                 EvenementFiche::MonteeDeNiveau(m) => {
                     let atteignable = niveau_atteignable(r, regles.vitesse, xp, jalon);
