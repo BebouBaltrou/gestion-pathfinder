@@ -50,6 +50,8 @@ Rapprochements par le prix et le poids :
 La v1.0 (`data/core/`) est la source unique. Ses noms ont été remplacés par ceux de la transcription du
 Manuel des joueurs en cas de conflit (17 noms dans `data/core/fr/equipement_noms.json`, puis
 `node outils/fusionner_traductions_equipement.js data/core` pour réécrire les noms dans les données).
-Deux fautes de frappe évidentes du livre n'ont pas été reprises : « Halllebarde » (gardé : « Hallebarde ») et
-« Clepysdre » (gardé : « Clepsydre »). La transcription en texte a été supprimée ; l'inventaire construit ses
-modèles depuis `data/core/` (`campagne::catalogue_inventaire`).
+Deux fautes d'impression du livre suivent la règle déjà en place (`docs/COMPARAISON_MANUEL_DES_JOUEURS.md`) :
+nom corrigé (« Hallebarde », « Clepsydre ») et note « erreur du livre » dans `data/core/fr/notes_livre.json`,
+qui accompagne l'objet dans l'inventaire (propriété `note_livre`). La note de l'objet « Outils de cambrioleur
+de qualité supérieure » a été retirée : son nom suit maintenant le libellé du livre. La transcription en texte
+a été supprimée ; l'inventaire construit ses modèles depuis `data/core/` (`campagne::catalogue_inventaire`).

@@ -6,6 +6,7 @@
 
 use domaine::Montant;
 use fiches::equipement::{CatalogueEquipement, Cout, GenreProtection};
+use fiches::traductions::Traductions;
 use inventaire::{Modele, Poids};
 use std::collections::BTreeMap;
 
@@ -46,8 +47,9 @@ fn proprietes(valeurs: &[(&str, Option<String>)]) -> BTreeMap<String, String> {
         .collect()
 }
 
-/// Tous les modèles du catalogue d'équipement : armes, armures et boucliers, matériel.
-pub fn modeles(catalogue: &CatalogueEquipement) -> Vec<Modele> {
+/// Tous les modèles du catalogue d'équipement : armes, armures et boucliers, matériel. La note « erreur du
+/// livre » de `notes_livre.json`, quand il y en a une, est dans la propriété `note_livre`.
+pub fn modeles(catalogue: &CatalogueEquipement, traductions: &Traductions) -> Vec<Modele> {
     let mut modeles = Vec::new();
     for a in &catalogue.armes {
         let munition = a.categorie_en.as_deref() == Some("Ammunition");
@@ -68,6 +70,7 @@ pub fn modeles(catalogue: &CatalogueEquipement) -> Vec<Modele> {
                 ("type_degats", a.type_en.clone()),
                 ("special", a.special_en.clone()),
                 ("groupes", a.groupes_en.clone()),
+                ("note_livre", traductions.note_livre("armes", &a.nom_en)),
             ]),
         });
     }
@@ -91,6 +94,7 @@ pub fn modeles(catalogue: &CatalogueEquipement) -> Vec<Modele> {
                 ("dex_max", a.dex_max.map(|v| v.to_string())),
                 ("malus_armure", a.malus_armure.map(|v| v.to_string())),
                 ("echec_sorts_pct", a.echec_sorts_pct.map(|v| v.to_string())),
+                ("note_livre", traductions.note_livre("armures", &a.nom_en)),
             ]),
         });
     }
@@ -105,6 +109,7 @@ pub fn modeles(catalogue: &CatalogueEquipement) -> Vec<Modele> {
             proprietes: proprietes(&[
                 ("nom_en", Some(o.nom_en.clone())),
                 ("categorie", o.categorie_en.clone()),
+                ("note_livre", traductions.note_livre("materiel", &o.nom_en)),
             ]),
         });
     }
@@ -136,7 +141,7 @@ mod tests {
     #[test]
     fn tout_le_catalogue_devient_des_modeles_uniques() {
         let c = catalogue();
-        let m = modeles(&c);
+        let m = modeles(&c, Traductions::partage());
         assert_eq!(m.len(), c.armes.len() + c.armures.len() + c.materiel.len());
         let mut ids: Vec<&str> = m.iter().map(|x| x.id.as_str()).collect();
         ids.sort_unstable();
@@ -147,7 +152,7 @@ mod tests {
 
     #[test]
     fn valeurs_et_poids_du_manuel_des_joueurs() {
-        let m = modeles(&catalogue());
+        let m = modeles(&catalogue(), Traductions::partage());
         let dague = trouver(&m, "Dague");
         assert_eq!(dague.valeur, Some(Montant::po(2)));
         assert_eq!(dague.poids, Some(Poids(500)));
@@ -161,5 +166,14 @@ mod tests {
         assert_eq!(trouver(&m, "Targe").type_objet, "bouclier");
         assert_eq!(trouver(&m, "Bougie").valeur, Some(Montant::pc(1)));
         assert_eq!(trouver(&m, "Flèches (20)").type_objet, "munition");
+    }
+
+    #[test]
+    fn les_notes_erreur_du_livre_suivent_l_objet() {
+        let m = modeles(&catalogue(), Traductions::partage());
+        let hallebarde = trouver(&m, "Hallebarde");
+        assert!(hallebarde.proprietes["note_livre"].contains("Halllebarde"));
+        assert!(trouver(&m, "Flasque (vide)").proprietes["note_livre"].contains("0,75 kg"));
+        assert!(!trouver(&m, "Dague").proprietes.contains_key("note_livre"));
     }
 }

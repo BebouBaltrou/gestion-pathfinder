@@ -9,8 +9,7 @@
  "armures": {},
  "materiel": {
   "Flask": "Erreur probable du livre : poids 2,25 kg (la règle d’origine donne 0,75 kg).",
-  "Water clock": "Le livre écrit « Clepysdre » (faute d’impression).",
-  "Thieves' tools (masterwork)": "Le livre écrit seulement « Outils de cambrioleur » à 100 po ; « (de maître) » est ajouté pour distinguer les deux lignes."
+  "Water clock": "Le livre écrit « Clepysdre » (faute d’impression)."
  },
  "sorts": {
   "Sequester": "Erreur probable du livre : les noms « Dissimulation suprême » (niveau 7) et « Séquestration » (niveau 8) sont échangés par rapport à la version d’origine.",
