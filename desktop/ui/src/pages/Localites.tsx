@@ -38,6 +38,7 @@ export function Localites({ outils }: { outils: Outils }) {
   const [p, setP] = useState<PageLocalites | null>(null);
   const [selection, setSelection] = useState<number | null>(null);
   const [creation, setCreation] = useState(false);
+  const [modeleChoisi, setModeleChoisi] = useState("");
 
   useEffect(() => {
     api.pageLocalites().then((x) => {
@@ -47,6 +48,7 @@ export function Localites({ outils }: { outils: Outils }) {
   }, [outils.version]);
 
   if (!p) return null;
+  const modele = p.modeles.find((m) => m.id === modeleChoisi);
   const choisie = p.localites.find((l) => l.id === selection) ?? (creation ? undefined : p.localites[0]);
 
   return (
@@ -88,9 +90,32 @@ export function Localites({ outils }: { outils: Outils }) {
           {creation || !choisie ? (
             <section className="carte section">
               <h2>Nouvelle localité</h2>
+              <div className="formulaire">
+                <label htmlFor="loc-modele">Localité prête à l'emploi</label>
+                <select
+                  id="loc-modele"
+                  className="champ"
+                  value={modeleChoisi}
+                  onChange={(e) => setModeleChoisi(e.target.value)}
+                >
+                  <option value="">Aucune (saisie libre)</option>
+                  {p.modeles.map((m) => (
+                    <option key={m.id} value={m.id}>
+                      {m.libelle}
+                      {m.officiel ? "" : " (à confirmer)"}
+                    </option>
+                  ))}
+                </select>
+                {modele && (
+                  <p className="doux">
+                    Source : {modele.source}.{" "}
+                    {modele.remarque ? <strong>À confirmer : {modele.remarque}</strong> : "Valeurs du wiki."}
+                  </p>
+                )}
+              </div>
               <Formulaire
-                key="creation"
-                initiale={SAISIE_VIDE}
+                key={"creation-" + modeleChoisi}
+                initiale={modele?.saisie ?? SAISIE_VIDE}
                 categories={p.categories}
                 bouton="Créer la localité"
                 principal
@@ -101,6 +126,7 @@ export function Localites({ outils }: { outils: Outils }) {
                     const apres = await api.pageLocalites();
                     const nouvelle = apres?.localites.find((l) => !avant.has(l.id));
                     setCreation(false);
+                    setModeleChoisi("");
                     setSelection(nouvelle?.id ?? null);
                   }
                   return !!r?.ok;

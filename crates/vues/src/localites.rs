@@ -19,6 +19,8 @@ pub struct PageLocalites {
     pub personnages: Vec<Choix>,
     /// Catégories officielles de communauté, dans l'ordre du livre.
     pub categories: Vec<ChoixCategorie>,
+    /// Localités prêtes à l'emploi (villes de Varisie), pour préremplir la création.
+    pub modeles: Vec<crate::localites_modeles::ModeleLocalite>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -243,6 +245,7 @@ pub fn page_localites(c: &mut campagne::Campagne, r: &Referentiel) -> PageLocali
             .iter()
             .map(|c| choix_categorie(c, r))
             .collect(),
+        modeles: crate::localites_modeles::modeles_localites(r),
     }
 }
 

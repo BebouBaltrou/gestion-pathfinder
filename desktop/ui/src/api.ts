@@ -115,6 +115,17 @@ export type SaisieLocalite = {
   notes: string;
 };
 
+/** Localité prête à l'emploi (villes de Varisie du wiki), formulaire déjà rempli. */
+export type ModeleLocalite = {
+  id: string;
+  nom: string;
+  libelle: string;
+  officiel: boolean;
+  remarque: string | null;
+  source: string;
+  saisie: SaisieLocalite;
+};
+
 export type ChoixCategorie = {
   id: string;
   libelle: string;
@@ -145,6 +156,7 @@ export type PageLocalites = {
   localites: FicheLocalite[];
   personnages: Choix[];
   categories: ChoixCategorie[];
+  modeles: ModeleLocalite[];
 };
 
 export type FichePersonnage = {
@@ -834,6 +846,19 @@ function simule(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
           { id: 2, libelle: "Valeros (87 po)" },
         ],
         categories: CATEGORIES_EXEMPLE,
+        modeles: [
+          {
+            id: "korvosa", nom: "Korvosa", libelle: "Korvosa — grande ville · 18 486 hab.", officiel: true,
+            remarque: null, source: "Wiki Pathfinder-FR, Golarion.Korvosa",
+            saisie: { ...saisie("Korvosa", "grande-ville"), genre: "grande ville", population: "18486", notes: "Alignement : LN." },
+          },
+          {
+            id: "abken", nom: "Abken", libelle: "Abken — petite ville · population inconnue", officiel: false,
+            remarque: "Pas de population ni de chiffres sur le wiki : population et catégorie à choisir.",
+            source: "Wiki Pathfinder-FR, Golarion.Abken",
+            saisie: { ...saisie("Abken", ""), genre: "petite ville" },
+          },
+        ],
       };
       return Promise.resolve(p);
     }
