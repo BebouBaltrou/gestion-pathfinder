@@ -200,7 +200,8 @@ export type CatalogueCreation = {
   classes: ClasseVue[];
   competences: CompetenceCatalogue[];
   dons: DonCatalogue[];
-  sortsEnsorceleur: SortCatalogue[];
+  /** Sorts de la liste de chaque classe (identifiant de classe) : on ne choisit que dans sa propre liste. */
+  sortsParClasse: Record<string, SortCatalogue[]>;
   armures: EquipementCatalogue[];
   armes: EquipementCatalogue[];
   materiel: EquipementCatalogue[];
@@ -269,6 +270,9 @@ export type ApercuMontee = {
   reflexes: [number, number];
   volonte: [number, number];
   donsAChoisir: number;
+  /** Parmi ces dons, nombre à prendre dans la liste du lignage. */
+  donsDeLignage: number;
+  donsDeLignagePossibles: { nomEn: string; nom: string }[];
   augmentation: boolean;
   predilectionPossible: boolean;
   capacites: string[];

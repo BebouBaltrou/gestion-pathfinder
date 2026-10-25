@@ -9,12 +9,15 @@ export function SelectionDons({
   valeur,
   onChange,
   imposes = [],
+  lignage,
 }: {
   cat: CatalogueCreation;
   nombre: number;
   valeur: string[];
   onChange: (v: string[]) => void;
   imposes?: string[];
+  /** Les premiers dons sont des dons de lignage : on ne peut les prendre que dans la liste du lignage. */
+  lignage?: { nombre: number; possibles: { nomEn: string; nom: string }[]; dejaPris: string[] };
 }) {
   const lignes = Array.from({ length: nombre }, (_, i) => valeur[i] ?? "");
   const maj = (i: number, v: string) => {
@@ -25,7 +28,37 @@ export function SelectionDons({
   return (
     <div className="section">
       {imposes.length > 0 && <p className="doux">Don imposé : {imposes.join(", ")} (à choisir parmi ses variantes).</p>}
+      {lignage && (
+        <p className="doux">
+          {lignage.nombre > 1 ? `Les ${lignage.nombre} premiers dons sont` : "Le premier don est"} un don de lignage : seuls les dons
+          de ton lignage sont proposés.
+        </p>
+      )}
       {lignes.map((d, i) => {
+        if (lignage && i < lignage.nombre) {
+          const pris = lignes.filter((_, j) => j !== i);
+          const options = lignage.possibles
+            .filter((p) => !lignage.dejaPris.includes(p.nomEn) && !pris.includes(p.nomEn))
+            .map((p) => ({ v: p.nomEn, l: p.nom }));
+          const def = cat.dons.find((x) => x.nomEn === d.split(" (")[0]);
+          return (
+            <div className="carte ligne-don" key={i}>
+              <Choix
+                etiquette={`Don de lignage ${i + 1}`}
+                vide="Choisir un don de lignage…"
+                valeur={options.some((o) => o.v === d) ? d : ""}
+                options={options}
+                onChange={(v) => maj(i, v)}
+              />
+              {def && (
+                <p className="doux">
+                  {def.resume}
+                  {def.prerequis ? ` — Prérequis : ${def.prerequis}` : ""}
+                </p>
+              )}
+            </div>
+          );
+        }
         const base = d.split(" (")[0];
         const choix = d.includes(" (") ? d.slice(d.indexOf(" (") + 2, -1) : "";
         const def = cat.dons.find((x) => x.nomEn === base);

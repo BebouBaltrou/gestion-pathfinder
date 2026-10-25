@@ -159,7 +159,17 @@ export function Montee({
         {apercu.donsAChoisir > 0 && (
           <>
             <h3>Don{apercu.donsAChoisir > 1 ? "s" : ""} à choisir</h3>
-            <SelectionDons cat={cat} nombre={apercu.donsAChoisir} valeur={dons} onChange={setDons} />
+            <SelectionDons
+              cat={cat}
+              nombre={apercu.donsAChoisir}
+              valeur={dons}
+              onChange={setDons}
+              lignage={
+                apercu.donsDeLignage > 0
+                  ? { nombre: apercu.donsDeLignage, possibles: apercu.donsDeLignagePossibles, dejaPris: fiche.dons.map((d) => d.nomEn) }
+                  : undefined
+              }
+            />
           </>
         )}
 
@@ -167,7 +177,7 @@ export function Montee({
           <>
             <h3>Nouveaux sorts connus</h3>
             <SelectionSorts
-              sorts={cat.sortsEnsorceleur}
+              sorts={cat.sortsParClasse[classe] ?? []}
               attendus={sortsAttendus}
               valeur={sorts}
               onChange={setSorts}

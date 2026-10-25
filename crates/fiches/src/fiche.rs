@@ -101,6 +101,11 @@ pub enum Probleme {
     DonInconnu(String),
     DonEnDouble(String),
     DonImposeManquant(String),
+    /// Le don supplémentaire de lignage doit venir de la liste du lignage.
+    DonDeLignageManquant {
+        niveau: u32,
+        lignage: String,
+    },
     DonsAuNiveau {
         niveau: u32,
         attendus: u32,
@@ -215,6 +220,10 @@ impl std::fmt::Display for Probleme {
             ),
             Probleme::DonInconnu(d) => write!(f, "don inconnu du catalogue : {d}"),
             Probleme::DonEnDouble(d) => write!(f, "don pris deux fois (non répétable) : {d}"),
+            Probleme::DonDeLignageManquant { niveau, lignage } => write!(
+                f,
+                "niveau {niveau} : un des dons doit être un don du lignage {lignage}"
+            ),
             Probleme::DonImposeManquant(d) => write!(f, "don imposé par la race manquant : {d}"),
             Probleme::EquipementInconnu(n) => write!(f, "équipement inconnu du catalogue : {n}"),
             Probleme::MauvaisEmplacement { objet, attendu } => {
@@ -671,30 +680,36 @@ impl Fiche {
         self.niveaux.iter().flat_map(|n| n.dons.clone()).collect()
     }
 
-    /// Nombre de dons à choisir au niveau de personnage `i + 1` (index `i`).
-    pub(crate) fn dons_attendus_a(&self, r: &Referentiel, i: usize) -> u32 {
-        let niveau = i as u32 + 1;
+    /// Nombre de dons supplémentaires de lignage (à prendre dans la liste du lignage) au niveau de
+    /// personnage `i + 1` (index `i`).
+    pub(crate) fn dons_de_lignage_a(&self, r: &Referentiel, i: usize) -> u32 {
         let Some(classe) = r.classe(&self.niveaux[i].classe) else {
             return 0;
         };
         let nc = self.niveaux[..=i]
             .iter()
             .filter(|n| n.classe == classe.id)
-            .count() as u32;
-        let mut n = 0;
+            .count();
+        let bonus = nc >= 1
+            && classe
+                .progression
+                .get(nc - 1)
+                .is_some_and(|l| l.special_en.contains("Bloodline feat"));
+        u32::from(bonus)
+    }
+
+    /// Nombre de dons à choisir au niveau de personnage `i + 1` (index `i`).
+    pub(crate) fn dons_attendus_a(&self, r: &Referentiel, i: usize) -> u32 {
+        let niveau = i as u32 + 1;
+        if r.classe(&self.niveaux[i].classe).is_none() {
+            return 0;
+        }
+        let mut n = self.dons_de_lignage_a(r, i);
         if r.ligne_progression(niveau).is_some_and(|l| l.don) {
             n += 1;
         }
         if niveau == 1 {
             n += r.race(&self.race).map(|x| x.bonus_don).unwrap_or(0);
-        }
-        if nc >= 1
-            && classe
-                .progression
-                .get(nc as usize - 1)
-                .is_some_and(|l| l.special_en.contains("Bloodline feat"))
-        {
-            n += 1;
         }
         n
     }
@@ -710,6 +725,18 @@ impl Fiche {
                     attendus,
                     choisis: n.dons.len() as u32,
                 });
+            }
+            let a_lignage = self.dons_de_lignage_a(r, i);
+            if a_lignage > 0 {
+                if let Some(l) = r.classe(&n.classe).and_then(|c| self.lignage_de(c)) {
+                    let du_lignage = n.dons.iter().filter(|d| l.autorise_don(d)).count() as u32;
+                    if du_lignage < a_lignage {
+                        p.push(Probleme::DonDeLignageManquant {
+                            niveau: i as u32 + 1,
+                            lignage: l.nom_en.clone(),
+                        });
+                    }
+                }
             }
             for d in &n.dons {
                 let base = crate::catalogue::nom_de_base(d);
@@ -1229,14 +1256,33 @@ pub(crate) mod tests {
 
     /// Donne à chaque niveau les dons attendus (dons distincts, sans prérequis ni choix).
     pub(crate) fn completer_dons(r: &Referentiel, f: &mut Fiche) {
+        let lignage_dons: Vec<String> = f
+            .lignage
+            .as_ref()
+            .and_then(|id| {
+                let c = r.classe(&f.niveaux[0].classe)?;
+                c.lignages.iter().find(|l| &l.id == id)
+            })
+            .map(|l| l.dons_bonus_en.clone())
+            .unwrap_or_default();
+        // les dons réservés au lignage ne servent pas de dons ordinaires (pas de doublon)
         let mut pool = r
             .dons
             .iter()
             .filter(|d| !d.repetable() && d.prerequis.is_empty() && !d.a_un_choix())
+            .filter(|d| !lignage_dons.iter().any(|l| l.starts_with(&d.nom_en)))
             .map(|d| d.nom_en.clone());
+        let mut prochains_lignage = lignage_dons.clone().into_iter();
         for i in 0..f.niveaux.len() {
             let n = f.dons_attendus_a(r, i) as usize;
-            f.niveaux[i].dons = (&mut pool).take(n).collect();
+            let mut dons: Vec<String> = Vec::new();
+            for _ in 0..f.dons_de_lignage_a(r, i) {
+                dons.extend(prochains_lignage.next());
+            }
+            let reste = n - dons.len();
+            let autres: Vec<String> = (&mut pool).take(reste).collect();
+            dons.extend(autres);
+            f.niveaux[i].dons = dons;
         }
     }
 

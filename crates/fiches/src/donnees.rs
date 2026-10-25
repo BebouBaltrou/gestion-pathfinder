@@ -115,6 +115,22 @@ pub struct Lignage {
     pub choix_en: Vec<String>,
 }
 
+impl Lignage {
+    /// Le don fait-il partie de la liste de dons supplémentaires de ce lignage ?
+    /// Une entrée avec précision (« Skill Focus (Fly) ») impose cette précision ; une entrée
+    /// sans précision accepte le don quel que soit son choix.
+    pub fn autorise_don(&self, don: &str) -> bool {
+        let base = crate::catalogue::nom_de_base(don);
+        self.dons_bonus_en.iter().any(|e| {
+            if e.contains(" (") {
+                e.trim().eq_ignore_ascii_case(don.trim())
+            } else {
+                e.trim().eq_ignore_ascii_case(base)
+            }
+        })
+    }
+}
+
 #[derive(Debug, Clone, Deserialize)]
 pub struct Incantation {
     #[serde(rename = "type")]

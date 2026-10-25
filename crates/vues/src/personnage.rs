@@ -754,8 +754,9 @@ vue! {
         pub classes: Vec<ClasseVue>,
         pub competences: Vec<CompetenceCatalogue>,
         pub dons: Vec<DonCatalogue>,
-        /// Sorts de la liste de la classe (ensorceleur), par niveau.
-        pub sorts_ensorceleur: Vec<SortCatalogue>,
+        /// Sorts de la liste de chaque classe lanceuse de sorts (identifiant de classe), par niveau.
+        /// Un personnage ne peut choisir que dans la liste de sa classe.
+        pub sorts_par_classe: std::collections::BTreeMap<String, Vec<SortCatalogue>>,
         pub armures: Vec<EquipementCatalogue>,
         pub armes: Vec<EquipementCatalogue>,
         pub materiel: Vec<EquipementCatalogue>,
@@ -763,6 +764,32 @@ vue! {
         /// Coût d'achat de points par score (7 à 18).
         pub cout_achat: Vec<(i32, i32)>,
     }
+}
+
+/// Sorts de la liste d'une classe (clé anglaise en minuscules : « sorcerer », « cleric »…),
+/// triés par niveau de sort puis par nom.
+pub fn sorts_de_la_liste(r: &Referentiel, t: &Traductions, cle: &str) -> Vec<SortCatalogue> {
+    let mut sorts: Vec<SortCatalogue> = r
+        .sorts
+        .iter()
+        .filter_map(|s| {
+            let niveau = s.niveau_pour(cle)?;
+            let fr = t.sort(&s.nom_en);
+            Some(SortCatalogue {
+                nom_en: s.nom_en.clone(),
+                nom: fr.map(|x| x.nom.clone()).unwrap_or(s.nom_en.clone()),
+                ecole: fr.map(|x| x.ecole.clone()).unwrap_or_default(),
+                niveau,
+                resume: fr
+                    .map(|x| x.description.chars().take(220).collect())
+                    .unwrap_or_default(),
+                source: t.source_vf("sorts", &s.nom_en),
+                note_livre: t.note_livre("sorts", &s.nom_en),
+            })
+        })
+        .collect();
+    sorts.sort_by_key(|s| (s.niveau, s.nom.clone()));
+    sorts
 }
 
 pub fn catalogue_creation() -> CatalogueCreation {
@@ -905,33 +932,24 @@ pub fn catalogue_creation() -> CatalogueCreation {
             }
         })
         .collect();
-    let mut sorts_ensorceleur: Vec<SortCatalogue> = r
-        .sorts
+    let sorts_par_classe = r
+        .classes
         .iter()
-        .filter_map(|s| {
-            let niveau = s.niveau_pour("sorcerer")?;
-            let fr = t.sort(&s.nom_en);
-            Some(SortCatalogue {
-                nom_en: s.nom_en.clone(),
-                nom: fr.map(|x| x.nom.clone()).unwrap_or(s.nom_en.clone()),
-                ecole: fr.map(|x| x.ecole.clone()).unwrap_or_default(),
-                niveau,
-                resume: fr
-                    .map(|x| x.description.chars().take(220).collect())
-                    .unwrap_or_default(),
-                source: t.source_vf("sorts", &s.nom_en),
-                note_livre: t.note_livre("sorts", &s.nom_en),
-            })
+        .filter(|c| c.incantation.is_some())
+        .map(|c| {
+            (
+                c.id.clone(),
+                sorts_de_la_liste(r, t, &c.nom_en.to_lowercase()),
+            )
         })
         .collect();
-    sorts_ensorceleur.sort_by_key(|s| (s.niveau, s.nom.clone()));
     let eq = &r.equipement;
     CatalogueCreation {
         races,
         classes,
         competences,
         dons,
-        sorts_ensorceleur,
+        sorts_par_classe,
         armures: eq
             .armures
             .iter()
@@ -1062,6 +1080,32 @@ mod tests {
     }
 
     #[test]
+    fn chaque_classe_ne_propose_que_les_sorts_de_sa_liste() {
+        let c = catalogue_creation();
+        let r = Referentiel::partage();
+        assert!(!c.sorts_par_classe.is_empty());
+        for classe in r.classes.iter().filter(|c| c.incantation.is_some()) {
+            let cle = classe.nom_en.to_lowercase();
+            let liste = &c.sorts_par_classe[&classe.id];
+            assert!(!liste.is_empty(), "{}", classe.id);
+            for s in liste {
+                let def = r.sort(&s.nom_en).unwrap();
+                assert_eq!(
+                    def.niveau_pour(&cle),
+                    Some(s.niveau),
+                    "{} / {}",
+                    classe.id,
+                    s.nom_en
+                );
+            }
+        }
+        // un sort de prêtre n'est pas proposé à l'ensorceleur
+        let ens = &c.sorts_par_classe["ensorceleur"];
+        assert!(ens.iter().any(|s| s.nom_en == "Magic Missile"));
+        assert!(!ens.iter().any(|s| s.nom_en == "Cure Light Wounds"));
+    }
+
+    #[test]
     fn le_catalogue_de_creation_est_complet() {
         let c = catalogue_creation();
         assert_eq!(c.races.len(), 7);
@@ -1071,7 +1115,7 @@ mod tests {
             .iter()
             .any(|x| x.nom == "Connaissances (mystères)"));
         assert_eq!(c.dons.len(), 176);
-        assert_eq!(c.sorts_ensorceleur.len(), 390);
+        assert_eq!(c.sorts_par_classe["ensorceleur"].len(), 390);
         assert_eq!(c.classes[0].lignages.len(), 10);
         assert_eq!(c.cout_achat.len(), 12);
         assert!(c.etats.len() == 34 && c.armures.len() == 21);
@@ -1081,6 +1125,14 @@ mod tests {
 }
 
 // ------------------------------------------------------------------ montée de niveau
+
+vue! {
+    pub struct DonDeLignageVue {
+        /// Valeur à enregistrer dans la fiche (nom anglais, avec la précision éventuelle).
+        pub nom_en: String,
+        pub nom: String,
+    }
+}
 
 vue! {
     pub struct ApercuMonteeVue {
@@ -1095,6 +1147,10 @@ vue! {
         pub reflexes: (i32, i32),
         pub volonte: (i32, i32),
         pub dons_a_choisir: u32,
+        /// Parmi ces dons, nombre à prendre dans la liste du lignage.
+        pub dons_de_lignage: u32,
+        /// Dons permis pour le don de lignage (vide si aucun n'est à prendre).
+        pub dons_de_lignage_possibles: Vec<DonDeLignageVue>,
         pub augmentation: bool,
         pub predilection_possible: bool,
         pub capacites: Vec<String>,
@@ -1112,6 +1168,33 @@ vue! {
         pub erreurs: Vec<String>,
         pub apres: Option<FicheVue>,
     }
+}
+
+/// Dons de la liste du lignage, que la fiche n'a pas déjà pris, avec leur nom français.
+fn dons_du_lignage(
+    t: &Traductions,
+    classe: &fiches::donnees::Classe,
+    lignage: Option<&str>,
+) -> Vec<DonDeLignageVue> {
+    let Some(l) = lignage.and_then(|id| classe.lignages.iter().find(|l| l.id == id)) else {
+        return Vec::new();
+    };
+    l.dons_bonus_en
+        .iter()
+        .map(|d| {
+            let base = fiches::catalogue::nom_de_base(d);
+            let nom_base = t.don(base).map(|x| x.nom.clone());
+            let nom = match (nom_base, d.find(" (")) {
+                (Some(n), Some(i)) => format!("{n}{}", &d[i..]),
+                (Some(n), None) => n,
+                (None, _) => d.clone(),
+            };
+            DonDeLignageVue {
+                nom_en: d.clone(),
+                nom,
+            }
+        })
+        .collect()
 }
 
 /// Ce que l'assistant de montée montre pour passer un niveau dans `classe`.
@@ -1139,6 +1222,12 @@ pub fn apercu_montee(etat: &Etat, pj: IdPersonnage, classe: &str) -> Option<Aper
         reflexes: a.reflexes,
         volonte: a.volonte,
         dons_a_choisir: a.dons_a_choisir,
+        dons_de_lignage: a.dons_de_lignage,
+        dons_de_lignage_possibles: if a.dons_de_lignage > 0 {
+            dons_du_lignage(t, c, e.fiche.lignage.as_deref())
+        } else {
+            Vec::new()
+        },
         augmentation: a.augmentation,
         predilection_possible: a.predilection_possible && regles.classe_de_predilection,
         capacites: t.capacites_de_niveau(&a.capacites_en),

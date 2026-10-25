@@ -498,7 +498,7 @@ mod essais {
             &[],
             &["Great Fortitude"],
             &[],
-            &["Leadership", "Dodge"],
+            &["Leadership", "Power Attack"],
         ];
         for d in dons {
             f.niveaux.push(NiveauPris {

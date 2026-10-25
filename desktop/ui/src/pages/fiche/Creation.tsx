@@ -292,7 +292,7 @@ export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePers
             automatiquement aux niveaux prévus.
           </p>
           <SelectionSorts
-            sorts={cat.sortsEnsorceleur}
+            sorts={cat.sortsParClasse[classe.id] ?? []}
             attendus={sortsAttendus}
             valeur={fiche.sorts_connus}
             onChange={(sorts_connus) => maj({ sorts_connus })}

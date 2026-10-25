@@ -178,6 +178,8 @@ pub struct ApercuMontee {
     pub reflexes: (i32, i32),
     pub volonte: (i32, i32),
     pub dons_a_choisir: u32,
+    /// Parmi ces dons, nombre à prendre dans la liste du lignage.
+    pub dons_de_lignage: u32,
     pub augmentation: bool,
     pub predilection_possible: bool,
     /// Capacités de classe gagnées (texte du tableau de classe).
@@ -207,6 +209,14 @@ fn dons_attendus(r: &Referentiel, f: &Fiche, classe: &crate::donnees::Classe, ni
         n += 1;
     }
     n
+}
+
+/// Dons de lignage à prendre (parmi les dons à choisir) en prenant le niveau `nc` de `classe`.
+fn dons_de_lignage(classe: &crate::donnees::Classe, nc: u32) -> u32 {
+    u32::from(
+        !classe.lignages.is_empty()
+            && table_a(classe, nc).is_some_and(|l| l.special_en.contains("Bloodline feat")),
+    )
 }
 
 /// Aperçu du prochain niveau dans `classe_id`, ou `None` au niveau 20 / classe inconnue.
@@ -253,6 +263,7 @@ pub fn apercu(r: &Referentiel, f: &Fiche, classe_id: &str) -> Option<ApercuMonte
         reflexes: (r0, apres.reflexes),
         volonte: (w0, apres.volonte),
         dons_a_choisir: dons_attendus(r, f, classe, niveau),
+        dons_de_lignage: dons_de_lignage(classe, nc),
         augmentation: r.ligne_progression(niveau).is_some_and(|l| l.augmentation),
         predilection_possible: f.classes_de_predilection.iter().any(|c| c == classe_id),
         capacites_en: apres.special_en.clone(),
@@ -391,14 +402,31 @@ pub(crate) fn montee_auto(r: &Referentiel, f: &Fiche, classe: &str, de: u32) -> 
         }
     }
     let deja = f.dons_choisis();
-    let dons: Vec<String> = r
+    let lignage = f.lignage.as_ref().and_then(|id| {
+        r.classe(classe)
+            .and_then(|c| c.lignages.iter().find(|l| &l.id == id))
+    });
+    let mut dons: Vec<String> = Vec::new();
+    if let (Some(l), true) = (lignage, ap.dons_de_lignage > 0) {
+        // don de lignage : le premier de la liste que la fiche n'a pas encore
+        let choisi = l
+            .dons_bonus_en
+            .iter()
+            .find(|d| !deja.contains(d))
+            .expect("assez de dons de lignage");
+        dons.push(choisi.clone());
+    }
+    let libres = ap.dons_a_choisir as usize - dons.len();
+    let autres: Vec<String> = r
         .dons
         .iter()
         .filter(|d| !d.repetable() && d.prerequis.is_empty() && !deja.contains(&d.nom_en))
         .filter(|d| !d.a_un_choix())
-        .take(ap.dons_a_choisir as usize)
+        .filter(|d| !dons.contains(&d.nom_en))
         .map(|d| d.nom_en.clone())
+        .take(libres)
         .collect();
+    dons.extend(autres);
     Montee {
         classe: classe.to_string(),
         de_vie: de,
@@ -543,6 +571,70 @@ mod tests {
                 .unwrap_or_else(|e| panic!("niveau {niv} : {e:?}"));
         }
         assert_eq!(f.niveau_de_personnage(), 7);
+    }
+
+    #[test]
+    fn don_de_lignage_limite_a_la_liste_du_lignage() {
+        let r = Referentiel::core();
+        let regles = ReglesFiche::default();
+        let mut f = base();
+        for _ in 2..=6 {
+            f = appliquer(&r, &regles, &f, &montee(&r, &f, 4), 20).unwrap();
+        }
+        let a = apercu(&r, &f, "ensorceleur").unwrap();
+        assert_eq!((a.dons_a_choisir, a.dons_de_lignage), (2, 1));
+        // deux dons quelconques hors de la liste du lignage : refusé
+        let mut m = montee(&r, &f, 4);
+        let deja = f.dons_choisis();
+        m.dons = r
+            .dons
+            .iter()
+            .filter(|d| {
+                !d.repetable()
+                    && d.prerequis.is_empty()
+                    && !d.a_un_choix()
+                    && !deja.contains(&d.nom_en)
+            })
+            .filter(|d| {
+                let l = &r.classe("ensorceleur").unwrap().lignages;
+                let id = f.lignage.as_ref().unwrap();
+                !l.iter()
+                    .find(|x| &x.id == id)
+                    .unwrap()
+                    .autorise_don(&d.nom_en)
+            })
+            .take(2)
+            .map(|d| d.nom_en.clone())
+            .collect();
+        let e = appliquer(&r, &regles, &f, &m, 20).unwrap_err();
+        assert!(
+            e.iter().any(|x| matches!(
+                x,
+                ErreurMontee::Fiche(Probleme::DonDeLignageManquant { niveau: 7, .. })
+            )),
+            "{e:?}"
+        );
+        // un des deux dons dans la liste : accepté
+        let f7 = appliquer(&r, &regles, &f, &montee(&r, &f, 4), 20).unwrap();
+        assert_eq!(f7.niveau_de_personnage(), 7);
+    }
+
+    #[test]
+    fn liste_de_dons_du_lignage() {
+        let r = Referentiel::core();
+        let l = &r.classe("ensorceleur").unwrap().lignages;
+        let draconique = l.iter().find(|x| x.id == "draconic").unwrap();
+        assert!(draconique.autorise_don("Great Fortitude"));
+        assert!(draconique.autorise_don("great fortitude"));
+        assert!(draconique.autorise_don("Skill Focus (Fly)"));
+        assert!(!draconique.autorise_don("Skill Focus (Acrobatics)"));
+        assert!(!draconique.autorise_don("Dodge"));
+        // une entrée sans précision accepte toutes les précisions (Spell Focus, Weapon Focus…)
+        let feerique = l.iter().find(|x| x.id == "fey").unwrap();
+        assert!(!feerique.autorise_don("Iron Will"));
+        assert!(feerique.autorise_don("Dodge"));
+        let arcanique = l.iter().find(|x| x.id == "arcane").unwrap();
+        assert!(arcanique.autorise_don("Spell Focus (evocation)"));
     }
 
     #[test]
