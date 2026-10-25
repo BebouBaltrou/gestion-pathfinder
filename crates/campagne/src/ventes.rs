@@ -139,7 +139,7 @@ impl Etat {
     }
 
     /// Retire un bien et tout ce qui en dépend.
-    fn retirer_actif(&mut self, a: Actif) {
+    pub(crate) fn retirer_actif(&mut self, a: Actif) {
         match a {
             Actif::Batiment(b) => {
                 self.salles.retain(|_, s| s.batiment != b);

@@ -600,6 +600,10 @@ export const api = {
   lireMontant: (texte: string) => appeler<Somme | null>("lire_montant", { texte }),
   creerLocalite: (saisie: SaisieLocalite) => appeler<Retour>("creer_localite", { saisie }),
   modifierLocalite: (id: number, saisie: SaisieLocalite) => appeler<Retour>("modifier_localite", { id, saisie }),
+  avertissementSuppressionLocalite: (id: number) => appeler<string>("avertissement_suppression_localite", { id }),
+  supprimerLocalite: (id: number) => appeler<Retour>("supprimer_localite", { id }),
+  supprimerPersonnage: (id: number) => appeler<Retour>("supprimer_personnage", { id }),
+  supprimerCampagne: (chemin: string) => appeler<Retour>("supprimer_campagne", { chemin }),
   mouvementPo: (injection: boolean, pj: number, localite: number, montant: string) =>
     appeler<Retour>("mouvement_po", { injection, pj, localite, montant }),
   transfert: (de: number, vers: number, ressource: RessourceTransfert, quantite: string, duree: string) =>

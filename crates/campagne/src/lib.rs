@@ -18,6 +18,7 @@ pub mod personnages;
 pub mod prestige;
 pub mod rapport;
 pub mod recettes;
+pub mod suppression;
 pub mod ventes;
 
 use calendrier::Calendrier;
@@ -297,6 +298,8 @@ impl Campagne {
             },
             LocaliteCreee { nom, genre, .. } => format!("Création de la localité {nom} ({genre})"),
             LocaliteModifiee { id, .. } => format!("Modification de la localité {}", lo(id)),
+            LocaliteSupprimee { id } => format!("Suppression de la localité {}", lo(id)),
+            PersonnageSupprime { id } => format!("Suppression du personnage {}", pj(id)),
             InjectionPo {
                 pj: p,
                 localite,

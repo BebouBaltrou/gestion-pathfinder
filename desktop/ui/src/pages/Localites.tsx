@@ -159,6 +159,20 @@ function Detail({ l, p, outils }: { l: FicheLocalite; p: PageLocalites; outils: 
           valider={async (s) => !!(await outils.agir(api.modifierLocalite(l.id, s)))?.ok}
         />
       </details>
+
+      <details className="carte repli">
+        <summary>Supprimer la localité</summary>
+        <div className="ligne operation">
+          <button
+            className="bouton danger"
+            onClick={async () => {
+              if (window.confirm(await api.avertissementSuppressionLocalite(l.id))) outils.agir(api.supprimerLocalite(l.id));
+            }}
+          >
+            Supprimer {l.nom}…
+          </button>
+        </div>
+      </details>
     </>
   );
 }

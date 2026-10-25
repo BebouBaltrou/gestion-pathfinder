@@ -142,6 +142,17 @@ export function Campagnes({ outils }: { outils: Outils }) {
                   Ouvrir
                 </button>
               )}
+              <button
+                className="bouton discret danger"
+                title="Range la campagne dans le dossier « corbeille »"
+                onClick={() => {
+                  if (window.confirm(`Supprimer la campagne « ${c.nom} » ?\n\nSes personnages, localités et tout son historique disparaissent de la liste. Le fichier est rangé dans le sous-dossier « corbeille » du dossier des campagnes : vous pouvez l'y récupérer à la main.`)) {
+                    outils.agir(api.supprimerCampagne(c.chemin));
+                  }
+                }}
+              >
+                Supprimer
+              </button>
             </div>
           ))}
         </div>

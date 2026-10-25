@@ -496,6 +496,9 @@ impl Etat {
                 l.categorie = categorie.clone();
                 l.notes = notes.clone();
             }
+            LocaliteSupprimee { .. } | PersonnageSupprime { .. } => {
+                self.appliquer_suppression(ev)?
+            }
             InjectionPo {
                 pj,
                 localite,
