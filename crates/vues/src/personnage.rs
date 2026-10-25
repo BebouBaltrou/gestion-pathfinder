@@ -281,6 +281,90 @@ vue! {
     }
 }
 vue! {
+    pub struct PouvoirDomaineVue {
+        pub nom: String,
+        pub genre: String,
+        pub niveau: u32,
+        pub actif: bool,
+        /// Utilisations par jour, quand le livre en donne.
+        pub utilisations: Option<i32>,
+        pub texte: String,
+    }
+}
+vue! {
+    pub struct SortDomaineVue {
+        pub niveau: u32,
+        pub nom: String,
+        pub nom_en: Option<String>,
+        pub note: Option<String>,
+        pub accessible: bool,
+    }
+}
+vue! {
+    pub struct DomaineVue {
+        pub id: String,
+        pub nom: String,
+        pub description: String,
+        pub pouvoirs: Vec<PouvoirDomaineVue>,
+        pub sorts: Vec<SortDomaineVue>,
+    }
+}
+vue! {
+    pub struct CanalisationVue {
+        /// Some(true) positive, Some(false) négative, None : à choisir.
+        pub positive: Option<bool>,
+        pub des: u32,
+        pub dd: i32,
+        pub utilisations: i32,
+    }
+}
+vue! {
+    /// Foi du personnage : dieu, alignement, domaines, énergie canalisée.
+    pub struct DivinVue {
+        pub divinite: Option<String>,
+        pub alignement: Option<String>,
+        pub arme_de_predilection: Option<String>,
+        pub domaines: Vec<DomaineVue>,
+        pub canalisation: Option<CanalisationVue>,
+        /// Prêtre Neutre : l'énergie canalisée reste à choisir.
+        pub energie_a_choisir: bool,
+    }
+}
+vue! {
+    pub struct SortPrepareVue {
+        pub niveau: u32,
+        pub nom_en: String,
+        pub nom: String,
+        pub domaine: bool,
+        pub utilise: bool,
+    }
+}
+vue! {
+    pub struct CapacitePreparation {
+        pub niveau: u32,
+        /// Sorts ordinaires préparables (oraisons au niveau 0).
+        pub normaux: u32,
+        /// Emplacements de sort de domaine (0 ou 1).
+        pub domaine: u32,
+        pub restants: Option<u32>,
+    }
+}
+vue! {
+    /// Sorts préparés d'un lanceur qui prépare (prêtre, druide).
+    pub struct PreparationVue {
+        pub classe_id: String,
+        pub classe: String,
+        pub capacites: Vec<CapacitePreparation>,
+        pub prepares: Vec<SortPrepareVue>,
+        /// Sorts de domaine permis (niveaux accessibles seulement).
+        pub sorts_de_domaine: Vec<SortDomaineVue>,
+        /// Descripteurs d'alignement interdits (good, evil, lawful, chaotic).
+        pub interdits: Vec<String>,
+        /// Conversion spontanée possible : Some(true) en soins, Some(false) en blessures.
+        pub conversion: Option<bool>,
+    }
+}
+vue! {
     pub struct FicheVue {
         pub identite: IdentiteVue,
         pub caracteristiques: Vec<CaracVue>,
@@ -302,6 +386,8 @@ vue! {
         pub dons: Vec<DonVue>,
         pub traits: Vec<TexteVue>,
         pub capacites: Vec<TexteVue>,
+        pub divin: Option<DivinVue>,
+        pub preparation: Option<PreparationVue>,
         pub incantateurs: Vec<IncantateurVue>,
         pub equipement: EquipementVue,
         pub etats: Vec<EtatVue>,
@@ -499,6 +585,129 @@ pub fn fiche_complete(
         });
     }
 
+    // Foi : divinité, domaines, canalisation d'énergie.
+    let divin = (classe_principale.is_some_and(|c| c.domaines_choisis > 0)).then(|| {
+        let dieu = f.divinite.as_deref().and_then(|d| r.divinite(d));
+        DivinVue {
+            divinite: dieu.map(|d| d.nom.clone()),
+            alignement: f.alignement.clone(),
+            arme_de_predilection: dieu.map(|d| d.arme_de_predilection.clone()),
+            domaines: v
+                .domaines
+                .iter()
+                .map(|d| DomaineVue {
+                    id: d.id.clone(),
+                    nom: d.nom.clone(),
+                    description: r
+                        .domaine(&d.id)
+                        .map(|x| x.description.clone())
+                        .unwrap_or_default(),
+                    pouvoirs: d
+                        .pouvoirs
+                        .iter()
+                        .map(|p| PouvoirDomaineVue {
+                            nom: p.nom.clone(),
+                            genre: p.genre.clone(),
+                            niveau: p.niveau,
+                            actif: p.actif,
+                            utilisations: p.utilisations,
+                            texte: p.texte.clone(),
+                        })
+                        .collect(),
+                    sorts: d
+                        .sorts
+                        .iter()
+                        .map(|s| SortDomaineVue {
+                            niveau: s.niveau,
+                            nom: s.nom_fr.clone(),
+                            nom_en: s.nom_en.clone(),
+                            note: s.note.clone(),
+                            accessible: s.accessible,
+                        })
+                        .collect(),
+                })
+                .collect(),
+            canalisation: v.canalisation.as_ref().map(|c| CanalisationVue {
+                positive: c.positive,
+                des: c.des,
+                dd: c.dd,
+                utilisations: c.utilisations,
+            }),
+            energie_a_choisir: v
+                .canalisation
+                .as_ref()
+                .is_some_and(|c| c.positive.is_none()),
+        }
+    });
+
+    // Sorts préparés (lanceur qui prépare).
+    let preparation = v
+        .incantateurs
+        .iter()
+        .find(|inc| {
+            r.classe(&inc.classe)
+                .and_then(|c| c.incantation.as_ref())
+                .is_some_and(|i| i.prepare())
+        })
+        .and_then(|inc| {
+            let classe = r.classe(&inc.classe)?;
+            let liste = e.prepares.get(&inc.classe).cloned().unwrap_or_default();
+            let utilises = e.prepares_utilises.get(&inc.classe);
+            Some(PreparationVue {
+                classe_id: inc.classe.clone(),
+                classe: classe.nom.clone(),
+                capacites: inc
+                    .emplacements
+                    .iter()
+                    .map(|em| CapacitePreparation {
+                        niveau: em.niveau_de_sort,
+                        normaux: if em.niveau_de_sort == 0 {
+                            em.base.unwrap_or(0)
+                        } else {
+                            em.par_jour.unwrap_or(0)
+                        },
+                        domaine: em.domaine,
+                        restants: restants
+                            .iter()
+                            .find(|(c, n, _, _)| *c == inc.classe && *n == em.niveau_de_sort)
+                            .map(|(_, _, rest, _)| *rest),
+                    })
+                    .collect(),
+                prepares: liste
+                    .iter()
+                    .enumerate()
+                    .map(|(k, s)| SortPrepareVue {
+                        niveau: s.niveau,
+                        nom: t
+                            .sort(&s.sort)
+                            .map(|x| x.nom.clone())
+                            .unwrap_or(s.sort.clone()),
+                        nom_en: s.sort.clone(),
+                        domaine: s.domaine,
+                        utilise: utilises.and_then(|u| u.get(k)).copied().unwrap_or(false),
+                    })
+                    .collect(),
+                sorts_de_domaine: v
+                    .domaines
+                    .iter()
+                    .flat_map(|d| d.sorts.iter())
+                    .filter(|s| s.accessible)
+                    .map(|s| SortDomaineVue {
+                        niveau: s.niveau,
+                        nom: s.nom_fr.clone(),
+                        nom_en: s.nom_en.clone(),
+                        note: s.note.clone(),
+                        accessible: true,
+                    })
+                    .collect(),
+                interdits: fiches::preparation::descripteurs_interdits(f, r)
+                    .into_iter()
+                    .map(String::from)
+                    .collect(),
+                conversion: v.canalisation.as_ref().and_then(|c| c.positive),
+            })
+        });
+
     let eq = &f.equipement;
     let be = &v.equipement;
     let equipement = EquipementVue {
@@ -598,6 +807,8 @@ pub fn fiche_complete(
         dons,
         traits,
         capacites,
+        divin,
+        preparation,
         incantateurs,
         equipement,
         etats,
@@ -698,6 +909,37 @@ vue! {
         pub don_bonus_niveau_1: Option<String>,
         /// Sorts connus (niveau de sort 0 à 9) à chaque niveau de classe.
         pub sorts_connus: Vec<Vec<Option<u32>>>,
+        /// Le lanceur choisit et prépare ses sorts chaque jour (prêtre, druide).
+        pub prepare: bool,
+        /// Nombre de domaines à choisir avec un dieu (prêtre : 2).
+        pub domaines_choisis: u32,
+        pub canalisation: bool,
+        /// Capacités du niveau 1.
+        pub capacites: Vec<TexteVue>,
+        /// Armes et armures maniées (texte du livre).
+        pub maitrises: String,
+    }
+}
+vue! {
+    pub struct DomaineCatalogue {
+        pub id: String,
+        pub nom: String,
+        pub description: String,
+        pub divinites: Vec<String>,
+        /// Bien, Mal, Loi ou Chaos : domaine réservé à un alignement correspondant.
+        pub alignement: Option<String>,
+        pub pouvoirs: Vec<PouvoirDomaineVue>,
+        pub sorts: Vec<SortDomaineVue>,
+    }
+}
+vue! {
+    pub struct DiviniteCatalogue {
+        pub id: String,
+        pub nom: String,
+        pub alignement: String,
+        pub theme: String,
+        pub domaines: Vec<String>,
+        pub arme_de_predilection: String,
     }
 }
 vue! {
@@ -756,6 +998,10 @@ vue! {
         pub dons: Vec<DonCatalogue>,
         /// Sorts de la liste de la classe (ensorceleur), par niveau.
         pub sorts_ensorceleur: Vec<SortCatalogue>,
+        /// Listes de sorts de chaque classe qui lance des sorts (clé : identifiant de la classe).
+        pub sorts_par_classe: std::collections::BTreeMap<String, Vec<SortCatalogue>>,
+        pub domaines: Vec<DomaineCatalogue>,
+        pub divinites: Vec<DiviniteCatalogue>,
         pub armures: Vec<EquipementCatalogue>,
         pub armes: Vec<EquipementCatalogue>,
         pub materiel: Vec<EquipementCatalogue>,
@@ -850,6 +1096,51 @@ pub fn catalogue_creation() -> CatalogueCreation {
                 .iter()
                 .map(|l| l.sorts_connus.clone())
                 .collect(),
+            prepare: c.incantation.as_ref().is_some_and(|i| i.prepare()),
+            domaines_choisis: c.domaines_choisis,
+            canalisation: c.canalisation,
+            capacites: c
+                .progression
+                .first()
+                .map(|l| {
+                    t.capacites_de_niveau(&l.special_en)
+                        .into_iter()
+                        .map(|texte| TexteVue {
+                            nom: "Niveau 1".into(),
+                            texte,
+                        })
+                        .collect()
+                })
+                .unwrap_or_default(),
+            maitrises: r
+                .equipement
+                .maitrises
+                .classes
+                .get(&c.id)
+                .map(|m| {
+                    let armes: Vec<String> = m
+                        .armes
+                        .iter()
+                        .chain(m.armes_nommees.iter())
+                        .cloned()
+                        .collect();
+                    let armures: Vec<&str> = m.armures.iter().map(|a| a.nom()).collect();
+                    format!(
+                        "armes : {} ; armures : {}{}",
+                        if armes.is_empty() {
+                            "aucune".to_string()
+                        } else {
+                            armes.join(", ")
+                        },
+                        if armures.is_empty() {
+                            "aucune".to_string()
+                        } else {
+                            armures.join(", ")
+                        },
+                        if m.boucliers { " ; boucliers" } else { "" }
+                    )
+                })
+                .unwrap_or_default(),
         })
         .collect();
     // Connaissances : une entrée par sous-type (Craft, Profession et Perform restent à saisir).
@@ -925,6 +1216,77 @@ pub fn catalogue_creation() -> CatalogueCreation {
         })
         .collect();
     sorts_ensorceleur.sort_by_key(|s| (s.niveau, s.nom.clone()));
+    let mut sorts_par_classe = std::collections::BTreeMap::new();
+    for c in r.classes.iter().filter(|c| c.incantation.is_some()) {
+        let cle = c.nom_en.to_lowercase();
+        let mut liste: Vec<SortCatalogue> = r
+            .sorts
+            .iter()
+            .filter_map(|s| {
+                let niveau = s.niveau_pour(&cle)?;
+                let fr = t.sort(&s.nom_en);
+                Some(SortCatalogue {
+                    nom_en: s.nom_en.clone(),
+                    nom: fr.map(|x| x.nom.clone()).unwrap_or(s.nom_en.clone()),
+                    ecole: fr.map(|x| x.ecole.clone()).unwrap_or_default(),
+                    niveau,
+                    resume: fr
+                        .map(|x| x.description.chars().take(220).collect())
+                        .unwrap_or_default(),
+                    source: t.source_vf("sorts", &s.nom_en),
+                    note_livre: t.note_livre("sorts", &s.nom_en),
+                })
+            })
+            .collect();
+        liste.sort_by_key(|s| (s.niveau, s.nom.clone()));
+        sorts_par_classe.insert(c.id.clone(), liste);
+    }
+    let domaines = r
+        .domaines
+        .iter()
+        .map(|d| DomaineCatalogue {
+            id: d.id.clone(),
+            nom: d.nom.clone(),
+            description: d.description.clone(),
+            divinites: d.divinites.clone(),
+            alignement: d.alignement.clone(),
+            pouvoirs: d
+                .pouvoirs
+                .iter()
+                .map(|p| PouvoirDomaineVue {
+                    nom: p.nom.clone(),
+                    genre: p.genre.clone(),
+                    niveau: p.niveau,
+                    actif: false,
+                    utilisations: None,
+                    texte: p.texte.clone(),
+                })
+                .collect(),
+            sorts: d
+                .sorts_de_domaine
+                .iter()
+                .map(|s| SortDomaineVue {
+                    niveau: s.niveau,
+                    nom: s.nom_fr.clone(),
+                    nom_en: s.nom_en.clone(),
+                    note: s.note.clone(),
+                    accessible: false,
+                })
+                .collect(),
+        })
+        .collect();
+    let divinites = r
+        .divinites
+        .iter()
+        .map(|d| DiviniteCatalogue {
+            id: d.id.clone(),
+            nom: d.nom.clone(),
+            alignement: d.alignement.clone(),
+            theme: d.theme.clone(),
+            domaines: d.domaines.clone(),
+            arme_de_predilection: d.arme_de_predilection.clone(),
+        })
+        .collect();
     let eq = &r.equipement;
     CatalogueCreation {
         races,
@@ -932,6 +1294,9 @@ pub fn catalogue_creation() -> CatalogueCreation {
         competences,
         dons,
         sorts_ensorceleur,
+        sorts_par_classe,
+        domaines,
+        divinites,
         armures: eq
             .armures
             .iter()
@@ -1176,6 +1541,98 @@ pub fn essai_montee(
             }
         },
     )
+}
+
+#[cfg(test)]
+mod tests_pretre {
+    use super::*;
+    use fiches::fiche::{BonusPredilection, NiveauPris};
+    use std::collections::BTreeMap;
+
+    fn pretre(niveau: u32) -> Fiche {
+        Fiche {
+            nom: "Test".into(),
+            race: "humain".into(),
+            bonus_racial_libre: Some(Carac::Sag),
+            scores_base: [
+                (Carac::For, 12),
+                (Carac::Dex, 10),
+                (Carac::Con, 14),
+                (Carac::Int, 10),
+                (Carac::Sag, 16),
+                (Carac::Cha, 12),
+            ]
+            .into_iter()
+            .collect(),
+            dommages: BTreeMap::new(),
+            drain: BTreeMap::new(),
+            augmentations: vec![],
+            niveaux: (0..niveau)
+                .map(|i| NiveauPris {
+                    classe: "pretre".into(),
+                    de_vie_obtenu: if i == 0 { 8 } else { 5 },
+                    rangs: BTreeMap::new(),
+                    predilection: Some(BonusPredilection::PointDeVie),
+                    dons: vec![],
+                })
+                .collect(),
+            classes_de_predilection: vec!["pretre".into()],
+            lignage: None,
+            connaissance_de_lignage: None,
+            effets: vec![],
+            sorts_connus: vec![],
+            equipement: Default::default(),
+            etats: vec![],
+            temporaires: vec![],
+            divinite: Some("iomedae".into()),
+            alignement: Some("LB".into()),
+            domaines: vec!["bien".into(), "soleil".into()],
+            energie: None,
+        }
+    }
+
+    #[test]
+    fn la_fiche_d_un_pretre_montre_foi_domaines_et_preparation() {
+        let f = apercu_fiche(&pretre(5)).unwrap();
+        let divin = f.divin.expect("foi");
+        assert_eq!(divin.divinite.as_deref(), Some("Iomédae"));
+        assert_eq!(divin.arme_de_predilection.as_deref(), Some("épée longue"));
+        assert_eq!(divin.domaines.len(), 2);
+        assert_eq!(divin.domaines[0].nom, "Bien");
+        assert!(divin.domaines[0].pouvoirs[0].actif);
+        let c = divin.canalisation.expect("canalisation");
+        assert_eq!((c.positive, c.des), (Some(true), 3));
+        assert!(!divin.energie_a_choisir);
+        let prep = f.preparation.expect("préparation");
+        assert_eq!(prep.classe_id, "pretre");
+        // Oraisons : 4 ; niveau 1 : 3 + 1 de Sagesse ; un emplacement de domaine.
+        let cap = |n: u32| prep.capacites.iter().find(|c| c.niveau == n).unwrap();
+        assert_eq!(cap(0).normaux, 4);
+        assert_eq!((cap(1).normaux, cap(1).domaine), (4, 1));
+        assert!(prep.prepares.is_empty());
+        assert_eq!(prep.conversion, Some(true));
+        assert!(prep.interdits.contains(&"evil".to_string()));
+        // Seuls les sorts de domaine des niveaux accessibles (1 à 3 au niveau 5) sont proposés.
+        assert!(prep.sorts_de_domaine.iter().all(|s| s.niveau <= 3));
+        assert!(!prep.sorts_de_domaine.is_empty());
+    }
+
+    #[test]
+    fn le_catalogue_propose_pretre_dieux_domaines_et_listes_de_sorts() {
+        let c = catalogue_creation();
+        let classe = c.classes.iter().find(|x| x.id == "pretre").expect("prêtre");
+        assert!(classe.prepare && classe.canalisation);
+        assert_eq!(classe.domaines_choisis, 2);
+        assert!(!classe.capacites.is_empty());
+        assert!(classe.maitrises.contains("simple"));
+        assert_eq!(c.domaines.len(), 33);
+        assert_eq!(c.divinites.len(), 20);
+        let liste = &c.sorts_par_classe["pretre"];
+        assert!(liste
+            .iter()
+            .any(|s| s.nom_en == "Cure Light Wounds" && s.niveau == 1));
+        assert!(c.sorts_par_classe.contains_key("ensorceleur"));
+    }
 }
 
 #[cfg(all(test, feature = "serde"))]
