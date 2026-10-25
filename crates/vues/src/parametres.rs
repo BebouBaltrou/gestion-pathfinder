@@ -46,6 +46,46 @@ pub struct VueCalendrier {
     pub apercu: String,
 }
 
+/// Calendrier choisi à la création d'une campagne.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Deserialize))]
+#[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
+pub struct SaisieCalendrier {
+    pub jour_semaine: u8,
+    pub jour: u8,
+    pub mois: u8,
+    pub annee: i32,
+    /// « quatre » ou « huit ».
+    pub bissextile: String,
+}
+
+/// Calendrier proposé par défaut à la création d'une campagne (celui d'une campagne neuve).
+pub fn calendrier_par_defaut() -> VueCalendrier {
+    let cal = campagne::calendrier::Calendrier::default();
+    VueCalendrier {
+        jour_semaine: cal.jour_semaine_origine,
+        jour: cal.origine.jour,
+        mois: cal.origine.mois,
+        annee: cal.origine.annee,
+        bissextile: match cal.bissextile {
+            RegleBissextile::TousLes8Ans => "huit",
+            _ => "quatre",
+        }
+        .into(),
+        jours_semaine: JOURS_SEMAINE.iter().map(|j| j.to_string()).collect(),
+        noms_mois: MOIS.iter().map(|(m, _)| m.to_string()).collect(),
+        apercu: cal.libelle(1),
+    }
+}
+
+/// Applique le calendrier choisi à une campagne neuve.
+pub fn appliquer_calendrier(
+    c: &mut campagne::Campagne,
+    s: &SaisieCalendrier,
+) -> Result<(), String> {
+    regler_calendrier(c, s.jour_semaine, s.jour, s.mois, s.annee, &s.bissextile)
+}
+
 /// Réglages affichés ici : ceux que le registre des règles de la campagne ne couvre pas.
 const AUTRES: [&str; 4] = [
     "sans_usure",
@@ -352,5 +392,27 @@ mod tests {
         assert!(regler_calendrier(&mut c, 0, 1, 13, 4712, "huit").is_err());
         assert!(regler_calendrier(&mut c, 0, 1, 1, 0, "huit").is_err());
         assert!(regler_calendrier(&mut c, 0, 1, 1, 4712, "x").is_err());
+    }
+
+    #[test]
+    fn calendrier_choisi_a_la_creation() {
+        let d = calendrier_par_defaut();
+        assert_eq!((d.jour, d.mois, d.annee), (1, 1, 4712));
+        assert_eq!(d.apercu, "lunedi 1 Abadius 4712 AR");
+        let mut c = Campagne::nouvelle("Neuve");
+        let s = SaisieCalendrier {
+            jour_semaine: 3,
+            jour: 12,
+            mois: 3,
+            annee: 4719,
+            bissextile: "huit".into(),
+        };
+        appliquer_calendrier(&mut c, &s).unwrap();
+        assert_eq!(c.calendrier.libelle(1), "juredi 12 Pharast 4719 AR");
+        assert_eq!(c.calendrier.libelle(20), "marnedi 31 Pharast 4719 AR");
+        assert_eq!(c.calendrier.libelle(21), "mercantdi 1 Gozran 4719 AR");
+        // une saisie invalide est refusée
+        let mauvais = SaisieCalendrier { mois: 13, ..s };
+        assert!(appliquer_calendrier(&mut c, &mauvais).is_err());
     }
 }
