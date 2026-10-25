@@ -82,6 +82,8 @@ pub enum Probleme {
         attendu: &'static str,
     },
     ArmeNonManiable(String),
+    /// Bonus magique hors de 1 à 5, ou sur un objet que le personnage ne porte pas.
+    BonusMagiqueInvalide(String),
     EtatInconnu(String),
     SortInconnu(String),
     SortHorsListe {
@@ -237,6 +239,11 @@ impl std::fmt::Display for Probleme {
             Probleme::ArmeNonManiable(n) => {
                 write!(f, "{n} n'est pas une arme que l'on manie (munition ou engin de siège) : la ranger dans les objets")
             }
+            Probleme::BonusMagiqueInvalide(n) => write!(
+                f,
+                "bonus magique invalide : {n} (de +1 à +{} sur une armure, un bouclier ou une arme portés)",
+                crate::equipement::BONUS_MAGIQUE_MAX
+            ),
             Probleme::EtatInconnu(n) => write!(f, "état inconnu : {n}"),
             Probleme::DonsAuNiveau { niveau, attendus, choisis } => {
                 write!(f, "niveau {niveau} : {attendus} don(s) attendu(s), {choisis} choisi(s)")
@@ -432,6 +439,9 @@ impl Fiche {
         for t in &self.temporaires {
             e.extend(t.effets.iter().cloned());
         }
+        for o in &self.equipement.objets_magiques {
+            e.extend(o.effets.iter().cloned());
+        }
         Ok(e)
     }
 
@@ -526,6 +536,14 @@ impl Fiche {
         for o in &eq.objets {
             if cat.poids_de(&o.nom_en).is_none() {
                 p.push(Probleme::EquipementInconnu(o.nom_en.clone()));
+            }
+        }
+        for (nom, bonus) in &eq.bonus_magiques {
+            let porte = eq.armure.as_ref() == Some(nom)
+                || eq.bouclier.as_ref() == Some(nom)
+                || eq.armes.contains(nom);
+            if !porte || !(1..=crate::equipement::BONUS_MAGIQUE_MAX).contains(bonus) {
+                p.push(Probleme::BonusMagiqueInvalide(nom.clone()));
             }
         }
         for e in &self.etats {
@@ -1250,6 +1268,23 @@ impl Fiche {
             };
             let maitrise = maitrises.arme(def);
             let mut ef = effets.clone();
+            let mut ef_degats = effets.clone();
+            let magique = self.equipement.bonus_magique(&def.nom_en);
+            if magique != 0 {
+                let source = format!("{} +{magique}", def.nom);
+                ef.push(Effet::new(
+                    "attaque",
+                    TypeBonus::Alteration,
+                    magique,
+                    &source,
+                ));
+                ef_degats.push(Effet::new(
+                    "degats",
+                    TypeBonus::Alteration,
+                    magique,
+                    &source,
+                ));
+            }
             if !maitrise {
                 ef.push(Effet::new(
                     "attaque",
@@ -1276,7 +1311,7 @@ impl Fiche {
             } else {
                 f
             };
-            let bonus_degats = calculer(&[("FOR", force_degats)], &effets, &eff("degats"));
+            let bonus_degats = calculer(&[("FOR", force_degats)], &ef_degats, &eff("degats"));
             armes.push(AttaqueArme {
                 arme_en: def.nom_en.clone(),
                 nom: def.nom.clone(),

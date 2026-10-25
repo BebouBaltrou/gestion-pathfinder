@@ -81,3 +81,17 @@ Chaque point : ce que le moteur fait aujourd'hui, et ce qu'il faut te demander.
     ne sont PAS rendus automatiquement : bouton « Repos » sur la fiche.
 26. **Sauvegardes** : une campagne avec fiches reste lisible par l'ancienne application, qui
     ignore les fiches. Les anciennes sauvegardes (sans fiches) s'ouvrent sans changement.
+
+## Objets magiques portés — ajouts du 25/10/2026
+
+27. **Bonus magique d'une armure, d'un bouclier ou d'une arme** (lecture à valider) : de +1 à +5 au
+    plus (Core, p. 468-469, à vérifier). C'est un bonus d'altération : il s'ajoute au bonus
+    d'armure ou de bouclier de base, et à l'attaque et aux dégâts pour une arme. Il disparaît
+    quand on retire l'objet.
+28. **Pas encore géré** : l'effet d'une armure magique sur son malus d'armure, l'arme « chef-d'œuvre »
+    (+1 à l'attaque), les capacités spéciales (flamboyante, tranchante…), le prix et le poids. À
+    confirmer avant d'y toucher.
+29. **Objets magiques portés** (anneau, cape, ceinture…) : aucune liste fournie. Tu saisis le nom,
+    ce qui change, le type de bonus et la valeur ; le moteur applique le cumul du Core (deux
+    bonus du même type ne s'additionnent pas, sauf esquive, circonstance et sans type). Aucune
+    limite d'emplacements corporels (un anneau par doigt, une cape…) n'est contrôlée : à confirmer.

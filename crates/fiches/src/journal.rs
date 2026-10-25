@@ -50,6 +50,14 @@ pub enum EvenementFiche {
     },
     ArmeAjoutee(String),
     ArmeRetiree(String),
+    /// Bonus d'altération (1 à 5) de l'armure, du bouclier ou d'une arme portés ; 0 l'enlève.
+    BonusMagique {
+        objet: String,
+        bonus: i32,
+    },
+    /// Objet magique porté (anneau, cape…) : le joueur en saisit les effets.
+    ObjetMagiqueAjoute(crate::equipement::ObjetMagique),
+    ObjetMagiqueRetire(String),
     /// Le joueur indique sa charge (légère, intermédiaire, lourde) ; elle n'est pas déduite du poids.
     ChargeDeclaree(crate::equipement::Charge),
     ObjetAjoute {
@@ -104,6 +112,14 @@ impl EvenementFiche {
             EvenementFiche::ChargeDeclaree(c) => format!("Charge portée : {}", c.nom()),
             EvenementFiche::ArmeAjoutee(a) => format!("Arme prise : {a}"),
             EvenementFiche::ArmeRetiree(a) => format!("Arme rangée : {a}"),
+            EvenementFiche::BonusMagique { objet, bonus: 0 } => {
+                format!("Bonus magique enlevé : {objet}")
+            }
+            EvenementFiche::BonusMagique { objet, bonus } => {
+                format!("Bonus magique : {objet} +{bonus}")
+            }
+            EvenementFiche::ObjetMagiqueAjoute(o) => format!("Objet magique porté : {}", o.nom),
+            EvenementFiche::ObjetMagiqueRetire(n) => format!("Objet magique retiré : {n}"),
             EvenementFiche::ObjetAjoute { nom_en, quantite } => {
                 format!("Objet ajouté : {nom_en} × {quantite}")
             }
@@ -345,11 +361,17 @@ impl Journal {
                     *utilises += 1;
                 }
                 EvenementFiche::Equiper { emplacement, objet } => {
-                    match emplacement {
-                        EmplacementProtection::Armure => fiche.equipement.armure = objet.clone(),
-                        EmplacementProtection::Bouclier => {
-                            fiche.equipement.bouclier = objet.clone()
+                    let ancien = match emplacement {
+                        EmplacementProtection::Armure => {
+                            std::mem::replace(&mut fiche.equipement.armure, objet.clone())
                         }
+                        EmplacementProtection::Bouclier => {
+                            std::mem::replace(&mut fiche.equipement.bouclier, objet.clone())
+                        }
+                    };
+                    // Le bonus magique part avec l'objet qu'on retire.
+                    if let Some(a) = ancien.filter(|a| Some(a) != objet.as_ref()) {
+                        fiche.equipement.bonus_magiques.remove(&a);
                     }
                     verifier_equipement(r, &fiche, i)?;
                 }
@@ -366,6 +388,34 @@ impl Journal {
                         });
                     };
                     fiche.equipement.armes.remove(pos);
+                    if !fiche.equipement.armes.contains(a) {
+                        fiche.equipement.bonus_magiques.remove(a);
+                    }
+                }
+                EvenementFiche::BonusMagique { objet, bonus } => {
+                    if *bonus == 0 {
+                        fiche.equipement.bonus_magiques.remove(objet);
+                    } else {
+                        fiche
+                            .equipement
+                            .bonus_magiques
+                            .insert(objet.clone(), *bonus);
+                    }
+                    verifier_equipement(r, &fiche, i)?;
+                }
+                EvenementFiche::ObjetMagiqueAjoute(o) => {
+                    fiche.equipement.objets_magiques.retain(|x| x.nom != o.nom);
+                    fiche.equipement.objets_magiques.push(o.clone());
+                }
+                EvenementFiche::ObjetMagiqueRetire(n) => {
+                    let avant = fiche.equipement.objets_magiques.len();
+                    fiche.equipement.objets_magiques.retain(|x| &x.nom != n);
+                    if fiche.equipement.objets_magiques.len() == avant {
+                        return Err(ErreurJournal::Equipement {
+                            evenement: i,
+                            raison: format!("{n} n'est pas porté"),
+                        });
+                    }
                 }
                 EvenementFiche::ObjetAjoute { nom_en, quantite } => {
                     fiche.equipement.ajouter_objet(nom_en, *quantite);
