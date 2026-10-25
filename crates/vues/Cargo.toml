@@ -10,6 +10,7 @@ domaine = { path = "../domaine" }
 regles = { path = "../regles" }
 campagne = { path = "../campagne", features = ["serde"] }  # modèles personnels (fichier JSON)
 inventaire = { path = "../inventaire" }
+notes = { path = "../notes" }
 fiches = { path = "../fiches" }
 aventure = { path = "../aventure" }
 combat = { path = "../combat" }

@@ -1,0 +1,10 @@
+{
+  "rubriques": [
+    { "id": "evenement", "nom": "Événements" },
+    { "id": "pnj", "nom": "PNJ" },
+    { "id": "lieu", "nom": "Lieux" },
+    { "id": "quete", "nom": "Quêtes" },
+    { "id": "indice", "nom": "Indices" },
+    { "id": "promesse-dette", "nom": "Promesses et dettes" }
+  ]
+}

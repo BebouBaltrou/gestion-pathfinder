@@ -388,6 +388,12 @@ impl Registre {
         Ok(())
     }
 
+    /// Écrit la note d'un objet (provenance, histoire) ; une note vide l'efface.
+    pub fn definir_note(&mut self, id: Id, note: &str) -> Result<(), Erreur> {
+        self.exemplaire_mut(id)?.note = note.trim().to_string();
+        Ok(())
+    }
+
     /// Poids d'un objet : son poids propre, plus son contenu s'il compte.
     pub fn poids_total(&self, id: Id) -> Poids {
         let Some(exemplaire) = self.exemplaires.get(&id) else {
@@ -566,6 +572,7 @@ impl Registre {
             Commande::Equiper { id, emplacement } => self.equiper(*id, emplacement).map(|()| None),
             Commande::Deequiper { id } => self.deequiper(*id).map(|()| None),
             Commande::DefinirColle { id, colle } => self.definir_colle(*id, *colle).map(|()| None),
+            Commande::DefinirNote { id, note } => self.definir_note(*id, note).map(|()| None),
             Commande::EnregistrerJeu { racine, nom } => {
                 self.enregistrer_jeu(*racine, nom).map(|()| None)
             }
@@ -621,6 +628,10 @@ pub enum Commande {
     DefinirColle {
         id: Id,
         colle: bool,
+    },
+    DefinirNote {
+        id: Id,
+        note: String,
     },
     EnregistrerJeu {
         racine: Id,
@@ -1042,6 +1053,20 @@ mod tests {
         };
         assert_eq!(rejoue(), rejoue());
         assert_eq!(rejoue().equipement_de(1).len(), 1);
+    }
+
+    #[test]
+    fn la_note_d_un_objet_se_definit_et_s_efface() {
+        let (mut r, racine) = registre();
+        let id = r.ajouter("epee", 1, racine).unwrap();
+        r.definir_note(id, "  Trouvée dans la crypte  ").unwrap();
+        assert_eq!(r.exemplaire(id).unwrap().note, "Trouvée dans la crypte");
+        r.appliquer(&Commande::DefinirNote {
+            id,
+            note: String::new(),
+        })
+        .unwrap();
+        assert!(r.exemplaire(id).unwrap().note.is_empty());
     }
 
     /// Générateur pseudo-aléatoire déterministe, pour des séquences reproductibles.

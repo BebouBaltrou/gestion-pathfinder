@@ -8,6 +8,7 @@ use std::collections::BTreeMap;
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Erreur {
     Inventaire(inventaire::Erreur),
+    Notes(notes::Erreur),
     /// Refus venant des fiches de personnage (message déjà lisible).
     Fiche(String),
     PersonnageInconnu(IdPersonnage),
@@ -89,6 +90,7 @@ impl std::fmt::Display for Erreur {
         match self {
             Erreur::Fiche(m) => write!(f, "fiche : {m}"),
             Erreur::Inventaire(e) => write!(f, "{e}"),
+            Erreur::Notes(e) => write!(f, "{e}"),
             Erreur::PersonnageInconnu(id) => write!(f, "personnage inconnu ({id})"),
             Erreur::LocaliteInconnue(id) => write!(f, "localité inconnue ({id})"),
             Erreur::IdDejaUtilise(id) => write!(f, "identifiant déjà utilisé ({id})"),
@@ -223,6 +225,8 @@ pub struct Etat {
     pub limite_par_pj: bool,
     /// Inventaires, objets et conteneurs (recalculés à partir du journal).
     pub inventaire: inventaire::Registre,
+    /// Notes de la partie (recalculées à partir du journal).
+    pub notes: notes::Registre,
     /// Fiches de personnage des PJ, par journal de fiche.
     pub fiches: BTreeMap<IdPersonnage, fiches::journal::Journal>,
     /// Acolytes du don Prestige : acolyte → maître.
@@ -442,6 +446,9 @@ impl Etat {
                 let p = self.pj_mut(*id)?;
                 p.nom = nom.clone();
                 p.prestige = *prestige;
+            }
+            Notes(commande) => {
+                self.notes.appliquer(commande).map_err(Erreur::Notes)?;
             }
             Inventaire(commande) => {
                 self.inventaire
