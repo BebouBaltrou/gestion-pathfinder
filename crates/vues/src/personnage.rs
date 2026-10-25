@@ -282,6 +282,8 @@ vue! {
 }
 vue! {
     pub struct PouvoirDomaineVue {
+        /// Identifiant du pouvoir limité par jour (vide pour le catalogue).
+        pub cle: String,
         pub nom: String,
         pub genre: String,
         pub niveau: u32,
@@ -365,6 +367,71 @@ vue! {
     }
 }
 vue! {
+    /// Un pouvoir limité par jour et ce qu'il en reste.
+    pub struct PouvoirJournalierVue {
+        pub cle: String,
+        pub nom: String,
+        /// `None` : à volonté.
+        pub max: Option<i32>,
+        pub restants: Option<i32>,
+    }
+}
+vue! {
+    pub struct FormeVue {
+        pub id: String,
+        pub nom: String,
+        pub categorie: String,
+        pub taille: Option<String>,
+        pub niveau: u32,
+        /// Le niveau de druide suffit.
+        pub disponible: bool,
+        pub effets: Vec<String>,
+        pub texte: String,
+    }
+}
+vue! {
+    /// Forme animale du druide.
+    pub struct FormesVue {
+        pub formes: Vec<FormeVue>,
+        /// Nom de la forme prise en ce moment.
+        pub en_cours: Option<String>,
+        pub rounds_restants: Option<u32>,
+        /// Durée de chaque transformation, en heures (1 par niveau de druide).
+        pub duree_heures: u32,
+    }
+}
+vue! {
+    pub struct CompagnonVue {
+        pub animal_id: String,
+        pub animal: String,
+        pub nom: String,
+        pub taille: String,
+        pub vitesse: String,
+        pub dv: u32,
+        pub pv: i32,
+        pub bba: i32,
+        pub caracteristiques: Vec<CaracVue>,
+        pub armure_naturelle: i32,
+        pub ca: i32,
+        pub ca_contact: i32,
+        pub ca_depourvu: i32,
+        pub reflexes: i32,
+        pub vigueur: i32,
+        pub volonte: i32,
+        pub attaques: String,
+        pub bonus_attaque: i32,
+        pub competences: u32,
+        pub dons: u32,
+        pub tours: u32,
+        pub capacites: Vec<TexteVue>,
+        pub particularites: String,
+        pub developpement_applique: bool,
+        pub ignore_developpement: bool,
+        pub augmentations_permises: u32,
+        pub augmentations: Vec<String>,
+    }
+}
+vue! {
     pub struct FicheVue {
         pub identite: IdentiteVue,
         pub caracteristiques: Vec<CaracVue>,
@@ -387,6 +454,11 @@ vue! {
         pub traits: Vec<TexteVue>,
         pub capacites: Vec<TexteVue>,
         pub divin: Option<DivinVue>,
+        pub pouvoirs: Vec<PouvoirJournalierVue>,
+        pub formes: Option<FormesVue>,
+        /// Pacte avec la nature du druide : domaine ou compagnon.
+        pub pacte: Option<String>,
+        pub compagnon: Option<CompagnonVue>,
         pub preparation: Option<PreparationVue>,
         pub incantateurs: Vec<IncantateurVue>,
         pub equipement: EquipementVue,
@@ -590,7 +662,9 @@ pub fn fiche_complete(
     }
 
     // Foi : divinité, domaines, canalisation d'énergie.
-    let divin = (classe_principale.is_some_and(|c| c.domaines_choisis > 0)).then(|| {
+    let divin = (classe_principale.is_some_and(|c| c.domaines_choisis > 0)
+        || f.pacte.as_deref() == Some("domaine"))
+    .then(|| {
         let dieu = f.divinite.as_deref().and_then(|d| r.divinite(d));
         DivinVue {
             divinite: dieu.map(|d| d.nom.clone()),
@@ -610,6 +684,7 @@ pub fn fiche_complete(
                         .pouvoirs
                         .iter()
                         .map(|p| PouvoirDomaineVue {
+                            cle: p.cle.clone(),
                             nom: p.nom.clone(),
                             genre: p.genre.clone(),
                             niveau: p.niveau,
@@ -641,6 +716,128 @@ pub fn fiche_complete(
                 .canalisation
                 .as_ref()
                 .is_some_and(|c| c.positive.is_none()),
+        }
+    });
+
+    // Pouvoirs limités par jour, avec ce qu'il en reste.
+    let pouvoirs: Vec<PouvoirJournalierVue> = v
+        .pouvoirs
+        .iter()
+        .map(|p| PouvoirJournalierVue {
+            cle: p.cle.clone(),
+            nom: p.nom.clone(),
+            max: p.max,
+            restants: p
+                .max
+                .map(|m| (m - e.pouvoirs_utilises.get(&p.cle).copied().unwrap_or(0) as i32).max(0)),
+        })
+        .collect();
+
+    // Forme animale du druide.
+    let formes = classe_principale
+        .filter(|c| c.pouvoirs.iter().any(|p| p.cle == "forme_animale"))
+        .map(|c| {
+            let nc = f.niveau_de_classe(&c.id);
+            let en_cours = f
+                .temporaires
+                .iter()
+                .find(|t| t.nom.starts_with(fiches::formes::PREFIXE_FORME));
+            FormesVue {
+                formes: r
+                    .formes
+                    .iter()
+                    .map(|x| FormeVue {
+                        id: x.id.clone(),
+                        nom: x.nom.clone(),
+                        categorie: x.categorie.clone(),
+                        taille: x.taille.clone(),
+                        niveau: x.niveau_druide,
+                        disponible: nc >= x.niveau_druide,
+                        effets: x
+                            .effets
+                            .iter()
+                            .map(|e| {
+                                let cible = match e.cible.as_str() {
+                                    "carac.for" => "Force",
+                                    "carac.dex" => "Dextérité",
+                                    "carac.con" => "Constitution",
+                                    "ca" => "CA",
+                                    autre => autre,
+                                };
+                                format!("{:+} {} ({})", e.valeur, cible, e.type_bonus.nom())
+                            })
+                            .collect(),
+                        texte: x.texte.clone(),
+                    })
+                    .collect(),
+                en_cours: en_cours.map(|t| t.nom.clone()),
+                rounds_restants: en_cours.and_then(|t| t.rounds_restants),
+                duree_heures: nc,
+            }
+        });
+
+    // Compagnon animal du druide.
+    let compagnon = v.compagnon.as_ref().map(|c| {
+        let choix = f.compagnon.as_ref();
+        CompagnonVue {
+            animal_id: choix.map(|x| x.animal.clone()).unwrap_or_default(),
+            animal: c.animal.clone(),
+            nom: c.nom.clone(),
+            taille: c.taille.clone(),
+            vitesse: c.vitesse.clone(),
+            dv: c.dv,
+            pv: c.pv,
+            bba: c.bba,
+            caracteristiques: c
+                .caracteristiques
+                .iter()
+                .map(|(car, score, m)| CaracVue {
+                    id: car.abrege().to_lowercase(),
+                    nom: nom_carac(*car).to_string(),
+                    score: ValeurVue {
+                        total: *score,
+                        explication: score.to_string(),
+                        termes: vec![],
+                    },
+                    modificateur: *m,
+                })
+                .collect(),
+            armure_naturelle: c.armure_naturelle,
+            ca: c.ca,
+            ca_contact: c.ca_contact,
+            ca_depourvu: c.ca_depourvu,
+            reflexes: c.reflexes,
+            vigueur: c.vigueur,
+            volonte: c.volonte,
+            attaques: c.attaques.clone(),
+            bonus_attaque: c.bonus_attaque,
+            competences: c.competences,
+            dons: c.dons,
+            tours: c.tours,
+            capacites: c
+                .capacites
+                .iter()
+                .flat_map(|s| s.split(", ").map(str::to_string).collect::<Vec<_>>())
+                .map(|nom| {
+                    let cle = nom.to_lowercase();
+                    TexteVue {
+                        texte: r.compagnons.textes.get(&cle).cloned().unwrap_or_default(),
+                        nom,
+                    }
+                })
+                .collect(),
+            particularites: c.particularites.clone(),
+            developpement_applique: c.developpement_applique,
+            ignore_developpement: choix.is_some_and(|x| x.ignore_developpement),
+            augmentations_permises: c.augmentations_permises,
+            augmentations: choix
+                .map(|x| {
+                    x.augmentations
+                        .iter()
+                        .map(|k| k.abrege().to_lowercase())
+                        .collect()
+                })
+                .unwrap_or_default(),
         }
     });
 
@@ -812,6 +1009,10 @@ pub fn fiche_complete(
         traits,
         capacites,
         divin,
+        pouvoirs,
+        formes,
+        pacte: f.pacte.clone(),
+        compagnon,
         preparation,
         incantateurs,
         equipement,
@@ -918,6 +1119,8 @@ vue! {
         /// Nombre de domaines à choisir avec un dieu (prêtre : 2).
         pub domaines_choisis: u32,
         pub canalisation: bool,
+        /// Domaines que le pacte avec la nature peut donner (druide), vide sinon.
+        pub pacte_domaines: Vec<String>,
         /// Capacités du niveau 1.
         pub capacites: Vec<TexteVue>,
         /// Armes et armures maniées (texte du livre).
@@ -934,6 +1137,20 @@ vue! {
         pub alignement: Option<String>,
         pub pouvoirs: Vec<PouvoirDomaineVue>,
         pub sorts: Vec<SortDomaineVue>,
+    }
+}
+vue! {
+    pub struct AnimalCatalogue {
+        pub id: String,
+        pub nom: String,
+        pub taille: String,
+        pub vitesse: String,
+        pub armure_naturelle: i32,
+        pub attaques: String,
+        pub caracteristiques: String,
+        pub particularites: String,
+        pub developpement: String,
+        pub niveau_developpement: u32,
     }
 }
 vue! {
@@ -1007,6 +1224,8 @@ vue! {
         pub sorts_par_classe: std::collections::BTreeMap<String, Vec<SortCatalogue>>,
         pub domaines: Vec<DomaineCatalogue>,
         pub divinites: Vec<DiviniteCatalogue>,
+        /// Animaux que le druide peut choisir comme compagnon.
+        pub animaux: Vec<AnimalCatalogue>,
         pub armures: Vec<EquipementCatalogue>,
         pub armes: Vec<EquipementCatalogue>,
         pub materiel: Vec<EquipementCatalogue>,
@@ -1148,6 +1367,7 @@ pub fn catalogue_creation() -> CatalogueCreation {
             prepare: c.incantation.as_ref().is_some_and(|i| i.prepare()),
             domaines_choisis: c.domaines_choisis,
             canalisation: c.canalisation,
+            pacte_domaines: c.pacte_domaines.clone(),
             capacites: c
                 .progression
                 .first()
@@ -1269,6 +1489,7 @@ pub fn catalogue_creation() -> CatalogueCreation {
                 .pouvoirs
                 .iter()
                 .map(|p| PouvoirDomaineVue {
+                    cle: String::new(),
                     nom: p.nom.clone(),
                     genre: p.genre.clone(),
                     niveau: p.niveau,
@@ -1302,6 +1523,46 @@ pub fn catalogue_creation() -> CatalogueCreation {
             arme_de_predilection: d.arme_de_predilection.clone(),
         })
         .collect();
+    let animaux = r
+        .compagnons
+        .animaux
+        .iter()
+        .map(|a| {
+            let c = &a.caracteristiques;
+            let d = &a.developpement;
+            AnimalCatalogue {
+                id: a.id.clone(),
+                nom: a.nom.clone(),
+                taille: a.taille.clone(),
+                vitesse: a.vitesse.clone(),
+                armure_naturelle: a.armure_naturelle,
+                attaques: a.attaques.clone(),
+                caracteristiques: format!(
+                    "For {}, Dex {}, Con {}, Int {}, Sag {}, Cha {}",
+                    c.force, c.dex, c.con, c.int, c.sag, c.cha
+                ),
+                particularites: a.autres.clone(),
+                developpement: format!(
+                    "{}{}{}",
+                    d.taille
+                        .as_ref()
+                        .map(|t| format!("taille {t} ; "))
+                        .unwrap_or_default(),
+                    d.caracteristiques
+                        .iter()
+                        .map(|(k, v)| format!("{} {:+}", k, v))
+                        .collect::<Vec<_>>()
+                        .join(", "),
+                    if d.autres.is_empty() {
+                        String::new()
+                    } else {
+                        format!(" ; {}", d.autres)
+                    }
+                ),
+                niveau_developpement: d.niveau,
+            }
+        })
+        .collect();
     let eq = &r.equipement;
     CatalogueCreation {
         races,
@@ -1311,6 +1572,7 @@ pub fn catalogue_creation() -> CatalogueCreation {
         sorts_par_classe,
         domaines,
         divinites,
+        animaux,
         armures: eq
             .armures
             .iter()
@@ -1703,6 +1965,68 @@ mod tests_pretre {
         // Seuls les sorts de domaine des niveaux accessibles (1 à 3 au niveau 5) sont proposés.
         assert!(prep.sorts_de_domaine.iter().all(|s| s.niveau <= 3));
         assert!(!prep.sorts_de_domaine.is_empty());
+    }
+
+    fn druide(niveau: u32) -> Fiche {
+        let mut f = pretre(niveau);
+        for n in &mut f.niveaux {
+            n.classe = "druide".into();
+        }
+        f.classes_de_predilection = vec!["druide".into()];
+        f.divinite = None;
+        f.alignement = None;
+        f.domaines = vec![];
+        f
+    }
+
+    #[test]
+    fn la_fiche_d_un_druide_montre_formes_pouvoirs_et_compagnon() {
+        let mut f = druide(8);
+        f.pacte = Some("compagnon".into());
+        f.compagnon = Some(fiches::compagnon::Compagnon {
+            animal: "loup".into(),
+            nom: "Croc".into(),
+            ignore_developpement: false,
+            augmentations: vec![Carac::Sag],
+        });
+        let v = apercu_fiche(&f).unwrap();
+        assert_eq!(v.pacte.as_deref(), Some("compagnon"));
+        let c = v.compagnon.expect("compagnon");
+        assert_eq!(
+            (c.animal.as_str(), c.nom.as_str(), c.dv),
+            ("Loup", "Croc", 7)
+        );
+        assert!(c
+            .capacites
+            .iter()
+            .any(|t| t.nom == "lien" && !t.texte.is_empty()));
+        assert_eq!(c.augmentations, vec!["sag".to_string()]);
+        // Forme animale : 3 utilisations au niveau 8 ; formes permises jusqu'au niveau 8 seulement.
+        let formes = v.formes.expect("formes");
+        assert_eq!(formes.duree_heures, 8);
+        let p = v
+            .pouvoirs
+            .iter()
+            .find(|p| p.cle == "forme_animale")
+            .unwrap();
+        assert_eq!((p.max, p.restants), (Some(3), Some(3)));
+        assert!(formes.formes.iter().any(|x| x.niveau == 8 && x.disponible));
+        assert!(formes
+            .formes
+            .iter()
+            .any(|x| x.niveau == 10 && !x.disponible));
+        assert!(formes.en_cours.is_none());
+        // Pas de domaine ni de préparation de domaine avec le compagnon.
+        assert!(v.divin.is_none());
+        // Avec le pacte du domaine : la foi montre le domaine, sans dieu.
+        let mut g = druide(5);
+        g.pacte = Some("domaine".into());
+        g.domaines = vec!["feu".into()];
+        let vg = apercu_fiche(&g).unwrap();
+        let divin = vg.divin.expect("domaine du pacte");
+        assert_eq!(divin.domaines[0].nom, "Feu");
+        assert!(divin.divinite.is_none() && divin.canalisation.is_none());
+        assert!(vg.compagnon.is_none());
     }
 
     #[test]
