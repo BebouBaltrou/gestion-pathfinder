@@ -27,6 +27,8 @@ pub mod journal;
 #[cfg(feature = "serde")]
 pub mod objets_magiques;
 #[cfg(feature = "serde")]
+pub mod preparation;
+#[cfg(feature = "serde")]
 pub mod prerequis;
 #[cfg(feature = "serde")]
 pub mod progression;

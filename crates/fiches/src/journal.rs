@@ -67,6 +67,19 @@ pub enum EvenementFiche {
         carac: crate::caracteristiques::Carac,
         delta: i32,
     },
+    /// Préparation des sorts du jour d'un lanceur qui prépare (prêtre, druide) : remplace la
+    /// préparation précédente et rend tous les emplacements de cette classe.
+    Preparation {
+        classe: String,
+        sorts: Vec<crate::preparation::SortPrepare>,
+    },
+    /// Un prêtre sacrifie un sort préparé (ni oraison ni sort de domaine) pour lancer
+    /// spontanément un sort de soins ou de blessure de niveau égal ou inférieur.
+    SortConverti {
+        classe: String,
+        niveau_sacrifie: u32,
+        sort: String,
+    },
 }
 
 impl EvenementFiche {
@@ -112,6 +125,14 @@ impl EvenementFiche {
             EvenementFiche::DommagesCaracteristique { carac, delta } => {
                 format!("Caractéristique récupérée : {} +{}", carac.abrege(), -delta)
             }
+            EvenementFiche::Preparation { sorts, .. } => {
+                format!("Sorts préparés : {} sort(s)", sorts.len())
+            }
+            EvenementFiche::SortConverti {
+                niveau_sacrifie,
+                sort,
+                ..
+            } => format!("Sort converti : {sort} (emplacement de niveau {niveau_sacrifie})"),
         }
     }
 }
@@ -125,6 +146,10 @@ pub struct EtatPersonnage {
     pub niveau_atteignable: u32,
     /// Emplacements de sorts dépensés depuis le dernier repos : (classe, niveau de sort) → nombre.
     pub sorts_depenses: std::collections::BTreeMap<(String, u32), u32>,
+    /// Sorts préparés du jour, par classe (lanceurs qui préparent).
+    pub prepares: std::collections::BTreeMap<String, Vec<crate::preparation::SortPrepare>>,
+    /// Pour chaque sort préparé (même ordre), s'il a déjà été lancé.
+    pub prepares_utilises: std::collections::BTreeMap<String, Vec<bool>>,
 }
 
 impl EtatPersonnage {
@@ -136,7 +161,8 @@ impl EtatPersonnage {
         let mut out = Vec::new();
         for inc in &v.incantateurs {
             for e in &inc.emplacements {
-                if let Some(total) = e.par_jour {
+                if let Some(par_jour) = e.par_jour {
+                    let total = par_jour + e.domaine;
                     let utilises = self
                         .sorts_depenses
                         .get(&(inc.classe.clone(), e.niveau_de_sort))
@@ -253,6 +279,10 @@ impl Journal {
         };
         let (mut xp, mut jalon) = (0u32, 0u32);
         let mut sorts_depenses: std::collections::BTreeMap<(String, u32), u32> = Default::default();
+        let mut prepares: std::collections::BTreeMap<String, Vec<crate::preparation::SortPrepare>> =
+            Default::default();
+        let mut prepares_utilises: std::collections::BTreeMap<String, Vec<bool>> =
+            Default::default();
         for (i, ev) in it {
             match ev {
                 EvenementFiche::Creation(_) => return Err(ErreurJournal::CreationManquante),
@@ -263,7 +293,78 @@ impl Journal {
                     }
                     jalon = jalon.max(*niveau);
                 }
-                EvenementFiche::Repos => sorts_depenses.clear(),
+                EvenementFiche::Repos => {
+                    sorts_depenses.clear();
+                    for v in prepares_utilises.values_mut() {
+                        v.iter_mut().for_each(|u| *u = false);
+                    }
+                }
+                EvenementFiche::Preparation { classe, sorts } => {
+                    crate::preparation::valider(&fiche, r, classe, sorts).map_err(|raison| {
+                        ErreurJournal::SortLanceImpossible {
+                            evenement: i,
+                            raison,
+                        }
+                    })?;
+                    sorts_depenses.retain(|(c, _), _| c != classe);
+                    prepares_utilises.insert(classe.clone(), vec![false; sorts.len()]);
+                    prepares.insert(classe.clone(), sorts.clone());
+                }
+                EvenementFiche::SortConverti {
+                    classe,
+                    niveau_sacrifie,
+                    sort,
+                } => {
+                    let erreur = |raison: String| ErreurJournal::SortLanceImpossible {
+                        evenement: i,
+                        raison,
+                    };
+                    let def = r
+                        .sort(sort)
+                        .ok_or_else(|| erreur(format!("sort inconnu : {sort}")))?;
+                    let valeurs = fiche.calculer(r).map_err(|p| erreur(p.to_string()))?;
+                    let positive = valeurs
+                        .canalisation
+                        .as_ref()
+                        .ok_or_else(|| erreur("cette classe ne convertit pas ses sorts".into()))?
+                        .positive
+                        .ok_or_else(|| {
+                            erreur("choisir d'abord l'énergie (positive ou négative)".into())
+                        })?;
+                    if !crate::preparation::est_sort_de_conversion(sort, positive) {
+                        return Err(erreur(format!(
+                            "{sort} n'est pas un sort de {}",
+                            if positive { "soins" } else { "blessure" }
+                        )));
+                    }
+                    let cle = r
+                        .classe(classe)
+                        .map(|c| c.nom_en.to_lowercase())
+                        .ok_or_else(|| erreur(format!("classe inconnue : {classe}")))?;
+                    match def.niveau_pour(&cle) {
+                        Some(n) if n >= 1 && n <= *niveau_sacrifie => {}
+                        _ => {
+                            return Err(erreur(format!(
+                            "{sort} n'est pas un sort de niveau 1 à {niveau_sacrifie} de la classe"
+                        )))
+                        }
+                    }
+                    let liste = prepares.get(classe).cloned().unwrap_or_default();
+                    let utilises = prepares_utilises.entry(classe.clone()).or_default();
+                    let Some(idx) = liste.iter().enumerate().position(|(k, s)| {
+                        s.niveau == *niveau_sacrifie
+                            && !s.domaine
+                            && !utilises.get(k).copied().unwrap_or(true)
+                    }) else {
+                        return Err(erreur(format!(
+                            "aucun sort préparé disponible au niveau {niveau_sacrifie} à sacrifier"
+                        )));
+                    };
+                    utilises[idx] = true;
+                    *sorts_depenses
+                        .entry((classe.clone(), *niveau_sacrifie))
+                        .or_default() += 1;
+                }
                 EvenementFiche::SortLance {
                     classe,
                     niveau_de_sort,
@@ -291,7 +392,7 @@ impl Journal {
                                 .iter()
                                 .find(|e| e.niveau_de_sort == *niveau_de_sort)
                         })
-                        .and_then(|e| e.par_jour)
+                        .and_then(|e| e.par_jour.map(|p| p + e.domaine))
                         .ok_or_else(|| ErreurJournal::SortLanceImpossible {
                             evenement: i,
                             raison: format!(
@@ -307,6 +408,31 @@ impl Journal {
                             classe: classe.clone(),
                             niveau_de_sort: *niveau_de_sort,
                         });
+                    }
+                    // Lanceur qui prépare : le sort doit faire partie de la préparation du jour et
+                    // ne pas avoir déjà été lancé.
+                    let prepare_classe = r
+                        .classe(classe)
+                        .and_then(|c| c.incantation.as_ref())
+                        .is_some_and(|inc| inc.prepare());
+                    if prepare_classe {
+                        let liste = prepares.get(classe).cloned().unwrap_or_default();
+                        let drapeaux = prepares_utilises.entry(classe.clone()).or_default();
+                        let Some(idx) = liste.iter().enumerate().position(|(k, s)| {
+                            s.niveau == *niveau_de_sort
+                                && s.sort.eq_ignore_ascii_case(sort)
+                                && !drapeaux.get(k).copied().unwrap_or(true)
+                        }) else {
+                            return Err(ErreurJournal::SortLanceImpossible {
+                                evenement: i,
+                                raison: format!(
+                                    "{sort} n'est pas préparé au niveau {niveau_de_sort}, ou déjà lancé"
+                                ),
+                            });
+                        };
+                        drapeaux[idx] = true;
+                        *utilises += 1;
+                        continue;
                     }
                     let connu = fiche
                         .sorts_connus
@@ -430,6 +556,8 @@ impl Journal {
             jalon,
             niveau_atteignable,
             sorts_depenses,
+            prepares,
+            prepares_utilises,
         })
     }
 

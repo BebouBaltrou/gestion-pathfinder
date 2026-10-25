@@ -998,6 +998,8 @@ pub fn apercu_fiche(f: &Fiche) -> Result<FicheVue, String> {
         jalon: 0,
         niveau_atteignable: f.niveau_de_personnage().max(1),
         sorts_depenses: Default::default(),
+        prepares: Default::default(),
+        prepares_utilises: Default::default(),
     };
     fiche_complete(
         &e,

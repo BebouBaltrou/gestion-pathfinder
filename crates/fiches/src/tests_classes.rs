@@ -323,3 +323,175 @@ fn canalisation_et_domaines_calcules() {
     assert!(maitrise("Longsword"));
     assert!(!maitrise("Greatsword"));
 }
+
+// ── Préparation des sorts, lancer, conversion spontanée ────────────────────────
+
+use crate::journal::{EvenementFiche, Journal};
+use crate::preparation::SortPrepare;
+use crate::progression::ReglesFiche;
+
+/// Les `n` premiers sorts de prêtre du niveau `niveau`, sans sort opposé à l'alignement Loyal Bon.
+fn sorts_de_pretre(r: &Referentiel, niveau: u32, n: usize) -> Vec<String> {
+    let mut v: Vec<&str> = r
+        .sorts
+        .iter()
+        .filter(|s| s.niveau_pour("cleric") == Some(niveau))
+        .filter(|s| {
+            !s.descripteurs
+                .iter()
+                .any(|d| matches!(d.to_lowercase().as_str(), "evil" | "chaotic"))
+        })
+        .map(|s| s.nom_en.as_str())
+        .collect();
+    v.sort_unstable();
+    v.into_iter().take(n).map(String::from).collect()
+}
+
+fn prep(niveau: u32, sort: &str, domaine: bool) -> SortPrepare {
+    SortPrepare {
+        niveau,
+        sort: sort.into(),
+        domaine,
+    }
+}
+
+#[test]
+fn preparer_lancer_et_se_reposer() {
+    let r = Referentiel::core();
+    let regles = ReglesFiche::default();
+    // Niveau 3, Sagesse 18 (+4) : oraisons 4 ; niveau 1 : 2 + 1 = 3 (+1 domaine) ; niveau 2 : 1 + 1 = 2 (+1 domaine).
+    let mut j = Journal::nouveau(pretre_de("iomedae", "LB", &["bien", "soleil"], 3));
+    let ajouter = |j: &mut Journal, e| j.ajouter(e, &r, &regles);
+    let n1 = sorts_de_pretre(&r, 1, 4);
+    let n2 = sorts_de_pretre(&r, 2, 3);
+    let oraisons = sorts_de_pretre(&r, 0, 4);
+    let mut sorts: Vec<SortPrepare> = oraisons.iter().map(|s| prep(0, s, false)).collect();
+    sorts.extend(n1[..3].iter().map(|s| prep(1, s, false)));
+    sorts.extend(n2[..2].iter().map(|s| prep(2, s, false)));
+    // Emplacements de domaine : un sort de niveau 1 du domaine du Bien, un de niveau 2 du Soleil.
+    sorts.push(prep(1, "Protection from Evil", true));
+    sorts.push(prep(2, "Heat Metal", true));
+    let prepare = |sorts: Vec<SortPrepare>| EvenementFiche::Preparation {
+        classe: "pretre".into(),
+        sorts,
+    };
+
+    // Trop de sorts au niveau 1 (4 normaux pour 3 permis).
+    let mut trop = sorts.clone();
+    trop.push(prep(1, &n1[3], false));
+    assert!(ajouter(&mut j, prepare(trop)).is_err());
+    // Un sort qui n'est pas dans la liste du prêtre, ou à un autre niveau.
+    let mut faux = sorts.clone();
+    faux[5] = prep(1, "Magic Missile", false);
+    assert!(ajouter(&mut j, prepare(faux)).is_err());
+    // Un sort de domaine qui n'appartient pas aux domaines choisis.
+    let mut hors = sorts.clone();
+    *hors.last_mut().unwrap() = prep(2, "Fire Trap", true);
+    assert!(ajouter(&mut j, prepare(hors)).is_err());
+    // Un sort Mauvais pour un prêtre Loyal Bon.
+    let mauvais = r
+        .sorts
+        .iter()
+        .find(|s| {
+            s.niveau_pour("cleric") == Some(1)
+                && s.descripteurs
+                    .iter()
+                    .any(|d| d.eq_ignore_ascii_case("evil"))
+        })
+        .unwrap();
+    let mut opp = sorts.clone();
+    opp[5] = prep(1, &mauvais.nom_en, false);
+    assert!(ajouter(&mut j, prepare(opp)).is_err());
+
+    // La bonne préparation passe.
+    ajouter(&mut j, prepare(sorts.clone())).expect("préparation valide");
+    let lancer = |niveau: u32, sort: &str| EvenementFiche::SortLance {
+        classe: "pretre".into(),
+        niveau_de_sort: niveau,
+        sort: sort.into(),
+    };
+    // Un sort préparé se lance une fois ; un sort non préparé non ; le sort de domaine non plus deux fois.
+    ajouter(&mut j, lancer(1, &n1[0])).expect("sort préparé");
+    assert!(ajouter(&mut j, lancer(1, &n1[0])).is_err(), "déjà lancé");
+    assert!(ajouter(&mut j, lancer(1, &n1[3])).is_err(), "non préparé");
+    ajouter(&mut j, lancer(1, "Protection from Evil")).expect("sort de domaine");
+    assert!(ajouter(&mut j, lancer(1, "Protection from Evil")).is_err());
+    let e = j.etat(&r, &regles).unwrap();
+    let restants = e.emplacements_restants(&r);
+    let reste = |niv: u32| restants.iter().find(|x| x.1 == niv).unwrap();
+    // Niveau 1 : 3 + 1 domaine = 4 emplacements, 2 lancés.
+    assert_eq!((reste(1).2, reste(1).3), (2, 4));
+    // Le repos rend tout, la préparation reste.
+    ajouter(&mut j, EvenementFiche::Repos).unwrap();
+    ajouter(&mut j, lancer(1, &n1[0])).expect("de nouveau lançable après le repos");
+}
+
+#[test]
+fn conversion_spontanee_en_soins() {
+    let r = Referentiel::core();
+    let regles = ReglesFiche::default();
+    let mut j = Journal::nouveau(pretre_de("iomedae", "LB", &["bien", "soleil"], 5));
+    let ajouter = |j: &mut Journal, e| j.ajouter(e, &r, &regles);
+    let mut sorts: Vec<SortPrepare> = sorts_de_pretre(&r, 2, 1)
+        .iter()
+        .map(|s| prep(2, s, false))
+        .collect();
+    sorts.push(prep(1, "Protection from Evil", true));
+    ajouter(
+        &mut j,
+        EvenementFiche::Preparation {
+            classe: "pretre".into(),
+            sorts,
+        },
+    )
+    .unwrap();
+    let convertir = |niveau: u32, sort: &str| EvenementFiche::SortConverti {
+        classe: "pretre".into(),
+        niveau_sacrifie: niveau,
+        sort: sort.into(),
+    };
+    // Soins sur un emplacement de niveau 2 : modérés (niveau 2) ou légers (niveau 1) ; pas graves (niveau 3).
+    assert!(ajouter(&mut j, convertir(2, "Cure Serious Wounds")).is_err());
+    // Un prêtre Bon ne convertit pas en blessures.
+    assert!(ajouter(&mut j, convertir(2, "Inflict Moderate Wounds")).is_err());
+    // On ne sacrifie pas un sort de domaine (ni une oraison) : au niveau 1 il n'y a que le sort de domaine.
+    assert!(ajouter(&mut j, convertir(1, "Cure Light Wounds")).is_err());
+    ajouter(&mut j, convertir(2, "Cure Light Wounds")).expect("conversion permise");
+    // Plus de sort préparé à sacrifier au niveau 2.
+    assert!(ajouter(&mut j, convertir(2, "Cure Moderate Wounds")).is_err());
+}
+
+#[test]
+fn le_mauvais_pretre_convertit_en_blessures() {
+    let r = Referentiel::core();
+    let regles = ReglesFiche::default();
+    let mut j = Journal::nouveau(pretre_de("asmodeus", "LM", &["feu", "mal"], 5));
+    let ajouter = |j: &mut Journal, e| j.ajouter(e, &r, &regles);
+    let sort2 = r
+        .sorts
+        .iter()
+        .filter(|s| s.niveau_pour("cleric") == Some(2))
+        .filter(|s| {
+            !s.descripteurs
+                .iter()
+                .any(|d| matches!(d.to_lowercase().as_str(), "good" | "chaotic"))
+        })
+        .map(|s| s.nom_en.clone())
+        .min()
+        .unwrap();
+    ajouter(
+        &mut j,
+        EvenementFiche::Preparation {
+            classe: "pretre".into(),
+            sorts: vec![prep(2, &sort2, false)],
+        },
+    )
+    .unwrap();
+    let convertir = |sort: &str| EvenementFiche::SortConverti {
+        classe: "pretre".into(),
+        niveau_sacrifie: 2,
+        sort: sort.into(),
+    };
+    assert!(ajouter(&mut j, convertir("Cure Light Wounds")).is_err());
+    ajouter(&mut j, convertir("Inflict Light Wounds")).expect("blessures");
+}
