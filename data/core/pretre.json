@@ -31,6 +31,8 @@
     "reflexes": "lente",
     "volonte": "rapide",
     "maitrises_fr": "Toutes les armes courantes, armures légères et intermédiaires, boucliers (sauf pavois), arme de prédilection de son dieu.",
+    "domaines_choisis": 2,
+    "canalisation": true,
     "incantation": {
       "type": "divin",
       "mode": "préparé",

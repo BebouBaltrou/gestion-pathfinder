@@ -72,10 +72,43 @@ pub struct Fiche {
     /// Effets qui durent (sorts sur soi, potions…).
     #[cfg_attr(feature = "serde", serde(default))]
     pub temporaires: Vec<EffetTemporaire>,
+    /// Divinité servie (identifiant de `data/core/divinites.json`), s'il y en a une.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub divinite: Option<String>,
+    /// Alignement : `LB`, `NB`, `CB`, `LN`, `N`, `CN`, `LM`, `NM` ou `CM`.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub alignement: Option<String>,
+    /// Domaines choisis (identifiants de `data/core/domaines.json`).
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub domaines: Vec<String>,
+    /// Énergie canalisée par un prêtre Neutre (sur l'axe Bien-Mal) : `positive` ou `negative`.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub energie: Option<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Probleme {
+    DiviniteInconnue(String),
+    AlignementManquant,
+    AlignementInvalide(String),
+    AlignementHorsDivinite {
+        alignement: String,
+        divinite: String,
+    },
+    DomainesAChoisir {
+        attendus: u32,
+        choisis: u32,
+    },
+    DomaineInconnu(String),
+    DomaineEnDouble(String),
+    DomaineHorsDivinite {
+        domaine: String,
+        divinite: String,
+    },
+    DomaineAlignement {
+        domaine: String,
+    },
+    EnergieAChoisir,
     EquipementInconnu(String),
     MauvaisEmplacement {
         objet: String,
@@ -150,7 +183,9 @@ impl Probleme {
             }
             | Probleme::SortsAChoisir {
                 attendus, choisis, ..
-            } => choisis < attendus,
+            }
+            | Probleme::DomainesAChoisir { attendus, choisis } => choisis < attendus,
+            Probleme::AlignementManquant | Probleme::EnergieAChoisir => true,
             _ => false,
         }
     }
@@ -203,6 +238,27 @@ impl std::fmt::Display for Probleme {
                 )
             }
             Probleme::CompetenceInconnue(c) => write!(f, "compétence inconnue : {c}"),
+            Probleme::DiviniteInconnue(d) => write!(f, "divinité inconnue : {d}"),
+            Probleme::AlignementManquant => write!(f, "choisir l'alignement du personnage"),
+            Probleme::AlignementInvalide(a) => write!(f, "alignement invalide : {a}"),
+            Probleme::AlignementHorsDivinite { alignement, divinite } => write!(
+                f,
+                "l'alignement {alignement} diffère de plus d'une catégorie de celui de {divinite}"
+            ),
+            Probleme::DomainesAChoisir { attendus, choisis } => {
+                write!(f, "{attendus} domaine(s) à choisir, {choisis} choisi(s)")
+            }
+            Probleme::DomaineInconnu(d) => write!(f, "domaine inconnu : {d}"),
+            Probleme::DomaineEnDouble(d) => write!(f, "domaine choisi deux fois : {d}"),
+            Probleme::DomaineHorsDivinite { domaine, divinite } => {
+                write!(f, "le domaine {domaine} n'est pas offert par {divinite}")
+            }
+            Probleme::DomaineAlignement { domaine } => {
+                write!(f, "le domaine {domaine} est réservé à un alignement correspondant")
+            }
+            Probleme::EnergieAChoisir => {
+                write!(f, "choisir l'énergie canalisée (positive ou négative)")
+            }
             Probleme::EmplacementOccupe { emplacement } => {
                 write!(f, "deux objets magiques portés à l'emplacement « {emplacement} »")
             }
@@ -272,6 +328,50 @@ pub struct Incantateur {
     pub sorts_de_lignage: Vec<(String, u32)>,
 }
 
+/// Canalisation d'énergie d'un prêtre.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Canalisation {
+    /// `Some(true)` : énergie positive (soigne les vivants, blesse les morts-vivants) ; `Some(false)` :
+    /// négative ; `None` : à choisir (prêtre Neutre).
+    pub positive: Option<bool>,
+    /// Nombre de d6 de soins ou de dégâts.
+    pub des: u32,
+    /// DD du jet de Volonté pour réduire les dégâts de moitié.
+    pub dd: i32,
+    /// Utilisations par jour (3 + modificateur de Charisme).
+    pub utilisations: i32,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct PouvoirVu {
+    pub nom: String,
+    pub genre: String,
+    pub niveau: u32,
+    /// Le niveau de prêtre est suffisant.
+    pub actif: bool,
+    /// Utilisations par jour, quand le livre en donne.
+    pub utilisations: Option<i32>,
+    pub texte: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct SortDomaineVu {
+    pub niveau: u32,
+    pub nom_fr: String,
+    pub nom_en: Option<String>,
+    pub note: Option<String>,
+    /// Le personnage a accès à ce niveau de sort.
+    pub accessible: bool,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct DomaineVu {
+    pub id: String,
+    pub nom: String,
+    pub pouvoirs: Vec<PouvoirVu>,
+    pub sorts: Vec<SortDomaineVu>,
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct BilanRangs {
     pub niveau: u32,
@@ -323,6 +423,8 @@ pub struct Valeurs {
     pub competences: BTreeMap<String, Detail>,
     pub rangs: Vec<BilanRangs>,
     pub incantateurs: Vec<Incantateur>,
+    pub canalisation: Option<Canalisation>,
+    pub domaines: Vec<DomaineVu>,
 }
 
 /// Comme `calculer`, mais plusieurs cibles à la fois (ex. une compétence et « toutes les compétences »),
@@ -460,6 +562,17 @@ impl Fiche {
                 m.armures.extend(c.armures.iter().copied());
                 m.boucliers |= c.boucliers;
                 m.pavois |= c.bouclier_pavois;
+            }
+            // Le prêtre sait manier l'arme de prédilection de son dieu.
+            if r.classe(&n.classe).is_some_and(|c| c.domaines_choisis > 0) {
+                if let Some(arme) = self
+                    .divinite
+                    .as_deref()
+                    .and_then(|d| r.divinite(d))
+                    .and_then(|d| d.arme_de_predilection_en.as_deref())
+                {
+                    m.armes.push(arme.to_lowercase());
+                }
             }
         }
         if let Some(rc) = r.equipement.maitrises.races.get(&self.race) {
@@ -702,7 +815,88 @@ impl Fiche {
         }
         p.extend(self.valider_dons(r));
         p.extend(self.valider_sorts(r));
+        p.extend(self.valider_divin(r));
         p.extend(self.problemes_equipement(r));
+        p
+    }
+
+    /// Divinité, alignement, domaines et énergie des classes qui en demandent (prêtre).
+    fn valider_divin(&self, r: &Referentiel) -> Vec<Probleme> {
+        let mut p = Vec::new();
+        let Some(attendus) = self
+            .niveaux
+            .iter()
+            .filter_map(|n| r.classe(&n.classe))
+            .map(|c| c.domaines_choisis)
+            .find(|d| *d > 0)
+        else {
+            return p;
+        };
+        let dieu = match &self.divinite {
+            Some(id) => {
+                let d = r.divinite(id);
+                if d.is_none() {
+                    p.push(Probleme::DiviniteInconnue(id.clone()));
+                }
+                d
+            }
+            None => None,
+        };
+        match &self.alignement {
+            None => p.push(Probleme::AlignementManquant),
+            Some(a) if crate::divin::axes(a).is_none() => {
+                p.push(Probleme::AlignementInvalide(a.clone()))
+            }
+            Some(a) => {
+                if let Some(d) = dieu {
+                    if !crate::divin::alignement_compatible(a, &d.alignement) {
+                        p.push(Probleme::AlignementHorsDivinite {
+                            alignement: a.clone(),
+                            divinite: d.nom.clone(),
+                        });
+                    }
+                }
+            }
+        }
+        let mut vus: Vec<&str> = Vec::new();
+        for id in &self.domaines {
+            let Some(d) = r.domaine(id) else {
+                p.push(Probleme::DomaineInconnu(id.clone()));
+                continue;
+            };
+            if vus.contains(&id.as_str()) {
+                p.push(Probleme::DomaineEnDouble(d.nom.clone()));
+                continue;
+            }
+            vus.push(id);
+            if let Some(dieu) = dieu {
+                if !dieu.domaines.contains(id) {
+                    p.push(Probleme::DomaineHorsDivinite {
+                        domaine: d.nom.clone(),
+                        divinite: dieu.nom.clone(),
+                    });
+                }
+            }
+            if let Some(a) = &self.alignement {
+                if crate::divin::axes(a).is_some() && !crate::divin::domaine_permis(d, a) {
+                    p.push(Probleme::DomaineAlignement {
+                        domaine: d.nom.clone(),
+                    });
+                }
+            }
+        }
+        if self.domaines.len() as u32 != attendus {
+            p.push(Probleme::DomainesAChoisir {
+                attendus,
+                choisis: self.domaines.len() as u32,
+            });
+        }
+        // Prêtre Neutre sur l'axe Bien-Mal : il choisit une fois pour toutes l'énergie canalisée.
+        if let Some((_, 1)) = self.alignement.as_deref().and_then(crate::divin::axes) {
+            if !matches!(self.energie.as_deref(), Some("positive" | "negative")) {
+                p.push(Probleme::EnergieAChoisir);
+            }
+        }
         p
     }
 
@@ -1183,6 +1377,79 @@ impl Fiche {
             });
         }
 
+        // Canalisation d'énergie et domaines (prêtre).
+        let mut canalisation = None;
+        let mut domaines_vus = Vec::new();
+        for id in &vues {
+            let Some(classe) = r.classe(id) else { continue };
+            let nc = self.niveau_de_classe(id);
+            if classe.canalisation {
+                let positive = match self.alignement.as_deref().and_then(crate::divin::axes) {
+                    Some((_, 0)) => Some(true),
+                    Some((_, 2)) => Some(false),
+                    Some(_) => match self.energie.as_deref() {
+                        Some("positive") => Some(true),
+                        Some("negative") => Some(false),
+                        _ => None,
+                    },
+                    None => None,
+                };
+                canalisation = Some(Canalisation {
+                    positive,
+                    des: 1 + nc.saturating_sub(1) / 2,
+                    dd: 10 + (nc / 2) as i32 + m(Carac::Cha),
+                    utilisations: (3 + m(Carac::Cha)).max(0),
+                });
+            }
+            if classe.domaines_choisis > 0 {
+                let niveau_max = classe
+                    .progression
+                    .get(nc as usize - 1)
+                    .map(|l| {
+                        l.sorts_par_jour
+                            .iter()
+                            .rposition(|s| s.is_some())
+                            .map(|i| i as u32 + 1)
+                            .unwrap_or(0)
+                    })
+                    .unwrap_or(0);
+                for did in &self.domaines {
+                    let Some(d) = r.domaine(did) else { continue };
+                    domaines_vus.push(DomaineVu {
+                        id: d.id.clone(),
+                        nom: d.nom.clone(),
+                        pouvoirs: d
+                            .pouvoirs
+                            .iter()
+                            .map(|p| PouvoirVu {
+                                nom: p.nom.clone(),
+                                genre: p.genre.clone(),
+                                niveau: p.niveau,
+                                actif: nc >= p.niveau,
+                                utilisations: if nc >= p.niveau {
+                                    p.utilisations(nc, m(Carac::Sag))
+                                } else {
+                                    None
+                                },
+                                texte: p.texte.clone(),
+                            })
+                            .collect(),
+                        sorts: d
+                            .sorts_de_domaine
+                            .iter()
+                            .map(|s| SortDomaineVu {
+                                niveau: s.niveau,
+                                nom_fr: s.nom_fr.clone(),
+                                nom_en: s.nom_en.clone(),
+                                note: s.note.clone(),
+                                accessible: s.niveau <= niveau_max,
+                            })
+                            .collect(),
+                    });
+                }
+            }
+        }
+
         let mut vitesse = bilan.vitesse;
         if etats_actifs.iter().any(|e| e.vitesse_moitie) {
             vitesse /= 2;
@@ -1262,6 +1529,8 @@ impl Fiche {
             competences,
             rangs,
             incantateurs,
+            canalisation,
+            domaines: domaines_vus,
         })
     }
 }

@@ -42,6 +42,10 @@ pub fn elfe_ensorceleuse() -> Fiche {
         equipement: Default::default(),
         etats: vec![],
         temporaires: vec![],
+        divinite: None,
+        alignement: None,
+        domaines: vec![],
+        energie: None,
         sorts_connus: [
             "Acid Splash",
             "Detect Magic",

@@ -1,0 +1,307 @@
+{
+  "source": "Manuel des joueurs (version française), Table 3-14 : divinités du monde de Golarion (p. 70)",
+  "note": "L'arme de prédilection est lue dans l'ordre des lignes du tableau (les cellules sont décalées dans le PDF) ; « mains nues » et « masse » n'ont pas d'équivalent unique dans le catalogue.",
+  "divinites": [
+    {
+      "id": "erastil",
+      "nom": "Érastil",
+      "alignement": "LB",
+      "theme": "dieu des fermes, de la chasse, du commerce et de la famille",
+      "domaines": [
+        "bien",
+        "communaute",
+        "faune",
+        "flore",
+        "loi"
+      ],
+      "arme_de_predilection": "arc long",
+      "arme_de_predilection_en": "Longbow"
+    },
+    {
+      "id": "iomedae",
+      "nom": "Iomédae",
+      "alignement": "LB",
+      "theme": "déesse du courage, du pouvoir, de la justice et de l'honneur",
+      "domaines": [
+        "bien",
+        "gloire",
+        "guerre",
+        "loi",
+        "soleil"
+      ],
+      "arme_de_predilection": "épée longue",
+      "arme_de_predilection_en": "Longsword"
+    },
+    {
+      "id": "torag",
+      "nom": "Torag",
+      "alignement": "LB",
+      "theme": "dieu de la forge, de la protection et de la stratégie",
+      "domaines": [
+        "artisanat",
+        "bien",
+        "loi",
+        "protection",
+        "terre"
+      ],
+      "arme_de_predilection": "marteau de guerre",
+      "arme_de_predilection_en": "Warhammer"
+    },
+    {
+      "id": "sarenrae",
+      "nom": "Sarenrae",
+      "alignement": "NB",
+      "theme": "déesse du soleil, de la rédemption, de l'honnêteté et de la guérison",
+      "domaines": [
+        "bien",
+        "guerison",
+        "feu",
+        "gloire",
+        "soleil"
+      ],
+      "arme_de_predilection": "cimeterre",
+      "arme_de_predilection_en": "Scimitar"
+    },
+    {
+      "id": "shelyn",
+      "nom": "Shélyn",
+      "alignement": "NB",
+      "theme": "déesse de la beauté, de l'art, de l'amour et de la musique",
+      "domaines": [
+        "air",
+        "bien",
+        "chance",
+        "charme",
+        "protection"
+      ],
+      "arme_de_predilection": "coutille",
+      "arme_de_predilection_en": "Glaive"
+    },
+    {
+      "id": "desna",
+      "nom": "Desna",
+      "alignement": "CB",
+      "theme": "déesse des rêves, des étoiles, des voyageurs et de la chance",
+      "domaines": [
+        "bien",
+        "chance",
+        "chaos",
+        "liberation",
+        "voyage"
+      ],
+      "arme_de_predilection": "lamétoile",
+      "arme_de_predilection_en": "Starknife"
+    },
+    {
+      "id": "cayden_cailean",
+      "nom": "Cayden Cailéan",
+      "alignement": "CB",
+      "theme": "dieu de la liberté, de la bière, du vin et de la bravoure",
+      "domaines": [
+        "bien",
+        "chaos",
+        "charme",
+        "force",
+        "voyage"
+      ],
+      "arme_de_predilection": "rapière",
+      "arme_de_predilection_en": "Rapier"
+    },
+    {
+      "id": "abadar",
+      "nom": "Abadar",
+      "alignement": "LN",
+      "theme": "dieu des villes, de la richesse, des marchands et de la loi",
+      "domaines": [
+        "terre",
+        "loi",
+        "noblesse",
+        "protection",
+        "voyage"
+      ],
+      "arme_de_predilection": "arbalète légère",
+      "arme_de_predilection_en": "Light crossbow"
+    },
+    {
+      "id": "irori",
+      "nom": "Irori",
+      "alignement": "LN",
+      "theme": "dieu de l'histoire, de la connaissance et de la perfection de soi",
+      "domaines": [
+        "connaissance",
+        "force",
+        "guerison",
+        "loi",
+        "runes"
+      ],
+      "arme_de_predilection": "mains nues",
+      "arme_de_predilection_en": null
+    },
+    {
+      "id": "gozreh",
+      "nom": "Gozreh",
+      "alignement": "N",
+      "theme": "dieu de la nature, du climat et de la mer",
+      "domaines": [
+        "air",
+        "climat",
+        "eau",
+        "faune",
+        "flore"
+      ],
+      "arme_de_predilection": "trident",
+      "arme_de_predilection_en": "Trident"
+    },
+    {
+      "id": "pharasma",
+      "nom": "Pharasma",
+      "alignement": "N",
+      "theme": "déesse du destin, de la mort, des prophéties et de la naissance",
+      "domaines": [
+        "connaissance",
+        "eau",
+        "guerison",
+        "mort",
+        "repos"
+      ],
+      "arme_de_predilection": "dague",
+      "arme_de_predilection_en": "Dagger"
+    },
+    {
+      "id": "nethys",
+      "nom": "Néthys",
+      "alignement": "N",
+      "theme": "dieu de la magie",
+      "domaines": [
+        "connaissance",
+        "destruction",
+        "magie",
+        "protection",
+        "runes"
+      ],
+      "arme_de_predilection": "bâton",
+      "arme_de_predilection_en": "Quarterstaff"
+    },
+    {
+      "id": "gorum",
+      "nom": "Gorum",
+      "alignement": "CN",
+      "theme": "dieu de la force, des batailles et des armes",
+      "domaines": [
+        "chaos",
+        "destruction",
+        "force",
+        "gloire",
+        "guerre"
+      ],
+      "arme_de_predilection": "épée à deux mains",
+      "arme_de_predilection_en": "Greatsword"
+    },
+    {
+      "id": "calistria",
+      "nom": "Calistria",
+      "alignement": "CN",
+      "theme": "déesse de la tromperie, de la luxure et de la vengeance",
+      "domaines": [
+        "chance",
+        "chaos",
+        "charme",
+        "connaissance",
+        "duperie"
+      ],
+      "arme_de_predilection": "fouet",
+      "arme_de_predilection_en": "Whip",
+      "ecart_livre": "Le tableau 3-14 (p. 70) donne Chance, Chaos, Charme, Connaissance, Guerre ; les pages des domaines donnent Chance, Chaos, Charme, Connaissance, Duperie : ces dernières sont retenues (point à confirmer)."
+    },
+    {
+      "id": "asmodeus",
+      "nom": "Asmodéus",
+      "alignement": "LM",
+      "theme": "dieu de la tyrannie, de l'esclavage, de la fierté et des contrats",
+      "domaines": [
+        "duperie",
+        "feu",
+        "loi",
+        "magie",
+        "mal"
+      ],
+      "arme_de_predilection": "masse",
+      "arme_de_predilection_en": null
+    },
+    {
+      "id": "zon-kuthon",
+      "nom": "Zon-Kuthon",
+      "alignement": "LM",
+      "theme": "dieu de l'envie, de la douleur, des ténèbres et de l'égarement",
+      "domaines": [
+        "destruction",
+        "loi",
+        "mal",
+        "mort",
+        "obscurite"
+      ],
+      "arme_de_predilection": "chaîne cloutée",
+      "arme_de_predilection_en": "Spiked chain"
+    },
+    {
+      "id": "urgathoa",
+      "nom": "Urgathoa",
+      "alignement": "NM",
+      "theme": "déesse de la gloutonnerie, des maladies et des morts-vivants",
+      "domaines": [
+        "force",
+        "guerre",
+        "magie",
+        "mal",
+        "mort"
+      ],
+      "arme_de_predilection": "faux",
+      "arme_de_predilection_en": "Scythe"
+    },
+    {
+      "id": "norgorber",
+      "nom": "Norgorber",
+      "alignement": "NM",
+      "theme": "dieu de l'avarice, des secrets, du poison et du meurtre",
+      "domaines": [
+        "charme",
+        "connaissance",
+        "duperie",
+        "mal",
+        "mort"
+      ],
+      "arme_de_predilection": "épée courte",
+      "arme_de_predilection_en": "Short sword"
+    },
+    {
+      "id": "lamashtu",
+      "nom": "Lamashtu",
+      "alignement": "CM",
+      "theme": "déesse de la folie, des monstres et des cauchemars",
+      "domaines": [
+        "chaos",
+        "duperie",
+        "folie",
+        "force",
+        "mal"
+      ],
+      "arme_de_predilection": "cimeterre à deux mains",
+      "arme_de_predilection_en": "Falchion"
+    },
+    {
+      "id": "rovagug",
+      "nom": "Rovagug",
+      "alignement": "CM",
+      "theme": "dieu de la colère, des désastres et de la destruction",
+      "domaines": [
+        "chaos",
+        "climat",
+        "destruction",
+        "guerre",
+        "mal"
+      ],
+      "arme_de_predilection": "grande hache",
+      "arme_de_predilection_en": "Greataxe"
+    }
+  ]
+}

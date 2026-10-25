@@ -797,6 +797,10 @@ pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32, r: &Referentiel) -> Result
         },
         etats: vec![],
         temporaires: vec![],
+        divinite: None,
+        alignement: None,
+        domaines: vec![],
+        energie: None,
     };
     // Rangs : la feuille ne dit pas à quel niveau ils ont été pris. On les répartit niveau par
     // niveau dans ce que le moteur permet (rangs disponibles, rang maximum = niveau), en

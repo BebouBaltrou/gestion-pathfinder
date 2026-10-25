@@ -39,6 +39,10 @@ fn pretre(niveau: u32, sagesse: i32) -> Fiche {
         equipement: Default::default(),
         etats: vec![],
         temporaires: vec![],
+        divinite: None,
+        alignement: None,
+        domaines: vec![],
+        energie: None,
     }
 }
 
@@ -209,4 +213,113 @@ fn le_druide_ne_connait_que_ses_armes() {
     let maitrise = |nom: &str| v.armes.iter().find(|a| a.arme_en == nom).unwrap().maitrise;
     assert!(maitrise("Scimitar"));
     assert!(!maitrise("Longsword"));
+}
+
+fn pretre_de(divinite: &str, alignement: &str, domaines: &[&str], niveau: u32) -> Fiche {
+    let mut f = pretre(niveau, 16);
+    f.divinite = Some(divinite.into());
+    f.alignement = Some(alignement.into());
+    f.domaines = domaines.iter().map(|d| d.to_string()).collect();
+    f
+}
+
+#[test]
+fn divinite_alignement_et_domaines_du_pretre() {
+    let r = Referentiel::core();
+    // Iomédae (LB) : Bien et Soleil sont ses domaines, alignement LB.
+    let f = pretre_de("iomedae", "LB", &["bien", "soleil"], 1);
+    assert!(
+        f.valider(&r).iter().all(|p| p.est_incomplet()),
+        "{:?}",
+        f.valider(&r)
+    );
+    // Un domaine que le dieu n'offre pas.
+    let g = pretre_de("iomedae", "LB", &["bien", "feu"], 1);
+    assert!(g
+        .valider(&r)
+        .iter()
+        .any(|p| matches!(p, crate::Probleme::DomaineHorsDivinite { .. })));
+    // Un domaine d'alignement qui ne correspond pas (prêtre NN de Gozreh ne peut prendre Bien).
+    let h = pretre_de("gozreh", "N", &["air", "bien"], 1);
+    let pb = h.valider(&r);
+    assert!(
+        pb.iter()
+            .any(|p| matches!(p, crate::Probleme::DomaineAlignement { .. })),
+        "{pb:?}"
+    );
+    assert!(pb
+        .iter()
+        .any(|p| matches!(p, crate::Probleme::DomaineHorsDivinite { .. })));
+    // Alignement trop éloigné du dieu : Iomédae (LB), prêtre CM.
+    let i = pretre_de("iomedae", "CM", &["bien", "soleil"], 1);
+    assert!(i
+        .valider(&r)
+        .iter()
+        .any(|p| matches!(p, crate::Probleme::AlignementHorsDivinite { .. })));
+    // Pas assez de domaines : fiche inachevée, pas fausse.
+    let j = pretre_de("iomedae", "LB", &["bien"], 1);
+    let pj = j.valider(&r);
+    assert!(pj
+        .iter()
+        .any(|p| matches!(p, crate::Probleme::DomainesAChoisir { .. })));
+    assert!(pj.iter().all(|p| p.est_incomplet()));
+    // Prêtre Neutre sur l'axe Bien-Mal : il doit choisir l'énergie.
+    let k = pretre_de("gozreh", "N", &["air", "eau"], 1);
+    assert!(k.valider(&r).contains(&crate::Probleme::EnergieAChoisir));
+}
+
+#[test]
+fn canalisation_et_domaines_calcules() {
+    let r = Referentiel::core();
+    // Niveau 5, Charisme 12 (+1), Sagesse 18 (+4) : bon prêtre.
+    let mut f = pretre_de("iomedae", "LB", &["bien", "soleil"], 5);
+    let v = f.calculer(&r).unwrap();
+    let c = v.canalisation.as_ref().expect("canalisation");
+    // 1d6 + 1d6 par deux niveaux après le premier : 3d6 au niveau 5 ; DD 10 + 5/2 + CHA +1 ; 3 + CHA fois par jour.
+    assert_eq!(
+        (c.positive, c.des, c.dd, c.utilisations),
+        (Some(true), 3, 10 + 2 + 1, 4)
+    );
+    assert_eq!(v.domaines.len(), 2);
+    let bien = &v.domaines[0];
+    assert_eq!(bien.nom, "Bien");
+    // Toucher du Bien : 3 + modificateur de Sagesse (+4) ; Lance du Bien : niveau 8 (inactif au niveau 5).
+    assert!(bien.pouvoirs[0].actif);
+    assert_eq!(bien.pouvoirs[0].utilisations, Some(7));
+    assert!(!bien.pouvoirs[1].actif);
+    // Sorts de domaine : niveau 3 accessible au niveau 5 (sorts de niveau 1 à 3), le 4e non.
+    assert!(
+        bien.sorts
+            .iter()
+            .find(|s| s.niveau == 3)
+            .unwrap()
+            .accessible
+    );
+    assert!(
+        !bien
+            .sorts
+            .iter()
+            .find(|s| s.niveau == 4)
+            .unwrap()
+            .accessible
+    );
+    // Mauvais prêtre : énergie négative. Neutre : selon son choix.
+    let mal = pretre_de("asmodeus", "LM", &["feu", "mal"], 1);
+    assert_eq!(
+        mal.calculer(&r).unwrap().canalisation.unwrap().positive,
+        Some(false)
+    );
+    let mut n = pretre_de("gozreh", "N", &["air", "eau"], 1);
+    assert_eq!(n.calculer(&r).unwrap().canalisation.unwrap().positive, None);
+    n.energie = Some("positive".into());
+    assert_eq!(
+        n.calculer(&r).unwrap().canalisation.unwrap().positive,
+        Some(true)
+    );
+    // L'arme de prédilection du dieu est maniée (Iomédae : épée longue), pas les autres armes de guerre.
+    f.equipement.armes = vec!["Longsword".into(), "Greatsword".into()];
+    let w = f.calculer(&r).unwrap();
+    let maitrise = |nom: &str| w.armes.iter().find(|a| a.arme_en == nom).unwrap().maitrise;
+    assert!(maitrise("Longsword"));
+    assert!(!maitrise("Greatsword"));
 }

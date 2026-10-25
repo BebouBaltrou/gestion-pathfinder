@@ -157,6 +157,12 @@ pub struct Classe {
     pub progression: Vec<ProgressionNiveau>,
     #[serde(default)]
     pub lignages: Vec<Lignage>,
+    /// Nombre de domaines à choisir (prêtre : 2), avec dieu et alignement.
+    #[serde(default)]
+    pub domaines_choisis: u32,
+    /// Canalisation d'énergie (prêtre).
+    #[serde(default)]
+    pub canalisation: bool,
     /// Bonus chiffrés accordés par la classe (ex. instinct naturel du druide).
     #[serde(default)]
     pub effets: Vec<EffetClasse>,
@@ -214,6 +220,8 @@ pub struct Referentiel {
     pub equipement: crate::equipement::CatalogueEquipement,
     pub etats: Vec<crate::etats::EtatDef>,
     pub objets_magiques: crate::objets_magiques::CatalogueMagique,
+    pub domaines: Vec<crate::divin::Domaine>,
+    pub divinites: Vec<crate::divin::Divinite>,
 }
 
 impl Referentiel {
@@ -254,6 +262,12 @@ impl Referentiel {
         .and_then(|r| {
             r.avec_objets_magiques(include_str!("../../../data/core/objets_magiques.json"))
         })
+        .and_then(|r| {
+            r.avec_divinites(
+                include_str!("../../../data/core/domaines.json"),
+                include_str!("../../../data/core/divinites.json"),
+            )
+        })
         .expect("référentiel Core embarqué valide")
     }
 
@@ -281,6 +295,8 @@ impl Referentiel {
             equipement: Default::default(),
             etats: Vec::new(),
             objets_magiques: Default::default(),
+            domaines: Vec::new(),
+            divinites: Vec::new(),
         })
     }
 
@@ -295,6 +311,26 @@ impl Referentiel {
         self.dons = d.dons;
         self.sorts = s.sorts;
         Ok(self)
+    }
+
+    /// Ajoute les domaines et les divinités du prêtre.
+    pub fn avec_divinites(
+        mut self,
+        domaines: &str,
+        divinites: &str,
+    ) -> Result<Referentiel, serde_json::Error> {
+        self.domaines = serde_json::from_str::<crate::divin::FichierDomaines>(domaines)?.domaines;
+        self.divinites =
+            serde_json::from_str::<crate::divin::FichierDivinites>(divinites)?.divinites;
+        Ok(self)
+    }
+
+    pub fn domaine(&self, id: &str) -> Option<&crate::divin::Domaine> {
+        self.domaines.iter().find(|d| d.id == id)
+    }
+
+    pub fn divinite(&self, id: &str) -> Option<&crate::divin::Divinite> {
+        self.divinites.iter().find(|d| d.id == id)
     }
 
     /// Ajoute les objets magiques à bonus chiffré.
