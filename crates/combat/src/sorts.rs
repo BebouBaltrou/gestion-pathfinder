@@ -246,6 +246,8 @@ pub struct ApercuSort {
     pub portee_en: Option<String>,
     pub jet_de_sauvegarde_en: Option<String>,
     pub description_en: String,
+    /// Dégâts, portée et nombre de projectiles calculés au niveau de lanceur.
+    pub stats: crate::stats_sorts::StatsSort,
     pub effet_automatique: bool,
     pub choix_energie: bool,
     pub notes: Option<String>,
@@ -531,6 +533,7 @@ impl EtatCombat {
             portee_en: p.sort.portee_en.clone(),
             jet_de_sauvegarde_en: p.sort.jet_de_sauvegarde_en.clone(),
             description_en: p.sort.description_en.clone(),
+            stats: crate::stats_sorts::statistiques(p.sort, cl),
             effet_automatique: effet.is_some(),
             choix_energie: effet.is_some_and(|e| e.choix_energie),
             notes: effet.and_then(|e| e.notes.clone()),
@@ -619,6 +622,11 @@ impl EtatCombat {
             nom_fr(&p.sort.nom_en),
             p.niveau_emplacement,
             p.dd
+        ));
+        self.noter(format!(
+            "{} : {}",
+            nom_fr(&p.sort.nom_en),
+            crate::stats_sorts::resume(p.sort, cl, p.dd)
         ));
         if let Some(r) = a.resultat_de {
             self.noter(format!("{} : résultat du dé du sort : {r}.", c.nom));

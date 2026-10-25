@@ -165,7 +165,12 @@ export type ApercuSort = {
   dureeSuggeree: Duree | null;
   dureeSuggereeTexte: string | null;
   portee: string | null;
+  porteeCalculee: string | null;
   jetDeSauvegarde: string | null;
+  degats: { libelle: string; formule: string; regle: string; aConfirmer: boolean }[];
+  nombre: string | null;
+  resistanceALaMagie: string | null;
+  cible: string | null;
   description: string;
   effetAutomatique: boolean;
   choixEnergie: boolean;

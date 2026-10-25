@@ -623,9 +623,20 @@ function DialogueSort({
               <span>Niveau de lanceur : {apercu.niveauDeLanceur}</span>
               <span>{apercu.typeAction}</span>
               <span>Composantes : {[apercu.verbal && "verbale", apercu.gestuel && "gestuelle"].filter(Boolean).join(" et ") || "aucune verbale ni gestuelle"}</span>
-              {apercu.portee && <span>Portée : {apercu.portee}</span>}
-              {apercu.jetDeSauvegarde && <span>Jet de sauvegarde : {apercu.jetDeSauvegarde}</span>}
-              {apercu.dureeTexte && <span>Durée : {apercu.dureeTexte}</span>}
+              {apercu.portee && <span>Portée : {apercu.porteeCalculee ? `${apercu.porteeCalculee} au niveau ${apercu.niveauDeLanceur} (${apercu.portee})` : apercu.portee}</span>}
+              {apercu.cible && <span>Cible / zone : {apercu.cible}</span>}
+              {apercu.jetDeSauvegarde && <span>Jet de sauvegarde : {apercu.jetDeSauvegarde}{!/^(aucun|non)/i.test(apercu.jetDeSauvegarde) && apercu.jetDeSauvegarde !== "" ? ` — DD ${apercu.dd}` : ""}</span>}
+              {apercu.resistanceALaMagie && <span>Résistance à la magie : {apercu.resistanceALaMagie}</span>}
+              {apercu.dureeTexte && <span>Durée : {apercu.dureeTexte}{apercu.dureeSuggereeTexte ? ` — soit ${apercu.dureeSuggereeTexte} au niveau ${apercu.niveauDeLanceur}` : ""}</span>}
+            </div>
+            <div className="grille">
+              {apercu.nombre && <span><strong>{apercu.nombre}</strong></span>}
+              {apercu.degats.map((d, i) => (
+                <span key={i}>
+                  <strong>{d.libelle} : {d.formule}</strong> <small className="doux">({d.regle}){d.aConfirmer ? " — lecture à valider" : ""}</small>
+                </span>
+              ))}
+              {apercu.degats.length === 0 && <span className="doux">Pas de formule de dégâts ou de soins lue dans le texte : voir la description.</span>}
             </div>
             <div className="descr">{apercu.description}</div>
             {apercu.source && <small className="doux">{apercu.source}</small>}

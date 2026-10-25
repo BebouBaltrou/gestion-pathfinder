@@ -139,6 +139,10 @@ fn apercu_d_une_boule_de_feu() {
     assert_eq!(a.duree_suggeree, Some(Duree::Instantanee));
     assert!(a.jet_de_sauvegarde_en.unwrap().contains("Reflex"));
     assert!(!a.effet_automatique);
+    // statistiques propres au sort, au niveau de lanceur 5
+    assert_eq!(a.stats.degats[0].libelle, "Dégâts de feu");
+    assert_eq!(a.stats.degats[0].formule, "5d6");
+    assert_eq!(a.stats.portee.as_deref(), Some("180 m"));
 }
 
 #[test]
@@ -273,6 +277,10 @@ fn sort_sans_effet_automatique_decompte_et_note() {
     assert!(j
         .iter()
         .any(|e| e.texte.contains("résultat du dé du sort : 17")));
+    // après le lancement, le journal rappelle les statistiques du sort
+    assert!(j.iter().any(|e| e.texte.contains("3 projectile(s)")
+        && e.texte.contains("Dégâts de force 1d4+1")
+        && e.texte.contains("portée 45 m")));
 }
 
 #[test]
