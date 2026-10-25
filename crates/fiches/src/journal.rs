@@ -119,6 +119,17 @@ pub enum EvenementFiche {
     RangsReattribuesGlobal {
         rangs: std::collections::BTreeMap<String, u32>,
     },
+    /// Dons choisis d'un niveau (1 = premier niveau du personnage) remplacés. Le nombre de dons
+    /// ne peut pas dépasser celui du niveau ; il peut rester inférieur (fiche à compléter).
+    DonsReattribues {
+        niveau: u32,
+        dons: Vec<String>,
+    },
+    /// Liste des sorts connus remplacée (les sorts accordés par le lignage ne se choisissent pas).
+    /// Chaque sort est vérifié contre la liste de sa classe et le nombre par niveau de sort.
+    SortsReattribues {
+        sorts: Vec<String>,
+    },
 }
 
 impl EvenementFiche {
@@ -193,6 +204,10 @@ impl EvenementFiche {
             EvenementFiche::RangsReattribues { niveau, .. } => {
                 format!("Rangs de compétence réattribués (niveau {niveau})")
             }
+            EvenementFiche::DonsReattribues { niveau, .. } => {
+                format!("Dons réattribués (niveau {niveau})")
+            }
+            EvenementFiche::SortsReattribues { .. } => "Sorts connus réattribués".to_string(),
         }
     }
 }
@@ -276,6 +291,10 @@ pub enum ErreurJournal {
         evenement: usize,
         raison: String,
     },
+    Choix {
+        evenement: usize,
+        raison: String,
+    },
 }
 
 impl std::fmt::Display for ErreurJournal {
@@ -304,6 +323,7 @@ impl std::fmt::Display for ErreurJournal {
             ErreurJournal::SortLanceImpossible { raison, .. } => write!(f, "{raison}"),
             ErreurJournal::Equipement { raison, .. } => write!(f, "{raison}"),
             ErreurJournal::Rangs { raison, .. } => write!(f, "{raison}"),
+            ErreurJournal::Choix { raison, .. } => write!(f, "{raison}"),
         }
     }
 }
@@ -832,6 +852,55 @@ impl Journal {
                         });
                     }
                 }
+                EvenementFiche::DonsReattribues { niveau, dons } => {
+                    let Some(pris) = (*niveau as usize)
+                        .checked_sub(1)
+                        .and_then(|k| fiche.niveaux.get_mut(k))
+                    else {
+                        return Err(ErreurJournal::Choix {
+                            evenement: i,
+                            raison: format!("le niveau {niveau} n'existe pas encore"),
+                        });
+                    };
+                    pris.dons = dons.clone();
+                    let trouve = fiche.valider(r).into_iter().find(|p| match p {
+                        Probleme::DonInconnu(d) => dons.contains(d),
+                        Probleme::DonEnDouble(_) | Probleme::DonDeLignageManquant { .. } => true,
+                        Probleme::DonsAuNiveau {
+                            niveau: n,
+                            attendus,
+                            choisis,
+                        } => n == niveau && choisis > attendus,
+                        Probleme::DonImposeManquant(_) => *niveau == 1,
+                        _ => false,
+                    });
+                    if let Some(p) = trouve {
+                        return Err(ErreurJournal::Choix {
+                            evenement: i,
+                            raison: p.to_string(),
+                        });
+                    }
+                }
+                EvenementFiche::SortsReattribues { sorts } => {
+                    fiche.sorts_connus = sorts.clone();
+                    let trouve = fiche.valider(r).into_iter().find(|p| match p {
+                        Probleme::SortInconnu(_)
+                        | Probleme::SortHorsListe { .. }
+                        | Probleme::SortEnDouble(_)
+                        | Probleme::SortDeLignageChoisi(_)
+                        | Probleme::CharismeInsuffisantPourSort { .. } => true,
+                        Probleme::SortsAChoisir {
+                            attendus, choisis, ..
+                        } => choisis > attendus,
+                        _ => false,
+                    });
+                    if let Some(p) = trouve {
+                        return Err(ErreurJournal::Choix {
+                            evenement: i,
+                            raison: p.to_string(),
+                        });
+                    }
+                }
                 EvenementFiche::MonteeDeNiveau(m) => {
                     let atteignable = niveau_atteignable(r, regles.vitesse, xp, jalon);
                     fiche = appliquer(r, regles, &fiche, m, atteignable).map_err(|erreurs| {
@@ -1189,5 +1258,55 @@ mod tests {
             sort: "Magic Missile".into(),
         };
         assert!(j.ajouter(haut, &r, &regles).is_err());
+    }
+
+    #[test]
+    fn dons_reattribues_respectent_le_nombre_du_niveau() {
+        let r = Referentiel::core();
+        let regles = ReglesFiche::default();
+        let mut j = journal();
+        let avant = j.clone();
+        let dons = |l: &[&str]| EvenementFiche::DonsReattribues {
+            niveau: 1,
+            dons: l.iter().map(|d| d.to_string()).collect(),
+        };
+        // le don déjà pris est accepté tel quel (aucun changement)
+        j.ajouter(dons(&["Toughness"]), &r, &regles).unwrap();
+        assert_eq!(j.etat(&r, &regles).unwrap().fiche.niveaux[0].dons, ["Toughness"]);
+        // plus de dons que le niveau n'en accorde, don inconnu, niveau absent : refusés
+        assert!(j.ajouter(dons(&["Toughness", "Toughness"]), &r, &regles).is_err());
+        assert!(j.ajouter(dons(&["Inconnu"]), &r, &regles).is_err());
+        let niveau_2 = EvenementFiche::DonsReattribues {
+            niveau: 2,
+            dons: vec![],
+        };
+        assert!(matches!(
+            j.ajouter(niveau_2, &r, &regles),
+            Err(ErreurJournal::Choix { .. })
+        ));
+        // annuler revient à l'état d'avant
+        j.annuler_dernier();
+        assert_eq!(j, avant);
+    }
+
+    #[test]
+    fn sorts_reattribues_refuses_si_hors_regles() {
+        let r = Referentiel::core();
+        let regles = ReglesFiche::default();
+        let mut j = journal();
+        let sorts = |l: &[&str]| EvenementFiche::SortsReattribues {
+            sorts: l.iter().map(|s| s.to_string()).collect(),
+        };
+        // un sort de la liste de l'ensorceleur, au bon niveau : accepté
+        j.ajouter(sorts(&["Light", "Magic Missile"]), &r, &regles)
+            .unwrap();
+        let e = j.etat(&r, &regles).unwrap();
+        assert_eq!(e.fiche.sorts_connus, ["Light", "Magic Missile"]);
+        let avant = j.clone();
+        // doublon, sort inconnu, sort de niveau 3 au niveau 1 : refusés
+        assert!(j.ajouter(sorts(&["Light", "Light"]), &r, &regles).is_err());
+        assert!(j.ajouter(sorts(&["Inconnu"]), &r, &regles).is_err());
+        assert!(j.ajouter(sorts(&["Fireball"]), &r, &regles).is_err());
+        assert_eq!(j, avant);
     }
 }

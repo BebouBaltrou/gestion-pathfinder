@@ -504,6 +504,10 @@ vue! {
         pub competences: Vec<CompetenceVue>,
         pub rangs_par_niveau: Vec<(u32, u32, u32)>,
         pub dons: Vec<DonVue>,
+        /// Dons choisis de chaque niveau (noms anglais), pour les réattribuer niveau par niveau.
+        pub dons_par_niveau: Vec<Vec<String>>,
+        /// Sorts connus choisis (noms anglais), pour les réattribuer.
+        pub sorts_connus: Vec<String>,
         pub traits: Vec<TexteVue>,
         pub capacites: Vec<TexteVue>,
         pub divin: Option<DivinVue>,
@@ -1151,6 +1155,8 @@ pub fn fiche_complete(
             .map(|b| (b.niveau, b.places, b.disponibles))
             .collect(),
         dons,
+        dons_par_niveau: f.niveaux.iter().map(|n| n.dons.clone()).collect(),
+        sorts_connus: f.sorts_connus.clone(),
         traits,
         capacites,
         divin,

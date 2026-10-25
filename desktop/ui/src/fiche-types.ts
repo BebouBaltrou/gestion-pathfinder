@@ -215,6 +215,10 @@ export type FicheVue = {
   competences: CompetenceVue[];
   rangsParNiveau: [number, number, number][];
   dons: DonVue[];
+  /** Dons choisis de chaque niveau (noms anglais). */
+  donsParNiveau: string[][];
+  /** Sorts connus choisis (noms anglais). */
+  sortsConnus: string[];
   traits: TexteVue[];
   capacites: TexteVue[];
   divin: DivinVue | null;
@@ -428,6 +432,8 @@ export type EvenementFiche =
   | { SortRemplace: { ancien: string; nouveau: string } }
   | { RangsReattribuesGlobal: { rangs: Record<string, number> } }
   | { RangsReattribues: { niveau: number; rangs: Record<string, number> } }
+  | { DonsReattribues: { niveau: number; dons: string[] } }
+  | { SortsReattribues: { sorts: string[] } }
   | { SortLance: { classe: string; niveau_de_sort: number; sort: string } }
   | { Preparation: { classe: string; sorts: SortPrepare[] } }
   | { PouvoirUtilise: { cle: string } }
