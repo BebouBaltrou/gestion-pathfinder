@@ -35,6 +35,6 @@ pub use caracteristiques::{modificateur, Carac, Caracteristique};
 pub use donnees::Referentiel;
 pub use effet::{Cible, Effet, TypeBonus};
 #[cfg(feature = "serde")]
-pub use fiche::{Fiche, Probleme, Valeurs};
+pub use fiche::{dd_sort, dons_ecole_pour, Fiche, Probleme, Valeurs};
 #[cfg(all(test, feature = "serde"))]
 mod tests_equipement;

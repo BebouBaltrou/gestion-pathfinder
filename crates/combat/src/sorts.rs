@@ -1,7 +1,8 @@
 //! Lancement de sorts en combat : emplacements, métamagie, DD, niveau de lanceur, lancement
 //! défensif, échec des sorts profanes, effets sur les personnages joués, concentration.
 //!
-//! Le moteur ne calcule ni DD ni bonus : il lit ce que la fiche fournit (`IncantationPj`). Les dés
+//! Le moteur ne calcule aucun bonus : il lit ce que la fiche fournit (`IncantationPj`) ; le DD d'un
+//! sort vient de `fiches::dd_sort` (modificateur, niveau effectif, dons d'école). Les dés
 //! sont physiques : l'aperçu dit quoi lancer, l'action reçoit les résultats saisis.
 //! Sources : métamagie `data/combat/metamagie.json`, effets `data/combat/sorts_effets.json`,
 //! concentration Core p. 206, échec des sorts profanes p. 83 et 208.
@@ -449,11 +450,11 @@ impl EtatCombat {
                 .unwrap_or(0);
             e.restants.saturating_sub(depenses)
         };
-        let dd = inc
-            .emplacements
-            .iter()
-            .find(|e| e.niveau_de_sort == niveau_effectif)
-            .map_or(10 + niveau_effectif as i32 + inc.mod_incantation, |e| e.dd);
+        let dd = fiches::dd_sort(
+            niveau_effectif,
+            inc.mod_incantation,
+            fiches::dons_ecole_pour(&inc.dons_ecole, &sort.ecole),
+        );
         let accelere = metas.iter().any(|m| m.rapide);
         let type_action = type_d_action(
             sort.temps_d_incantation_en.as_deref(),

@@ -263,6 +263,27 @@ pub fn sorts_bonus(modificateur: i32, niveau_de_sort: u32) -> u32 {
     }
 }
 
+/// DD d'un sort : 10 + niveau du sort + modificateur de la caractéristique d'incantation de la
+/// classe + 1 par don d'école applicable (École renforcée, École supérieure : ils se cumulent).
+pub fn dd_sort(niveau_du_sort: u32, modificateur: i32, dons_ecole: u32) -> i32 {
+    10 + niveau_du_sort as i32 + modificateur + dons_ecole as i32
+}
+
+/// Nombre de dons École renforcée / École supérieure pris pour `ecole` (nom anglais en minuscules,
+/// comme dans le catalogue des sorts) parmi les dons choisis (« Spell Focus (evocation) »).
+pub fn dons_ecole_pour(dons: &[String], ecole: &str) -> u32 {
+    dons.iter()
+        .filter(|d| {
+            let d = d.to_lowercase();
+            ["spell focus (", "greater spell focus ("].iter().any(|p| {
+                d.strip_prefix(p)
+                    .and_then(|s| s.strip_suffix(')'))
+                    .is_some_and(|e| e.trim() == ecole)
+            })
+        })
+        .count() as u32
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct EmplacementsDeSorts {
     pub niveau_de_sort: u32,
@@ -1232,7 +1253,7 @@ impl Fiche {
                         _ => Some(0),
                     },
                     connus: connus.unwrap_or(0),
-                    dd: 10 + sn as i32 + m(car),
+                    dd: dd_sort(sn, m(car), 0),
                 });
             }
             let sorts_de_lignage = self
@@ -1358,6 +1379,25 @@ pub(crate) mod tests {
     use super::*;
 
     pub(crate) use crate::exemple::elfe_ensorceleuse;
+
+    #[test]
+    fn dd_des_sorts_et_dons_d_ecole() {
+        // 10 + niveau du sort + modificateur (+1 par don d'école)
+        assert_eq!(dd_sort(3, 4, 0), 17);
+        assert_eq!(dd_sort(0, -1, 0), 9);
+        let dons: Vec<String> = [
+            "Spell Focus (evocation)",
+            "Greater Spell Focus (evocation)",
+            "Spell Focus (illusion)",
+            "Toughness",
+        ]
+        .map(String::from)
+        .to_vec();
+        assert_eq!(dons_ecole_pour(&dons, "evocation"), 2);
+        assert_eq!(dons_ecole_pour(&dons, "illusion"), 1);
+        assert_eq!(dons_ecole_pour(&dons, "necromancy"), 0);
+        assert_eq!(dd_sort(3, 4, dons_ecole_pour(&dons, "evocation")), 19);
+    }
 
     /// Complète les sorts connus pour que la fiche soit valide à son niveau actuel.
     pub(crate) fn completer_sorts(r: &Referentiel, f: &mut Fiche) {
