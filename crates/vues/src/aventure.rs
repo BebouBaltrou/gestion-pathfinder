@@ -734,6 +734,17 @@ pub fn personnages_de_l_aventure(etat: &Etat) -> Vec<(IdPersonnage, String)> {
 
 // ------------------------------------------------- aperçus (avant de confirmer)
 
+/// Une ligne de dégâts ou de soins du sort, calculée au niveau de lanceur.
+#[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize))]
+#[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
+pub struct DegatsSortVue {
+    pub libelle: String,
+    pub formule: String,
+    pub regle: String,
+    pub a_confirmer: bool,
+}
+
 #[derive(Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize))]
 #[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
@@ -758,7 +769,15 @@ pub struct ApercuSortVue {
     pub duree_suggeree: Option<temps::Duree>,
     pub duree_suggeree_texte: Option<String>,
     pub portee: Option<String>,
+    /// Portée en mètres au niveau de lanceur, quand la formule est connue.
+    pub portee_calculee: Option<String>,
     pub jet_de_sauvegarde: Option<String>,
+    /// Dégâts ou soins au niveau de lanceur ; vide si le texte du sort n'en donne pas de formule.
+    pub degats: Vec<DegatsSortVue>,
+    /// Nombre de projectiles ou de rayons.
+    pub nombre: Option<String>,
+    pub resistance_a_la_magie: Option<String>,
+    pub cible: Option<String>,
     pub description: String,
     pub effet_automatique: bool,
     pub choix_energie: bool,
@@ -794,9 +813,24 @@ pub fn apercu_sort(a: &combat::ApercuSort) -> ApercuSortVue {
         portee: fr
             .and_then(|s| s.portee.clone())
             .or_else(|| a.portee_en.clone()),
+        portee_calculee: a.stats.portee.clone(),
         jet_de_sauvegarde: fr
             .and_then(|s| s.jet_de_sauvegarde.clone())
             .or_else(|| a.jet_de_sauvegarde_en.clone()),
+        degats: a
+            .stats
+            .degats
+            .iter()
+            .map(|d| DegatsSortVue {
+                libelle: d.libelle.clone(),
+                formule: d.formule.clone(),
+                regle: d.regle.clone(),
+                a_confirmer: d.a_confirmer,
+            })
+            .collect(),
+        nombre: a.stats.nombre.clone(),
+        resistance_a_la_magie: fr.and_then(|s| s.resistance_a_la_magie.clone()),
+        cible: fr.and_then(|s| s.cible.clone()),
         description: fr.map_or_else(|| a.description_en.clone(), |s| s.description.clone()),
         effet_automatique: a.effet_automatique,
         choix_energie: a.choix_energie,

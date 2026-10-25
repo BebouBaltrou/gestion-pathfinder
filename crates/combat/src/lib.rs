@@ -11,6 +11,7 @@ pub mod etat;
 pub mod objets;
 pub mod regles;
 pub mod sorts;
+pub mod stats_sorts;
 pub mod xp;
 
 #[cfg(feature = "serde")]

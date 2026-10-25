@@ -194,6 +194,20 @@ vue! {
     }
 }
 vue! {
+    pub struct RemplacementSortVue {
+        pub ancien_en: String,
+        pub ancien: String,
+        pub niveau_de_sort: u32,
+        pub propositions: Vec<SortProposeVue>,
+    }
+}
+vue! {
+    pub struct SortProposeVue {
+        pub nom_en: String,
+        pub nom: String,
+    }
+}
+vue! {
     pub struct SortVue {
         pub nom_en: String,
         pub nom: String,
@@ -201,6 +215,29 @@ vue! {
         pub ecole: String,
         /// Obtenu automatiquement par le lignage.
         pub de_lignage: bool,
+        /// Statistiques du sort au niveau de lanceur du personnage (affichées au clic).
+        pub stats: Option<StatsSortFicheVue>,
+    }
+}
+vue! {
+    pub struct StatsSortFicheVue {
+        pub niveau_de_lanceur: u32,
+        pub temps_d_incantation: Option<String>,
+        pub composantes: Option<String>,
+        pub portee: Option<String>,
+        pub portee_calculee: Option<String>,
+        pub cible: Option<String>,
+        pub duree: Option<String>,
+        pub duree_calculee: Option<String>,
+        pub jet_de_sauvegarde: Option<String>,
+        /// DD du jet de sauvegarde pour ce niveau de sort.
+        pub dd: Option<i32>,
+        pub resistance_a_la_magie: Option<String>,
+        pub nombre: Option<String>,
+        pub degats: Vec<crate::aventure::DegatsSortVue>,
+        pub description: String,
+        pub source: Option<String>,
+        pub note_livre: Option<String>,
     }
 }
 vue! {
@@ -467,6 +504,8 @@ vue! {
         pub notes_etats: Vec<String>,
         /// Ce qui rend la fiche invalide ou incomplète.
         pub problemes: Vec<String>,
+        /// Sorts connus à remplacer (doublon ou sort déjà accordé par le lignage), avec propositions.
+        pub remplacements_de_sorts: Vec<RemplacementSortVue>,
         pub historique: Vec<String>,
     }
 }
@@ -502,6 +541,28 @@ pub fn fiche_complete(
     let mut problemes: Vec<String> = f.valider(r).iter().map(Probleme::to_string).collect();
     problemes.extend(problemes_supplementaires);
     let (nom_pj, compte, prestige, prestige_calcule) = identite;
+    let nom_sort = |nom_en: &str| {
+        t.sort(nom_en)
+            .map(|s| s.nom.clone())
+            .unwrap_or_else(|| nom_en.to_string())
+    };
+    let remplacements: Vec<RemplacementSortVue> = f
+        .remplacements_de_sorts(r)
+        .into_iter()
+        .map(|x| RemplacementSortVue {
+            ancien: nom_sort(&x.ancien),
+            ancien_en: x.ancien,
+            niveau_de_sort: x.niveau_de_sort,
+            propositions: x
+                .propositions
+                .into_iter()
+                .map(|p| SortProposeVue {
+                    nom: nom_sort(&p),
+                    nom_en: p,
+                })
+                .collect(),
+        })
+        .collect();
 
     let classe_principale = f.niveaux.first().and_then(|n| r.classe(&n.classe));
     let lignage = f.lignage.as_ref().and_then(|id| {
@@ -637,6 +698,46 @@ pub fn fiche_complete(
                 niveau: def.and_then(|d| d.niveau_pour(&cle)).unwrap_or(0),
                 ecole: fr.map(|s| s.ecole.clone()).unwrap_or_default(),
                 de_lignage,
+                stats: def.map(|d| {
+                    let cl = inc.niveau_de_lanceur;
+                    let st = combat::stats_sorts::statistiques(d, cl);
+                    let niveau = d.niveau_pour(&cle).unwrap_or(0);
+                    StatsSortFicheVue {
+                        niveau_de_lanceur: cl,
+                        temps_d_incantation: fr.and_then(|s| s.temps_d_incantation.clone()),
+                        composantes: fr.and_then(|s| s.composantes.clone()),
+                        portee: fr.and_then(|s| s.portee.clone()),
+                        portee_calculee: st.portee,
+                        cible: fr.and_then(|s| s.cible.clone()),
+                        duree: fr.and_then(|s| s.duree.clone()),
+                        duree_calculee: d
+                            .duree_en
+                            .as_deref()
+                            .and_then(|x| combat::sorts::duree_suggeree(x, cl))
+                            .map(|x| x.texte()),
+                        jet_de_sauvegarde: fr.and_then(|s| s.jet_de_sauvegarde.clone()),
+                        dd: inc
+                            .emplacements
+                            .iter()
+                            .find(|e| e.niveau_de_sort == niveau)
+                            .map(|e| e.dd),
+                        resistance_a_la_magie: fr.and_then(|s| s.resistance_a_la_magie.clone()),
+                        nombre: st.nombre,
+                        degats: st
+                            .degats
+                            .iter()
+                            .map(|x| crate::aventure::DegatsSortVue {
+                                libelle: x.libelle.clone(),
+                                formule: x.formule.clone(),
+                                regle: x.regle.clone(),
+                                a_confirmer: x.a_confirmer,
+                            })
+                            .collect(),
+                        description: fr.map(|s| s.description.clone()).unwrap_or_default(),
+                        source: t.source_vf("sorts", &d.nom_en),
+                        note_livre: t.note_livre("sorts", &d.nom_en),
+                    }
+                }),
             });
         };
         for s in &f.sorts_connus {
@@ -1027,6 +1128,7 @@ pub fn fiche_complete(
         etats,
         temporaires,
         notes_etats: v.notes_etats.clone(),
+        remplacements_de_sorts: remplacements,
         problemes,
         historique,
     })

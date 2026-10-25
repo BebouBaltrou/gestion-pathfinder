@@ -137,7 +137,11 @@ impl Session {
         }
     }
 
-    pub fn creer(&mut self, nom: &str) -> Retour {
+    pub fn creer(
+        &mut self,
+        nom: &str,
+        calendrier: Option<&vues::parametres::SaisieCalendrier>,
+    ) -> Retour {
         let nom = nom.trim();
         if nom.is_empty() {
             return Retour::erreur("Donnez un nom à la campagne");
@@ -156,9 +160,15 @@ impl Session {
         if chemin.exists() {
             return Retour::erreur(format!("Une campagne « {nom} » existe déjà"));
         }
+        let mut neuve = Campagne::nouvelle(nom);
+        if let Some(cal) = calendrier {
+            if let Err(e) = vues::parametres::appliquer_calendrier(&mut neuve, cal) {
+                return Retour::erreur(e);
+            }
+        }
         self.simulation = None;
         self.combat = None;
-        self.campagne = Some(Campagne::nouvelle(nom));
+        self.campagne = Some(neuve);
         self.chemin = Some(chemin);
         if let Err(e) = self.enregistrer() {
             return Retour::erreur(e);

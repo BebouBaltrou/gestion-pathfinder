@@ -490,6 +490,14 @@ export type PageReferentiel = {
   capitaux: { ressource: RessourceId; nom: string; coutAchat: string; coutProduit: string }[];
 };
 
+export type SaisieCalendrier = {
+  jourSemaine: number;
+  jour: number;
+  mois: number;
+  annee: number;
+  bissextile: "quatre" | "huit";
+};
+
 export type PageParametres = {
   campagne: string;
   reglages: { id: string; titre: string; aide: string; actif: boolean; statut: "officiel" | "personnalise" | null; point: string | null }[];
@@ -583,7 +591,8 @@ const appeler = <T>(cmd: string, args?: Record<string, unknown>) => pont()(cmd, 
 export const api = {
   etatApp: () => appeler<EtatApp>("etat_app"),
   ouvrirCampagne: (chemin: string) => appeler<Retour>("ouvrir_campagne", { chemin }),
-  creerCampagne: (nom: string) => appeler<Retour>("creer_campagne", { nom }),
+  creerCampagne: (nom: string, calendrier?: SaisieCalendrier) => appeler<Retour>("creer_campagne", { nom, calendrier: calendrier ?? null }),
+  calendrierParDefaut: () => appeler<PageParametres["calendrier"]>("calendrier_par_defaut"),
   exporterCampagne: () => appeler<Retour>("exporter_campagne"),
   exporterRecapitulatif: () => appeler<Retour>("exporter_recapitulatif"),
   exporterHistorique: () => appeler<Retour>("exporter_historique"),

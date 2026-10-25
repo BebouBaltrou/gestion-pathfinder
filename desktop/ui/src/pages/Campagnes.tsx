@@ -1,14 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Outils } from "../App";
-import { api } from "../api";
+import { api, PageParametres } from "../api";
 import { icones } from "../icones";
 
 export function Campagnes({ outils }: { outils: Outils }) {
   const [nom, setNom] = useState("");
+  const [cal, setCal] = useState<PageParametres["calendrier"] | null>(null);
   const { campagnes, dossier } = outils.etat;
 
+  useEffect(() => {
+    api.calendrierParDefaut().then(setCal);
+  }, []);
+
   const creer = async () => {
-    const r = await outils.agir(api.creerCampagne(nom));
+    const saisie = cal && { jourSemaine: cal.jourSemaine, jour: cal.jour, mois: cal.mois, annee: cal.annee, bissextile: cal.bissextile };
+    const r = await outils.agir(api.creerCampagne(nom, saisie ?? undefined));
     if (r?.ok) {
       setNom("");
       outils.aller("tableau");
@@ -26,7 +32,7 @@ export function Campagnes({ outils }: { outils: Outils }) {
         <h2>Nouvelle campagne</h2>
         <form
           className="ligne"
-          style={{ gap: 12 }}
+          style={{ gap: 12, flexWrap: "wrap" }}
           onSubmit={(e) => {
             e.preventDefault();
             creer();
@@ -42,6 +48,42 @@ export function Campagnes({ outils }: { outils: Outils }) {
               placeholder="ex. L'Éveil des Seigneurs des Runes"
             />
           </div>
+          {cal && (
+            <div>
+              <span className="etiquette-champ">Date de départ (jour 1)</span>
+              <div className="ligne" style={{ gap: 8 }}>
+                <select className="champ petit" aria-label="Jour de la semaine du jour 1" value={cal.jourSemaine} onChange={(e) => setCal({ ...cal, jourSemaine: Number(e.target.value) })}>
+                  {cal.joursSemaine.map((j, i) => (
+                    <option key={j} value={i}>{j}</option>
+                  ))}
+                </select>
+                <input
+                  className="champ mini"
+                  type="number"
+                  min={1}
+                  max={31}
+                  aria-label="Jour du mois"
+                  value={cal.jour}
+                  onChange={(e) => setCal({ ...cal, jour: Math.max(1, Math.min(31, Number(e.target.value) || 1)) })}
+                />
+                <select className="champ petit" aria-label="Mois" value={cal.mois} onChange={(e) => setCal({ ...cal, mois: Number(e.target.value) })}>
+                  {cal.nomsMois.map((m, i) => (
+                    <option key={m} value={i + 1}>{m}</option>
+                  ))}
+                </select>
+                <input
+                  className="champ mini"
+                  type="number"
+                  min={1}
+                  max={9999}
+                  aria-label="Année"
+                  value={cal.annee}
+                  onChange={(e) => setCal({ ...cal, annee: Math.max(1, Math.min(9999, Number(e.target.value) || 1)) })}
+                />
+                <span>AR</span>
+              </div>
+            </div>
+          )}
           <button className="bouton principal" type="submit" disabled={!nom.trim()} style={{ alignSelf: "flex-end", height: 44 }}>
             {icones.plus({})} Créer
           </button>

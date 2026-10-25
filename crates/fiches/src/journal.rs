@@ -3,7 +3,7 @@
 
 use crate::donnees::Referentiel;
 use crate::etats::EffetTemporaire;
-use crate::fiche::Fiche;
+use crate::fiche::{Fiche, Probleme};
 use crate::progression::{appliquer, niveau_atteignable, ErreurMontee, Montee, ReglesFiche};
 
 /// Où se porte une protection.
@@ -29,6 +29,12 @@ pub enum EvenementFiche {
         niveau: u32,
     },
     MonteeDeNiveau(Montee),
+    /// Un sort connu en double (ou déjà accordé par le lignage) est remplacé par un autre
+    /// sort du même niveau, de la liste de la classe.
+    SortRemplace {
+        ancien: String,
+        nouveau: String,
+    },
     /// Un emplacement de sort dépensé (niveau de sort 1 à 9). Les tours de magie sont à volonté.
     SortLance {
         classe: String,
@@ -95,6 +101,16 @@ pub enum EvenementFiche {
         niveau_sacrifie: u32,
         sort: String,
     },
+    /// Les rangs de compétence d'un niveau (1 = premier niveau du personnage) sont replacés.
+    RangsReattribues {
+        niveau: u32,
+        rangs: std::collections::BTreeMap<String, u32>,
+    },
+    /// Rangs réattribués globalement : total voulu par compétence, réparti automatiquement
+    /// sur les niveaux selon les rangs disponibles à chacun.
+    RangsReattribuesGlobal {
+        rangs: std::collections::BTreeMap<String, u32>,
+    },
 }
 
 impl EvenementFiche {
@@ -108,6 +124,9 @@ impl EvenementFiche {
             EvenementFiche::XpGagnes { nombre, motif } => format!("+{nombre} XP ({motif})"),
             EvenementFiche::JalonAccorde { niveau } => format!("Jalon : niveau {niveau} accordé"),
             EvenementFiche::MonteeDeNiveau(m) => format!("Montée de niveau en {}", m.classe),
+            EvenementFiche::SortRemplace { ancien, nouveau } => {
+                format!("Sort remplacé : {ancien} → {nouveau}")
+            }
             EvenementFiche::SortLance {
                 niveau_de_sort,
                 sort,
@@ -152,6 +171,12 @@ impl EvenementFiche {
                 sort,
                 ..
             } => format!("Sort converti : {sort} (emplacement de niveau {niveau_sacrifie})"),
+            EvenementFiche::RangsReattribuesGlobal { .. } => {
+                "Rangs de compétence réattribués (tous niveaux)".to_string()
+            }
+            EvenementFiche::RangsReattribues { niveau, .. } => {
+                format!("Rangs de compétence réattribués (niveau {niveau})")
+            }
         }
     }
 }
@@ -231,6 +256,10 @@ pub enum ErreurJournal {
         evenement: usize,
         raison: String,
     },
+    Rangs {
+        evenement: usize,
+        raison: String,
+    },
 }
 
 impl std::fmt::Display for ErreurJournal {
@@ -258,6 +287,7 @@ impl std::fmt::Display for ErreurJournal {
             ),
             ErreurJournal::SortLanceImpossible { raison, .. } => write!(f, "{raison}"),
             ErreurJournal::Equipement { raison, .. } => write!(f, "{raison}"),
+            ErreurJournal::Rangs { raison, .. } => write!(f, "{raison}"),
         }
     }
 }
@@ -646,6 +676,112 @@ impl Journal {
                     let d = fiche.dommages.entry(*carac).or_insert(0);
                     *d = (*d + *delta).max(0);
                 }
+                EvenementFiche::SortRemplace { ancien, nouveau } => {
+                    let permis = fiche.remplacements_de_sorts(r).into_iter().any(|x| {
+                        x.ancien.eq_ignore_ascii_case(ancien)
+                            && x.propositions
+                                .iter()
+                                .any(|p| p.eq_ignore_ascii_case(nouveau))
+                    });
+                    if !permis {
+                        return Err(ErreurJournal::SortLanceImpossible {
+                            evenement: i,
+                            raison: format!(
+                                "{ancien} ne peut pas être remplacé par {nouveau} (même niveau, liste de la classe, pas de doublon)"
+                            ),
+                        });
+                    }
+                    if let Some(pos) = fiche
+                        .sorts_connus
+                        .iter()
+                        .position(|s| s.eq_ignore_ascii_case(ancien))
+                    {
+                        // le doublon retiré est la dernière occurrence : la première reste
+                        let pos = fiche
+                            .sorts_connus
+                            .iter()
+                            .rposition(|s| s.eq_ignore_ascii_case(ancien))
+                            .unwrap_or(pos);
+                        fiche.sorts_connus[pos] = nouveau.clone();
+                    }
+                }
+                EvenementFiche::RangsReattribuesGlobal { rangs } => {
+                    for n in &mut fiche.niveaux {
+                        n.rangs.clear();
+                    }
+                    let budgets: Vec<u32> = match fiche.calculer(r) {
+                        Ok(v) => v.rangs.iter().map(|b| b.disponibles).collect(),
+                        Err(p) => {
+                            return Err(ErreurJournal::Rangs {
+                                evenement: i,
+                                raison: p.to_string(),
+                            })
+                        }
+                    };
+                    let total: u32 = rangs.values().sum();
+                    if total > budgets.iter().sum::<u32>() {
+                        return Err(ErreurJournal::Rangs {
+                            evenement: i,
+                            raison: format!(
+                                "{total} rangs demandés pour {} disponibles",
+                                budgets.iter().sum::<u32>()
+                            ),
+                        });
+                    }
+                    // remplissage du premier niveau qui a encore de la place
+                    let mut restants = budgets;
+                    for (c, v) in rangs.iter().filter(|(_, v)| **v > 0) {
+                        for _ in 0..*v {
+                            if let Some(k) = restants.iter().position(|b| *b > 0) {
+                                restants[k] -= 1;
+                                *fiche.niveaux[k].rangs.entry(c.clone()).or_default() += 1;
+                            }
+                        }
+                    }
+                    if let Some(p) = fiche.valider(r).into_iter().find(|p| {
+                        matches!(
+                            p,
+                            Probleme::RangsDepasses { .. }
+                                | Probleme::RangAuDessusDuNiveau { .. }
+                                | Probleme::CompetenceInconnue(_)
+                        )
+                    }) {
+                        return Err(ErreurJournal::Rangs {
+                            evenement: i,
+                            raison: p.to_string(),
+                        });
+                    }
+                }
+                EvenementFiche::RangsReattribues { niveau, rangs } => {
+                    let Some(pris) = (*niveau as usize)
+                        .checked_sub(1)
+                        .and_then(|k| fiche.niveaux.get_mut(k))
+                    else {
+                        return Err(ErreurJournal::Rangs {
+                            evenement: i,
+                            raison: format!("le niveau {niveau} n'existe pas encore"),
+                        });
+                    };
+                    pris.rangs = rangs
+                        .iter()
+                        .filter(|(_, v)| **v > 0)
+                        .map(|(c, v)| (c.clone(), *v))
+                        .collect();
+                    let trouve = fiche.valider(r).into_iter().find(|p| {
+                        matches!(
+                            p,
+                            Probleme::RangsDepasses { .. }
+                                | Probleme::RangAuDessusDuNiveau { .. }
+                                | Probleme::CompetenceInconnue(_)
+                        )
+                    });
+                    if let Some(p) = trouve {
+                        return Err(ErreurJournal::Rangs {
+                            evenement: i,
+                            raison: p.to_string(),
+                        });
+                    }
+                }
                 EvenementFiche::MonteeDeNiveau(m) => {
                     let atteignable = niveau_atteignable(r, regles.vitesse, xp, jalon);
                     fiche = appliquer(r, regles, &fiche, m, atteignable).map_err(|erreurs| {
@@ -712,6 +848,85 @@ mod tests {
 
     fn journal() -> Journal {
         Journal::nouveau(crate::fiche::tests::elfe_ensorceleuse())
+    }
+
+    fn rangs(liste: &[(&str, u32)]) -> EvenementFiche {
+        EvenementFiche::RangsReattribues {
+            niveau: 1,
+            rangs: liste.iter().map(|(c, v)| (c.to_string(), *v)).collect(),
+        }
+    }
+
+    #[test]
+    fn rangs_reattribues_remplacent_ceux_du_niveau() {
+        let r = Referentiel::core();
+        let regles = ReglesFiche::default();
+        let mut j = journal();
+        let ev = rangs(&[("bluff", 1), ("perception", 1), ("spellcraft", 1)]);
+        j.ajouter(ev, &r, &regles).unwrap();
+        let e = j.etat(&r, &regles).unwrap();
+        let places: u32 = e.fiche.niveaux[0].rangs.values().sum();
+        assert_eq!(places, 3);
+        assert_eq!(e.fiche.niveaux[0].rangs.get("bluff"), Some(&1));
+        // on peut en placer moins que le maximum, et annuler revient à l'état d'avant
+        let avant = j.clone();
+        j.ajouter(rangs(&[("bluff", 1)]), &r, &regles).unwrap();
+        assert!(j.annuler_dernier().is_some());
+        assert_eq!(j, avant);
+    }
+
+    #[test]
+    fn rangs_reattribues_globalement() {
+        let r = Referentiel::core();
+        let regles = ReglesFiche::default();
+        let mut j = journal();
+        let global = |l: &[(&str, u32)]| EvenementFiche::RangsReattribuesGlobal {
+            rangs: l.iter().map(|(c, v)| (c.to_string(), *v)).collect(),
+        };
+        j.ajouter(global(&[("bluff", 1), ("perception", 1)]), &r, &regles)
+            .unwrap();
+        let e = j.etat(&r, &regles).unwrap();
+        assert_eq!(e.fiche.niveaux[0].rangs.values().sum::<u32>(), 2);
+        // trop de rangs, rang au-dessus du niveau, compétence inconnue : refusés
+        let avant = j.clone();
+        let quatre = [("bluff", 1), ("perception", 1), ("climb", 1), ("swim", 1)];
+        assert!(j.ajouter(global(&quatre), &r, &regles).is_err());
+        assert!(j.ajouter(global(&[("bluff", 2)]), &r, &regles).is_err());
+        assert!(j.ajouter(global(&[("inconnue", 1)]), &r, &regles).is_err());
+        assert_eq!(j, avant);
+    }
+
+    #[test]
+    fn rangs_reattribues_refuses_si_hors_regles() {
+        let r = Referentiel::core();
+        let regles = ReglesFiche::default();
+        let mut j = journal();
+        let avant = j.clone();
+        // trop de rangs pour le niveau (3 disponibles)
+        let e = j
+            .ajouter(
+                rangs(&[
+                    ("bluff", 1),
+                    ("perception", 1),
+                    ("spellcraft", 1),
+                    ("climb", 1),
+                ]),
+                &r,
+                &regles,
+            )
+            .unwrap_err();
+        assert!(matches!(e, ErreurJournal::Rangs { .. }));
+        // rang maximum = niveau : 2 rangs en niveau 1
+        assert!(j.ajouter(rangs(&[("bluff", 2)]), &r, &regles).is_err());
+        // compétence inconnue
+        assert!(j.ajouter(rangs(&[("inconnue", 1)]), &r, &regles).is_err());
+        // niveau pas encore pris
+        let ev = EvenementFiche::RangsReattribues {
+            niveau: 2,
+            rangs: Default::default(),
+        };
+        assert!(j.ajouter(ev, &r, &regles).is_err());
+        assert_eq!(j, avant);
     }
 
     #[test]

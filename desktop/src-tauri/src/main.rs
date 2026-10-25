@@ -59,8 +59,17 @@ fn ouvrir_campagne(s: S, chemin: String) -> Retour {
 }
 
 #[tauri::command]
-fn creer_campagne(s: S, nom: String) -> Retour {
-    session(&s).creer(&nom)
+fn creer_campagne(
+    s: S,
+    nom: String,
+    calendrier: Option<vues::parametres::SaisieCalendrier>,
+) -> Retour {
+    session(&s).creer(&nom, calendrier.as_ref())
+}
+
+#[tauri::command]
+fn calendrier_par_defaut() -> vues::parametres::VueCalendrier {
+    vues::parametres::calendrier_par_defaut()
 }
 
 #[tauri::command]
@@ -628,6 +637,7 @@ fn main() {
             etat_app,
             ouvrir_campagne,
             creer_campagne,
+            calendrier_par_defaut,
             exporter_campagne,
             exporter_recapitulatif,
             exporter_historique,

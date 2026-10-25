@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import type { Outils } from "../../App";
 import { api, formaterPo } from "../../api";
-import type { Charge, EffetDonnees, EvenementFiche, FicheVue, LignePersonnage } from "../../fiche-types";
+import type { Charge, EffetDonnees, EvenementFiche, FicheVue, LignePersonnage, StatsSortFiche } from "../../fiche-types";
 import { Chiffre, Choix, Detail, signe, useCatalogue } from "./commun";
 import { Montee } from "./Montee";
 import { PanneauFoi, PanneauPreparation } from "./foi";
@@ -82,6 +82,18 @@ export function FicheComplete(p: Props) {
         </section>
       )}
 
+      {f.remplacementsDeSorts.length > 0 && (
+        <section className="carte">
+          <h3>Sorts à remplacer</h3>
+          <p className="doux">
+            Ces sorts sont en double ou déjà accordés par le lignage. Choisis un autre sort du même niveau, de la liste de la classe.
+          </p>
+          {f.remplacementsDeSorts.map((x) => (
+            <RemplacementDeSort key={x.ancienEn} x={x} agir={agir} />
+          ))}
+        </section>
+      )}
+
       {monter && <Montee outils={p.outils} pj={p.pj} fiche={f} onFerme={() => setMonter(false)} />}
 
       <div className="onglets" role="tablist">
@@ -104,7 +116,7 @@ export function FicheComplete(p: Props) {
       </div>
 
       {onglet === "combat" && <Combat f={f} />}
-      {onglet === "competences" && <Competences f={f} />}
+      {onglet === "competences" && <Competences f={f} agir={agir} />}
       {onglet === "dons" && <Dons f={f} />}
       {onglet === "foi" && f.divin && <PanneauFoi divin={f.divin} pouvoirs={f.pouvoirs} agir={agir} />}
       {onglet === "forme" && <PanneauFormes f={f} agir={agir} />}
@@ -178,13 +190,49 @@ function Combat({ f }: { f: FicheVue }) {
 
 // ------------------------------------------------------------------ compétences
 
-function Competences({ f }: { f: FicheVue }) {
+function Competences({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => void }) {
   const [tout, setTout] = useState(false);
+  const [edition, setEdition] = useState<Record<string, number> | null>(null);
   const [ouverte, setOuverte] = useState<string | null>(null);
   const liste = f.competences.filter((c) => tout || c.rangs > 0 || c.deClasse);
   const bilan = f.rangsParNiveau;
+  const dispo = bilan.reduce((t, [, , d]) => t + d, 0);
+  if (edition) {
+    const total = Object.values(edition).reduce((t, v) => t + v, 0);
+    const niveau = bilan.length;
+    const valide = total <= dispo && Object.values(edition).every((v) => v <= niveau);
+    return (
+      <div className="section">
+        <p>
+          Rangs placés : <strong>{total}</strong> / {dispo} disponibles (maximum {niveau} par compétence)
+        </p>
+        <table className="tableau">
+          <thead><tr><th>Compétence</th><th>Rangs</th></tr></thead>
+          <tbody>
+            {f.competences.map((c) => (
+              <tr key={c.cle}>
+                <td>{c.nom}</td>
+                <td>
+                  <input type="number" min={0} max={niveau} value={edition[c.cle] ?? 0}
+                    onChange={(e) => setEdition({ ...edition, [c.cle]: Math.max(0, Number(e.target.value) || 0) })} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <button className="bouton principal" disabled={!valide}
+          onClick={() => { agir({ RangsReattribuesGlobal: { rangs: edition } }); setEdition(null); }}>
+          Valider
+        </button>{" "}
+        <button className="bouton" onClick={() => setEdition(null)}>Annuler</button>
+      </div>
+    );
+  }
   return (
     <div className="section">
+      <button className="bouton" onClick={() => setEdition(Object.fromEntries(f.competences.map((c) => [c.cle, c.rangs])))}>
+        Réattribuer les rangs
+      </button>
       <label className="case">
         <input type="checkbox" checked={tout} onChange={(e) => setTout(e.target.checked)} /> Montrer toutes les compétences
       </label>
@@ -268,9 +316,38 @@ function Dons({ f }: { f: FicheVue }) {
 
 // ------------------------------------------------------------------ sorts
 
+function StatsDuSort({ st }: { st: StatsSortFiche }) {
+  const sauvegarde = st.jetDeSauvegarde;
+  const aUnJet = sauvegarde && !/^(aucun|non)/i.test(sauvegarde);
+  return (
+    <div className="details-sort">
+      <div className="grille">
+        {st.nombre && <span><strong>{st.nombre}</strong></span>}
+        {st.degats.map((d, i) => (
+          <span key={i}>
+            <strong>{d.libelle} : {d.formule}</strong> <small className="doux">({d.regle}){d.aConfirmer ? " — lecture à valider" : ""}</small>
+          </span>
+        ))}
+        {st.degats.length === 0 && <span className="doux">Pas de formule de dégâts ou de soins dans le texte : voir la description.</span>}
+        {st.tempsDIncantation && <span>Incantation : {st.tempsDIncantation}</span>}
+        {st.composantes && <span>Composantes : {st.composantes}</span>}
+        {st.portee && <span>Portée : {st.porteeCalculee ? `${st.porteeCalculee} au niveau ${st.niveauDeLanceur} (${st.portee})` : st.portee}</span>}
+        {st.cible && <span>Cible / zone : {st.cible}</span>}
+        {st.duree && <span>Durée : {st.duree}{st.dureeCalculee ? ` — soit ${st.dureeCalculee} au niveau ${st.niveauDeLanceur}` : ""}</span>}
+        {sauvegarde && <span>Jet de sauvegarde : {sauvegarde}{aUnJet && st.dd != null ? ` — DD ${st.dd}` : ""}</span>}
+        {st.resistanceALaMagie && <span>Résistance à la magie : {st.resistanceALaMagie}</span>}
+      </div>
+      <div className="descr">{st.description}</div>
+      {st.source && <small className="doux">{st.source}</small>}
+      {st.noteLivre && <small className="doux"><em>{st.noteLivre}</em></small>}
+    </div>
+  );
+}
+
 function Sorts({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => void }) {
   const cat = useCatalogue();
   if (f.preparation) return <PanneauPreparation f={f} cat={cat} agir={agir} />;
+  const [ouvert, setOuvert] = useState<string | null>(null);
   if (f.incantateurs.length === 0) return <p className="doux">Ce personnage ne lance pas de sorts.</p>;
   return (
     <div className="section">
@@ -307,7 +384,8 @@ function Sorts({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => void }) 
             <thead><tr><th>Sort</th><th>Niv.</th><th>École</th><th /></tr></thead>
             <tbody>
               {inc.sorts.map((s) => (
-                <tr key={s.nomEn}>
+                <Fragment key={s.nomEn}>
+                <tr onClick={() => setOuvert(ouvert === s.nomEn ? null : s.nomEn)} style={{ cursor: "pointer" }}>
                   <td>{s.nom}{s.deLignage && <small className="doux"> (lignage)</small>}</td>
                   <td className="num">{s.niveau}</td>
                   <td className="doux">{s.ecole}</td>
@@ -316,13 +394,17 @@ function Sorts({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => void }) 
                       <button
                         className="bouton discret"
                         disabled={(inc.emplacements.find((e) => e.niveauDeSort === s.niveau)?.restants ?? 0) === 0}
-                        onClick={() => agir({ SortLance: { classe: "ensorceleur", niveau_de_sort: s.niveau, sort: s.nomEn } })}
+                        onClick={(e) => { e.stopPropagation(); agir({ SortLance: { classe: "ensorceleur", niveau_de_sort: s.niveau, sort: s.nomEn } }); }}
                       >
                         Lancer
                       </button>
                     )}
                   </td>
                 </tr>
+                {ouvert === s.nomEn && s.stats && (
+                  <tr><td colSpan={4}><StatsDuSort st={s.stats} /></td></tr>
+                )}
+                </Fragment>
               ))}
             </tbody>
           </table>
@@ -656,6 +738,26 @@ function Histoire({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => void 
       <ol className="historique">
         {[...f.historique].reverse().map((h, i) => <li key={i}>{h}</li>)}
       </ol>
+    </div>
+  );
+}
+
+type Remplacement = FicheVue["remplacementsDeSorts"][number];
+
+/** Un sort connu à remplacer : liste des sorts proposés par le cœur et bouton de remplacement. */
+function RemplacementDeSort({ x, agir }: { x: Remplacement; agir: (e: EvenementFiche) => unknown }) {
+  const [choix, setChoix] = useState(x.propositions[0]?.nomEn ?? "");
+  return (
+    <div className="ligne">
+      <span>
+        {x.ancien} (niveau {x.niveauDeSort}) →
+      </span>
+      <select className="champ choix" aria-label={`Remplacer ${x.ancien}`} value={choix} onChange={(e) => setChoix(e.target.value)}>
+        {x.propositions.map((p) => <option key={p.nomEn} value={p.nomEn}>{p.nom}</option>)}
+      </select>
+      <button className="bouton principal" disabled={!choix} onClick={() => agir({ SortRemplace: { ancien: x.ancienEn, nouveau: choix } })}>
+        Remplacer
+      </button>
     </div>
   );
 }

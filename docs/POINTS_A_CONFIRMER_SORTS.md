@@ -56,3 +56,20 @@ chaque fichier de données) et règles d'Archives of Nethys (Core Rulebook p. 83
 - Lectures validées : 7 (échec des sorts profanes si le d100 est ≤ au pourcentage), 8 (lancement défensif),
   9 (sort « 1 round » traité comme action complexe).
 - **Durée (10)** : quand la formule du livre n'est pas claire, le joueur décide et la saisit (déjà le cas).
+
+## Statistiques propres à chaque sort (aperçu avant, journal après)
+
+Calculées dans `crates/combat/src/stats_sorts.rs` d'après le texte du sort du Core (`data/core/sorts.json`) au niveau de lanceur du personnage. Si le texte n'est pas une formule reconnue, rien n'est affiché et l'interface renvoie à la description.
+
+| # | Donnée | Calcul | Statut |
+|---|---|---|---|
+| 13 | Dégâts / soins « XdY par niveau de lanceur (maximum NdY) » | dés × niveau de lanceur, plafonné au maximum du texte (ex. Boule de feu 5d6 au niveau 5, 10d6 dès le niveau 10) | officiel (texte du sort) |
+| 14 | Dégâts fixes (Rayon ardent 4d6, Projectile magique 1d4+1) et soins « +1 par niveau (maximum +5) » | lus tels quels | officiel |
+| 15 | Dégâts « tous les deux niveaux » | base affichée, marquée **lecture à valider** | à confirmer |
+| 16 | Portée courte / moyenne / longue et portées fixes en pieds | courte 7,5 m + 1,5 m/2 niveaux, moyenne 30 m + 3 m/niveau, longue 120 m + 12 m/niveau (1 pied = 0,3 m, comme le livre en français) | officiel |
+| 17 | Nombre de projectiles / rayons (Projectile magique, Rayon ardent) | table limitée à ces deux sorts, lue dans leur texte | officiel |
+| 18 | Jet de sauvegarde, résistance à la magie, cible, durée | texte français du Manuel des joueurs + DD du lanceur ; durée chiffrée au niveau de lanceur quand la formule est simple | officiel |
+| 19 | Type de dégâts non reconnu (hors feu, froid, acide, électricité, son, force, énergie négative/positive, non-létaux) | la ligne n'est pas affichée (pas de supposition) | à confirmer |
+
+Après le lancement, le journal de combat rappelle ces statistiques (une ligne par sort lancé).
+Pas encore fait : afficher ces statistiques sur la fiche (liste des sorts connus), hors combat.
