@@ -43,6 +43,7 @@ fn pretre(niveau: u32, sagesse: i32) -> Fiche {
         alignement: None,
         domaines: vec![],
         energie: None,
+        pacte: None,
     }
 }
 
@@ -570,4 +571,149 @@ fn certains_domaines_ajoutent_des_competences_de_classe() {
     assert!(de_classe("stealth"));
     // Escalade n'est pas une compétence de classe du prêtre.
     assert!(!de_classe("climb"));
+}
+
+#[test]
+fn le_druide_n_a_droit_qu_aux_armures_et_boucliers_sans_metal() {
+    let r = Referentiel::core();
+    let mut f = druide(1);
+    f.equipement.armure = Some("Hide".into());
+    f.equipement.bouclier = Some("Heavy wooden".into());
+    assert!(f.problemes_equipement(&r).is_empty());
+    f.equipement.armure = Some("Studded leather".into());
+    f.equipement.bouclier = Some("Buckler".into());
+    let p = f.problemes_equipement(&r);
+    assert_eq!(
+        p.iter()
+            .filter(|x| matches!(x, crate::Probleme::ObjetInterdit { .. }))
+            .count(),
+        2,
+        "{p:?}"
+    );
+    // Le prêtre, lui, porte la cotte de mailles.
+    let mut g = pretre(1, 14);
+    g.equipement.armure = Some("Chainmail".into());
+    assert!(g.problemes_equipement(&r).is_empty());
+    // Refusé aussi par le journal : l'armure interdite ne s'enfile pas.
+    let regles = ReglesFiche::default();
+    let mut j = Journal::nouveau(druide(1));
+    let e = EvenementFiche::Equiper {
+        emplacement: crate::journal::EmplacementProtection::Armure,
+        objet: Some("Chainmail".into()),
+    };
+    assert!(j.ajouter(e, &r, &regles).is_err());
+}
+
+// ── Pouvoirs limités par jour ─────────────────────────────────────────────────
+
+#[test]
+fn les_pouvoirs_du_jour_se_comptent_et_se_rendent_au_repos() {
+    let r = Referentiel::core();
+    let regles = ReglesFiche::default();
+    // Prêtre niveau 5, Charisme 12 (+1) : canalisation 4 fois par jour ; Toucher du Bien : 3 + SAG (+4) = 7.
+    let mut j = Journal::nouveau(pretre_de("iomedae", "LB", &["bien", "soleil"], 5));
+    let ajouter = |j: &mut Journal, e| j.ajouter(e, &r, &regles);
+    let utiliser = |cle: &str| EvenementFiche::PouvoirUtilise { cle: cle.into() };
+    let v = j.etat(&r, &regles).unwrap().fiche.calculer(&r).unwrap();
+    let max = |cle: &str| v.pouvoirs.iter().find(|p| p.cle == cle).map(|p| p.max);
+    assert_eq!(max("canalisation"), Some(Some(4)));
+    assert_eq!(max("domaine:bien:0"), Some(Some(7)));
+    // Lance du Bien : niveau 8, pas encore accordée au niveau 5.
+    assert_eq!(max("domaine:bien:1"), None);
+    for _ in 0..4 {
+        ajouter(&mut j, utiliser("canalisation")).expect("utilisation permise");
+    }
+    assert!(
+        ajouter(&mut j, utiliser("canalisation")).is_err(),
+        "cinquième utilisation"
+    );
+    assert!(
+        ajouter(&mut j, utiliser("domaine:bien:1")).is_err(),
+        "pouvoir pas encore accordé"
+    );
+    assert!(ajouter(&mut j, utiliser("inconnu")).is_err());
+    ajouter(&mut j, utiliser("domaine:bien:0")).expect("autre pouvoir");
+    ajouter(&mut j, EvenementFiche::Repos).unwrap();
+    ajouter(&mut j, utiliser("canalisation")).expect("rendu au repos");
+}
+
+#[test]
+fn la_forme_animale_du_druide_suit_la_table() {
+    let r = Referentiel::core();
+    let utilisations = |niveau: u32| {
+        let v = druide(niveau).calculer(&r).unwrap();
+        v.pouvoirs
+            .iter()
+            .find(|p| p.cle == "forme_animale")
+            .map(|p| p.max)
+    };
+    // Rien avant le niveau 4 ; 1 par jour au niveau 4, 2 au niveau 6, 8 au niveau 18, à volonté au niveau 20.
+    assert_eq!(utilisations(3), None);
+    assert_eq!(utilisations(4), Some(Some(1)));
+    assert_eq!(utilisations(5), Some(Some(1)));
+    assert_eq!(utilisations(6), Some(Some(2)));
+    assert_eq!(utilisations(10), Some(Some(4)));
+    assert_eq!(utilisations(18), Some(Some(8)));
+    assert_eq!(utilisations(19), Some(Some(8)));
+    assert_eq!(utilisations(20), Some(None));
+}
+
+// ── Pacte avec la nature du druide ────────────────────────────────────────────
+
+#[test]
+fn le_pacte_avec_la_nature_du_druide() {
+    let r = Referentiel::core();
+    // Sans choix : fiche inachevée, pas fausse.
+    let f = druide(1);
+    let pb = f.valider(&r);
+    assert!(pb.contains(&crate::Probleme::PacteManquant));
+    assert!(pb.iter().all(|p| p.est_incomplet()));
+    // Pacte du domaine du Feu : un emplacement de domaine par niveau de sort, pouvoirs et sorts du domaine.
+    let mut g = druide(5);
+    g.pacte = Some("domaine".into());
+    g.domaines = vec!["feu".into()];
+    assert!(
+        g.valider(&r).iter().all(|p| p.est_incomplet()),
+        "{:?}",
+        g.valider(&r)
+    );
+    let v = g.calculer(&r).unwrap();
+    let inc = &v.incantateurs[0];
+    assert!(inc
+        .emplacements
+        .iter()
+        .filter(|e| e.niveau_de_sort >= 1)
+        .all(|e| e.domaine == 1));
+    assert_eq!(v.domaines.len(), 1);
+    assert_eq!(v.domaines[0].nom, "Feu");
+    // Le niveau de prêtre du domaine est le niveau de druide : Trait de feu (niveau 1) est actif.
+    assert!(v.domaines[0].pouvoirs[0].actif);
+    // Un domaine que le pacte n'offre pas (Bien, Mort…) est refusé.
+    let mut h = druide(1);
+    h.pacte = Some("domaine".into());
+    h.domaines = vec!["bien".into()];
+    assert!(h
+        .valider(&r)
+        .iter()
+        .any(|p| matches!(p, crate::Probleme::DomaineHorsPacte { .. })));
+    // Pacte du compagnon : pas de domaine, pas d'emplacement de domaine.
+    let mut c = druide(1);
+    c.pacte = Some("compagnon".into());
+    assert!(c.valider(&r).iter().all(|p| p.est_incomplet()));
+    let v = c.calculer(&r).unwrap();
+    assert!(v.incantateurs[0]
+        .emplacements
+        .iter()
+        .all(|e| e.domaine == 0));
+    c.domaines = vec!["feu".into()];
+    assert!(c
+        .valider(&r)
+        .iter()
+        .any(|p| matches!(p, crate::Probleme::DomainesAChoisir { .. })));
+    // Pacte inconnu.
+    c.pacte = Some("autre".into());
+    assert!(c
+        .valider(&r)
+        .iter()
+        .any(|p| matches!(p, crate::Probleme::PacteInvalide(_))));
 }

@@ -8,7 +8,9 @@
       "armures": ["legere", "intermediaire"],
       "boucliers": true,
       "bouclier_pavois": false,
-      "restrictions": "Armures et boucliers non métalliques seulement (non contrôlé par l'application)."
+      "armures_permises": ["Padded", "Leather", "Hide"],
+      "boucliers_permis": ["Light wooden", "Heavy wooden"],
+      "restrictions": "Armures de cuir, de peau ou matelassées et boucliers en bois seulement (Manuel des joueurs, druide : armes et armures)."
     },
     "pretre": { "armes": ["simple"], "armures": ["legere", "intermediaire"], "boucliers": true, "bouclier_pavois": false }
   },

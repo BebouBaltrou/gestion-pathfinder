@@ -84,6 +84,9 @@ pub struct Fiche {
     /// Énergie canalisée par un prêtre Neutre (sur l'axe Bien-Mal) : `positive` ou `negative`.
     #[cfg_attr(feature = "serde", serde(default))]
     pub energie: Option<String>,
+    /// Pacte avec la nature du druide : `domaine` (un des domaines permis, dans `domaines`) ou `compagnon`.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub pacte: Option<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -109,6 +112,13 @@ pub enum Probleme {
         domaine: String,
     },
     EnergieAChoisir,
+    /// Pacte avec la nature du druide : choisir un domaine ou un compagnon animal.
+    PacteManquant,
+    PacteInvalide(String),
+    DomaineHorsPacte {
+        domaine: String,
+    },
+    CompagnonManquant,
     EquipementInconnu(String),
     MauvaisEmplacement {
         objet: String,
@@ -176,6 +186,11 @@ pub enum Probleme {
     EmplacementOccupe {
         emplacement: String,
     },
+    /// Armure ou bouclier interdit à la classe (druide : pas de métal).
+    ObjetInterdit {
+        classe: String,
+        objet: String,
+    },
 }
 
 impl Probleme {
@@ -190,7 +205,10 @@ impl Probleme {
                 attendus, choisis, ..
             }
             | Probleme::DomainesAChoisir { attendus, choisis } => choisis < attendus,
-            Probleme::AlignementManquant | Probleme::EnergieAChoisir => true,
+            Probleme::AlignementManquant
+            | Probleme::EnergieAChoisir
+            | Probleme::PacteManquant
+            | Probleme::CompagnonManquant => true,
             _ => false,
         }
     }
@@ -261,9 +279,23 @@ impl std::fmt::Display for Probleme {
             Probleme::DomaineAlignement { domaine } => {
                 write!(f, "le domaine {domaine} est réservé à un alignement correspondant")
             }
+            Probleme::PacteManquant => write!(
+                f,
+                "choisir le pacte avec la nature : un domaine ou un compagnon animal"
+            ),
+            Probleme::PacteInvalide(x) => write!(f, "pacte avec la nature invalide : {x}"),
+            Probleme::DomaineHorsPacte { domaine } => write!(
+                f,
+                "le domaine {domaine} n'est pas offert par le pacte avec la nature"
+            ),
+            Probleme::CompagnonManquant => write!(f, "choisir le compagnon animal du druide"),
             Probleme::EnergieAChoisir => {
                 write!(f, "choisir l'énergie canalisée (positive ou négative)")
             }
+            Probleme::ObjetInterdit { classe, objet } => write!(
+                f,
+                "{objet} est interdit à la classe {classe} : le porter fait perdre l'accès aux sorts et aux aptitudes surnaturelles ou magiques"
+            ),
             Probleme::EmplacementOccupe { emplacement } => {
                 write!(f, "deux objets magiques portés à l'emplacement « {emplacement} »")
             }
@@ -351,8 +383,20 @@ pub struct Canalisation {
     pub utilisations: i32,
 }
 
+/// Un pouvoir qu'on peut utiliser un nombre de fois par jour.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct PouvoirJournalier {
+    /// Identifiant stable : `canalisation`, `forme_animale`, `domaine:<id>:<rang>`.
+    pub cle: String,
+    pub nom: String,
+    /// `None` : à volonté.
+    pub max: Option<i32>,
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PouvoirVu {
+    /// Identifiant du pouvoir journalier correspondant.
+    pub cle: String,
     pub nom: String,
     pub genre: String,
     pub niveau: u32,
@@ -434,6 +478,8 @@ pub struct Valeurs {
     pub incantateurs: Vec<Incantateur>,
     pub canalisation: Option<Canalisation>,
     pub domaines: Vec<DomaineVu>,
+    /// Pouvoirs limités par jour (canalisation, pouvoirs de domaine, forme animale).
+    pub pouvoirs: Vec<PouvoirJournalier>,
 }
 
 /// Comme `calculer`, mais plusieurs cibles à la fois (ex. une compétence et « toutes les compétences »),
@@ -656,6 +702,32 @@ impl Fiche {
                 _ => {}
             }
         }
+        // Armures et boucliers que la classe interdit (druide : pas de métal).
+        for n in &self.niveaux {
+            let Some(m) = r.equipement.maitrises.classes.get(&n.classe) else {
+                continue;
+            };
+            let nom_classe = r
+                .classe(&n.classe)
+                .map(|c| c.nom.clone())
+                .unwrap_or_default();
+            if let (Some(permises), Some(a)) = (&m.armures_permises, &eq.armure) {
+                if !permises.iter().any(|x| x.eq_ignore_ascii_case(a)) {
+                    p.push(Probleme::ObjetInterdit {
+                        classe: nom_classe.clone(),
+                        objet: a.clone(),
+                    });
+                }
+            }
+            if let (Some(permis), Some(b)) = (&m.boucliers_permis, &eq.bouclier) {
+                if !permis.iter().any(|x| x.eq_ignore_ascii_case(b)) {
+                    p.push(Probleme::ObjetInterdit {
+                        classe: nom_classe,
+                        objet: b.clone(),
+                    });
+                }
+            }
+        }
         let mut occupes: BTreeMap<String, u32> = BTreeMap::new();
         for o in &eq.objets {
             match r.objets_magiques.objet(&o.nom_en) {
@@ -838,6 +910,44 @@ impl Fiche {
     /// Divinité, alignement, domaines et énergie des classes qui en demandent (prêtre).
     fn valider_divin(&self, r: &Referentiel) -> Vec<Probleme> {
         let mut p = Vec::new();
+        // Pacte avec la nature (druide) : un domaine parmi ceux que la classe permet, ou un compagnon.
+        if let Some(permis) = self
+            .niveaux
+            .iter()
+            .filter_map(|n| r.classe(&n.classe))
+            .map(|c| &c.pacte_domaines)
+            .find(|d| !d.is_empty())
+        {
+            match self.pacte.as_deref() {
+                None => p.push(Probleme::PacteManquant),
+                Some("domaine") => {
+                    if self.domaines.len() != 1 {
+                        p.push(Probleme::DomainesAChoisir {
+                            attendus: 1,
+                            choisis: self.domaines.len() as u32,
+                        });
+                    }
+                    for id in &self.domaines {
+                        match r.domaine(id) {
+                            None => p.push(Probleme::DomaineInconnu(id.clone())),
+                            Some(d) if !permis.contains(id) => p.push(Probleme::DomaineHorsPacte {
+                                domaine: d.nom.clone(),
+                            }),
+                            Some(_) => {}
+                        }
+                    }
+                }
+                Some("compagnon") => {
+                    if !self.domaines.is_empty() {
+                        p.push(Probleme::DomainesAChoisir {
+                            attendus: 0,
+                            choisis: self.domaines.len() as u32,
+                        });
+                    }
+                }
+                Some(autre) => p.push(Probleme::PacteInvalide(autre.to_string())),
+            }
+        }
         let Some(attendus) = self
             .niveaux
             .iter()
@@ -1389,7 +1499,9 @@ impl Fiche {
                     },
                     connus: connus.unwrap_or(0),
                     dd: 10 + sn as i32 + m(car),
-                    domaine: u32::from(ligne.domaine && sn > 0),
+                    domaine: u32::from(
+                        (ligne.domaine || self.pacte.as_deref() == Some("domaine")) && sn > 0,
+                    ),
                 });
             }
             let sorts_de_lignage = self
@@ -1413,9 +1525,21 @@ impl Fiche {
         // Canalisation d'énergie et domaines (prêtre).
         let mut canalisation = None;
         let mut domaines_vus = Vec::new();
+        let mut pouvoirs: Vec<PouvoirJournalier> = Vec::new();
         for id in &vues {
             let Some(classe) = r.classe(id) else { continue };
             let nc = self.niveau_de_classe(id);
+            for p in classe.pouvoirs.iter().filter(|p| nc >= p.niveau) {
+                pouvoirs.push(PouvoirJournalier {
+                    cle: p.cle.clone(),
+                    nom: p.nom.clone(),
+                    max: if p.a_volonte.is_some_and(|l| nc >= l) {
+                        None
+                    } else {
+                        Some(1 + ((nc - p.niveau) / p.pas.max(1)) as i32)
+                    },
+                });
+            }
             if classe.canalisation {
                 let positive = match self.alignement.as_deref().and_then(crate::divin::axes) {
                     Some((_, 0)) => Some(true),
@@ -1427,14 +1551,20 @@ impl Fiche {
                     },
                     None => None,
                 };
+                let utilisations = (3 + m(Carac::Cha)).max(0);
+                pouvoirs.push(PouvoirJournalier {
+                    cle: "canalisation".into(),
+                    nom: "Canalisation d'énergie".into(),
+                    max: Some(utilisations),
+                });
                 canalisation = Some(Canalisation {
                     positive,
                     des: 1 + nc.saturating_sub(1) / 2,
                     dd: 10 + (nc / 2) as i32 + m(Carac::Cha),
-                    utilisations: (3 + m(Carac::Cha)).max(0),
+                    utilisations,
                 });
             }
-            if classe.domaines_choisis > 0 {
+            if classe.domaines_choisis > 0 || self.pacte.as_deref() == Some("domaine") {
                 let niveau_max = classe
                     .progression
                     .get(nc as usize - 1)
@@ -1454,17 +1584,30 @@ impl Fiche {
                         pouvoirs: d
                             .pouvoirs
                             .iter()
-                            .map(|p| PouvoirVu {
-                                nom: p.nom.clone(),
-                                genre: p.genre.clone(),
-                                niveau: p.niveau,
-                                actif: nc >= p.niveau,
-                                utilisations: if nc >= p.niveau {
+                            .enumerate()
+                            .map(|(k, p)| {
+                                let utilisations = if nc >= p.niveau {
                                     p.utilisations(nc, m(Carac::Sag))
                                 } else {
                                     None
-                                },
-                                texte: p.texte.clone(),
+                                };
+                                let cle = format!("domaine:{}:{k}", d.id);
+                                if let Some(max) = utilisations {
+                                    pouvoirs.push(PouvoirJournalier {
+                                        cle: cle.clone(),
+                                        nom: p.nom.clone(),
+                                        max: Some(max),
+                                    });
+                                }
+                                PouvoirVu {
+                                    cle,
+                                    nom: p.nom.clone(),
+                                    genre: p.genre.clone(),
+                                    niveau: p.niveau,
+                                    actif: nc >= p.niveau,
+                                    utilisations,
+                                    texte: p.texte.clone(),
+                                }
                             })
                             .collect(),
                         sorts: d
@@ -1564,6 +1707,7 @@ impl Fiche {
             incantateurs,
             canalisation,
             domaines: domaines_vus,
+            pouvoirs,
         })
     }
 }

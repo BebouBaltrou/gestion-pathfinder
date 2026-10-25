@@ -527,9 +527,15 @@ pub fn fiche_complete(
         let nc = f.niveau_de_classe(&c.id) as usize;
         for l in c.progression.iter().take(nc) {
             for cap in t.capacites_de_niveau(&l.special_en) {
+                // Texte du livre quand la classe en donne un (« forme animale (2/jour) » → « forme animale »).
+                let cle = cle_capacite(&cap);
+                let texte = match c.textes_capacites.get(&cle) {
+                    Some(desc) => format!("{cap} — {desc}"),
+                    None => cap,
+                };
                 capacites.push(TexteVue {
                     nom: format!("Niveau {}", l.niveau),
-                    texte: cap,
+                    texte,
                 });
             }
         }
@@ -1037,6 +1043,23 @@ pub fn sorts_de_la_liste(r: &Referentiel, t: &Traductions, cle: &str) -> Vec<Sor
     sorts
 }
 
+/// Nom d'une capacité de classe sans ses précisions : minuscules, sans « (2/jour) » ni « 3d6 ».
+fn cle_capacite(cap: &str) -> String {
+    let mut s = cap.to_lowercase();
+    if let Some(i) = s.find(" (") {
+        s.truncate(i);
+    }
+    let mots: Vec<&str> = s.split(' ').collect();
+    if mots.len() > 1
+        && mots.last().is_some_and(|m| {
+            m.contains('d') && m.chars().next().is_some_and(|c| c.is_ascii_digit())
+        })
+    {
+        return mots[..mots.len() - 1].join(" ");
+    }
+    s.trim().to_string()
+}
+
 pub fn catalogue_creation() -> CatalogueCreation {
     let r = Referentiel::partage();
     let t = Traductions::partage();
@@ -1356,6 +1379,7 @@ pub fn apercu_fiche(f: &Fiche) -> Result<FicheVue, String> {
         sorts_depenses: Default::default(),
         prepares: Default::default(),
         prepares_utilises: Default::default(),
+        pouvoirs_utilises: Default::default(),
     };
     fiche_complete(
         &e,
@@ -1650,6 +1674,7 @@ mod tests_pretre {
             alignement: Some("LB".into()),
             domaines: vec!["bien".into(), "soleil".into()],
             energie: None,
+            pacte: None,
         }
     }
 

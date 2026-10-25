@@ -73,6 +73,11 @@ pub enum EvenementFiche {
         classe: String,
         sorts: Vec<crate::preparation::SortPrepare>,
     },
+    /// Un pouvoir limité par jour est utilisé (canalisation, pouvoir de domaine, forme animale…).
+    /// `cle` : identifiant donné par les valeurs de la fiche.
+    PouvoirUtilise {
+        cle: String,
+    },
     /// Un prêtre sacrifie un sort préparé (ni oraison ni sort de domaine) pour lancer
     /// spontanément un sort de soins ou de blessure de niveau égal ou inférieur.
     SortConverti {
@@ -125,6 +130,7 @@ impl EvenementFiche {
             EvenementFiche::DommagesCaracteristique { carac, delta } => {
                 format!("Caractéristique récupérée : {} +{}", carac.abrege(), -delta)
             }
+            EvenementFiche::PouvoirUtilise { cle } => format!("Pouvoir utilisé : {cle}"),
             EvenementFiche::Preparation { sorts, .. } => {
                 format!("Sorts préparés : {} sort(s)", sorts.len())
             }
@@ -150,6 +156,8 @@ pub struct EtatPersonnage {
     pub prepares: std::collections::BTreeMap<String, Vec<crate::preparation::SortPrepare>>,
     /// Pour chaque sort préparé (même ordre), s'il a déjà été lancé.
     pub prepares_utilises: std::collections::BTreeMap<String, Vec<bool>>,
+    /// Utilisations de pouvoirs depuis le dernier repos : identifiant → nombre.
+    pub pouvoirs_utilises: std::collections::BTreeMap<String, u32>,
 }
 
 impl EtatPersonnage {
@@ -283,6 +291,7 @@ impl Journal {
             Default::default();
         let mut prepares_utilises: std::collections::BTreeMap<String, Vec<bool>> =
             Default::default();
+        let mut pouvoirs_utilises: std::collections::BTreeMap<String, u32> = Default::default();
         for (i, ev) in it {
             match ev {
                 EvenementFiche::Creation(_) => return Err(ErreurJournal::CreationManquante),
@@ -293,7 +302,31 @@ impl Journal {
                     }
                     jalon = jalon.max(*niveau);
                 }
+                EvenementFiche::PouvoirUtilise { cle } => {
+                    let erreur = |raison: String| ErreurJournal::SortLanceImpossible {
+                        evenement: i,
+                        raison,
+                    };
+                    let valeurs = fiche.calculer(r).map_err(|p| erreur(p.to_string()))?;
+                    let pouvoir =
+                        valeurs
+                            .pouvoirs
+                            .iter()
+                            .find(|p| &p.cle == cle)
+                            .ok_or_else(|| {
+                                erreur(format!("pouvoir inconnu ou pas encore accordé : {cle}"))
+                            })?;
+                    let n = pouvoirs_utilises.entry(cle.clone()).or_default();
+                    if pouvoir.max.is_some_and(|m| *n as i32 >= m) {
+                        return Err(erreur(format!(
+                            "plus d'utilisation de « {} » aujourd'hui",
+                            pouvoir.nom
+                        )));
+                    }
+                    *n += 1;
+                }
                 EvenementFiche::Repos => {
+                    pouvoirs_utilises.clear();
                     sorts_depenses.clear();
                     for v in prepares_utilises.values_mut() {
                         v.iter_mut().for_each(|u| *u = false);
@@ -558,6 +591,7 @@ impl Journal {
             sorts_depenses,
             prepares,
             prepares_utilises,
+            pouvoirs_utilises,
         })
     }
 

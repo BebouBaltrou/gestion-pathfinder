@@ -179,9 +179,29 @@ pub struct Classe {
     /// Canalisation d'énergie (prêtre).
     #[serde(default)]
     pub canalisation: bool,
+    /// Identifiants des domaines que le « pacte avec la nature » du druide peut donner.
+    #[serde(default)]
+    pub pacte_domaines: Vec<String>,
+    /// Pouvoirs de classe utilisables un nombre de fois par jour (forme animale…).
+    #[serde(default)]
+    pub pouvoirs: Vec<PouvoirClasse>,
+    /// Texte du livre pour chaque capacité de classe (nom en minuscules → texte).
+    #[serde(default)]
+    pub textes_capacites: std::collections::BTreeMap<String, String>,
     /// Bonus chiffrés accordés par la classe (ex. instinct naturel du druide).
     #[serde(default)]
     pub effets: Vec<EffetClasse>,
+}
+
+/// Pouvoir de classe limité par jour : une utilisation au niveau `niveau`, une de plus tous les
+/// `pas` niveaux, à volonté au niveau `a_volonte`.
+#[derive(Debug, Clone, Deserialize)]
+pub struct PouvoirClasse {
+    pub cle: String,
+    pub nom: String,
+    pub niveau: u32,
+    pub pas: u32,
+    pub a_volonte: Option<u32>,
 }
 
 /// Bonus chiffré d'une capacité de classe, acquis à partir d'un niveau de classe.

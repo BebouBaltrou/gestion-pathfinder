@@ -221,6 +221,12 @@ pub struct MaitrisesClasse {
     pub armures: Vec<GenreProtection>,
     pub boucliers: bool,
     pub bouclier_pavois: bool,
+    /// Si présent : seules ces armures (noms du catalogue) sont permises (druide : pas de métal).
+    #[serde(default)]
+    pub armures_permises: Option<Vec<String>>,
+    /// Si présent : seuls ces boucliers (noms du catalogue) sont permis.
+    #[serde(default)]
+    pub boucliers_permis: Option<Vec<String>>,
 }
 
 #[derive(Debug, Clone, Default, Deserialize)]
