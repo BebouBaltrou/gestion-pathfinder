@@ -78,3 +78,51 @@ mod tests {
         assert_eq!(back, super::elfe_ensorceleuse());
     }
 }
+
+/// Fiche d'exemple d'un prêtre humain de niveau 3 (Iomédae, Loyal Bon, domaines du Bien et du Soleil),
+/// pour les essais et les démonstrations.
+pub fn pretre_d_iomedae() -> Fiche {
+    let scores = [
+        (Carac::For, 12),
+        (Carac::Dex, 10),
+        (Carac::Con, 14),
+        (Carac::Int, 10),
+        (Carac::Sag, 16),
+        (Carac::Cha, 12),
+    ];
+    let niveau = |i: u32| NiveauPris {
+        classe: "pretre".into(),
+        de_vie_obtenu: if i == 0 { 8 } else { 5 },
+        rangs: BTreeMap::new(),
+        predilection: Some(BonusPredilection::PointDeVie),
+        dons: if i == 0 {
+            vec!["Toughness".into(), "Alertness".into()]
+        } else if i == 2 {
+            vec!["Combat Casting".into()]
+        } else {
+            vec![]
+        },
+    };
+    Fiche {
+        nom: "Aleth".into(),
+        race: "humain".into(),
+        bonus_racial_libre: Some(Carac::Sag),
+        scores_base: scores.into_iter().collect(),
+        dommages: BTreeMap::new(),
+        drain: BTreeMap::new(),
+        augmentations: vec![],
+        niveaux: (0..3).map(niveau).collect(),
+        classes_de_predilection: vec!["pretre".into()],
+        lignage: None,
+        connaissance_de_lignage: None,
+        effets: vec![],
+        sorts_connus: vec![],
+        equipement: Default::default(),
+        etats: vec![],
+        temporaires: vec![],
+        divinite: Some("iomedae".into()),
+        alignement: Some("LB".into()),
+        domaines: vec!["bien".into(), "soleil".into()],
+        energie: None,
+    }
+}

@@ -690,7 +690,7 @@ impl Fiche {
     }
 
     /// Compétences de classe de tout le personnage, avec celle du lignage.
-    fn competences_de_classe(&self, r: &Referentiel) -> Vec<String> {
+    pub fn competences_de_classe(&self, r: &Referentiel) -> Vec<String> {
         let mut v = Vec::new();
         let mut vues = Vec::new();
         for n in &self.niveaux {
@@ -710,6 +710,12 @@ impl Fiche {
                         v.push(comp.clone());
                     }
                 }
+            }
+        }
+        // Compétences accordées par les domaines choisis.
+        for id in &self.domaines {
+            if let Some(d) = r.domaine(id) {
+                v.extend(d.competences_de_classe_en.iter().cloned());
             }
         }
         v

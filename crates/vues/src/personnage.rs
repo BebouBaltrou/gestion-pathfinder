@@ -449,9 +449,7 @@ pub fn fiche_complete(
         .collect();
 
     // Compétences : toutes, avec leur détail.
-    let de_classe_ids: Vec<String> = classe_principale
-        .map(|c| c.competences_de_classe_en.clone())
-        .unwrap_or_default();
+    let de_classe_ids: Vec<String> = f.competences_de_classe(r);
     let mut competences: Vec<CompetenceVue> = v
         .competences
         .iter()
@@ -1650,7 +1648,13 @@ mod export_apercu {
             return;
         };
         let d = std::path::Path::new(&dossier);
-        let fiche = apercu_fiche(&fiches::exemple::elfe_ensorceleuse()).unwrap();
+        // GP_EXPORT_CLASSE=pretre : aperçu de l'interface avec un prêtre au lieu de l'ensorceleuse.
+        let exemple = if std::env::var("GP_EXPORT_CLASSE").as_deref() == Ok("pretre") {
+            fiches::exemple::pretre_d_iomedae()
+        } else {
+            fiches::exemple::elfe_ensorceleuse()
+        };
+        let fiche = apercu_fiche(&exemple).unwrap();
         let ecrire = |nom: &str, v: &dyn erased::Serialize| {
             std::fs::write(d.join(nom), v.vers_json()).unwrap();
         };

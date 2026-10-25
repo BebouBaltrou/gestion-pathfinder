@@ -796,7 +796,10 @@
           "note": null
         }
       ],
-      "alignement": null
+      "alignement": null,
+      "competences_de_classe_en": [
+        "Knowledge"
+      ]
     },
     {
       "id": "destruction",
@@ -970,7 +973,12 @@
           "note": null
         }
       ],
-      "alignement": null
+      "alignement": null,
+      "competences_de_classe_en": [
+        "Bluff",
+        "Disguise",
+        "Stealth"
+      ]
     },
     {
       "id": "eau",
@@ -1137,7 +1145,10 @@
           "note": null
         }
       ],
-      "alignement": null
+      "alignement": null,
+      "competences_de_classe_en": [
+        "Knowledge (nature)"
+      ]
     },
     {
       "id": "feu",

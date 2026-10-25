@@ -550,3 +550,24 @@ fn un_pretre_monte_du_niveau_1_au_niveau_11() {
             .accessible
     );
 }
+
+#[test]
+fn certains_domaines_ajoutent_des_competences_de_classe() {
+    let r = Referentiel::core();
+    let mut f = pretre_de("calistria", "CN", &["connaissance", "duperie"], 1);
+    f.niveaux[0].rangs.insert("knowledge:history".into(), 1);
+    f.niveaux[0].rangs.insert("stealth".into(), 1);
+    f.niveaux[0].rangs.insert("climb".into(), 1);
+    let v = f.calculer(&r).unwrap();
+    let de_classe = |cle: &str| {
+        v.competences[cle]
+            .termes
+            .iter()
+            .any(|t| t.libelle == "compétence de classe")
+    };
+    // Connaissance : toutes les Connaissances ; Duperie : Bluff, Déguisement, Discrétion.
+    assert!(de_classe("knowledge:history"));
+    assert!(de_classe("stealth"));
+    // Escalade n'est pas une compétence de classe du prêtre.
+    assert!(!de_classe("climb"));
+}

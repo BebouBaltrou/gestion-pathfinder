@@ -50,6 +50,9 @@ pub struct Domaine {
     pub sorts_de_domaine: Vec<SortDomaine>,
     /// `Bien`, `Mal`, `Loi` ou `Chaos` : domaine réservé à un alignement correspondant.
     pub alignement: Option<String>,
+    /// Compétences que le domaine rend « de classe » (Connaissance, Duperie, Faune).
+    #[serde(default)]
+    pub competences_de_classe_en: Vec<String>,
 }
 
 #[derive(Debug, Clone, Deserialize)]

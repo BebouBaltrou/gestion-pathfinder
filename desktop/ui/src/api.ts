@@ -837,6 +837,11 @@ function simule(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
       };
       return Promise.resolve(p);
     }
+    case "page_personnages":
+      return Promise.resolve({
+        personnages: [{ id: 1, nom: "Lyra", compte: { pa: 1000, texte: "100 po" }, localite: 1, lieu: "Sandpoint", prestige: 4 }],
+        localites: [{ id: 1, libelle: "Sandpoint" }],
+      });
     case "liste_personnages":
       return Promise.resolve([
         { id: 1, nom: "Lyra", compte: { pa: 1000, texte: "100 po" }, lieu: "Sandpoint", prestige: 4, prestigeCalcule: true,
