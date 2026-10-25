@@ -105,7 +105,7 @@ export function Personnages({ outils }: { outils: Outils }) {
               <button className="bouton principal" type="submit" disabled={!nom.trim()}>Ajouter</button>
             </form>
             <p className="doux">ou</p>
-            <button className="bouton" onClick={() => setImportPdf(true)}>Importer une fiche PDF…</button>
+            <button className="bouton" onClick={() => setImportPdf(true)}>Importer une fiche PDF… (en développement)</button>
           </section>
         </div>
 

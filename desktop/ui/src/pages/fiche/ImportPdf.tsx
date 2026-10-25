@@ -56,7 +56,7 @@ export function ImportPdf({ outils, onFini }: { outils: Outils; onFini: () => vo
   if (!apercu) {
     return (
       <section className="carte section">
-        <h2>Importer une fiche PDF</h2>
+        <h2>Importer une fiche PDF <span className="puce or">en développement</span></h2>
         <p className="doux">
           Le programme lit la fiche, la compare aux règles du Manuel des joueurs, puis te montre chaque écart :
           tu choisis de suivre les règles ou de garder la valeur de la feuille (elle sera alors marquée « personnalisé »).

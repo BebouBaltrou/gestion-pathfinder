@@ -92,3 +92,5 @@ familiers, lien de la fiche avec le déplacement du PJ dans une localité, impre
 Les points 23 à 26 de `docs/POINTS_A_CONFIRMER_FICHES.md` sont gardés tels quels, à trancher plus
 tard : bonus de compétence dans les jets de recettes, Prestige calculé, temps de campagne et
 fiches, compatibilité des sauvegardes.
+
+- **Importation de fiche PDF** : fonctionnalité en développement, à reprendre plus tard (voir `docs/IMPORT_PDF.md`). Priorité : toutes les classes dans le créateur de fiche (Prêtre, puis Druide).
