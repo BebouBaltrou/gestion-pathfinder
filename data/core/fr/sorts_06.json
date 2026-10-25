@@ -1,0 +1,62 @@
+{
+  "Arcane Lock": {
+    "cible": "porte, coffre ou portail touché, dans la limite de 1 m²/niveau",
+    "composantes": "V, G, M (poussière d’or d’une valeur de 25 po)",
+    "description": "Un verrou du mage ferme solidement le coffre, la porte ou le portail ciblé. Le mage peut ouvrir son propre verrou sans la moindre difficulté. Si l’objet fermé a un verrou, le DD de celui-ci augmente de 10 tant qu’il reste fixé à l’objet. Si ce dernier n’a pas de verrou, le sort en conçoit un que l’on peut ouvrir avec un test de Sabotage DD 20.\nUne porte ou un objet fermé par ce sort s’ouvre uniquement avec déblocage ou dissipation de la magie. Si quelqu’un tente d’enfoncer une porte ou un portail protégés par ce sort, ajoutez +10 au DD normal du test de Force. À noter que déblocage ne dissipe pas un verrou du mage, mais se contente de le rendre inactif pendant dix minutes."
+  },
+  "Bear's Endurance": {
+    "cible": "1 créature touchée",
+    "composantes": "V, G, M/FD (quelques poils ou une pincée de crotte d’ours)",
+    "description": "La créature touchée bénéficie d’une vigueur et d’une robustesse accrues. Ce sort confère au sujet un bonus d’altération de +4 à sa valeur de Constitution, ce qui améliore ses points de vie, ses jets de Vigueur, ses tests de Constitution, etc. Les points de vie gagnés grâce à un accroissement temporaire de la Constitution ne sont pas temporaires. Ils disparaissent lorsque la valeur de Constitution revient à la normale. Contrairement aux points de vie temporaires, ils ne sont pas perdus les premiers."
+  },
+  "Blindness/Deafness": {
+    "cible": "1 créature vivante",
+    "composantes": "V",
+    "description": "La victime du sort devient sourde ou aveugle, au choix du lanceur de sorts faisant appel aux forces de la mort."
+  },
+  "Blur": {
+    "cible": "créature touchée",
+    "composantes": "V",
+    "description": "Les contours du sujet deviennent imprécis et changeants. Grâce à cet effet, il bénéficie d’un camouflage (20 % de chances que les attaques le ratent).\nDétection de l’invisibilité ne contre pas flou, mais vision lucide, si. Les créatures qui ne voient pas le sujet ignorent les effets du sort (mais combattre dans ces conditions entraîne d’autres désavantages)."
+  },
+  "Bull's Strength": {
+    "cible": "créature touchée",
+    "composantes": "V, G, M/FD (quelques poils de taureau ou une pincée de bouse séchée)",
+    "description": "Le sujet devient plus fort. Ce sort lui confère un bonus d’altération de +4 points en Force, ce qui induit un effet positif sur ses jets d’attaque, ses jets de dégâts au corps à corps et sur tous les autres éléments dépendant du modificateur de Force."
+  },
+  "Cat's Grace": {
+    "cible": "créature touchée",
+    "composantes": "V, G, M (quelques poils de chat)",
+    "description": "La créature transformée à l’aide de ce sort devient bien plus gracieuse et agile, ce qui lui permet de mieux coordonner ses gestes. Cet avantage se traduit par un bonus d’altération de +4 à la Dextérité, accompagné de toutes les modifications habituelles en termes de CA, de jets de Réflexes et autres utilisations du bonus de Dextérité."
+  },
+  "Command Undead": {
+    "cible": "1 mort-vivant",
+    "composantes": "V, G, M (un morceau de viande crue ou un éclat d’os)",
+    "description": "Ce sort permet de contrôler en partie un mort-vivant. Si celui-ci est intelligent, il interprétera toutes les paroles et les actions du personnage de la manière la plus favorable qui soit (son attitude est amicale) et ne l’attaquera pas avant que le sort ne prenne fin. Le mort-vivant peut suivre les instructions du personnage, mais celui-ci doit remporter un test de Charisme opposé pour convaincre le sujet de faire une chose qui lui déplaît (une seule chance). Un mort-vivant intelligent contrôlé n’obéit jamais à un ordre suicidaire, mais il est possible de le persuader que le jeu en vaut la chandelle.\nUn mort-vivant dénué d’intelligence ne peut faire aucun jet de sauvegarde contre ce sort. Lorsque le personnage contrôle un mortvivant de ce type, il ne peut lui donner que des ordres simples, comme « Approche », « Va là-bas », « Attaque », « Ne bouge pas », etc. Cet être dénué de conscience ne refuse même pas un ordre suicidaire ou simplement nuisible.\nToute action du personnage ou de ses alliés menaçant le sujet met instantanément un terme au sort (quelle que soit l’Intelligence du mortvivant).\nLes ordres ne sont pas télépathiques. Le mort-vivant doit donc avoir la capacité de comprendre le personnage."
+  },
+  "Continual Flame": {
+    "cible": "flamme illusoire magique",
+    "composantes": "V, G, M (poussière de rubis (50 po))",
+    "description": "Une flamme aussi brillante que celle d’une torche apparaît sur l’objet que le lanceur de sorts touche. Elle a l’apparence d’une flamme normale mais elle ne dégage pas la moindre chaleur et ne consomme pas d’oxygène. Il est possible de recouvrir et de cacher une flamme éternelle, mais pas de l’étouffer ou de l’éteindre.\nLes sorts de lumière contrent et dissipent les sorts d’obscurité de niveau inférieur ou égal."
+  },
+  "Darkness": {
+    "cible": "objet touché",
+    "composantes": "V, M/FD (fourrure de chauve-souris et morceau de charbon)",
+    "description": "L’objet enchanté par ce sort génère une zone de ténèbres de six mètres de rayon. La luminosité de la zone baisse alors d’un niveau : de lumière vive à lumière normale, de lumière normale à lumière faible ou de lumière faible à obscurité. Ce sort n’a aucun effet dans une zone déjà obscure. Les créatures vulnérables ou sensibles à la lumière ne subissent pas de dégâts si elles sont exposées à une lumière normale. Toutes les créatures situées dans une zone de lumière faible bénéficient d’un camouflage (20 % de chances de les rater) tandis que celles qui se trouvent dans l’obscurité bénéficient d’un camouflage total (50% de chances de les rater). Les sources d’éclairage normales (bougies, torches, lanternes, etc.) ne permettent pas d’augmenter la luminosité d’une zone affectée par ce sort. Les sources de lumières magiques augmentent la luminosité de la zone uniquement si elles proviennent d’un sort de niveau supérieur aux ténèbres.\nSi le sort est lancé sur un petit objet recouvert d’un cache opaque, les effets de ténèbres sont bloqués tant que le cache reste en place.\nCe sort ne se cumule pas avec lui-même. Ténèbres contre et dissipe tout sort de lumière de niveau égal ou inférieur."
+  },
+  "Darkvision": {
+    "cible": "créature touchée",
+    "composantes": "V, G, M (une pincée de carotte séchée ou une agate)",
+    "description": "La cible du sort acquiert la faculté de voir jusqu’à dix-huit mètres de distance dans le noir le plus complet. Il voit les formes normalement, mais en noir et blanc.\nIl est possible d’user de permanence sur un sort de vision dans le noir."
+  },
+  "Daze Monster": {
+    "cible": "1 créature vivante de 6",
+    "composantes": "V, G, M (une pincée de laine ou d'une substance similaire)",
+    "description": "DV ou moins Ce sort fonctionne comme hébétement, si ce n’est qu’il peut affecter les créatures vivantes de tout type, pour autant qu’elles ne possèdent pas 7 DV ou plus."
+  },
+  "Detect Thoughts": {
+    "cible": "émanation en forme de cône",
+    "composantes": "V, G, F/FD (une pièce de cuivre)",
+    "description": "Grâce à détection de pensées, le lanceur de sorts peut détecter les pensées superficielles des créatures situées dans la zone d’effet. Les informations révélées dépendent du temps passé à étudier un sujet ou un endroit donné :\nPremier round : présence ou absence de pensées (de créatures conscientes ayant une valeur d’Intelligence supérieure ou égale à 1).\nDeuxième round : nombre d’esprits conscients et la valeur d’Intelligence de chacun d’eux. Si la créature la plus intelligente possède une valeur d’intelligence à la fois supérieure ou égale à 26 et au moins 10 points plus élevée que celle du personnage, celui-ci est étourdi pendant 1 round et le sort se termine immédiatement. Ce sort ne révèle pas l’emplacement des créatures que le personnage ne voit pas, même s’il en détecte les pensées.\nTroisième round : pensées superficielles de tous les esprits situés dans la zone d’effet. Si une créature réussit un jet de Volonté, le lanceur de sorts ne peut pas en lire ses pensées ; il doit lancer détection de pensées une seconde fois s’il veut une autre chance de le faire. Les créatures d’intelligence animale (Int 1 ou 2) possèdent des pensées simples correspondant à un niveau instinctif.\nLe personnage peut pivoter sur lui-même pour examiner une nouvelle zone chaque round. Le sort fonctionne à travers les barrières si celles-ci ne sont pas trop épaisses : il est bloqué par 30 cm de pierre, 2,5 cm de métal, une mince feuille de plomb ou 90 cm de bois ou de terre."
+  }
+}

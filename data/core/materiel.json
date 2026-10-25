@@ -1,0 +1,2575 @@
+{
+  "source": "Archives of Nethys (aonprd.com), Core Rulebook, licence OGL",
+  "materiel": [
+    {
+      "nom_en": "Acid",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "10 gp",
+      "cout": {
+        "valeur": 10,
+        "unite": "gp"
+      },
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
+      "categorie_en": "Alchemical Weapons",
+      "nom": "Acide"
+    },
+    {
+      "nom_en": "Alchemist's fire",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "20 gp",
+      "cout": {
+        "valeur": 20,
+        "unite": "gp"
+      },
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
+      "categorie_en": "Alchemical Weapons",
+      "nom": "Feu grégeois"
+    },
+    {
+      "nom_en": "Alchemist's lab",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "200 gp",
+      "cout": {
+        "valeur": 200,
+        "unite": "gp"
+      },
+      "poids_en": "40 lbs.",
+      "poids_lb": 40,
+      "categorie_en": "Tools",
+      "nom": "Laboratoire d'alchimiste"
+    },
+    {
+      "nom_en": "Ale (gallon)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "7 cp",
+      "cout": {
+        "valeur": 7,
+        "unite": "cp"
+      },
+      "poids_en": "2 lb.",
+      "poids_lb": 2,
+      "categorie_en": null,
+      "nom": "Bière (gallon)"
+    },
+    {
+      "nom_en": "Ale (mug)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "4 cp",
+      "cout": {
+        "valeur": 4,
+        "unite": "cp"
+      },
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
+      "categorie_en": null,
+      "nom": "Bière (chope)"
+    },
+    {
+      "nom_en": "Antitoxin",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "50 gp",
+      "cout": {
+        "valeur": 50,
+        "unite": "gp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": "Alchemical Remedies",
+      "nom": "Antitoxine"
+    },
+    {
+      "nom_en": "Artisan's outfit",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "1 gp",
+      "cout": {
+        "valeur": 1,
+        "unite": "gp"
+      },
+      "poids_en": "4 lbs.",
+      "poids_lb": 4,
+      "categorie_en": "Clothing",
+      "nom": "Tenue d'artisan"
+    },
+    {
+      "nom_en": "Artisan's tools (common)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "5 gp (common), 55 gp (masterwork)",
+      "cout": {
+        "valeur": 5,
+        "unite": "gp"
+      },
+      "poids_en": "5 lbs. (common), 5 lbs. (masterwork)",
+      "poids_lb": 5,
+      "categorie_en": null,
+      "nom": "Outils d'artisan (courants)"
+    },
+    {
+      "nom_en": "Artisan's tools (masterwork)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "55 gp",
+      "cout": {
+        "valeur": 55,
+        "unite": "gp"
+      },
+      "poids_en": "5 lbs. (common), 5 lbs. (masterwork)",
+      "poids_lb": 5,
+      "categorie_en": null,
+      "nom": "Outils d'artisan (de maître)"
+    },
+    {
+      "nom_en": "Backpack (common)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "2 gp",
+      "cout": {
+        "valeur": 2,
+        "unite": "gp"
+      },
+      "poids_en": "2 lb.",
+      "poids_lb": 2,
+      "categorie_en": null,
+      "nom": "Sac à dos (courant)"
+    },
+    {
+      "nom_en": "Banquet (per person)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "10 gp",
+      "cout": {
+        "valeur": 10,
+        "unite": "gp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": "Food/Drink",
+      "nom": "Banquet (par personne)"
+    },
+    {
+      "nom_en": "Barding (Large creature)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "×4 (Large creature), ×2 (Medium creature)",
+      "cout": null,
+      "poids_en": "×2 (Large creature), ×1 (Medium creature)",
+      "poids_lb": null,
+      "categorie_en": null,
+      "nom": "Barde (grande créature)"
+    },
+    {
+      "nom_en": "Barding (Medium creature)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "×4 (Large creature), ×2 (Medium creature)",
+      "cout": null,
+      "poids_en": "×2 (Large creature), ×1 (Medium creature)",
+      "poids_lb": null,
+      "categorie_en": null,
+      "nom": "Barde (créature moyenne)"
+    },
+    {
+      "nom_en": "Barrel",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "2 gp",
+      "cout": {
+        "valeur": 2,
+        "unite": "gp"
+      },
+      "poids_en": "30 lbs.",
+      "poids_lb": 30,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Tonneau"
+    },
+    {
+      "nom_en": "Basket",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "4 sp",
+      "cout": {
+        "valeur": 4,
+        "unite": "sp"
+      },
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Panier"
+    },
+    {
+      "nom_en": "Bedroll",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1 sp",
+      "cout": {
+        "valeur": 1,
+        "unite": "sp"
+      },
+      "poids_en": "5 lbs.",
+      "poids_lb": 5,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Sac de couchage"
+    },
+    {
+      "nom_en": "Bell",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1 gp",
+      "cout": {
+        "valeur": 1,
+        "unite": "gp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Cloche"
+    },
+    {
+      "nom_en": "Bit and bridle",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "2 gp",
+      "cout": {
+        "valeur": 2,
+        "unite": "gp"
+      },
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
+      "categorie_en": "Animal Gear",
+      "nom": "Mors et bride"
+    },
+    {
+      "nom_en": "Blanket",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "5 sp",
+      "cout": {
+        "valeur": 5,
+        "unite": "sp"
+      },
+      "poids_en": "3 lbs.",
+      "poids_lb": 3,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Couverture"
+    },
+    {
+      "nom_en": "Block and tackle",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "5 gp",
+      "cout": {
+        "valeur": 5,
+        "unite": "gp"
+      },
+      "poids_en": "5 lbs.",
+      "poids_lb": 5,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Palan"
+    },
+    {
+      "nom_en": "Bottle",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "2 gp",
+      "cout": {
+        "valeur": 2,
+        "unite": "gp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Bouteille"
+    },
+    {
+      "nom_en": "Bread",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "2 cp",
+      "cout": {
+        "valeur": 2,
+        "unite": "cp"
+      },
+      "poids_en": "1/2 lb.",
+      "poids_lb": 0.5,
+      "categorie_en": "Food/Drink",
+      "nom": "Pain"
+    },
+    {
+      "nom_en": "Bucket",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "5 sp",
+      "cout": {
+        "valeur": 5,
+        "unite": "sp"
+      },
+      "poids_en": "2 lbs.",
+      "poids_lb": 2,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Seau"
+    },
+    {
+      "nom_en": "Bullseye lantern",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "12 gp",
+      "cout": {
+        "valeur": 12,
+        "unite": "gp"
+      },
+      "poids_en": "3 lbs.",
+      "poids_lb": 3,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Lanterne sourde"
+    },
+    {
+      "nom_en": "Caltrops",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1 gp",
+      "cout": {
+        "valeur": 1,
+        "unite": "gp"
+      },
+      "poids_en": "2 lbs.",
+      "poids_lb": 2,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Chausse-trapes"
+    },
+    {
+      "nom_en": "Candle",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1 cp",
+      "cout": {
+        "valeur": 1,
+        "unite": "cp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Bougie"
+    },
+    {
+      "nom_en": "Canvas (sq. yd.)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1 sp",
+      "cout": {
+        "valeur": 1,
+        "unite": "sp"
+      },
+      "poids_en": "2 lb.",
+      "poids_lb": 2,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Toile (yard carré)"
+    },
+    {
+      "nom_en": "Carriage",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "100 gp; Price of Passage (per mile) 3 cp",
+      "cout": {
+        "valeur": 100,
+        "unite": "gp"
+      },
+      "poids_en": "600 lb.",
+      "poids_lb": 600,
+      "categorie_en": "Transport, Land",
+      "nom": "Carrosse"
+    },
+    {
+      "nom_en": "Cart",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "15 gp; Price of Passage (per mile) 1 cp",
+      "cout": {
+        "valeur": 15,
+        "unite": "gp"
+      },
+      "poids_en": "200 lb.",
+      "poids_lb": 200,
+      "categorie_en": "Transport, Land",
+      "nom": "Charrette"
+    },
+    {
+      "nom_en": "Chain (10 ft.)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "30 gp",
+      "cout": {
+        "valeur": 30,
+        "unite": "gp"
+      },
+      "poids_en": "2 lbs.",
+      "poids_lb": 2,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Chaîne (3 m)"
+    },
+    {
+      "nom_en": "Chalk",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1 cp",
+      "cout": {
+        "valeur": 1,
+        "unite": "cp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Craie"
+    },
+    {
+      "nom_en": "Cheese",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "1 sp",
+      "cout": {
+        "valeur": 1,
+        "unite": "sp"
+      },
+      "poids_en": "1/2 lb.",
+      "poids_lb": 0.5,
+      "categorie_en": "Food/Drink",
+      "nom": "Fromage"
+    },
+    {
+      "nom_en": "Chest (small)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "2 gp",
+      "cout": {
+        "valeur": 2,
+        "unite": "gp"
+      },
+      "poids_en": "25 lb.",
+      "poids_lb": 25,
+      "categorie_en": null,
+      "nom": "Coffre (petit)"
+    },
+    {
+      "nom_en": "Cleric's vestments",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "5 gp",
+      "cout": {
+        "valeur": 5,
+        "unite": "gp"
+      },
+      "poids_en": "6 lbs.",
+      "poids_lb": 6,
+      "categorie_en": "Clothing",
+      "nom": "Habits sacerdotaux"
+    },
+    {
+      "nom_en": "Climber's kit",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "80 gp",
+      "cout": {
+        "valeur": 80,
+        "unite": "gp"
+      },
+      "poids_en": "5 lbs.",
+      "poids_lb": 5,
+      "categorie_en": "Tools",
+      "nom": "Matériel d'escalade"
+    },
+    {
+      "nom_en": "Coach cab",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "—; Price of Passage (per mile) 3 cp",
+      "cout": {
+        "valeur": 3,
+        "unite": "cp"
+      },
+      "poids_en": null,
+      "poids_lb": null,
+      "categorie_en": "Transport, Land",
+      "nom": "Fiacre (course)"
+    },
+    {
+      "nom_en": "Cold-weather outfit",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "8 gp",
+      "cout": {
+        "valeur": 8,
+        "unite": "gp"
+      },
+      "poids_en": "7 lbs.",
+      "poids_lb": 7,
+      "categorie_en": "Clothing",
+      "nom": "Tenue de grand froid"
+    },
+    {
+      "nom_en": "Courtier's outfit",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "30 gp",
+      "cout": {
+        "valeur": 30,
+        "unite": "gp"
+      },
+      "poids_en": "6 lbs.",
+      "poids_lb": 6,
+      "categorie_en": "Clothing",
+      "nom": "Tenue de courtisan"
+    },
+    {
+      "nom_en": "Crowbar",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "2 gp",
+      "cout": {
+        "valeur": 2,
+        "unite": "gp"
+      },
+      "poids_en": "5 lbs.",
+      "poids_lb": 5,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Pied-de-biche"
+    },
+    {
+      "nom_en": "Disguise kit",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "50 gp",
+      "cout": {
+        "valeur": 50,
+        "unite": "gp"
+      },
+      "poids_en": "8 lbs.",
+      "poids_lb": 8,
+      "categorie_en": "Tools",
+      "nom": "Matériel de déguisement"
+    },
+    {
+      "nom_en": "Dog (guard)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "25 gp (guard), 15 gp (lap), 150 gp (riding)",
+      "cout": {
+        "valeur": 25,
+        "unite": "gp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": null,
+      "nom": "Chien (de garde)"
+    },
+    {
+      "nom_en": "Dog (riding)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "150 gp",
+      "cout": {
+        "valeur": 150,
+        "unite": "gp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": null,
+      "nom": "Chien (de monte)"
+    },
+    {
+      "nom_en": "Entertainer's outfit",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "3 gp",
+      "cout": {
+        "valeur": 3,
+        "unite": "gp"
+      },
+      "poids_en": "4 lbs.",
+      "poids_lb": 4,
+      "categorie_en": "Clothing",
+      "nom": "Tenue d'artiste"
+    },
+    {
+      "nom_en": "Everburning torch",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "110 gp",
+      "cout": {
+        "valeur": 110,
+        "unite": "gp"
+      },
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Torche éternelle"
+    },
+    {
+      "nom_en": "Explorer's outfit",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "10 gp",
+      "cout": {
+        "valeur": 10,
+        "unite": "gp"
+      },
+      "poids_en": "8 lbs.",
+      "poids_lb": 8,
+      "categorie_en": "Clothing",
+      "nom": "Tenue d'explorateur"
+    },
+    {
+      "nom_en": "Feed (per day)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "5 cp",
+      "cout": {
+        "valeur": 5,
+        "unite": "cp"
+      },
+      "poids_en": "10 lbs.",
+      "poids_lb": 10,
+      "categorie_en": "Animal Gear",
+      "nom": "Fourrage (par jour)"
+    },
+    {
+      "nom_en": "Firewood (per day)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1 cp",
+      "cout": {
+        "valeur": 1,
+        "unite": "cp"
+      },
+      "poids_en": "20 lbs.",
+      "poids_lb": 20,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Bois de chauffage (par jour)"
+    },
+    {
+      "nom_en": "Fishhook",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1 sp",
+      "cout": {
+        "valeur": 1,
+        "unite": "sp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Hameçon"
+    },
+    {
+      "nom_en": "Fishing net",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "4 gp",
+      "cout": {
+        "valeur": 4,
+        "unite": "gp"
+      },
+      "poids_en": "5 lbs.",
+      "poids_lb": 5,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Filet de pêche"
+    },
+    {
+      "nom_en": "Flask",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "3 cp",
+      "cout": {
+        "valeur": 3,
+        "unite": "cp"
+      },
+      "poids_en": "4.5 lb.",
+      "poids_lb": 4.5,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Flasque"
+    },
+    {
+      "nom_en": "Flint and steel",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1 gp",
+      "cout": {
+        "valeur": 1,
+        "unite": "gp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Briquet à silex"
+    },
+    {
+      "nom_en": "Galley",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "30,000 gp; Price of Passage (per mile) 1 sp",
+      "cout": {
+        "valeur": 30000,
+        "unite": "gp"
+      },
+      "poids_en": null,
+      "poids_lb": null,
+      "categorie_en": "Transport, Sea",
+      "nom": "Galère"
+    },
+    {
+      "nom_en": "Grappling hook (common)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1 gp (common), 2,001 gp (mithral)",
+      "cout": {
+        "valeur": 1,
+        "unite": "gp"
+      },
+      "poids_en": "4 lbs. (common), 2 lbs. (mithral)",
+      "poids_lb": 4,
+      "categorie_en": null,
+      "nom": "Grappin"
+    },
+    {
+      "nom_en": "Hammer",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "5 sp",
+      "cout": {
+        "valeur": 5,
+        "unite": "sp"
+      },
+      "poids_en": "2 lbs.",
+      "poids_lb": 2,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Marteau"
+    },
+    {
+      "nom_en": "Healer's kit",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "50 gp",
+      "cout": {
+        "valeur": 50,
+        "unite": "gp"
+      },
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
+      "categorie_en": "Tools",
+      "nom": "Trousse de soins"
+    },
+    {
+      "nom_en": "Hireling (trained)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "3 sp per day (trained), 1 sp per day (untrained)",
+      "cout": {
+        "valeur": 3,
+        "unite": "sp"
+      },
+      "poids_en": "— (trained), — (untrained)",
+      "poids_lb": null,
+      "categorie_en": null,
+      "nom": "Employé (qualifié)"
+    },
+    {
+      "nom_en": "Hireling (untrained)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "3 sp per day (trained), 1 sp per day (untrained)",
+      "cout": {
+        "valeur": 3,
+        "unite": "sp"
+      },
+      "poids_en": "— (trained), — (untrained)",
+      "poids_lb": null,
+      "categorie_en": null,
+      "nom": "Employé (non qualifié)"
+    },
+    {
+      "nom_en": "Holly and mistletoe",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "0 gp",
+      "cout": {
+        "valeur": 0,
+        "unite": "gp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": "Tools",
+      "nom": "Houx et gui"
+    },
+    {
+      "nom_en": "Holy symbol (silver)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "25 gp",
+      "cout": {
+        "valeur": 25,
+        "unite": "gp"
+      },
+      "poids_en": "1 lb. (gold), 1 lb. (iron), 1 lb. (platinum), 1 lb. (silver), — (wooden)",
+      "poids_lb": 1,
+      "categorie_en": null,
+      "nom": "Symbole sacré (argent)"
+    },
+    {
+      "nom_en": "Holy symbol (wooden)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1 gp",
+      "cout": {
+        "valeur": 1,
+        "unite": "gp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": null,
+      "nom": "Symbole sacré (bois)"
+    },
+    {
+      "nom_en": "Holy water",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "25 gp",
+      "cout": {
+        "valeur": 25,
+        "unite": "gp"
+      },
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
+      "categorie_en": "Alchemical Weapons",
+      "nom": "Eau bénite"
+    },
+    {
+      "nom_en": "Hooded lantern",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "7 gp",
+      "cout": {
+        "valeur": 7,
+        "unite": "gp"
+      },
+      "poids_en": "2 lbs.",
+      "poids_lb": 2,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Lanterne à capuchon"
+    },
+    {
+      "nom_en": "Horse (heavy)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "200 gp (heavy), 300 gp (heavy, combat trained), 75 gp (light), 110 gp (light, combat trained), 30 gp (pony), 45 gp (pony, combat trained)",
+      "cout": {
+        "valeur": 200,
+        "unite": "gp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": null,
+      "nom": "Cheval (lourd)"
+    },
+    {
+      "nom_en": "Horse (heavy, combat trained)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "300 gp",
+      "cout": {
+        "valeur": 300,
+        "unite": "gp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": null,
+      "nom": "Cheval (lourd, dressé au combat)"
+    },
+    {
+      "nom_en": "Horse (light)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "75 gp",
+      "cout": {
+        "valeur": 75,
+        "unite": "gp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": null,
+      "nom": "Cheval (léger)"
+    },
+    {
+      "nom_en": "Horse (light, combat trained)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "200 gp (heavy), 300 gp (heavy, combat trained), 75 gp (light), 110 gp (light, combat trained), 30 gp (pony), 45 gp (pony, combat trained)",
+      "cout": {
+        "valeur": 200,
+        "unite": "gp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": null,
+      "nom": "Cheval (léger, dressé au combat)"
+    },
+    {
+      "nom_en": "Horse (pony)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "30 gp",
+      "cout": {
+        "valeur": 30,
+        "unite": "gp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": null,
+      "nom": "Poney"
+    },
+    {
+      "nom_en": "Horse (pony, combat trained)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "45 gp",
+      "cout": {
+        "valeur": 45,
+        "unite": "gp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": null,
+      "nom": "Poney (dressé au combat)"
+    },
+    {
+      "nom_en": "Hourglass",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "25 gp",
+      "cout": {
+        "valeur": 25,
+        "unite": "gp"
+      },
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Sablier"
+    },
+    {
+      "nom_en": "Ink",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "8 gp",
+      "cout": {
+        "valeur": 8,
+        "unite": "gp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Encre"
+    },
+    {
+      "nom_en": "Inkpen",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1 sp",
+      "cout": {
+        "valeur": 1,
+        "unite": "sp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Plume"
+    },
+    {
+      "nom_en": "Inn stay (common)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "5 sp (common), 2 gp (good), 2 sp (poor), 16 gp (suite, average), 32 gp+ (suite, luxurious), 4 gp (suite, small)",
+      "cout": {
+        "valeur": 5,
+        "unite": "sp"
+      },
+      "poids_en": "— (common), — (good), — (poor), — (suite, average), — (suite, luxurious), — (suite, small)",
+      "poids_lb": null,
+      "categorie_en": null,
+      "nom": "Séjour à l'auberge (courant)"
+    },
+    {
+      "nom_en": "Inn stay (good)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "2 gp",
+      "cout": {
+        "valeur": 2,
+        "unite": "gp"
+      },
+      "poids_en": "— (common), — (good), — (poor), — (suite, average), — (suite, luxurious), — (suite, small)",
+      "poids_lb": null,
+      "categorie_en": null,
+      "nom": "Séjour à l'auberge (bon)"
+    },
+    {
+      "nom_en": "Inn stay (poor)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "2 sp",
+      "cout": {
+        "valeur": 2,
+        "unite": "sp"
+      },
+      "poids_en": "— (common), — (good), — (poor), — (suite, average), — (suite, luxurious), — (suite, small)",
+      "poids_lb": null,
+      "categorie_en": null,
+      "nom": "Séjour à l'auberge (pauvre)"
+    },
+    {
+      "nom_en": "Jug",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "3 cp",
+      "cout": {
+        "valeur": 3,
+        "unite": "cp"
+      },
+      "poids_en": "9 lbs.",
+      "poids_lb": 9,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Cruche"
+    },
+    {
+      "nom_en": "Keelboat",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "3,000 gp; Price of Passage (per mile) 1 sp",
+      "cout": {
+        "valeur": 3000,
+        "unite": "gp"
+      },
+      "poids_en": null,
+      "poids_lb": null,
+      "categorie_en": "Transport, Sea",
+      "nom": "Bateau à quille"
+    },
+    {
+      "nom_en": "Ladder",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "5 cp",
+      "cout": {
+        "valeur": 5,
+        "unite": "cp"
+      },
+      "poids_en": "20 lbs.",
+      "poids_lb": 20,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Échelle"
+    },
+    {
+      "nom_en": "Lamp",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1 sp",
+      "cout": {
+        "valeur": 1,
+        "unite": "sp"
+      },
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Lampe"
+    },
+    {
+      "nom_en": "Lock (average)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "40 gp (average), 80 gp (good), 20 gp (simple), 150 gp (superior)",
+      "cout": {
+        "valeur": 40,
+        "unite": "gp"
+      },
+      "poids_en": "1 lb. (average), 1 lb. (good), 1 lb. (simple), 1 lb. (superior)",
+      "poids_lb": 1,
+      "categorie_en": null,
+      "nom": "Serrure (moyenne)"
+    },
+    {
+      "nom_en": "Lock (good)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "80 gp",
+      "cout": {
+        "valeur": 80,
+        "unite": "gp"
+      },
+      "poids_en": "1 lb. (average), 1 lb. (good), 1 lb. (simple), 1 lb. (superior)",
+      "poids_lb": 1,
+      "categorie_en": null,
+      "nom": "Serrure (bonne)"
+    },
+    {
+      "nom_en": "Lock (simple)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "20 gp",
+      "cout": {
+        "valeur": 20,
+        "unite": "gp"
+      },
+      "poids_en": "1 lb. (average), 1 lb. (good), 1 lb. (simple), 1 lb. (superior)",
+      "poids_lb": 1,
+      "categorie_en": null,
+      "nom": "Serrure (simple)"
+    },
+    {
+      "nom_en": "Lock (superior)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "150 gp",
+      "cout": {
+        "valeur": 150,
+        "unite": "gp"
+      },
+      "poids_en": "1 lb. (average), 1 lb. (good), 1 lb. (simple), 1 lb. (superior)",
+      "poids_lb": 1,
+      "categorie_en": null,
+      "nom": "Serrure (supérieure)"
+    },
+    {
+      "nom_en": "Longship",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "10,000 gp; Price of Passage (per mile) 5 cp",
+      "cout": {
+        "valeur": 10000,
+        "unite": "gp"
+      },
+      "poids_en": null,
+      "poids_lb": null,
+      "categorie_en": "Transport, Sea",
+      "nom": "Drakkar"
+    },
+    {
+      "nom_en": "Magnifying glass",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "100 gp",
+      "cout": {
+        "valeur": 100,
+        "unite": "gp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Loupe"
+    },
+    {
+      "nom_en": "Manacles (common)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "15 gp (common), 50 gp (masterwork), 1,000 gp (mithral)",
+      "cout": {
+        "valeur": 15,
+        "unite": "gp"
+      },
+      "poids_en": "2 lbs. (common), 2 lbs. (masterwork), 2 lbs. (mithral)",
+      "poids_lb": 2,
+      "categorie_en": null,
+      "nom": "Menottes (courantes)"
+    },
+    {
+      "nom_en": "Manacles (masterwork)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "50 gp",
+      "cout": {
+        "valeur": 50,
+        "unite": "gp"
+      },
+      "poids_en": "2 lbs. (common), 2 lbs. (masterwork), 2 lbs. (mithral)",
+      "poids_lb": 2,
+      "categorie_en": null,
+      "nom": "Menottes (de maître)"
+    },
+    {
+      "nom_en": "Masterwork tool",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "50 gp",
+      "cout": {
+        "valeur": 50,
+        "unite": "gp"
+      },
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
+      "categorie_en": "Tools",
+      "nom": "Outil de maître"
+    },
+    {
+      "nom_en": "Meal (common, per day)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "3 sp (common, per day), 5 sp (good, per day), 1 sp (poor, per day)",
+      "cout": {
+        "valeur": 3,
+        "unite": "sp"
+      },
+      "poids_en": "— (common, per day), — (good, per day), — (poor, per day)",
+      "poids_lb": null,
+      "categorie_en": null,
+      "nom": "Repas (courant, par jour)"
+    },
+    {
+      "nom_en": "Meal (good, per day)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "5 sp",
+      "cout": {
+        "valeur": 5,
+        "unite": "sp"
+      },
+      "poids_en": "— (common, per day), — (good, per day), — (poor, per day)",
+      "poids_lb": null,
+      "categorie_en": null,
+      "nom": "Repas (bon, par jour)"
+    },
+    {
+      "nom_en": "Meal (poor, per day)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "1 sp",
+      "cout": {
+        "valeur": 1,
+        "unite": "sp"
+      },
+      "poids_en": "— (common, per day), — (good, per day), — (poor, per day)",
+      "poids_lb": null,
+      "categorie_en": null,
+      "nom": "Repas (pauvre, par jour)"
+    },
+    {
+      "nom_en": "Meat",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "3 sp",
+      "cout": {
+        "valeur": 3,
+        "unite": "sp"
+      },
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
+      "categorie_en": "Food/Drink",
+      "nom": "Viande"
+    },
+    {
+      "nom_en": "Merchant's scale",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "2 gp",
+      "cout": {
+        "valeur": 2,
+        "unite": "gp"
+      },
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
+      "categorie_en": "Tools",
+      "nom": "Balance de marchand"
+    },
+    {
+      "nom_en": "Messenger",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "2 cp per mile",
+      "cout": {
+        "valeur": 2,
+        "unite": "cp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": "Lodging/Services",
+      "nom": "Messager"
+    },
+    {
+      "nom_en": "Miner's pick",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "3 gp",
+      "cout": {
+        "valeur": 3,
+        "unite": "gp"
+      },
+      "poids_en": "10 lbs.",
+      "poids_lb": 10,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Pioche de mineur"
+    },
+    {
+      "nom_en": "Mirror",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "10 gp",
+      "cout": {
+        "valeur": 10,
+        "unite": "gp"
+      },
+      "poids_en": "1/2 lb.",
+      "poids_lb": 0.5,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Miroir"
+    },
+    {
+      "nom_en": "Monk's outfit",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "5 gp",
+      "cout": {
+        "valeur": 5,
+        "unite": "gp"
+      },
+      "poids_en": "2 lbs.",
+      "poids_lb": 2,
+      "categorie_en": "Clothing",
+      "nom": "Tenue de moine"
+    },
+    {
+      "nom_en": "Mug/tankard",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "2 cp",
+      "cout": {
+        "valeur": 2,
+        "unite": "cp"
+      },
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Chope"
+    },
+    {
+      "nom_en": "Musical instrument (common)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "5 gp (common), 100 gp (masterwork)",
+      "cout": {
+        "valeur": 5,
+        "unite": "gp"
+      },
+      "poids_en": "3 lbs. (common), 3 lbs. (masterwork)",
+      "poids_lb": 3,
+      "categorie_en": null,
+      "nom": "Instrument de musique (courant)"
+    },
+    {
+      "nom_en": "Musical instrument (masterwork)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "100 gp",
+      "cout": {
+        "valeur": 100,
+        "unite": "gp"
+      },
+      "poids_en": "3 lbs. (common), 3 lbs. (masterwork)",
+      "poids_lb": 3,
+      "categorie_en": null,
+      "nom": "Instrument de musique (de maître)"
+    },
+    {
+      "nom_en": "Noble's outfit",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "75 gp",
+      "cout": {
+        "valeur": 75,
+        "unite": "gp"
+      },
+      "poids_en": "10 lbs.",
+      "poids_lb": 10,
+      "categorie_en": "Clothing",
+      "nom": "Tenue de noble"
+    },
+    {
+      "nom_en": "Oar",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "2 gp",
+      "cout": {
+        "valeur": 2,
+        "unite": "gp"
+      },
+      "poids_en": "10 lbs.",
+      "poids_lb": 10,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Rame"
+    },
+    {
+      "nom_en": "Oil",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1 sp",
+      "cout": {
+        "valeur": 1,
+        "unite": "sp"
+      },
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Huile"
+    },
+    {
+      "nom_en": "Pack animal (donkey/mule)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "8 gp Pack animal (donkey/mule), 15 gp Pack animal (ox), 24 gp Pack animal (yak)",
+      "cout": {
+        "valeur": 8,
+        "unite": "gp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": null,
+      "nom": "Bête de somme (âne ou mule)"
+    },
+    {
+      "nom_en": "Paper (sheet)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "4 sp",
+      "cout": {
+        "valeur": 4,
+        "unite": "sp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Papier (feuille)"
+    },
+    {
+      "nom_en": "Parchment (sheet)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "2 sp",
+      "cout": {
+        "valeur": 2,
+        "unite": "sp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Parchemin vierge (feuille)"
+    },
+    {
+      "nom_en": "Peasant's outfit",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "1 sp",
+      "cout": {
+        "valeur": 1,
+        "unite": "sp"
+      },
+      "poids_en": "2 lbs.",
+      "poids_lb": 2,
+      "categorie_en": "Clothing",
+      "nom": "Tenue de paysan"
+    },
+    {
+      "nom_en": "Pitcher",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "2 cp",
+      "cout": {
+        "valeur": 2,
+        "unite": "cp"
+      },
+      "poids_en": "5 lbs.",
+      "poids_lb": 5,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Pichet"
+    },
+    {
+      "nom_en": "Piton",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1 sp",
+      "cout": {
+        "valeur": 1,
+        "unite": "sp"
+      },
+      "poids_en": "1/2 lb.",
+      "poids_lb": 0.5,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Piton"
+    },
+    {
+      "nom_en": "Pole",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "5 cp",
+      "cout": {
+        "valeur": 5,
+        "unite": "cp"
+      },
+      "poids_en": "8 lbs.",
+      "poids_lb": 8,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Perche"
+    },
+    {
+      "nom_en": "Portable ram",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "10 gp",
+      "cout": {
+        "valeur": 10,
+        "unite": "gp"
+      },
+      "poids_en": "20 lbs.",
+      "poids_lb": 20,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Bélier portatif"
+    },
+    {
+      "nom_en": "Pot (common)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "8 sp (common), 2,001 gp (mithral)",
+      "cout": {
+        "valeur": 8,
+        "unite": "sp"
+      },
+      "poids_en": "4 lbs. (common), 2 lbs. (mithral)",
+      "poids_lb": 4,
+      "categorie_en": null,
+      "nom": "Marmite"
+    },
+    {
+      "nom_en": "Pouch, belt (empty)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1 gp",
+      "cout": {
+        "valeur": 1,
+        "unite": "gp"
+      },
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Bourse de ceinture (vide)"
+    },
+    {
+      "nom_en": "Road or gate toll",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "1 cp",
+      "cout": {
+        "valeur": 1,
+        "unite": "cp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": "Lodging/Services",
+      "nom": "Péage de route ou de porte"
+    },
+    {
+      "nom_en": "Rope (50 ft.)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1 gp",
+      "cout": {
+        "valeur": 1,
+        "unite": "gp"
+      },
+      "poids_en": "10 lbs.",
+      "poids_lb": 10,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Corde (15 m)"
+    },
+    {
+      "nom_en": "Rowboat",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "50 gp; Price of Passage (per mile) 2 cp",
+      "cout": {
+        "valeur": 50,
+        "unite": "gp"
+      },
+      "poids_en": "100 lb.",
+      "poids_lb": 100,
+      "categorie_en": "Transport, Sea",
+      "nom": "Barque"
+    },
+    {
+      "nom_en": "Royal outfit",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "200 gp",
+      "cout": {
+        "valeur": 200,
+        "unite": "gp"
+      },
+      "poids_en": "15 lbs.",
+      "poids_lb": 15,
+      "categorie_en": "Clothing",
+      "nom": "Tenue royale"
+    },
+    {
+      "nom_en": "Sack",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1 sp",
+      "cout": {
+        "valeur": 1,
+        "unite": "sp"
+      },
+      "poids_en": "1/2 lb.",
+      "poids_lb": 0.5,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Sac"
+    },
+    {
+      "nom_en": "Saddle (exotic, military)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "60 gp (exotic, military), 15 gp (exotic, pack), 30 gp (exotic, riding), 20 gp (military), 5 gp (pack), 10 gp (riding)",
+      "cout": {
+        "valeur": 60,
+        "unite": "gp"
+      },
+      "poids_en": "40 lbs. (exotic, military), 20 lbs. (exotic, pack), 30 lbs. (exotic, riding), 30 lbs. (military), 15 lbs. (pack), 25 lbs. (riding)",
+      "poids_lb": 40,
+      "categorie_en": null,
+      "nom": "Selle (exotique, de guerre)"
+    },
+    {
+      "nom_en": "Saddle (exotic, pack)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "15 gp",
+      "cout": {
+        "valeur": 15,
+        "unite": "gp"
+      },
+      "poids_en": "20 lb.",
+      "poids_lb": 20,
+      "categorie_en": null,
+      "nom": "Selle (exotique, de bât)"
+    },
+    {
+      "nom_en": "Saddle (exotic, riding)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "30 gp",
+      "cout": {
+        "valeur": 30,
+        "unite": "gp"
+      },
+      "poids_en": "30 lb.",
+      "poids_lb": 30,
+      "categorie_en": null,
+      "nom": "Selle (exotique, de monte)"
+    },
+    {
+      "nom_en": "Saddle (military)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "20 gp",
+      "cout": {
+        "valeur": 20,
+        "unite": "gp"
+      },
+      "poids_en": "30 lb.",
+      "poids_lb": 30,
+      "categorie_en": null,
+      "nom": "Selle (de guerre)"
+    },
+    {
+      "nom_en": "Saddle (pack)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "5 gp",
+      "cout": {
+        "valeur": 5,
+        "unite": "gp"
+      },
+      "poids_en": "15 lb.",
+      "poids_lb": 15,
+      "categorie_en": null,
+      "nom": "Selle (de bât)"
+    },
+    {
+      "nom_en": "Saddle (riding)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "10 gp",
+      "cout": {
+        "valeur": 10,
+        "unite": "gp"
+      },
+      "poids_en": "25 lb.",
+      "poids_lb": 25,
+      "categorie_en": null,
+      "nom": "Selle (de monte)"
+    },
+    {
+      "nom_en": "Saddlebags",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "4 gp",
+      "cout": {
+        "valeur": 4,
+        "unite": "gp"
+      },
+      "poids_en": "8 lbs.",
+      "poids_lb": 8,
+      "categorie_en": "Animal Gear",
+      "nom": "Sacoches de selle"
+    },
+    {
+      "nom_en": "Sailing ship",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "10,000 gp; Price of Passage (per mile) 2 sp",
+      "cout": {
+        "valeur": 10000,
+        "unite": "gp"
+      },
+      "poids_en": null,
+      "poids_lb": null,
+      "categorie_en": "Transport, Sea",
+      "nom": "Voilier"
+    },
+    {
+      "nom_en": "Scholar's outfit",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "5 gp",
+      "cout": {
+        "valeur": 5,
+        "unite": "gp"
+      },
+      "poids_en": "6 lbs.",
+      "poids_lb": 6,
+      "categorie_en": "Clothing",
+      "nom": "Tenue d'érudit"
+    },
+    {
+      "nom_en": "Scroll case",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1 gp",
+      "cout": {
+        "valeur": 1,
+        "unite": "gp"
+      },
+      "poids_en": "1/2 lb.",
+      "poids_lb": 0.5,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Étui à parchemins"
+    },
+    {
+      "nom_en": "Sealing wax",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1 gp",
+      "cout": {
+        "valeur": 1,
+        "unite": "gp"
+      },
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Cire à cacheter"
+    },
+    {
+      "nom_en": "Sewing needle",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "5 sp",
+      "cout": {
+        "valeur": 5,
+        "unite": "sp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Aiguille à coudre"
+    },
+    {
+      "nom_en": "Ship's passage",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "—; Price of Passage (per mile) 1 sp",
+      "cout": {
+        "valeur": 1,
+        "unite": "sp"
+      },
+      "poids_en": null,
+      "poids_lb": null,
+      "categorie_en": "Transport, Sea",
+      "nom": "Passage sur un navire"
+    },
+    {
+      "nom_en": "Shovel, common",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "2 gp",
+      "cout": {
+        "valeur": 2,
+        "unite": "gp"
+      },
+      "poids_en": "8 lb.",
+      "poids_lb": 8,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Pelle"
+    },
+    {
+      "nom_en": "Signet ring",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "5 gp",
+      "cout": {
+        "valeur": 5,
+        "unite": "gp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Chevalière"
+    },
+    {
+      "nom_en": "Silk rope (50 ft.)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "10 gp",
+      "cout": {
+        "valeur": 10,
+        "unite": "gp"
+      },
+      "poids_en": "5 lbs.",
+      "poids_lb": 5,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Corde de soie (15 m)"
+    },
+    {
+      "nom_en": "Sled",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "20 gp; Price of Passage (per mile) —",
+      "cout": {
+        "valeur": 20,
+        "unite": "gp"
+      },
+      "poids_en": "300 lb.",
+      "poids_lb": 300,
+      "categorie_en": "Transport, Land",
+      "nom": "Traîneau"
+    },
+    {
+      "nom_en": "Sledge",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1 gp",
+      "cout": {
+        "valeur": 1,
+        "unite": "gp"
+      },
+      "poids_en": "10 lbs.",
+      "poids_lb": 10,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Masse de forgeron"
+    },
+    {
+      "nom_en": "Smokestick",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "20 gp",
+      "cout": {
+        "valeur": 20,
+        "unite": "gp"
+      },
+      "poids_en": "1/2 lb.",
+      "poids_lb": 0.5,
+      "categorie_en": "Alchemical Tools",
+      "nom": "Bâton fumigène"
+    },
+    {
+      "nom_en": "Soap",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "5 sp",
+      "cout": {
+        "valeur": 5,
+        "unite": "sp"
+      },
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Savon"
+    },
+    {
+      "nom_en": "Spell component pouch",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "5 gp",
+      "cout": {
+        "valeur": 5,
+        "unite": "gp"
+      },
+      "poids_en": "2 lbs.",
+      "poids_lb": 2,
+      "categorie_en": "Tools",
+      "nom": "Sacoche de composantes de sorts"
+    },
+    {
+      "nom_en": "Spellbook",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "15 gp",
+      "cout": {
+        "valeur": 15,
+        "unite": "gp"
+      },
+      "poids_en": "3 lbs.",
+      "poids_lb": 3,
+      "categorie_en": "Tools",
+      "nom": "Grimoire"
+    },
+    {
+      "nom_en": "Spellcasting",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "caster level × spell level × 10 gp",
+      "cout": {
+        "valeur": 10,
+        "unite": "gp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": "Lodging/Services",
+      "nom": "Lancement de sort (service)"
+    },
+    {
+      "nom_en": "Spyglass",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1,000 gp",
+      "cout": {
+        "valeur": 1000,
+        "unite": "gp"
+      },
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Longue-vue"
+    },
+    {
+      "nom_en": "Stabling (per day)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "5 sp",
+      "cout": {
+        "valeur": 5,
+        "unite": "sp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": "Animal Gear",
+      "nom": "Écurie (par jour)"
+    },
+    {
+      "nom_en": "Sunrod",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "2 gp",
+      "cout": {
+        "valeur": 2,
+        "unite": "gp"
+      },
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
+      "categorie_en": "Alchemical Tools",
+      "nom": "Bâton éclairant"
+    },
+    {
+      "nom_en": "Tanglefoot bag",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "50 gp",
+      "cout": {
+        "valeur": 50,
+        "unite": "gp"
+      },
+      "poids_en": "4 lbs.",
+      "poids_lb": 4,
+      "categorie_en": "Alchemical Weapons",
+      "nom": "Sac collant"
+    },
+    {
+      "nom_en": "Tent",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "10 gp",
+      "cout": {
+        "valeur": 10,
+        "unite": "gp"
+      },
+      "poids_en": "20 lbs.",
+      "poids_lb": 20,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Tente"
+    },
+    {
+      "nom_en": "Thieves' tools (common)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "30 gp (common), 100 gp (masterwork)",
+      "cout": {
+        "valeur": 30,
+        "unite": "gp"
+      },
+      "poids_en": "1 lb. (common), 2 lbs. (masterwork)",
+      "poids_lb": 1,
+      "categorie_en": null,
+      "nom": "Outils de voleur (courants)"
+    },
+    {
+      "nom_en": "Thieves' tools (masterwork)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "100 gp",
+      "cout": {
+        "valeur": 100,
+        "unite": "gp"
+      },
+      "poids_en": "2 lb.",
+      "poids_lb": 2,
+      "categorie_en": null,
+      "nom": "Outils de voleur (de maître)"
+    },
+    {
+      "nom_en": "Thunderstone",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "30 gp",
+      "cout": {
+        "valeur": 30,
+        "unite": "gp"
+      },
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
+      "categorie_en": "Alchemical Weapons",
+      "nom": "Pierre à tonnerre"
+    },
+    {
+      "nom_en": "Tindertwig",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1 gp",
+      "cout": {
+        "valeur": 1,
+        "unite": "gp"
+      },
+      "poids_en": "—",
+      "poids_lb": null,
+      "categorie_en": "Alchemical Tools",
+      "nom": "Allumette"
+    },
+    {
+      "nom_en": "Torch",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1 cp",
+      "cout": {
+        "valeur": 1,
+        "unite": "cp"
+      },
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Torche"
+    },
+    {
+      "nom_en": "Trail rations",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "5 sp",
+      "cout": {
+        "valeur": 5,
+        "unite": "sp"
+      },
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
+      "categorie_en": "Food/Drink",
+      "nom": "Rations de voyage"
+    },
+    {
+      "nom_en": "Traveler's outfit",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "1 gp",
+      "cout": {
+        "valeur": 1,
+        "unite": "gp"
+      },
+      "poids_en": "5 lbs.",
+      "poids_lb": 5,
+      "categorie_en": "Clothing",
+      "nom": "Tenue de voyageur"
+    },
+    {
+      "nom_en": "Vial",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1 gp",
+      "cout": {
+        "valeur": 1,
+        "unite": "gp"
+      },
+      "poids_en": "0.1 lb.",
+      "poids_lb": 0.1,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Fiole"
+    },
+    {
+      "nom_en": "Wagon (light)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "35 gp",
+      "cout": {
+        "valeur": 35,
+        "unite": "gp"
+      },
+      "poids_en": "400 lb.",
+      "poids_lb": 400,
+      "categorie_en": null,
+      "nom": "Chariot (léger)"
+    },
+    {
+      "nom_en": "Warship",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "25,000 gp; Price of Passage (per mile) 2 sp",
+      "cout": {
+        "valeur": 25000,
+        "unite": "gp"
+      },
+      "poids_en": null,
+      "poids_lb": null,
+      "categorie_en": "Transport, Sea",
+      "nom": "Navire de guerre"
+    },
+    {
+      "nom_en": "Water clock",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1,000 gp",
+      "cout": {
+        "valeur": 1000,
+        "unite": "gp"
+      },
+      "poids_en": "200 lbs.",
+      "poids_lb": 200,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Clepsydre"
+    },
+    {
+      "nom_en": "Waterskin",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "1 gp",
+      "cout": {
+        "valeur": 1,
+        "unite": "gp"
+      },
+      "poids_en": "4 lbs.",
+      "poids_lb": 4,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Outre"
+    },
+    {
+      "nom_en": "Whetstone",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "2 cp",
+      "cout": {
+        "valeur": 2,
+        "unite": "cp"
+      },
+      "poids_en": "1 lb.",
+      "poids_lb": 1,
+      "categorie_en": "Adventuring Gear",
+      "nom": "Pierre à aiguiser"
+    },
+    {
+      "nom_en": "Whistle (signal)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 158
+      },
+      "prix_en": "8 sp (signal), 9 sp (silent)",
+      "cout": {
+        "valeur": 8,
+        "unite": "sp"
+      },
+      "poids_en": "— (signal), — (silent)",
+      "poids_lb": null,
+      "categorie_en": null,
+      "nom": "Sifflet"
+    },
+    {
+      "nom_en": "Wine (common, pitcher)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "2 sp (common, pitcher), 10 gp (fine, bottle)",
+      "cout": {
+        "valeur": 2,
+        "unite": "sp"
+      },
+      "poids_en": "6 lbs. (common, pitcher), 1-1/2 lbs. (fine, bottle)",
+      "poids_lb": 6,
+      "categorie_en": null,
+      "nom": "Vin (courant, pichet)"
+    },
+    {
+      "nom_en": "Wine (fine, bottle)",
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 159
+      },
+      "prix_en": "10 gp",
+      "cout": {
+        "valeur": 10,
+        "unite": "gp"
+      },
+      "poids_en": "1.5 lb.",
+      "poids_lb": 1.5,
+      "categorie_en": null,
+      "nom": "Vin (fin, bouteille)"
+    }
+  ]
+}

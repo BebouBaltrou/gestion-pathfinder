@@ -1,0 +1,169 @@
+{
+  "Snatch Arrows": {
+    "resume": "Au lieu de dévier les flèches et les attaques à distance, le personnage est capable de les attraper en plein vol.",
+    "prerequis": "Dex 15, Parade de projectiles, Science de l’attaque à mains nues.",
+    "avantage": "Quand le personnage utilise le don Parade de projectiles, il peut attraper le projectile au lieu de se contenter de le détourner. Il peut renvoyer immédiatement les armes de jet sur leur lanceur (même si ce n’est pas son tour) ou les garder pour un usage ultérieur. Il doit avoir au moins une main libre (qui ne tient rien)."
+  },
+  "Spell Focus": {
+    "resume": "Le personnage choisit une école de magie contre laquelle ses adversaires auront plus de mal à résister.",
+    "avantage": "Le DD des jets de sauvegarde contre tous les sorts de l’école choisie par le personnage augmente de +1.",
+    "special": "Ce don peut être choisi plusieurs fois, mais ses effets ne se cumulent pas. Il s’applique à chaque fois à une nouvelle école de magie."
+  },
+  "Spell Mastery": {
+    "resume": "Le personnage maîtrise une petite poignée de sorts pour lesquels il n’a pas besoin de se référer à son grimoire.",
+    "prerequis": "Magicien de niveau 1.",
+    "avantage": "À chaque fois que le personnage choisit ce don, il peut sélectionner un nombre de sorts égal à son modificateur d’Intelligence parmi les sorts de magicien qu’il connaît déjà. Il peut alors préparer les sorts sélectionnés sans consulter son grimoire.",
+    "normal": "Un magicien qui ne possède pas ce don doit utiliser un grimoire pour préparer tous ses sorts, à l’exception de lecture de la magie."
+  },
+  "Spell Penetration": {
+    "resume": "Les sorts du personnage ont plus de facilité à traverser les défenses de ses ennemis.",
+    "avantage": "Le personnage bénéficie d’un bonus de +2 à son test de niveau de lanceur de sorts (1d20 + niveau de lanceur de sorts) lorsqu’il s’agit de traverser la résistance à la magie d’une cible."
+  },
+  "Spellbreaker": {
+    "resume": "Le personnage frappe les lanceurs de sorts ennemis quand ils ratent un sort lancé sur la défensive alors qu’ils se trouvent dans une case contrôlée par le personnage.",
+    "prerequis": "Perturbateur, guerrier de niveau 10.",
+    "avantage": "Les lanceurs de sorts adverses qui se trouvent dans une case contrôlée par le personnage et qui ratent un sort lancé sur la défensive provoquent une attaque d’opportunité de la part du personnage.",
+    "normal": "Les ennemis qui ne parviennent pas à lancer un sort sur la défensive ne provoquent pas d’attaque d’opportunité."
+  },
+  "Spirited Charge": {
+    "resume": "Les charges montées du personnage provoquent des dégâts terrifiants.",
+    "prerequis": "1 rang en Équitation, Attaque au galop, Combat monté.",
+    "avantage": "Quand le personnage lance une charge à cheval (ou sur une autre monture), les dégâts qu’il cause sont doublés s’il utilise une arme de corps à corps (ou triplés s’il s’agit d’une lance d’arçon)."
+  },
+  "Spring Attack": {
+    "resume": "Le personnage peut s’approcher d’un adversaire, le frapper et battre en retraite avant que ce dernier n’ait le temps de réagir.",
+    "prerequis": "Dex 13, Esquive, Souplesse du serpent, bonus de base à l’attaque de +4.",
+    "avantage": "Le personnage peut se déplacer à sa vitesse de base et faire une attaque de corps à corps sans provoquer d’attaque d’opportunité de la part de sa cible. Il peut se déplacer avant et après l’attaque mais il doit parcourir au moins trois mètres avant d’attaquer et la distance parcourue au total ne doit pas dépasser sa vitesse de base. Le personnage ne peut pas utiliser ce don pour attaquer un ennemi qui se trouve sur une case adjacente à la sienne au début du tour.",
+    "normal": "Le personnage ne peut pas se déplacer avant et après une attaque."
+  },
+  "Staggering Critical": {
+    "resume": "Les coups critiques du personnage ralentissent ses adversaires.",
+    "prerequis": "Don pour les critiques, bonus de base à l’attaque de +13.",
+    "avantage": "Quand le personnage inflige un coup critique, son adversaire est chancelant pendant 1d4+1 rounds. Un jet de Vigueur réussi permet de réduire cette durée à 1 round. Le DD du jet de Vigueur est égal à 10 + bonus de base à l’attaque. Les effets de ce don ne se cumulent pas. Les coups supplémentaires prolongent la durée.",
+    "special": "Le personnage applique un seul effet de critique à chacun de ses coups critiques, à moins qu’il dispose de la Maîtrise du critique."
+  },
+  "Stand Still": {
+    "resume": "Le personnage arrête les ennemis qui tentent de le dépasser.",
+    "prerequis": "Attaques réflexes",
+    "avantage": "Quand un adversaire déclenche une attaque d’opportunité en se déplaçant dans une case adjacente à celle du personnage, ce dernier peut faire un test de manœuvre offensive à la place d’une attaque d’opportunité. S’il réussit, son adversaire ne peut plus se déplacer pendant le reste de son tour. Il peut toujours effectuer ses actions restantes mais il ne peut plus bouger. Ce don s’applique aussi aux créatures qui essaient de quitter une case adjacente si ce mouvement provoque une attaque d’opportunité."
+  },
+  "Stealthy": {
+    "resume": "Le personnage a un don pour éviter d’attirer l’attention et échapper à ses liens.",
+    "avantage": "Le personnage obtient un bonus de +2 sur tous ses tests de Discrétion et d’Évasion. Si le personnage a 10 rangs ou plus dans l’une de ces compétences, ce bonus pass à +4."
+  },
+  "Step Up": {
+    "resume": "Le personnage se rapproche des adversaires qui tentent de s’éloigner.",
+    "prerequis": "Bonus de base à l’attaque de +1.",
+    "avantage": "Quand un ennemi adjacent tente de faire un pas de 1,5 m pour s’éloigner du personnage, ce dernier peut aussi faire un pas de 1,5 m (par une action immédiate) tant qu’il termine son déplacement sur une case adjacente à celle de l’adversaire qui a provoqué ce mouvement. En revanche, le personnage ne pourra pas faire de pas de 1,5 m lors de son prochain tour. Si le personnage fait une action de mouvement lors de son prochain tour, retranchez 1,5 m à son total de mouvement."
+  },
+  "Still Spell": {
+    "resume": "Le personnage peut lancer un sort en restant immobile.",
+    "avantage": "Un sort à incantation statique ne nécessite pas de composante gestuelle. Les sorts sans composante gestuelle ne sont pas affectés. Un sort à incantation statique nécessite un emplacement de sort d’un niveau de plus que son niveau réel."
+  },
+  "Strike Back": {
+    "resume": "Le personnage peut frapper un adversaire qui l’attaque grâce à une allonge supérieure. Il vise alors l’arme ou le membre qui se tend vers lui.",
+    "prerequis": "Bonus de base à l’attaque de +11.",
+    "avantage": "Le personnage peut préparer son action pour faire une attaque de corps à corps contre un adversaire qui l’attaque en mêlée, même si ce dernier devrait être hors de portée."
+  },
+  "Stunning Critical": {
+    "resume": "Les coups critiques du personnage étourdissent ses adversaires.",
+    "prerequis": "Critique ralentissant, Don pour les critiques, bonus de base à l’attaque de +17.",
+    "avantage": "Quand le personnage inflige un coup critique, son adversaire est étourdi pendant 1d4 rounds. Un jet de Vigueur réussi permet à l’adversaire d’être seulement chancelant pendant 1d4 rounds. Le DD du jet de Vigueur est égal à 10 + bonus de base à l’attaque. Les effets de ce don ne se cumulent pas. Les coups supplémentaires prolongent sa durée.",
+    "special": "Le personnage applique un seul effet de critique à chacun de ses coups critiques, à moins qu’il dispose de la Maîtrise du critique."
+  },
+  "Stunning Fist": {
+    "resume": "Le personnage sait où frapper pour étourdir son adversaire.",
+    "prerequis": "Dex 13, Sag 13, Science de l’attaque à mains nues, bonus de base à l’attaque de +8.",
+    "avantage": "Le personnage doit annoncer qu’il utilise ce don avant de faire son jet d’attaque (la tentative échoue donc si le personnage rate son jet). L’attaque inflige les dégâts habituels. De plus, le Coup étourdissant oblige tout adversaire frappé par l’attaque à mains nues du personnage à faire un jet de Vigueur (DD 10 + 1/2 niveau du personnage + modificateur de Sagesse). S’il rate ce jet de sauvegarde, il est étourdi pendant 1 round (jusqu’au début du prochain tour du personnage). Un personnage étourdi lâche tout ce qu’il tient en main et ne peut pas entreprendre d’action, il perd son bonus de Dextérité à la CA et subit un malus de -2 à la CA. Le personnage peut porter un Coup étourdissant par jour par tranche de quatre niveaux (voir Spécial) mais pas plus d’une fois par round. Le personnage ne peut pas étourdir les créatures artificielles, les vases, les plantes, les morts-vivants, les créatures intangibles et les créatures immunisées contre les coups critiques.",
+    "special": "Un moine peut choisir Coup étourdissant comme don supplémentaire au niveau 1, même s’il ne remplit pas les conditions requises. Chaque jour, un moine qui choisit ce don peut faire un nombre de Coup étourdissants égal à son niveau de moine plus une fois par tranche de quatre niveaux qu’il possède dans d’autres classes."
+  },
+  "Throw Anything": {
+    "resume": "Le personnage est habitué à lancer tout ce qui lui tombe sous la main.",
+    "avantage": "Le personnage ne souffre d’aucun malus quand il utilise une arme de jet improvisée. Il reçoit un bonus de circonstances de +1 quand il utilise une arme à aspersion.",
+    "normal": "Le personnage subit un malus de -4 aux jets d’attaque avec une arme improvisée."
+  },
+  "Tiring Critical": {
+    "resume": "Les critiques du personnage fatiguent son adversaire.",
+    "prerequis": "Don pour les critiques, bonus de base à l’attaque de +13.",
+    "avantage": "Quand le personnage inflige un coup critique à un adversaire, ce dernier est fatigué. Ce don n’a aucun effet sur une cible déjà fatiguée ou épuisée.",
+    "special": "Le personnage applique un seul effet de critique à chacun de ses coups critiques, à moins qu’il dispose de la Maîtrise du critique."
+  },
+  "Toughness": {
+    "resume": "L’endurance du personnage est au-dessus de la moyenne.",
+    "avantage": "Le personnage gagne 3 points de vie supplémentaires. Il gagne 1 point de vie supplémentaire pour chaque DV qu’il possède au-dessus de 3. S’il possède plus de 3 DV, il gagne 1 point de vie supplémentaire à chaque fois qu’il gagne un DV (quand il prend un niveau par exemple)."
+  },
+  "Tower Shield Proficiency": {
+    "resume": "Le personnage sait se servir des pavois.",
+    "prerequis": "Maniement des boucliers.",
+    "avantage": "Lorsque le personnage utilise un pavois, le malus d’armure du bouclier s’applique alors uniquement aux compétences basées sur la Force et la Dextérité.",
+    "normal": "Le malus d’armure aux tests qu’impose un bouclier au port duquel on n’est pas formé s’applique aux jets d’attaque et à tous les tests de caractéristique ou de compétence qui demandent de se déplacer, y compris aux tests d’Équitation.",
+    "special": "Les guerriers gagnent automatiquement Maniement du pavois en tant que don supplémentaire. Ils n’ont pas besoin de le choisir."
+  },
+  "Trample": {
+    "resume": "Quand le personnage est à cheval, il peut renverser ses adversaires et les piétiner sous les sabots de sa monture.",
+    "prerequis": "1 rang en Équitation, Combat monté.",
+    "avantage": "Lors d’une tentative de renversement monté, la cible du personnage ne peut choisir de l’éviter. La monture du personnage peut porter un coup de sabot contre un adversaire renversé, en bénéficiant du bonus habituel au jet d’attaque de +4 contre les créatures à terre."
+  },
+  "Turn Undead": {
+    "resume": "Le personnage appelle les puissances supérieures : les morts-vivants fuient devant l’énergie divine qu’il dégage.",
+    "prerequis": "Capacité de classe permettant de canaliser de l’énergie positive.",
+    "avantage": "Par une action simple, le personnage peut utiliser l’une de ses canalisations d’énergie positive pour faire fuir tous les morts-vivants qui se trouvent dans un rayon de 9 mètres, comme s’ils étaient paniqués. Ils ont droit à un jet de Volonté pour annuler cet effet dont le DD est égal à 10 + 1/2 niveau de prêtre + modificateur de Charisme. Les morts-vivants qui ratent leur jet fuient pendant une minute. Les morts-vivants intelligents ont droit à un jet de Volonté supplémentaire par round. Si le personnage choisit le renvoi des morts-vivants, il ne bénéficie d’aucun effet de la canalisation (elle ne soigne ni ne blesse les créatures proches)."
+  },
+  "Two-Weapon Defense": {
+    "resume": "Le personnage sait se défendre avec deux armes.",
+    "prerequis": "Dex 15, Combat à deux armes.",
+    "avantage": "Quand le personnage manie une arme double ou deux armes (sans compter les armes naturelles et les attaques à mains nues), il gagne un bonus de bouclier de +1 à la CA. Quand il se bat sur la défensive ou qu’il se met en défense totale, ce bonus de bouclier passe à +2."
+  },
+  "Two-Weapon Fighting": {
+    "resume": "Le personnage sait se battre avec une arme dans chaque main. À chaque round, il peut faire une attaque supplémentaire avec son arme secondaire.",
+    "prerequis": "Dex 15.",
+    "avantage": "Le personnage subit des malus moins importants lorsqu’il se bat à deux armes. Le malus de la main directrice est réduit de 2 points et celui de la main secondaire est réduit de 6 points. Consultez le Chapitre 8 pour plus de détails.",
+    "normal": "Si le personnage manie une arme dans sa main nondirectrice, il peut porter une attaque avec elle. Quand il se bat ainsi, il subit un malus de -6 aux attaques habituelles ou aux attaques portées avec la main directrice et un malus de -10 aux attaques portées avec la main non-directrice. Si l’arme secondaire est une arme légère, les malus sont réduits de 2 points. On considère toujours une attaque à mains nues comme une arme légère."
+  },
+  "Two-Weapon Rend": {
+    "resume": "En frappant simultanément avec ses deux armes, le personnage cause de terrifiantes blessures.",
+    "prerequis": "Dex 17, Combat à deux armes, Double frappe, Science du combat à deux armes, bonus de base à l’attaque de +11.",
+    "avantage": "Si le personnage touche son adversaire avec ses deux armes, il lui inflige 1d10 points de dégâts supplémentaires plus 1,5 fois son modificateur de Force. Le personnage ne peut faire de tels dégâts qu’une fois par round."
+  },
+  "Unseat": {
+    "resume": "Le personnage est doué pour désarçonner ses adversaires.",
+    "prerequis": "For 13, 1 rang en Équitation, Attaque en puissance,Combat monté, Science de la bousculade, bonus de base à l’attaque de +1.",
+    "avantage": "Quand le personnage charge un adversaire alors qu’il est monté et manie une lance d’arçon, l’attaque se déroule comme à l’accoutumée. En revanche, si l’attaque touche, le personnage peut immédiatement tenter une bousculade gratuite en plus d’infliger les dégâts habituels. S’il réussit, sa cible tombe à terre dans une case adjacente à sa monture et opposée au personnage."
+  },
+  "Vital Strike": {
+    "resume": "Le personnage peut faire une attaque qui inflige des dégâts incroyables.",
+    "prerequis": "Bonus de base à l’attaque de +6.",
+    "avantage": "Quand le personnage recourt à cette action, il porte une unique attaque avec son bonus de base à l’attaque le plus élevé. Cette attaque inflige alors des dégâts supplémentaires : le personnage lance deux fois les dés de dégâts et additionne leurs résultats. Il ne multiplie pas les dégâts supplémentaires issus de la Force, des aptitudes de son arme (comme une arme de feu) ni les dégâts basés sur la précision (comme les attaques sournoises). Ce bonus de dégâts n’est pas multiplié en cas de critique (bien que les autres bonus de dégâts le soient, comme à l’accoutumée)."
+  },
+  "Weapon Finesse": {
+    "resume": "Le personnage privilégie l’agilité plutôt que la force brute quand il s’agit de se battre.",
+    "avantage": "Lorsqu’il utilise une arme légère, une rapière, un fouet ou une chaîne cloutée (adaptée à une créature de sa catégorie de taille), le personnage peut choisir d’appliquer son bonus de Dextérité à ses jets d’attaque plutôt que son bonus de Force. Si le personnage utilise un bouclier, le malus d’armure aux tests imposé par celui-ci s’applique aux jets d’attaque.",
+    "special": "Les armes naturelles sont toujours considérées comme des armes légères."
+  },
+  "Weapon Focus": {
+    "resume": "Le personnage choisit une arme. Il peut aussi choisir l’attaque à mains nues ou la lutte (ou les rayons s’il lance des sorts).",
+    "prerequis": "Maniement de l’arme choisie, bonus de base à l’attaque de +1.",
+    "avantage": "Le personnage bénéficie d’un bonus de +1 à tous ses jets d’attaque lorsqu’il utilise cette arme.",
+    "special": "Ce don peut être choisi plusieurs fois, mais ses effets ne se cumulent pas. Il s’applique à chaque fois à une arme nouvelle."
+  },
+  "Weapon Specialization": {
+    "resume": "Le personnage est doué pour infliger des dégâts avec son arme. Il choisit une arme pour laquelle il possède le don Arme de prédilection. Il peut aussi choisir l’ attaque à mains nues ou la lutte. Il inflige des dégâts supplémentaires avec cette arme.",
+    "prerequis": "Arme de prédilection pour l’arme choisie, Maniement de l’arme choisie, guerrier de niveau 4.",
+    "avantage": "Le personnage obtient un bonus de +2 sur les jets de dégâts de l’arme choisie.",
+    "special": "Ce don peut être choisi plusieurs fois, mais ses effets ne se cumulent pas. Il s’applique à chaque fois à une arme nouvelle."
+  },
+  "Whirlwind Attack": {
+    "resume": "Le personnage frappe tous les ennemis qui se trouvent à portée.",
+    "prerequis": "Int 13, Dex 13, Attaque éclair, Esquive, Expertise du combat, Souplesse du serpent, bonus de base à l’attaque de +4.",
+    "avantage": "Lors d’une attaque à outrance, le personnage peut sacrifier ses attaques normales pour porter une attaque de corps à corps avec son bonus de base maximal à l’attaque contre chacun des adversaires à sa portée. Il doit faire un jet d’attaque distinct pour chaque ennemi. Un personnage qui effectue une attaque en rotation sacrifie aussi toutes les attaques supplémentaires dont il bénéficie normalement, quelle que soit leur origine."
+  },
+  "Widen Spell": {
+    "resume": "Les sorts lancés par le personnage affectent une zone plus étendue.",
+    "avantage": "Le personnage peut modifier un sort dont la zone d’effet est une émanation, une étendue ou un rayonnement afin d’augmenter la surface couverte. Toutes les données numériques déterminant la surface de la zone d’effet sont doublées. Un sort à extension de zone d’effet nécessite un emplacement de sort de trois niveaux de plus que son niveau réel. Les sorts dont la zone d’effet n’est pas d’un des quatre types cités ne peuvent être affectés par ce don."
+  },
+  "Wind Stance": {
+    "resume": "Les ennemis du personnage ont bien du mal à le situer à cause de ses mouvements erratiques.",
+    "prerequis": "Dex 15, Esquive, bonus de base à l’attaque de +6.",
+    "avantage": "Si le personnage parcourt plus de 1,5 m pendant son tour, il gagne un camouflage de 20% contre les attaques à distance pendant un round."
+  }
+}

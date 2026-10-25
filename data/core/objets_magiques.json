@@ -1,0 +1,213 @@
+{
+  "avertissement": "Objets magiques dont l'effet est un bonus chiffré d'un type précis, relevés dans le Manuel des joueurs (version française, chapitre 15 « Les objets magiques »). Les prix et les types de bonus sont ceux du livre ; les noms anglais sont indicatifs. Les autres objets magiques ne sont pas appliqués aux calculs.",
+  "livre": "Manuel des joueurs (VF)",
+  "objets": [
+    {
+      "nom_en": "Headband of Alluring Charisma",
+      "nom": "Bandeau de belle allure",
+      "emplacement": "front",
+      "page": 507,
+      "variantes": [
+        { "bonus": 2, "prix_po": 4000 },
+        { "bonus": 4, "prix_po": 16000 },
+        { "bonus": 6, "prix_po": 36000 }
+      ],
+      "effets": [{ "cible": "carac.cha", "type": "alteration" }],
+      "notes": "Le bonus est temporaire pendant les 24 premières heures de port."
+    },
+    {
+      "nom_en": "Headband of Inspired Wisdom",
+      "nom": "Bandeau d'inspiration",
+      "emplacement": "front",
+      "page": 507,
+      "variantes": [
+        { "bonus": 2, "prix_po": 4000 },
+        { "bonus": 4, "prix_po": 16000 },
+        { "bonus": 6, "prix_po": 36000 }
+      ],
+      "effets": [{ "cible": "carac.sag", "type": "alteration" }],
+      "notes": "Le bonus est temporaire pendant les 24 premières heures de port."
+    },
+    {
+      "nom_en": "Headband of Vast Intelligence",
+      "nom": "Bandeau d'intelligence",
+      "emplacement": "front",
+      "page": 507,
+      "variantes": [
+        { "bonus": 2, "prix_po": 4000 },
+        { "bonus": 4, "prix_po": 16000 },
+        { "bonus": 6, "prix_po": 36000 }
+      ],
+      "effets": [{ "cible": "carac.int", "type": "alteration" }],
+      "notes": "Après 24 heures, accorde aussi des rangs de compétence supplémentaires (non appliqués ici)."
+    },
+    {
+      "nom_en": "Headband of Mental Superiority",
+      "nom": "Bandeau de supériorité mentale",
+      "emplacement": "front",
+      "page": 507,
+      "variantes": [
+        { "bonus": 2, "prix_po": 16000 },
+        { "bonus": 4, "prix_po": 64000 },
+        { "bonus": 6, "prix_po": 144000 }
+      ],
+      "effets": [
+        { "cible": "carac.int", "type": "alteration" },
+        { "cible": "carac.sag", "type": "alteration" },
+        { "cible": "carac.cha", "type": "alteration" }
+      ],
+      "notes": "Accorde aussi des rangs de compétence supplémentaires (non appliqués ici)."
+    },
+    {
+      "nom_en": "Belt of Giant Strength",
+      "nom": "Ceinturon de force de géant",
+      "emplacement": "ceinture",
+      "page": 514,
+      "variantes": [
+        { "bonus": 2, "prix_po": 4000 },
+        { "bonus": 4, "prix_po": 16000 },
+        { "bonus": 6, "prix_po": 36000 }
+      ],
+      "effets": [{ "cible": "carac.for", "type": "alteration" }],
+      "notes": "Le bonus est temporaire pendant les 24 premières heures de port."
+    },
+    {
+      "nom_en": "Belt of Incredible Dexterity",
+      "nom": "Ceinturon de dextérité du chat",
+      "emplacement": "ceinture",
+      "page": 514,
+      "variantes": [
+        { "bonus": 2, "prix_po": 4000 },
+        { "bonus": 4, "prix_po": 16000 },
+        { "bonus": 6, "prix_po": 36000 }
+      ],
+      "effets": [{ "cible": "carac.dex", "type": "alteration" }],
+      "notes": "Le bonus est temporaire pendant les 24 premières heures de port."
+    },
+    {
+      "nom_en": "Belt of Mighty Constitution",
+      "nom": "Ceinturon de constitution de l'ours",
+      "emplacement": "ceinture",
+      "page": 514,
+      "variantes": [
+        { "bonus": 2, "prix_po": 4000 },
+        { "bonus": 4, "prix_po": 16000 },
+        { "bonus": 6, "prix_po": 36000 }
+      ],
+      "effets": [{ "cible": "carac.con", "type": "alteration" }],
+      "notes": "Le bonus est temporaire pendant les 24 premières heures de port."
+    },
+    {
+      "nom_en": "Belt of Physical Perfection",
+      "nom": "Ceinturon de la perfection physique",
+      "emplacement": "ceinture",
+      "page": 514,
+      "variantes": [
+        { "bonus": 2, "prix_po": 16000 },
+        { "bonus": 4, "prix_po": 64000 },
+        { "bonus": 6, "prix_po": 144000 }
+      ],
+      "effets": [
+        { "cible": "carac.for", "type": "alteration" },
+        { "cible": "carac.dex", "type": "alteration" },
+        { "cible": "carac.con", "type": "alteration" }
+      ],
+      "notes": "Le bonus est temporaire pendant les 24 premières heures de port."
+    },
+    {
+      "nom_en": "Bracers of Armor",
+      "nom": "Bracelets d'armure",
+      "emplacement": "poignets",
+      "page": 510,
+      "variantes": [
+        { "bonus": 1, "prix_po": 1000 },
+        { "bonus": 2, "prix_po": 4000 },
+        { "bonus": 3, "prix_po": 9000 },
+        { "bonus": 4, "prix_po": 16000 },
+        { "bonus": 5, "prix_po": 25000 },
+        { "bonus": 6, "prix_po": 36000 },
+        { "bonus": 7, "prix_po": 49000 },
+        { "bonus": 8, "prix_po": 64000 }
+      ],
+      "effets": [{ "cible": "ca", "type": "armure" }],
+      "notes": "Bonus d'armure à la CA : il ne se cumule pas avec celui d'une armure portée."
+    },
+    {
+      "nom_en": "Ring of Protection",
+      "nom": "Anneau de protection",
+      "emplacement": "anneau",
+      "page": 488,
+      "variantes": [
+        { "bonus": 1, "prix_po": 2000 },
+        { "bonus": 2, "prix_po": 8000 },
+        { "bonus": 3, "prix_po": 18000 },
+        { "bonus": 4, "prix_po": 32000 },
+        { "bonus": 5, "prix_po": 50000 }
+      ],
+      "effets": [{ "cible": "ca", "type": "parade" }]
+    },
+    {
+      "nom_en": "Amulet of Natural Armor",
+      "nom": "Amulette d'armure naturelle",
+      "emplacement": "cou",
+      "page": 506,
+      "variantes": [
+        { "bonus": 1, "prix_po": 2000 },
+        { "bonus": 2, "prix_po": 8000 },
+        { "bonus": 3, "prix_po": 18000 },
+        { "bonus": 4, "prix_po": 32000 },
+        { "bonus": 5, "prix_po": 50000 }
+      ],
+      "effets": [{ "cible": "ca", "type": "alteration" }],
+      "notes": "Bonus d'altération qui s'ajoute au bonus d'armure naturelle."
+    },
+    {
+      "nom_en": "Cloak of Resistance",
+      "nom": "Cape de résistance",
+      "emplacement": "épaules",
+      "page": 511,
+      "variantes": [
+        { "bonus": 1, "prix_po": 1000 },
+        { "bonus": 2, "prix_po": 4000 },
+        { "bonus": 3, "prix_po": 9000 },
+        { "bonus": 4, "prix_po": 16000 },
+        { "bonus": 5, "prix_po": 25000 }
+      ],
+      "effets": [
+        { "cible": "jds.vig", "type": "resistance" },
+        { "cible": "jds.ref", "type": "resistance" },
+        { "cible": "jds.vol", "type": "resistance" }
+      ]
+    },
+    {
+      "nom_en": "Cloak of Elvenkind",
+      "nom": "Cape elfique",
+      "emplacement": null,
+      "page": 511,
+      "nom_fixe": true,
+      "variantes": [{ "bonus": 5, "prix_po": 2500 }],
+      "effets": [{ "cible": "comp.stealth", "type": "competence" }],
+      "notes": "Bonus d'aptitude aux tests de Discrétion, capuche rabattue."
+    },
+    {
+      "nom_en": "Boots of Elvenkind",
+      "nom": "Bottes elfiques",
+      "emplacement": "pieds",
+      "page": 508,
+      "nom_fixe": true,
+      "variantes": [{ "bonus": 5, "prix_po": 2500 }],
+      "effets": [{ "cible": "comp.acrobatics", "type": "competence" }],
+      "notes": "Le Manuel des joueurs français indique un bonus d'aptitude de +5 aux tests d'Acrobaties (point à confirmer avec la version anglaise)."
+    },
+    {
+      "nom_en": "Gloves of Arrow Snaring",
+      "nom": "Gants antiprojectiles",
+      "emplacement": "mains",
+      "page": 521,
+      "nom_fixe": true,
+      "variantes": [{ "bonus": 0, "prix_po": 4000 }],
+      "effets": [],
+      "notes": "Deux fois par jour, agit comme le don Interception de projectiles. Aucun effet chiffré."
+    }
+  ]
+}

@@ -48,6 +48,37 @@ export function Campagnes({ outils }: { outils: Outils }) {
         </form>
       </section>
 
+      <section className="carte section">
+        <h2>Exporter et importer</h2>
+        <div className="ligne" style={{ gap: 10 }}>
+          <button className="bouton" disabled={!outils.etat.entete} title="Copie complète (fichier .json) à ranger ou à transmettre" onClick={() => outils.agir(api.exporterCampagne())}>
+            Exporter la campagne…
+          </button>
+          <button
+            className="bouton"
+            disabled={!outils.etat.entete}
+            title="Page lisible : personnages, localités, bâtiments, organisations, gestionnaires, historique. Ouvrez-la dans le navigateur puis « Imprimer → PDF »."
+            onClick={() => outils.agir(api.exporterRecapitulatif())}
+          >
+            Récapitulatif (HTML / PDF)…
+          </button>
+          <button className="bouton" disabled={!outils.etat.entete} title="Fichier CSV lisible par Excel ou LibreOffice" onClick={() => outils.agir(api.exporterHistorique())}>
+            Historique (tableur)…
+          </button>
+          <button
+            className="bouton"
+            title="Ajoute une campagne exportée (.json) à vos campagnes et l'ouvre"
+            onClick={async () => {
+              const r = await outils.agir(api.importerCampagne());
+              if (r?.ok && outils.etat.entete) outils.aller("tableau");
+            }}
+          >
+            Importer une campagne…
+          </button>
+        </div>
+        {outils.etat.simulation && <p className="doux">En simulation, les exports portent sur la campagne simulée.</p>}
+      </section>
+
       <section className="section">
         <h2>Campagnes enregistrées</h2>
         {campagnes.length === 0 && <p className="doux">Aucune campagne pour l'instant.</p>}
@@ -72,7 +103,10 @@ export function Campagnes({ outils }: { outils: Outils }) {
             </div>
           ))}
         </div>
-        <p className="doux">Dossier : {dossier}</p>
+        <div className="ligne" style={{ gap: 10 }}>
+          <span className="doux">Dossier : {dossier}</span>
+          <button className="bouton discret" onClick={() => outils.agir(api.ouvrirDossier())}>Ouvrir le dossier</button>
+        </div>
       </section>
     </div>
   );

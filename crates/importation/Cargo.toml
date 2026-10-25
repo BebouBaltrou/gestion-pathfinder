@@ -1,0 +1,10 @@
+[package]
+name = "importation"
+description = "Lecture d'une fiche de personnage PDF (champs remplissables) et contrôle de cohérence avec le moteur de règles"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+
+[dependencies]
+fiches = { path = "../fiches" }
+lopdf = "0.34"

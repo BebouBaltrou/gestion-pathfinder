@@ -1,0 +1,42 @@
+{
+  "Bless": {
+    "cible": "le lanceur de sorts et tous les alliés se trouvant dans un rayonnement de 15 m ou moins centré sur le personnage",
+    "composantes": "V, G, FD",
+    "description": "Ce sort offre un renouveau de courage aux alliés du personnage, se traduisant par un bonus de moral de +1, tant aux jets d’attaque qu’aux jets de sauvegarde contre la terreur. Bénédiction contre et dissipe imprécation."
+  },
+  "Flame Strike": {
+    "cible": "cylindre de 12 m de haut sur 3 m de rayon",
+    "composantes": "V, G, FD",
+    "description": "Ce sort crée une colonne de flammes semblant tomber du ciel. Il administre 1d6 points de dégâts par niveau de lanceur de sorts (jusqu’à un maximum de 15d6). La moitié est causée par le feu, mais le reste prend la forme d’énergie divine. On ne peut donc pas s’en protéger à l’aide de sorts de résistance au feu."
+  },
+  "Freedom of Movement": {
+    "cible": "le jeteur de sorts ou créature touchée",
+    "composantes": "V, G, M (une lanière de cuir attachée à la cible), FD",
+    "description": "Ce sort permet au personnage ou à la créature ciblé de se déplacer et de combattre normalement, même si elle subit les effets d’un sort ou d’une magie qui réduit ses déplacements (comme les sorts de brouillard dense, lenteur, toile d’araignée ou à cause de la paralysie). Toutes les manœuvres offensives qui visent à agripper la cible échouent automatiquement et elle réussit forcément tous ses tests de manœuvres offensives et d’Évasion destinés à échapper à une lutte ou une immmobilisation.\nLe sujet peut également se déplacer et attaquer normalement quand il se trouve sous l’eau, même s’il manie des armes tranchantes (épées, haches, etc.) ou contondantes (fléaux, marteaux et autres masses d’armes), tant qu’il s’agit de combat au corps à corps (il ne peut toujours pas les lancer). Toutefois, liberté de mouvement ne permet pas à un personnage de respirer sous l’eau."
+  },
+  "Spell Resistance": {
+    "cible": "créature touchée",
+    "composantes": "V, G, FD",
+    "description": "L’individu touché acquiert une résistance à la magie égale à 12 + niveau de lanceur de sorts."
+  },
+  "Elemental Swarm": {
+    "cible": "2 créatures convoquées (ou plus) à moins de 9 m les unes des autres",
+    "composantes": "V, G",
+    "description": "Ce sort ouvre un portail vers l’un des quatre plans élémentaires. Un druide peut sélectionner le plan de son choix (Air, Eau, Feu ou Terre), tandis qu’un prêtre est limité au plan qui correspond à son domaine.\nÀ la fin de l’incatation, 2d4 élémentaires de taille G apparaissent, suivis, dix minutes plus tard, de 1d4 élémentaires de taille TG. Enfin, dix minutes plus tard, un élémentaire noble fait son apparition. Chacun a le maximum de points de vie par DV. Les élémentaires obéissent au personnage jusqu’à la fin de la durée indiquée.\nLes élémentaires obéissent au lanceur de sorts qu’ils n’attaquent jamais, même si quelqu’un d’autre parvient à prendre leur contrôle. Le personnage n’a pas besoin de se concentrer pour les diriger. Il peut les renvoyer quand il le désire, un par un ou tous ensemble.\nUn sort d’appel convoquant une créature d’air, d’eau, de feu ou de terre est automatiquement considéré comme un sort du même type."
+  },
+  "Entangle": {
+    "cible": "toute la végétation sur une étendue de 12 m de rayon",
+    "composantes": "V, G, FD",
+    "description": "Les herbes, les plantes, les buissons et les arbres se déforment et s’entortillent autour des créatures qui se trouvent dans la zone d’effet ou qui y pénètrent. Les créatures qui ratent leur jet de sauvegarde sont enchevêtrées. Celles qui réussissent se déplacent normalement mais doivent faire un nouveau jet à la fin de leur tour. Les créatures qui pénètrent dans la zone doivent faire ce jet immédiatement. En cas d’échec, la créature ne peut plus se déplacer et reste enchevêtrée. Elle peut se libérer si elle réussit un test de Force ou d’Évasion, par une action de mouvement. Le DD du test est égal au DD du sort. Tant que le sort fait effet, la zone qu’il affecte est considérée comme un terrain difficile.\nSi les plantes locales sont couvertes d’épines, les créatures présentes dans la zone d’effet du sort reçoivent 1 point de dégâts à chaque fois qu’elles ratent leur jet de sauvegarde contre le sort ou ratent un test pour se libérer. On peut appliquer d’autres effets liés à la flore locale, à la discrétion du MJ."
+  },
+  "Poison": {
+    "cible": "créature vivante touchée",
+    "composantes": "V, G, FD",
+    "description": "Ce sort fait appel au pouvoir des entités venimeuses. Il permet au personnage d’empoisonner sa cible en réussissant une attaque de contact au corps à corps. Le poison inflige 1d3 points d’affaiblissement temporaire de Constitution par round pendant 6 rounds. Une créature empoisonnée a droit à un jet de Vigueur par round pour annuler les dégâts et se débarrasser du poison."
+  },
+  "Tree Stride": {
+    "cible": "le jeteur de sorts",
+    "composantes": "V, G, FD",
+    "description": "Ce sort permet de pénétrer dans un arbre ou de se déplacer d’un arbre à un utre. L’arbre dans lequel le personnage entre et ceux par lesquels il passe avant de ressortir doivent appartenir à la même espèce. La largeur de leur tronc doit également leur permettre d’accueillir le lanceur de sorts. Dès que ce dernier pénètre dans un chêne (par exemple), il sait instantanément où tous les autres chênes situés dans les limites de portée du sort se trouvent (voir ci-dessous), ce qui lui permet de décider jusqu’auquel il souhaite se téléporter ou s’il veut ressortir par l’arbre par lequel il est entré. L’arbre au cœur duquel il peut réapparaître peut se trouver plus ou moins loin, en fonction de son espèce :\nEspèce d’arbre Chêne, frêne, if Orme, tilleul Autre arbre à feuilles caduques Conifère\nPortée du déplacement 900 m 600 m 450 m\n300 m\nLe personnage peut se téléporter une fois par niveau de lanceur de sorts (le fait de se déplacer du premier au deuxième arbre compte seulement pour un passage). Le sort s’achève dès que le personnage a épuisé son nombre de déplacements possibles ou dès qu’il sort d’un arbre. Chaque déplacement est une action complexe.\nIl est également possible de rester dans l’arbre de son choix sans en sortir, mais le personnage en est expulsé au terme de la durée indiquée. Si l’arbre dans lequel il se cache est abattu ou incendié, le personnage meurt s’il ne s’extrait pas de l’arbre avant la mort de ce dernier."
+  }
+}

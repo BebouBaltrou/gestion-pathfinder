@@ -1,0 +1,296 @@
+{
+  "avertissement": "Noms et textes des lignages et de leurs pouvoirs repris du Manuel des joueurs (version française).",
+  "classe": {
+    "nom": "Ensorceleur",
+    "capacites_par_niveau": {
+      "bloodline power": "pouvoir de lignage",
+      "cantrips": "tours de magie",
+      "eschew materials": "dispense de composantes",
+      "bloodline spell": "sort de lignage",
+      "bloodline feat": "don de lignage"
+    },
+    "textes": {
+      "Spells": "Un ensorceleur peut lancer des sorts profanes appartenant à la liste de sorts d’ensorceleur et de magicien présentée dans le Chapitre 10. Il les lance sans avoir à les préparer à l’avance. Pour apprendre ou lancer un sort, un ensorceleur doit avoir une valeur de Charisme au moins égale à 10 + le niveau du sort. Le DD des jets de sauvegarde contre ses sorts est égal à 10 + le niveau du sort + le modificateur de Charisme de l’ensorceleur. Comme les autres lanceurs de sorts, l’ensorceleur ne peut lancer qu’un nombre de sorts donné de chaque niveau chaque jour. Son quota de sorts quotidiens est indiqué dans la Table 3-7. En plus de cela, il reçoit des sorts en bonus si sa valeur de Charisme est suffisamment élevée (voir la Table 1-3).",
+      "Spells Known": "Le répertoire de sorts d’un ensorceleur est très limité. Il commence sa carrière en connaissant seulement quatre sorts du niveau 0 et deux sorts de 1er niveau, tous choisis par le joueur. Lors de chaque passage de niveau, un ensorceleur apprend un ou plusieurs sorts supplémentaires, comme indiqué dans la Table 3-8 (contrairement au quota de sorts quotidiens, le nombre de sorts connus par un ensorceleur n’est pas modifié par son éventuel bonus de Charisme : les nombres de cette table sont fixes). Ces sorts peuvent être choisis parmi la liste des sorts courants d’ensorceleur et de magicien, mais il peut également s’agir de sorts moins courants, que l’ensorceleur s’est entraîné à maîtriser.",
+      "Swap": "Lorsqu’il atteint le niveau 4, et tous les deux niveaux suivants, un ensorceleur peut choisir d’apprendre un nouveau sort à la place de l’un de ceux qu’il connaît déjà. Il oublie alors un sort au profit d’un autre. Le niveau du nouveau sort doit être identique à celui du sort oublié. Un ensorceleur ne peut remplacer qu’un seul sort à chaque fois, et doit choisir de le faire ou non au moment où il apprend de nouveaux sorts lors du passage de niveau.",
+      "Bloodline": "Chaque ensorceleur tire ses pouvoirs magiques d’une source liée à son héritage. Elle lui donne accès à des sorts, des dons supplémentaires, une compétence de classe additionnelle et d’autres capacités spéciales. Cette source peut être un lien de sang ou un événement extrême vécu par un de ses ancêtres. Ainsi, un ensorceleur peut avoir un dragon comme parent éloigné, ou son grand-père peut avoir conclu un contrat infernal avec un diable. Quelle que soit la nature de cette source, son influence se manifeste de diverses manières au cours de l’évolution du personnage. Un ensorceleur doit choisir un lignage dès qu’il reçoit son premier niveau d’ensorceleur. Ce choix ne peut plus être modifié par la suite. Au niveau 3 et tous les deux niveaux suivants, l’ensorceleur apprend un sort supplémentaire associé à son lignage. Ces sorts viennent s’ajouter au nombre de sorts indiqué dans la Table 3-8. L’ensorceleur ne peut pas les remplacer par d’autres sorts par la suite. Au niveau 7 et tous les six niveaux suivants, l’ensorceleur reçoit un don supplémentaire qu’il peut choisir dans une liste dépendant de son lignage. L’ensorceleur doit remplir les conditions du don qu’il choisit.",
+      "Cantrips": "Les ensorceleurs apprennent un certain nombre de tours de magie (ou sorts de niveau 0) comme indiqué dans la Table 3-8 : Sorts connus par l’ensorceleur. Ces sorts sont lancés de la même manière que les autres mais ils ne réduisent pas le quota quotidien de l’ensorceleur et peuvent être utilisés indéfiniment.",
+      "Proficiency": "L’ensorceleur est formé au maniement de toutes les armes courantes mais pas au port des armures ni à l’utilisation des boucliers. En effet, une armure restreint ses gestes, ce qui risque de faire échouer ses sorts à composante gestuelle (voir « Sorts profanes et armure » à la page 60).",
+      "Eschew Materials": "Un ensorceleur reçoit le don Dispense de composantes comme don supplémentaire au niveau 1."
+    }
+  },
+  "lignages": {
+    "aberrant": {
+      "nom": "Aberrant",
+      "competence_de_classe": "Connaissances (exploration souterraine)",
+      "arcane": "Chaque fois que l’ensorceleur lance un sort de la branche de magie de métamorphose, la durée du sort est augmentée de 50% (au minimum +1 round). Ce bonus ne se cumule pas avec les effets du don Extension de durée.",
+      "pouvoirs": {
+        "Acidic Ray": {
+          "nom": "Rayon d’acide (Mag)",
+          "texte": "Dès le niveau 1, par une action simple, l’ensorceleur peut envoyer un rayon d’acide sur une cible distante de 9 m ou moins en réussissant une attaque de contact à distance. Le rayon d’acide inflige 1d6 points de dégâts d’acide + 1 point par deux niveaux d’ensorceleur. Chaque jour, l’ensorceleur peut utiliser ce pouvoir un nombre de fois égal à 3 + son modificateur de Charisme."
+        },
+        "Long Limbs": {
+          "nom": "Longs membres (Ext)",
+          "texte": "Au niveau 3, l’allonge de l’ensorceleur augmente de 1,50 m lorsqu’il porte une attaque de contact au corps à corps. Ce pouvoir ne modifie cependant pas la zone qu’il contrôle. Au niveau 11, cette augmentation passe à 3 m. Au niveau 17, elle passe à 4,50 m."
+        },
+        "Unusual Anatomy": {
+          "nom": "Anatomie hors du commun (Ext)",
+          "texte": "Au niveau 9, l’anatomie du personnage change de sorte qu’il bénéficie de 25% de chances d’ignorer les coups critiques et les attaques sournoises à son encontre. Ce pourcentage de chances augmente à 50% au niveau 13."
+        },
+        "Alien Resistance": {
+          "nom": "Résistance de l’au-delà (Sur)",
+          "texte": "Au niveau 15, l’ensorceleur gagne une résistance à la magie égale à son niveau d’ensorceleur + 10."
+        },
+        "Aberrant Form": {
+          "nom": "Forme aberrante (Ext)",
+          "texte": "Au niveau 20, le corps de l’ensorceleur prend une forme complètement bizarre. Il est immunisé aux coups critiques et aux attaques sournoises. De plus, il acquiert le pouvoir de vision aveugle avec une portée de 18 m et une réduction aux dégâts de 5/—."
+        }
+      }
+    },
+    "abyssal": {
+      "nom": "Abyssal",
+      "competence_de_classe": "Connaissances (plans)",
+      "arcane": "Chaque fois que l’ensorceleur lance un sort de la branche de magie de convocation, les créatures invoquées gagnent une résistance aux dégâts que seules les armes alignées sur le Bien peuvent ignorer. Cette résistance s’élève à un nombre de points égal à la moitié du niveau d’ensorceleur du personnage (au minimum 1) et ne se cumule pas avec les résistances aux dégâts dont les créatures pourraient éventuellement déjà bénéficier.",
+      "pouvoirs": {
+        "Claws": {
+          "nom": "Griffes (Ext)",
+          "texte": "Au niveau 1, l’ensorceleur peut se doter de griffes par une action libre. Ces griffes fonctionnent comme des armes naturelles et lui permettent de porter deux attaques de griffes (en utilisant le bonus d’attaque maximal de l’ensorceleur) au cours d’une attaque à outrance. Les griffes infligent 1d4 points de dégâts chacune (1d3 si l’ensorceleur est de taille P) plus la moitié de son modificateur de Force. Au niveau 5, ces griffes ignorent les résistances aux dégâts comme s’il s’agissait d’armes magiques. Au niveau 7, les dégâts augmentent d’une catégorie, passant à 1d6 points (1d4 pour les ensorceleurs de taille P). Au niveau 11, les griffes fonctionnent comme des armes de feu, infligeant chacune 1d6 points de dégâts de feu supplémentaires en cas d’attaque réussie. Il s’agit d’une capacité surnaturelle. Chaque jour, le personnage peut utiliser ses griffes pendant un nombre de rounds égal à 3 + son modificateur de Charisme."
+        },
+        "Demon Resistances": {
+          "nom": "Résistances démoniaques (Ext)",
+          "texte": "Au niveau 3, le personnage gagne une résistance à l’électricité de 5 points et un bonus de +2 aux jets de sauvegarde contre le poison. Au niveau 9, la résistance passe à 10 points et le bonus contre le poison à +4."
+        },
+        "Strength of the Abyss": {
+          "nom": "Force de l’Abysse (Ext)",
+          "texte": "Au niveau 9, l’ensorceleur gagne un bonus inné de +2 à la Force. Ce bonus passe à +4 au niveau 13 et à +6 au niveau 17."
+        },
+        "Added Summonings": {
+          "nom": "Invocations supplémentaires (Sur)",
+          "texte": "Au niveau 15, chaque fois que le personnage invoque une créature appartenant au sous-type démon ou possédant l’archétype fiélon grâce à un sort de convocation de monstres, le sort invoque une créature supplémentaire de même type."
+        },
+        "Demonic Might": {
+          "nom": "Puissance démoniaque (Sur)",
+          "texte": "Au niveau 20, la puissance de l’Abysse coule dans les veines du personnage. Il développe une immunité à l’électricité et au poison. Il gagne également une résistance à l’acide de 10 points, une résistance au froid de 10 points et une résistance au feu de 10 points. Enfin, il acquiert le pouvoir de télépathie avec une portée de 18 m (ce qui lui permet de communiquer avec n’importe quelle créature capable de parler un langage)."
+        }
+      }
+    },
+    "arcane": {
+      "nom": "Profane",
+      "competence_de_classe": "Connaissances (un domaine au choix)",
+      "arcane": "Chaque fois que le personnage utilise un don de métamagie qui accroît le niveau de l’emplacement de sort à utiliser d’au moins 1, le DD du sort est augmenté de +1. Ce bonus ne se cumule pas avec lui-même et ne s’applique pas lorsque le personnage utilise le don Augmentation d’intensité.",
+      "pouvoirs": {
+        "Arcane Bond": {
+          "nom": "Pacte magique (Sur)",
+          "texte": "Au niveau 1, le personnage acquiert les bénéfices d’un pacte magique comme s’il était un magicien de même niveau. Ses niveaux d’ensorceleur se cumulent avec ses niveaux de magicien lorsqu’il s’agit de déterminer les capacités de son familier ou de son objet fétiche. Ce pouvoir ne lui permet pas de posséder à la fois un familier et un objet fétiche. Les règles régissant les pactes magiques se trouvent à la page 55. Une fois par jour, l’objet fétiche vous permet de lancer n’importe lequel de vos sorts connus (contrairement à l’objet fétiche du magicien, qui permet de lancer n’importe quel sort de son grimoire)."
+        },
+        "Metamagic Adept": {
+          "nom": "Adepte de la métamagie (Ext)",
+          "texte": "Au niveau 3, lorsque le personnage applique les effets d’un don de métamagie qu’il connaît à un sort qu’il est sur le point de lancer, ce pouvoir lui permet d’éviter d’augmenter le temps d’incantation du sort. Cela ne change cependant pas le fait qu’un emplacement de sort de plus haut niveau soit nécessaire. L’ensorceleur dispose d’une utilisation quotidienne de ce pouvoir au niveau 3 et gagne une utilisation quotidienne supplémentaire tous les quatre niveaux d’ensorceleur au-delà du niveau 3, jusqu’à un maximum de cinq utilisations quotidiennes au niveau 19. Au niveau 20, l’apothéose magique remplace ce pouvoir."
+        },
+        "New Arcana": {
+          "nom": "Nouveaux arcanes (Ext)",
+          "texte": "Au niveau 9, le personnage peut ajouter à son répertoire un sort provenant la liste des sorts d’ensorceleur et de magicien. Le sort choisi doit appartenir à un niveau de sort auquel l’ensorceleur a accès. Il peut ajouter à nouveau un sort supplémentaire aux niveaux 13 et 17."
+        },
+        "School Power": {
+          "nom": "École privilégiée (Ext)",
+          "texte": "Au niveau 15, l’ensorceleur choisit une école de magie. Le DD des jets de sauvegarde contre les sorts de l’ensorceleur appartenant à cette école augmente de +2. Ce bonus se cumule avec celui provenant du don École renforcée."
+        },
+        "Arcane Apotheosis": {
+          "nom": "Apothéose magique (Ext)",
+          "texte": "Au niveau 20, la magie envahit tout le corps de l’ensorceleur. Lorsqu’il lance un sort en y appliquant les effets d’un don de métamagie qu’il connaît, la durée de l’incantation n’est pas modifiée (mais il doit toujours utiliser un emplacement de sort d’un niveau plus élevé). De plus, chaque fois qu’il utilise un objet magique à charges, il peut choisir de sacrifier des emplacements de sorts pour réduire le nombre de charges consommées. Pour chaque tranche de trois niveaux de sorts sacrifiés, le coût en charges est réduit de un. Voué à un grand destin"
+        }
+      }
+    },
+    "celestial": {
+      "nom": "Céleste",
+      "competence_de_classe": "Premiers secours",
+      "arcane": "Chaque fois que l’ensorceleur lance un sort de la branche de magie de convocation, les créatures invoquées gagnent une résistance aux dégâts que seules les armes alignées sur le Mal peuvent ignorer. Cette résistance s’élève à un nombre de points égal à la moitié du niveau d’ensorceleur du personnage (au minimum 1) et ne se cumule pas avec les résistances aux dégâts dont les créatures pourraient éventuellement déjà bénéficier.",
+      "pouvoirs": {
+        "Heavenly Fire": {
+          "nom": "Feu céleste (Mag)",
+          "texte": "Dès le niveau 1 et par une action simple, l’ensorceleur peut attaquer une cible distante de 9 m ou moins avec un rayon de feu céleste qui nécessite une attaque de contact à distance. Le rayon inflige aux créatures d’alignement Mauvais 1d4 points de dégâts + 1 point par deux niveaux de l’ensorceleur. Il s’agit de dégâts divins qui ignorent les résistances aux dégâts et les immunités. Lorsqu’il touche une créature d’alignement Bon, le rayon guérit 1d4 points de dégâts + 1 point par deux niveaux d’ensorceleur, mais une même créature d’alignement Bon ne peut bénéficier de ce pouvoir qu’une fois par jour. Les créatures d’alignement Neutre ne sont ni blessées ni guéries par cet effet. Ce pouvoir peut être utilisé chaque jour un nombre de fois égal à 3 + le modificateur de Charisme de l’ensorceleur."
+        },
+        "Celestial Resistances": {
+          "nom": "Résistances célestes (Ext)",
+          "texte": "Au niveau 3, le personnage gagne une résistance à l’acide de 5 points et une résistance au froid de 5 points. Au niveau 9, ces résistances passent à 10 points."
+        },
+        "Wings of Heaven": {
+          "nom": "Ailes du Paradis (Sur)",
+          "texte": "Au niveau 9, l’ensorceleur peut se doter d’ailes d’oiseau et voler chaque jour pendant un nombre de minutes égal à son niveau d’ensorceleur avec une vitesse de 18 m et une bonne manœuvrabilité. Ces minutes ne doivent pas forcément être consécutives mais chaque utilisation dure un nombre entier de minutes."
+        },
+        "Conviction": {
+          "nom": "Conviction (Sur)",
+          "texte": "Au niveau 15, le personnage peut relancer n’importe quel test de caractéristique, jet d’attaque, test de compétence ou jet de sauvegarde qu’il vient d’effectuer. Il doit décider d’utiliser ce pouvoir après le premier jet de dé mais avant que le MJ n’en ait révélé le résultat. Il doit accepter le second résultat, même si celui-ci est moins bon que le premier. Ce pouvoir peut être utilisé une fois par jour."
+        },
+        "Ascension": {
+          "nom": "Ascension (Sur)",
+          "texte": "Au niveau 20, le pouvoir des êtres célestes se répand dans tout le corps du personnage. Celui-ci développe une immunité à l’acide, au froid et à la pétrification. Il gagne également une résistance à l’électricité de 10 points, une résistance au feu de 10 points et un bonus racial de +4 aux jets de sauvegarde contre le poison. Par ailleurs, il gagne la possibilité de se servir de sa capacité d’ailes du paradis à volonté. Finalement, il acquiert la capacité de dialoguer avec n’importe quelle créature possédant un langage (comme le sort don des langues)."
+        }
+      }
+    },
+    "destined": {
+      "nom": "Voué à un grand destin",
+      "competence_de_classe": "Connaissances (histoire)",
+      "arcane": "Chaque fois que l’ensorceleur lance un sort dont la portée est « personnelle », il gagne un bonus de chance égal au niveau du sort qui s’applique à tous ses jets de sauvegarde pendant 1 round.",
+      "pouvoirs": {
+        "Touch of Destiny": {
+          "nom": "Toucher de la destinée (Mag)",
+          "texte": "Au niveau 1, par une action simple, le personnage peut toucher une créature et lui accorder un bonus d’intuition aux jets d’attaque, tests de compétence, tests de caractéristique et jets de sauvegarde égal à la moitié de son niveau d’ensorceleur (au minimum +1) pendant 1 round. Chaque jour, l’ensorceleur peut utiliser ce pouvoir un nombre de fois égal à 3 + son modificateur de Charisme."
+        },
+        "Fated": {
+          "nom": "Destiné (Sur)",
+          "texte": "Dès le niveau 3, l’ensorceleur obtient un bonus de chance de +1 à tous ses jets de sauvegarde et à sa CA pendant les rounds de surprise (voir le Chapitre 8) ainsi que contre les attaques qui le prennent par surprise (pour une raison ou une autre). Au niveau 7 et tous les quatre niveaux par la suite, ce bonus augmente de +1, jusqu’à un maximum de +5 au niveau 19."
+        },
+        "It Was Meant To Be": {
+          "nom": "Accomplissement de la prophétie (Sur)",
+          "texte": "Au niveau 9, le personnage peut relancer n’importe quel jet d’attaque, jet de confirmation de critique ou test de niveau visant à ignorer une résistance à la magie. Il doit décider d’utiliser ce pouvoir après le premier jet mais avant que le MJ en révèle les résultats. Il doit accepter le second résultat, même si celui-ci est moins bon que le premier. L’ensorceleur dispose d’une utilisation quotidienne de ce pouvoir au niveau 9. Au niveau 17, il peut l’utiliser deux fois par jour."
+        },
+        "Within Reach": {
+          "nom": "Près du but (Sur)",
+          "texte": "Au niveau 15, le destin ultime du personnage est en vue. Une fois par jour, lorsqu’une attaque ou un sort infligeant des dégâts causerait la mort du personnage, celui-ci peut tenter un jet de Volonté (DD 20). Si celui-ci réussit, les effets de l’action mortelle sont réduits : les points de vie du personnage tombent à -1 et il est stabilisé. Le bonus provenant du pouvoir Destiné s’applique à ce jet de sauvegarde."
+        },
+        "Destiny Realized": {
+          "nom": "Réalisation du destin (Sur)",
+          "texte": "Au niveau 20, le destin du personnage est à portée de main. Les possibilités de critique à l’encontre de l’ensorceleur ne sont confirmées que par un résultat naturel de 20 sur le jet de confirmation. Toutes les possibilités de critique que le personnage obtient en lançant un sort sont, quant à elles, automatiquement confirmées. Une fois par jour, l’ensorceleur peut choisir de réussir automatiquement un test de niveau de lanceur de sorts visant à ignorer la résistance à la magie de sa cible. Ce choix doit être effectué avant de lancer le dé. GUERRIER Certains prennent les armes en quête de gloire, de richesse, ou de vengeance. D’autres combattent pour faire leurs preuves, pour protéger des proches ou parce qu’ils ne savent rien faire d’autre. Et d’autres encore s’engagent sur la voie des armes pour affûter leur corps et démontrer leur courage lorsque le combat fait rage. Les guerriers, ces seigneurs du champ de bataille, forment un groupe hétéroclite. Ils s’entraînent à manier de nombreuses armes ou juste une, ils apprennent à utiliser les armures de manière optimale, ils suivent les enseignements martiaux de maîtres exotiques et étudient l’art de la guerre. Tout cela pour devenir de véritables armes vivantes. Ces combattants exceptionnels sont plus que de simples brutes : ils révèlent la véritable puissance des armes et transforment de simples morceaux de métal en outils permettant de soumettre des royaumes, de massacrer des monstres et d’unir des armées. Les guerriers sont des soldats, des chevaliers, des chasseurs, des artistes de la guerre et des champions sans égal. Malheur à ceux qui oseraient s’opposer à eux. Rôle. Les guerriers excellent au combat, qu’il s’agisse de vaincre des ennemis, de contrôler le déroulement d’une bataille ou de survivre à des affrontements. Les armes et les méthodes qu’ils emploient leur donnent accès à des tactiques variées. Rares sont ceux qui peuvent rivaliser d’adresse au combat avec eux. Alignement. Au choix. Dés de vie. d10."
+        }
+      }
+    },
+    "draconic": {
+      "nom": "Draconique",
+      "competence_de_classe": "Perception",
+      "arcane": "Chaque fois que l’ensorceleur lance un sort appartenant au registre correspondant au type d’énergie de son héritage draconique, ce sort inflige +1 point de dégâts par dé lancé.",
+      "pouvoirs": {
+        "Claws": {
+          "nom": "Griffes (Ext)",
+          "texte": "Au niveau 1, l’ensorceleur peut se doter de griffes par une action libre. Ces griffes fonctionnent comme des armes naturelles et lui permettent de porter deux attaques de griffes (en utilisant le bonus d’attaque maximal de l’ensorceleur) au cours d’une attaque à outrance. Les griffes infligent 1d4 points de dégâts chacune (1d3 si l’ensorceleur est de taille P) plus la moitié de son modificateur de Force. Au niveau 5, ces griffes ignorent les résistances aux dégâts comme s’il s’agissait d’armes magiques. Au niveau 7, les dégâts augmentent d’une catégorie, passant à 1d6 points (1d4 pour les ensorceleurs de taille P). Au niveau 11, les griffes infligent chacune 1d6 points de dégâts supplémentaires en cas d’attaque réussie. Il s’agit de dégâts d’énergie du type associé à l’espèce de dragon choisie et d’une capacité surnaturelle. Chaque jour, l’ensorceleur peut utiliser ses griffes pendant un nombre de rounds égal à 3 + son modificateur de Charisme."
+        },
+        "Dragon Resistances": {
+          "nom": "Résistances draconiques (Ext)",
+          "texte": "Au niveau 3, le personnage gagne une résistance de 5 points contre le type d’énergie associée à l’espèce de dragon choisie ainsi qu’un bonus d’armure naturelle de +1. Au niveau 9, cette résistance passe à 10 points et le bonus d’armure naturelle à +2. Au niveau 15, le bonus d’armure naturelle devient +4."
+        },
+        "Breath Weapon": {
+          "nom": "Souffle (Sur)",
+          "texte": "Au niveau 9, le personnage gagne une attaque de souffle qui inflige 1d6 points de dégâts par niveau d’ensorceleur dont le type d’énergie est associé à l’espèce de dragon choisie. Les créatures prises dans la zone du souffle bénéficient d’un jet de Réflexes pour tenter de diminuer de moitié les dégâts infligés. Le DD de ce jet de sauvegarde vaut 10 + la moitié du niveau de l’ensorceleur + le modificateur de Charisme de l’ensorceleur. La forme du souffle dépend de l’espèce de dragon choisie (comme indiqué sur la table ci-dessus). L’ensorceleur peut utiliser ce pouvoir une fois par jour au niveau 9, deux fois par jour au niveau 17 et trois fois par jour au niveau 20."
+        },
+        "Wings": {
+          "nom": "Ailes (Sur)",
+          "texte": "Au niveau 15, l’ensorceleur peut faire pousser des ailes membraneuses dans son dos par une action simple. Il gagne alors une vitesse de vol de 18 m avec une manœuvrabilité moyenne. Il peut faire disparaître ces ailes par une action libre."
+        },
+        "Power of Wyrms": {
+          "nom": "Pouvoir des dragons (Sur)",
+          "texte": "Au niveau 20, l’héritage draconique de l’ensorceleur devient évident. Il développe une immunité à la paralysie, au sommeil et aux dégâts dont le type d’énergie est associé à l’espèce de dragon choisie. Il gagne également la capacité de perception aveugle à 18 m."
+        }
+      },
+      "choix": "Au niveau 1, choisissez un type de dragon chromatique ou métallique (définitif) : noir (acide, ligne de 18 m), bleu (électricité, ligne de 18 m), vert (acide, cône de 9 m), rouge (feu, cône de 9 m), blanc (froid, cône de 9 m), airain (feu, ligne de 18 m), bronze (électricité, ligne de 18 m), cuivre (acide, ligne de 18 m), or (feu, cône de 9 m), argent (froid, cône de 9 m)."
+    },
+    "elemental": {
+      "nom": "Élémentaire",
+      "competence_de_classe": "Connaissances (plans)",
+      "arcane": "Chaque fois que l’ensorceleur lance un sort infligeant des dégâts d’énergie, il peut en modifier le type pour le faire correspondre avec le type d’énergie associé à l’élément qu’il a choisi. Dans ce cas, le registre du sort change également en conséquence.",
+      "pouvoirs": {
+        "Elemental Ray": {
+          "nom": "Rayon élémentaire (Mag)",
+          "texte": "Dès le niveau 1, par une action simple, l’ensorceleur peut attaquer une cible distante de 9 m ou moins avec un rayon élémentaire qui nécessite une attaque de contact à distance. Le rayon élémentaire inflige 1d6 points de dégâts + 1 point par deux niveaux d’ensorceleur. Ces dégâts sont du type d’énergie associé à l’élément choisi. Chaque jour, l’ensorceleur peut utiliser ce pouvoir un nombre de fois égal à 3 + son modificateur de Charisme."
+        },
+        "Elemental Resistance": {
+          "nom": "Résistances élémentaires (Ext)",
+          "texte": "Au niveau 3, le personnage gagne une résistance de 10 points contre le type d’énergie associé à l’élément choisi. Au niveau 9, cette résistance passe à 20 points."
+        },
+        "Elemental Blast": {
+          "nom": "Explosion élémentaire (Mag)",
+          "texte": "Au niveau 9, l’ensorceleur peut créer une puissante explosion élémentaire une fois par jour. Il s’agit d’un rayonnement de 6 m de rayon qui inflige 1d6 points de dégâts (du type d’énergie associé à l’élément choisi) par niveau d’ensorceleur. Les créatures prises dans la zone de l’explosion bénéficient d’un jet de Réflexes pour tenter de diminuer de moitié les dégâts infligés. Le DD de ce jet de sauvegarde vaut 10 + la moitié du niveau de l’ensorceleur + le modificateur de Charisme de l’ensorceleur. L’ensorceleur peut utiliser ce pouvoir une fois par jour au niveau 9, deux fois par jour au niveau 17 et trois fois par jour au niveau 20. La portée maximale de ce pouvoir est de 18 m."
+        },
+        "Elemental Movement": {
+          "nom": "Mouvement élémentaire (Sur)",
+          "texte": "Au niveau 15, le personnage acquiert un mode de déplacement spécial ou un bonus à sa vitesse de déplacement de base. Ce pouvoir dépend de l’élément choisi, comme indiqué dans la table ci-dessus."
+        },
+        "Elemental Body": {
+          "nom": "Corps élémentaire (Sur)",
+          "texte": "Au niveau 20, le pouvoir des éléments se répand dans tout le corps du personnage. Celui-ci développe une immunité aux attaques sournoises, aux coups critiques et aux dégâts du type d’énergie associé à l’élément choisi."
+        }
+      },
+      "choix": "Au niveau 1, choisissez un élément (définitif) : air (électricité ; vol 18 m, moyenne), terre (acide ; creusement 9 m), feu (feu ; +9 m de vitesse de base), eau (froid ; nage 18 m)."
+    },
+    "fey": {
+      "nom": "Féerique",
+      "competence_de_classe": "Connaissances (nature)",
+      "arcane": "Le DD des jets de sauvegarde contre les sorts de la branche de magie de coercition lancés par l’ensorceleur est augmenté de +2.",
+      "pouvoirs": {
+        "Laughing Touch": {
+          "nom": "Toucher rieur (Mag)",
+          "texte": "Au niveau 1, le personnage peut utiliser une action simple pour faire éclater de rire une créature pendant 1 round en réussissant une attaque de contact au corps à corps. La créature sujette aux rires ne peut entreprendre qu’une simple action de mouvement mais elle peut se défendre normalement. Une créature affectée par un toucher rieur est immunisée à ce pouvoir pendant vingt-quatre heures. Chaque jour, l’ensorceleur peut utiliser ce pouvoir un nombre de fois égal à 3 + son modificateur de Charisme. Le toucher rieur est un pouvoir mental."
+        },
+        "Woodland Stride": {
+          "nom": "Déplacement facilité (Ext)",
+          "texte": "Au niveau 3, l’ensorceleur se déplace sans la moindre gêne dans toutes sortes de taillis, y compris les fourrés, les buissons (même épineux) et les autres zones de végétation dense. Il progresse à sa vitesse de déplacement normal et ne subit aucun dégât. La végétation enchantée de manière à restreindre les mouvements continue toutefois à l’affecter."
+        },
+        "Fleeting Glance": {
+          "nom": "Regard furtif (Mag)",
+          "texte": "Au niveau 9, l’ensorceleur peut devenir invisible chaque jour pendant un nombre de rounds égal à son niveau d’ensorceleur. Ce pouvoir fonctionne comme le sort d’invisibilité suprême. Ces rounds ne doivent pas forcément être consécutifs."
+        },
+        "Fey Magic": {
+          "nom": "Magie des fées (Sur)",
+          "texte": "Au niveau 15, l’ensorceleur peut relancer un test de lanceur de sorts visant à surmonter une résistance à la magie. Il doit décider d’utiliser cette capacité avant que le MJ révèle les résultats de son premier jet. Il doit accepter le second résultat, même si celui-ci est moins bon que le premier. Ce pouvoir peut être utilisé à volonté."
+        },
+        "Soul of the Fey": {
+          "nom": "Âme des fées (Sur)",
+          "texte": "Au niveau 20, l’âme du personnage ne fait plus qu’un avec le monde des fées. Il développe une immunité au poison et une RD 10/fer froid. Les créatures du type animal n’attaquent plus le personnage à moins d’y être forcées par magie. Une fois par jour, l’ensorceleur peut lancer traversée des ombres avec un niveau de lanceur de sorts égal à son niveau d’ensorceleur."
+        }
+      }
+    },
+    "infernal": {
+      "nom": "Infernal",
+      "competence_de_classe": "Diplomatie",
+      "arcane": "Le DD des jets de sauvegarde contre les sorts de la branche de magie du charme lancés par le personnage est augmenté de +2.",
+      "pouvoirs": {
+        "Corrupting Touch": {
+          "nom": "Toucher corrupteur (Mag)",
+          "texte": "Au niveau 1, le personnage peut utiliser une action simple pour secouer une créature (voir page 568) en réussissant une attaque de contact au corps à corps. L’effet persiste pendant un nombre de rounds égal à la moitié du niveau d’ensorceleur du personnage (1 round au minimum). Il émane des créatures secouées par ce pouvoir une aura du Mal similaire à celles des Extérieurs d’alignement mauvais (voir le descriptif du sort de détection du Mal). Si une créature est touchée plusieurs fois, les effets ne se cumulent pas mais leur durée est augmentée. Chaque jour, l’ensorceleur peut utiliser ce pouvoir un nombre de fois égal à 3 + son modificateur de Charisme."
+        },
+        "Infernal Resistances": {
+          "nom": "Résistances infernales (Ext)",
+          "texte": "Au niveau 3, le personnage gagne une résistance au feu de 5 points et un bonus de +2 aux jets de sauvegarde contre le poison. Au niveau 9, la résistance passe à 10 points et le bonus contre le poison à +4."
+        },
+        "Hellfire": {
+          "nom": "Feu infernal (Mag)",
+          "texte": "Au niveau 9, l’ensorceleur peut faire s’abattre une colonne de flammes infernales sur ses ennemis. Il s’agit d’un rayonnement de 3 m de rayon qui inflige 1d6 points de dégâts de feu par niveau d’ensorceleur. Les créatures prises dans la zone de l’explosion bénéficient d’un jet de Réflexes pour tenter de diminuer de moitié les dégâts infligés. Le DD de ce jet de sauvegarde vaut 10 + la moitié du niveau de l’ensorceleur + le modificateur de Charisme de l’ensorceleur. Les créatures d’alignement Bon qui ratent ce jet de sauvegarde sont secouées pendant un nombre de rounds égal au niveau d’ensorceleur du personnage. Celui-ci peut utiliser ce pouvoir une fois par jour au niveau 9, deux fois par jour au niveau 17 et trois fois par jour au niveau 20. La portée maximale de ce pouvoir est de 18 m."
+        },
+        "On Dark Wings": {
+          "nom": "Ailes sombres (Sur)",
+          "texte": "Au niveau 15, l’ensorceleur peut faire pousser de terrifiantes ailes de chauve-souris dans son dos par une action simple. Il gagne alors une vitesse de vol de 18 m avec une manœuvrabilité en vol moyenne. Il peut faire disparaître ces ailes par une action libre."
+        },
+        "Power of the Pit": {
+          "nom": "Pouvoir de la Fosse (Sur)",
+          "texte": "Au niveau 20, le pouvoir de la Fosse se répand dans tout le corps du personnage. Celui-ci développe une immunité au feu et au poison. Il gagne également une résistance à l’acide de 10 points et une résistance au froid de 10 points. Enfin, il acquiert la capacité de voir parfaitement dans les ténèbres de toute sorte, jusqu’à une distance de 18 m."
+        }
+      }
+    },
+    "undead": {
+      "nom": "Mort-vivant",
+      "competence_de_classe": "Connaissances (religion)",
+      "arcane": "Certains morts-vivants peuvent être affectés par les sorts mentaux lancés par le personnage. Les morts-vivants non-intangibles qui étaient autrefois des humanoïdes sont considérés comme des humanoïdes pour déterminer si les sorts lancés par l’ensorceleur les affectent.",
+      "pouvoirs": {
+        "Grave Touch": {
+          "nom": "Toucher du tombeau (Mag)",
+          "texte": "Au niveau 1, le personnage peut utiliser une action simple pour secouer une créature vivante (voir page 568) en réussissant une attaque de contact au corps à corps. L’effet persiste pendant un nombre de rounds égal à la moitié du niveau d’ensorceleur du personnage (1 round au minimum). Si le personnage touche à nouveau une créature déjà secouée par ce pouvoir, elle devient effrayée (voir page 568) pendant 1 round si elle possède un nombre de DV inférieur au niveau d’ensorceleur du personnage. Chaque jour, l’ensorceleur peut utiliser ce pouvoir un nombre de fois égal à 3 + son modificateur de Charisme."
+        },
+        "Death's Gift": {
+          "nom": "Bienfait de la mort (Sur)",
+          "texte": "Au niveau 3, le personnage gagne une résistance au froid de 5 points et une RD 5/— contre les dégâts nonlétaux. Au niveau 9, la résistance passe à 10 points et la RD devient 10/— contre les dégâts non-létaux."
+        },
+        "Grasp of the Dead": {
+          "nom": "Emprise de la mort (Mag)",
+          "texte": "Au niveau 9, l’ensorceleur peut faire jaillir du sol un champ de bras squelettiques qui tentent alors de griffer ses ennemis. Les bras squelettiques apparaissent du sol dans un rayon de 6 mètres/4 cases. Toutes les créatures situées dans cette zone subissent 1d6 points de dégâts de type tranchant par niveau d’ensorceleur du personnage. Elles bénéficient d’un jet de Réflexes pour tenter de diminuer de moitié les dégâts infligés. Le DD de ce jet de sauvegarde vaut 10 + la moitié du niveau de l’ensorceleur + le modificateur de Charisme de l’ensorceleur. Les créatures qui ratent ce jet de sauvegarde sont incapables de se déplacer pendant 1 round. Les bras squelettiques, qui ne peuvent apparaître que sur une surface solide, disparaissent après 1 round. L’ensorceleur peut utiliser ce pouvoir une fois par jour au niveau 9, deux fois par jour au niveau 17 et trois fois par jour au niveau 20. La portée maximale de ce pouvoir est de 18 m."
+        },
+        "Incorporeal Form": {
+          "nom": "Forme intangible (Mag)",
+          "texte": "Au niveau 15, le personnage peut devenir intangible pendant 1 round par niveau d’ensorceleur. Lorsqu’il utilise ce pouvoir, l’ensorceleur devient une créature du sous-type intangible. Il ne subit que la moitié des dégâts provenant de sources tangibles magiques et aucun dégât dans le cas d’armes et d’objets qui ne sont pas magiques. Les sorts de l’ensorceleur n’infligent également que la moitié des dégâts normaux aux créatures tangibles. Les sorts et effets qui n’infligent pas de dégâts fonctionnent normalement. L’ensorceleur peut utiliser cette capacité une fois par jour."
+        },
+        "One of Us": {
+          "nom": "Un d’entre nous (Ext)",
+          "texte": "Au niveau 20, le corps de l’ensorceleur commence à se putréfier (son apparence exacte est laissée au choix du joueur) et les morts-vivants le considèrent comme l’un des leurs. L’ensorceleur développe une immunité au froid, aux dégâts non-létaux, à la paralysie et au sommeil. Il gagne également une RD 5/—. Les morts-vivants sans intelligence ne le remarquent pas sauf s’il les attaque. Enfin, il bénéficie d’un bonus de moral de +4 aux jets de sauvegarde contre les sorts et les pouvoirs magiques des morts-vivants. Profane"
+        }
+      }
+    }
+  }
+}

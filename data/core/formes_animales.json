@@ -1,0 +1,651 @@
+{
+  "source": "Manuel des joueurs (version française), druide : forme animale (p. 41) ; bonus lus dans les sorts forme bestiale, corps élémentaire et forme végétale. Les bonus de forme bestiale sont des bonus de taille (type non écrit dans le texte français).",
+  "formes": [
+    {
+      "id": "beast_shape_i_animal_de_taille_p",
+      "nom": "Animal de taille P",
+      "categorie": "animal",
+      "taille": "P",
+      "niveau_druide": 4,
+      "sort_en": "Beast Shape I",
+      "effets": [
+        {
+          "cible": "carac.dex",
+          "type": "taille",
+          "valeur": 2
+        },
+        {
+          "cible": "ca",
+          "type": "naturel",
+          "valeur": 1
+        }
+      ],
+      "texte": "Animal de taille P. Si le personnage prend la forme d’un animal de taille P, il gagne un bonus de +2 à la Dextérité et un bonus d’armure naturelle de +1."
+    },
+    {
+      "id": "beast_shape_i_animal_de_taille_m",
+      "nom": "Animal de taille M",
+      "categorie": "animal",
+      "taille": "M",
+      "niveau_druide": 4,
+      "sort_en": "Beast Shape I",
+      "effets": [
+        {
+          "cible": "carac.for",
+          "type": "taille",
+          "valeur": 2
+        },
+        {
+          "cible": "ca",
+          "type": "naturel",
+          "valeur": 2
+        }
+      ],
+      "texte": "Animal de taille M. Si le personnage prend la forme d’un animal de taille M, il gagne un bonus de +2 à la Force et un bonus d’armure naturelle de +2."
+    },
+    {
+      "id": "beast_shape_ii_animal_de_taille_tp",
+      "nom": "Animal de taille TP",
+      "categorie": "animal",
+      "taille": "TP",
+      "niveau_druide": 6,
+      "sort_en": "Beast Shape II",
+      "effets": [
+        {
+          "cible": "carac.dex",
+          "type": "taille",
+          "valeur": 4
+        },
+        {
+          "cible": "carac.for",
+          "type": "taille",
+          "valeur": -2
+        },
+        {
+          "cible": "ca",
+          "type": "naturel",
+          "valeur": 1
+        }
+      ],
+      "texte": "Animal de taille TP. Si le personnage prend la forme d’un animal de taille TP, il gagne un bonus de +4 à la Dextérité, un malus de -2 à la Force et un bonus d’armure naturelle de +1."
+    },
+    {
+      "id": "beast_shape_ii_animal_de_taille_g",
+      "nom": "Animal de taille G",
+      "categorie": "animal",
+      "taille": "G",
+      "niveau_druide": 6,
+      "sort_en": "Beast Shape II",
+      "effets": [
+        {
+          "cible": "carac.for",
+          "type": "taille",
+          "valeur": 4
+        },
+        {
+          "cible": "carac.dex",
+          "type": "taille",
+          "valeur": -2
+        },
+        {
+          "cible": "ca",
+          "type": "naturel",
+          "valeur": 4
+        }
+      ],
+      "texte": "Animal de taille G. Si le personnage prend la forme d’un animal de taille G, il gagne un bonus de +4 à la Force, un malus de -2 à la Dextérité et un bonus d’armure naturelle de +4."
+    },
+    {
+      "id": "elemental_body_i_elementaire_d_air",
+      "nom": "Élémentaire d'air",
+      "categorie": "élémentaire",
+      "taille": null,
+      "niveau_druide": 6,
+      "sort_en": "Elemental Body I",
+      "effets": [
+        {
+          "cible": "carac.dex",
+          "type": "taille",
+          "valeur": 2
+        },
+        {
+          "cible": "ca",
+          "type": "naturel",
+          "valeur": 2
+        }
+      ],
+      "texte": "Élémentaire d’air : si le personnage se transforme en élémentaire d’air de taille P, il gagne un bonus de taille à la Dextérité de +2 et un bonus d’armure naturelle de +2. Il dispose d’une capacité de vol de 18 m (parfaite), de la vision dans le noir à 18 m et il peut créer un cyclone."
+    },
+    {
+      "id": "elemental_body_i_elementaire_d_eau",
+      "nom": "Élémentaire d'eau",
+      "categorie": "élémentaire",
+      "taille": null,
+      "niveau_druide": 6,
+      "sort_en": "Elemental Body I",
+      "effets": [
+        {
+          "cible": "carac.con",
+          "type": "taille",
+          "valeur": 2
+        },
+        {
+          "cible": "ca",
+          "type": "naturel",
+          "valeur": 4
+        }
+      ],
+      "texte": "Élémentaire d’eau : si le personnage se transforme en élémentaire d’eau de taille P, il gagne un bonus de taille à la Constitution de +2 et un bonus d’armure naturelle de +4. Il dispose d’une capacité de nage de 18 m, du pouvoir maelström, de la vision dans le noir à 18 m et de la respiration aquatique."
+    },
+    {
+      "id": "elemental_body_i_elementaire_de_feu",
+      "nom": "Élémentaire de feu",
+      "categorie": "élémentaire",
+      "taille": null,
+      "niveau_druide": 6,
+      "sort_en": "Elemental Body I",
+      "effets": [
+        {
+          "cible": "carac.dex",
+          "type": "taille",
+          "valeur": 2
+        },
+        {
+          "cible": "ca",
+          "type": "naturel",
+          "valeur": 2
+        }
+      ],
+      "texte": "Élémentaire de feu : si le personnage se transforme en élémentaire de feu de taille P, il gagne un bonus de taille à la Dextérité de +2 et un bonus d’armure naturelle de +2. Il dispose de la vision dans le noir à 18 m, d’une résistance au feu 20, d’une vulnérabilité au froid et du pouvoir combustion."
+    },
+    {
+      "id": "elemental_body_i_elementaire_de_terre",
+      "nom": "Élémentaire de terre",
+      "categorie": "élémentaire",
+      "taille": null,
+      "niveau_druide": 6,
+      "sort_en": "Elemental Body I",
+      "effets": [
+        {
+          "cible": "carac.for",
+          "type": "taille",
+          "valeur": 2
+        },
+        {
+          "cible": "ca",
+          "type": "naturel",
+          "valeur": 4
+        }
+      ],
+      "texte": "Élémentaire de terre : si le personnage se transforme en élémentaire de terre de taille P, il gagne un bonus de taille à la Force de +2 et un bonus d’armure naturelle de +4. Il dispose de la vision dans le noir à 18 m, et des pouvoirs repousser et nage dans la terre."
+    },
+    {
+      "id": "beast_shape_iii_animal_de_taille_min",
+      "nom": "Animal de taille Min",
+      "categorie": "animal",
+      "taille": "Min",
+      "niveau_druide": 8,
+      "sort_en": "Beast Shape III",
+      "effets": [
+        {
+          "cible": "carac.dex",
+          "type": "taille",
+          "valeur": 6
+        },
+        {
+          "cible": "carac.for",
+          "type": "taille",
+          "valeur": -4
+        },
+        {
+          "cible": "ca",
+          "type": "naturel",
+          "valeur": 1
+        }
+      ],
+      "texte": "Animal de taille Min. Si le personnage prend la forme d’un animal de taille Min, il gagne un bonus de +6 à la Dextérité, un malus de -4 à la Force et un bonus d’armure naturelle de +1."
+    },
+    {
+      "id": "beast_shape_iii_animal_de_taille_tg",
+      "nom": "Animal de taille TG",
+      "categorie": "animal",
+      "taille": "TG",
+      "niveau_druide": 8,
+      "sort_en": "Beast Shape III",
+      "effets": [
+        {
+          "cible": "carac.for",
+          "type": "taille",
+          "valeur": 6
+        },
+        {
+          "cible": "carac.dex",
+          "type": "taille",
+          "valeur": -4
+        },
+        {
+          "cible": "ca",
+          "type": "naturel",
+          "valeur": 6
+        }
+      ],
+      "texte": "Animal de taille TG. Si le personnage prend la forme d’un animal de taille TG, il gagne un bonus de +6 à la Force, un malus de -4 à la Dextérité et un bonus d’armure naturelle de +6."
+    },
+    {
+      "id": "elemental_body_ii_elementaire_d_air",
+      "nom": "Élémentaire d'air",
+      "categorie": "élémentaire",
+      "taille": null,
+      "niveau_druide": 8,
+      "sort_en": "Elemental Body II",
+      "effets": [
+        {
+          "cible": "carac.dex",
+          "type": "taille",
+          "valeur": 4
+        },
+        {
+          "cible": "ca",
+          "type": "naturel",
+          "valeur": 3
+        }
+      ],
+      "texte": "Élémentaire d’air : comme corps élémentaire I mais le personnage gagne un bonus de taille de +4 à Dextérité et un bonus d’armure naturelle de +3."
+    },
+    {
+      "id": "elemental_body_ii_elementaire_d_eau",
+      "nom": "Élémentaire d'eau",
+      "categorie": "élémentaire",
+      "taille": null,
+      "niveau_druide": 8,
+      "sort_en": "Elemental Body II",
+      "effets": [
+        {
+          "cible": "carac.con",
+          "type": "taille",
+          "valeur": 4
+        },
+        {
+          "cible": "ca",
+          "type": "naturel",
+          "valeur": 5
+        }
+      ],
+      "texte": "Élémentaire d’eau : comme corps élémentaire I mais le personnage gagne un bonus de taille de +4 à Constitution et un bonus d’armure naturelle de +5."
+    },
+    {
+      "id": "elemental_body_ii_elementaire_de_feu",
+      "nom": "Élémentaire de feu",
+      "categorie": "élémentaire",
+      "taille": null,
+      "niveau_druide": 8,
+      "sort_en": "Elemental Body II",
+      "effets": [
+        {
+          "cible": "carac.dex",
+          "type": "taille",
+          "valeur": 4
+        },
+        {
+          "cible": "ca",
+          "type": "naturel",
+          "valeur": 3
+        }
+      ],
+      "texte": "Élémentaire de feu : comme corps élémentaire I mais le personnage gagne un bonus de taille de +4 à Dextérité et un bonus d’armure naturelle de +3."
+    },
+    {
+      "id": "elemental_body_ii_elementaire_de_terre",
+      "nom": "Élémentaire de terre",
+      "categorie": "élémentaire",
+      "taille": null,
+      "niveau_druide": 8,
+      "sort_en": "Elemental Body II",
+      "effets": [
+        {
+          "cible": "carac.for",
+          "type": "taille",
+          "valeur": 4
+        },
+        {
+          "cible": "ca",
+          "type": "naturel",
+          "valeur": 5
+        }
+      ],
+      "texte": "Élémentaire de terre : comme corps élémentaire I mais le personnage gagne un bonus de taille de +4 à Force et un bonus d’armure naturelle de +5."
+    },
+    {
+      "id": "plant_shape_i_plante_de_taille_p",
+      "nom": "Plante de taille P",
+      "categorie": "plante",
+      "taille": "P",
+      "niveau_druide": 8,
+      "sort_en": "Plant Shape I",
+      "effets": [
+        {
+          "cible": "carac.con",
+          "type": "alteration",
+          "valeur": 2
+        },
+        {
+          "cible": "ca",
+          "type": "naturel",
+          "valeur": 2
+        }
+      ],
+      "texte": "Plante de taille P. Si le personnage prend l’apparence d’une plante de taille P, il gagne un bonus d’altération de +2 à la Constitution et un bonus de +2 à l’armure naturelle."
+    },
+    {
+      "id": "plant_shape_i_plante_de_taille_m",
+      "nom": "Plante de taille M",
+      "categorie": "plante",
+      "taille": "M",
+      "niveau_druide": 8,
+      "sort_en": "Plant Shape I",
+      "effets": [
+        {
+          "cible": "carac.for",
+          "type": "taille",
+          "valeur": 2
+        },
+        {
+          "cible": "carac.con",
+          "type": "alteration",
+          "valeur": 2
+        },
+        {
+          "cible": "ca",
+          "type": "naturel",
+          "valeur": 2
+        }
+      ],
+      "texte": "Plante de taille M. Si le personnage prend l’apparence d’une plante de taille M, il gagne un bonus de taille de +2 à la Force, un bonus d’altération de +2 à la Constitution et un bonus de +2 à l’armure naturelle."
+    },
+    {
+      "id": "elemental_body_iii_elementaire_d_air",
+      "nom": "Élémentaire d'air",
+      "categorie": "élémentaire",
+      "taille": null,
+      "niveau_druide": 10,
+      "sort_en": "Elemental Body III",
+      "effets": [
+        {
+          "cible": "carac.for",
+          "type": "taille",
+          "valeur": 2
+        },
+        {
+          "cible": "carac.dex",
+          "type": "taille",
+          "valeur": 4
+        },
+        {
+          "cible": "ca",
+          "type": "naturel",
+          "valeur": 4
+        }
+      ],
+      "texte": "Élémentaire d’air : comme corps élémentaire I mais le personnage gagne un bonus de taille de +2 à la Force, de +4 à Dextérité et un bonus d’armure naturelle de +4."
+    },
+    {
+      "id": "elemental_body_iii_elementaire_d_eau",
+      "nom": "Élémentaire d'eau",
+      "categorie": "élémentaire",
+      "taille": null,
+      "niveau_druide": 10,
+      "sort_en": "Elemental Body III",
+      "effets": [
+        {
+          "cible": "carac.for",
+          "type": "taille",
+          "valeur": 2
+        },
+        {
+          "cible": "carac.dex",
+          "type": "taille",
+          "valeur": -2
+        },
+        {
+          "cible": "carac.con",
+          "type": "taille",
+          "valeur": 6
+        },
+        {
+          "cible": "ca",
+          "type": "naturel",
+          "valeur": 6
+        }
+      ],
+      "texte": "Élémentaire d’eau : comme corps élémentaire I mais le personnage gagne un bonus de taille de +2 à la Force, de +6 à Constitution, un malus de -2 à la Dextérité et un bonus d’armure naturelle de +6."
+    },
+    {
+      "id": "elemental_body_iii_elementaire_de_feu",
+      "nom": "Élémentaire de feu",
+      "categorie": "élémentaire",
+      "taille": null,
+      "niveau_druide": 10,
+      "sort_en": "Elemental Body III",
+      "effets": [
+        {
+          "cible": "carac.dex",
+          "type": "taille",
+          "valeur": 4
+        },
+        {
+          "cible": "carac.con",
+          "type": "taille",
+          "valeur": 2
+        },
+        {
+          "cible": "ca",
+          "type": "naturel",
+          "valeur": 4
+        }
+      ],
+      "texte": "Élémentaire de feu : comme corps élémentaire I mais le personnage gagne un bonus de taille de +4 à Dextérité, de +2 à la Constitution et un bonus d’armure naturelle de +4."
+    },
+    {
+      "id": "elemental_body_iii_elementaire_de_terre",
+      "nom": "Élémentaire de terre",
+      "categorie": "élémentaire",
+      "taille": null,
+      "niveau_druide": 10,
+      "sort_en": "Elemental Body III",
+      "effets": [
+        {
+          "cible": "carac.for",
+          "type": "taille",
+          "valeur": 6
+        },
+        {
+          "cible": "carac.dex",
+          "type": "taille",
+          "valeur": -2
+        },
+        {
+          "cible": "carac.con",
+          "type": "taille",
+          "valeur": 2
+        },
+        {
+          "cible": "ca",
+          "type": "naturel",
+          "valeur": 6
+        }
+      ],
+      "texte": "Élémentaire de terre : comme corps élémentaire I mais le personnage gagne un bonus de taille de +6 à Force, un malus de -2 à la Dextérité, un bonus de +2 à la Constitution et un bonus d’armure naturelle de +6."
+    },
+    {
+      "id": "plant_shape_ii_plante_de_taille_g",
+      "nom": "Plante de taille G",
+      "categorie": "plante",
+      "taille": "G",
+      "niveau_druide": 10,
+      "sort_en": "Plant Shape II",
+      "effets": [
+        {
+          "cible": "carac.for",
+          "type": "taille",
+          "valeur": 4
+        },
+        {
+          "cible": "carac.con",
+          "type": "alteration",
+          "valeur": 2
+        },
+        {
+          "cible": "ca",
+          "type": "naturel",
+          "valeur": 4
+        }
+      ],
+      "texte": "Plante de taille G. Si le personnage prend l’apparence d’une plante de taille G, il gagne un bonus de taille de +4 à la Force, un bonus d’altération de +2 à la Constitution et un bonus de +4 à l’armure naturelle."
+    },
+    {
+      "id": "elemental_body_iv_elementaire_d_air",
+      "nom": "Élémentaire d'air",
+      "categorie": "élémentaire",
+      "taille": null,
+      "niveau_druide": 12,
+      "sort_en": "Elemental Body IV",
+      "effets": [
+        {
+          "cible": "carac.for",
+          "type": "taille",
+          "valeur": 4
+        },
+        {
+          "cible": "carac.dex",
+          "type": "taille",
+          "valeur": 6
+        },
+        {
+          "cible": "ca",
+          "type": "naturel",
+          "valeur": 4
+        }
+      ],
+      "texte": "Élémentaire d’air : comme corps élémentaire I mais le personnage gagne un bonus de taille de +4 à la Force, de +6 à Dextérité et un bonus d’armure naturelle de +4, ainsi que la capacité de vol de 36 m (parfaite)."
+    },
+    {
+      "id": "elemental_body_iv_elementaire_de_terre",
+      "nom": "Élémentaire de terre",
+      "categorie": "élémentaire",
+      "taille": null,
+      "niveau_druide": 12,
+      "sort_en": "Elemental Body IV",
+      "effets": [
+        {
+          "cible": "carac.for",
+          "type": "taille",
+          "valeur": 8
+        },
+        {
+          "cible": "carac.dex",
+          "type": "taille",
+          "valeur": -2
+        },
+        {
+          "cible": "carac.con",
+          "type": "taille",
+          "valeur": 4
+        },
+        {
+          "cible": "ca",
+          "type": "naturel",
+          "valeur": 6
+        }
+      ],
+      "texte": "Élémentaire de terre : comme corps élémentaire I mais le personnage gagne un bonus de taille de +8 à Force, un malus de -2 à la Dextérité, un bonus de +4 à la Constitution et un bonus d’armure naturelle de +6."
+    },
+    {
+      "id": "elemental_body_iv_elementaire_de_feu",
+      "nom": "Élémentaire de feu",
+      "categorie": "élémentaire",
+      "taille": null,
+      "niveau_druide": 12,
+      "sort_en": "Elemental Body IV",
+      "effets": [
+        {
+          "cible": "carac.dex",
+          "type": "taille",
+          "valeur": 6
+        },
+        {
+          "cible": "carac.con",
+          "type": "taille",
+          "valeur": 4
+        },
+        {
+          "cible": "ca",
+          "type": "naturel",
+          "valeur": 4
+        }
+      ],
+      "texte": "Élémentaire de feu : comme corps élémentaire I mais le personnage gagne un bonus de taille de +6 à Dextérité, de +4 à la Constitution et un bonus d’armure naturelle de +4."
+    },
+    {
+      "id": "elemental_body_iv_elementaire_d_eau",
+      "nom": "Élémentaire d'eau",
+      "categorie": "élémentaire",
+      "taille": null,
+      "niveau_druide": 12,
+      "sort_en": "Elemental Body IV",
+      "effets": [
+        {
+          "cible": "carac.for",
+          "type": "taille",
+          "valeur": 4
+        },
+        {
+          "cible": "carac.dex",
+          "type": "taille",
+          "valeur": -2
+        },
+        {
+          "cible": "carac.con",
+          "type": "taille",
+          "valeur": 8
+        },
+        {
+          "cible": "ca",
+          "type": "naturel",
+          "valeur": 6
+        }
+      ],
+      "texte": "Élémentaire d’eau : comme corps élémentaire I mais le personnage gagne un bonus de taille de +4 à la Force, de +8 à Constitution, un malus de -2 à la Dextérité et un bonus d’armure naturelle de +6. Nage 36 m."
+    },
+    {
+      "id": "plant_shape_iii_plante_de_taille_tg",
+      "nom": "Plante de taille TG",
+      "categorie": "plante",
+      "taille": "TG",
+      "niveau_druide": 12,
+      "sort_en": "Plant Shape III",
+      "effets": [
+        {
+          "cible": "carac.for",
+          "type": "taille",
+          "valeur": 8
+        },
+        {
+          "cible": "carac.con",
+          "type": "alteration",
+          "valeur": 4
+        },
+        {
+          "cible": "carac.dex",
+          "type": "taille",
+          "valeur": -2
+        },
+        {
+          "cible": "ca",
+          "type": "naturel",
+          "valeur": 6
+        }
+      ],
+      "texte": "Plante de taille TG. Si le personnage prend l’apparence d’une plante de taille TG, il gagne un bonus de taille de +8 à la Force, un bonus d’altération de +4 à la Constitution, un malus de -2 à la Dextérité et un bonus de +6 à l’armure naturelle."
+    }
+  ]
+}

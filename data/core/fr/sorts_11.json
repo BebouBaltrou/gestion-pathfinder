@@ -1,0 +1,72 @@
+{
+  "Major Image": {
+    "cible": "hallucination visuelle ne pouvant dépasser quatre cubes de 3 m (10 pieds) d'arête + un cube de 3 m (10 pieds) d'arête par niveau (E)",
+    "composantes": "V, G, F (un peu de toison)",
+    "description": "Ce sort fonctionne comme image silencieuse, si ce n’est que l’illusion obtenue inclut également des composantes sonores, olfactives et thermiques. Tant que le personnage continue de se concentrer, il peut déplacer l’illusion dans les limites de portée indiquées.\nL’image disparaît dès qu’un adversaire la frappe, sauf si le lanceur du sort la fait réagir de manière appropriée."
+  },
+  "Nondetection": {
+    "cible": "créature ou objet touché",
+    "composantes": "V, G, M (poussière de diamant (50 po))",
+    "description": "La créature ou l’objet protégé par ce sort devient difficile à repérer à l’aide de sorts de Divination, comme clairvoyance/clairaudience, localisation d’objet et autres détections. Antidétection protège de la même manière contre les boules de cristal. Quiconque tente d’espionner la créature ou l’objet protégé doit réussir un test de niveau de lanceur de sorts (1d20 + niveau de lanceur de sorts) contre un DD égal à 11 + niveau de lanceur de sorts du personnage qui a lancé antidétection. Si ce dernier décide de bénéficier lui-même du sort (ou de protéger un objet en sa possession), le DD est égal à 15 + son niveau de lanceur de sorts.\nLorsqu’une créature bénéficie de l’effet d’antidétection, son équipement est protégé lui aussi."
+  },
+  "Phantom Steed": {
+    "cible": "1 équidé quasi réel",
+    "composantes": "V, G",
+    "description": "Cette invocation fait apparaître une créature quasi-réelle ayant la forme d’un cheval de taille G. Seul le personnage (ou celui pour qui il a lancé le sort) peut la chevaucher. Le coursier fantôme a une tête et un corps noirs, des crins gris, et des sabots translucides et intangibles qui ne font pas le moindre bruit. Il est harnaché de ce qui s’apparente à une selle, un mors et des rênes. Il ne combat jamais, mais terrifie les animaux normaux, qui se retrouvent dans l’incapacité de l’attaquer.\nLe destrier a une CA de 18 (-1 taille, +4 armure naturelle, +5 Dex) et 7 points de vie +1 par niveau de lanceur de sorts. Il se dissipe dès qu’il perd tous ses points de vie. Il se déplace à une vitesse de 6 m par niveau de lanceur de sorts, jusqu’à un maximum de 72 m au niveau 12. Il peut transporter son cavalier plus 5 kg par niveau de lanceur de sorts.\nLe coursier hérite de certains pouvoirs en fonction du niveau de lanceur de sorts, toutes les facultés qui suivent étant cumulatives.\nNiveau 8 : le cheval peut avancer dans le sable, la boue ou les marécages sans que sa vitesse de déplacement n’en soit affectée.\nNiveau 10 : il utilise marche sur l’onde à volonté (comme le sort du même nom, inutile d’entreprendre une action pour activer ce pouvoir).\nNiveau 12 : il utilise marche dans les airs à volonté (comme le sort du même nom, inutile d’entreprendre une action pour activer ce pouvoir). Après 1 round de déplacement aérien, il chute.\nNiveau 14 : le coursier peut voler en conservant la même vitesse de déplacement. Il dispose d’un bonus à la compétence Vol égal au niveau de lanceur de sorts du personnage."
+  },
+  "Protection from Energy": {
+    "cible": "créature touchée",
+    "composantes": "V, G, FD",
+    "description": "Ce sort offre une immunité temporaire contre le type d’énergie sélectionné (acide, électricité, feu, froid ou son). Une fois que l’abjuration a absorbé 12 points de dégâts par niveau de lanceur de sorts de celui qui l’a lancée (jusqu’à un maximum de 120 points de dégâts au niveau 10), elle cesse de faire effet.\nProtection contre les énergies destructives remplace résistance aux énergies destructives (et n’est pas cumulable avec ce dernier). Si un personnage bénéficie de protection contre les énergies destructives et de résistance aux énergies destructives, la protection agit seule jusqu’à ce que son potentiel d’absorption soit épuisé."
+  },
+  "Rage": {
+    "cible": "1 créature vivante et consentante/3 niveaux, à moins de 9 m les unes des autres",
+    "composantes": "V, G",
+    "description": "Les créatures affectées bénéficient d’un bonus de moral de +2 en Force et en Constitution et d’un bonus de moral de +1 aux jets de Volonté mais subissent un malus de -2 à la CA. Sinon, l’effet est identique à celui du pouvoir de rage de berserker, si ce n’est que les sujets ne sont pas fatigués quand le sort se termine."
+  },
+  "Ray of Exhaustion": {
+    "cible": "rayon",
+    "composantes": "V, G, M (une goutte de sueur)",
+    "description": "Un rayon noir jaillit du doigt tendu du personnage qui doit réussir une attaque de contact à distance pour toucher sa cible. Celle-ci est alors épuisée jusqu’à la fin du sort. Si elle réussit un jet de\nVigueur, elle est seulement fatiguée. Un personnage déjà fatigué devient épuisé. Ce sort n’a aucun effet sur les créatures qui sont déjà épuisées.\nContrairement à la fatigue et à l’épuisement normaux, l’effet s’arrête au terme du sort."
+  },
+  "Secret Page": {
+    "cible": "page touchée (0,3 m² maximum)",
+    "composantes": "V, G, M (quelques écailles de hareng réduites en poudre et une goutte d’essence de feu follet)",
+    "description": "Cette transmutation modifie le contenu d’une page pour que celle-ci ne soit plus identifiable. On peut changer le texte d’un sort et le remplacer par celui d’un autre sort d’un niveau égal ou inférieur, connu du personnage. Le personnage ne peut pas utiliser ce sort pour changer le sort inscrit sur un parchemin mais il peut s’en servir pour cacher le parchemin. On peut lancer runes explosives ou sceau du serpent sur la page secrète.\nCompréhension des langages ne suffit pas à révéler le contenu d’une page secrète. Le lanceur de sorts peut lire le texte en prononçant un simple mot de commande et faire réapparaître la page secrète d’un autre. Le sort s’achève si l’on prononce le mot de commande deux fois de suite. Détection de la magie révèle une faible aura magique autour de la page, mais ne révèle pas le véritable texte. De même, vision lucide indique que quelque chose est caché sous le texte apparent, mais il faut y ajouter compréhension des langages pour pouvoir lire l’original. La page secrète peut être dissipée, et le sort effacement permet de faire disparaître à tout jamais le texte caché."
+  },
+  "Sepia Snake Sigil": {
+    "cible": "livre ou texte touché",
+    "composantes": "V, G, M (poudre d’ambre (500 po) et écaille de serpent)",
+    "description": "Au terme de l’incantation, un symbole s’inscrit au cœur de tout texte long de vingt-cinq mots ou plus. Dès que quelqu’un le lit, un serpent de couleur ambrée apparaît et frappe le lecteur (à condition qu’il existe une ligne d’effet entre le symbole et la cible).\nVoir le texte ne suffit pas à déclencher le sort, il faut le lire volontairement. La cible a droit à un jet de Réflexes. Si elle réussit, le serpent se dissipe dans une lueur brune accompagnée d’un peu de fumée de même teinte et d’un bruit sourd. Dans le cas contraire, elle se retrouve prisonnière d’une bulle scintillante de couleur ambrée qui l’immobilise pendant 1d4 jours, +1 jour par niveau du lanceur de sorts.\nTant que la victime reste enfermée dans le champ de force, elle ne vieillit pas. Elle cesse également de respirer et de dormir, elle n’a ni faim ni soif et elle ne peut pas récupérer ses sorts. Elle est dans un état d’animation suspendue, inconsciente du monde qui l’entoure. En revanche, elle peut être blessée, voire tuée, par des forces extérieures, car la bulle de stase ne la protège pas des attaques. Un personnage agonisant ne perd pas de pv supplémentaires, mais son état ne se stabilise pas non plus avant la fin de la durée indiquée. Il est impossible de remarquer le symbole dissimulé par des moyens ordinaires et détection de la magie indique seulement que le texte entier est magique.\nEn cas de succès, dissipation de la magie fait disparaître un sceau du serpent. Effacement aussi, mais il détruit la page tout entière.\nOn peut lancer sceau du serpent en l’accompagnant d’autres sorts qui dissimulent ou modifient le contenu d’un texte, comme par exemple page secrète."
+  },
+  "Shrink Item": {
+    "cible": "1 objet touché allant jusqu’à 0,06 m³/niveau",
+    "composantes": "V, G",
+    "description": "Ce sort permet de rétrécir un objet non-magique jusqu’à ce qu’il ne fasse plus qu’un seizième de sa taille habituelle (ce qui correspond à peine à 1/4 000e de son volume et de sa masse initiaux). Ce changement réduit donc l’objet de quatre catégories de taille (de G à Min, par exemple). Le personnage peut également modifier la texture de l’objet réduit afin de le rendre aussi souple qu’une étoffe. Le personnage n’a qu’à jeter l’objet sur une surface dure ou prononcer un mot de commande pour rendre sa taille initiale à l’objet. Il peut même réduire un feu et son combustible à l’aide de ce sort, qui cesse instantanément de faire effet dès que l’objet retrouve sa taille initiale.\nSi le résultat de réduction d’objet est rendu permanent (grâce à permanence) l’objet affecté peut être agrandi et réduit un nombre infini de fois, mais seulement par le lanceur de sorts."
+  },
+  "Sleet Storm": {
+    "cible": "cylindre (12 m de rayon sur 6 m de haut)",
+    "composantes": "V, G, M/FD (poussière et eau)",
+    "description": "La neige fondue générée par ce sort tombe avec une telle violence qu’elle bloque le champ de vision de toutes les créatures qui se trouvent dans la zone d’effet (même celles qui bénéficient de vision dans le noir). De plus, le sol se couvre presque instantanément d’une pellicule glissante qui réduit tous les déplacements de la moitié dans la zone d’effet, en admettant que les créatures concernées réussissent un test d’Acrobaties (DD 10). En cas d’échec, elles ne peuvent se déplacer du tout pendant ce round. Si elles ratent leur test de 5 points ou plus, elles chutent (voir la compétence Acrobaties pour de plus amples renseignements).\nLa tempête de neige éteint les torches et les feux de petite taille."
+  },
+  "Slow": {
+    "cible": "1 créature/niveau, à moins de 9 m les unes des autres",
+    "composantes": "V, G, M (une goutte de mélasse)",
+    "description": "Les créatures affectées par ce sort se déplacent et attaquent bien plus lentement. Leur tour de jeu est limité à une action de mouvement ou à une action simple, mais pas les deux (les actions complexes sont impossibles). Dans le même temps, elles subissent un malus de –1 à la CA et aux jets d’attaque et de Réflexes. Les individus ralentis voient leur vitesse de déplacement normale réduite de moitié (arrondir à la tranche de 1,50 m inférieure), ce qui réduit également leur distance de saut.\nLes effets de plusieurs lenteurs ne sont pas cumulatifs. Lenteur contre et dissipe rapidité."
+  },
+  "Suggestion": {
+    "cible": "1 créature vivante",
+    "composantes": "V, M (une langue de serpent et un rayon de miel)",
+    "description": "Ce sort permet d’influer sur les actes de la cible en lui suggérant la conduite à suivre. La suggestion, qui se limite nécessairement à une ou deux phrases, doit être formulée de façon à paraître raisonnable. Toute suggestion visiblement néfaste pour la cible annule immédiatement le sort.\nL’action suggérée peut se poursuivre jusqu’au terme de la durée indiquée, en revanche, si la cible la termine plus rapidement, le sort s’achève dès que le sujet a obéit à la suggestion. Le lanceur de sorts peut aussi spécifier un événement qui incitera la cible à se comporter d’une certaine façon. Si la condition donnée ne se présente pas avant la fin de la durée du sort, le sort reste sans effet.\nSi la suggestion est particulièrement raisonnable, le jet de sauvegarde peut s’accompagner d’un malus (-1, -2, etc.)."
+  },
+  "Summon Monster 3": {
+    "cible": "une créature convoquée",
+    "composantes": "V, G, F/FD (un minuscule sac et une petite bougie)",
+    "description": "Prê 3 Ce sort s’apparente à convocation de monstres I, à la différence qu’il permet d’appeler une créature de niveau 3, 1d3 créatures de niveau 2 ou 1d4+1 créatures de niveau 1 (lorsque le personnage convoque plusieurs monstres, ces derniers doivent nécessairement tous être du même type)."
+  },
+  "Tiny Hut": {
+    "cible": "sphère de 6 m de rayon centrée sur la position du personnage",
+    "composantes": "V, G, M (une petite perle de cristal)",
+    "description": "En lançant ce sort, le personnage fait apparaître autour de lui une sphère de force, opaque et immobile, de la couleur de son choix. La moitié supérieure du globe est visible, le reste se trouvant sous terre. En plus du personnage, l’abri peut accueillir jusqu’à neuf créatures de taille M. Tous ces invités peuvent entrer ou sortir comme bon leur semble. Par contre, si le personnage sort de la sphère, celle-ci disparaît aussitôt.\nSi la température extérieure est comprise entre -15° C et 35° C, la température à l’intérieur de la sphère est constante à 20° C. En cas de température plus extrême, l’intérieur de l’abri évolue de la même façon, à raison de 1° C pour 1° C (s’il fait -25° C dehors, il fera donc 10° C dans les limites de la zone d’effet du sort). Les occupants sont également protégés contre les éléments (pluie, grêle, tempête de sable, etc.). Il résiste aux vents inférieurs à la force d’un ouragan (120 km/h). Au-delà, il est détruit.\nL’intérieur de l’abri est de forme hémisphérique, le personnage pouvant l’éclairer de manière diffuse ou l’éteindre sur commande. Bien qu’il soit opaque vu du dehors, le champ de force est transparent de l’intérieur. Les projectiles, les armes et la plupart des sorts peuvent franchir la sphère, les occupants ne pouvant être vus de l’extérieur (ils bénéficient d’un camouflage total)."
+  }
+}

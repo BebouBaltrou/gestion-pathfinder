@@ -1,0 +1,317 @@
+{
+  "source": "Archives of Nethys (aonprd.com), contenu du Core Rulebook sous licence OGL",
+  "competences": [
+    {
+      "id": "acrobatics",
+      "nom_en": "Acrobatics",
+      "caracteristique": "dex",
+      "formation_requise": false,
+      "malus_d_armure": true,
+      "sous_types": false,
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 87
+      }
+    },
+    {
+      "id": "appraise",
+      "nom_en": "Appraise",
+      "caracteristique": "int",
+      "formation_requise": false,
+      "malus_d_armure": false,
+      "sous_types": false,
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 90
+      }
+    },
+    {
+      "id": "bluff",
+      "nom_en": "Bluff",
+      "caracteristique": "cha",
+      "formation_requise": false,
+      "malus_d_armure": false,
+      "sous_types": false,
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 90
+      }
+    },
+    {
+      "id": "climb",
+      "nom_en": "Climb",
+      "caracteristique": "for",
+      "formation_requise": false,
+      "malus_d_armure": true,
+      "sous_types": false,
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 90
+      }
+    },
+    {
+      "id": "craft",
+      "nom_en": "Craft",
+      "caracteristique": "int",
+      "formation_requise": false,
+      "malus_d_armure": false,
+      "sous_types": true,
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 91
+      }
+    },
+    {
+      "id": "diplomacy",
+      "nom_en": "Diplomacy",
+      "caracteristique": "cha",
+      "formation_requise": false,
+      "malus_d_armure": false,
+      "sous_types": false,
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 93
+      }
+    },
+    {
+      "id": "disable_device",
+      "nom_en": "Disable Device",
+      "caracteristique": "dex",
+      "formation_requise": true,
+      "malus_d_armure": true,
+      "sous_types": false,
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 94
+      }
+    },
+    {
+      "id": "disguise",
+      "nom_en": "Disguise",
+      "caracteristique": "cha",
+      "formation_requise": false,
+      "malus_d_armure": false,
+      "sous_types": false,
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 95
+      }
+    },
+    {
+      "id": "escape_artist",
+      "nom_en": "Escape Artist",
+      "caracteristique": "dex",
+      "formation_requise": false,
+      "malus_d_armure": true,
+      "sous_types": false,
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 95
+      }
+    },
+    {
+      "id": "fly",
+      "nom_en": "Fly",
+      "caracteristique": "dex",
+      "formation_requise": false,
+      "malus_d_armure": true,
+      "sous_types": false,
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 96
+      }
+    },
+    {
+      "id": "handle_animal",
+      "nom_en": "Handle Animal",
+      "caracteristique": "cha",
+      "formation_requise": true,
+      "malus_d_armure": false,
+      "sous_types": false,
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 97
+      }
+    },
+    {
+      "id": "heal",
+      "nom_en": "Heal",
+      "caracteristique": "sag",
+      "formation_requise": false,
+      "malus_d_armure": false,
+      "sous_types": false,
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 98
+      }
+    },
+    {
+      "id": "intimidate",
+      "nom_en": "Intimidate",
+      "caracteristique": "cha",
+      "formation_requise": false,
+      "malus_d_armure": false,
+      "sous_types": false,
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 99
+      }
+    },
+    {
+      "id": "knowledge",
+      "nom_en": "Knowledge",
+      "caracteristique": "int",
+      "formation_requise": true,
+      "malus_d_armure": false,
+      "sous_types": true,
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 99
+      }
+    },
+    {
+      "id": "linguistics",
+      "nom_en": "Linguistics",
+      "caracteristique": "int",
+      "formation_requise": true,
+      "malus_d_armure": false,
+      "sous_types": false,
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 100
+      }
+    },
+    {
+      "id": "perception",
+      "nom_en": "Perception",
+      "caracteristique": "sag",
+      "formation_requise": false,
+      "malus_d_armure": false,
+      "sous_types": false,
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 102
+      }
+    },
+    {
+      "id": "perform",
+      "nom_en": "Perform",
+      "caracteristique": "cha",
+      "formation_requise": false,
+      "malus_d_armure": false,
+      "sous_types": true,
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 102
+      }
+    },
+    {
+      "id": "profession",
+      "nom_en": "Profession",
+      "caracteristique": "sag",
+      "formation_requise": true,
+      "malus_d_armure": false,
+      "sous_types": true,
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 103
+      }
+    },
+    {
+      "id": "ride",
+      "nom_en": "Ride",
+      "caracteristique": "dex",
+      "formation_requise": false,
+      "malus_d_armure": true,
+      "sous_types": false,
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 103
+      }
+    },
+    {
+      "id": "sense_motive",
+      "nom_en": "Sense Motive",
+      "caracteristique": "sag",
+      "formation_requise": false,
+      "malus_d_armure": false,
+      "sous_types": false,
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 104
+      }
+    },
+    {
+      "id": "sleight_of_hand",
+      "nom_en": "Sleight of Hand",
+      "caracteristique": "dex",
+      "formation_requise": true,
+      "malus_d_armure": true,
+      "sous_types": false,
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 104
+      }
+    },
+    {
+      "id": "spellcraft",
+      "nom_en": "Spellcraft",
+      "caracteristique": "int",
+      "formation_requise": true,
+      "malus_d_armure": false,
+      "sous_types": false,
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 106
+      }
+    },
+    {
+      "id": "stealth",
+      "nom_en": "Stealth",
+      "caracteristique": "dex",
+      "formation_requise": false,
+      "malus_d_armure": true,
+      "sous_types": false,
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 106
+      }
+    },
+    {
+      "id": "survival",
+      "nom_en": "Survival",
+      "caracteristique": "sag",
+      "formation_requise": false,
+      "malus_d_armure": false,
+      "sous_types": false,
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 107
+      }
+    },
+    {
+      "id": "swim",
+      "nom_en": "Swim",
+      "caracteristique": "for",
+      "formation_requise": false,
+      "malus_d_armure": true,
+      "sous_types": false,
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 108
+      }
+    },
+    {
+      "id": "use_magic_device",
+      "nom_en": "Use Magic Device",
+      "caracteristique": "cha",
+      "formation_requise": true,
+      "malus_d_armure": false,
+      "sous_types": false,
+      "source": {
+        "livre": "PRPG Core Rulebook",
+        "page": 108
+      }
+    }
+  ]
+}

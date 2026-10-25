@@ -3,6 +3,7 @@
 //! L'état n'est jamais modifié directement : toute action passe par [`Campagne::executer`],
 //! qui valide l'événement, l'ajoute au journal et met l'état à jour.
 
+pub mod aventure;
 pub mod calendrier;
 pub mod construction;
 pub mod etat;
@@ -10,7 +11,11 @@ pub mod evenements;
 #[cfg(feature = "serde")]
 pub mod fichier;
 pub mod modele;
+#[cfg(feature = "serde")]
+pub mod modeles_perso;
 pub mod organisation;
+pub mod personnages;
+pub mod prestige;
 pub mod rapport;
 pub mod recettes;
 pub mod ventes;
@@ -108,6 +113,12 @@ impl Campagne {
     }
 
     /// Entrées actives, de la plus récente à la plus ancienne.
+    /// Le journal contient-il des événements du mode aventure ou combat ? (Alors le fichier est écrit
+    /// au format 2, que l'ancienne application ne lit pas.)
+    pub fn utilise_aventure(&self) -> bool {
+        self.journal.iter().any(|e| e.evenement.utilise_aventure())
+    }
+
     pub fn historique(&self) -> impl Iterator<Item = &Entree> {
         self.journal[..self.curseur].iter().rev()
     }
@@ -267,6 +278,19 @@ impl Campagne {
                 ..
             } => format!("Création du personnage {nom} (compte : {compte_initial})"),
             PersonnageModifie { id, .. } => format!("Modification du personnage {}", pj(id)),
+            PrestigeDonRegle { pj: p, .. } => {
+                format!("Prestige (don) : modificateurs de {} modifiés", pj(p))
+            }
+            AcolyteLie { acolyte, maitre } => {
+                format!("{} devient l'acolyte de {}", pj(acolyte), pj(maitre))
+            }
+            AcolyteDelie { acolyte } => format!("{} n'est plus acolyte", pj(acolyte)),
+            PartisanAjoute {
+                maitre,
+                niveau,
+                nom,
+            } => format!("{} recrute le partisan {nom} (niveau {niveau})", pj(maitre)),
+            PartisanRetire { maitre, .. } => format!("{} retire un partisan", pj(maitre)),
             PersonnageDeplace { id, vers } => match vers {
                 Some(l) => format!("{} se rend à {}", pj(id), lo(l)),
                 None => format!("{} quitte toute localité", pj(id)),
@@ -620,6 +644,18 @@ impl Campagne {
                     "Limite des dépenses : une par localité".to_string()
                 }
             }
+            Fiche { pj: id_pj, evenement } => format!(
+                "Fiche de {} : {}",
+                pj(id_pj),
+                evenement.description()
+            ),
+            ReglagePersonnages { .. } => "Réglages des personnages modifiés".to_string(),
+            AventureDemarree { heure, minute, .. } => {
+                format!("Début de l'aventure à {heure:02}:{minute:02}")
+            }
+            Aventure(ev) => ev.description(),
+            CombatValide { resume, .. } => format!("Combat terminé : {resume}"),
+            AventureTerminee => "Fin de l'aventure".to_string(),
             Note { texte } => format!("Note : {texte}"),
         }
     }
@@ -859,3 +895,6 @@ mod tests {
         assert_eq!(c.date_courante(&r), "Jour 1 — lunedi 1 Abadius 4712 AR");
     }
 }
+
+#[cfg(test)]
+mod tests_aventure;

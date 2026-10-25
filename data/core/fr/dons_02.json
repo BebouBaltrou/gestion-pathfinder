@@ -1,0 +1,127 @@
+{
+  "Craft Magic Arms and Armor": {
+    "resume": "Le personnage sait fabriquer des armures, des boucliers et des armes magiques.",
+    "prerequis": "Niveau 5 de lanceur de sorts.",
+    "avantage": "Le personnage peut créer n’importe quel type de bouclier, d’arme ou d’armure magique. Le processus de fabrication prend un jour par tranche de 1000 po du prix de base des modifications à apporter à l’objet. Le personnage doit acheter les matières premières nécessaires à la moitié de leur prix de base. Consultez le Chapitre 15 pour plus d’informations. L’arme, armure ou bouclier devant être enchanté doit obligatoirement être un objet de maître (son prix n’est pas inclus dans le total précédent). Le personnage peut également réparer des armes, des armures ou des boucliers cassés s’il remplit les conditions de création de ce type d’objet. La procédure à suivre reste la même, mais tous les chiffres (prix et durée) sont réduits de moitié."
+  },
+  "Craft Rod": {
+    "resume": "Le personnage sait fabriquer des sceptres magiques.",
+    "prerequis": "Niveau 9 de lanceur de sorts.",
+    "avantage": "Le personnage peut fabriquer un sceptre magique. Le processus de fabrication prend un jour par tranche de 1000 po du prix de base de l’objet. Le personnage doit acheter les matières premières nécessaires (à la moitié de leur prix de base). Consultez les règles de fabrication des objets magiques du Chapitre 15 pour plus d’informations."
+  },
+  "Craft Staff": {
+    "resume": "Le personnage sait fabriquer des bâtons magiques.",
+    "prerequis": "Niveau 11 de lanceur de sorts.",
+    "avantage": "Le personnage peut fabriquer un bâton magique. Le processus de fabrication prend un jour par tranche de 1000 po du prix de base de l’objet. Le personnage doit acheter les matières premières nécessaires (à la moitié de leur prix de base). À sa création, le bâton possède dix charges. Consultez les règles de fabrication des objets magiques du Chapitre 15 pour plus d’informations."
+  },
+  "Craft Wand": {
+    "resume": "Le personnage sait fabriquer des baguettes magiques.",
+    "prerequis": "Niveau 5 de lanceur de sorts.",
+    "avantage": "Le personnage peut fabriquer une baguette magique pour n’importe quel sort de niveau 4 ou moins qu’il connaît. Le processus de fabrication prend un jour par tranche de 1000 po du prix de base de l’objet. Le personnage doit acheter les matières premières nécessaires (à la moitié de leur prix de base). À sa création, la baguette possède cinquante charges. Consultez les règles de fabrication des objets magiques du Chapitre 15 pour plus d’informations."
+  },
+  "Craft Wondrous Item": {
+    "resume": "Le personnage sait fabriquer des objets merveilleux, un type d’objets magiques.",
+    "prerequis": "Niveau 3 de lanceur de sorts.",
+    "avantage": "Le personnage peut fabriquer une grande variété d’objets merveilleux. Le processus de fabrication prend un jour par tranche de 1000 po du prix de base de l’objet. Le personnage doit acheter les matières premières nécessaires (à la moitié de leur prix de base). Consultez les règles de fabrication des objets magiques du Chapitre 15 pour plus d’informations. Le personnage peut réparer un objet s’il est capable de le fabriquer. La procédure à suivre reste la même, mais le temps passé et le coût en matières premières sont réduits de moitié."
+  },
+  "Critical Focus": {
+    "resume": "Le personnage est très doué pour semer la souffrance.",
+    "prerequis": "Bonus de base à l’attaque de +9.",
+    "avantage": "Le personnage reçoit un bonus de circonstances de +4 aux jets d’attaque destinés à confirmer un coup critique."
+  },
+  "Critical Mastery": {
+    "resume": "Les coups critiques du personnage provoquent deux effets supplémentaires.",
+    "prerequis": "Don pour les critiques, deux dons de critique, guerrier de niveau 14.",
+    "avantage": "Quand le personnage assène un coup critique, il peut ajouter les effets de deux dons de critique aux dégâts infligés.",
+    "normal": "Le personnage applique un seul effet de critique aux dégâts infligés à chacun de ses coups critiques."
+  },
+  "Dazzling Display": {
+    "resume": "L’habileté avec laquelle le personnage manie son arme de prédilection terrifie ses adversaires.",
+    "prerequis": "Arme de prédilection, maniement de l’arme choisie.",
+    "avantage": "Quand le personnage manie son Arme de prédilection, il peut faire une démonstration impressionnante de ses talents lors d’une action complexe. Il fait un test d’Intimidation pour démoraliser tous les ennemis qui se trouvent dans un rayon de neuf mètres et qui le regardent."
+  },
+  "Deadly Aim": {
+    "resume": "Le personnage effectue de dangereuses attaques à distance en visant les points faibles de son adversaire mais il diminue ainsi ses chances de toucher.",
+    "prerequis": "Dex 13, bonus de base à l’attaque de +1.",
+    "avantage": "Le personnage peut s’imposer un malus de -1 aux jets d’attaque à distance pour gagner un bonus de +2 aux jets de dégâts sur ces mêmes attaques. Quand son bonus de base à l’attaque atteint +4, et, par la suite, pour chaque tranche de +4 points de bonus, le malus augmente de -1 et le bonus aux dégâts de +2. Le personnage doit choisir s’il veut utiliser ce don avant de lancer les dés pour son jet d’attaque et les effets persistent jusqu’à son prochain tour. Ce bonus aux dégâts ne s’applique pas aux attaques de contact ni aux effets qui n’infligent pas de points de dégâts."
+  },
+  "Deadly Stroke": {
+    "resume": "Le personnage peut mettre un terme brutal aux souffrances de ses adversaires, d’un unique coup bien placé.",
+    "prerequis": "Arme de prédilection, Arme de prédilection supérieure, Briser les défenses, Démonstration, maniement de l’arme choisie, bonus de base à l’attaque de +11.",
+    "avantage": "Par une action simple, le personnage porte une unique attaque avec son Arme de prédilection supérieure contre un adversaire étourdi ou pris au dépourvu. S’il le touche, il lui inflige le double des dégâts habituels et la cible subit un saignement de 1 point de Constitution (voir Appendice 2). Les dégâts supplémentaires et le saignement ne sont pas multipliés en cas de critique."
+  },
+  "Deafening Critical": {
+    "resume": "Les coups critiques du personnage assourdissent ses adversaires.",
+    "prerequis": "Don pour les critiques, bonus de base à l’attaque +13.",
+    "avantage": "Quand le personnage réussit un coup critique, sa victime devient définitivement sourde. Un jet de Vigueur réussi permet d’être assourdi pendant seulement un round. Le DD du jet de Vigueur est égal à 10 + bonus de base à l’attaque du personnage. Ce don n’a aucun effet sur une créature déjà sourde. On peut soigner la surdité par un sort de guérison suprême, régénération, guérison de la surdité ou par un pouvoir similaire.",
+    "special": "Le personnage applique un seul effet de critique à chacun de ses coups critiques, à moins qu’il dispose de la Maîtrise du critique."
+  },
+  "Deceitful": {
+    "resume": "Le personnage est particulièrement doué pour tromper les autres, que ce soit à l’aide d’un discours ou d’un habile déguisement.",
+    "avantage": "Le personnage obtient un bonus de +2 sur tous ses tests de Bluff et de Déguisement. Si le personnage a 10 rangs ou plus dans l’une de ces compétences, le bonus ajouté à cette compétence augmente de +4."
+  },
+  "Defensive Combat Training": {
+    "resume": "Le personnage excelle à se défendre contre toutes les manœuvres offensives.",
+    "avantage": "Le personnage remplace son bonus de base à l’attaque par son nombre total de DV quand il calcule son degré de manœuvre défensive (DMD, voir Chapitre 8)."
+  },
+  "Deflect Arrows": {
+    "resume": "Le personnage peut détourner les flèches et d’autres projectiles de leur trajectoire afin de les éviter.",
+    "prerequis": "Dex 13, Science du combat à mains nues.",
+    "avantage": "Le personnage doit avoir au moins une main libre pour utiliser ce don. Une fois par round, quand il devrait être touché par une arme à distance, il peut dévier le projectile au dernier moment et éviter tout dégât. Le personnage doit être conscient de l’attaque. Il ne doit pas être pris au dépourvu. Il effectue un geste extrêmement rapide qui ne compte pas comme une action. Il est impossible de parer les projectiles massifs (comme un rocher lancé par un géant ou un carreau de baliste) ni les attaques à distance générées par des sorts ou des attaques naturelles (comme les souffles)."
+  },
+  "Deft Hands": {
+    "resume": "Le personnage est d’une dextérité hors du commun.",
+    "avantage": "Le personnage obtient un bonus de +2 sur tous ses tests d’Escamotage et de Sabotage. Si le personnage a 10 rangs ou plus dans l’une de ces compétences, le bonus ajouté à cette compétence augmente de +4."
+  },
+  "Diehard": {
+    "resume": "Le personnage est particulièrement difficile à tuer. Ses blessures se stabilisent automatiquement quand il est grièvement blessé mais, en plus, même aux portes de la mort, il reste conscient et peut continuer de bouger.",
+    "prerequis": "Endurance.",
+    "avantage": "Lorsque les points de vie du personnage tombent en dessous de 0 mais qu’il n’est pas mort, il se stabilise automatiquement. Il n’a pas besoin de faire de test de Constitution à chaque round pour ne pas perdre de points de vie supplémentaires. Il peut choisir d’être hors de combat plutôt que mourant. Le joueur doit prendre cette décision dès que son personnage atteint un total de points de vie négatif (même si cela arrive en dehors de son tour de jeu). Si le personnage ne choisit pas cela, il tombe aussitôt inconscient. Lorsqu’il utilise ce don, le personnage est chancelant. Effectuer une action de mouvement n’aggrave pas ses blessures, mais s’il entreprend une action simple (ou toute autre action fatigante, y compris certaines actions libres comme lancer un sort à incantation rapide), le personnage subit 1 point de dégâts aussitôt après avoir accompli son action. Le personnage meurt immédiatement si son total de points de vie négatif atteint ou dépasse sa valeur de Constitution.",
+    "normal": "Un personnage ne possédant pas ce don suit les règles habituelles : il est mourant et inconscient lorsque son total de points de vie tombe en dessous de 0."
+  },
+  "Disruptive": {
+    "resume": "L’entraînement du personnage lui permet de perturber les lanceurs de sorts qui ont alors bien du mal à utiliser la magie près de lui.",
+    "prerequis": "Guerrier de niveau 6.",
+    "avantage": "Le DD qui permet de lancer des sorts sur la défensive alors qu’il se trouve dans une case contrôlée par le personnage augmente de +4. Cette augmentation du DD s’applique uniquement aux lanceurs de sorts dont le personnage connaît la position et contre lesquels il peut faire une attaque d’opportunité. Si le personnage a droit à une seule attaque d’opportunité par round et qu’il l’a déjà utilisée, le DD n’augmente pas."
+  },
+  "Dodge": {
+    "resume": "L’entraînement et les réflexes du personnage lui permettent de réagir rapidement quand il s’agit d’éviter une attaque.",
+    "prerequis": "Dex 13.",
+    "avantage": "Le personnage bénéficie d’un bonus d’esquive de +1 à la CA. Il perd automatiquement ce bonus s’il se trouve dans une situation où il perd son bonus de Dextérité à la CA."
+  },
+  "Double Slice": {
+    "resume": "Quand le personnage se bat à deux armes, il manie son arme secondaire avec une puissance accrue.",
+    "prerequis": "Dex 15, Combat à deux armes.",
+    "avantage": "Le personnage ajoute son bonus de Force aux jets de dégâts de son arme secondaire.",
+    "normal": "Le personnage ajoute seulement la moitié de son bonus de Force aux jets de dégâts de l’arme qu’il manie avec sa main non-directrice."
+  },
+  "Elemental Channel": {
+    "resume": "Le personnage choisit un sous-type élémentaire comme l’air, l’eau, le feu ou la terre. Il peut canaliser l’énergie divine pour blesser ou soigner les extérieurs de ce sous-type.",
+    "prerequis": "Capacité de classe permettant de canaliser de l’énergie.",
+    "avantage": "L’énergie canalisée par le personnage soigne ou blesse les extérieurs du sous-type choisi au lieu de fonctionner comme à l’accoutumée. Le personnage doit choisir s’il souhaite utiliser ce don ou non à chaque fois qu’il canalise de l’énergie. S’il choisit de soigner ou de blesser une créature du sous-type en question, cette énergie n’aura aucun effet sur les autres créatures. La quantité de dégâts soignés ou infligés et le DD à battre pour réduire les dégâts de moitié ne change pas.",
+    "special": "Le personnage peut sélectionner ce don à plusieurs reprises mais ses effets ne se cumulent pas. À chaque fois que le personnage choisit ce don, il s’applique à un nouveau sous-type élémentaire. Le personnage doit décider du sous-type affecté à chaque fois qu’il lance le sort."
+  },
+  "Empower Spell": {
+    "resume": "Le personnage augmente la puissance de ses sorts qui infligent donc plus de dégâts.",
+    "avantage": "Toutes les variables numériques et aléatoires d’un sort à extension d’effet augmentent de 50%, y compris les bonus aux jets de dés. Les jets de sauvegarde et les jets opposés ne sont pas affectés, ni les sorts sans variable numérique aléatoire. Un sort à extension d’effet nécessite un emplacement de sort de deux niveaux de plus que son niveau réel."
+  },
+  "Endurance": {
+    "resume": "Le personnage résiste particulièrement bien aux efforts prolongés et aux conditions difficiles.",
+    "avantage": "Le personnage bénéficie d’un bonus de +4 à chacun des tests et jets de sauvegarde suivants : test de Natation pour résister à des dégâts temporaires dus à la fatigue, tests de Constitution pour continuer à courir, tests de Constitution pour éviter les dégâts nonlétaux infligés par une marche forcée, tests de Constitution pour retenir sa respiration, tests de Constitution pour éviter les dégâts nonlétaux infligés par la famine ou la soif, jets de Vigueur pour éviter les dégâts non-létaux infligés par les climats chauds ou froids et jets de Vigueur pour résister aux dégâts infligés par l’asphyxie. De plus, le personnage peut dormir en armure légère ou intermédiaire sans être fatigué le lendemain.",
+    "normal": "Un personnage qui ne possède pas ce don et dort en armure intermédiaire ou lourde est automatiquement fatigué le lendemain."
+  },
+  "Enlarge Spell": {
+    "resume": "Le personnage augmente la portée de ses sorts.",
+    "avantage": "Le personnage peut modifier un sort de courte, moyenne ou longue portée afin de doubler celle-ci. Une fois la portée étendue, une courte portée devient alors égale à 15 m + 1,5 m/niveau, une portée moyenne à 60 m + 6 m/niveau et une longue portée à 240 m + 24 m/niveau. Un sort à extension de portée nécessite un emplacement de sort d’un niveau de plus que son niveau réel. Les sorts dont la portée ne s’exprime pas par une mesure physique ou qui n’est ni courte, ni moyenne, ni longue, ne peuvent être affectés par ce don."
+  },
+  "Eschew Materials": {
+    "resume": "Le personnage peut lancer de nombreux sorts sans utiliser de composantes matérielles mineures.",
+    "avantage": "Le personnage peut lancer des sorts nécessitant une composante matérielle de 1 po ou moins sans utiliser cette composante. L’incantation provoque tout de même des attaques d’opportunité. Le personnage doit fournir les composantes matérielles dont le prix est supérieur à 1 po."
+  },
+  "Exhausting Critical": {
+    "resume": "Les critiques du personnage épuisent son adversaire.",
+    "prerequis": "Critique fatigant, Don pour les critiques, bonus de base à l’attaque de +15.",
+    "avantage": "Quand le personnage inflige un coup critique à un adversaire, ce dernier est épuisé. Ce don n’a aucun effet sur une cible déjà épuisée.",
+    "special": "Le personnage applique un seul effet de critique à chacun de ses coups critiques, à moins qu’il dispose de la Maîtrise du critique."
+  }
+}

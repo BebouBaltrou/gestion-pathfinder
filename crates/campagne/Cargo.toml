@@ -8,9 +8,15 @@ license.workspace = true
 [dependencies]
 domaine = { path = "../domaine" }
 regles = { path = "../regles" }
+fiches = { path = "../fiches" }
+aventure = { path = "../aventure" }
+temps = { path = "../temps" }
 serde = { version = "1", features = ["derive"], optional = true }
 serde_json = { version = "1", optional = true }
 
 [features]
 # Sauvegarde des campagnes en JSON (activée par l'application).
 serde = ["dep:serde", "dep:serde_json", "domaine/serde", "regles/serde"]
+
+[dev-dependencies]
+combat = { path = "../combat" }

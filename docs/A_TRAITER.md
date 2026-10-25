@@ -10,12 +10,13 @@ Ce fichier est tenu à jour à chaque étape.
 
 ## Migration vers la nouvelle application (Tauri, `desktop/`)
 
-Fait : coquille (navigation, date, annuler/rétablir, simulation, notifications), tableau de
-bord, campagnes ; compilation Windows (.exe) avec essai de bout en bout (Linux en pause
-jusqu'à ce que l'application soit stable et terminée).
-À migrer, dans l'ordre : Localités, Personnages, Bâtiments (salles, extensions, vente),
-Recettes, Organisations, Gestionnaires, Historique, Paramètres, Référentiel, Points à
-confirmer, import/export, modèles personnels. Puis retrait de l'ancienne application (`app/`).
+Fait : toutes les pages de l'ancienne application (coquille, tableau de bord, campagnes avec
+export/import, localités, personnages, bâtiments, recettes, organisations, gestionnaires,
+historique, paramètres, référentiel, points à confirmer, modèles personnels) ; compilation
+Windows (.exe) avec essai de bout en bout (Linux en pause jusqu'à ce que l'application soit
+stable et terminée).
+Reste : essai à la main de chaque page par l'utilisateur, puis retrait de l'ancienne application
+(`app/`) avec son accord.
 
 ## Décisions du 23/10/2026
 
@@ -67,3 +68,40 @@ confirmer, import/export, modèles personnels. Puis retrait de l'ancienne applic
   servies avant les équipes.
 - Délocalisation équipe par équipe (1d6 par groupe, règle officielle) ; option personnalisée
   « un seul jet pour toute l'organisation ».
+
+## Fiches de personnage : à faire plus tard (décisions du 23/10/2026)
+
+- **Charge portée** : conversion automatique poids -> charge (tableau 7-4 déjà chargé dans
+  `data/core/charge.json`), pièces de monnaie (50 par livre) et poids manquants ; pour l'instant le
+  joueur indique la charge.
+- **Niveaux négatifs (drain d'énergie)** : malus par niveau négatif, perte de niveau effectif,
+  jets de sauvegarde pour les rendre permanents.
+- Vitesse divisée par deux : arrondi à clarifier (voir `docs/POINTS_A_CONFIRMER_FICHES.md`, n° 17).
+
+## Pages des personnages (nouvelle application) : fait et reste à faire
+
+Fait : liste des PJ, création de fiche pas à pas, fiche complète (chiffres détaillés au clic,
+compétences, dons, sorts et repos, équipement, états et effets temporaires, XP, historique),
+montée de niveau, page Paramètres (registre des règles optionnelles de la campagne).
+Reste : équipement de départ dans l'assistant de création, multiclassage (une seule classe
+existe pour l'instant), tirage de dés intégré pour les caractéristiques et les dés de vie,
+familiers, lien de la fiche avec le déplacement du PJ dans une localité, impression de la fiche.
+
+## À élucider plus tard (décision du 23/10/2026)
+
+Les points 23 à 26 de `docs/POINTS_A_CONFIRMER_FICHES.md` sont gardés tels quels, à trancher plus
+tard : bonus de compétence dans les jets de recettes, Prestige calculé, temps de campagne et
+fiches, compatibilité des sauvegardes.
+
+- **Importation de fiche PDF** : fonctionnalité en développement, à reprendre plus tard (voir `docs/IMPORT_PDF.md`). Priorité : toutes les classes dans le créateur de fiche (Prêtre, puis Druide).
+
+## Prêtre et Druide : ce qui reste à faire plus tard (24/10/2026)
+
+- **Combat** : les lanceurs qui préparent leurs sorts (Prêtre, Druide) sont encore refusés par le combat (garde-fou existant).
+- **Forme animale du Druide** : vitesses, attaques naturelles et aptitudes de chaque forme restent en texte (suivre le sort forme bestiale, corps élémentaire ou forme végétale) ; seuls les bonus chiffrés sont calculés.
+- **Compagnon animal** : compétences, dons et tours ne sont que des nombres, sans choix ; PV en moyenne arrondie (4,5 par d8, à confirmer).
+- **Druide** : conversion spontanée des sorts en « convocation d'alliés naturels » (celle du Prêtre est faite).
+- **Domaines** : résistances (Air, Eau, Feu, Terre) en texte seulement ; domaines de Calistria (table et pages du livre ne concordent pas), sorts de domaine non résolus (Obscurité 8e, Runes 6e) : points à confirmer.
+- **Armes et objets** : « mains nues » et « masse » à confirmer ; Bottes elfiques = Acrobaties dans le livre français à confirmer ; type du bonus de forme bestiale (taille) à confirmer.
+- **Importation PDF** : domaines, divinité, alignement et pacte de nature ne sont pas lus (fonctionnalité en développement).
+- **Autres classes du créateur de fiche** : toutes les classes restantes sont à implémenter (seuls Ensorceleur, Prêtre et Druide existent).

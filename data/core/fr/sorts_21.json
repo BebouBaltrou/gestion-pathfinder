@@ -1,0 +1,72 @@
+{
+  "Owl's Wisdom, Mass": {
+    "cible": "1 créature/niveau, distantes de moins de 9 m les unes des autres",
+    "composantes": "V, G, M/FD (des plumes ou des fientes de chouette)",
+    "description": "Ce sort est semblable à sagesse du hibou, si ce n’est qu’il affecte plusieurs créatures."
+  },
+  "Permanent Image": {
+    "cible": "chimère ne pouvant dépasser 1 cube de 6 m de côté + 1 cube de 3 m de côté/niveau (F)",
+    "composantes": "V, G, F (un peu de toison)",
+    "description": "Ce sort fonctionne comme image silencieuse, si ce n’est que l’illusion obtenue est permanente et qu’elle inclut des composantes visuelles, sonores, olfactives et thermiques. Si le personnage se concentre, il peut déplacer l’illusion dans les limites de portée ; s’il ne se concentre pas, elle reste statique."
+  },
+  "Planar Binding": {
+    "cible": "jusqu’à 3 élémentaires ou",
+    "composantes": "V, G",
+    "description": "Extérieurs (ne totalisant pas plus de 12 DV), apparaissant à 9 m ou moins les uns des autres Ce sort s’apparente à contrat, si ce n’est qu’il permet d’appeler une entité ayant jusqu’à 12 DV, ou plusieurs créatures du même type dont la somme des DV ne dépasse pas 12. Chacune peut faire un jet de sauvegarde et a la possibilité de s’échapper, et le mage doit les convaincre une par une de lui rendre service."
+  },
+  "Plant Shape II": {
+    "cible": "vous",
+    "composantes": "V, G, M (un morceau de la créature dont vous comptez prendre la forme)",
+    "description": "Ce sort fonctionne comme forme végétale I si ce n’est que le personnage peut aussi se transformer en plante de taille G. Si la créature est immunisée ou possède une résistance à un élément, le personnage gagne un résistance de 20 contre cet élément. Si la créature est vulnérable à un élément, le personnage le devient aussi.\nPlante de taille G. Si le personnage prend l’apparence d’une plante de taille G, il gagne un bonus de taille de +4 à la Force, un bonus d’altération de +2 à la Constitution et un bonus de +4 à l’armure naturelle."
+  },
+  "Programmed Image": {
+    "cible": "chimère ne pouvant dépasser 1 cube de 6 m de côté + 1 cube de 3 m de côté/niveau (F)",
+    "composantes": "V, G, M (un bout de toison de mouton et de la poudre de jade (valeur 25 po))",
+    "description": "Ce sort fonctionne comme image silencieuse, si ce n’est que l’illusion obtenue inclut des composantes visuelles, sonores, olfactives et thermiques, voire même des paroles intelligibles et qu’elle se déclenche lorsqu’une condition spécifique est remplie.\nLe lanceur du sort choisit la condition au cours de l’incantation (un mot à prononcer par exemple). La condition qui déclenche l’illusion peut être aussi générale ou spécifique que le personnage le désire mais elle doit se baser sur des éléments visuels, sonores, olfactifs ou tactiles ; elle ne peut pas dépendre d’éléments qui ne sont pas immédiatement perceptibles via un des sens (comme l’alignement). Reportez-vous au descriptif du sort bouche magique pour plus de renseignements sur les conditions de déclenchement."
+  },
+  "Repulsion": {
+    "cible": "émanation de 3 m de rayon/niveau maximum, centrée sur le jeteur de sorts",
+    "composantes": "V, G, F/FD (une paire de statuettes canines (50 po))",
+    "description": "Le personnage se retrouve entouré d’un champ de force invisible faisant obstacle à toutes autres créatures qui voudraient approcher. Il choisit la taille du champ de force au moment de l’incantation, dans les limites autorisées par son niveau. Les créatures se situant dans la zone définie ou tentant d’y pénétrer doivent effectuer un jet de Volonté. Si elles échouent, elles se retrouvent dans l’incapacité d’avancer en direction du personnage pendant toute la durée du sort. Elles peuvent continuer d’agir comme elles le désirent, et rien ne les empêche par exemple d’attaquer le personnage à l’aide de sorts ou d’armes à distance. Si le lanceur de sorts se rapproche d’une créature ayant raté son jet de sauvegarde, celleci n’est pas repoussée davantage par le champ de force. Les créatures repoussées sont libres d’attaquer le personnage au corps à corps s’il se met à portée de leur allonge. Enfin, si une créature s’éloigne ne serait ce qu’un peu du personnage, elle se retrouve immédiatement dans l’incapacité de regagner le terrain perdu au sein de la zone d’effet du sort."
+  },
+  "Shadow Walk": {
+    "cible": "jusqu’à 1 créature touchée/niveau",
+    "composantes": "V, G",
+    "description": "On ne peut faire appel à ce sort que dans une zone de faible luminosité. Le lanceur de sorts et ceux qu’il touche sont alors transportés par une voie d’ombre jusqu’en bordure du plan Matériel, à proximité du plan de l’Ombre. L’effet du sort est principalement illusoire, mais la voie empruntée est quasi-réelle. Le personnage peut emmener plusieurs compagnons avec lui, à condition que tous se touchent au moment de l’incantation.\nLa région d’ombre atteinte permet de se déplacer à une vitesse de 75 km/h, en évoluant normalement aux frontières du plan de l’Ombre mais cela correspond à une vitesse bien plus élevée dans le plan Matériel. Le personnage peut donc utiliser cette incantation pour se rendre dans le plan de l’Ombre, se déplacer rapidement et revenir dans le plan Matériel après avoir parcouru une distance considérable.\nÀ cause du flou qui existe entre le plan de l’Ombre et le plan Matériel, le personnage ne peut pas discerner les détails topographiques des régions qu’il traverse, tout comme il ne saurait dire où se terminera son périple. Il ne peut pas estimer les distances avec précision, ce qui empêche de se servir de ce sort pour faire de la reconnaissance ou de l’espionnage. Au terme du sort, le personnage est éjecté à 1d10x30 mètres dans une direction horizontale aléatoire par rapport à l’endroit recherché. Si cela doit le faire apparaître dans un objet solide, il est repoussé de 1d10x30 mètres dans la même direction. Si cela devait à nouveau le faire apparaître dans un objet solide, le personnage et tous ses compagnons sont éjectés vers l’espace libre le plus proche, mais ils sont alors fatigués (pas de jet de sauvegarde).\nTraversée des ombres permet également de se rendre dans les plans jouxtant le plan de l’Ombre, mais pour cela, il faut s’aventurer dans ce plan pour gagner la frontière qu’il partage avec un autre. Le passage par le plan de l’Ombre prend 1d4 heures.\nToute créature touchée par le lanceur de sorts au moment de l’incantation est emportée avec lui. Elle peut choisir de suivre le lanceur de sorts, errer seule dans le plan de l’Ombre ou rentrer à tâtons dans le plan Matériel (50% de chances qu’elle erre et 50 % qu’elle rentre dans le plan Matériel si le personnage l’abandonne ou si elle se perd). Les créatures refusant d’accompagner le mage ont droit à un jet de Volonté. En cas de succès, elles résistent à l’effet du sort."
+  },
+  "Stone to Flesh": {
+    "cible": "1 créature pétrifiée ou 1 cylindre de pierre faisant jusqu’à 3 m de long et entre 30 et 90 cm de diamètre",
+    "composantes": "V, G, M (une goutte de sang mêlée à un peu de terre)",
+    "description": "Ce sort redonne son apparence normale à une créature pétrifiée, ce qui la ramène aussitôt à la vie (son équipement reprend lui aussi sa consistance initiale). La cible doit réussir un jet de Vigueur DD 15 pour survivre au choc de cette transformation. Toute créature pétrifiée peut être affectée par cette incantation, quelle que soit sa taille. Le sort permet aussi de transformer une masse de pierre en une substance ayant la texture de la chair. La masse qui en résulte est inerte, à moins qu’elle ne soit animée par de l’énergie vitale ou magique (transmutation de la pierre en chair peut par exemple transformer une statue de pierre animée en statue de chair animée mais une statue ordinaire se changera en masse de chair inerte en forme de statue). Si la masse de pierre prise pour cible est vraiment très importante, le lanceur de sort affecte seulement un cylindre de trois mètres de long et de trente à quatre-vingt-dix centimètres de diamètre."
+  },
+  "Suggestion, Mass": {
+    "cible": "1 créature/niveau, à moins de 9 m les unes des autres",
+    "composantes": "V, M (une langue de serpent et un rayon de miel)",
+    "description": "Ce sort est semblable à suggestion, si ce n’est qu’il affecte plusieurs créatures à la fois. La même suggestion s’applique à toutes les cibles."
+  },
+  "Summon Monster 6": {
+    "cible": "une créature convoquée",
+    "composantes": "V, G, F/FD (un minuscule sac et une petite bougie)",
+    "description": "Prê 6 Ce sort s’apparente à convocation de monstres I, à la différence qu’il permet d’appeler une créature de niveau 5, 1d3 créatures de niveau 5 ou 1d4+1 créatures de niveau moindre (lorsque le personnage convoque plusieurs monstres, ces derniers doivent nécessairement tous être du même type)."
+  },
+  "Symbol of Fear": {
+    "cible": "un symbole",
+    "composantes": "V, G, M (du mercure et du phosphore, plus de la poudre de diamant et d'opale pour une valeur totale de 1 000 po)",
+    "description": "Ce sort ressemble à symbole de mort, si ce n’est que les créatures situées dans un rayon de 18 m de la rune sont paniquées pendant 1 round par niveau de lanceur de sorts.\nNote. Les pièges magiques tels que symbole de terreur sont extrêmement difficiles à détecter et à désamorcer. Un roublard (et lui seul) peut utiliser sa compétence de Perception pour les repérer, puis de Sabotage pour les mettre hors d’état. Pour chacun des deux tests, le DD s’élève à 25 + niveau du sort, soit 31 pour symbole de terreur."
+  },
+  "Symbol of Persuasion": {
+    "cible": "un symbole",
+    "composantes": "V, G, M (du mercure et du phosphore, plus de la poudre de diamant et d'opale pour une valeur totale de 5 000 po)",
+    "description": "Ce sort ressemble à symbole de mort, si ce n’est que les créatures situées dans un rayon de 18 m de la rune sont charmées (voir le sort charme-personne) pendant 1 heure par niveau de lanceur de sorts.\nContrairement à symbole de mort, symbole de persuasion ne présente pas de limite de points de vie. Une fois déclenché, il reste actif pendant dix minutes par niveau de lanceur de sorts.\nNote. Les pièges magiques tels que symbole de persuasion sont extrêmement difficiles à détecter et à désamorcer. Un roublard (et lui seul) peut utiliser sa compétence de Perception pour les repérer, puis de Sabotage pour les mettre hors d’état. Pour chacun des deux tests, le DD s’élève à 25 + niveau du sort, soit 31 pour symbole de persuasion."
+  },
+  "Transformation": {
+    "cible": "le jeteur de sorts",
+    "composantes": "V, G, M (une potion de force de taureau que le personnage doit boire et dont les effets sont inclus dans le sort)",
+    "description": "Cette incantation transforme le mage en machine à tuer : grâce à elle, il devient plus fort, plus rapide et plus efficace au combat. En même temps, son état d’esprit change et il apprécie tant le maniement des armes qu’il devient incapable de faire appel à sa magie, que ce soit à l’aide d’un sort ou d’un objet.\nLe personnage bénéficie d’un bonus d’armure naturelle de +4 à la CA, d’un bonus d’altération de +4 en Force, en Dextérité et en Constitution et d’un bonus d’aptitude de +5 aux jets de Vigueur. Il est instinctivement formé au maniement de toutes les armes courantes et de guerre. Son bonus de base à l’attaque est égal à son niveau de personnage (ce qui peut lui conférer une ou plusieurs attaques supplémentaires).\nLe personnage perd ses facultés de lanceur de sorts, dont l’utilisation des objets magiques à potentiel magique ou à fin d’incantation, comme si les sorts ne figuraient plus dans sa liste de classe."
+  },
+  "True Seeing": {
+    "cible": "créature touchée",
+    "composantes": "V, G, M (onguent à paupière (250 po))",
+    "description": "Le lanceur de sorts offre à as cible la faculté de voir les choses telles qu’elles sont vraiment, ce qui lui permet de voir normalement dans l’obscurité (normale comme magique), de remarquer les passages secrets dissimulés par magie, de repérer l’endroit exact où se situent les créatures protégées par des sorts tels que flou ou déplacement, de voir clairement les créatures et objets invisibles, de ne pas être trompé par les illusions, et d’apercevoir la véritable apparence des créatures ou objets métamorphosés ou transformés. Un simple exercice mental lui permet également de voir dans le plan Éthéré, mais pas à l’intérieur des espaces extradimensionnels. La vision lucide s’étend jusqu’à une portée de trente-six mètres.\nCe sort n’est pas comparable à la vision aux rayons X et ne permet pas de voir au travers des objets solides. Il ne réduit pas non plus le camouflage des adversaires, même si celui-ci, par exemple, est causé par le brouillard. Il ne permet pas de percer à jour les créatures déguisées à l’aide d’un déguisement normal (et non par magie), ni de remarquer celles qui se cachent dans l’ombre. De même, il ne permet pas de repérer les passages secrets non magiques. Enfin, ses effets ne sont cumulatifs avec ceux d’aucun autre sort ou objet magique. Il est ainsi impossible de conjuguer vision lucide et clairvoyance/ clairaudience (ou vision lucide et une boule de cristal)."
+  }
+}

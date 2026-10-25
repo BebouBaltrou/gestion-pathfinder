@@ -1,0 +1,72 @@
+{
+  "Tongues": {
+    "cible": "créature touchée",
+    "composantes": "V, G, M/FD (une ziggourat miniature en argile)",
+    "description": "Ce sort donne à la créature touchée la capacité de parler et de comprendre le langage de n’importe quelle créature intelligente, qu’il s’agisse d’une langue raciale ou d’un dialecte régional. Elle ne peut parler qu’une seule langue à la fois mais elle peut en comprendre plusieurs. Ce sort ne lui permet cependant pas de communiquer avec des créatures qui ne sont pas capables de parler. La créature touchée peut se faire comprendre de tous les individus qui entendent sa voix. Ce sort ne modifie en rien les prédispositions des créatures auxquelles le personnage s’adresse.\nOn peut user de permanence sur un sort de don des langues."
+  },
+  "Vampiric Touch": {
+    "cible": "créature vivante touchée",
+    "composantes": "V, G",
+    "description": "Le mage doit réussir une attaque de contact au corps à corps pour que le sort prenne effet. Il inflige alors 1d6 points de dégâts tous les deux niveaux de lanceur de sorts (jusqu’à un maximum de 10d6). Le lanceur de sorts gagne autant de points de vie temporaires qu’il inflige de dégâts. Ces points de vie ne peuvent toutefois dépasser le nombre actuel de points de vie de la cible + sa valeur de Constitution (ce qui peut suffire à la tuer). Les points de vie temporaires disparaissent au bout d’une heure."
+  },
+  "Water Breathing": {
+    "cible": "créatures vivantes touchées",
+    "composantes": "V, G, M/FD (un petit roseau ou un brin de paille)",
+    "description": "Les créatures affectées respirent sans mal sous l’eau. Si le personnage décide d’en faire bénéficier plusieurs compagnons, il doit diviser la durée indiquée par le nombre d’individus affectés. Ce sort n’empêche pas les créatures de respirer à l’air libre."
+  },
+  "Wind Wall": {
+    "cible": "mur faisant jusqu’à 3 m de long/niveau et 1,50 m de haut/niveau (F)",
+    "composantes": "V, G, M/FD",
+    "description": "Un rideau de vent invisible apparaît à la fin de l’incantation. Il fait soixante centimètres d’épaisseur et sa violence considérable lui permet d’emporter les oiseaux plus petits qu’un aigle ou d’arracher les papiers et les autres objets similaires des mains des possesseurs qui sont surpris (ce dernier peut toutefois les garder en main s’il réussit un jet de Réflexes). Les créatures volantes de taille TP ou P sont incapables de franchir cette barrière. Les objets qui ne sont pas tenus et les vêtements s’envolent au contact d’un mur de vent. Les flèches et les carreaux sont déviés et manquent automatiquement leur cible, tandis que toutes les autres armes à distance ont 30% de chance de la rater (rochers de géants, projectiles d’engins de siège et autres armes de jet aussi massives ne sont pas affectés). Le gaz ne peut pas franchir le mur, pas plus que la plupart des souffles gazeux ou les créatures sous forme gazeuse. À l’inverse, le sort ne représente pas une barrière pour les créatures intangibles.\nLe mur doit être vertical mais, mise à part cette restriction, le personnage peut lui donner la forme de son choix. Il est possible de le créer cylindrique ou carré pour délimiter une zone bien précise."
+  },
+  "Animate Dead": {
+    "cible": "le ou les cadavres touchés",
+    "composantes": "V, G, M (un onyx noir valant au moins 25 po par dé de vie du mort-vivant)",
+    "description": "Animation des morts transforme les cadavres en zombis et les ossements en squelettes (voir le Bestiaire Pathfinder JdR) obéissant aux ordres du lanceur de sorts. Les morts-vivants peuvent suivre leur maître ou monter la garde à un endroit précis en attaquant tout ce qui bouge (ou seulement certains types de créatures). Ils restent animés tant qu’ils ne sont pas détruits, après quoi ils ne pourront plus être affectés de nouveau par ce sort.\nLe lanceur de sorts ne peut animer plus de 2 DV par niveau de jeteur de sorts d’un coup (le sort profanation double cette limite), qu’il s’agisse de squelettes ou de zombies.\nLes morts-vivants créés de la sorte restent indéfiniment sous le contrôle de leur maître, qui peut en diriger jusqu’à 4 DV par niveau de lanceur de sorts. Si cette limite est dépassée, il domine bien les morts-vivants qu’il vient juste d’animer, mais les autres, qu’il contrôlait jusque-là, lui échappent totalement (il décide desquels il s’agit). Les morts-vivants que le lanceur de sorts contrôle à l’aide du don Contrôle des morts-vivants ne comptent pas.\nSquelettes. On ne peut animer en squelette que les squelettes ou cadavres quasiment intacts. Le corps doit posséder une ossature. Dans le cas où le cadavre est encore en assez bon état, sa chair et ses muscles tombent pour ne plus laisser que ses os.\nZombis. Un corps presque intact est nécessaire pour animer un zombi. La créature doit avoir une réelle anatomie.\nComposantes matérielles profanes : le personnage doit placer un onyx noir valant au moins 25 po par dé de vie du mort-vivant dans la bouche ou l’orbite de chaque cadavre à animer. La magie libérée par le sort vide la pierre de sa substance, ce qui lui fait perdre toute valeur."
+  },
+  "Arcane Eye": {
+    "cible": "capteur magique",
+    "composantes": "V, G, M (un morceau de fourrure)",
+    "description": "Cette incantation crée un capteur magique mobile qui transmet au personnage toutes les informations visuelles qu’il reçoit. Le lanceur de sorts peut créer ce capteur en tout point de son champ de vision, et celuici peut en sortir sans aucun souci. L’œil du mage se déplace à une vitesse de 9 m par round (90 m par minute) s’il n’observe rien de particulier (c’est-à-dire s’il se concentre principalement sur le sol qui défile devant lui), et de 3 m par round seulement (30 m par minute) si on lui demande d’examiner également les murs et le plafond. Il voit exactement ce que son créateur verrait si ce dernier se trouvait à sa place.\nIl peut se déplacer dans n’importe quelle direction. Il ne peut pas franchir un obstacle solide mais il peut se faufiler par un trou de souris (diamètre minimum : 2,5 cm). L’œil du mage ne peut pas entrer dans un autre plan d’existence même s’il emprunte un portail ou une autre ouverture magique.\nLe personnage doit se concentrer pour recevoir des informations en provenance de l’œil. Le capteur reste inerte tant que le personnage ne lui demande rien."
+  },
+  "Beast Shape II": {
+    "cible": "vous",
+    "composantes": "V, G, M (un morceau de la créature dont vous comptez prendre la forme)",
+    "description": "Ce sort fonctionne comme forme bestiale I mais le personnage peut prendre l’apparence d’un animal TP ou G. Si cette créature dispose des aptitudes suivantes, le personnage en bénéficie aussi : escalade 18 m, nage 18 m, vol 18 m (bonne maniabilité), bond, croc-en-jambe, étreinte, odorat, vision dans le noir 18 mètres, vision nocturne.\nAnimal de taille TP. Si le personnage prend la forme d’un animal de taille TP, il gagne un bonus de +4 à la Dextérité, un malus de -2 à la Force et un bonus d’armure naturelle de +1.\nAnimal de taille G. Si le personnage prend la forme d’un animal de taille G, il gagne un bonus de +4 à la Force, un malus de -2 à la Dextérité et un bonus d’armure naturelle de +4."
+  },
+  "Bestow Curse": {
+    "cible": "créature touchée",
+    "composantes": "V, G",
+    "description": "Ce sort permet de maudire la créature touchée. Le personnage choisit l’effet qu’il souhaite produire parmi les trois suivants :\n• -6 à une valeur de caractéristique (1 minimum). • Malus de -4 aux jets d’attaque, aux jets de sauvegarde, aux tests de caractéristique et aux tests de compétence. • Chaque fois que son tour de jeu arrive, la victime a 50% de chances de pouvoir agir normalement. Sinon, elle ne fait rien. Il est possible d’ajouter d’autres types de malédictions à cette liste, mais elles ne doivent pas être plus puissantes que celles-ci. La malédiction ne peut pas être dissipée, mais il est possible de s’en débarrasser à l’aide d’annulation d’enchantement, délivrance des malédictions, miracle, souhait ou souhait limité. Malédiction contre délivrance des malédictions."
+  },
+  "Black Tentacles": {
+    "cible": "étendue de 6 m de rayon",
+    "composantes": "V, G, M (tentacule de pieuvre ou de calmar)",
+    "description": "Cette incantation fait apparaître un amas de tentacules noirs et spongieux qui semblent surgir du sol (ou de la surface de l’eau). Ils s’agrippent et s’enroulent autour des créatures qui entrent dans la zone et les immobilisent afin de les écraser.À chaque round, au début du tour du personnage, toutes les créatures présentes dans la zone d’effet du sort sont victimes d’une manœuvre de combat destinée à les agripper. Les créatures qui entrent dans la zone d’effet sont immédiatement attaquées. Les tentacules ne provoquent pas d’attaque d’opportunité. Les tentacules utilisent le niveau de lanceur de sorts du personnage comme bonus de base à l’attaque pour déterminer leur BMO et reçoivent un bonus de Force de +4 et un bonus de taille de +1. À chaque round, le personnage lance une seule fois les dés pour la totalité des effets du sort et applique le résultat à toutes les créatures de la zone d’effet.\nLorsque les tentacules réussissent un test de lutte, ils infligent 1d6+4 points de dégâts et leur victime est en lutte et ne peut pas se déplacer tant qu’elle ne s’est pas libérée. Elle ne peut rien faire tant qu’elle est agrippée. Les tentacules noirs reçoivent un bonus de +5 au test de lutte contre les adversaires qu’ils agrippent déjà mais ils ne peuvent pas les déplacer ni les immobiliser. À chaque fois que les tentacules réussissent un test de lutte, ils infligent 1d6+4 points de dégâts. Le DMD pour échapper à l’étreinte des tentacules est égale à 10 + BMO des tentacules.\nOn ne peut pas blesser ces tentacules mais on peut les dissiper normalement. Tant qu’ils sont présents, la zone qu’ils affectent est considérée comme un terrain difficile."
+  },
+  "Charm Monster": {
+    "cible": "1 créature vivante",
+    "composantes": "V, G",
+    "description": "Ce sort fonctionne sur le même principe que charme-personne, excepté le fait qu’il affecte n’importe quelle créature, sans considération de taille ou de type."
+  },
+  "Confusion": {
+    "cible": "toutes les créatures comprises dans un rayonnement de 9 m de diamètre",
+    "composantes": "V, G, M/FD (trois noix)",
+    "description": "Les victimes de cet enchantement deviennent confuses, ce qui les empêche de prendre la moindre décision. Pour déterminer ce que chacun fera pendant le round à venir, lancer 1d100 au début du tour de chaque sujet.\n1d100 01–25 26-50\n51–75\n76–100\nComportement Agit normalement. Ne fait rien et babille de manière incohérente. S’inflige 1d8 points de dégâts + modificateur de Force avec un objet en main. Attaque la créature la plus proche (dans ce cas, un familier fait partie du sujet).\nUn personnage confus dans l’incapacité de mener à bien l’action indiquée ne fait rien d’autre que babiller de manière incohérente. Les attaquants n’ont aucun d’avantage particulier face à un personnage confus. En revanche, ce dernier riposte automatiquement lors de son tour de jeu suivant, du moins s’il est toujours confus. Il est bon de prendre en note qu’un personnage confus ne porte pas d’attaque d’opportunité contre une créature sauf s’il est déjà en train de l’attaquer (soit à cause de sa dernière action, soit parce qu’il vient d’être attaqué)."
+  },
+  "Contagion": {
+    "cible": "créature vivante touchée",
+    "composantes": "V, G",
+    "description": "Le sujet contracte une maladie tirée de la liste suivante : bouille-crâne, mal aveuglant, fièvre des marais, fièvre gloussante, lèpre, mal rouge, mort vaseuse, peste bubonique, tremblote.\nCette maladie le frappe sur-le-champ, sans la moindre période d’incubation. Utilisez la fréquence et le DD des maladies indiquées pour déterminer leurs effets. Pour plus d’informations sur ces maladies, consultez la page 563."
+  },
+  "Crushing Despair": {
+    "cible": "rayonnement en forme de cône",
+    "composantes": "V, G, M (un flacon rempli de larmes)",
+    "description": "Une grande tristesse envahit les cibles situées dans le cône de désespoir engendré par ce sort. Les créatures affectées subissent un malus de -2 aux jets d’attaque, aux jets de sauvegarde, aux tests de caractéristiques, aux tests de compétences et aux jets de dégâts des armes.\nDésespoir foudroyant contre et dissipe espoir."
+  },
+  "Detect Scrying": {
+    "cible": "émanation de 12 m de rayon centrée sur le jeteur de sorts",
+    "composantes": "V, G, M (un éclat de miroir et un cornet acoustique miniature en laiton)",
+    "description": "Le lanceur de sorts repère immédiatement toutes les tentatives visant à l’observer grâce à des sorts ou des effets de Divination (scrutation). La zone d’effet de la détection de la scrutation émane du personnage et se déplace avec lui. Le personnage repère l’emplacement de tous les capteurs magiques se trouvant à l’intérieur de la zone d’effet.\nDe’tection de la loi/du chaos\nIntensité de l’aura\nCréature/objet\nAucune Faible Modérée Puissante Surpuissante\nCréature alignée1 (DV)\n5 ou moins 5-10\n11–25\n26–50 51 ou +\nMort-vivant aligné (DV)\n—\n2 ou moins 3–8\n9–20\n21 ou +\nExtérieur aligné (DV)\n—\n1 ou moins 2–4\n5–10\n11 ou +\nPrêtre ou paladin d’une divinité alignée² (niveau de classe)\n—\n1\n2–4\n5 –10\n11 ou +\nObjet magique ou sort aligné (niveau de lanceur de sorts)\n5 ou moins 6-10\n11-15\n16–20 21 ou +\n1 Hormis pour les morts-vivants et les extérieurs qui possèdent leur propre entrée dans cette table. 2 Certains personnages peuvent émettre une aura semblable alors qu’ils ne sont pas prêtres. Ceci est indiqué dans leur description de classe.\nSi l’origine de la tentative de scrutation se trouve à l’intérieur de la zone d’effet du sort, le personnage en connaît automatiquement l’emplacement. Si ce n’est pas le cas, il doit effectuer un test de niveau de lanceur de sorts opposé contre la créature qui l’observe (1d20 + niveau de lanceur de sorts). S’il obtient un résultat supérieur ou égal à celui de la créature qui l’épie, il reçoit une brève vison de celle-ci et sait dans quelle direction et à quelle distance elle se trouve."
+  }
+}

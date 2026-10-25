@@ -7,6 +7,8 @@ use std::collections::BTreeMap;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Erreur {
+    /// Refus venant des fiches de personnage (message déjà lisible).
+    Fiche(String),
     PersonnageInconnu(IdPersonnage),
     LocaliteInconnue(IdLocalite),
     IdDejaUtilise(String),
@@ -36,6 +38,14 @@ pub enum Erreur {
     SalleInconnue(IdSalle),
     SalleReferentielInconnue(String),
     AucunPjPresent(String),
+    /// Règle du don Prestige.
+    Prestige(String),
+    /// Limite de recrutement par le Prestige (GC p. 93).
+    PrestigeInsuffisant {
+        equipe: String,
+        niveau: u32,
+        prestige: i32,
+    },
     StatutIncompatible {
         salle: String,
         attendu: &'static str,
@@ -69,11 +79,14 @@ pub enum Erreur {
     Recettes(String),
     /// Vente, abandon ou réparation refusés.
     Actif(String),
+    /// Mode aventure ou combat refusé (message déjà lisible).
+    Aventure(String),
 }
 
 impl std::fmt::Display for Erreur {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
+            Erreur::Fiche(m) => write!(f, "fiche : {m}"),
             Erreur::PersonnageInconnu(id) => write!(f, "personnage inconnu ({id})"),
             Erreur::LocaliteInconnue(id) => write!(f, "localité inconnue ({id})"),
             Erreur::IdDejaUtilise(id) => write!(f, "identifiant déjà utilisé ({id})"),
@@ -125,6 +138,15 @@ impl std::fmt::Display for Erreur {
                 "aucun personnage n'est présent à {l} : un PJ doit se trouver dans la communauté \
                  au début des travaux (Guide de campagne p. 95)"
             ),
+            Erreur::PrestigeInsuffisant {
+                equipe,
+                niveau,
+                prestige,
+            } => write!(
+                f,
+                "{equipe} : ses employés sont de niveau {niveau}, mais le meilleur Prestige parmi les                  personnages présents est {prestige} ; un personnage ne peut recruter que des employés                  de niveau inférieur ou égal à son Prestige (Guide de campagne p. 93)"
+            ),
+            Erreur::Prestige(m) => write!(f, "{m}"),
             Erreur::StatutIncompatible { salle, attendu } => {
                 write!(f, "{salle} doit être {attendu}")
             }
@@ -155,6 +177,7 @@ impl std::fmt::Display for Erreur {
             Erreur::OrganisationNonVide(o) => write!(f, "l'organisation {o} contient encore des équipes"),
             Erreur::Recettes(m) => write!(f, "recettes : {m}"),
             Erreur::Actif(m) => f.write_str(m),
+            Erreur::Aventure(m) => write!(f, "aventure : {m}"),
             Erreur::DelocalisationVersElleMeme => {
                 f.write_str("l'équipe se trouve déjà dans cette localité")
             }
@@ -196,6 +219,17 @@ pub struct Etat {
     pub ventes: Vec<Vente>,
     /// Limite des dépenses par PJ présent plutôt que par localité (PC-14, option).
     pub limite_par_pj: bool,
+    /// Fiches de personnage des PJ, par journal de fiche.
+    pub fiches: BTreeMap<IdPersonnage, fiches::journal::Journal>,
+    /// Acolytes du don Prestige : acolyte → maître.
+    pub acolytes: BTreeMap<IdPersonnage, IdPersonnage>,
+    /// Don Prestige : modificateurs cochés et partisans, par maître.
+    pub prestige_don: BTreeMap<IdPersonnage, crate::prestige::PrestigeDon>,
+    pub regles_personnages: crate::personnages::ReglesPersonnages,
+    /// Mode aventure : horloge, santé, effets, ressources (`None` tant que le joueur ne l'a pas démarré).
+    pub aventure: Option<aventure::EtatAventure>,
+    /// Combats validés, du plus ancien au plus récent (historique, statistiques, export).
+    pub combats: Vec<crate::aventure::CombatPasse>,
 }
 
 /// Effet notable d'un événement, pour l'historique (ex. arrivée d'un transfert).
@@ -244,6 +278,34 @@ impl Etat {
             jour: 1,
             ..Etat::default()
         }
+    }
+
+    /// Fait passer `nombre` jours de calendrier : arrivées des transferts, chantiers, salaires,
+    /// présence, ventes (jour par jour), puis le temps des fiches.
+    pub(crate) fn avancer_jours(
+        &mut self,
+        nombre: u32,
+        r: &regles::Referentiel,
+    ) -> Result<Vec<Consequence>, Erreur> {
+        let mut out = Vec::new();
+        for _ in 0..nombre {
+            self.jour += 1;
+            let (arrives, restants): (Vec<_>, Vec<_>) = std::mem::take(&mut self.transferts)
+                .into_iter()
+                .partition(|t| t.jour_arrivee <= self.jour);
+            self.transferts = restants;
+            for t in arrives {
+                self.livrer(&t)?;
+                out.push(Consequence::TransfertArrive(t));
+            }
+            out.extend(self.avancer_chantiers(r));
+            out.extend(self.avancer_delocalisations(r));
+            out.extend(self.payer_salaires());
+            out.extend(self.suivre_presence());
+            out.extend(self.conclure_ventes());
+        }
+        self.faire_passer_le_temps_des_fiches(nombre);
+        Ok(out)
     }
 
     pub fn pj(&self, id: IdPersonnage) -> Result<&Personnage, Erreur> {
@@ -549,24 +611,12 @@ impl Etat {
                 }
             }
             JoursAvances { nombre } => {
-                // Jour par jour : arrivées des transferts, puis avancement des chantiers.
-                for _ in 0..*nombre {
-                    self.jour += 1;
-                    let (arrives, restants): (Vec<_>, Vec<_>) =
-                        std::mem::take(&mut self.transferts)
-                            .into_iter()
-                            .partition(|t| t.jour_arrivee <= self.jour);
-                    self.transferts = restants;
-                    for t in arrives {
-                        self.livrer(&t)?;
-                        out.push(Consequence::TransfertArrive(t));
-                    }
-                    out.extend(self.avancer_chantiers(r));
-                    out.extend(self.avancer_delocalisations(r));
-                    out.extend(self.payer_salaires());
-                    out.extend(self.suivre_presence());
-                    out.extend(self.conclure_ventes());
-                }
+                // Si une aventure est en cours, son horloge suit : les effets en cours expirent.
+                self.suivre_les_jours_dans_l_aventure(*nombre, r)?;
+                out.extend(self.avancer_jours(*nombre, r)?);
+            }
+            AventureDemarree { .. } | Aventure(_) | CombatValide { .. } | AventureTerminee => {
+                out.extend(self.appliquer_aventure(ev, r)?)
             }
             Groupe { evenements, .. } => {
                 for e in evenements {
@@ -609,6 +659,8 @@ impl Etat {
                 l.capitaux = l.capitaux + *capitaux;
             }
             ReglageLimiteDepense { par_pj } => self.limite_par_pj = *par_pj,
+            Fiche { pj, evenement } => self.appliquer_fiche(*pj, evenement)?,
+            ReglagePersonnages { regles } => self.regles_personnages = *regles,
             RecettesPercues { .. } => self.percevoir_recettes(ev, r)?,
             AbandonActif { .. }
             | VenteLancee { .. }
@@ -636,6 +688,11 @@ impl Etat {
             | GestionnaireEmbauche { .. }
             | GestionnaireModifie { .. }
             | GestionnaireRenvoye { .. } => self.appliquer_organisation(ev, r)?,
+            PrestigeDonRegle { .. }
+            | AcolyteLie { .. }
+            | AcolyteDelie { .. }
+            | PartisanAjoute { .. }
+            | PartisanRetire { .. } => self.appliquer_prestige(ev)?,
             Note { .. } => {}
         }
         Ok(out)

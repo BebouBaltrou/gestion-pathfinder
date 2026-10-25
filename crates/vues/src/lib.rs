@@ -1,7 +1,22 @@
 //! Modèles d'affichage : ce que l'interface montre, calculé ici à partir de l'état de la
 //! campagne. L'interface (quelle qu'elle soit) ne refait aucun calcul de règles.
 
+pub mod actions_batiments;
+pub mod aventure;
+pub mod batiments;
+pub mod gestionnaires;
+pub mod historique;
+pub mod localites;
+pub mod organisations;
+pub mod parametres;
+pub mod personnage;
+pub mod personnages;
+pub mod points;
+pub mod prestige_don;
+pub mod recettes;
+pub mod referentiel;
 pub mod tableau;
+pub mod ventes;
 
 use domaine::{CoutCapitaux, Montant};
 
@@ -35,12 +50,23 @@ impl From<Montant> for Somme {
 
 /// Les quatre capitaux, dans l'ordre du livre.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize))]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Capitaux {
     pub marchandises: u32,
     pub influence: u32,
     pub travail: u32,
     pub magie: u32,
+}
+
+impl From<Capitaux> for CoutCapitaux {
+    fn from(c: Capitaux) -> Self {
+        CoutCapitaux {
+            marchandises: c.marchandises,
+            influence: c.influence,
+            travail: c.travail,
+            magie: c.magie,
+        }
+    }
 }
 
 impl From<CoutCapitaux> for Capitaux {

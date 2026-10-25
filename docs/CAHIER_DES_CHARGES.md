@@ -38,3 +38,21 @@ une exigence ne change que sur décision explicite de l'utilisateur (datée ici)
   web React, three.js pour la 3D), le moteur de règles Rust restant inchangé. Migration page
   par page dans `desktop/`, l'application egui actuelle (`app/`) restant disponible jusqu'à
   parité ; les deux travaillent sur les mêmes fichiers de campagne.
+
+## Fiches de personnage (décisions du 23/10/2026)
+
+- Périmètre étendu aux **règles officielles de Pathfinder 1 (Core Rulebook)** pour les fiches
+  de personnage, en plus du Guide de campagne pour l'intermède. Aucune règle non officielle.
+- Première classe : Ensorceleur et ses 10 lignages ; les autres classes s'ajoutent par données.
+- Règles = données (JSON dans `data/`), tout produit des **effets typés**, un moteur unique
+  (`crates/fiches`) les agrège et explique chaque valeur. Plan : `docs/PLAN_PERSONNAGES.md`.
+- Données importées d'Archives of Nethys (textes en anglais), interface et noms en français.
+- Fiches stockées **dans le fichier de campagne** (journal d'événements) ; l'ancienne
+  application egui ne les gérera pas. Interface uniquement dans `desktop/`.
+- (Mise à jour 23/10/2026, soir) **Application finale entièrement en français**, y compris les
+  textes de sorts, dons et capacités : remplace le choix « descriptions en anglais ». Le mode
+  de traduction reste à fixer avec l'utilisateur.
+- Pas d'*Advanced Race Guide* : aucun trait racial alternatif. Méthode de calcul des PV
+  (jet / moyenne / moyenne arrondie / maximum) : **réglage de campagne** au choix du joueur.
+- L'ensorceleur n'a pas de composants matériels bon marché à fournir (Eschew Materials) ; il ne
+  reçoit pas l'Écriture de parchemin gratuitement.

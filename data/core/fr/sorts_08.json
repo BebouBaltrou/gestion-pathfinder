@@ -1,0 +1,82 @@
+{
+  "Mirror Image": {
+    "cible": "le jeteur de sorts",
+    "composantes": "V, G",
+    "description": "Ce sort fait apparaître plusieurs copies illusoires du personnage dans l’espace qu’il occupe. À cause de la présence de ces sosies, ses ennemis éprouvent des difficultés à le localiser précisément.\nImage miroir crée 1d4 doubles, +1 tous les trois niveaux du personnage (jusqu’à un maximum de huit images). Ces chimères restent toujours dans la case du lanceur de sorts et se déplacent en même temps que lui. Elles reproduisent ses mouvements, ses bruits et ses actes à la perfection. Quand le personnage est attaqué ou victime d’un sort qui nécessite un jet d’attaque, il y a des chances qu’une image soit touchée au lieu du personnage. Si l’attaque touche, il faut lancer un dé pour déterminer si l’attaque touche le personnage ou une de ses images. Une attaque réussie contre une chimère la fait disparaître instantanément. Si une attaque rate le personnage de 5 ou moins, elle détruit une chimère au passage. Les sorts de zone affectent le personnage normalement et n’abîment pas ses chimères. De même, les sorts et les effets qui ne nécessitent pas de jet d’attaque affectent le personnage normalement et ne détruisent pas ses images. Un sort qui nécessite une attaque de contact se décharge sans effet si on l’utilise sur une chimère (qui est alors détruite).\nLes images illusoires ne peuvent tromper que les adversaires qui les voient. Si le personnage est invisible ou si son adversaire ferme les yeux, les images n’ont aucun effet (mais les règles imposant une chance de rater aux attaques effectuées dans une telle situation s’appliquent normalement)."
+  },
+  "Misdirection": {
+    "cible": "1 créature ou 1 objet ne dépassant pas 3 m de côté",
+    "composantes": "V, G",
+    "description": "Cette illusion permet d’abuser les sorts de Divination détectant les auras (détection de la magie, détection du Mal, détection du mensonge, etc.). Au moment de l’incantation, le personnage choisit un leurre (être vivant ou objet) se trouvant dans les limites de portée indiquée. Tant que dure détection faussée, tout sort de détection lancé sur le sujet fonctionne comme s’il avait été jeté sur le leurre (sauf si le lanceur de sorts réussit un jet de Volonté, auquel cas le sort fonctionne normalement). Par exemple, un magicien se choisissant pour sujet et prenant un arbre tout proche pour leurre communiquera des informations totalement erronées sur sa personne : il n’est pas mauvais, ne ment pas, n’est pas magique, son alignement est neutre, etc. Ce sort n’affecte pas les autres sortes de divination (augure, clairaudience/clairvoyance, détection de pensées, etc.)."
+  },
+  "Obscure Object": {
+    "cible": "1 objet touché, dans la limite de 50 kg/niveau",
+    "composantes": "V, G, M/FD (peau de caméléon)",
+    "description": "Ce sort place autour de l’objet touché une aura protectrice qui empêche les boules de cristal et les sorts de scrutation de le détecter. Les tentatives de ce genre échouent automatiquement (si la divination visait l’objet) ou ne révèlent pas l’objet (si la divination visait un lieu, un objet ou une personne proche)."
+  },
+  "Owl's Wisdom": {
+    "cible": "créature touchée",
+    "composantes": "V, G, M/FD (une plume ou une fiente de hibou)",
+    "description": "La créature affectée se montre plus sage. Le sort offre un bonus d’altération de +4 à la Sagesse. La cible en bénéficie à chaque fois qu’elle doit se servir de sa Sagesse. Les prêtres (et autres lanceurs de sorts dépendant de la Sagesse) qui bénéficient de sagesse du hibou ne gagnent pas de sorts supplémentaires mais cela augmente le DD de leurs sorts."
+  },
+  "Phantom Trap": {
+    "cible": "objet touché",
+    "composantes": "V, G, M (poussière spéciale (50 po))",
+    "description": "Si on examine une serrure ou un autre mécanisme similaire de près, ce sort donne l’impression qu’il est piégé. Il se lance sur un verrou, un cadenas, un loquet, une charnière, un fermoir, un bouchon, etc. pour persuader tout individu capable de détecter les pièges (ou qui utilise un sort pour parvenir au même résultat) qu’il se trouve en présence d’un piège. Mais il s’agit d’une illusion, sans conséquence si le « piège » est accidentellement déclenché. Ce sort est destiné à dissuader les voleurs ou au moins à leur faire perdre du temps.\nSi un autre piège illusoire est actif à quinze mètres ou moins à la ronde lors de l’incantation, le sort échoue automatiquement."
+  },
+  "Protection from Arrows": {
+    "cible": "créature touchée",
+    "composantes": "V, G, F (un morceau de carapace de tortue)",
+    "description": "Le bénéficiaire du sort est protégé contre les armes à distance, il bénéficie donc d’une réduction de dégâts de 10/magie contre cellesci. En revanche, le sort ne permet pas de blesser des créatures dotées d’une réduction des dégâts similaire. Dès que le sort a absorbé un total de 10 points de dégâts par niveau de lanceur de sorts (jusqu’à un total de 100 points), il cesse de faire effet."
+  },
+  "Pyrotechnics": {
+    "cible": "1 source de feu (cube de 6 m de côté maximum)",
+    "composantes": "V, G, M (une source de feu)",
+    "description": "Selon la version choisie, pyrotechnie transforme un feu en feu d’artifice aveuglant ou en nuage de fumée épaisse et étouffante. Le sort utilise une seule source de feu qui s’éteint alors immédiatement. Un feu de plus de six mètres de côté ne s’éteint qu’en partie. Les feux magiques ne s’éteignent pas mais les créatures de feu qui servent de source pour ce sort subissent 1 point de dégâts par niveau de lanceur de sorts.\nFeu d’artifice. Cette version prend la forme d’un bref bouquet de lumières éblouissantes et colorées. Il aveugle les créatures situées dans un rayon de trente-six mètres pendant 1d4+1 rounds si elles ratent un jet de Volonté. Seuls les individus qui regardent directement le feu d’artifice sont affectés et un test de résistance à la magie leur permet d’éviter cette cécité temporaire.\nNuage de fumée. D’épaisses volutes de fumée s’élèvent du point d’origine du sort et forment un nuage opaque dans un rayon de six mètres. Il persiste pendant 1 round par niveau de lanceur de sorts. On ne voit pas ce qui se trouve à l’intérieur, pas même à l’aide de vision dans le noir. Toutes les créatures prises dans le nuage voient leur valeur de Force et de Dextérité réduites de -4 chacune si elles ratent un jet de Vigueur. Cet effet se prolonge pendant 1d4+1 rounds une fois le nuage dissipé ou quand les créatures en sont sorties. La résistance à la magie ne protège pas contre cette version du sort."
+  },
+  "Resist Energy": {
+    "cible": "créature touchée",
+    "composantes": "V, G, FD",
+    "description": "Ce sort offre une protection limitée contre la forme d’énergie choisie : acide, électricité, feu, froid ou son. Le sujet bénéficie d’une résistance de 10 points contre ce type d’énergie, ce qui signifie que chaque fois qu’il subit des dégâts (que leur source soit d’origine naturelle ou magique), ils sont réduits de 10 points avant d’être décomptés de ses points de vie restants. Cette résistance passe à 20 points au niveau 7 et à 30 points (le maximum) au niveau 11. Le sort protège également l’équipement du bénéficiaire.\nRésistance aux énergies destructives absorbe seulement les dégâts, le sujet risque toujours d’être victime d’effets secondaires indésirables.\nRésistance aux énergies destructives prend le pas sur protection contre les énergies destructives (ces sorts ne se cumulent pas). Si un personnage bénéficie de protection contre les énergies destructives et de ce sort, la protection agit seule jusqu’à ce que son potentiel d’absorption soit épuisé."
+  },
+  "Rope Trick": {
+    "cible": "1 corde faisant entre 1,50 m et 9 m de long",
+    "composantes": "V, G, M (farine de maïs et parchemin torsadé)",
+    "description": "Quand cet enchantement est lancé sur une corde d’une longueur comprise entre 1,50 m et 9 m, l’une de ses extrémités se dresse à la verticale, comme si elle était accrochée à quelque chose dans les airs. Elle s’attache en fait dans un espace extradimensionnel se trouvant en bordure du multivers. Les créatures présentes dans cet espace sont à l’abri des sorts (y compris des divinations), à moins que ces sorts ne soient capables de fonctionner d’un plan à l’autre. Ce nouveau plan dimensionnel peut contenir jusqu’à huit créatures, sans limite de taille. On ne peut retirer ou cacher la corde. Celle-ci peut supporter jusqu’à huit tonnes ; un poids supérieur l’arrache.\nAucun sort ne peut entrer ou sortir de l’espace dimensionnel, y compris pour les sorts de zone. Une fois réfugié à l’intérieur de cet espace, on peut regarder dehors par un trou de 1,50 m x 90 cm, centré sur la corde. Ce trou est invisible. Une créature détectant l’invisible peut voir ce trou, mais pas ce qui se trouve à l’intérieur de l’espace dimensionnel. Tout ce qui se trouve dans cet espace retombe au pied de la corde à la fin du sort. Une seule personne à la fois peut monter à la corde. Si l’on ne grimpe pas jusqu’à l’espace extradimensionnel, l’enchantement permet de monter jusqu’à neuf mètres de hauteur."
+  },
+  "Scare": {
+    "cible": "1 créature vivante/3 niveaux, à moins de 9 m les unes des autres",
+    "composantes": "V, G, M (un os d’un mort-vivant)",
+    "description": "Ce sort fonctionne comme frayeur, si ce n’est qu’il affecte toutes les créatures de 6 DV ou moins se trouvant dans la zone d’effet."
+  },
+  "Scorching Ray": {
+    "cible": "un ou plusieurs rayons",
+    "composantes": "V, G",
+    "description": "Le mage frappe ses ennemis de rayons brûlants. Il peut en tirer un, plus un tous les quatre niveaux au-delà du niveau 3 (pour un maximum de trois rayons au niveau 11). Il faut effectuer une attaque de contact à distance pour chaque rayon. Chacun inflige 4d6 points de dégâts de feu. On les tire simultanément sur une ou plusieurs cibles, mais tous doivent viser des sujets situés à 9 m ou moins les uns des autres."
+  },
+  "See Invisibility": {
+    "cible": "le jeteur de sorts",
+    "composantes": "V, G, M (talc et poudre d’argent)",
+    "description": "Ce sort permet au personnage de repérer les objets et les créatures invisibles situés dans son champ de vision, ainsi que celles qui sont éthérées, comme si elles étaient visibles. Ces créatures apparaissent sous la forme de silhouettes translucides, ce qui permet au personnage de distinguer les créatures visibles, les invisibles et celles qui sont éthérées.\nLe sort n’indique pas la méthode employée pour se rendre invisible. Il ne révèle pas non plus les illusions, et il ne permet pas de voir à travers les objets opaques. Il ne fait pas non plus apparaître les cachées, camouflées ou difficiles à repérer.\nOn peut user de permanence sur un sort de détection de l’invisibilité."
+  },
+  "Shatter": {
+    "cible": "étendue de 1,50 m (5 pieds) de rayon ; ou un objet solide ou une créature cristalline",
+    "composantes": "V, G, M/FD (une paillette de mica)",
+    "description": "Fracassement crée une puissante vibration sonore qui peut être utilisée pour briser les objets fragiles et non magiques, détruire un unique objet solide et non magique ou encore pour endommager une créature cristalline.\nLorsqu’il est utilisé en tant qu’attaque de zone, ce sort détruit tous les objets non magiques en verre, cristal, terre cuite ou porcelaine. Tous ceux qui se trouvent dans un rayon de 1,50 m autour du point d’origine du sort volent en éclats. Les objets qui pèsent plus de 500 g par niveau du personnage ne sont pas affectés mais tous les autres objets sont détruits.\nLe sort peut également prendre pour cible un unique objet solide et non magique qui pèse au plus 5 kilos par niveau de lanceur de sorts et ce, quel que soit le matériau dont il est composé. Finalement, lorsque le sort est utilisé contre une créature cristalline (dont le poids n’importe pas), il lui inflige 1d6 points de dégâts de son par niveau de lanceur de sorts (jusqu’à un maximum de 10d6). Un jet de Vigueur réussi réduit ce total de moitié."
+  },
+  "Spectral Hand": {
+    "cible": "1 main spectrale",
+    "composantes": "V, G",
+    "description": "Une main spectrale prend forme à partir de l’énergie vitale du personnage. Elle se matérialise et se déplace selon les souhaits de son créateur, ce qui lui permet de lancer des sorts de contact à distance de bas niveau. À la fin de l’incantation, le mage perd 1d4 points de vie, qu’il regagne au terme de la durée indiquée ou si la main est dissipée. Par contre, ces points de vie restent perdus si la main est détruite (mais on peut les soigner normalement). Tant que le sort persiste, le personnage peut lancer n’importe quel sort de contact à distance du 4e niveau ou moins par l’intermédiaire de la main spectrale, qui lui confère un bonus de +2 au jet d’attaque de contact au corps à corps (se servir de la main de cette façon constitue une attaque normale). La main se trouve toujours entre l’ennemi et le mage. Si elle s’éloigne trop de ce dernier ou si elle quitte son champ de vision (ou s’il cesse de la contrôler), elle revient flotter à ses côtés.\nIntangible, la main n’est pas affectée par les armes ordinaires. Elle possède l’aptitude d’esquive extraordinaire (les sorts de zone ne lui infligent aucun dégât sur un jet de sauvegarde réussi ; même en cas d’échec, les dégâts sont automatiquement réduits de moitié), bénéficie des mêmes bonus que le mage aux jets de sauvegarde et a une CA de 22 (+8 taille, +4 armure naturelle). Le modificateur d’Intelligence du personnage s’applique à la CA de la main, à la place du modificateur de Dextérité de cette dernière. Enfin, elle possède entre 1 et 4 points de vie (le nombre de pv empruntés à son créateur lors de l’incantation)."
+  },
+  "Spider Climb": {
+    "cible": "créature touchée",
+    "composantes": "V, G, M (une araignée vivante)",
+    "description": "Le sujet peut se déplacer sur une surface verticale, voire au plafond, avec l’agilité d’une araignée. Pour ce faire, il doit avoir les mains libres. Sa vitesse de déplacement est égale à 6 m et il gagne un bonus racial aux tests d’Escalade de +8. De plus, il n’a pas besoin de faire de test d’Escalade pour franchir les surfaces verticales ou horizontales (même s’il a la tête en bas). Une créature qui bénéficie des effets de ce sort conserve son bonus de Dextérité à la CA (le cas échéant) lorsqu’elle grimpe et ses adversaires ne bénéficient d’aucun bonus spécial pour l’attaquer. Par contre, elle ne peut pas entreprendre d’action de course tant qu’elle escalade quelque chose."
+  },
+  "Summon Monster 2": {
+    "cible": "une créature convoquée",
+    "composantes": "V, G, F/FD (un minuscule sac et une petite bougie)",
+    "description": "Prê 2 Ce sort s’apparente à convocation de monstres I, à la différence qu’il permet d’appeler une créature de niveau 2 ou 1d3 créatures de niveau 1 (lorsque le personnage convoque plusieurs monstres, ces derniers doivent nécessairement tous être du même type)."
+  }
+}

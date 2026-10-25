@@ -14,6 +14,9 @@ jargon, et on lui livre des choses qu'il peut lancer et tester.
 - **Inspecter et proposer avant de coder** ; ne pas écraser de fichier sans le signaler.
 - Toute lecture de règle non évidente est signalée comme « lecture à valider ».
 
+Noms et textes français des dons, sorts, races, états, équipement… : ceux du **Manuel des joueurs**
+(comparaison et points à confirmer : `docs/COMPARAISON_MANUEL_DES_JOUEURS.md`). Le livre fait foi.
+
 Passation (état détaillé et prochaines étapes) : `docs/REPRISE.md`.
 Exigences complètes : `docs/CAHIER_DES_CHARGES.md`. Décisions et lectures validées :
 `docs/A_TRAITER.md`. À faire avec les fiches de personnage : `docs/FICHES_PERSONNAGE.md`.
@@ -24,9 +27,11 @@ Règles et points à confirmer du référentiel : page « Points à confirmer »
 ```
 crates/domaine   types purs : capitaux, monnaie (en pa), sources, statuts, fiches
 crates/regles    référentiel officiel (données du livre), calculs, contrôles
-crates/campagne  journal d'événements (event sourcing), état recalculé, annuler/rétablir,
+crates/campagne  journal d'événements (event sourcing), état recalculé, annuler/rétablir, modèles personnels,
                  calendrier de Golarion, sauvegarde JSON (feature « serde »)
 crates/vues      modèles d'affichage calculés par le cœur pour l'interface
+crates/fiches      personnages (PF1, Core) : effets typés, fiche, progression, dons, sorts, équipement,
+                 états ; données dans data/core/ ; plan : docs/PLAN_PERSONNAGES.md
 desktop/         NOUVELLE application (Tauri 2) : src-tauri/ (Rust, commandes), ui/ (React + TS)
 app/             ANCIENNE application (egui), gardée jusqu'à la fin de la migration
 data/            referentiel_officiel.json (source de vérité des données du livre)
@@ -72,9 +77,9 @@ essai de bout en bout de la nouvelle application (variable `GESTION_PATHFINDER_A
 
 ## État de la migration vers `desktop/`
 
-Fait : coquille, tableau de bord, campagnes. À faire, dans l'ordre : Localités, Personnages,
-Bâtiments (salles, extensions, vente, réparation), Recettes, Organisations, Gestionnaires,
-Historique, Paramètres, Référentiel, Points à confirmer, import/export, modèles personnels,
-mode simulation complet. Ensuite : retirer `app/`. Le détail est dans `docs/A_TRAITER.md`.
-Pour chaque page : reprendre le comportement de `app/src/pages/<page>.rs`, mettre les calculs
-dans `crates/vues`, ajouter les commandes Tauri, puis l'interface React.
+Toutes les pages de `app/` sont migrées dans `desktop/` (tableau de bord, campagnes avec
+export/import, localités, personnages, bâtiments, recettes, organisations, gestionnaires,
+historique, paramètres, référentiel, points à confirmer, modèles personnels). Reste : essai à
+la main de chaque page par l'utilisateur, puis retirer `app/` **avec son accord**. Le détail
+est dans `docs/A_TRAITER.md`. Pour une page nouvelle : mettre les calculs dans `crates/vues`
+(avec tests), ajouter les commandes Tauri, puis l'interface React.

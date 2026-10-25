@@ -1,0 +1,29 @@
+{
+  "_note": "Effets mécaniques des sorts qu'un personnage joué peut recevoir. Valeurs recopiées du texte du Core (data/core/sorts.json, page indiquée) ; rien n'est déduit. Un sort absent n'a pas d'effet automatique : le lancement est décompté et noté, et l'effet s'applique à la main (« Appliquer un effet »). Types de bonus : alteration (= bonus d'altération), armure, bouclier, moral, esquive, sans_type. Cibles : ca, attaque, init, carac.xxx, jds.vig / jds.ref / jds.vol, comp.*. Protections : reduction (RD), resistance (paliers : [niveau de lanceur minimum, valeur]), immunite.",
+  "sorts": [
+    { "nom_en": "Mage Armor", "page": 306, "effets": [ { "cible": "ca", "type": "armure", "valeur": 4 } ] },
+    { "nom_en": "Shield", "page": 342, "effets": [ { "cible": "ca", "type": "bouclier", "valeur": 4 } ], "notes": "Annule aussi les projectiles magiques (magic missile) dirigés contre le lanceur." },
+    { "nom_en": "Bull's Strength", "page": 251, "effets": [ { "cible": "carac.for", "type": "alteration", "valeur": 4 } ] },
+    { "nom_en": "Cat's Grace", "page": 252, "effets": [ { "cible": "carac.dex", "type": "alteration", "valeur": 4 } ] },
+    { "nom_en": "Bear's Endurance", "page": 246, "effets": [ { "cible": "carac.con", "type": "alteration", "valeur": 4 } ] },
+    { "nom_en": "Eagle's Splendor", "page": 275, "effets": [ { "cible": "carac.cha", "type": "alteration", "valeur": 4 } ] },
+    { "nom_en": "Fox's Cunning", "page": 286, "effets": [ { "cible": "carac.int", "type": "alteration", "valeur": 4 } ] },
+    { "nom_en": "Owl's Wisdom", "page": 318, "effets": [ { "cible": "carac.sag", "type": "alteration", "valeur": 4 } ] },
+    { "nom_en": "Heroism", "page": 295, "effets": [
+        { "cible": "attaque", "type": "moral", "valeur": 2 },
+        { "cible": "jds.vig", "type": "moral", "valeur": 2 },
+        { "cible": "jds.ref", "type": "moral", "valeur": 2 },
+        { "cible": "jds.vol", "type": "moral", "valeur": 2 },
+        { "cible": "comp.*", "type": "moral", "valeur": 2 } ] },
+    { "nom_en": "Haste", "page": 293, "effets": [
+        { "cible": "attaque", "type": "sans_type", "valeur": 1 },
+        { "cible": "ca", "type": "esquive", "valeur": 1 },
+        { "cible": "jds.ref", "type": "esquive", "valeur": 1 } ],
+      "notes": "+30 pieds de vitesse (au plus le double) et une attaque supplémentaire à l'attaque à outrance : non calculés." },
+    { "nom_en": "Resist Energy", "page": 334, "choix_energie": true,
+      "protections": [ { "genre": "resistance", "paliers": [ [1, 10], [7, 20], [11, 30] ] } ] },
+    { "nom_en": "Stoneskin", "page": 350, "protections": [ { "genre": "reduction", "valeur": 10 } ],
+      "notes": "RD 10/adamantite ; le sort est déchargé après 10 PV évités par niveau de lanceur (maximum 150) : à suivre à la main." },
+    { "nom_en": "Invisibility", "page": 301, "etats": [ "invisible" ] }
+  ]
+}

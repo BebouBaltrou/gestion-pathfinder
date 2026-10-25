@@ -1,0 +1,72 @@
+{
+  "Power Word Blind": {
+    "cible": "1 créature dotée de 200 pv ou moins",
+    "composantes": "V",
+    "description": "Le personnage prononce un mot qui aveugle une créature de son choix, qu’elle entende le mot ou non. La durée du sort dépend du nombre de points de vie actuel de la créature affectée. Une créature dotée de plus de 200 points de vie n’est pas affectée.\nPoints de vie Jusqu’à 50 51–100 101–200\nDurée Permanente 1d4+1 minutes 1d4+1 rounds"
+  },
+  "Prismatic Spray": {
+    "cible": "rayonnement en forme de cône",
+    "composantes": "V, G",
+    "description": "Ce sort génère sept rayons de lumière tourbillonnante qui jaillissent de la main du personnage. Chaque rayon a une couleur et un pouvoir particulier. Toutes les créatures de moins de 8 DV dans la zone d’effet sont automatiquement aveuglées pendant 2d4 rounds. Toutes les créatures dans la zone d’effet sont également touchées au hasard par un ou deux rayons, qui ont les effets suivants :\n1d8 Couleur du rayon\n1\nRouge\n2\nOrange\n3\nJaune\n4\nVert\n5\nBleu\n6\nIndigo\n7\nViolet\n8\n* Voir les poisons page 557.\nEffet 20 points de dégâts de feu (Réflexes, 1/2 dégâts) 40 points de dégâts d’acide (Réflexes, 1/2 dégâts) 80 points de dégâts d’électricité (Réflexes, 1/2 dégâts) Poison (fréquence 1/round pendant 6 rounds ; effet primaire mort ; effet secondaire 1 Con/round ; guérison 2 jets de Vig consécutifs)* Pétrification (Vigueur, annule) Démence, comme le sort aliénation mentale (Volonté, annule) Cible envoyée dans un autre plan (Volonté, annule) Cible touchée par deux rayons ; rejetez deux fois le dé en ignorant tout nouveau « 8 »"
+  },
+  "Project Image": {
+    "cible": "1 sosie d’ombre",
+    "composantes": "V, G, M (une petite réplique du personnage (5 po))",
+    "description": "Cette incantation permet au personnage de créer un double de luimême entièrement constitué d’énergie issue du plan de l’Ombre. Il ressemble à s’y méprendre à l’original (même voix, même odeur, etc.) mais il est intangible. Il imite à la perfection les actions du personnage (et va même jusqu’à parler en même temps que lui) à moins que ce dernier ne décide de le faire agir autrement (par une action de mouvement).\nLe lanceur de sorts peut voir par les yeux de son double et entendre par ses oreilles comme s’il se trouvait à sa place. Lors de son tour de jeu, il peut passer de sa propre perspective à celle de son image et inversement par une action libre. Quand il utilise les sens de son image, son corps est considéré comme aveugle et sourd.\nS’il le désire, il peut lancer des sorts par l’intermédiaire de son double plutôt (l’ombre est quasi-réelle, ce qui lui permet de servir de conduit pour les sorts). L’image est toutefois incapable de jeter des sorts sur elle-même, sauf si ce sont des illusions.\nLes objets sont affectés par la projection d’image comme s’ils avaient réussi leur jet de Volonté. Le personnage et son double doivent être reliés en permanence par une ligne d’effet dégagée. Si cette ligne est bloquée ne serait-ce qu’un instant, le sort s’achève. Si le personnage utilise changement de plan, porte dimensionnelle, téléportation ou tout autre sort sectionnant la ligne d’effet, projection d’image s’interrompt aussitôt."
+  },
+  "Reverse Gravity": {
+    "cible": "jusqu’à 1 cube de 3 m de côté/2 niveaux (F)",
+    "composantes": "V, G, M/FD (de la magnétite et quelques copeaux de fer)",
+    "description": "Ce sort inverse la gravité dans une zone. Les créatures et objets non attachés tombent vers le haut et atteignent le sommet du volume affecté en 1 round. S’ils rencontrent un obstacle solide au cours de cette « chute » (le plafond, par exemple), les conséquences de l’impact qui en résulte sont déterminées comme s’ils étaient tombés dans le sens normal. Les objets et les créatures qui atteignent la limite de la zone affectée sans rencontrer d’obstacle y restent suspendus, oscillant légèrement jusqu’à la fin de la durée du sort. Lorsque le sort se termine, les objets et les créatures retombent.\nLes créatures qui se trouvent dans la zone affectée et qui ont la possibilité de s’accrocher à quelque chose peuvent effectuer un jet de Réflexes au moment où le sort prend effet pour se retenir et ne pas tomber. Les créatures capables de voler ou de léviter réussissent automatiquement à éviter de tomber si elles le désirent."
+  },
+  "Scrying, Greater": {
+    "cible": "capteur magique",
+    "composantes": "V, G",
+    "description": "Ce sort ressemble à scrutation, sauf pour ce qui est des détails indiqués ci-dessus. De plus, les sorts suivants peuvent être lancés par l’intermédiaire du capteur sans risque d’échec : détection de la Loi, détection du Bien, détection du Chaos, détection du Mal, don des langues, lecture de la magie et message."
+  },
+  "Sequester": {
+    "cible": "créature ou objet touché, dont le volume ne doit pas dépasser 1 cube de 60 cm de côté/niveau",
+    "composantes": "V, G, M (un cil de basilic et de la gomme arabique)",
+    "description": "Ce sort empêche les sorts de Divination de détecter ou de localiser la créature ou l’objet touché et rend également celui-ci invisible (comme par le sort d’invisibilité ). Il reste toutefois possible de le détecter par tâtonnement ou par des moyens similaires. Les créatures affectées par le sort entrent instantanément dans un état d’animation suspendue qui persiste jusqu’à la fin du sort.\nNote. Le jet de Volonté permet à un objet tenu ou magique d’échapper à l’effet du sort. Il n’y a pas de jet de sauvegarde pour remarquer la créature ou l’objet dissimulé, ni pour le repérer à l’aide d’un sort de Divination."
+  },
+  "Shadow Conjuration, Greater": {
+    "cible": "voir texte",
+    "composantes": "V, G",
+    "description": "Ce sort s’apparente à convocation d’ombres, à la différence qu’il permet de reproduire les invocations d’ensorceleur ou de magicien jusqu’au 6e niveau et que les créatures, objets ou effets magiques qu’il permet de créer ont 60 % de leur potentiel habituel (au lieu de 20 % seulement)."
+  },
+  "Simulacrum": {
+    "cible": "1 double",
+    "composantes": "V, G, M (sculpture de glace représentant la cible et poudre de rubis (500 po par DV du simulacre))",
+    "description": "Ce sort crée un simulacre illusoire de la créature choisie. Ce double est partiellement réel et formé à partir de neige ou de glace. Il ressemble à s’y méprendre à l’original mais il existe des différences: il n’a que la moitié des niveaux ou dés de vie de la créature qu’il imite (ce qui inclut points de vie, dons, degrés de compétence et pouvoirs spéciaux). Le lanceur de sorts ne peut pas créer le simulacre d’une créature qui a deux fois plus de niveaux ou dés de vie que son niveau de lanceur de sorts. Le mage doit faire un test de Déguisement au moment de l’incantation, afin de déterminer s’il crée un double fidèle. Une créature qui connaît l’original détecte la ruse si elle réussit un test de Perception opposé au test de Déguisement du lanceur de sorts ou un test de Psychologie DD 20.\nLe simulacre est en permanence sous le contrôle de son créateur. Il n’existe aucun lien télépathique entre les deux ce qui implique que le personnage doit lui transmettre ses instructions autrement. Le double ne peut jamais devenir plus puissant (il ne peut pas gagner des niveaux ni augmenter ses caractéristiques). S’il est détruit, il se retransforme en neige et fond rapidement. S’il est seulement endommagé, on peut le remettre en état à condition de disposer d’un laboratoire de magie et de suivre un processus complexe qui exige au moins vingt-quatre heures, ainsi que 100 po par point de vie à restituer à la créature."
+  },
+  "Spell Turning": {
+    "cible": "le jeteur de sorts",
+    "composantes": "V, G, M/FD (un petit miroir en argent)",
+    "description": "Les sorts et effets magiques qui prennent le personnage pour cible (et seulement ceux-là) sont renvoyés sur celui qui les a lancés. Les sorts de zone ne sont pas affectés, pas plus que les sorts à effet. Cette protection est inefficace contre les sorts de contact. L’abjuration renvoie de sept à dix (1d4+6) niveaux de sort (ce chiffre est déterminé en secret). Chaque sort retourné à l’envoyeur est retranché à ce nombre.\nIl arrive qu’un sort ne soit que partiellement renvoyé si l’abjuration n’a plus assez de niveaux de sort pour le contrer totalement. Dans ce cas, une simple règle de trois permet de savoir quelle part du sort est renvoyée et quelle part affecte normalement le personnage. Si le sort concerné inflige des dégâts, le personnage et celui qui le prend pour cible sont tous deux blessés, en fonction du résultat donné par la règle de trois. Sinon, chacun d’eux risque d’être affecté (là encore, selon le résultat indiqué). Si le personnage et le lanceur de sorts adverse sont tous deux protégés par un renvoi des sorts, un champ de résonance se crée et produit des effets imprévisibles. Jetez 1d100 et consultez la table suivante :\n1d100 01–70 71–80 81–97\n98–00\nEffet Le sort est annulé sans aucun effet. Le sort affecte normalement les deux protagonistes. Les deux renvois des sorts cessent de fonctionner pendant 1d4 minutes. La trame de la réalité se déchire et les deux adversaires sont projetés dans un autre plan d’existence."
+  },
+  "Statue": {
+    "cible": "créature touchée",
+    "composantes": "V, G, M (un peu de chaux, quelques grains de sable et une goutte d’eau, le tout mélangé par un clou ou une pointe en fer)",
+    "description": "Cette incantation transforme la victime et tout ce qu’elle porte en statue de pierre. Sous forme de statue, elle a une solidité de 8 et conserve son total de points de vie. Le personnage statufié voit, entend et sent normalement, mais il n’a plus besoin de manger, boire ou respirer. Son sens du toucher se restreint aux pressions suffisamment importantes pour affecter son corps de granit : si quelqu’un fait sauter quelques éclats de pierre, il perçoit cela comme une simple égratignure mais si on lui casse un bras il subit d’importants dégâts. Tant que le sort fait effet, l’individu affecté peut reprendre son apparence normale, agir et se transformer à nouveau en statue (cela lui demande seulement une action libre)."
+  },
+  "Summon Monster 7": {
+    "cible": "une créature convoquée",
+    "composantes": "V, G, F/FD (un minuscule sac et une petite bougie)",
+    "description": "Prê 7 Ce sort s’apparente à convocation de monstres I, à la différence qu’il permet d’appeler une créature de niveau 7, 1d3 créatures de niveau 6 ou 1d4+1 créatures de niveau moindre (lorsque le personnage convoque plusieurs monstres, ces derniers doivent nécessairement tous être du même type)."
+  },
+  "Symbol of Stunning": {
+    "cible": "un symbole",
+    "composantes": "V, G, M (du mercure et du phosphore, plus de la poudre de diamant et d'opale pour une valeur totale de 5 000 po)",
+    "description": "Ce sort ressemble à symbole de mort, si ce n’est que les créatures situées dans un rayon de 18 m de la rune sont étourdies pendant 1d6 rounds.\nNote. Les pièges magiques tels que symbole d’étourdissement sont extrêmement difficiles à détecter et à désamorcer. Un roublard (et lui seul) peut utiliser sa compétence de Perception pour les repérer, puis de Sabotage pour les mettre hors d’état. Pour chacun des deux tests, le DD s’élève à 25 + niveau du sort, soit 32 pour symbole d’étourdissement."
+  },
+  "Symbol of Weakness": {
+    "cible": "un symbole",
+    "composantes": "V, G, M (du mercure et du phosphore, plus de la poudre de diamant et d'opale pour une valeur totale de 5 000 po)",
+    "description": "Prê 7 Composante : V, G, M (mercure et phosphore, plus un diamant et une opale en poudre (5 000 po au total)) Ce sort ressemble à symbole de mort, si ce n’est que les créatures situées dans un rayon de 18 m de la rune sont frappées par un mal qui leur inflige un affaiblissement temporaire de 3d6 points de Force.\nContrairement à symbole de mort, symbole de faiblesse ne présente pas de limite de points de vie. Une fois déclenché, il reste actif pendant dix minutes par niveau de lanceur de sorts. Une créature est affectée une seule fois par ce symbole.\nNote. Les pièges magiques tels que symbole de faiblesse sont extrêmement difficiles à détecter et à désamorcer. Un roublard (et lui seul) peut utiliser sa compétence de Perception pour les repérer, puis de Sabotage pour les mettre hors d’état. Pour chacun des deux tests, le DD s’élève à 25 + niveau du sort, soit 32 pour symbole de faiblesse."
+  },
+  "Teleport Object": {
+    "cible": "1 objet touché, dans la limite de 25 kg/niveau et 0,1 m³/niveau",
+    "composantes": "V",
+    "description": "Ce sort est semblable à téléportation, si ce n’est qu’il transporte un objet au lieu d’un personnage. Les créatures et les forces magiques (telles que la bille créée par boule de feu à retardement) ne peuvent pas être téléportées de la sorte.\nSi le lanceur de sorts le souhaite, il peut envoyer l’objet dans le plan Éthéré. Dans ce cas, l’endroit que l’objet occupait dans le plan Matériel dégage une légère aura magique jusqu’à ce qu’il revienne. Une dissipation de la magie réussie qui cible ce point bien précis ramène l’objet du plan Éthéré."
+  }
+}

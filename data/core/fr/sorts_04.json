@@ -1,0 +1,72 @@
+{
+  "Floating Disk": {
+    "cible": "disque de force de 90 cm de diamètre",
+    "composantes": "V, G, M (une goutte de mercure)",
+    "description": "Ce sort crée un plan de force légèrement concave qui suit le personnage et peut porter des charges pour lui. Le disque a un diamètre de 90 cm et s’enfonce de 2,5 cm en son centre. Il peut accepter jusqu’à 50 kg par niveau de lanceur de sorts. S’il est utilisé pour transporter un liquide, sa contenance est de 8 litres. Il flotte à un mètre du sol et reste toujours horizontal. Il se meut en flottant lorsqu’il est dans la portée du sort et suit le lanceur de sorts en se déplaçant chaque round d’une distance inférieure ou égale à la vitesse de déplacement normale du lanceur de sort. Sauf ordre contraire, il reste à une distance de 1,50 m du personnage. Le disque disparaît instantanément lorsque le sort expire. Il fait de même si le personnage s’éloigne au-delà des limites de portée ou s’il tente de le soulever à plus d’un mètre du sol. Lorsque le disque disparaît, tout ce qu’il transportait tombe au sol."
+  },
+  "Grease": {
+    "cible": "un objet ou un carré de 3 m (10 pieds) de côté",
+    "composantes": "V, G, M (une noix de beurre)",
+    "description": "Ce sort recouvre une surface solide d’une couche de graisse glissante. Les créatures qui se trouvent dans la zone du sort au moment où il prend effet doivent réussir un jet de Réflexes pour éviter de tomber. Une créature peut se déplacer dans la zone graisseuse ou la traverser à la moitié de sa vitesse de déplacement normal si elle réussit un test d’Acrobaties de DD 10. En cas d’échec de moins de 5 points, elle ne peut pas bouger de tout le round (puis doit effectuer un test de Réflexes pour éviter de tomber). En cas d’échec de 5 points ou plus, elle tombe automatiquement (consultez la compétence Acrobaties pour plus de détails). Les créatures qui ne se déplacent pas au cours de leur tour ne sont pas forcées de faire de test d’Acrobaties et ne sont pas prises au dépourvu.\nLe sort peut également être utilisé pour recouvrir un objet d’une couche de graisse. S’il s’agit d’un objet solide que personne n’utilise, le sort l’affecte automatiquement. S’il s’agit d’un objet manié ou porté par une créature, celle-ci peut éviter que le sort ne fasse effet en réussissant un jet de Réflexes. En cas d’échec, l’objet lui glisse hors des mains. Un nouveau jet de sauvegarde est nécessaire chaque round où une créature tente de ramasser ou d’utiliser un objet graissé. Une créature portant une armure ou des vêtements graissés bénéficie d’un bonus de circonstances de +10 aux tests d’Évasion et aux tests de manœuvre offensive visant à échapper à une lutte, ainsi qu’au DMD pour éviter de se faire agripper."
+  },
+  "Hold Portal": {
+    "cible": "1 porte dans la limite de 2 m²/niveau",
+    "composantes": "V",
+    "description": "Ce sort verrouille une porte, une fenêtre, un portail, des volets ou une herse de bois, de métal ou de pierre. Verrouillage empêche d’ouvrir l’objet protégé comme si ce dernier était fermé par un véritabel cadenas. Déblocage ou dissipation de la magie dissipe le verrouillage. Un personnage qui souhaite enfoncer une porte ou autre protégée par ce sort voit le DD de son test de Force augmenté de 5 points."
+  },
+  "Hypnotism": {
+    "cible": "plusieurs créatures vivantes distantes de moins de 9 m les unes des autres",
+    "composantes": "V, G",
+    "description": "Les gestes lents et l’incantation lancinante de ce sort permettent au personnage de capter l’attention des créatures proches, qui cessent leurs activités et le regardent d’un air hagard. Le personnage peut alors profiter de leur état pour leur présenter des suggestions ou des demandes. Le nombre total de DV de créatures affectées est déterminé en lançant 2d4. Les créatures possédant le moins de DV sont affectées en premier. Seules les créatures qui peuvent voir ou entendre le lanceur du sort sont hypnotisées ; il n’est cependant pas nécessaire qu’elles comprennent le personnage pour que la fascination prenne effet.\nSi ce sort est utilisé au combat, les sujets bénéficient d’un bonus de +2 au jet de sauvegarde. À l’inverse, s’il ne cible qu’une seule créature qui n’est pas en train de se battre, elle subit un malus de -2 à ce même jet.\nTant qu’elles restent fascinées, les cibles affectées par ce sort réagissent comme si leur attitude à l’égard du personnage avait été rendue plus favorable de deux crans. Cela donne l’occasion au personnage de formuler une requête (une seule), pour autant qu’il puisse communiquer avec la créature affectée. Cette requête doit être brève et raisonnable. Même après la fin du sort, la créature continue de considérer cette requête avec l’attitude favorable qu’hypnose avait instillée en elle.\nUne créature qui rate son jet de sauvegarde ne se souvient pas qu’on l’a hypnotisée."
+  },
+  "Identify": {
+    "cible": "émanation en cône",
+    "composantes": "V, G, M (un peu de vin mélangé avec une plume de hibou)",
+    "description": "Ce sort fonctionne comme détection de la magie mais il offre un bonus d’altération de +10 aux tests d’Art de la magie destinés à découvrir les propriétés et les mots de commande des objets magiques en possession du personnage. Identification ne fonctionne pas sur les artefacts."
+  },
+  "Jump": {
+    "cible": "créature touchée",
+    "composantes": "V, G, M (une patte arrière de sauterelle)",
+    "description": "Le sujet bénéficie d’un bonus d’altération de +10 aux tests d’Acrobaties pour sauter en hauteur ou en longueur. Ce bonus d’altération passe à +20 pour un lanceur de sorts de niveau 5 et à +30 (le maximum) pour un lanceur de sorts de niveau 9."
+  },
+  "Mage Armor": {
+    "cible": "créature touchée",
+    "composantes": "V, G, F (un morceau de cuir tanné)",
+    "description": "Ce sort entoure le sujet d’un champ de force invisible mais tangible qui lui octroie un bonus d’armure de +4 à la CA. Contrairement à une armure normale, une armure de mage ne donne pas de pénalité d’armure, de risque d’échec des sorts profanes ou de réduction de la vitesse de déplacement. Cette protection étant constituée de force, les créatures intangibles sont incapables de passer au travers comme elles le font pour les armures physiques."
+  },
+  "Magic Aura": {
+    "cible": "objet touché (2,5 kg/niveau maximum)",
+    "composantes": "V, G, F (un petit carré de soie à passer au-dessus de l’objet qui recevra l’aura)",
+    "description": "Le lanceur de sort altère l’aura d’un objet afin qu’une détection (et tout sort disposant d’une aptitude similaire) le définisse soit comme non-magique, soit comme un objet magique doué de propriétés choisie par le personnage ou comme un objet affecté par un sort choisi par le personnage. Si l’objet protégé par aura magique est soumis à identification ou à un examen semblable, le lanceur de sorts décèle la tromperie et parvient à découvrir les propriétés de l’objet en réussissant un jet de Volonté.Sinon, il croit ce que lui révèle l’aura, et ce quels que soient les tests auxquels il se livre sur l’objet.\nAura magique est sans effet si l’aura naturelle de l’objet est particulièrement puissante (comme c’est le cas pour les artefacts).\nNote. Armes, armures et boucliers magiques sont nécessairement des objets de maître, ce qui signifie qu’une épée grossièrement forgée dégageant une aura magique est pour le moins suspecte."
+  },
+  "Magic Missile": {
+    "cible": "jusqu’à 5 créatures situées à 4,50 m ou moins les unes des autres",
+    "composantes": "V, G",
+    "description": "Un projectile d’énergie magique jaillit du doigt tendu du mage et va frapper sa cible, ce qui lui inflige 1d4+1 points de dégâts.\nLe projectile touche automatiquement, même si la créature visée se trouve au corps à corps ou bénéficie d’un camouflage ou d’un abri autre que total. En revanche, le personnage ne peut pas viser un point précis de sa cible. Projectile magique ne permet pas d’endommager des objets.\nLe mage gagne un projectile supplémentaire tous les deux niveaux audessus du niveau 1. Il tire donc deux projectiles au niveau 3, trois au niveau 5, quatre au niveau 7 et avec un maximum de cinq au niveau 9. Il peut répartir ses différents projectiles entre plusieurs cibles, mais chacun ne peut atteindre qu’un seul adversaire. Il doit indiquer toutes ses cibles avant d’effectuer d’éventuels tests de résistance à la magie ou de faire ses jets de dégâts."
+  },
+  "Magic Weapon": {
+    "cible": "arme touchée",
+    "composantes": "V, G, FD",
+    "description": "Ce sort confère à l’arme choisie un bonus d’altération de +1 aux jets d’attaque et de dégâts. Un bonus d’altération n’est pas cumulable avec celui que confère une arme de maître.\nCe sort ne peut pas être lancé sur une arme naturelle (poings, etc. ; voir morsure magique). Les attaques à mains nues d’un moine sont considérées comme des armes et peuvent donc bénéficier de ce sort."
+  },
+  "Mount": {
+    "cible": "1 monture",
+    "composantes": "V, G, M (quelques crins)",
+    "description": "Ce sort fait apparaître un cheval léger ou un poney (au choix) servant de monture au personnage (voir le Bestiaire Pathfinder JdR). L’animal le sert fidèlement et de son plein gré. Il est équipé d’un mors et d’une selle."
+  },
+  "Obscuring Mist": {
+    "cible": "brouillard centré sur le jeteur de sorts et s’étendant sur 6 m de rayon et de haut",
+    "composantes": "V, G",
+    "description": "D’épaisses volutes de brume s’élèvent autour du personnage à la fin de l’incantation. La nappe reste stationnaire une fois composée, limitant le champ de vision (y compris la vision dans le noir) à 1,50 m. Les créatures se trouvant à 1,50 m ou moins bénéficient d’un camouflage (20 % de chances que les attaques les ratent) en combat. Au-delà, le camouflage devient total (50 % de chances que les attaques les ratent, et leurs adversaires ne peuvent pas les repérer à vue).\nUn vent modéré (plus de 15 km/h), comme celui produit par bourrasque, disperse la nappe en 4 rounds. En cas de vent important (plus de 30 km/h), elle est dispersée en 1 round. Un sort tel que boule de feu ou colonne de feu fait disparaître la brume dans sa zone d’effet. Mur de feu la disperse dans toute la zone où il inflige des dégâts.\nCe sort ne fonctionne pas sous l’eau."
+  },
+  "Protection from Chaos": {
+    "cible": "créature touchée",
+    "composantes": "V, G, M/FD",
+    "description": "Prê 1 Ce sort est semblable à protection contre le Mal mais les bonus de parade et de résistance s’appliquent aux attaques délivrées par les créatures Chaotiques et les créatures convoquées d’alignement Chaotique ne peuvent pas toucher le bénéficiaire."
+  },
+  "Protection from Evil": {
+    "cible": "créature touchée",
+    "composantes": "V, G, M/FD",
+    "description": "Ce sort protège son bénéficiaire contre les attaques des créatures d’alignement Mauvais, mais aussi contre le contrôle mental et les créatures convoquées. Il crée une barrière magique à trente centimètres autour du sujet. Cette barrière se déplace avec le personnage et possède trois effets principaux :\nPremièrement, le personnage bénéficie d’un bonus de parade de +2 à la CA et d’un bonus de résistance de +2 aux jets de sauvegarde. Ces deux bonus s’appliquent contre les attaques et les effets réalisés par les créatures maléfiques.\nDeuxièmement, la cible a droit à un jet de sauvegarde supplémentaire contre toute tentative visant à la posséder, ce qui inclut les effets d’enchantement (charme) et d’enchantement (coercition) comme charmepersonne, injonction ou domination.. Ce jet de sauvegarde bénéficie d’un bonus de moral de +2 et utilise le même DD que l’effet originel. Si le sujet réussit son jet, les effets du sort néfastes sont supprimés pendant toute la durée de protection contre le Mal. En revanche, l’effet s’applique à nouveau une fois que la protection expire. Le sort fonctionne de la même façon contre la possession ou le contrôle mental : il les réprime tant qu’il font effet mais ne les annule pas. Ce sort n’expulse pas une force vivante ayant établi un contrôl mental (comme un fantôme ou un lanceur de sort utilisant possession), mais il l’empêche de contrôler leur cible. Ce deuxième effet fonctionne seulement contre les sorts et les effets générés par des créatures ou des objets maléfiques, ce qui est laissé à l’appréciation du MJ.\nEnfin, le sort empêche les créatures convoquées de toucher le personnage. Les attaques naturelles de ces créatures échouent automatiquement et elles sont obligées de reculer si leurs attaques les obligent à toucher l’individu protégé. Les créatures d’alignement autre que Mauvais sont immunisées contre cet effet du sort. La protection contre les créatures convoquées s’achève instantanément si le sujet attaque l’entité ou tente de la repousser à l’aide de la barrière. Enfin, la résistance à la magie peut permettre à une créature de toucher le personnage."
+  }
+}

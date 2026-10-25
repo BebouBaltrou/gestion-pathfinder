@@ -48,6 +48,11 @@ pub struct Session {
     /// jetable, jamais enregistrée.
     pub simulation: Option<Campagne>,
     pub chemin: Option<PathBuf>,
+    /// Modèles personnels (bâtiments, organisations), communs à toutes les campagnes.
+    pub modeles: campagne::modeles_perso::ModelesPerso,
+    /// Combat en cours : copie de travail séparée de la campagne, sauvegardée après chaque action
+    /// dans un fichier à côté de la campagne (reprise après un plantage).
+    pub combat: Option<combat::Combat>,
 }
 
 /// Dossier des campagnes : %APPDATA%\GestionPathfinder\campagnes sous Windows,
@@ -73,6 +78,8 @@ impl Session {
             campagne: None,
             simulation: None,
             chemin: None,
+            modeles: campagne::modeles_perso::ModelesPerso::charger(&dossier_campagnes()),
+            combat: None,
         };
         // rouvre la campagne la plus récemment modifiée
         if let Some(c) = s.lister().into_iter().next() {
@@ -108,7 +115,7 @@ impl Session {
                 )
             })
             .collect();
-        v.sort_by(|a, b| b.0.cmp(&a.0));
+        v.sort_by_key(|x| std::cmp::Reverse(x.0));
         v.into_iter().map(|(_, f)| f).collect()
     }
 
@@ -119,6 +126,11 @@ impl Session {
                 self.simulation = None;
                 self.campagne = Some(c);
                 self.chemin = Some(chemin.to_path_buf());
+                self.combat = None;
+                let m = match self.recharger_combat() {
+                    Ok(true) => format!("{m} : un combat interrompu a été retrouvé"),
+                    _ => m,
+                };
                 Retour::ok(m)
             }
             Err(e) => Retour::erreur(format!("Impossible d'ouvrir {} : {e}", chemin.display())),
@@ -145,6 +157,7 @@ impl Session {
             return Retour::erreur(format!("Une campagne « {nom} » existe déjà"));
         }
         self.simulation = None;
+        self.combat = None;
         self.campagne = Some(Campagne::nouvelle(nom));
         self.chemin = Some(chemin);
         if let Err(e) = self.enregistrer() {
@@ -153,7 +166,14 @@ impl Session {
         Retour::ok(format!("Campagne « {nom} » créée"))
     }
 
-    fn enregistrer(&mut self) -> Result<(), String> {
+    /// Enregistre les modèles personnels (fichier commun aux deux applications).
+    pub fn enregistrer_modeles(&self) -> Result<(), String> {
+        self.modeles
+            .enregistrer(&self.dossier)
+            .map_err(|e| format!("Enregistrement des modèles impossible : {e}"))
+    }
+
+    pub fn enregistrer(&mut self) -> Result<(), String> {
         if self.simulation.is_some() {
             return Ok(()); // une simulation n'est jamais enregistrée
         }
@@ -166,6 +186,11 @@ impl Session {
 
     /// Exécute un événement sur la campagne ouverte, puis enregistre.
     pub fn executer(&mut self, ev: Evenement, succes: &str) -> Retour {
+        if self.combat.is_some() && !ev.valide_un_combat() {
+            return Retour::erreur(
+                "Un combat est en cours : terminez-le (validation ou abandon) avant toute autre action",
+            );
+        }
         let Some(c) = self.campagne.as_mut() else {
             return Retour::erreur("Aucune campagne ouverte");
         };
@@ -186,7 +211,30 @@ impl Session {
         }
     }
 
+    /// Lit l'état de la campagne ouverte.
+    pub fn avec_etat<T>(&mut self, f: impl FnOnce(&campagne::etat::Etat) -> T) -> Option<T> {
+        let c = self.campagne.as_mut()?;
+        Some(f(c.etat(&self.r)))
+    }
+
+    /// Règles optionnelles de l'intermède (hors journal), puis enregistrement.
+    pub fn regler_options(&mut self, o: regles::options::OptionsRegles, succes: &str) -> Retour {
+        let Some(c) = self.campagne.as_mut() else {
+            return Retour::erreur("Aucune campagne ouverte");
+        };
+        c.options = o;
+        match self.enregistrer() {
+            Ok(()) => Retour::ok(succes),
+            Err(e) => Retour::erreur(e),
+        }
+    }
+
     pub fn annuler(&mut self) -> Retour {
+        if self.combat.is_some() {
+            return Retour::erreur(
+                "Un combat est en cours : annulez dans le combat (ou abandonnez-le)",
+            );
+        }
         let Some(c) = self.campagne.as_mut() else {
             return Retour::erreur("Aucune campagne ouverte");
         };
@@ -201,6 +249,9 @@ impl Session {
     }
 
     pub fn retablir(&mut self) -> Retour {
+        if self.combat.is_some() {
+            return Retour::erreur("Un combat est en cours : rétablissez dans le combat");
+        }
         let Some(c) = self.campagne.as_mut() else {
             return Retour::erreur("Aucune campagne ouverte");
         };

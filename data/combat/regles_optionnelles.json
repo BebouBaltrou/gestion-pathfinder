@@ -1,0 +1,11 @@
+{
+  "regles": [
+    {
+      "id": "degats_massifs",
+      "nom": "Dégâts massifs",
+      "description": "Quand une seule attaque inflige au moins 50 PV et au moins la moitié des PV maximum sans tuer, un jet de Vigueur DD 15 est demandé ; un échec est la mort.",
+      "source": "Core Rulebook p. 189",
+      "par_defaut": false
+    }
+  ]
+}

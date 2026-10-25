@@ -1,0 +1,167 @@
+{
+  "Exotic Weapon Proficiency": {
+    "resume": "Le personnage choisit une arme exotique, comme la chaîne cloutée ou le fouet. Il sait alors comment s’en servir au combat et sait comment utiliser ses aptitudes particulières.",
+    "prerequis": "Bonus de base à l’attaque de +1.",
+    "avantage": "Lorsqu’il utilise l’arme exotique choisie, le personnage fait ses jets d’attaque normalement.",
+    "normal": "Un personnage qui utilise une arme sans être formé à son maniement subit un malus de -4 aux jets d’attaque.",
+    "special": "Ce don peut être choisi plusieurs fois, mais ses effets ne se cumulent pas. Il s’applique à chaque fois à une nouvelle arme exotique."
+  },
+  "Extend Spell": {
+    "resume": "Les sorts du personnage durent deux fois plus longtemps.",
+    "avantage": "Un sort à extension de durée dure deux fois plus longtemps qu’indiqué dans sa description. Les sorts permanents, instantanés et ceux dont la durée dépend de la concentration du personnage ne sont pas concernés. Un sort à extension de durée nécessite un emplacement de sort d’un niveau de plus que son niveau réel."
+  },
+  "Extra Channel": {
+    "resume": "Le personnage canalise l’énergie divine un peu plus souvent.",
+    "prerequis": "Capacité de classe à canaliser de l’énergie.",
+    "avantage": "Le personnage canalise l’énergie deux fois de plus par jour.",
+    "special": "Si un paladin capable de canaliser de l’énergie choisit ce don, il peut utiliser l’imposition des mains quatre fois de plus par jour mais seulement pour canaliser de l’énergie positive."
+  },
+  "Extra Ki": {
+    "resume": "Le personnage peut utiliser sa réserve de ki de plus nombreuses fois que la normale.",
+    "prerequis": "Capacité de classe d’utilisation du ki.",
+    "avantage": "La réserve de ki du personnage est augmentée de 2 points.",
+    "special": "Le personnage peut choisir ce don à plusieurs reprises, ses effets se cumulent."
+  },
+  "Extra Lay on Hands": {
+    "resume": "Le personnage utilise l’imposition des mains plus souvent.",
+    "prerequis": "Capacité de classe d’imposition des mains.",
+    "avantage": "Le personnage utilise imposition des mains deux fois de plus par jour.",
+    "special": "Le personnage peut choisir ce don à plusieurs reprises, ses effets se cumulent."
+  },
+  "Extra Mercy": {
+    "resume": "Quand le personnage utilise imposition des mains, il ajoute une grâce supplémentaire.",
+    "prerequis": "Capacités de classe d’imposition des mains et de grâce.",
+    "avantage": "Le personnage choisit une grâce supplémentaire. Quand il utilise imposition des mains, la créature qu’il soigne bénéficie aussi des effets de cette grâce.",
+    "special": "Le personnage peut choisir ce don à plusieurs reprises mais ses effets ne se cumulent pas. Le personnage doit choisir une nouvelle grâce à chaque fois qu’il choisit ce don."
+  },
+  "Extra Performance": {
+    "resume": "Le personnage donne quelques représentations bardiques de plus.",
+    "prerequis": "Capacité de classe à donner des représentations bardiques.",
+    "avantage": "Le personnage peut donner une représentation bardique pendant six rounds de plus par jour.",
+    "special": "Le personnage peut choisir ce don à plusieurs reprises, ses effets se cumulent."
+  },
+  "Extra Rage": {
+    "resume": "Le personnage peut devenir enragé plus souvent.",
+    "prerequis": "Capacité de classe de rage.",
+    "avantage": "Le personnage peut entrer en rage pendant six rounds supplémentaires par jour.",
+    "special": "Le personnage peut choisir ce don à plusieurs reprises, ses effets se cumulent."
+  },
+  "Far Shot": {
+    "resume": "Le personnage est plus précis quand il tire de loin.",
+    "prerequis": "Tir à bout portant.",
+    "avantage": "Si le personnage utilise une arme à projectiles, il souffre seulement d’un malus de -1 par facteur de portée qui le sépare de sa cible.",
+    "normal": "Le personnage souffre d’un malus de -2 par facteur de portée qui le sépare de sa cible."
+  },
+  "Fleet": {
+    "resume": "Le personnage est plus rapide que la plupart des gens.",
+    "avantage": "Quand le personnage porte une armure légère ou ne porte aucune armure, sa vitesse de base augmente de 1,5 m. Il perd ce bonus s’il porte une charge intermédiaire ou lourde.",
+    "special": "Le personnage peut choisir ce don à plusieurs reprises, ses effets se cumulent."
+  },
+  "Forge Ring": {
+    "resume": "Le personnage sait fabriquer des anneaux magiques.",
+    "prerequis": "Niveau 7 de lanceur de sorts.",
+    "avantage": "Le personnage peut créer des anneaux magiques. Le processus de fabrication prend un jour par tranche de 1 000 po du prix de base. Le personnage doit acheter les matières premières nécessaires pour une valeur totale de la moitié du prix de base. Consultez le Chapitre 15 pour plus d’informations. Le personnage peut également réparer un anneau cassé s’il remplit les conditions de création de celui-ci. La procédure à suivre est la même, mais la réparation nécessite moitié moins de temps et de composantes matérielles."
+  },
+  "Gorgon's Fist": {
+    "resume": "Le personnage peut projeter son adversaire en arrière d’un seul coup de poing.",
+    "prerequis": "École du scorpion, Science de l’attaque à mains nues, bonus de base à l’attaque de +6.",
+    "avantage": "Par une action simple, le personnage fait une unique attaque de corps à corps contre un adversaire dont la vitesse est réduite (s’il est victime de l’École du scorpion par exemple). S’il touche son adversaire, le personnage lui inflige les dégâts habituels. La cible est chancelante jusqu’à la fin du prochain tour du personnage, à moins qu’elle ne réussisse un jet de Vigueur (DD 10 + 1/2 niveau du personnage + modificateur de Sag). Ce don n’a aucun effet sur les cibles qui chancellent déjà."
+  },
+  "Great Cleave": {
+    "resume": "Le personnage peut frapper plusieurs adversaires adjacents d’un seul coup.",
+    "prerequis": "For 13, Attaque en puissance, Enchaînement, bonus de base à l’attaque de +4.",
+    "avantage": "Par une action simple, le personnage porte une unique attaque avec la totalité de son bonus de base à l’attaque à un adversaire situé à sa portée. S’il le touche, il lui inflige les dégâts habituels et peut faire une attaque supplémentaire (toujours avec son bonus de base à l’attaque maximal) contre un adversaire adjacent au premier ennemi et situé à portée du personnage. S’il le touche, il peut faire une nouvelle attaque sur un adversaire à sa portée et adjacent au dernier ennemi touché. Il n’y a pas de limite au nombre d’ennemis que le personnage peut attaquer ainsi mais il ne peut pas attaquer deux fois le même pendant cette action. Quand le personnage utilise ce don, il subit un malus de -2 à la CA jusqu’à son prochain tour."
+  },
+  "Great Fortitude": {
+    "resume": "Le personnage est plus résistant aux poisons, aux maladies et autres effets néfastes.",
+    "avantage": "Le personnage bénéficie d’un bonus de +2 à tous ses jets de Vigueur."
+  },
+  "Greater Bull Rush": {
+    "resume": "Le personnage charge ses ennemis pour les déséquilibrer.",
+    "prerequis": "For 13, Attaque en puissance, Science de la bousculade, bonus de base à l’attaque de +6.",
+    "avantage": "Le personnage reçoit un bonus de +2 aux tests de bousculade. Ce bonus s’ajoute à celui de la Science de la bousculade. Quand le personnage bouscule un adversaire, il permet à tous ses alliés de faire une attaque d’opportunité sur sa victime (mais lui ne peut pas).",
+    "normal": "Les créatures bousculées ne provoquent pas d’attaques d’opportunité."
+  },
+  "Greater Disarm": {
+    "resume": "Le personnage désarme ses ennemis et envoie leurs armes voltiger au loin.",
+    "prerequis": "Int 13, Expertise du combat, Science du désarmement, bonus de base à l’attaque de +6.",
+    "avantage": "Le personnage reçoit un bonus de +2 aux tests de désarmement. Ce bonus s’ajoute à celui de la Science du désarmement. Quand le personnage parvient à désarmer son adversaire, il envoie son arme à 4,50 m de son propriétaire, dans une direction aléatoire.",
+    "normal": "Les armes et l’équipement arrachés à un adversaire atterrissent à ses pieds."
+  },
+  "Greater Feint": {
+    "resume": "Le personnage est doué pour amplifier les réactions de ses adversaires à ses attaques.",
+    "prerequis": "Int 13, Expertise du combat, Science de la feinte, bonus de base à l’attaque de +6.",
+    "avantage": "Quand le personnage feinte pour faire perdre le bonus de Dextérité à la CA de son adversaire, ce dernier le perd pour la prochaine attaque du personnage qui l’a feintée mais, en plus, ne le récupère pas avant le début du prochain tour du personnage.",
+    "normal": "Les créatures victimes d’une feinte perdent leur bonus de Dextérité lors de la prochaine attaque du personnage."
+  },
+  "Greater Grapple": {
+    "resume": "Pour le personnage, continuer à lutter est une seconde nature.",
+    "prerequis": "Dex 13, Science de la lutte, Science du combat à mains nues, bonus de base à l’attaque de +6.",
+    "avantage": "Le personnage reçoit un bonus de +2 aux tests destinés à agripper un adversaire. Ce bonus s’ajoute à celui de la Science de la lutte. Une fois que le personnage a agrippé un adversaire, il lui suffit d’une action de mouvement pour maintenir sa prise. Ce don permet au personnage de faire deux tests de lutte par round (pour déplacer, blesser ou immobiliser son adversaire) mais il n’est pas obligé d’en faire deux. Il lui suffit d’en réussir un pour maintenir sa prise.",
+    "normal": "Maintenir sa prise est une action simple."
+  },
+  "Greater Overrun": {
+    "resume": "Les ennemis du personnage doivent plonger pour éviter ses dangereux mouvements.",
+    "prerequis": "For 13, Attaque en puissance, Science du renversement, bonus de base à l’attaque de +6.",
+    "avantage": "Le personnage reçoit un bonus de +2 aux tests destinés à renverser un adversaire. Ce bonus s’ajoute à celui de la Science du renversement. Quand le personnage renverse un adversaire, ce dernier déclenche une attaque d’opportunité s’il tombe à terre.",
+    "normal": "Les créatures qui tombent à terre suite à un renversement ne provoquent pas d’attaques d’opportunité."
+  },
+  "Greater Penetrating Strike": {
+    "resume": "Les attaques du personnage pénètrent les défenses de la plupart des adversaires. Le personnage doit choisir une arme pour laquelle il dispose déjà du don Frappe puissante.",
+    "prerequis": "Frappe puissante, Arme de prédilection, guerrier de niveau 16.",
+    "avantage": "Les attaques du personnage ignorent jusqu’à 10 points de réduction de dégâts. Cette quantité est réduite à 5 points pour les réductions de dégâts sans type (comme une RD 10/–)."
+  },
+  "Greater Shield Focus": {
+    "resume": "Le personnage est un expert lorsqu’il s’agit de parer les coups à l’aide de son bouclier.",
+    "prerequis": "Art du bouclier, Maniement des boucliers, bonus de base à l’attaque de +1, guerrier de niveau 8.",
+    "avantage": "Augmente de +1 le bonus de CA accordé par n’importe quel bouclier utilisé par le personnage. Ce bonus se cumule avec le bonus octroyé par le don Art du bouclier."
+  },
+  "Greater Spell Focus": {
+    "resume": "Le personnage choisit une école de magie pour laquelle il dispose déjà du don École renforcée. Quand le personnage lance un sort de cette école, il est très difficile d’y résister.",
+    "prerequis": "École renforcée.",
+    "avantage": "Le DD des jets de sauvegarde contre tous les sorts de l’école choisie par le personnage augmente de +1. Ce bonus s’ajoute à celui d’École renforcée.",
+    "special": "Ce don peut être choisi plusieurs fois, mais ses effets ne se cumulent pas. Il s’applique à chaque fois à une nouvelle école de magie."
+  },
+  "Greater Spell Penetration": {
+    "resume": "Les sorts du personnage traversent bien plus facilement la résistance aux sorts de ses ennemis que ceux de la plupart des gens.",
+    "prerequis": "Efficacité des sorts accrue.",
+    "avantage": "Le personnage obtient un bonus de +2 sur les tests de niveau de lanceur de sorts (1d20 + niveau de lanceur de sorts) effectués pour traverser la résistance à la magie d’une créature. Ce bonus se cumule avec celui d’Efficacité des sorts accrue."
+  },
+  "Greater Sunder": {
+    "resume": "Les coups dévastateurs du personnage traversent aussi bien les armes et les armures que leur propriétaire. Ces frappes terrifiantes brisent à la fois les objets et la personne qui se protège derrière.",
+    "prerequis": "For 13, Attaque en puissance, Science de la destruction d’arme, bonus de base à l’attaque de +6.",
+    "avantage": "Le personnage reçoit un bonus de +2 aux tests destinés à détruire un objet. Ce bonus s’ajoute à celui de la Science de la destruction d’arme. Quand le personnage tente de détruire une arme, un bouclier ou une armure, il applique tous les dégâts en excès au propriétaire de l’objet. Si le personnage décide de laisser l’objet avec 1 point de vie, son propriétaire ne subit pas le moindre dégât."
+  },
+  "Greater Trip": {
+    "resume": "Le personnage attaque gratuitement les adversaires qu’il a fait tomber.",
+    "prerequis": "Int 13, Expertise du combat, Science du croc-en-jambe, bonus de base à l’attaque de +6.",
+    "avantage": "Le personnage reçoit un bonus de +2 aux tests destinés à faire un croc-en-jambe à un adversaire. Ce bonus s’ajoute à celui de la Science du croc-en-jambe. Quand le personnage réussit à faire un croc-en-jambe à son adversaire, ce dernier provoque des attaques d’opportunité.",
+    "normal": "Les créatures victimes d’un croc-en-jambe ne provoquent pas d’attaques d’opportunité."
+  },
+  "Greater Two-Weapon Fighting": {
+    "resume": "Le personnage est incroyablement doué pour se battre avec deux armes à la fois.",
+    "prerequis": "Dex 19, Combat à deux armes, Science du combat à deux armes, bonus de base à l’attaque de +11.",
+    "avantage": "Le personnage a droit à une troisième attaque avec son arme secondaire mais avec un malus de -10."
+  },
+  "Greater Vital Strike": {
+    "resume": "Le personnage peut faire une attaque qui inflige des dégâts incroyables.",
+    "prerequis": "Frappe décisive, Science de la frappe décisive, bonus de base à l’attaque de +16.",
+    "avantage": "Quand le personnage recourt à cette action, il porte une unique attaque avec son bonus de base à l’attaque le plus élevé. Cette attaque inflige alors des dégâts supplémentaires : le personnage lance quatre fois les dés de dégâts et additionne leurs résultats. Il ne multiplie pas les dégâts supplémentaires issus de la Force, des aptitudes de son arme (comme une arme de feu) ni les dégâts basés sur la précision (comme les attaques sournoises). Ce bonus de dégâts n’est pas multiplié en cas de critique (bien que les autres bonus de dégâts le soient, comme à l’accoutumée)."
+  },
+  "Greater Weapon Focus": {
+    "resume": "Le personnage choisit une arme pour laquelle il possède le don Arme de prédilection. Il peut aussi choisir l’attaque à mains nues ou la lutte. Il passe maître dans le maniement de cette arme.",
+    "prerequis": "Maniement de l’arme choisie, Arme de prédilection pour l’arme choisie, bonus de base à l’attaque +1, guerrier de niveau 8.",
+    "avantage": "Le personnage bénéficie d’un bonus de +1 à tous ses jets d’attaque lorsqu’il utilise l’arme choisie. Ce bonus se cumule avec tous les autres bonus aux jets d’attaque, dont celui du don Arme de prédilection.",
+    "special": "Ce don peut être choisi plusieurs fois, mais ses effets ne se cumulent pas. Il s’applique à chaque fois à une arme nouvelle."
+  },
+  "Greater Weapon Specialization": {
+    "resume": "Le personnage choisit une arme pour laquelle il possède le don Spécialisation martiale. Il peut aussi choisir l’attaque à mains nues ou la lutte. Ses attaques seront alors bien plus destructrices que la normale.",
+    "prerequis": "Maniement de l’arme choisie, Arme de prédilection pour l’arme choisie, Arme de prédilection supérieure pour l’arme choisie, Spécialisation martiale pour l’arme choisie, guerrier de niveau 12.",
+    "avantage": "Le personnage obtient un bonus de +2 sur les jets de dégâts de l’arme choisie. Ce bonus se cumule avec tous les autres bonus aux jets de dégâts, y compris celui du don Spécialisation martiale.",
+    "special": "Ce don peut être choisi plusieurs fois, mais ses effets ne se cumulent pas. Il s’applique à chaque fois à une arme nouvelle."
+  },
+  "Heighten Spell": {
+    "resume": "Le personnage lance ses sorts comme s’ils étaient d’un niveau supérieur.",
+    "avantage": "Ce don permet d’amplifier l’intensité du sort choisi en augmentant son niveau effectif (d’un ou plusieurs niveaux, sans toutefois dépasser le 9e). Contrairement aux autres dons de métamagie, il augmente réellement le niveau du sort modifié. Toutes les propriétés du sort qui dépendent de son niveau (comme le DD de son jet de sauvegarde et sa capacité à traverser un globe d’invulnérabilité partielle) sont calculées en fonction de son nouveau niveau, choisi par le personnage. Un sort à intensité augmentée nécessite un emplacement de sort égal à son nouveau niveau effectif."
+  }
+}

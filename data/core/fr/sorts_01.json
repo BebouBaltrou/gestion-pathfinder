@@ -1,0 +1,62 @@
+{
+  "Acid Splash": {
+    "cible": "un projectile constitué d’acide",
+    "composantes": "V, G",
+    "description": "Le jeteur de sort lance un petit orbe en direction de la cible. Il doit effectuer une attaque de contact à distance pour toucher cette dernière. L’orbe inflige alors 1d3 points de dégâts d’acide. Cet acide disparaît au bout d’un round."
+  },
+  "Arcane Mark": {
+    "cible": "1 rune ou marque personnelle devant tenir dans un carré de 30 cm de côté",
+    "composantes": "V, G",
+    "description": "Ce sort permet au personnage d’apposer sa signature ou sa marque personnelle, qui ne peut comprendre plus de six caractères distincts. Ce symbole peut être visible ou non. La rune s’inscrit dans n’importe quel matériau sans abîmer l’objet sur lequel elle est placée. Si la marque est invisible, détection de la magie l’entoure d’une aura qui la rend visible (mais elle n’en devient pas forcément compréhensible pour autant).\nDétection de l’invisibilité, vision lucide, une gemme de vision ou une robe de vision totale permettent aussi de repérer une rune invisible. Lecture de la magie révèle les mots contenus dans la signature, le cas échéant. Rien ne permet de dissiper la rune, qui peut être effacée normalement par son créateur ou grâce au sort effacement.\nSi on la trace sur un être vivant, la rune s’efface peu à peu et disparaît au bout d’un mois environ.\nIl faut apposer sa signature magique sur un objet avant de lancer invocation instantanée dessus (voir la description de ce sort pour plus de détails)."
+  },
+  "Bleed": {
+    "cible": "une créature vivante",
+    "composantes": "V, G",
+    "description": "À cause du personnage, une créature qui se trouvait sous 0 points de vie mais s’était stabilisée recommence à agoniser. Le lanceur de sorts vise une créature qui possède -1 point de vie ou moins. Celle-ci perd alors un point de vie par round. On peut la stabiliser ensuite normalement mais le sort fait perdre 1 point de vie à toute créature mourante."
+  },
+  "Dancing Lights": {
+    "cible": "jusqu’à 4 lumières devant se trouver dans un rayon de 3 m",
+    "composantes": "V, G",
+    "description": "Ce sort fait apparaître, au choix, jusqu’à quatre lumières ressemblant à des torches ou des lanternes (dont l’éclairage est équivalent), jusqu’à quatre globes lumineux semblables à des feux follets, ou une silhouette lumineuse vaguement humanoïde. Quand ce sort est lancé plusieurs fois, les lumières dansantes doivent rester à trois mètres ou moins les unes des autres. Mis à part cela, elles se déplacent en fonction des désirs du lanceur de sort, sans que ce dernier ait besoin de se concentrer : elles peuvent donc avancer, reculer, monter, descendre, tourner à l’angle des couloirs, etc. Elles peuvent se déplacer de 30 m par round. Les lumières dansantes qui vont au-delà des limites de portée du sort (par rapport au personnage, pas au point où le sort a été lancé) disparaît aussitôt.\nLe personnage ne peut activer qu’un sort de ce type à la fois. S’il en lance un alors qu’un ancien est encore actif, l’ancien sort se dissipe. En revanche, si un sort de lumières dansantes devient permanent, il ne compte plus.Il est possible d’user de permanence sur un sort de lumières dansantes."
+  },
+  "Daze": {
+    "cible": "1 humanoïde de 4 DV ou moins",
+    "composantes": "V, G, M (un brin de laine ou une substance similaire)",
+    "description": "Ce sort embue l’esprit d’un humanoïde possédant 4 DV ou moins, ce qui l’empêche d’entreprendre la moindre action. Les humanoïdes ayant au moins 5 DV sont immunisés aux effets d’hébétement. La victime est hébétée mais pas étourdie, de sorte que ses adversaires ne bénéficient d’aucun avantage lorsqu’ils s’en prennent à elle. Si une créature a été hébétée par ce sort, elle ne peut plus être affectée par celui-ci pendant une minute."
+  },
+  "Detect Magic": {
+    "cible": "émanation en forme de cône",
+    "composantes": "V, G",
+    "description": "Grâce à ce sort, le personnage peut repérer les auras magiques. Les informations fournies par détection de la magie dépendent du temps que le personnage passe à étudier le sujet et ou la zone.\nPremier round : présence ou absence d’auras magiques. Deuxième round : nombre d’auras magiques et intensité de la plus puissante. Troisième round : intensité et emplacement précis de chaque aura. Dans le cas d’objets ou de créatures situées dans le champ de vision du lanceur de sort, il est possible de tenter des tests d’Art de la magie pour déterminer l’école de magie associée à chacune des auras (un test par aura ; DD 15 + niveau du sort, ou 15 + moitié du niveau de lanceur de sorts pour un effet qui ne serait pas un sort). Si l’aura émane d’un objet magique, le personnage peut tenter d’identifier ses propriétés (voir Art de la magie).\nLes auras magiques particulièrement puissantes ou encore les émanations magiques locales peuvent dissimuler les auras plus discrètes.\nIntensité de l’aura. La force d’une aura dépend du niveau du sort qui en est à l’origine ou du niveau de lanceur de sorts de la créature qui a créé l’objet magique d’où elle émane. Dans le cas d’auras qui correspondent à plusieurs catégories, le sort indique toujours la plus puissante.\nDetection de la magie\nSort ou objet\nSort actif (niveau de sort)\nObjet magique (niveau de lanceur de sorts)\nFaible 3 ou -\n5 ou -\n- Intensité de l’aura -\nModérée Puissante Surpuissante\n4–6\n7–9\n10 ou +\n(niveau divin)\n6–11\n12–20 21 ou +\n(artefact)\nAura persistante. Une aura magique ne disparaît pas immédiatement lorsque sa source est est dissipée (s’il s’agit d’un sort) ou détruite (s’il s’agit d’un objet magique) mais persiste pendant un certain temps. Une détection de la magie dirigée vers la zone en question révélera une aura de puissance ténue (moins puissante encore qu’une aura faible). La période de temps pendant laquelle l’aura persiste dépend de l’intensité d’origine de l’aura.\nIntensité de l’aura Faible Modérée Puissante Surpuissante\nDurée 1d6 rounds 1d6 minutes 1d6x10 minutes 1d6 jours\nLes élémentaires et les Extérieurs ne sont pas magiques de manière inhérente mais, s’ils ont été convoqués par magie, détection de la magie repère l’aura du sort qui les a invoqués. Le personnage peut pivoter sur lui-même et examiner une nouvelle zone chaque round. Le sort fonctionne à travers les barrières si celles-ci ne sont pas trop épaisses : il est bloqué par 30 cm de pierre, 2,5 cm de métal, une mince feuille de plomb ou 90 cm de bois ou de terre.\nIl est possible d’user de permanence sur détection de la magie."
+  },
+  "Detect Poison": {
+    "cible": "une créature, un objet ou un cube de 1,50 m (5 pieds) d'arête",
+    "composantes": "V, G",
+    "description": "Ce sort indique si une créature, un objet ou un lieu a été empoisonné ou est toxique. Un test de Sagesse de DD 20 permet de déterminer la nature exacte du poison. Si le lanceur de sorts maîtrise la compétence Artisanat (alchimie), il peut tenter un test d’Artisanat (alchimie) de DD 20 si le test de Sagesse échoue ; il peut également choisir de réaliser ce test d’Artisanat (alchimie) avant le test de Sagesse. Le sort fonctionne à travers les barrières si celles-ci ne sont pas trop épaisses : il est bloqué par 30 cm de pierre, 2,5 cm de métal, une mince feuille de plomb ou 90 cm de bois ou de terre."
+  },
+  "Disrupt Undead": {
+    "cible": "rayon",
+    "composantes": "V, G",
+    "description": "Ce sort crée un rayon d’énergie positive. Le personnage doit réussir une attaque de contact à distance pour atteindre le mort-vivant. Si l’attaque touche, le mort-vivant subit 1d6 points de dégâts."
+  },
+  "Flare": {
+    "cible": "rayonnement de lumière",
+    "composantes": "V",
+    "description": "Ce sort élémentaire crée une petite explosion de lumière. Si celle-ci se produit devant une créature, cette dernière doit réussir un jet de Vigueur pour éviter de se retrouver éblouie pendant une minute. Les créatures aveugles, ainsi que celles qui sont déjà éblouies, ne sont pas affectées par illumination."
+  },
+  "Ghost Sound": {
+    "cible": "sons illusoires",
+    "composantes": "V, G, M (un brin de laine ou un morceau de cire)",
+    "description": "Ce sort permet de créer un son d’intensité stable ou changeante (qui monte, qui descend, qui se rapproche, etc.). Le personnage choisit le type de bruit qu’il souhaite obtenir au cours de l’incantation et ne peut plus le modifier par la suite.\nLe volume du son dépend du niveau du personnage, qui peut faire autant de bruit que quatre humains normaux par niveau de lanceur de sorts (jusqu’à un maximum de quarante humains). Le personnage peut faire croire que des gens chantent ou crient non loin, qu’ils marchent, qu’ils courent, etc. Le son généré peut prendre n’importe quelle forme, du moment qu’il ne dépasse pas les limites de volume imposées. Une horde de rats qui courent et piaillent fait autant de bruit que huit humains qui se livrent au même exercice. Le rugissement d’un lion fait autant de bruit que seize humains, alors que le rugissement d’un dragon vaut trente-deux humains.\nToute personne qui entend un son imaginaire a droit à un jet de Volonté pour dévoiler la supercherie.\nÀ noter que son imaginaire permet d’augmenter fortement l’efficacité d’image silencieuse.\nOn peut rendre le son imaginaire permanent à l’aide d’un sort de permanence."
+  },
+  "Light": {
+    "cible": "objet touché",
+    "composantes": "V, M/FD (une luciole)",
+    "description": "Lancé sur un objet, ce sort le fait briller comme la lumière d’une torche, ce qui lui permet d’éclairer jusqu’à six mètres à la ronde tout en augmentant la luminosité d’un cran dans un rayon de six mètres de plus (les ténèbres se muent en faible lumière et cette dernière en lumière normale). Ce sort n’a aucun effet dans une zone de lumière normale ou de vive lumière. L’effet est immobile, mais on peut le jeter sur un objet mobile.\nLe personnage ne peut activer qu’un sort de lumière à la fois. S’il en lance un alors qu’un ancien est encore actif, l’ancien sort se dissipe. Si le personnage rend ce sort permanent (à l’aide de permanence ou d’un effet similaire) le sort permanent ne compte pas. Tous les sorts de lumière contrent et dissipent les sorts d’obscurité de niveau inférieur ou égal."
+  },
+  "Mage Hand": {
+    "cible": "objet non-magique pesant jusqu’à 2,5 kg et n’étant porté ou tenu par personne",
+    "composantes": "V, G",
+    "description": "En pointant le doigt vers l’objet de son choix, le lanceur de sorts peut le soulever et le déplacer sans le toucher. Par une action de mouvement, il peut déplacer l’objet de 4,50 m au maximum dans n’importe quelle direction. Le sort expire instantanément si la distance séparant le personnage de l’objet dépasse les limites de portée du sort."
+  }
+}

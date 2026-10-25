@@ -1,0 +1,1673 @@
+{
+  "source": "Archives of Nethys (aonprd.com), contenu du Core Rulebook sous licence OGL",
+  "classe": {
+    "id": "ensorceleur",
+    "nom": "Ensorceleur",
+    "nom_en": "Sorcerer",
+    "source": {
+      "livre": "PRPG Core Rulebook",
+      "page": 70,
+      "url": "https://aonprd.com/ClassDisplay.aspx?ItemName=Sorcerer"
+    },
+    "de_vie": 6,
+    "rangs_par_niveau": 2,
+    "caracteristique_rangs": "int",
+    "competences_de_classe_en": [
+      "Appraise",
+      "Bluff",
+      "Craft",
+      "Fly",
+      "Intimidate",
+      "Knowledge (arcana)",
+      "Profession",
+      "Spellcraft",
+      "Use Magic Device"
+    ],
+    "bba": "moyen",
+    "vigueur": "lente",
+    "reflexes": "lente",
+    "volonte": "rapide",
+    "maitrises_en": "all simple weapons; no armor, no shield",
+    "incantation": {
+      "type": "profane",
+      "mode": "spontané",
+      "caracteristique": "cha",
+      "echange_niveau_min": 4,
+      "echange_pas": 2,
+      "echange_de_sort": "niveaux 4, 6, 8… : un sort connu contre un autre du même niveau"
+    },
+    "or_de_depart_en": "2d6 x 10 gp (average 70 gp)",
+    "don_bonus_niveau_1": "Eschew Materials",
+    "progression": [
+      {
+        "niveau": 1,
+        "bba": [
+          0
+        ],
+        "vigueur": 0,
+        "reflexes": 0,
+        "volonte": 2,
+        "special_en": "Bloodline power, cantrips, eschew materials",
+        "sorts_par_jour": [
+          3,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [
+          4,
+          2,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "niveau": 2,
+        "bba": [
+          1
+        ],
+        "vigueur": 0,
+        "reflexes": 0,
+        "volonte": 3,
+        "special_en": "",
+        "sorts_par_jour": [
+          4,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [
+          5,
+          2,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "niveau": 3,
+        "bba": [
+          1
+        ],
+        "vigueur": 1,
+        "reflexes": 1,
+        "volonte": 3,
+        "special_en": "Bloodline power, bloodline spell",
+        "sorts_par_jour": [
+          5,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [
+          5,
+          3,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "niveau": 4,
+        "bba": [
+          2
+        ],
+        "vigueur": 1,
+        "reflexes": 1,
+        "volonte": 4,
+        "special_en": "",
+        "sorts_par_jour": [
+          6,
+          3,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [
+          6,
+          3,
+          1,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "niveau": 5,
+        "bba": [
+          2
+        ],
+        "vigueur": 1,
+        "reflexes": 1,
+        "volonte": 4,
+        "special_en": "Bloodline spell",
+        "sorts_par_jour": [
+          6,
+          4,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [
+          6,
+          4,
+          2,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "niveau": 6,
+        "bba": [
+          3
+        ],
+        "vigueur": 2,
+        "reflexes": 2,
+        "volonte": 5,
+        "special_en": "",
+        "sorts_par_jour": [
+          6,
+          5,
+          3,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [
+          7,
+          4,
+          2,
+          1,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "niveau": 7,
+        "bba": [
+          3
+        ],
+        "vigueur": 2,
+        "reflexes": 2,
+        "volonte": 5,
+        "special_en": "Bloodline feat, bloodline spell",
+        "sorts_par_jour": [
+          6,
+          6,
+          4,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [
+          7,
+          5,
+          3,
+          2,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "niveau": 8,
+        "bba": [
+          4
+        ],
+        "vigueur": 2,
+        "reflexes": 2,
+        "volonte": 6,
+        "special_en": "",
+        "sorts_par_jour": [
+          6,
+          6,
+          5,
+          3,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [
+          8,
+          5,
+          3,
+          2,
+          1,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "niveau": 9,
+        "bba": [
+          4
+        ],
+        "vigueur": 3,
+        "reflexes": 3,
+        "volonte": 6,
+        "special_en": "Bloodline power, bloodline spell",
+        "sorts_par_jour": [
+          6,
+          6,
+          6,
+          4,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [
+          8,
+          5,
+          4,
+          3,
+          2,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "niveau": 10,
+        "bba": [
+          5
+        ],
+        "vigueur": 3,
+        "reflexes": 3,
+        "volonte": 7,
+        "special_en": "",
+        "sorts_par_jour": [
+          6,
+          6,
+          6,
+          5,
+          3,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [
+          9,
+          5,
+          4,
+          3,
+          2,
+          1,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "niveau": 11,
+        "bba": [
+          5
+        ],
+        "vigueur": 3,
+        "reflexes": 3,
+        "volonte": 7,
+        "special_en": "Bloodline spell",
+        "sorts_par_jour": [
+          6,
+          6,
+          6,
+          6,
+          4,
+          null,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [
+          9,
+          5,
+          5,
+          4,
+          3,
+          2,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "niveau": 12,
+        "bba": [
+          6,
+          1
+        ],
+        "vigueur": 4,
+        "reflexes": 4,
+        "volonte": 8,
+        "special_en": "",
+        "sorts_par_jour": [
+          6,
+          6,
+          6,
+          6,
+          5,
+          3,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [
+          9,
+          5,
+          5,
+          4,
+          3,
+          2,
+          1,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "niveau": 13,
+        "bba": [
+          6,
+          1
+        ],
+        "vigueur": 4,
+        "reflexes": 4,
+        "volonte": 8,
+        "special_en": "Bloodline feat, bloodline spell",
+        "sorts_par_jour": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          4,
+          null,
+          null,
+          null
+        ],
+        "sorts_connus": [
+          9,
+          5,
+          5,
+          4,
+          4,
+          3,
+          2,
+          null,
+          null,
+          null
+        ]
+      },
+      {
+        "niveau": 14,
+        "bba": [
+          7,
+          2
+        ],
+        "vigueur": 4,
+        "reflexes": 4,
+        "volonte": 9,
+        "special_en": "",
+        "sorts_par_jour": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          5,
+          3,
+          null,
+          null
+        ],
+        "sorts_connus": [
+          9,
+          5,
+          5,
+          4,
+          4,
+          3,
+          2,
+          1,
+          null,
+          null
+        ]
+      },
+      {
+        "niveau": 15,
+        "bba": [
+          7,
+          2
+        ],
+        "vigueur": 5,
+        "reflexes": 5,
+        "volonte": 9,
+        "special_en": "Bloodline power, bloodline spell",
+        "sorts_par_jour": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          4,
+          null,
+          null
+        ],
+        "sorts_connus": [
+          9,
+          5,
+          5,
+          4,
+          4,
+          4,
+          3,
+          2,
+          null,
+          null
+        ]
+      },
+      {
+        "niveau": 16,
+        "bba": [
+          8,
+          3
+        ],
+        "vigueur": 5,
+        "reflexes": 5,
+        "volonte": 10,
+        "special_en": "",
+        "sorts_par_jour": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          5,
+          3,
+          null
+        ],
+        "sorts_connus": [
+          9,
+          5,
+          5,
+          4,
+          4,
+          4,
+          3,
+          2,
+          1,
+          null
+        ]
+      },
+      {
+        "niveau": 17,
+        "bba": [
+          8,
+          3
+        ],
+        "vigueur": 5,
+        "reflexes": 5,
+        "volonte": 10,
+        "special_en": "Bloodline spell",
+        "sorts_par_jour": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          4,
+          null
+        ],
+        "sorts_connus": [
+          9,
+          5,
+          5,
+          4,
+          4,
+          4,
+          3,
+          3,
+          2,
+          null
+        ]
+      },
+      {
+        "niveau": 18,
+        "bba": [
+          9,
+          4
+        ],
+        "vigueur": 6,
+        "reflexes": 6,
+        "volonte": 11,
+        "special_en": "",
+        "sorts_par_jour": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          5,
+          3
+        ],
+        "sorts_connus": [
+          9,
+          5,
+          5,
+          4,
+          4,
+          4,
+          3,
+          3,
+          2,
+          1
+        ]
+      },
+      {
+        "niveau": 19,
+        "bba": [
+          9,
+          4
+        ],
+        "vigueur": 6,
+        "reflexes": 6,
+        "volonte": 11,
+        "special_en": "Bloodline feat, bloodline spell",
+        "sorts_par_jour": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          4
+        ],
+        "sorts_connus": [
+          9,
+          5,
+          5,
+          4,
+          4,
+          4,
+          3,
+          3,
+          3,
+          2
+        ]
+      },
+      {
+        "niveau": 20,
+        "bba": [
+          10,
+          5
+        ],
+        "vigueur": 6,
+        "reflexes": 6,
+        "volonte": 12,
+        "special_en": "Bloodline power",
+        "sorts_par_jour": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        "sorts_connus": [
+          9,
+          5,
+          5,
+          4,
+          4,
+          4,
+          3,
+          3,
+          3,
+          3
+        ]
+      }
+    ],
+    "lignages": [
+      {
+        "id": "aberrant",
+        "nom_en": "Aberrant",
+        "source": {
+          "livre": "PRPG Core Rulebook",
+          "page": 72,
+          "url": "https://aonprd.com/BloodlineDisplay.aspx?ItemName=Aberrant&Class=Sorcerer"
+        },
+        "competence_de_classe_en": "Knowledge (dungeoneering).",
+        "sorts_bonus": [
+          {
+            "nom_en": "enlarge person",
+            "niveau_classe": 3
+          },
+          {
+            "nom_en": "see invisibility",
+            "niveau_classe": 5
+          },
+          {
+            "nom_en": "tongues",
+            "niveau_classe": 7
+          },
+          {
+            "nom_en": "black tentacles",
+            "niveau_classe": 9
+          },
+          {
+            "nom_en": "feeblemind",
+            "niveau_classe": 11
+          },
+          {
+            "nom_en": "veil",
+            "niveau_classe": 13
+          },
+          {
+            "nom_en": "plane shift",
+            "niveau_classe": 15
+          },
+          {
+            "nom_en": "mind blank",
+            "niveau_classe": 17
+          },
+          {
+            "nom_en": "shapechange",
+            "niveau_classe": 19
+          }
+        ],
+        "dons_bonus_en": [
+          "Combat Casting",
+          "Improved Disarm",
+          "Improved Grapple",
+          "Improved Initiative",
+          "Improved Unarmed Strike",
+          "Iron Will",
+          "Silent Spell",
+          "Skill Focus (Knowledge [dungeoneering])"
+        ],
+        "arcane_en": "Whenever you cast a spell of the polymorph subschool, increase the duration of the spell by 50% (minimum 1 round). This bonus does not stack with the increase granted by the Extend Spell feat.",
+        "pouvoirs": [
+          {
+            "nom_en": "Acidic Ray",
+            "type": "Sp",
+            "niveau_classe": 1,
+            "texte_en": "Starting at 1st level, you can fire an acidic ray as a standard action, targeting any foe within 30 feet as a ranged touch attack. The acidic ray deals 1d6 points of acid damage + 1 for every two sorcerer levels you possess. You can use this ability a number of times per day equal to 3 + your Charisma modifier."
+          },
+          {
+            "nom_en": "Long Limbs",
+            "type": "Ex",
+            "niveau_classe": 3,
+            "texte_en": "At 3rd level, your reach increases by 5 feet whenever you are making a melee touch attack. This ability does not otherwise increase your threatened area. At 11th level, this bonus to your reach increases to 10 feet. At 17th level, this bonus to your reach increases to 15 feet."
+          },
+          {
+            "nom_en": "Unusual Anatomy",
+            "type": "Ex",
+            "niveau_classe": 9,
+            "texte_en": "At 9th level, your anatomy changes, giving you a 25% chance to ignore any critical hit or sneak attack scored against you. This chance increases to 50% at 13th level."
+          },
+          {
+            "nom_en": "Alien Resistance",
+            "type": "Su",
+            "niveau_classe": 15,
+            "texte_en": "At 15th level, you gain spell resistance equal to your sorcerer level + 10."
+          },
+          {
+            "nom_en": "Aberrant Form",
+            "type": "Ex",
+            "niveau_classe": 20,
+            "texte_en": "At 20th level, your body becomes truly unnatural. You are immune to critical hits and sneak attacks. In addition, you gain blindsight with a range of 60 feet and damage reduction 5/—."
+          }
+        ],
+        "choix_en": [
+          "Site Owner: Blake Davis Email Spam Checker: MX Guarddog"
+        ]
+      },
+      {
+        "id": "abyssal",
+        "nom_en": "Abyssal",
+        "source": {
+          "livre": "PRPG Core Rulebook",
+          "page": 72,
+          "url": "https://aonprd.com/BloodlineDisplay.aspx?ItemName=Abyssal&Class=Sorcerer"
+        },
+        "competence_de_classe_en": "Knowledge (planes).",
+        "sorts_bonus": [
+          {
+            "nom_en": "cause fear",
+            "niveau_classe": 3
+          },
+          {
+            "nom_en": "bull's strength",
+            "niveau_classe": 5
+          },
+          {
+            "nom_en": "rage",
+            "niveau_classe": 7
+          },
+          {
+            "nom_en": "stoneskin",
+            "niveau_classe": 9
+          },
+          {
+            "nom_en": "dismissal",
+            "niveau_classe": 11
+          },
+          {
+            "nom_en": "transformation",
+            "niveau_classe": 13
+          },
+          {
+            "nom_en": "greater teleport",
+            "niveau_classe": 15
+          },
+          {
+            "nom_en": "unholy aura",
+            "niveau_classe": 17
+          },
+          {
+            "nom_en": "summon monster IX",
+            "niveau_classe": 19
+          }
+        ],
+        "dons_bonus_en": [
+          "Augment Summoning",
+          "Cleave",
+          "Empower Spell",
+          "Great Fortitude",
+          "Improved Bull Rush",
+          "Improved Sunder",
+          "Power Attack",
+          "Skill Focus (Knowledge [planes])"
+        ],
+        "arcane_en": "Whenever you cast a spell of the summoning subschool, the creatures summoned gain DR/good equal to 1/2 your sorcerer level (minimum 1). This does not stack with any DR the creature might have.",
+        "pouvoirs": [
+          {
+            "nom_en": "Claws",
+            "type": "Su",
+            "niveau_classe": 1,
+            "texte_en": "At 1st level, you can grow claws as a free action. These claws are treated as natural weapons, allowing you to make two claw attacks as a full attack action using your full base attack bonus. These attacks deal 1d4 points of damage each (1d3 if you are Small) plus your Strength modifier. At 5th level, these claws are considered magic weapons for the purpose of overcoming DR. At 7th level, the damage increases by one step to 1d6 points of damage (1d4 if you are Small). At 11th level, these claws become flaming weapons , each dealing an additional 1d6 points of fire damage on a successful hit. You can use your claws for a number of rounds per day equal to 3 + your Charisma modifier. These rounds do not need to be consecutive."
+          },
+          {
+            "nom_en": "Demon Resistances",
+            "type": "Ex",
+            "niveau_classe": 3,
+            "texte_en": "At 3rd level, you gain resist electricity 5 and a +2 bonus on saving throws made against poison. At 9th level, your resistance to electricity increases to 10 and your bonus on poison saving throws increases to +4."
+          },
+          {
+            "nom_en": "Strength of the Abyss",
+            "type": "Ex",
+            "niveau_classe": 9,
+            "texte_en": "At 9th level, you gain a +2 inherent bonus to your Strength. This bonus increases to +4 at 13th level, and to +6 at 17th level."
+          },
+          {
+            "nom_en": "Added Summonings",
+            "type": "Su",
+            "niveau_classe": 15,
+            "texte_en": "At 15th level, whenever you summon a creature with the demon subtype or the fiendish template using a summon monster spell, you summon one additional creature of the same kind."
+          },
+          {
+            "nom_en": "Demonic Might",
+            "type": "Su",
+            "niveau_classe": 20,
+            "texte_en": "At 20th level, the power of the Abyss flows through you. You gain immunity to electricity and poison. You also gain resistance to acid 10, cold 10, and fire 10, and gain telepathy with a range of 60 feet (allowing you to communicate with any creature that can speak a language)."
+          }
+        ],
+        "choix_en": [
+          "Site Owner: Blake Davis Email Spam Checker: MX Guarddog"
+        ]
+      },
+      {
+        "id": "arcane",
+        "nom_en": "Arcane",
+        "source": {
+          "livre": "PRPG Core Rulebook",
+          "page": 73,
+          "url": "https://aonprd.com/BloodlineDisplay.aspx?ItemName=Arcane&Class=Sorcerer"
+        },
+        "competence_de_classe_en": "Knowledge (any one).",
+        "sorts_bonus": [
+          {
+            "nom_en": "identify",
+            "niveau_classe": 3
+          },
+          {
+            "nom_en": "invisibility",
+            "niveau_classe": 5
+          },
+          {
+            "nom_en": "dispel magic",
+            "niveau_classe": 7
+          },
+          {
+            "nom_en": "dimension door",
+            "niveau_classe": 9
+          },
+          {
+            "nom_en": "overland flight",
+            "niveau_classe": 11
+          },
+          {
+            "nom_en": "true seeing",
+            "niveau_classe": 13
+          },
+          {
+            "nom_en": "greater teleport",
+            "niveau_classe": 15
+          },
+          {
+            "nom_en": "power word stun",
+            "niveau_classe": 17
+          },
+          {
+            "nom_en": "wish",
+            "niveau_classe": 19
+          }
+        ],
+        "dons_bonus_en": [
+          "Combat Casting",
+          "Improved Counterspell",
+          "Improved Initiative",
+          "Iron Will",
+          "Scribe Scroll",
+          "Skill Focus (Knowledge [arcana])",
+          "Spell Focus",
+          "Still Spell"
+        ],
+        "arcane_en": "Whenever you apply a metamagic feat to a spell that increases the slot used by at least one level, increase the spell's DC by +1. This bonus does not stack with itself and does not apply to spells modified by the Heighten Spell feat.",
+        "pouvoirs": [
+          {
+            "nom_en": "Arcane Bond",
+            "type": "Su",
+            "niveau_classe": 1,
+            "texte_en": "At 1st level, you gain an arcane bond, as a wizard equal to your sorcerer level. Your sorcerer levels stack with any wizard levels you possess when determining the powers of your familiar or bonded object. This ability does not allow you to have both a familiar and a bonded item. Once per day, your bonded item allows you to cast any one of your spells known (unlike a wizard's bonded item, which allows him to cast any one spell in his spellbook)."
+          },
+          {
+            "nom_en": "Metamagic Adept",
+            "type": "Ex",
+            "niveau_classe": 3,
+            "texte_en": "At 3rd level, you can apply any one metamagic feat you know to a spell you are about to cast without increasing the casting time. You must still expend a higher-level spell slot to cast this spell. You can use this ability once per day at 3rd level and one additional time per day for every four sorcerer levels you possess beyond 3rd, up to five times per day at 19th level. At 20th level, this ability is replaced by arcane apotheosis."
+          },
+          {
+            "nom_en": "New Arcana",
+            "type": "Ex",
+            "niveau_classe": 9,
+            "texte_en": "At 9th level, you can add any one spell from the sorcerer/wizard spell list to your list of spells known. This spell must be of a level that you are capable of casting. You can also add one additional spell at 13th level and 17th level."
+          },
+          {
+            "nom_en": "School Power",
+            "type": "Ex",
+            "niveau_classe": 15,
+            "texte_en": "At 15th level, pick one school of magic. The DC for any spells you cast from that school increases by +2. This bonus stacks with the bonus granted by Spell Focus."
+          },
+          {
+            "nom_en": "Arcane Apotheosis",
+            "type": "Ex",
+            "niveau_classe": 20,
+            "texte_en": "At 20th level, your body surges with arcane power. You can add any metamagic feats that you know to your spells without increasing their casting time, although you must still expend higher-level spell slots. Whenever you use magic items that require charges, you can instead expend spell slots to power the item. For every three levels of spell slots that you expend, you consume one less charge when using a magic item that expends charges."
+          }
+        ],
+        "choix_en": [
+          "Site Owner: Blake Davis Email Spam Checker: MX Guarddog"
+        ]
+      },
+      {
+        "id": "celestial",
+        "nom_en": "Celestial",
+        "source": {
+          "livre": "PRPG Core Rulebook",
+          "page": 74,
+          "url": "https://aonprd.com/BloodlineDisplay.aspx?ItemName=Celestial&Class=Sorcerer"
+        },
+        "competence_de_classe_en": "Heal.",
+        "sorts_bonus": [
+          {
+            "nom_en": "bless",
+            "niveau_classe": 3
+          },
+          {
+            "nom_en": "resist energy",
+            "niveau_classe": 5
+          },
+          {
+            "nom_en": "magic circle against evil",
+            "niveau_classe": 7
+          },
+          {
+            "nom_en": "remove curse",
+            "niveau_classe": 9
+          },
+          {
+            "nom_en": "flame strike",
+            "niveau_classe": 11
+          },
+          {
+            "nom_en": "greater dispel magic",
+            "niveau_classe": 13
+          },
+          {
+            "nom_en": "banishment",
+            "niveau_classe": 15
+          },
+          {
+            "nom_en": "sunburst",
+            "niveau_classe": 17
+          },
+          {
+            "nom_en": "gate",
+            "niveau_classe": 19
+          }
+        ],
+        "dons_bonus_en": [
+          "Dodge",
+          "Extend Spell",
+          "Iron Will",
+          "Mobility",
+          "Mounted Combat",
+          "Ride-By Attack",
+          "Skill Focus (Knowledge [religion])",
+          "Weapon Finesse"
+        ],
+        "arcane_en": "Whenever you cast a spell of the summoning subschool, the creatures summoned gain DR/evil equal to 1/2 your sorcerer level (minimum 1). This does not stack with any DR the creature might have.",
+        "pouvoirs": [
+          {
+            "nom_en": "Heavenly Fire",
+            "type": "Sp",
+            "niveau_classe": 1,
+            "texte_en": "Starting at 1st level, you can unleash a ray of heavenly fire as a standard action, targeting any foe within 30 feet as a ranged touch attack. Against evil creatures, this ray deals 1d4 points of damage + 1 for every two sorcerer levels you possess. This damage is divine and not subject to energy resistance or immunity. This ray heals good creatures of 1d4 points of damage + 1 for every two sorcerer levels you possess. A good creature cannot benefit from your heavenly fire more than once per day. Neutral creatures are neither harmed nor healed by this effect. You can use this ability a number of times per day equal to 3 + your Charisma modifier."
+          },
+          {
+            "nom_en": "Celestial Resistances",
+            "type": "Ex",
+            "niveau_classe": 3,
+            "texte_en": "At 3rd level, you gain resist acid 5 and resist cold 5. At 9th level, your resistances increase to 10."
+          },
+          {
+            "nom_en": "Wings of Heaven",
+            "type": "Su",
+            "niveau_classe": 9,
+            "texte_en": "At 9th level, you can sprout feathery wings and fly for a number of minutes per day equal to your sorcerer level, with a speed of 60 feet and good maneuverability. This duration does not need to be consecutive, but it must be used in 1 minute increments."
+          },
+          {
+            "nom_en": "Conviction",
+            "type": "Su",
+            "niveau_classe": 15,
+            "texte_en": "At 15th level, you can reroll any one ability check, attack roll, skill check, or saving throw you just made. You must decide to use this ability after the die is rolled, but before the results are revealed by the GM. You must take the second result, even if it is worse. You can use this ability once per day."
+          },
+          {
+            "nom_en": "Ascension",
+            "type": "Su",
+            "niveau_classe": 20,
+            "texte_en": "At 20th level, you become infused with the power of the heavens. You gain immunity to acid, cold, and petrification. You also gain resist electricity 10, resist fire 10, and a +4 racial bonus on saves against poison. Finally, you gain unlimited use of the wings of heaven ability. Finally, you gain the ability to speak with any creature that has a language (as per the tongues spell)."
+          }
+        ],
+        "choix_en": [
+          "Site Owner: Blake Davis Email Spam Checker: MX Guarddog"
+        ]
+      },
+      {
+        "id": "destined",
+        "nom_en": "Destined",
+        "source": {
+          "livre": "PRPG Core Rulebook",
+          "page": 74,
+          "url": "https://aonprd.com/BloodlineDisplay.aspx?ItemName=Destined&Class=Sorcerer"
+        },
+        "competence_de_classe_en": "Knowledge (history).",
+        "sorts_bonus": [
+          {
+            "nom_en": "alarm",
+            "niveau_classe": 3
+          },
+          {
+            "nom_en": "blur",
+            "niveau_classe": 5
+          },
+          {
+            "nom_en": "protection from energy",
+            "niveau_classe": 7
+          },
+          {
+            "nom_en": "freedom of movement",
+            "niveau_classe": 9
+          },
+          {
+            "nom_en": "break enchantment",
+            "niveau_classe": 11
+          },
+          {
+            "nom_en": "mislead",
+            "niveau_classe": 13
+          },
+          {
+            "nom_en": "spell turning",
+            "niveau_classe": 15
+          },
+          {
+            "nom_en": "moment of prescience",
+            "niveau_classe": 17
+          },
+          {
+            "nom_en": "foresight",
+            "niveau_classe": 19
+          }
+        ],
+        "dons_bonus_en": [
+          "Arcane Strike",
+          "Diehard",
+          "Endurance",
+          "Leadership",
+          "Lightning Reflexes",
+          "Maximize Spell",
+          "Skill Focus (Knowledge [history])",
+          "Weapon Focus"
+        ],
+        "arcane_en": "Whenever you cast a spell with a range of “personal,” you gain a luck bonus equal to the spell's level on all your saving throws for 1 round.",
+        "pouvoirs": [
+          {
+            "nom_en": "Touch of Destiny",
+            "type": "Sp",
+            "niveau_classe": 1,
+            "texte_en": "At 1st level, you can touch a creature as a standard action, giving it an insight bonus on attack rolls, skill checks, ability checks, and saving throws equal to 1/2 your sorcerer level (minimum 1) for 1 round. You can use this ability a number of times per day equal to 3 + your Charisma modifier."
+          },
+          {
+            "nom_en": "Fated",
+            "type": "Su",
+            "niveau_classe": 3,
+            "texte_en": "Starting at 3rd level, you gain a +1 luck bonus on all of your saving throws and to your AC during surprise rounds (see Combat) and when you are otherwise unaware of an attack. At 7th level and every four levels thereafter, this bonus increases by +1, to a maximum of +5 at 19th level."
+          },
+          {
+            "nom_en": "It Was Meant To Be",
+            "type": "Su",
+            "niveau_classe": 9,
+            "texte_en": "At 9th level, you may reroll any one attack roll, critical hit confirmation roll, or level check made to overcome spell resistance. You must decide to use this ability after the first roll is made but before the results are revealed by the GM. You must take the second result, even if it is worse. At 9th level, you can use this ability once per day. At 17th level, you can use this ability twice per day."
+          },
+          {
+            "nom_en": "Within Reach",
+            "type": "Su",
+            "niveau_classe": 15,
+            "texte_en": "At 15th level, your ultimate destiny is drawing near. Once per day, when an attack or spell that causes damage would result in your death, you may attempt a DC 20 Will save. If successful, you are instead reduced to –1 hit points and are automatically stabilized. The bonus from your fated ability applies to this save."
+          },
+          {
+            "nom_en": "Destiny Realized",
+            "type": "Su",
+            "niveau_classe": 20,
+            "texte_en": "At 20th level, your moment of destiny is at hand. Any critical threats made against you only confirm if the second roll results in a natural 20 on the die. Any critical threats you score with a spell are automatically confirmed. Once per day, you can automatically succeed at one caster level check made to overcome spell resistance. You must use this ability before making the roll."
+          }
+        ],
+        "choix_en": [
+          "Site Owner: Blake Davis Email Spam Checker: MX Guarddog"
+        ]
+      },
+      {
+        "id": "draconic",
+        "nom_en": "Draconic",
+        "source": {
+          "livre": "PRPG Core Rulebook",
+          "page": 75,
+          "url": "https://aonprd.com/BloodlineDisplay.aspx?ItemName=Draconic&Class=Sorcerer"
+        },
+        "competence_de_classe_en": "Perception.",
+        "sorts_bonus": [
+          {
+            "nom_en": "mage armor",
+            "niveau_classe": 3
+          },
+          {
+            "nom_en": "resist energy",
+            "niveau_classe": 5
+          },
+          {
+            "nom_en": "fly",
+            "niveau_classe": 7
+          },
+          {
+            "nom_en": "fear",
+            "niveau_classe": 9
+          },
+          {
+            "nom_en": "spell resistance",
+            "niveau_classe": 11
+          },
+          {
+            "nom_en": "form of the dragon I",
+            "niveau_classe": 13
+          },
+          {
+            "nom_en": "form of the dragon II",
+            "niveau_classe": 15
+          },
+          {
+            "nom_en": "form of the dragon III",
+            "niveau_classe": 17
+          },
+          {
+            "nom_en": "wish",
+            "niveau_classe": 19
+          }
+        ],
+        "dons_bonus_en": [
+          "Blind-Fight",
+          "Great Fortitude",
+          "Improved Initiative",
+          "Power Attack",
+          "Quicken Spell",
+          "Skill Focus (Fly)",
+          "Skill Focus (Knowledge [arcana])",
+          "Toughness"
+        ],
+        "arcane_en": "Whenever you cast a spell with an energy descriptor that matches your draconic bloodline's energy type, that spell deals +1 point of damage per die rolled.",
+        "pouvoirs": [
+          {
+            "nom_en": "Claws",
+            "type": "Su",
+            "niveau_classe": 1,
+            "texte_en": "Starting at 1st level, you can grow claws as a free action. These claws are treated as natural weapons, allowing you to make two claw attacks as a full attack action using your full base attack bonus. Each of these attacks deals 1d4 points of damage plus your Strength modifier (1d3 if you are Small). At 5th level, these claws are considered magic weapons for the purpose of overcoming DR. At 7th level, the damage increases by one step to 1d6 points of damage (1d4 if you are Small). At 11th level, these claws deal an additional 1d6 points of damage of your energy type on a successful hit. You can use your claws for a number of rounds per day equal to 3 + your Charisma modifier. These rounds do not need to be consecutive."
+          },
+          {
+            "nom_en": "Dragon Resistances",
+            "type": "Ex",
+            "niveau_classe": 3,
+            "texte_en": "At 3rd level, you gain resist 5 against your energy type and a +1 natural armor bonus. At 9th level, your energy resistance increases to 10 and natural armor bonus increases to +2. At 15th level, your natural armor bonus increases to +4."
+          },
+          {
+            "nom_en": "Breath Weapon",
+            "type": "Su",
+            "niveau_classe": 9,
+            "texte_en": "At 9th level, you gain a breath weapon. This breath weapon deals 1d6 points of damage of your energy type per sorcerer level. Those caught in the area of the breath receive a Reflex save for half damage. The DC of this save is equal to 10 + 1/2 your sorcerer level + your Charisma modifier. The shape of the breath weapon depends on your dragon type (as indicated on the above chart). At 9th level, you can use this ability once per day. At 17th level, you can use this ability twice per day. At 20th level, you can use this ability three times per day."
+          },
+          {
+            "nom_en": "Wings",
+            "type": "Su",
+            "niveau_classe": 15,
+            "texte_en": "At 15th level, leathery dragon wings grow from your back as a standard action, giving you a fly speed of 60 feet with average maneuverability. You can dismiss the wings as a free action."
+          },
+          {
+            "nom_en": "Power of Wyrms",
+            "type": "Su",
+            "niveau_classe": 20,
+            "texte_en": "At 20th level, your draconic heritage becomes manifest. You gain immunity to paralysis, sleep, and damage of your energy type. You also gain blindsense 60 feet."
+          }
+        ],
+        "choix_en": [
+          "Dragon Type Energy Type Breath Shape",
+          "Black Acid 60-foot line",
+          "Blue Electricity 60-foot line",
+          "Green Acid 30-foot cone",
+          "Red Fire 30-foot cone",
+          "White Cold 30-foot cone",
+          "Brass Fire 60-foot line",
+          "Bronze Electricity 60-foot line",
+          "Copper Acid 60-foot line",
+          "Gold Fire 30-foot cone",
+          "Silver Cold 30-foot cone"
+        ]
+      },
+      {
+        "id": "elemental",
+        "nom_en": "Elemental",
+        "source": {
+          "livre": "PRPG Core Rulebook",
+          "page": 75,
+          "url": "https://aonprd.com/BloodlineDisplay.aspx?ItemName=Elemental&Class=Sorcerer"
+        },
+        "competence_de_classe_en": "Knowledge (planes).",
+        "sorts_bonus": [
+          {
+            "nom_en": "burning hands*",
+            "niveau_classe": 3
+          },
+          {
+            "nom_en": "scorching ray*",
+            "niveau_classe": 5
+          },
+          {
+            "nom_en": "protection from energy",
+            "niveau_classe": 7
+          },
+          {
+            "nom_en": "elemental body I",
+            "niveau_classe": 9
+          },
+          {
+            "nom_en": "elemental body II",
+            "niveau_classe": 11
+          },
+          {
+            "nom_en": "elemental body III",
+            "niveau_classe": 13
+          },
+          {
+            "nom_en": "elemental body IV",
+            "niveau_classe": 15
+          },
+          {
+            "nom_en": "summon monster VIII (elementals only)",
+            "niveau_classe": 17
+          },
+          {
+            "nom_en": "elemental swarm",
+            "niveau_classe": 19
+          }
+        ],
+        "dons_bonus_en": [
+          "Dodge",
+          "Empower Spell",
+          "Great Fortitude",
+          "Improved Initiative",
+          "Lightning Reflexes",
+          "Power Attack",
+          "Skill Focus (Knowledge [planes])",
+          "Weapon Finesse"
+        ],
+        "arcane_en": "Whenever you cast a spell that deals energy damage, you can change the type of damage to match the type of your bloodline. This also changes the spell's type to match the type of your bloodline.",
+        "pouvoirs": [
+          {
+            "nom_en": "Elemental Ray",
+            "type": "Sp",
+            "niveau_classe": 1,
+            "texte_en": "Starting at 1st level, you can unleash an elemental ray as a standard action, targeting any foe within 30 feet as a ranged touch attack. This ray deals 1d6 points of damage of your energy type + 1 for every two sorcerer levels you possess. You can use this ability a number of times per day equal to 3 + your Charisma modifier."
+          },
+          {
+            "nom_en": "Elemental Resistance",
+            "type": "Ex",
+            "niveau_classe": 3,
+            "texte_en": "At 3rd level, you gain energy resistance 10 against your energy type. At 9th level, your energy resistance increases to 20."
+          },
+          {
+            "nom_en": "Elemental Blast",
+            "type": "Sp",
+            "niveau_classe": 9,
+            "texte_en": "At 9th level, you can unleash a blast of elemental power once per day. This 20-foot-radius burst does 1d6 points of damage of your energy type per sorcerer level. Those caught in the area of your blast receive a Reflex save for half damage. Creatures that fail their saves gain vulnerability to your energy type until the end of your next turn. The DC of this save is equal to 10 + 1/2 your sorcerer level + your Charisma modifier. At 9th level, you can use this ability once per day. At 17th level, you can use this ability twice per day. At 20th level, you can use this ability three times per day. This power has a range of 60 feet."
+          },
+          {
+            "nom_en": "Elemental Movement",
+            "type": "Su",
+            "niveau_classe": 15,
+            "texte_en": "At 15th level, you gain a special movement type or bonus. This ability is based on your chosen element, as indicated on the above chart."
+          },
+          {
+            "nom_en": "Elemental Body",
+            "type": "Su",
+            "niveau_classe": 20,
+            "texte_en": "At 20th level, elemental power surges through your body. You gain immunity to sneak attacks, critical hits, and damage from your energy type."
+          }
+        ],
+        "choix_en": [
+          "Element Energy Type Elemental Movement",
+          "Air Electricity Fly 60 feet (average)",
+          "Earth Acid Burrow 30 feet",
+          "Fire Fire +30 feet base speed",
+          "Water Cold Swim 60 feet",
+          "Site Owner: Blake Davis Email Spam Checker: MX Guarddog"
+        ]
+      },
+      {
+        "id": "fey",
+        "nom_en": "Fey",
+        "source": {
+          "livre": "PRPG Core Rulebook",
+          "page": 76,
+          "url": "https://aonprd.com/BloodlineDisplay.aspx?ItemName=Fey&Class=Sorcerer"
+        },
+        "competence_de_classe_en": "Knowledge (nature).",
+        "sorts_bonus": [
+          {
+            "nom_en": "entangle",
+            "niveau_classe": 3
+          },
+          {
+            "nom_en": "hideous laughter",
+            "niveau_classe": 5
+          },
+          {
+            "nom_en": "deep slumber",
+            "niveau_classe": 7
+          },
+          {
+            "nom_en": "poison",
+            "niveau_classe": 9
+          },
+          {
+            "nom_en": "tree stride",
+            "niveau_classe": 11
+          },
+          {
+            "nom_en": "mislead",
+            "niveau_classe": 13
+          },
+          {
+            "nom_en": "phase door",
+            "niveau_classe": 15
+          },
+          {
+            "nom_en": "irresistible dance",
+            "niveau_classe": 17
+          },
+          {
+            "nom_en": "shapechange",
+            "niveau_classe": 19
+          }
+        ],
+        "dons_bonus_en": [
+          "Dodge",
+          "Improved Initiative",
+          "Lightning Reflexes",
+          "Mobility",
+          "Point-Blank Shot",
+          "Precise Shot",
+          "Quicken Spell",
+          "Skill Focus (Knowledge [nature])"
+        ],
+        "arcane_en": "Whenever you cast a spell of the compulsion subschool, increase the spell's DC by +2.",
+        "pouvoirs": [
+          {
+            "nom_en": "Laughing Touch",
+            "type": "Sp",
+            "niveau_classe": 1,
+            "texte_en": "At 1st level, you can cause a creature to burst out laughing for 1 round as a melee touch attack. A laughing creature can only take a move action but can defend itself normally. Once a creature has been affected by laughing touch, it is immune to its effects for 24 hours. You can use this ability a number of times per day equal to 3 + your Charisma modifier. This is a mind-affecting effect."
+          },
+          {
+            "nom_en": "Woodland Stride",
+            "type": "Ex",
+            "niveau_classe": 3,
+            "texte_en": "At 3rd level, you can move through any sort of undergrowth (such as natural thorns, briars, overgrown areas, and similar terrain) at your normal speed and without taking damage or suffering any other impairment. Thorns, briars, and overgrown areas that have been magically manipulated to impede motion, however, still affect you."
+          },
+          {
+            "nom_en": "Fleeting Glance",
+            "type": "Sp",
+            "niveau_classe": 9,
+            "texte_en": "At 9th level, you can turn invisible for a number of rounds per day equal to your sorcerer level. This ability functions as greater invisibility . These rounds need not be consecutive."
+          },
+          {
+            "nom_en": "Fey Magic",
+            "type": "Su",
+            "niveau_classe": 15,
+            "texte_en": "At 15th level, you may reroll any caster level check made to overcome spell resistance. You must decide to use this ability before the results are revealed by the GM. You must take the second result, even if it is worse. You can use this ability at will."
+          },
+          {
+            "nom_en": "Soul of the Fey",
+            "type": "Su",
+            "niveau_classe": 20,
+            "texte_en": "At 20th level, your soul becomes one with the world of the fey. You gain immunity to poison and DR 10/cold iron. Creatures of the animal type do not attack you unless compelled to do so through magic. Once per day, you can cast shadow walk as a spell-like ability using your sorcerer level as your caster level."
+          }
+        ],
+        "choix_en": [
+          "Site Owner: Blake Davis Email Spam Checker: MX Guarddog"
+        ]
+      },
+      {
+        "id": "infernal",
+        "nom_en": "Infernal",
+        "source": {
+          "livre": "PRPG Core Rulebook",
+          "page": 76,
+          "url": "https://aonprd.com/BloodlineDisplay.aspx?ItemName=Infernal&Class=Sorcerer"
+        },
+        "competence_de_classe_en": "Diplomacy.",
+        "sorts_bonus": [
+          {
+            "nom_en": "protection from good",
+            "niveau_classe": 3
+          },
+          {
+            "nom_en": "scorching ray",
+            "niveau_classe": 5
+          },
+          {
+            "nom_en": "suggestion",
+            "niveau_classe": 7
+          },
+          {
+            "nom_en": "charm monster",
+            "niveau_classe": 9
+          },
+          {
+            "nom_en": "dominate person",
+            "niveau_classe": 11
+          },
+          {
+            "nom_en": "planar binding (devils and creatures with the fiendish template only)",
+            "niveau_classe": 13
+          },
+          {
+            "nom_en": "greater teleport",
+            "niveau_classe": 15
+          },
+          {
+            "nom_en": "power word stun",
+            "niveau_classe": 17
+          },
+          {
+            "nom_en": "meteor swarm",
+            "niveau_classe": 19
+          }
+        ],
+        "dons_bonus_en": [
+          "Blind-Fight",
+          "Combat Expertise",
+          "Deceitful",
+          "Extend Spell",
+          "Improved Disarm",
+          "Iron Will",
+          "Skill Focus (Knowledge [planes])",
+          "Spell Penetration"
+        ],
+        "arcane_en": "Whenever you cast a spell of the charm subschool, increase the spell's DC by +2.",
+        "pouvoirs": [
+          {
+            "nom_en": "Corrupting Touch",
+            "type": "Sp",
+            "niveau_classe": 1,
+            "texte_en": "At 1st level, you can cause a creature to become shaken as a melee touch attack. This effect persists for a number of rounds equal to 1/2 your sorcerer level (minimum 1). Creatures shaken by this ability radiate an aura of evil, as if they were an evil outsider (see detect evil ). Multiple touches do not stack, but they do add to the duration. You can use this ability a number of times per day equal to 3 + your Charisma modifier."
+          },
+          {
+            "nom_en": "Infernal Resistances",
+            "type": "Ex",
+            "niveau_classe": 3,
+            "texte_en": "At 3rd level, you gain resist fire 5 and a +2 bonus on saving throws made against poison. At 9th level, your resistance to fire increases to 10 and your bonus on poison saving throws increases to +4."
+          },
+          {
+            "nom_en": "Hellfire",
+            "type": "Sp",
+            "niveau_classe": 9,
+            "texte_en": "At 9th level, you can call down a column of hellfire. This 10-foot-radius burst does 1d6 points of fire damage per sorcerer level. Those caught in the area of your blast receive a Reflex save for half damage. Good creatures that fail their saves are shaken for a number of rounds equal to your sorcerer level. The DC of this save is equal to 10 + 1/2 your sorcerer level + your Charisma modifier. At 9th level, you can use this ability once per day. At 17th level, you can use this ability twice per day. At 20th level, you can use this ability three times per day. This power has a range of 60 feet."
+          },
+          {
+            "nom_en": "On Dark Wings",
+            "type": "Su",
+            "niveau_classe": 15,
+            "texte_en": "At 15th level, you can grow fearsome bat wings as a standard action, giving you a fly speed of 60 feet with average maneuverability. The wings can be dismissed as a free action."
+          },
+          {
+            "nom_en": "Power of the Pit",
+            "type": "Su",
+            "niveau_classe": 20,
+            "texte_en": "At 20th level, your form becomes infused with vile power. You gain immunity to fire and poison. You also gain resistance to acid 10 and cold 10, and the ability to see perfectly in darkness of any kind to a range of 60 feet."
+          }
+        ],
+        "choix_en": [
+          "Site Owner: Blake Davis Email Spam Checker: MX Guarddog"
+        ]
+      },
+      {
+        "id": "undead",
+        "nom_en": "Undead",
+        "source": {
+          "livre": "PRPG Core Rulebook",
+          "page": 77,
+          "url": "https://aonprd.com/BloodlineDisplay.aspx?ItemName=Undead&Class=Sorcerer"
+        },
+        "competence_de_classe_en": "Knowledge (religion).",
+        "sorts_bonus": [
+          {
+            "nom_en": "chill touch",
+            "niveau_classe": 3
+          },
+          {
+            "nom_en": "false life",
+            "niveau_classe": 5
+          },
+          {
+            "nom_en": "vampiric touch",
+            "niveau_classe": 7
+          },
+          {
+            "nom_en": "animate dead",
+            "niveau_classe": 9
+          },
+          {
+            "nom_en": "waves of fatigue",
+            "niveau_classe": 11
+          },
+          {
+            "nom_en": "undeath to death",
+            "niveau_classe": 13
+          },
+          {
+            "nom_en": "finger of death",
+            "niveau_classe": 15
+          },
+          {
+            "nom_en": "horrid wilting",
+            "niveau_classe": 17
+          },
+          {
+            "nom_en": "energy drain",
+            "niveau_classe": 19
+          }
+        ],
+        "dons_bonus_en": [
+          "Combat Casting",
+          "Diehard",
+          "Endurance",
+          "Iron Will",
+          "Skill Focus (Knowledge [religion])",
+          "Spell Focus",
+          "Still Spell",
+          "Toughness"
+        ],
+        "arcane_en": "Some undead are susceptible to your mind-affecting spells. Corporeal undead that were once humanoids are treated as humanoids for the purposes of determining which spells affect them.",
+        "pouvoirs": [
+          {
+            "nom_en": "Grave Touch",
+            "type": "Sp",
+            "niveau_classe": 1,
+            "texte_en": "Starting at 1st level, you can make a melee touch attack as a standard action that causes a living creature to become shaken for a number of rounds equal to 1/2 your sorcerer level (minimum 1). If you touch a shaken creature with this ability, it becomes frightened for 1 round if it has fewer Hit Dice than your sorcerer level. You can use this ability a number of times per day equal to 3 + your Charisma modifier."
+          },
+          {
+            "nom_en": "Death's Gift",
+            "type": "Su",
+            "niveau_classe": 3,
+            "texte_en": "At 3rd level, you gain resist cold 5 and DR 5/— against nonlethal damage. At 9th level, your resistance to cold increases to 10 and your DR increases to 10/— against nonlethal damage."
+          },
+          {
+            "nom_en": "Grasp of the Dead",
+            "type": "Sp",
+            "niveau_classe": 9,
+            "texte_en": "At 9th level, you can cause a swarm of skeletal arms to burst from the ground to rip and tear at your foes. The skeletal arms erupt from the ground in a 20-foot-radius burst. Anyone in this area takes 1d6 points of slashing damage per sorcerer level. Those caught in the area receive a Reflex save for half damage. Those who fail the save are unable to move for 1 round. The DC of this save is equal to 10 + 1/2 your sorcerer level + your Charisma modifier. The skeletal arms disappear after 1 round. The arms must burst up from a solid surface. At 9th level, you can use this ability once per day. At 17th level, you can use this ability twice per day. At 20th level, you can use this ability three times per day. This power has a range of 60 feet."
+          },
+          {
+            "nom_en": "Incorporeal Form",
+            "type": "Sp",
+            "niveau_classe": 15,
+            "texte_en": "At 15th level, you can become incorporeal for 1 round per sorcerer level. While in this form, you gain the incorporeal subtype. You only take half damage from corporeal sources as long as they are magic (you take no damage from non-magic weapons and objects). Likewise, your spells deal only half damage to corporeal creatures. Spells and other effects that do not deal damage function normally. You can use this ability once per day."
+          },
+          {
+            "nom_en": "One of Us",
+            "type": "Ex",
+            "niveau_classe": 20,
+            "texte_en": "At 20th level, your form begins to rot (the appearance of this decay is up to you) and undead see you as one of them. You gain immunity to cold, nonlethal damage, paralysis, and sleep. You also gain DR 5/—. Unintelligent undead do not notice you unless you attack them. You receive a +4 morale bonus on saving throws made against spells and spell-like abilities cast by undead."
+          }
+        ],
+        "choix_en": [
+          "Site Owner: Blake Davis Email Spam Checker: MX Guarddog"
+        ]
+      }
+    ],
+    "capacites_en": {
+      "bloodline": "niveau 1 : un lignage au choix, définitif ; sorts de lignage aux niveaux 3, 5, 7… 19 ; don de lignage aux niveaux 7, 13, 19"
+    }
+  }
+}

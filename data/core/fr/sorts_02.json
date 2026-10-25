@@ -1,0 +1,62 @@
+{
+  "Mending": {
+    "cible": "1 objet pesant jusqu’à 500 g",
+    "composantes": "V, G",
+    "description": "Ce sort permet de réparer les dommages superficiels causés aux objets et leur rend 1d4 points de vie. Dans le cas d’un objet cassé, l’objet n’est plus affecté par cette condition néfaste si l’objet se retrouve à 50% de ses points de vie ou moins. Pour que ce sort fonctionne, le personnage doit disposer de tous les morceaux de l’objet. Le personnage peut utiliser ce sort pour réparer un objet magique cassé à condition que son niveau de lanceur de sorts soit égal ou supérieur à celui de l’objet. Il peut aussi réparer un objet magique détruit (à 0 point de vie ou moins) mais le sort ne lui rend pas ses aptitudes magiques. Ce sort n’affecte pas les créatures (pas même les créatures artificielles). Ce sort n’a aucun effet sur les objets pervertis ou transmutés mais il peut réparer les dégâts qu’ils ont subis."
+  },
+  "Message": {
+    "cible": "1 créature/niveau",
+    "composantes": "V, G, F",
+    "description": "Cette incantation permet de chuchoter des messages. Les personnes alentour discernent le message si elles réussissent un test de Perception DD 25. Le personnage commence par indiquer du doigt toutes les créatures à inclure dans le sort. Par la suite, dès qu’il murmure, le message est entendu par tous les destinataires désignés, à condition qu’ils se trouvent dans les limites de portée. L’effet du sort est bloqué par un silence d’origine magique, 30 cm de pierre, 2,5 cm de métal, une feuille de plomb, ou 90 cm de bois ou de terre. Le message n’a pas besoin de se déplacer en ligne droite. Il peut contourner un obstacle physique, à condition que le chemin qu’il emprunte reste à l’intérieur des limites de portée. Les créatures recevant le message peuvent à leur tour chuchoter une réponse, que le personnage entend. Le sort transmet les sons, pas le sens ; il ne permet donc pas de franchir la barrière du langage. Pour énoncer un message, il est nécessaire de le prononcer très bas."
+  },
+  "Open/Close": {
+    "cible": "objet pesant jusqu’à 15 kg ou porte pouvant être ouverte ou fermée",
+    "composantes": "V, G, F (une clef en laiton)",
+    "description": "Ce sort permet, au choix, d’ouvrir ou de fermer une porte, un coffre, une boîte, une fenêtre, un sac, une bourse, une bouteille ou tout autre récipient. Il échoue automatiquement si l’objet dispose d’un mécanisme de fermeture (barre, serrure fermée, etc.). De plus, il ouvre et ferme seulement les objets qui pèsent 15 kg ou moins. Le couvercle d’un gros coffre ou une porte de grande taille représentent des masses trop importantes pour lui."
+  },
+  "Prestidigitation": {
+    "cible": "voir texte",
+    "composantes": "V, G",
+    "description": "Ce terme regroupe toute une série de tours de magie mineurs que les novices lancent pour s’entraîner. Une fois l’incantation achevée, ces sorts permettent de générer des effets magiques très simples et très limités pendant une heure. Par exemple, le personnage peut, une fois par round, soulever très lentement un objet ne pesant pas plus de cinq cents grammes, colorier, nettoyer ou salir un objet ne faisant pas plus de trente centimètres de côté, mais aussi chauffer, refroidir ou donner du goût à cinq cents grammes de matière inerte. Ces tours sont trop anodins pour blesser qui que ce soit, ou même pour troubler la concentration d’un autre jeteur de sorts. Ils permettent aussi de créer de petits objets mais ceux-ci ont toujours l’air grossiers et artificiels. Les objets créés par prestidigitation sont trop fragiles pour servir d’armes, d’outils ou de composantes matérielles pour d’autres sorts. Enfin, ces tours mineurs ne sont pas assez puissants pour reproduire les effets d’autres sorts. Tout changement d’état qu’ils apportent (mis à part le fait de déplacer un objet, de le salir ou de le nettoyer) dure une heure tout au plus."
+  },
+  "Ray of Frost": {
+    "cible": "rayon",
+    "composantes": "V, G",
+    "description": "Un rayon de givre jaillit du doigt tendu du mage, qui doit réussir une attaque de contact à distance pour atteindre sa cible. Le rayon inflige 1d3 points de dégâts de froid."
+  },
+  "Read Magic": {
+    "cible": "le jeteur de sorts",
+    "composantes": "V, G, F (un cristal translucide ou un prisme minéral)",
+    "description": "Grâce à ce sort, le personnage peut lire les inscriptions magiques normalement incompréhensibles (celles des parchemins, livres magiques, armes, etc.). En principe, déchiffrer ce texte ne déclenche pas la magie qu’il contient, sauf s’il s’agit d’un parchemin maudit. Dès lors que le sort est lancé et le texte compris, le personnage est capable de le lire aussi souvent qu’il le souhaite. La vitesse de lecture du sort est d’une page (soit deux cent cinquante mots) par minute. Lecture de la magie permet aussi d’identifier un glyphe de garde grâce à un test d’Art de la magie (DD 13), un glyphe de garde suprême (Art de la magie, DD 16) et un symbole (Art de la magie, mais contre un DD égal à 10 + niveau de sort)).\nOn peut user de permanence sur un sort de lecture de la magie."
+  },
+  "Resistance": {
+    "cible": "créature touchée",
+    "composantes": "V, G, M/FD (une cape miniature)",
+    "description": "Ce sort protège la cible en lui offrant temporairement un bonus de résistance de +1 aux jets de sauvegarde.\nOn peut user de permanence sur un sort de résistance."
+  },
+  "Touch of Fatigue": {
+    "cible": "créature touchée",
+    "composantes": "V, G, M (une goutte de sueur)",
+    "description": "D’un simple toucher, le lanceur de sorts peut fatiguer la cible en lui infligeant une décharge d’énergie négative. Il doit effectuer une attaque de contact pour toucher sa victime. Celle-ci est alors fatiguée pendant toute la durée du sort.\nFatigue n’a aucun effet si la cible est déjà fatiguée. Contrairement à la fatigue normale, l’effet prend fin au terme de la durée du sort."
+  },
+  "Alarm": {
+    "cible": "émanation de 6 m de rayon autour du point choisi",
+    "composantes": "V, G, F/FD (une clochette et un peu de fil d’argent extrêmement fin)",
+    "description": "Alarme fait résonner une sonnerie d’alerte audible ou mentale chaque fois qu’une créature au minimum de taille TP pénètre dans la zone protégée ou la touche. Quiconque donne le mot de passe (choisi par le personnage au moment de l’incantation) peut entrer sans déclencher l’alarme. La sonnerie est audible ou mentale suivant la décision du jeteur de sorts.\nAlarme mentale. Le personnage est le seul à se rendre compte de l’intrusion, mais il doit se trouver à moins de 1,5 km de l’endroit protégé. Il entend une brève sonnerie qui le réveille s’il dormait mais ne dérange pas sa concentration. Il perçoit l’alarme même s’il est sous le coup d’un sort de silence.\nAlarme audible. Un son de cloche retentit en cas d’intrusion, toutes les créatures distantes de 18 m ou moins l’entendent (distance réduite de 3 m par porte close et de 6 m par mur épais). Si l’environnement est suffisamment silencieux, on entend faiblement la sonnerie jusqu’à 54 m à la ronde. Celle-ci dure 1 round. Les créatures situées dans la zone d’un sort de silence ne peuvent la percevoir.\nLes créatures astrales ou éthérées ne déclenchent pas l’alarme. Il est possible d’user de permanence sur un sort d’alarme."
+  },
+  "Animate Rope": {
+    "cible": "1 corde (ou objet assimilé) ne dépassant pas une longueur de 15 m + 1,50 m/niveau (voir description)",
+    "composantes": "V, G",
+    "description": "Ce sort permet d’animer tout objet s’apparentant à une corde. La longueur maximale stipulée correspond à une corde de 2,5 cm de diamètre. Réduisez-la de 50 % chaque fois que le diamètre est doublé, ou augmentez-la d’autant s’il est réduit de moitié.\nLes instructions que le personnage ordonne à la corde sont « Enroule-toi » (elle se range par terre en un joli tas), « Enroule-toi et noue-toi », « Forme une boucle », « Forme une boucle et noue-toi », « Attache » et toutes les instructions inverses (« Déroule-toi », etc.). Le mage a la possibilité de donner un ordre par round au prix d’une action de mouvement, comme s’il dirigeait un sort actif.\nLa corde ne peut s’enrouler qu’autour des objets ou créatures se situant à moins de trente centimètres d’elle. Elle est incapable de se déplacer par elle-même et, si l’on souhaite l’utiliser à distance, il faut la lancer sur la cible choisie, ce qui nécessite une attaque de contact à distance (facteur de portée de 3 m). La plupart des cordes ont 2 points de vie, une CA de 10 et peuvent être brisées via un test de Force (DD 23). La corde n’inflige pas le moindre point de dégâts, mais il est possible de s’en servir pour faire tomber une créature ou pour l’immobiliser en entortillant la corde autour de ses jambes. Dans les deux cas, la cible a la possibilité d’éviter l’attaque en réussissant un jet de Réflexes. Si la créature enchevêtrée souhaite lancer un sort, il lui faut réussir un test de concentration (DD 15 + niveau du sort). Elle peut se libérer en réussissant un test d’Évasion (DD 20).\nLa corde ainsi que les nœuds qu’elle confectionne ne sont pas plus magique l’un que l’autre. Ce sort ne peut pas animer des objets tenus ou portés par une créature."
+  },
+  "Burning Hands": {
+    "cible": "rayonnement en forme de cône",
+    "composantes": "V, G",
+    "description": "Un cône de flammes jaillit des mains tendues du personnage. Toutes les créatures prises dans ce cône subissent 1d4 points de dégâts de feu par niveau de lanceur de sorts (jusqu’à un maximum de 5d4). Les matières inflammables prennent feu si elles sont exposées aux flammes. N’importe qui peut les éteindre par une action complexe."
+  },
+  "Cause Fear": {
+    "cible": "1 créature vivante ayant 5 DV ou moins",
+    "composantes": "V, G",
+    "description": "La cible de ce sort est effrayée. Si elle réussit un jet de Volonté, elle est seulement secouée pendant 1 round. Les créatures qui possèdent 6 DV ou plus sont immunisées contre ce sort. Frayeur contre et dissipe regain d’assurance."
+  }
+}

@@ -1,0 +1,16 @@
+[package]
+name = "temps"
+description = "Horloge de campagne en rounds, durées PF1 extensibles et effets temporisés (conversion de fin de combat, alertes d'expiration)"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+
+[dependencies]
+serde = { version = "1", features = ["derive"], optional = true }
+
+[dev-dependencies]
+proptest = "1"
+
+[features]
+default = ["serde"]
+serde = ["dep:serde"]
