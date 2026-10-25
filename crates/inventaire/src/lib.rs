@@ -13,6 +13,7 @@ use std::fmt;
 use std::ops::Add;
 
 pub mod catalogue;
+pub mod equipement;
 
 use domaine::Montant;
 
@@ -84,6 +85,9 @@ pub struct Exemplaire {
     pub parent: Option<Id>,
     pub conteneur: Option<Conteneur>,
     pub note: String,
+    /// Objet maudit : une fois équipé, il ne peut plus être déséquipé.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub colle: bool,
 }
 
 /// Propriétaire générique : le type et l'identifiant pointent vers une entité existante.
@@ -115,6 +119,20 @@ pub enum Erreur {
     ConteneurNonVide(Id),
     RacineNonSupprimable(Id),
     RacineImmobile(Id),
+    EmplacementInconnu(String),
+    /// L'objet ne va pas dans cet emplacement.
+    EmplacementIncompatible {
+        objet: Id,
+        emplacement: String,
+    },
+    EmplacementOccupe(String),
+    /// Un conteneur, une pile ou un inventaire ne s'équipe pas.
+    PasEquipable(Id),
+    DejaEquipe(Id),
+    NonEquipe(Id),
+    /// Objet maudit : il ne se retire pas.
+    ObjetColle(Id),
+    JeuInconnu(String),
 }
 
 impl fmt::Display for Erreur {
@@ -139,11 +157,27 @@ impl fmt::Display for Erreur {
             Erreur::ConteneurNonVide(id) => write!(f, "le conteneur {id} n'est pas vide"),
             Erreur::RacineNonSupprimable(id) => write!(f, "l'inventaire {id} ne se supprime pas"),
             Erreur::RacineImmobile(id) => write!(f, "l'inventaire {id} ne se déplace pas"),
+            Erreur::EmplacementInconnu(e) => write!(f, "emplacement inconnu : {e}"),
+            Erreur::EmplacementIncompatible { objet, emplacement } => {
+                write!(
+                    f,
+                    "l'objet {objet} ne va pas dans l'emplacement {emplacement}"
+                )
+            }
+            Erreur::EmplacementOccupe(e) => write!(f, "l'emplacement {e} est occupé"),
+            Erreur::PasEquipable(id) => write!(f, "l'objet {id} ne s'équipe pas"),
+            Erreur::DejaEquipe(id) => write!(f, "l'objet {id} est déjà équipé"),
+            Erreur::NonEquipe(id) => write!(f, "l'objet {id} n'est pas équipé"),
+            Erreur::ObjetColle(id) => write!(f, "l'objet {id} est collé : il ne se retire pas"),
+            Erreur::JeuInconnu(nom) => write!(f, "jeu d'équipement inconnu : {nom}"),
         }
     }
 }
 
 impl std::error::Error for Erreur {}
+
+/// Un jeu d'équipement enregistré : chaque objet et les emplacements qu'il occupe.
+pub type JeuEquipement = Vec<(Id, Vec<String>)>;
 
 /// Ensemble des modèles, exemplaires et inventaires d'une campagne.
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
@@ -154,6 +188,15 @@ pub struct Registre {
     /// Propriétaire de chaque inventaire racine.
     proprietaires: BTreeMap<Id, Proprietaire>,
     dernier_id: Id,
+    /// Emplacements du corps (données).
+    #[cfg_attr(feature = "serde", serde(default))]
+    regles_emplacements: equipement::ReglesEmplacements,
+    /// Objets équipés et emplacements qu'ils occupent.
+    #[cfg_attr(feature = "serde", serde(default))]
+    affectations: BTreeMap<Id, Vec<String>>,
+    /// Jeux d'équipement enregistrés, par inventaire racine puis par nom.
+    #[cfg_attr(feature = "serde", serde(default))]
+    jeux: BTreeMap<Id, BTreeMap<String, JeuEquipement>>,
 }
 
 impl Registre {
@@ -187,6 +230,7 @@ impl Registre {
                 parent: None,
                 conteneur: Some(conteneur),
                 note: String::new(),
+                colle: false,
             },
         );
         self.proprietaires.insert(id, proprietaire);
@@ -228,6 +272,10 @@ impl Registre {
         }
         let type_objet = self.type_de(&exemplaire);
         let poids = self.poids_total(id);
+        let racine_avant = self.racine_de(id)?;
+        if self.racine_de(vers)? != racine_avant {
+            self.verifier_pas_colle(id)?;
+        }
         // Détaché le temps de la vérification : son poids ne compte pas deux fois
         // sur les conteneurs communs à l'ancien et au nouvel emplacement.
         self.exemplaire_mut(id)?.parent = None;
@@ -236,6 +284,21 @@ impl Registre {
             return Err(erreur);
         }
         self.exemplaire_mut(id)?.parent = Some(vers);
+        // Donné à un autre propriétaire : il n'est plus équipé.
+        if self.racine_de(id)? != racine_avant {
+            self.retirer_des_emplacements(id);
+        }
+        Ok(())
+    }
+
+    /// Un objet maudit équipé (ou qui en contient un) ne quitte pas son propriétaire.
+    fn verifier_pas_colle(&self, id: Id) -> Result<(), Erreur> {
+        if self.affectations.contains_key(&id) && self.exemplaire(id)?.colle {
+            return Err(Erreur::ObjetColle(id));
+        }
+        for enfant in self.enfants(id) {
+            self.verifier_pas_colle(enfant)?;
+        }
         Ok(())
     }
 
@@ -247,6 +310,8 @@ impl Registre {
         if !self.enfants(id).is_empty() {
             return Err(Erreur::ConteneurNonVide(id));
         }
+        self.verifier_pas_colle(id)?;
+        self.retirer_des_emplacements(id);
         self.exemplaires.remove(&id);
         Ok(())
     }
@@ -283,7 +348,9 @@ impl Registre {
             && a.parent.is_some()
             && a.conteneur.is_none()
             && b.conteneur.is_none();
-        if !identiques || garde == absorbe {
+        let equipe =
+            self.affectations.contains_key(&garde) || self.affectations.contains_key(&absorbe);
+        if !identiques || garde == absorbe || equipe {
             return Err(Erreur::FusionImpossible(garde, absorbe));
         }
         let total = a
@@ -363,6 +430,7 @@ impl Registre {
                 parent: Some(dans),
                 conteneur,
                 note: String::new(),
+                colle: false,
             },
         );
         Ok(id)
@@ -466,6 +534,18 @@ impl Registre {
             Commande::Fusionner { garde, absorbe } => {
                 self.fusionner(*garde, *absorbe).map(|()| None)
             }
+            Commande::DefinirEmplacements(regles) => {
+                self.definir_emplacements(regles.clone()).map(|()| None)
+            }
+            Commande::Equiper { id, emplacement } => self.equiper(*id, emplacement).map(|()| None),
+            Commande::Deequiper { id } => self.deequiper(*id).map(|()| None),
+            Commande::DefinirColle { id, colle } => self.definir_colle(*id, *colle).map(|()| None),
+            Commande::EnregistrerJeu { racine, nom } => {
+                self.enregistrer_jeu(*racine, nom).map(|()| None)
+            }
+            Commande::AppliquerJeu { racine, nom } => {
+                self.appliquer_jeu(*racine, nom).map(|()| None)
+            }
         }
     }
 }
@@ -503,6 +583,26 @@ pub enum Commande {
     Fusionner {
         garde: Id,
         absorbe: Id,
+    },
+    DefinirEmplacements(equipement::ReglesEmplacements),
+    Equiper {
+        id: Id,
+        emplacement: String,
+    },
+    Deequiper {
+        id: Id,
+    },
+    DefinirColle {
+        id: Id,
+        colle: bool,
+    },
+    EnregistrerJeu {
+        racine: Id,
+        nom: String,
+    },
+    AppliquerJeu {
+        racine: Id,
+        nom: String,
     },
 }
 
@@ -701,6 +801,220 @@ mod tests {
         };
         assert_eq!(rejoue(), rejoue());
         assert_eq!(rejoue().poids_total(1), Poids(250));
+    }
+
+    fn regles() -> equipement::ReglesEmplacements {
+        let slot = |id: &str, zone: &str, capacite: u32| equipement::Emplacement {
+            id: id.into(),
+            zone: zone.into(),
+            nom: id.into(),
+            capacite,
+        };
+        equipement::ReglesEmplacements {
+            emplacements: vec![
+                slot("corps", "Corps", 1),
+                slot("anneau", "Doigts", 2),
+                slot("main_directrice", "Mains tenues", 1),
+                slot("main_non_directrice", "Mains tenues", 1),
+            ],
+            par_type: BTreeMap::from([
+                ("armure".to_string(), vec!["corps".to_string()]),
+                (
+                    "bouclier".to_string(),
+                    vec!["main_non_directrice".to_string()],
+                ),
+                (
+                    "arme".to_string(),
+                    vec![
+                        "main_directrice".to_string(),
+                        "main_non_directrice".to_string(),
+                    ],
+                ),
+                ("anneau".to_string(), vec!["anneau".to_string()]),
+            ]),
+        }
+    }
+
+    /// Registre avec des emplacements et quelques modèles à équiper.
+    fn equipe() -> (Registre, Id) {
+        let (mut r, racine) = registre();
+        r.definir_emplacements(regles()).unwrap();
+        r.ajouter_modele(modele("armure", "armure", 7500));
+        r.ajouter_modele(modele("bouclier", "bouclier", 2500));
+        r.ajouter_modele(modele("anneau", "anneau", 10));
+        let mut deux_mains = modele("grande-epee", "arme", 4000);
+        deux_mains.proprietes.insert("mains".into(), "2".into());
+        r.ajouter_modele(deux_mains);
+        (r, racine)
+    }
+
+    #[test]
+    fn equiper_garde_l_objet_dans_l_inventaire_et_dans_le_poids() {
+        let (mut r, racine) = equipe();
+        let sac = r
+            .ajouter_conteneur("sac", conteneur(None, None, true), racine)
+            .unwrap();
+        let armure = r.ajouter("armure", 1, sac).unwrap();
+        r.equiper(armure, "corps").unwrap();
+        assert_eq!(r.exemplaire(armure).unwrap().parent, Some(sac));
+        assert_eq!(r.poids_total(racine), Poids(7600));
+        assert_eq!(
+            r.equipement_de(racine),
+            vec![equipement::Equipe {
+                objet: armure,
+                emplacements: vec!["corps".into()]
+            }]
+        );
+        r.deequiper(armure).unwrap();
+        assert!(r.equipement_de(racine).is_empty());
+        assert_eq!(r.deequiper(armure), Err(Erreur::NonEquipe(armure)));
+    }
+
+    #[test]
+    fn une_armure_a_la_fois_et_deux_anneaux_au_plus() {
+        let (mut r, racine) = equipe();
+        let a1 = r.ajouter("armure", 1, racine).unwrap();
+        let a2 = r.ajouter("armure", 1, racine).unwrap();
+        r.equiper(a1, "corps").unwrap();
+        assert_eq!(
+            r.equiper(a2, "corps"),
+            Err(Erreur::EmplacementOccupe("corps".into()))
+        );
+        assert_eq!(r.equiper(a1, "corps"), Err(Erreur::DejaEquipe(a1)));
+        let bagues: Vec<Id> = (0..3)
+            .map(|_| r.ajouter("anneau", 1, racine).unwrap())
+            .collect();
+        r.equiper(bagues[0], "anneau").unwrap();
+        r.equiper(bagues[1], "anneau").unwrap();
+        assert_eq!(
+            r.equiper(bagues[2], "anneau"),
+            Err(Erreur::EmplacementOccupe("anneau".into()))
+        );
+        // Un anneau ne va pas sur le corps.
+        assert_eq!(
+            r.equiper(bagues[2], "corps"),
+            Err(Erreur::EmplacementIncompatible {
+                objet: bagues[2],
+                emplacement: "corps".into()
+            })
+        );
+    }
+
+    #[test]
+    fn une_arme_a_deux_mains_occupe_les_deux_mains() {
+        let (mut r, racine) = equipe();
+        let epee = r.ajouter("grande-epee", 1, racine).unwrap();
+        let bouclier = r.ajouter("bouclier", 1, racine).unwrap();
+        r.equiper(epee, "main_directrice").unwrap();
+        assert_eq!(
+            r.equipement_de(racine)[0].emplacements,
+            vec!["main_directrice", "main_non_directrice"]
+        );
+        assert_eq!(
+            r.equiper(bouclier, "main_non_directrice"),
+            Err(Erreur::EmplacementOccupe("main_non_directrice".into()))
+        );
+        r.deequiper(epee).unwrap();
+        r.equiper(bouclier, "main_non_directrice").unwrap();
+    }
+
+    #[test]
+    fn un_objet_colle_ne_se_retire_ni_ne_se_donne() {
+        let (mut r, racine) = equipe();
+        let autre = r.creer_inventaire(
+            Proprietaire {
+                type_id: "personnage".into(),
+                ref_id: "perso-2".into(),
+            },
+            conteneur(None, None, true),
+        );
+        let anneau = r.ajouter("anneau", 1, racine).unwrap();
+        r.equiper(anneau, "anneau").unwrap();
+        r.definir_colle(anneau, true).unwrap();
+        assert_eq!(r.deequiper(anneau), Err(Erreur::ObjetColle(anneau)));
+        assert_eq!(r.retirer(anneau), Err(Erreur::ObjetColle(anneau)));
+        assert_eq!(r.deplacer(anneau, autre), Err(Erreur::ObjetColle(anneau)));
+        r.definir_colle(anneau, false).unwrap();
+        r.deplacer(anneau, autre).unwrap();
+        // Donné à quelqu'un d'autre : plus équipé.
+        assert!(r.equipement_de(racine).is_empty());
+        assert!(r.equipement_de(autre).is_empty());
+    }
+
+    #[test]
+    fn les_jeux_d_equipement_basculent_en_un_geste() {
+        let (mut r, racine) = equipe();
+        let armure = r.ajouter("armure", 1, racine).unwrap();
+        let bouclier = r.ajouter("bouclier", 1, racine).unwrap();
+        let epee = r.ajouter("grande-epee", 1, racine).unwrap();
+        r.equiper(armure, "corps").unwrap();
+        r.equiper(bouclier, "main_non_directrice").unwrap();
+        r.enregistrer_jeu(racine, "combat").unwrap();
+        r.deequiper(bouclier).unwrap();
+        r.deequiper(armure).unwrap();
+        r.equiper(epee, "main_directrice").unwrap();
+        r.enregistrer_jeu(racine, "deux mains").unwrap();
+        r.appliquer_jeu(racine, "combat").unwrap();
+        let objets: Vec<Id> = r.equipement_de(racine).iter().map(|e| e.objet).collect();
+        assert_eq!(objets, vec![armure, bouclier]);
+        r.appliquer_jeu(racine, "deux mains").unwrap();
+        let objets: Vec<Id> = r.equipement_de(racine).iter().map(|e| e.objet).collect();
+        assert_eq!(objets, vec![epee]);
+        assert_eq!(
+            r.appliquer_jeu(racine, "inconnu"),
+            Err(Erreur::JeuInconnu("inconnu".into()))
+        );
+    }
+
+    #[test]
+    fn un_jeu_impossible_ne_change_rien() {
+        let (mut r, racine) = equipe();
+        let armure = r.ajouter("armure", 1, racine).unwrap();
+        r.equiper(armure, "corps").unwrap();
+        r.enregistrer_jeu(racine, "armure").unwrap();
+        r.deequiper(armure).unwrap();
+        // L'armure n'est plus dans l'inventaire : le jeu ne peut plus s'appliquer.
+        r.retirer(armure).unwrap();
+        let avant = r.clone();
+        assert_eq!(
+            r.appliquer_jeu(racine, "armure"),
+            Err(Erreur::ExemplaireInconnu(armure))
+        );
+        assert_eq!(r, avant);
+    }
+
+    #[test]
+    fn rejouer_l_equipement_donne_le_meme_registre() {
+        let commandes = vec![
+            Commande::DefinirEmplacements(regles()),
+            Commande::AjouterModele(modele("armure", "armure", 7500)),
+            Commande::CreerInventaire {
+                proprietaire: proprietaire(),
+                conteneur: conteneur(None, None, true),
+            },
+            Commande::Ajouter {
+                modele: "armure".into(),
+                quantite: 1,
+                dans: 1,
+            },
+            Commande::Equiper {
+                id: 2,
+                emplacement: "corps".into(),
+            },
+            Commande::EnregistrerJeu {
+                racine: 1,
+                nom: "voyage".into(),
+            },
+        ];
+        let rejoue = || {
+            let mut r = Registre::default();
+            for c in &commandes {
+                r.appliquer(c).unwrap();
+            }
+            r
+        };
+        assert_eq!(rejoue(), rejoue());
+        assert_eq!(rejoue().equipement_de(1).len(), 1);
     }
 
     /// Générateur pseudo-aléatoire déterministe, pour des séquences reproductibles.

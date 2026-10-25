@@ -70,6 +70,7 @@ pub fn modeles(catalogue: &CatalogueEquipement, traductions: &Traductions) -> Ve
                 ("type_degats", a.type_en.clone()),
                 ("special", a.special_en.clone()),
                 ("groupes", a.groupes_en.clone()),
+                ("mains", a.est_a_deux_mains().then(|| "2".to_string())),
                 ("note_livre", traductions.note_livre("armes", &a.nom_en)),
             ]),
         });
@@ -114,6 +115,13 @@ pub fn modeles(catalogue: &CatalogueEquipement, traductions: &Traductions) -> Ve
         });
     }
     modeles
+}
+
+/// Emplacements du corps par défaut (`data/equipement/emplacements.json`).
+#[cfg(feature = "serde")]
+pub fn emplacements_par_defaut() -> inventaire::equipement::ReglesEmplacements {
+    serde_json::from_str(include_str!("../../../data/equipement/emplacements.json"))
+        .expect("emplacements.json valide")
 }
 
 #[cfg(test)]
@@ -175,5 +183,53 @@ mod tests {
         assert!(hallebarde.proprietes["note_livre"].contains("Halllebarde"));
         assert!(trouver(&m, "Flasque (vide)").proprietes["note_livre"].contains("0,75 kg"));
         assert!(!trouver(&m, "Dague").proprietes.contains_key("note_livre"));
+    }
+
+    #[cfg(feature = "serde")]
+    #[test]
+    fn equiper_des_objets_du_catalogue() {
+        use inventaire::{Conteneur, Erreur, Proprietaire, Registre};
+        let tous = modeles(&catalogue(), Traductions::partage());
+        let mut r = Registre::default();
+        for m in &tous {
+            r.ajouter_modele(m.clone());
+        }
+        r.definir_emplacements(emplacements_par_defaut()).unwrap();
+        let racine = r.creer_inventaire(
+            Proprietaire {
+                type_id: "personnage".into(),
+                ref_id: "1".into(),
+            },
+            Conteneur {
+                capacite: None,
+                types_autorises: None,
+                contenu_compte: true,
+            },
+        );
+        let mut ajouter = |nom: &str| {
+            let id = trouver(&tous, nom).id.clone();
+            r.ajouter(&id, 1, racine).unwrap()
+        };
+        let armure = ajouter("Armure de cuir");
+        let targe = ajouter("Targe");
+        let deux_mains = ajouter("Épée à deux mains");
+        let epee_longue = ajouter("Épée longue");
+
+        r.equiper(armure, "corps").unwrap();
+        // L'épée à deux mains occupe les deux mains tenues : la targe ne passe pas.
+        r.equiper(deux_mains, "main_directrice").unwrap();
+        assert_eq!(
+            r.equiper(targe, "main_non_directrice"),
+            Err(Erreur::EmplacementOccupe("main_non_directrice".into()))
+        );
+        r.deequiper(deux_mains).unwrap();
+        r.equiper(epee_longue, "main_directrice").unwrap();
+        r.equiper(targe, "main_non_directrice").unwrap();
+        assert_eq!(r.equipement_de(racine).len(), 3);
+        // Le poids ne change pas quand on équipe : tout reste dans l'inventaire.
+        assert_eq!(
+            r.poids_total(racine),
+            inventaire::Poids(7_500 + 2_500 + 4_000 + 2_000)
+        );
     }
 }

@@ -30,7 +30,8 @@ crates/regles    référentiel officiel (données du livre), calculs, contrôles
 crates/campagne  journal d'événements (event sourcing), état recalculé, annuler/rétablir, modèles personnels,
                  calendrier de Golarion, sauvegarde JSON (feature « serde »)
 crates/vues      modèles d'affichage calculés par le cœur pour l'interface
-crates/inventaire  objets, conteneurs, poids, transferts, import de catalogues texte ; les modèles d'équipement viennent de data/core/ via campagne::catalogue_inventaire
+crates/inventaire  objets, conteneurs, poids, transferts, équipement porté (emplacements : data/equipement/), import de catalogues texte ;
+                 les modèles d'équipement viennent de data/core/ via campagne::catalogue_inventaire
 crates/fiches      personnages (PF1, Core) : effets typés, fiche, progression, dons, sorts, équipement,
                  états ; données dans data/core/ ; plan : docs/PLAN_PERSONNAGES.md
 desktop/         NOUVELLE application (Tauri 2) : src-tauri/ (Rust, commandes), ui/ (React + TS)
