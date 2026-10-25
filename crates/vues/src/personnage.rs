@@ -601,10 +601,18 @@ pub fn fiche_complete(
             for cap in t.capacites_de_niveau(&l.special_en) {
                 // Texte du livre quand la classe en donne un (« forme animale (2/jour) » → « forme animale »).
                 let cle = cle_capacite(&cap);
-                let texte = match c.textes_capacites.get(&cle) {
+                let mut texte = match c.textes_capacites.get(&cle) {
                     Some(desc) => format!("{cap} — {desc}"),
                     None => cap,
                 };
+                // Empathie sauvage : 1d20 + niveau de druide + modificateur de Charisme.
+                if cle == "empathie sauvage" {
+                    texte.push_str(&format!(
+                        " Bonus actuel : {:+} (niveau {} + modificateur de Charisme).",
+                        nc as i32 + v.modificateurs[&Carac::Cha],
+                        nc
+                    ));
+                }
                 capacites.push(TexteVue {
                     nom: format!("Niveau {}", l.niveau),
                     texte,
@@ -1387,15 +1395,21 @@ pub fn catalogue_creation() -> CatalogueCreation {
                 .classes
                 .get(&c.id)
                 .map(|m| {
+                    // Armes nommées : noms français du catalogue quand ils existent.
                     let armes: Vec<String> = m
                         .armes
                         .iter()
-                        .chain(m.armes_nommees.iter())
                         .cloned()
+                        .chain(m.armes_nommees.iter().map(|n| {
+                            r.equipement
+                                .arme(n)
+                                .map(|a| a.nom.clone())
+                                .unwrap_or_else(|| n.clone())
+                        }))
                         .collect();
                     let armures: Vec<&str> = m.armures.iter().map(|a| a.nom()).collect();
                     format!(
-                        "armes : {} ; armures : {}{}",
+                        "armes : {} ; armures : {}{}{}",
                         if armes.is_empty() {
                             "aucune".to_string()
                         } else {
@@ -1406,7 +1420,12 @@ pub fn catalogue_creation() -> CatalogueCreation {
                         } else {
                             armures.join(", ")
                         },
-                        if m.boucliers { " ; boucliers" } else { "" }
+                        if m.boucliers { " ; boucliers" } else { "" },
+                        if m.armures_permises.is_some() {
+                            " (sans métal : cuir, peau ou matelassé ; boucliers en bois)"
+                        } else {
+                            ""
+                        }
                     )
                 })
                 .unwrap_or_default(),
@@ -2059,10 +2078,10 @@ mod export_apercu {
         };
         let d = std::path::Path::new(&dossier);
         // GP_EXPORT_CLASSE=pretre : aperçu de l'interface avec un prêtre au lieu de l'ensorceleuse.
-        let exemple = if std::env::var("GP_EXPORT_CLASSE").as_deref() == Ok("pretre") {
-            fiches::exemple::pretre_d_iomedae()
-        } else {
-            fiches::exemple::elfe_ensorceleuse()
+        let exemple = match std::env::var("GP_EXPORT_CLASSE").as_deref() {
+            Ok("pretre") => fiches::exemple::pretre_d_iomedae(),
+            Ok("druide") => fiches::exemple::druide_de_la_foret(),
+            _ => fiches::exemple::elfe_ensorceleuse(),
         };
         let fiche = apercu_fiche(&exemple).unwrap();
         let ecrire = |nom: &str, v: &dyn erased::Serialize| {

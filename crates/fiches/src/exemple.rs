@@ -111,6 +111,38 @@ pub fn pretre_d_iomedae() -> Fiche {
     }
 }
 
+/// Fiche d'exemple d'un druide humain de niveau 8 avec un loup pour compagnon, pour les essais et
+/// les démonstrations.
+pub fn druide_de_la_foret() -> Fiche {
+    let mut f = pretre_d_iomedae();
+    f.nom = "Sylvain".into();
+    f.niveaux = (0..8)
+        .map(|i| NiveauPris {
+            classe: "druide".into(),
+            de_vie_obtenu: if i == 0 { 8 } else { 5 },
+            rangs: BTreeMap::new(),
+            predilection: Some(BonusPredilection::PointDeVie),
+            dons: if i == 0 {
+                vec!["Toughness".into(), "Alertness".into()]
+            } else {
+                vec![]
+            },
+        })
+        .collect();
+    f.classes_de_predilection = vec!["druide".into()];
+    f.divinite = None;
+    f.alignement = None;
+    f.domaines = vec![];
+    f.pacte = Some("compagnon".into());
+    f.compagnon = Some(crate::compagnon::Compagnon {
+        animal: "loup".into(),
+        nom: "Croc".into(),
+        ignore_developpement: false,
+        augmentations: vec![crate::Carac::Sag],
+    });
+    f
+}
+
 #[cfg(test)]
 mod tests {
     #[test]

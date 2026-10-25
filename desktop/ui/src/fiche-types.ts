@@ -61,7 +61,48 @@ export type EmplacementVue = {
   dd: number;
 };
 export type SortVue = { nomEn: string; nom: string; niveau: number; ecole: string; deLignage: boolean };
-export type PouvoirDomaineVue = { nom: string; genre: string; niveau: number; actif: boolean; utilisations: number | null; texte: string };
+export type PouvoirJournalierVue = { cle: string; nom: string; max: number | null; restants: number | null };
+export type FormeVue = {
+  id: string;
+  nom: string;
+  categorie: string;
+  taille: string | null;
+  niveau: number;
+  disponible: boolean;
+  effets: string[];
+  texte: string;
+};
+export type FormesVue = { formes: FormeVue[]; enCours: string | null; roundsRestants: number | null; dureeHeures: number };
+export type CompagnonVue = {
+  animalId: string;
+  animal: string;
+  nom: string;
+  taille: string;
+  vitesse: string;
+  dv: number;
+  pv: number;
+  bba: number;
+  caracteristiques: CaracVue[];
+  armureNaturelle: number;
+  ca: number;
+  caContact: number;
+  caDepourvu: number;
+  reflexes: number;
+  vigueur: number;
+  volonte: number;
+  attaques: string;
+  bonusAttaque: number;
+  competences: number;
+  dons: number;
+  tours: number;
+  capacites: TexteVue[];
+  particularites: string;
+  developpementApplique: boolean;
+  ignoreDeveloppement: boolean;
+  augmentationsPermises: number;
+  augmentations: string[];
+};
+export type PouvoirDomaineVue = { cle: string; nom: string; genre: string; niveau: number; actif: boolean; utilisations: number | null; texte: string };
 export type SortDomaineVue = { niveau: number; nom: string; nomEn: string | null; note: string | null; accessible: boolean };
 export type DomaineVue = { id: string; nom: string; description: string; pouvoirs: PouvoirDomaineVue[]; sorts: SortDomaineVue[] };
 export type CanalisationVue = { positive: boolean | null; des: number; dd: number; utilisations: number };
@@ -157,6 +198,10 @@ export type FicheVue = {
   traits: TexteVue[];
   capacites: TexteVue[];
   divin: DivinVue | null;
+  pouvoirs: PouvoirJournalierVue[];
+  formes: FormesVue | null;
+  pacte: string | null;
+  compagnon: CompagnonVue | null;
   preparation: PreparationVue | null;
   incantateurs: IncantateurVue[];
   equipement: EquipementVue;
@@ -205,6 +250,7 @@ export type ClasseVue = {
   prepare: boolean;
   domainesChoisis: number;
   canalisation: boolean;
+  pacteDomaines: string[];
   capacites: TexteVue[];
   maitrises: string;
 };
@@ -237,6 +283,18 @@ export type DonCatalogue = {
 export type SortCatalogue = { nomEn: string; nom: string; ecole: string; niveau: number; resume: string; source: string | null; noteLivre: string | null; descripteurs: string[] };
 export type EquipementCatalogue = { nomEn: string; nom: string; genre: string; poidsLb: number | null; source: string | null; noteLivre: string | null; description: string | null };
 export type EtatCatalogue = { id: string; nom: string };
+export type AnimalCatalogue = {
+  id: string;
+  nom: string;
+  taille: string;
+  vitesse: string;
+  armureNaturelle: number;
+  attaques: string;
+  caracteristiques: string;
+  particularites: string;
+  developpement: string;
+  niveauDeveloppement: number;
+};
 export type CatalogueCreation = {
   races: RaceVue[];
   classes: ClasseVue[];
@@ -246,6 +304,7 @@ export type CatalogueCreation = {
   sortsParClasse: Record<string, SortCatalogue[]>;
   domaines: DomaineCatalogue[];
   divinites: DiviniteCatalogue[];
+  animaux: AnimalCatalogue[];
   armures: EquipementCatalogue[];
   armes: EquipementCatalogue[];
   materiel: EquipementCatalogue[];
@@ -294,7 +353,11 @@ export type FicheDonnees = {
   alignement: string | null;
   domaines: string[];
   energie: "positive" | "negative" | null;
+  pacte: "domaine" | "compagnon" | null;
+  compagnon: Compagnon | null;
 };
+
+export type Compagnon = { animal: string; nom: string; ignore_developpement: boolean; augmentations: Carac[] };
 
 export type Montee = {
   classe: string;
@@ -340,6 +403,10 @@ export type EvenementFiche =
   | { MonteeDeNiveau: Montee }
   | { SortLance: { classe: string; niveau_de_sort: number; sort: string } }
   | { Preparation: { classe: string; sorts: SortPrepare[] } }
+  | { PouvoirUtilise: { cle: string } }
+  | { FormeAdoptee: { forme: string } }
+  | "FormeQuittee"
+  | { CompagnonModifie: Compagnon }
   | { SortConverti: { classe: string; niveau_sacrifie: number; sort: string } }
   | { Equiper: { emplacement: "armure" | "bouclier"; objet: string | null } }
   | { ArmeAjoutee: string }

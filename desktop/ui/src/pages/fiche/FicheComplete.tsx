@@ -5,11 +5,12 @@ import type { Charge, EffetDonnees, EvenementFiche, FicheVue, LignePersonnage } 
 import { Chiffre, Choix, Detail, signe, useCatalogue } from "./commun";
 import { Montee } from "./Montee";
 import { PanneauFoi, PanneauPreparation } from "./foi";
+import { PanneauCompagnon, PanneauFormes } from "./nature";
 import { PrestigeDon } from "./PrestigeDon";
 
 /** `niveauVise` : niveau choisi à la création ; l'assistant de montée s'ouvre tant qu'il n'est pas atteint. */
 type Props = { outils: Outils; pj: LignePersonnage; fiche: FicheVue; niveauVise?: number };
-type Onglet = "combat" | "competences" | "dons" | "foi" | "sorts" | "equipement" | "etats" | "histoire" | "prestige";
+type Onglet = "combat" | "competences" | "dons" | "foi" | "forme" | "compagnon" | "sorts" | "equipement" | "etats" | "histoire" | "prestige";
 
 const ONGLETS: [Onglet, string][] = [
   ["combat", "Combat"],
@@ -84,7 +85,18 @@ export function FicheComplete(p: Props) {
       {monter && <Montee outils={p.outils} pj={p.pj} fiche={f} onFerme={() => setMonter(false)} />}
 
       <div className="onglets" role="tablist">
-        {[...(f.divin ? ONGLETS.flatMap((o) => (o[0] === "sorts" ? [["foi", "Foi et domaines"] as [Onglet, string], o] : [o])) : ONGLETS), ...(avecPrestige ? ([["prestige", "Prestige"]] as [Onglet, string][]) : [])].map(([k, nom]) => (
+        {[
+          ...ONGLETS.flatMap((o): [Onglet, string][] =>
+            o[0] === "sorts"
+              ? [
+                  ...(f.divin ? ([["foi", f.divin.divinite || f.divin.alignement ? "Foi et domaines" : "Domaine"]] as [Onglet, string][]) : []),
+                  ...(f.formes ? ([["forme", "Forme animale"]] as [Onglet, string][]) : []),
+                  ...(f.compagnon ? ([["compagnon", "Compagnon animal"]] as [Onglet, string][]) : []),
+                  o,
+                ]
+              : [o],
+          ),
+          ...(avecPrestige ? ([["prestige", "Prestige"]] as [Onglet, string][]) : [])].map(([k, nom]) => (
           <button key={k} role="tab" aria-selected={onglet === k} className={"onglet" + (onglet === k ? " actif" : "")} onClick={() => setOnglet(k)}>
             {nom}
           </button>
@@ -94,7 +106,9 @@ export function FicheComplete(p: Props) {
       {onglet === "combat" && <Combat f={f} />}
       {onglet === "competences" && <Competences f={f} />}
       {onglet === "dons" && <Dons f={f} />}
-      {onglet === "foi" && f.divin && <PanneauFoi divin={f.divin} />}
+      {onglet === "foi" && f.divin && <PanneauFoi divin={f.divin} pouvoirs={f.pouvoirs} agir={agir} />}
+      {onglet === "forme" && <PanneauFormes f={f} agir={agir} />}
+      {onglet === "compagnon" && <PanneauCompagnon f={f} agir={agir} />}
       {onglet === "sorts" && <Sorts f={f} agir={agir} />}
       {onglet === "equipement" && <Equipement f={f} agir={agir} />}
       {onglet === "etats" && <Etats f={f} agir={agir} />}

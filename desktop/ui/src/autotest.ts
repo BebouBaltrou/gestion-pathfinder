@@ -33,6 +33,8 @@ const FICHE_EXEMPLE: FicheDonnees = {
   alignement: null,
   domaines: [],
   energie: null,
+  pacte: null,
+  compagnon: null,
 };
 
 const pause = (ms: number) => new Promise((r) => setTimeout(r, ms));

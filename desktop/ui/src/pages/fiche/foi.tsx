@@ -4,7 +4,9 @@ import type {
   ClasseVue,
   DivinVue,
   FicheDonnees,
+  EvenementFiche,
   FicheVue,
+  PouvoirJournalierVue,
   PreparationVue,
   SortCatalogue,
   SortPrepare,
@@ -218,16 +220,27 @@ export { sorts_vides };
 
 // ------------------------------------------------------------------ fiche : foi
 
-export function PanneauFoi({ divin }: { divin: DivinVue }) {
+export function PanneauFoi({
+  divin,
+  pouvoirs,
+  agir,
+}: {
+  divin: DivinVue;
+  pouvoirs: PouvoirJournalierVue[];
+  agir: (e: EvenementFiche) => void;
+}) {
+  const reste = (cle: string) => pouvoirs.find((p) => p.cle === cle)?.restants ?? null;
   return (
     <div className="section">
-      <section className="carte">
-        <h3>{divin.divinite ?? "Aucune divinité"}</h3>
-        <p className="doux">
-          Alignement : {nomAlignement(divin.alignement)}
-          {divin.armeDePredilection ? ` · arme de prédilection : ${divin.armeDePredilection}` : ""}
-        </p>
-      </section>
+      {(divin.divinite || divin.alignement) && (
+        <section className="carte">
+          <h3>{divin.divinite ?? "Aucune divinité"}</h3>
+          <p className="doux">
+            Alignement : {nomAlignement(divin.alignement)}
+            {divin.armeDePredilection ? ` · arme de prédilection : ${divin.armeDePredilection}` : ""}
+          </p>
+        </section>
+      )}
       {divin.canalisation && (
         <section className="carte">
           <h3>Canalisation d'énergie</h3>
@@ -242,6 +255,16 @@ export function PanneauFoi({ divin }: { divin: DivinVue }) {
             <strong>{divin.canalisation.des}d6</strong> · DD {divin.canalisation.dd} (Volonté, demi-dégâts) · {divin.canalisation.utilisations} utilisation(s) par jour
             · rayon 9 m, action simple.
           </p>
+          <div className="ligne">
+            <span className="doux">Restantes aujourd'hui : {reste("canalisation")}</span>
+            <button
+              className="bouton"
+              disabled={(reste("canalisation") ?? 0) <= 0 || divin.canalisation.positive === null}
+              onClick={() => agir({ PouvoirUtilise: { cle: "canalisation" } })}
+            >
+              Canaliser l'énergie
+            </button>
+          </div>
         </section>
       )}
       {divin.domaines.map((d) => (
@@ -252,8 +275,13 @@ export function PanneauFoi({ divin }: { divin: DivinVue }) {
             <details key={p.nom} open={p.actif}>
               <summary>
                 <strong>{p.nom}</strong> ({p.genre}) — {p.actif ? "disponible" : `niveau ${p.niveau}`}
-                {p.actif && p.utilisations !== null ? ` · ${p.utilisations} fois par jour` : ""}
+                {p.actif && p.utilisations !== null ? ` · ${reste(p.cle) ?? p.utilisations}/${p.utilisations} aujourd'hui` : ""}
               </summary>
+              {p.actif && p.utilisations !== null && (
+                <button className="bouton discret" disabled={(reste(p.cle) ?? 0) <= 0} onClick={() => agir({ PouvoirUtilise: { cle: p.cle } })}>
+                  Utiliser
+                </button>
+              )}
               <p>{p.texte}</p>
             </details>
           ))}

@@ -13,9 +13,10 @@ import { SaisieNombre } from "../../composants/jeu";
 import { Choix, Pas, signe, useCatalogue } from "./commun";
 import { SelectionDons, SelectionRangs, SelectionSorts } from "./selections";
 import { ChoixFoi, EditeurPreparation, problemesDeFoi } from "./foi";
+import { ChoixPacte } from "./nature";
 import type { SortPrepare } from "../../fiche-types";
 
-type Etape = { id: "identite" | "caracs" | "foi" | "competences" | "dons" | "sorts" | "recap"; nom: string };
+type Etape = { id: "identite" | "caracs" | "foi" | "pacte" | "competences" | "dons" | "sorts" | "recap"; nom: string };
 
 /** Assistant de création : un niveau 1 contrôlé pas à pas par le cœur de règles. */
 export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePersonnage; onFini: (niveauVise: number) => void }) {
@@ -56,6 +57,8 @@ export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePers
         alignement: null,
         domaines: [],
         energie: null,
+        pacte: null,
+        compagnon: null,
       });
     }
   }, [cat, fiche, pj.nom]);
@@ -105,6 +108,7 @@ export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePers
     { id: "identite", nom: "Identité" },
     { id: "caracs", nom: "Caractéristiques" },
     ...(aFoi ? [{ id: "foi", nom: "Foi et domaines" } as Etape] : []),
+    ...(classe.pacteDomaines.length > 0 ? [{ id: "pacte", nom: "Pacte avec la nature" } as Etape] : []),
     { id: "competences", nom: "Compétences" },
     { id: "dons", nom: "Dons" },
     ...(classe.incantation ? [{ id: "sorts", nom: classe.prepare ? "Sorts préparés" : "Sorts" } as Etape] : []),
@@ -125,6 +129,8 @@ export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePers
       alignement: null,
       domaines: [],
       energie: null,
+      pacte: null,
+      compagnon: null,
     });
   };
 
@@ -155,6 +161,9 @@ export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePers
       !!fiche.alignement &&
       fiche.domaines.length === classe.domainesChoisis &&
       problemesDeFoi(apercu?.problemes ?? []).length === 0,
+    pacte:
+      (fiche.pacte === "domaine" && fiche.domaines.length === 1) ||
+      (fiche.pacte === "compagnon" && !!fiche.compagnon?.animal && fiche.compagnon.nom.trim().length > 0),
     competences: true,
     dons: true,
     sorts: true,
@@ -316,6 +325,8 @@ export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePers
           </table>
         </div>
       )}
+
+      {courante === "pacte" && <ChoixPacte cat={cat} fiche={fiche} maj={maj} apercu={apercu} classe={classe} />}
 
       {courante === "foi" && <ChoixFoi cat={cat} fiche={fiche} maj={maj} apercu={apercu} classe={classe} />}
 
