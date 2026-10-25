@@ -29,6 +29,10 @@ const FICHE_EXEMPLE: FicheDonnees = {
   equipement: { armure: null, bouclier: null, armes: [], objets: [], charge_declaree: "Legere" },
   etats: [],
   temporaires: [],
+  divinite: null,
+  alignement: null,
+  domaines: [],
+  energie: null,
 };
 
 const pause = (ms: number) => new Promise((r) => setTimeout(r, ms));

@@ -495,3 +495,58 @@ fn le_mauvais_pretre_convertit_en_blessures() {
     assert!(ajouter(&mut j, convertir("Cure Light Wounds")).is_err());
     ajouter(&mut j, convertir("Inflict Light Wounds")).expect("blessures");
 }
+
+#[test]
+fn un_pretre_monte_du_niveau_1_au_niveau_11() {
+    use crate::progression::{appliquer, montee_auto};
+    let r = Referentiel::core();
+    let regles = ReglesFiche::default();
+    let mut f = pretre_de("iomedae", "LB", &["bien", "soleil"], 1);
+    f.niveaux[0].dons = vec!["Toughness".into(), "Alertness".into()];
+    for _ in 2..=11 {
+        let m = montee_auto(&r, &f, "pretre", 5);
+        f = appliquer(&r, &regles, &f, &m, 20).expect("montée valide");
+        // Les dons manquants viennent de montee_auto ; rien d'autre ne doit manquer.
+        assert!(
+            f.valider(&r)
+                .iter()
+                .all(|p| p.est_incomplet() || matches!(p, crate::Probleme::DonsAuNiveau { .. })),
+            "{:?}",
+            f.valider(&r)
+        );
+    }
+    assert_eq!(f.niveau_de_personnage(), 11);
+    let v = f.calculer(&r).unwrap();
+    assert_eq!(v.bba.total, 8);
+    // Niveau 11 : jets 7/3/7 (+ CON +2, DEX 0, SAG +4).
+    assert_eq!(v.vigueur.total, 7 + 2);
+    assert_eq!(v.reflexes.total, 3);
+    assert_eq!(v.volonte.total, 7 + 4);
+    // Canalisation 6d6 (niveau 11) ; Lance du Bien disponible au niveau 8, 2 fois par jour au niveau 12 seulement.
+    assert_eq!(v.canalisation.as_ref().unwrap().des, 6);
+    let bien = &v.domaines[0];
+    assert!(bien.pouvoirs[1].actif);
+    assert_eq!(bien.pouvoirs[1].utilisations, Some(1));
+    // Sorts de niveau 6 accessibles (1 emplacement + 1 de domaine) ; pas de niveau 7.
+    let inc = &v.incantateurs[0];
+    assert!(inc
+        .emplacements
+        .iter()
+        .any(|e| e.niveau_de_sort == 6 && e.domaine == 1));
+    assert!(!inc.emplacements.iter().any(|e| e.niveau_de_sort == 7));
+    assert!(
+        bien.sorts
+            .iter()
+            .find(|s| s.niveau == 6)
+            .unwrap()
+            .accessible
+    );
+    assert!(
+        !bien
+            .sorts
+            .iter()
+            .find(|s| s.niveau == 7)
+            .unwrap()
+            .accessible
+    );
+}

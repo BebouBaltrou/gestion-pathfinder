@@ -4,11 +4,12 @@ import { api, formaterPo } from "../../api";
 import type { Charge, EffetDonnees, EvenementFiche, FicheVue, LignePersonnage } from "../../fiche-types";
 import { Chiffre, Choix, Detail, signe, useCatalogue } from "./commun";
 import { Montee } from "./Montee";
+import { PanneauFoi, PanneauPreparation } from "./foi";
 import { PrestigeDon } from "./PrestigeDon";
 
 /** `niveauVise` : niveau choisi à la création ; l'assistant de montée s'ouvre tant qu'il n'est pas atteint. */
 type Props = { outils: Outils; pj: LignePersonnage; fiche: FicheVue; niveauVise?: number };
-type Onglet = "combat" | "competences" | "dons" | "sorts" | "equipement" | "etats" | "histoire" | "prestige";
+type Onglet = "combat" | "competences" | "dons" | "foi" | "sorts" | "equipement" | "etats" | "histoire" | "prestige";
 
 const ONGLETS: [Onglet, string][] = [
   ["combat", "Combat"],
@@ -83,7 +84,7 @@ export function FicheComplete(p: Props) {
       {monter && <Montee outils={p.outils} pj={p.pj} fiche={f} onFerme={() => setMonter(false)} />}
 
       <div className="onglets" role="tablist">
-        {[...ONGLETS, ...(avecPrestige ? ([["prestige", "Prestige"]] as [Onglet, string][]) : [])].map(([k, nom]) => (
+        {[...(f.divin ? ONGLETS.flatMap((o) => (o[0] === "sorts" ? [["foi", "Foi et domaines"] as [Onglet, string], o] : [o])) : ONGLETS), ...(avecPrestige ? ([["prestige", "Prestige"]] as [Onglet, string][]) : [])].map(([k, nom]) => (
           <button key={k} role="tab" aria-selected={onglet === k} className={"onglet" + (onglet === k ? " actif" : "")} onClick={() => setOnglet(k)}>
             {nom}
           </button>
@@ -93,6 +94,7 @@ export function FicheComplete(p: Props) {
       {onglet === "combat" && <Combat f={f} />}
       {onglet === "competences" && <Competences f={f} />}
       {onglet === "dons" && <Dons f={f} />}
+      {onglet === "foi" && f.divin && <PanneauFoi divin={f.divin} />}
       {onglet === "sorts" && <Sorts f={f} agir={agir} />}
       {onglet === "equipement" && <Equipement f={f} agir={agir} />}
       {onglet === "etats" && <Etats f={f} agir={agir} />}
@@ -253,6 +255,8 @@ function Dons({ f }: { f: FicheVue }) {
 // ------------------------------------------------------------------ sorts
 
 function Sorts({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => void }) {
+  const cat = useCatalogue();
+  if (f.preparation) return <PanneauPreparation f={f} cat={cat} agir={agir} />;
   if (f.incantateurs.length === 0) return <p className="doux">Ce personnage ne lance pas de sorts.</p>;
   return (
     <div className="section">

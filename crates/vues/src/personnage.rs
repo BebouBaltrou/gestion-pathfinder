@@ -971,6 +971,8 @@ vue! {
         pub resume: String,
         pub source: Option<String>,
         pub note_livre: Option<String>,
+        /// Descripteurs en minuscules (good, evil, lawful, chaotic, fire…).
+        pub descripteurs: Vec<String>,
     }
 }
 vue! {
@@ -1212,6 +1214,7 @@ pub fn catalogue_creation() -> CatalogueCreation {
                     .unwrap_or_default(),
                 source: t.source_vf("sorts", &s.nom_en),
                 note_livre: t.note_livre("sorts", &s.nom_en),
+                descripteurs: s.descripteurs.iter().map(|d| d.to_lowercase()).collect(),
             })
         })
         .collect();
@@ -1235,6 +1238,7 @@ pub fn catalogue_creation() -> CatalogueCreation {
                         .unwrap_or_default(),
                     source: t.source_vf("sorts", &s.nom_en),
                     note_livre: t.note_livre("sorts", &s.nom_en),
+                    descripteurs: s.descripteurs.iter().map(|d| d.to_lowercase()).collect(),
                 })
             })
             .collect();

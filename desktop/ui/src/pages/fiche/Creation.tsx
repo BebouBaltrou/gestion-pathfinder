@@ -12,8 +12,10 @@ import {
 import { SaisieNombre } from "../../composants/jeu";
 import { Choix, Pas, signe, useCatalogue } from "./commun";
 import { SelectionDons, SelectionRangs, SelectionSorts } from "./selections";
+import { ChoixFoi, EditeurPreparation, problemesDeFoi } from "./foi";
+import type { SortPrepare } from "../../fiche-types";
 
-const ETAPES = ["Identité", "Caractéristiques", "Compétences", "Dons", "Sorts", "Récapitulatif"];
+type Etape = { id: "identite" | "caracs" | "foi" | "competences" | "dons" | "sorts" | "recap"; nom: string };
 
 /** Assistant de création : un niveau 1 contrôlé pas à pas par le cœur de règles. */
 export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePersonnage; onFini: (niveauVise: number) => void }) {
@@ -24,6 +26,7 @@ export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePers
   const [erreur, setErreur] = useState<string | null>(null);
   const [fiche, setFiche] = useState<FicheDonnees | null>(null);
   const [niveauVise, setNiveauVise] = useState<number | null>(1);
+  const [prep, setPrep] = useState<SortPrepare[]>([]);
 
   useEffect(() => {
     api.reglesCampagne().then((l) => setRegle(l.find((r) => r.id === "pj.generation") ?? null));
@@ -49,6 +52,10 @@ export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePers
         equipement: { armure: null, bouclier: null, armes: [], objets: [], charge_declaree: "Legere" },
         etats: [],
         temporaires: [],
+        divinite: null,
+        alignement: null,
+        domaines: [],
+        energie: null,
       });
     }
   }, [cat, fiche, pj.nom]);
@@ -93,10 +100,41 @@ export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePers
     .map((n, i) => [i, n ?? 0] as [number, number])
     .filter(([, n]) => n > 0);
   const choixLibreManquant = race?.choixLibre != null && !fiche.bonus_racial_libre;
+  const aFoi = classe.domainesChoisis > 0;
+  const etapes: Etape[] = [
+    { id: "identite", nom: "Identité" },
+    { id: "caracs", nom: "Caractéristiques" },
+    ...(aFoi ? [{ id: "foi", nom: "Foi et domaines" } as Etape] : []),
+    { id: "competences", nom: "Compétences" },
+    { id: "dons", nom: "Dons" },
+    ...(classe.incantation ? [{ id: "sorts", nom: classe.prepare ? "Sorts préparés" : "Sorts" } as Etape] : []),
+    { id: "recap", nom: "Récapitulatif" },
+  ];
+  const courante = etapes[Math.min(etape, etapes.length - 1)].id;
+  const choisirClasse = (id: string) => {
+    const c = cat.classes.find((x) => x.id === id)!;
+    setPrep([]);
+    setFiche({
+      ...fiche,
+      niveaux: [{ classe: c.id, de_vie_obtenu: c.deVie, rangs: {}, predilection: "PointDeVie", dons: [] }],
+      classes_de_predilection: [c.id],
+      lignage: null,
+      connaissance_de_lignage: null,
+      sorts_connus: [],
+      divinite: null,
+      alignement: null,
+      domaines: [],
+      energie: null,
+    });
+  };
 
   const creer = async () => {
     const r = await outils.agir(api.creerFiche(pj.id, fiche));
     if (!r?.ok) return;
+    if (classe.prepare && prep.length > 0) {
+      const p = await outils.agir(api.evenementFiche(pj.id, { Preparation: { classe: classe.id, sorts: prep } }));
+      if (!p?.ok) return;
+    }
     const niveau = niveauVise ?? 1;
     if (niveau > 1) {
       // les XP du niveau choisi sont accordés ; les niveaux se montent ensuite un à un
@@ -106,14 +144,22 @@ export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePers
     onFini(niveau);
   };
 
-  const peutAvancer = [
-    !!race && !!fiche.lignage && !choixLibreManquant && (!lignage?.choixConnaissance || !!fiche.connaissance_de_lignage),
-    points === null || (depense === points && CARACS.every((c) => fiche.scores_base[c] >= 7 && fiche.scores_base[c] <= 18)),
-    true,
-    true,
-    true,
-    true,
-  ][etape];
+  const peutAvancer = {
+    identite:
+      !!race &&
+      (classe.lignages.length === 0 || !!fiche.lignage) &&
+      !choixLibreManquant &&
+      (!lignage?.choixConnaissance || !!fiche.connaissance_de_lignage),
+    caracs: points === null || (depense === points && CARACS.every((c) => fiche.scores_base[c] >= 7 && fiche.scores_base[c] <= 18)),
+    foi:
+      !!fiche.alignement &&
+      fiche.domaines.length === classe.domainesChoisis &&
+      problemesDeFoi(apercu?.problemes ?? []).length === 0,
+    competences: true,
+    dons: true,
+    sorts: true,
+    recap: true,
+  }[courante];
 
   return (
     <section className="carte creation">
@@ -123,15 +169,36 @@ export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePers
         <button className="bouton" onClick={() => onFini(1)}>Annuler</button>
       </div>
       <ol className="etapes">
-        {ETAPES.map((n, i) => (
-          <li key={n} className={i === etape ? "actif" : i < etape ? "fait" : ""}>
-            <button onClick={() => setEtape(i)} disabled={i > etape && !peutAvancer}>{n}</button>
+        {etapes.map((e, i) => (
+          <li key={e.id} className={i === etape ? "actif" : i < etape ? "fait" : ""}>
+            <button onClick={() => setEtape(i)} disabled={i > etape && !peutAvancer}>{e.nom}</button>
           </li>
         ))}
       </ol>
 
-      {etape === 0 && (
+      {courante === "identite" && (
         <div className="section">
+          <div>
+            <label className="etiquette-champ">Classe</label>
+            <div className="groupe-boutons">
+              {cat.classes.map((c) => (
+                <button key={c.id} className={"bouton" + (c.id === classe.id ? " principal" : "")} onClick={() => choisirClasse(c.id)}>
+                  {c.nom}
+                </button>
+              ))}
+            </div>
+            <p className="doux">
+              d{classe.deVie} · {classe.rangsParNiveau} rangs + Int · {classe.maitrises}
+              {classe.canalisation ? " · canalisation d'énergie" : ""}
+              {classe.prepare ? " · prépare ses sorts" : ""}
+            </p>
+            {classe.capacites.length > 0 && (
+              <details>
+                <summary>Capacités du niveau 1</summary>
+                {classe.capacites.map((c, i) => <p key={i}>{c.texte}</p>)}
+              </details>
+            )}
+          </div>
           <div>
             <label className="etiquette-champ" htmlFor="c-nom">Nom du personnage</label>
             <input id="c-nom" className="champ" value={fiche.nom} onChange={(e) => maj({ nom: e.target.value })} />
@@ -168,6 +235,7 @@ export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePers
               </details>
             </div>
           )}
+          {classe.lignages.length > 0 && (
           <div>
             <label className="etiquette-champ">Lignage ({classe.nom})</label>
             <Choix
@@ -178,6 +246,7 @@ export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePers
               onChange={(v) => maj({ lignage: v || null, connaissance_de_lignage: null })}
             />
           </div>
+          )}
           {lignage && (
             <div className="carte">
               <p className="doux">
@@ -199,7 +268,7 @@ export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePers
         </div>
       )}
 
-      {etape === 1 && (
+      {courante === "caracs" && (
         <div className="section">
           <p className="doux">
             Méthode de la campagne : {regle?.choix.find(([v]) => v === methode)?.[1] ?? methode} (modifiable dans Paramètres).
@@ -248,7 +317,9 @@ export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePers
         </div>
       )}
 
-      {etape === 2 && (
+      {courante === "foi" && <ChoixFoi cat={cat} fiche={fiche} maj={maj} apercu={apercu} classe={classe} />}
+
+      {courante === "competences" && (
         <div className="section">
           <h3>Classe de prédilection</h3>
           <div className="groupe-boutons">
@@ -268,7 +339,7 @@ export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePers
         </div>
       )}
 
-      {etape === 3 && (
+      {courante === "dons" && (
         <div className="section">
           <p className="doux">
             {classe.donBonusNiveau1 ? `Don gratuit de la classe : ${classe.donBonusNiveau1}. ` : ""}
@@ -285,14 +356,14 @@ export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePers
         </div>
       )}
 
-      {etape === 4 && (
+      {courante === "sorts" && !classe.prepare && (
         <div className="section">
           <p className="doux">
             Sorts connus au niveau 1 : {sortsAttendus.map(([n, k]) => `${k} de niveau ${n}`).join(", ")}. Les sorts de lignage s'ajoutent
             automatiquement aux niveaux prévus.
           </p>
           <SelectionSorts
-            sorts={cat.sortsEnsorceleur}
+            sorts={cat.sortsParClasse[classe.id] ?? cat.sortsEnsorceleur}
             attendus={sortsAttendus}
             valeur={fiche.sorts_connus}
             onChange={(sorts_connus) => maj({ sorts_connus })}
@@ -300,7 +371,21 @@ export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePers
         </div>
       )}
 
-      {etape === 5 && (
+      {courante === "sorts" && classe.prepare && (
+        <div className="section">
+          <p className="doux">
+            {classe.nom} ne connaît pas un nombre fixe de sorts : chaque jour, il prépare ceux qu'il veut dans sa liste, dans la limite de ses
+            emplacements. Cette préparation est facultative ici : vous pourrez la faire ou la refaire depuis la fiche.
+          </p>
+          {apercu?.preparation ? (
+            <EditeurPreparation prep={apercu.preparation} liste={cat.sortsParClasse[classe.id] ?? []} valeur={prep} onChange={setPrep} />
+          ) : (
+            <p className="alerte-texte">Complétez d'abord l'identité (race, foi) pour voir les emplacements.</p>
+          )}
+        </div>
+      )}
+
+      {courante === "recap" && (
         <div className="section">
           {erreur && <p className="alerte-texte">{erreur}</p>}
           {apercu && (
@@ -344,7 +429,7 @@ export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePers
 
       <div className="ligne">
         <button className="bouton" disabled={etape === 0} onClick={() => setEtape(etape - 1)}>Précédent</button>
-        {etape < ETAPES.length - 1 && (
+        {etape < etapes.length - 1 && (
           <button className="bouton principal" disabled={!peutAvancer} onClick={() => setEtape(etape + 1)}>Suivant</button>
         )}
       </div>

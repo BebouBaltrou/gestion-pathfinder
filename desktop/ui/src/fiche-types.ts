@@ -61,6 +61,31 @@ export type EmplacementVue = {
   dd: number;
 };
 export type SortVue = { nomEn: string; nom: string; niveau: number; ecole: string; deLignage: boolean };
+export type PouvoirDomaineVue = { nom: string; genre: string; niveau: number; actif: boolean; utilisations: number | null; texte: string };
+export type SortDomaineVue = { niveau: number; nom: string; nomEn: string | null; note: string | null; accessible: boolean };
+export type DomaineVue = { id: string; nom: string; description: string; pouvoirs: PouvoirDomaineVue[]; sorts: SortDomaineVue[] };
+export type CanalisationVue = { positive: boolean | null; des: number; dd: number; utilisations: number };
+export type DivinVue = {
+  divinite: string | null;
+  alignement: string | null;
+  armeDePredilection: string | null;
+  domaines: DomaineVue[];
+  canalisation: CanalisationVue | null;
+  energieAChoisir: boolean;
+};
+export type SortPrepareVue = { niveau: number; nomEn: string; nom: string; domaine: boolean; utilise: boolean };
+export type CapacitePreparation = { niveau: number; normaux: number; domaine: number; restants: number | null };
+export type PreparationVue = {
+  classeId: string;
+  classe: string;
+  capacites: CapacitePreparation[];
+  prepares: SortPrepareVue[];
+  sortsDeDomaine: SortDomaineVue[];
+  interdits: string[];
+  conversion: boolean | null;
+};
+/** Un emplacement de sort préparé, tel que le journal du cœur le reçoit. */
+export type SortPrepare = { niveau: number; sort: string; domaine: boolean };
 export type IncantateurVue = {
   classe: string;
   niveauDeLanceur: number;
@@ -131,6 +156,8 @@ export type FicheVue = {
   dons: DonVue[];
   traits: TexteVue[];
   capacites: TexteVue[];
+  divin: DivinVue | null;
+  preparation: PreparationVue | null;
   incantateurs: IncantateurVue[];
   equipement: EquipementVue;
   etats: EtatVue[];
@@ -175,7 +202,22 @@ export type ClasseVue = {
   competencesDeClasse: string[];
   donBonusNiveau1: string | null;
   sortsConnus: (number | null)[][];
+  prepare: boolean;
+  domainesChoisis: number;
+  canalisation: boolean;
+  capacites: TexteVue[];
+  maitrises: string;
 };
+export type DomaineCatalogue = {
+  id: string;
+  nom: string;
+  description: string;
+  divinites: string[];
+  alignement: string | null;
+  pouvoirs: PouvoirDomaineVue[];
+  sorts: SortDomaineVue[];
+};
+export type DiviniteCatalogue = { id: string; nom: string; alignement: string; theme: string; domaines: string[]; armeDePredilection: string };
 export type CompetenceCatalogue = {
   id: string;
   nom: string;
@@ -192,7 +234,7 @@ export type DonCatalogue = {
   repetable: boolean;
   aUnChoix: boolean;
 };
-export type SortCatalogue = { nomEn: string; nom: string; ecole: string; niveau: number; resume: string; source: string | null; noteLivre: string | null };
+export type SortCatalogue = { nomEn: string; nom: string; ecole: string; niveau: number; resume: string; source: string | null; noteLivre: string | null; descripteurs: string[] };
 export type EquipementCatalogue = { nomEn: string; nom: string; genre: string; poidsLb: number | null; source: string | null; noteLivre: string | null; description: string | null };
 export type EtatCatalogue = { id: string; nom: string };
 export type CatalogueCreation = {
@@ -201,6 +243,9 @@ export type CatalogueCreation = {
   competences: CompetenceCatalogue[];
   dons: DonCatalogue[];
   sortsEnsorceleur: SortCatalogue[];
+  sortsParClasse: Record<string, SortCatalogue[]>;
+  domaines: DomaineCatalogue[];
+  divinites: DiviniteCatalogue[];
   armures: EquipementCatalogue[];
   armes: EquipementCatalogue[];
   materiel: EquipementCatalogue[];
@@ -245,6 +290,10 @@ export type FicheDonnees = {
   };
   etats: string[];
   temporaires: { nom: string; effets: EffetDonnees[]; rounds_restants: number | null }[];
+  divinite: string | null;
+  alignement: string | null;
+  domaines: string[];
+  energie: "positive" | "negative" | null;
 };
 
 export type Montee = {
@@ -287,6 +336,8 @@ export type EvenementFiche =
   | { JalonAccorde: { niveau: number } }
   | { MonteeDeNiveau: Montee }
   | { SortLance: { classe: string; niveau_de_sort: number; sort: string } }
+  | { Preparation: { classe: string; sorts: SortPrepare[] } }
+  | { SortConverti: { classe: string; niveau_sacrifie: number; sort: string } }
   | { Equiper: { emplacement: "armure" | "bouclier"; objet: string | null } }
   | { ArmeAjoutee: string }
   | { ArmeRetiree: string }
