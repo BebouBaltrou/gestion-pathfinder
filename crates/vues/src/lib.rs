@@ -6,6 +6,7 @@ pub mod aventure;
 pub mod batiments;
 pub mod gestionnaires;
 pub mod historique;
+pub mod inventaire;
 pub mod localites;
 pub mod localites_modeles;
 pub mod organisations;
@@ -32,7 +33,7 @@ pub mod page {
     pub const PERSONNAGES: &str = "personnages";
 }
 
-/// Somme en pièces d'argent, avec son libellé (« 4 po 7 pa »).
+/// Somme en pièces de cuivre, avec son libellé (« 4 po 7 pa »).
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize))]
 pub struct Somme {

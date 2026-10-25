@@ -153,6 +153,25 @@ pub enum Charge {
 }
 
 impl Charge {
+    /// Charge d'un poids (en livres) selon les limites légère / intermédiaire / lourde.
+    /// Sans limites (Force inconnue ou nulle) : surcharge.
+    pub fn selon_limites(limites: Option<(f64, f64, f64)>, poids: f64) -> Charge {
+        match limites {
+            None => Charge::Surcharge,
+            Some((l, m, h)) => {
+                if poids <= l {
+                    Charge::Legere
+                } else if poids <= m {
+                    Charge::Intermediaire
+                } else if poids <= h {
+                    Charge::Lourde
+                } else {
+                    Charge::Surcharge
+                }
+            }
+        }
+    }
+
     pub fn nom(self) -> &'static str {
         match self {
             Charge::Legere => "légère",
@@ -186,20 +205,7 @@ impl TableCharge {
     }
 
     pub fn charge(&self, force: i32, poids: f64) -> Charge {
-        match self.limites(force) {
-            None => Charge::Surcharge,
-            Some((l, m, h)) => {
-                if poids <= l {
-                    Charge::Legere
-                } else if poids <= m {
-                    Charge::Intermediaire
-                } else if poids <= h {
-                    Charge::Lourde
-                } else {
-                    Charge::Surcharge
-                }
-            }
-        }
+        Charge::selon_limites(self.limites(force), poids)
     }
 
     pub fn vitesse_reduite(&self, base: u32) -> u32 {

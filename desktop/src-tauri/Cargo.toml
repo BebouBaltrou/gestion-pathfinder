@@ -15,6 +15,7 @@ tauri-build = { version = "2", features = [] }
 domaine = { path = "../../crates/domaine", features = ["serde"] }
 regles = { path = "../../crates/regles", features = ["serde"] }
 campagne = { path = "../../crates/campagne", features = ["serde"] }
+inventaire = { path = "../../crates/inventaire", features = ["serde"] }
 vues = { path = "../../crates/vues", features = ["serde"] }
 fiches = { path = "../../crates/fiches" }
 importation = { path = "../../crates/importation" }

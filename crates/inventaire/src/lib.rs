@@ -214,6 +214,24 @@ impl Registre {
             .ok_or(Erreur::ExemplaireInconnu(id))
     }
 
+    /// Tous les exemplaires, inventaires racines compris, dans l'ordre de leur identifiant.
+    pub fn exemplaires(&self) -> impl Iterator<Item = &Exemplaire> + '_ {
+        self.exemplaires.values()
+    }
+
+    /// Les inventaires racines et leur propriétaire.
+    pub fn inventaires(&self) -> impl Iterator<Item = (Id, &Proprietaire)> + '_ {
+        self.proprietaires.iter().map(|(id, p)| (*id, p))
+    }
+
+    /// Noms des jeux d'équipement enregistrés pour un inventaire.
+    pub fn noms_des_jeux(&self, racine: Id) -> Vec<String> {
+        self.jeux
+            .get(&racine)
+            .map(|j| j.keys().cloned().collect())
+            .unwrap_or_default()
+    }
+
     /// Inventaire racine d'un propriétaire (type et identifiant dans la campagne).
     pub fn racine_du_proprietaire(&self, type_id: &str, ref_id: &str) -> Option<Id> {
         self.proprietaires

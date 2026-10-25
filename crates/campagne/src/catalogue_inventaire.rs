@@ -187,6 +187,21 @@ pub fn emplacements_par_defaut() -> inventaire::equipement::ReglesEmplacements {
         .expect("emplacements.json valide")
 }
 
+/// Tout le catalogue des objets (équipement et objets magiques), construit une seule fois.
+#[cfg(feature = "serde")]
+pub fn catalogue_complet() -> &'static [Modele] {
+    static CATALOGUE: std::sync::OnceLock<Vec<Modele>> = std::sync::OnceLock::new();
+    CATALOGUE.get_or_init(|| {
+        let fiches = fiches::Referentiel::partage();
+        let mut tous = modeles(&fiches.equipement, Traductions::partage());
+        tous.extend(modeles_magiques(
+            &fiches.objets_magiques,
+            &emplacements_par_defaut(),
+        ));
+        tous
+    })
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

@@ -22,6 +22,16 @@ use regles::Referentiel;
 /// Type de propriétaire de l'inventaire d'un personnage.
 pub const PROPRIETAIRE_PERSONNAGE: &str = "personnage";
 
+/// Identifiant d'un personnage comme propriétaire d'inventaire (« PJ-1 »).
+pub fn ref_personnage(pj: IdPersonnage) -> String {
+    pj.to_string()
+}
+
+/// Le personnage désigné par l'identifiant d'un propriétaire d'inventaire.
+pub fn personnage_de_ref(ref_id: &str) -> Option<IdPersonnage> {
+    ref_id.strip_prefix("PJ-")?.parse().ok().map(IdPersonnage)
+}
+
 /// Ce que l'inventaire fait porter à un personnage.
 #[derive(Debug, Default, PartialEq, Eq)]
 struct Cible {
@@ -122,7 +132,7 @@ fn synchronisation(etat: &Etat) -> Vec<Evenement> {
     for pj in etat.personnages.keys() {
         let Some(racine) = etat
             .inventaire
-            .racine_du_proprietaire(PROPRIETAIRE_PERSONNAGE, &pj.to_string())
+            .racine_du_proprietaire(PROPRIETAIRE_PERSONNAGE, &ref_personnage(*pj))
         else {
             continue;
         };
@@ -143,10 +153,23 @@ impl Campagne {
         commande: Commande,
         r: &Referentiel,
     ) -> Result<Vec<Consequence>, Erreur> {
-        let evenement = Evenement::Inventaire(commande);
+        self.executer_inventaires(vec![commande], r)
+    }
+
+    /// Comme [`Campagne::executer_inventaire`] pour plusieurs commandes d'un même geste (par exemple
+    /// enregistrer un modèle puis en ajouter un exemplaire) : un seul bloc annulable.
+    pub fn executer_inventaires(
+        &mut self,
+        commandes: Vec<Commande>,
+        r: &Referentiel,
+    ) -> Result<Vec<Consequence>, Erreur> {
         let mut apres = self.etat(r).clone();
-        apres.appliquer(&evenement, r)?;
-        let mut evenements = vec![evenement];
+        let mut evenements = Vec::new();
+        for commande in commandes {
+            let evenement = Evenement::Inventaire(commande);
+            apres.appliquer(&evenement, r)?;
+            evenements.push(evenement);
+        }
         evenements.extend(synchronisation(&apres));
         let evenement = if evenements.len() == 1 {
             evenements.remove(0)

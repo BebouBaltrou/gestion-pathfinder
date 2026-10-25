@@ -9,6 +9,7 @@ license.workspace = true
 domaine = { path = "../domaine" }
 regles = { path = "../regles" }
 campagne = { path = "../campagne", features = ["serde"] }  # modèles personnels (fichier JSON)
+inventaire = { path = "../inventaire" }
 fiches = { path = "../fiches" }
 aventure = { path = "../aventure" }
 combat = { path = "../combat" }

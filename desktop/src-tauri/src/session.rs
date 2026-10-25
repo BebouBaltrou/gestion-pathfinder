@@ -247,10 +247,36 @@ impl Session {
                 "Un combat est en cours : terminez-le (validation ou abandon) avant toute autre action",
             );
         }
+        self.executer_avec(succes, |c, r| c.executer(ev, r))
+    }
+
+    /// Exécute des commandes d'inventaire d'un seul geste (avec la mise à jour des fiches), puis
+    /// enregistre. Refusé pendant un combat.
+    pub fn executer_inventaires(
+        &mut self,
+        commandes: Vec<inventaire::Commande>,
+        succes: &str,
+    ) -> Retour {
+        if self.combat.is_some() {
+            return Retour::erreur(
+                "Un combat est en cours : terminez-le (validation ou abandon) avant toute autre action",
+            );
+        }
+        self.executer_avec(succes, |c, r| c.executer_inventaires(commandes, r))
+    }
+
+    fn executer_avec(
+        &mut self,
+        succes: &str,
+        action: impl FnOnce(
+            &mut campagne::Campagne,
+            &regles::Referentiel,
+        ) -> Result<Vec<campagne::etat::Consequence>, campagne::etat::Erreur>,
+    ) -> Retour {
         let Some(c) = self.campagne.as_mut() else {
             return Retour::erreur("Aucune campagne ouverte");
         };
-        match c.executer(ev, &self.r) {
+        match action(c, &self.r) {
             Ok(consequences) => {
                 let etat = c.etat(&self.r).clone();
                 let (message, alerte) = vues::resume_action(succes, &consequences, &etat);
