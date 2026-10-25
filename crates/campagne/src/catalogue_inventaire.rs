@@ -386,4 +386,31 @@ mod tests {
         }
         assert!(ecarts.is_empty(), "{ecarts:#?}");
     }
+
+    #[test]
+    fn les_objets_merveilleux_se_rangent_sans_emplacement_sans_limite() {
+        use inventaire::{Conteneur, Proprietaire, Registre};
+        let regles = emplacements_par_defaut();
+        let m = magiques();
+        let mut r = Registre::default();
+        r.definir_emplacements(regles).unwrap();
+        let racine = r.creer_inventaire(
+            Proprietaire {
+                type_id: "personnage".into(),
+                ref_id: "1".into(),
+            },
+            Conteneur {
+                capacite: None,
+                types_autorises: None,
+                contenu_compte: true,
+            },
+        );
+        for nom in ["Bille de force", "Trou portable", "Cube de force"] {
+            let modele = trouver(&m, nom).clone();
+            r.ajouter_modele(modele.clone());
+            let id = r.ajouter(&modele.id, 1, racine).unwrap();
+            r.equiper(id, "sans_emplacement").unwrap();
+        }
+        assert_eq!(r.equipement_de(racine).len(), 3);
+    }
 }

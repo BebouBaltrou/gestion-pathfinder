@@ -144,5 +144,6 @@ les notes de bas de page n'ont pas été transmis.
 - « Timbales de panique » : le texte transmis donne « panique3 0 000 po », lu comme 30 000 po.
 - Paladin et rôdeur : les tables 15-12, 15-15 et 15-17 et les « Prix de base » de la fin du chapitre donnent
   des prix différents pour les potions, parchemins et baguettes. Les deux versions sont gardées.
-- Emplacement des objets merveilleux : les tables ne le donnent pas. Seuls les objets de
+- Emplacement des objets merveilleux : les tables ne le donnent pas ; décision d'Antoine : ils restent « sans
+  emplacement » (illimités). Seuls les objets de
   `objets_magiques.json` et les anneaux peuvent être équipés dans un emplacement du corps.
