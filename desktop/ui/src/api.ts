@@ -29,6 +29,8 @@ import type {
   Montee,
   RegleInfo,
 } from "./fiche-types";
+import type { CommandeInventaire, ModeleObjetVue, PageInventaire } from "./inventaire-types";
+import { simulerInventaire } from "./mock-inventaire";
 
 export type Somme = { pc: number; texte: string };
 export type Capitaux = { marchandises: number; influence: number; travail: number; magie: number };
@@ -590,6 +592,19 @@ const appeler = <T>(cmd: string, args?: Record<string, unknown>) => pont()(cmd, 
 
 export const api = {
   etatApp: () => appeler<EtatApp>("etat_app"),
+  pageInventaire: () => appeler<PageInventaire | null>("page_inventaire"),
+  catalogueObjets: (requete: string, typeObjet: string | null, limite = 60) =>
+    appeler<ModeleObjetVue[]>("catalogue_objets", { requete, typeObjet, limite }),
+  typesObjets: () => appeler<string[]>("types_objets"),
+  inventaireCommande: (commande: CommandeInventaire, message: string) =>
+    appeler<Retour>("inventaire_commande", { commande, message }),
+  creerInventairePersonnage: (pj: number) => appeler<Retour>("creer_inventaire_personnage", { pj }),
+  ajouterObjetCatalogue: (dans: number, modele: string, quantite: number) =>
+    appeler<Retour>("ajouter_objet_catalogue", { dans, modele, quantite }),
+  ajouterConteneur: (dans: number, modele: string, capaciteGrammes: number | null, extradimensionnel: boolean) =>
+    appeler<Retour>("ajouter_conteneur", { dans, modele, capaciteGrammes, extradimensionnel }),
+  ajouterObjetLibre: (dans: number, nom: string, typeObjet: string, valeur: string, poidsGrammes: number, quantite: number) =>
+    appeler<Retour>("ajouter_objet_libre", { dans, nom, typeObjet, valeur, poidsGrammes, quantite }),
   ouvrirCampagne: (chemin: string) => appeler<Retour>("ouvrir_campagne", { chemin }),
   creerCampagne: (nom: string, calendrier?: SaisieCalendrier) => appeler<Retour>("creer_campagne", { nom, calendrier: calendrier ?? null }),
   calendrierParDefaut: () => appeler<PageParametres["calendrier"]>("calendrier_par_defaut"),
@@ -747,6 +762,8 @@ let annulables = 3;
 
 function simule(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
   const ok = (message: string): Retour => ({ ok: true, alerte: false, message });
+  const inventaire = simulerInventaire(cmd, args);
+  if (inventaire) return inventaire;
   const date = (j: number) => `${["lunedi", "marnedi", "mercantdi", "juredi", "ventdi", "astredi", "solardi"][j % 7]} ${j - 10} Rova 4712 AR`;
   switch (cmd) {
     case "etat_app":

@@ -7,6 +7,7 @@ import { Localites } from "./pages/Localites";
 import { Batiments } from "./pages/Batiments";
 import { Gestionnaires } from "./pages/Gestionnaires";
 import { Historique } from "./pages/Historique";
+import { Inventaire } from "./pages/Inventaire";
 import { Parametres } from "./pages/Parametres";
 import { Points } from "./pages/Points";
 import { Referentiel } from "./pages/Referentiel";
@@ -18,7 +19,7 @@ import { Tableau } from "./pages/Tableau";
 
 export type Page =
   | "tableau" | "aventure" | "recettes" | "historique"
-  | "localites" | "batiments" | "organisations" | "gestionnaires" | "personnages"
+  | "localites" | "batiments" | "organisations" | "gestionnaires" | "personnages" | "inventaire"
   | "referentiel" | "points" | "parametres" | "campagnes";
 
 const NAVIGATION: { titre: string; pages: [Page, string][] }[] = [
@@ -26,7 +27,7 @@ const NAVIGATION: { titre: string; pages: [Page, string][] }[] = [
   { titre: "Campagne", pages: [["tableau", "Tableau de bord"], ["recettes", "Recettes"], ["historique", "Historique"]] },
   {
     titre: "Domaines",
-    pages: [["localites", "Localités"], ["batiments", "Bâtiments"], ["organisations", "Organisations"], ["gestionnaires", "Gestionnaires"], ["personnages", "Personnages"]],
+    pages: [["localites", "Localités"], ["batiments", "Bâtiments"], ["organisations", "Organisations"], ["gestionnaires", "Gestionnaires"], ["personnages", "Personnages"], ["inventaire", "Inventaire"]],
   },
   { titre: "Référence", pages: [["referentiel", "Référentiel"], ["points", "Points à confirmer"], ["parametres", "Paramètres"], ["campagnes", "Campagnes"]] },
 ];
@@ -224,6 +225,7 @@ export function App() {
           {pageActive === "campagnes" && <Campagnes outils={outils} />}
           {pageActive === "localites" && <Localites outils={outils} />}
           {pageActive === "personnages" && <Personnages outils={outils} />}
+          {pageActive === "inventaire" && <Inventaire outils={outils} />}
           {pageActive === "batiments" && <Batiments outils={outils} />}
           {pageActive === "organisations" && <Organisations outils={outils} />}
           {pageActive === "gestionnaires" && <Gestionnaires outils={outils} />}
@@ -232,7 +234,7 @@ export function App() {
           {pageActive === "referentiel" && <Referentiel outils={outils} />}
           {pageActive === "parametres" && <Parametres outils={outils} />}
           {pageActive === "recettes" && <Recettes outils={outils} />}
-          {!["tableau", "aventure", "campagnes", "localites", "personnages", "batiments", "recettes", "organisations", "gestionnaires", "historique", "points", "parametres", "referentiel"].includes(pageActive) && <EnAttente nom={NOMS_PAGES[pageActive]} />}
+          {!["tableau", "aventure", "campagnes", "localites", "personnages", "inventaire", "batiments", "recettes", "organisations", "gestionnaires", "historique", "points", "parametres", "referentiel"].includes(pageActive) && <EnAttente nom={NOMS_PAGES[pageActive]} />}
         </main>
       </div>
 

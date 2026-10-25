@@ -130,6 +130,13 @@ export const icones: Record<string, (p: P) => ReactElement> = {
       <path d="M5 12h14M13 6l6 6-6 6" />
     </Icone>
   ),
+  inventaire: (p) => (
+    <Icone {...p}>
+      <path d="M8 7V5.5A2.5 2.5 0 0 1 10.5 3h3A2.5 2.5 0 0 1 16 5.5V7" />
+      <path d="M6 7h12l1.5 12.5a1.5 1.5 0 0 1-1.5 1.5H6a1.5 1.5 0 0 1-1.5-1.5L6 7Z" />
+      <path d="M9.5 12.5h5" />
+    </Icone>
+  ),
   fiole: (p) => (
     <Icone {...p}>
       <path d="M9 3h6M10 3v6L4.5 18.5A2 2 0 0 0 6.2 21.5h11.6a2 2 0 0 0 1.7-3L14 9V3" />
