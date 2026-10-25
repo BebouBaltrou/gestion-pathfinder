@@ -70,6 +70,8 @@ pub struct IncantationPj {
     pub mod_sagesse: i32,
     /// Bonus divers aux tests de concentration (dons…).
     pub bonus_concentration: i32,
+    /// Dons École renforcée / École supérieure choisis (« Spell Focus (evocation) »), pour le DD.
+    pub dons_ecole: Vec<String>,
     pub emplacements: Vec<EmplacementPj>,
     /// Noms anglais des sorts connus (sorts de lignage compris).
     pub sorts_connus: Vec<String>,

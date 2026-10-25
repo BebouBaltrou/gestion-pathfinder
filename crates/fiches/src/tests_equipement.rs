@@ -314,3 +314,179 @@ fn deux_bonus_de_meme_type_ne_se_cumulent_pas_et_un_emplacement_ne_sert_qu_une_f
         .iter()
         .any(|p| matches!(p, Probleme::EquipementInconnu(_))));
 }
+
+fn les_bonus_magiques_des_armures_et_des_armes() {
+    let r = Referentiel::core();
+    let avant = equipee().calculer(&r).unwrap();
+    // Cotte de mailles +2 : bonus d'altération qui s'ajoute au bonus d'armure.
+    let mut f = equipee();
+    f.equipement.bonus_magiques.insert("Chainmail".into(), 2);
+    let v = f.calculer(&r).unwrap();
+    assert_eq!(v.ca.total, avant.ca.total + 2, "{}", v.ca.explication());
+    assert!(v.ca.explication().contains("+2 Cotte de mailles"));
+    assert_eq!(v.ca_contact.total, avant.ca_contact.total + 2);
+    // Épée longue +1 : attaque et dégâts.
+    let mut f = elfe_ensorceleuse();
+    f.equipement.armes = vec!["Longsword".into()];
+    let nu = f.calculer(&r).unwrap();
+    f.equipement.bonus_magiques.insert("Longsword".into(), 1);
+    let v = f.calculer(&r).unwrap();
+    assert_eq!(v.armes[0].attaque.total, nu.armes[0].attaque.total + 1);
+    assert_eq!(
+        v.armes[0].bonus_degats.total,
+        nu.armes[0].bonus_degats.total + 1
+    );
+    assert!(f.problemes_equipement(&r).is_empty());
+}
+
+#[test]
+fn les_bonus_magiques_hors_limites_ou_sans_objet_sont_signales() {
+    let r = Referentiel::core();
+    let mut f = elfe_ensorceleuse();
+    f.equipement.armes = vec!["Longsword".into()];
+    f.equipement.bonus_magiques.insert("Longsword".into(), 6);
+    f.equipement.bonus_magiques.insert("Dagger".into(), 1);
+    let p = f.problemes_equipement(&r);
+    assert!(p.contains(&Probleme::BonusMagiqueInvalide("Longsword".into())));
+    assert!(p.contains(&Probleme::BonusMagiqueInvalide("Dagger".into())));
+}
+
+#[test]
+fn les_objets_magiques_portes_appliquent_leurs_effets_sans_cumuler_un_meme_type() {
+    let r = Referentiel::core();
+    let nu = elfe_ensorceleuse().calculer(&r).unwrap();
+    let mut f = elfe_ensorceleuse();
+    f.equipement
+        .objets_magiques
+        .push(crate::equipement::ObjetMagique {
+            nom: "Anneau de protection +1".into(),
+            effets: vec![Effet::new(
+                "ca",
+                TypeBonus::Parade,
+                1,
+                "Anneau de protection +1",
+            )],
+        });
+    f.equipement
+        .objets_magiques
+        .push(crate::equipement::ObjetMagique {
+            nom: "Amulette de parade +2".into(),
+            effets: vec![Effet::new(
+                "ca",
+                TypeBonus::Parade,
+                2,
+                "Amulette de parade +2",
+            )],
+        });
+    f.equipement
+        .objets_magiques
+        .push(crate::equipement::ObjetMagique {
+            nom: "Cape de résistance +2".into(),
+            effets: vec![Effet::new(
+                "jds.vig",
+                TypeBonus::Chance,
+                2,
+                "Cape de résistance +2",
+            )],
+        });
+    let v = f.calculer(&r).unwrap();
+    // Deux bonus de parade : seul le plus fort compte.
+    assert_eq!(v.ca.total, nu.ca.total + 2, "{}", v.ca.explication());
+    assert_eq!(v.vigueur.total, nu.vigueur.total + 2);
+}
+
+#[test]
+fn le_journal_gere_bonus_magiques_et_objets_magiques() {
+    let r = Referentiel::core();
+    let regles = ReglesFiche::default();
+    let mut j = Journal::nouveau(elfe_ensorceleuse());
+    let ajouter = |j: &mut Journal, e| j.ajouter(e, &r, &regles);
+    // Pas de bonus magique sur ce qu'on ne porte pas, ni au-delà de +5.
+    assert!(ajouter(
+        &mut j,
+        EvenementFiche::BonusMagique {
+            objet: "Chainmail".into(),
+            bonus: 1
+        }
+    )
+    .is_err());
+    ajouter(
+        &mut j,
+        EvenementFiche::Equiper {
+            emplacement: EmplacementProtection::Armure,
+            objet: Some("Chainmail".into()),
+        },
+    )
+    .unwrap();
+    assert!(ajouter(
+        &mut j,
+        EvenementFiche::BonusMagique {
+            objet: "Chainmail".into(),
+            bonus: 6
+        }
+    )
+    .is_err());
+    ajouter(
+        &mut j,
+        EvenementFiche::BonusMagique {
+            objet: "Chainmail".into(),
+            bonus: 3,
+        },
+    )
+    .unwrap();
+    assert_eq!(
+        j.etat(&r, &regles)
+            .unwrap()
+            .fiche
+            .equipement
+            .bonus_magique("Chainmail"),
+        3
+    );
+    // Retirer l'armure fait partir son bonus.
+    ajouter(
+        &mut j,
+        EvenementFiche::Equiper {
+            emplacement: EmplacementProtection::Armure,
+            objet: None,
+        },
+    )
+    .unwrap();
+    assert!(j
+        .etat(&r, &regles)
+        .unwrap()
+        .fiche
+        .equipement
+        .bonus_magiques
+        .is_empty());
+    // Objet magique : ajout, remplacement du même nom, retrait.
+    let ceinture = crate::equipement::ObjetMagique {
+        nom: "Ceinture de force".into(),
+        effets: vec![Effet::new(
+            "carac.for",
+            TypeBonus::Alteration,
+            2,
+            "Ceinture de force",
+        )],
+    };
+    ajouter(&mut j, EvenementFiche::ObjetMagiqueAjoute(ceinture.clone())).unwrap();
+    ajouter(&mut j, EvenementFiche::ObjetMagiqueAjoute(ceinture)).unwrap();
+    let e = j.etat(&r, &regles).unwrap();
+    assert_eq!(e.fiche.equipement.objets_magiques.len(), 1);
+    assert!(ajouter(&mut j, EvenementFiche::ObjetMagiqueRetire("Inconnu".into())).is_err());
+    ajouter(
+        &mut j,
+        EvenementFiche::ObjetMagiqueRetire("Ceinture de force".into()),
+    )
+    .unwrap();
+    assert!(j
+        .etat(&r, &regles)
+        .unwrap()
+        .fiche
+        .equipement
+        .objets_magiques
+        .is_empty());
+    assert!(j
+        .historique()
+        .iter()
+        .any(|l| l.contains("Objet magique porté")));
+}

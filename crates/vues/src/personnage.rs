@@ -268,7 +268,23 @@ vue! {
     }
 }
 vue! {
+    /// Bonus d'altération (magique) d'une armure, d'un bouclier ou d'une arme portés.
+    pub struct BonusMagiqueVue {
+        pub nom_en: String,
+        pub bonus: i32,
+    }
+}
+vue! {
+    /// Objet magique porté, avec ses effets saisis par le joueur.
+    pub struct ObjetMagiqueVue {
+        pub nom: String,
+        pub effets: Vec<String>,
+    }
+}
+vue! {
     pub struct EquipementVue {
+        pub bonus_magiques: Vec<BonusMagiqueVue>,
+        pub objets_magiques: Vec<ObjetMagiqueVue>,
         pub armure: Option<ObjetVue>,
         pub bouclier: Option<ObjetVue>,
         pub armes: Vec<ArmeVue>,
@@ -1021,6 +1037,26 @@ pub fn fiche_complete(
     let eq = &f.equipement;
     let be = &v.equipement;
     let equipement = EquipementVue {
+        bonus_magiques: eq
+            .bonus_magiques
+            .iter()
+            .map(|(n, b)| BonusMagiqueVue {
+                nom_en: n.clone(),
+                bonus: *b,
+            })
+            .collect(),
+        objets_magiques: eq
+            .objets_magiques
+            .iter()
+            .map(|o| ObjetMagiqueVue {
+                nom: o.nom.clone(),
+                effets: o
+                    .effets
+                    .iter()
+                    .map(|x| format!("{:+} {} ({})", x.valeur, x.cible.0, x.type_bonus.nom()))
+                    .collect(),
+            })
+            .collect(),
         armure: eq.armure.as_deref().map(|n| objet_vue(r, n, 1)),
         bouclier: eq.bouclier.as_deref().map(|n| objet_vue(r, n, 1)),
         armes: v

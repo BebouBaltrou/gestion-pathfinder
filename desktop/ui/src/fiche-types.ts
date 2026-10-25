@@ -163,6 +163,8 @@ export type ArmeVue = {
 };
 export type ObjetVue = { nomEn: string; nom: string; quantite: number };
 export type EquipementVue = {
+  bonusMagiques: { nomEn: string; bonus: number }[];
+  objetsMagiques: { nom: string; effets: string[] }[];
   armure: ObjetVue | null;
   bouclier: ObjetVue | null;
   armes: ArmeVue[];
@@ -366,6 +368,8 @@ export type FicheDonnees = {
     armes: string[];
     objets: { nom_en: string; quantite: number }[];
     charge_declaree: Charge;
+    bonus_magiques?: Record<string, number>;
+    objets_magiques?: { nom: string; effets: EffetDonnees[] }[];
   };
   etats: string[];
   temporaires: { nom: string; effets: EffetDonnees[]; rounds_restants: number | null }[];
@@ -434,6 +438,9 @@ export type EvenementFiche =
   | { Equiper: { emplacement: "armure" | "bouclier"; objet: string | null } }
   | { ArmeAjoutee: string }
   | { ArmeRetiree: string }
+  | { BonusMagique: { objet: string; bonus: number } }
+  | { ObjetMagiqueAjoute: { nom: string; effets: EffetDonnees[] } }
+  | { ObjetMagiqueRetire: string }
   | { ObjetAjoute: { nom_en: string; quantite: number } }
   | { ObjetRetire: { nom_en: string; quantite: number } }
   | { EtatAjoute: string }

@@ -376,9 +376,29 @@ pub struct Equipement {
     /// Charge indiquée par le joueur. Pour l'instant le poids n'est pas converti en charge
     /// automatiquement (décision du 23/10/2026) ; le poids total reste affiché à titre indicatif.
     pub charge_declaree: Charge,
+    /// Bonus d'altération (magique) de l'armure, du bouclier ou d'une arme portés, par nom
+    /// du catalogue (anglais). Absent : pas de bonus.
+    pub bonus_magiques: BTreeMap<String, i32>,
+    /// Anneaux, capes, ceintures… dont le joueur saisit lui-même les effets.
+    pub objets_magiques: Vec<ObjetMagique>,
+}
+
+/// Bonus d'altération maximal d'une armure, d'un bouclier ou d'une arme (Core, p. 468-469).
+pub const BONUS_MAGIQUE_MAX: i32 = 5;
+
+/// Objet magique porté : le nom et les effets chiffrés saisis par le joueur.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ObjetMagique {
+    pub nom: String,
+    pub effets: Vec<Effet>,
 }
 
 impl Equipement {
+    /// Bonus d'altération de l'armure, du bouclier ou de l'arme `nom_en` (0 si aucun).
+    pub fn bonus_magique(&self, nom_en: &str) -> i32 {
+        self.bonus_magiques.get(nom_en).copied().unwrap_or(0)
+    }
+
     pub fn ajouter_objet(&mut self, nom_en: &str, quantite: u32) {
         match self.objets.iter_mut().find(|o| o.nom_en == nom_en) {
             Some(o) => o.quantite += quantite,
@@ -548,10 +568,28 @@ impl Equipement {
             if let Some(v) = a.bonus_armure.filter(|v| *v != 0) {
                 effets.push(Effet::new("ca", TypeBonus::Armure, v, &a.nom));
             }
+            let m = self.bonus_magique(&a.nom_en);
+            if m != 0 {
+                effets.push(Effet::new(
+                    "ca",
+                    TypeBonus::Alteration,
+                    m,
+                    &format!("{} +{m}", a.nom),
+                ));
+            }
         }
         if let Some(b) = bouclier {
             if let Some(v) = b.bonus_armure.filter(|v| *v != 0) {
                 effets.push(Effet::new("ca", TypeBonus::Bouclier, v, &b.nom));
+            }
+            let m = self.bonus_magique(&b.nom_en);
+            if m != 0 {
+                effets.push(Effet::new(
+                    "ca",
+                    TypeBonus::Alteration,
+                    m,
+                    &format!("{} +{m}", b.nom),
+                ));
             }
         }
 

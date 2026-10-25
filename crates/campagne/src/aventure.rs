@@ -94,6 +94,14 @@ impl Etat {
                 score_incantation: score_de(carac),
                 mod_sagesse: mod_de(Carac::Sag),
                 bonus_concentration: 0,
+                dons_ecole: fiche
+                    .dons_choisis()
+                    .into_iter()
+                    .filter(|d| {
+                        let d = d.to_lowercase();
+                        d.starts_with("spell focus (") || d.starts_with("greater spell focus (")
+                    })
+                    .collect(),
                 emplacements,
                 sorts_connus,
                 metamagies,

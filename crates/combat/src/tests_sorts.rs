@@ -16,6 +16,7 @@ fn incantation(niveau_de_lanceur: u32, echec_pct: u32) -> IncantationPj {
         score_incantation: 16,
         mod_sagesse: 1,
         bonus_concentration: 0,
+        dons_ecole: vec![],
         emplacements: (1..=6)
             .map(|n| EmplacementPj {
                 niveau_de_sort: n,
@@ -143,6 +144,27 @@ fn apercu_d_une_boule_de_feu() {
     assert_eq!(a.stats.degats[0].libelle, "Dégâts de feu");
     assert_eq!(a.stats.degats[0].formule, "5d6");
     assert_eq!(a.stats.portee.as_deref(), Some("180 m"));
+}
+
+#[test]
+fn dd_avec_les_dons_d_ecole() {
+    // École renforcée + École supérieure (évocation) : +1 chacun, seulement pour l'école choisie
+    let base = ctx_avec(5, 0);
+    let ctx = move |id| {
+        base(id).map(|mut c| {
+            if let Some(i) = c.incantation.as_mut() {
+                i.dons_ecole = vec![
+                    "Spell Focus (evocation)".into(),
+                    "Greater Spell Focus (evocation)".into(),
+                ];
+            }
+            c
+        })
+    };
+    let c = combat(&ctx);
+    let dd = |sort: &str| c.etat().apercu_sort(1, sort, &[], None, &ctx).unwrap().dd;
+    assert_eq!(dd("Fireball"), 18); // évocation : 10 + 3 + CHA +3 + 2
+    assert_eq!(dd("Haste"), 16); // transmutation : sans bonus
 }
 
 #[test]

@@ -520,6 +520,12 @@ function Equipement({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => voi
         />
         {eq.bouclier && <button className="bouton discret" onClick={() => setDetail(eq.bouclier!.nomEn)}>Voir le bouclier</button>}
       </div>
+      {(eq.armure || eq.bouclier) && (
+        <div className="ligne">
+          {eq.armure && <BonusMagique eq={eq} nomEn={eq.armure.nomEn} nom={eq.armure.nom} agir={agir} />}
+          {eq.bouclier && <BonusMagique eq={eq} nomEn={eq.bouclier.nomEn} nom={eq.bouclier.nom} agir={agir} />}
+        </div>
+      )}
 
       <h2>Armes</h2>
       <div className="puces">
@@ -530,6 +536,13 @@ function Equipement({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => voi
           </span>
         ))}
       </div>
+      {eq.armes.length > 0 && (
+        <div className="ligne">
+          {eq.armes.filter((a, i) => eq.armes.findIndex((b) => b.nomEn === a.nomEn) === i).map((a) => (
+            <BonusMagique key={a.nomEn} eq={eq} nomEn={a.nomEn} nom={a.nom} agir={agir} />
+          ))}
+        </div>
+      )}
       <div className="ligne">
         <Choix
           etiquette="Arme à prendre"
@@ -540,6 +553,8 @@ function Equipement({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => voi
         />
         <button className="bouton" disabled={!arme} onClick={() => { agir({ ArmeAjoutee: arme }); setArme(""); }}>Ajouter</button>
       </div>
+
+      <ObjetsMagiques eq={eq} agir={agir} />
 
       <h2>Matériel et munitions</h2>
       <table className="tableau">
@@ -577,6 +592,82 @@ function Equipement({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => voi
         </button>
       </div>
     </div>
+  );
+}
+
+/** Bonus magique (+1 à +5) d'une armure, d'un bouclier ou d'une arme portés. */
+function BonusMagique({ eq, nomEn, nom, agir }: { eq: FicheVue["equipement"]; nomEn: string; nom: string; agir: (e: EvenementFiche) => void }) {
+  const actuel = eq.bonusMagiques.find((b) => b.nomEn === nomEn)?.bonus ?? 0;
+  return (
+    <label className="ligne">
+      <span>{nom}, bonus magique</span>
+      <select
+        className="champ choix"
+        aria-label={`Bonus magique : ${nom}`}
+        value={actuel}
+        onChange={(e) => agir({ BonusMagique: { objet: nomEn, bonus: Number(e.target.value) } })}
+      >
+        <option value={0}>aucun</option>
+        {[1, 2, 3, 4, 5].map((n) => <option key={n} value={n}>+{n}</option>)}
+      </select>
+    </label>
+  );
+}
+
+/** Anneaux, capes, ceintures… : le joueur saisit lui-même ce que l'objet donne. */
+function ObjetsMagiques({ eq, agir }: { eq: FicheVue["equipement"]; agir: (e: EvenementFiche) => void }) {
+  const [nom, setNom] = useState("");
+  const [cible, setCible] = useState("ca");
+  const [type, setType] = useState("objet");
+  const [valeur, setValeur] = useState("1");
+  return (
+    <>
+      <h2>Objets magiques portés</h2>
+      <p className="doux">Tu saisis ce que l'objet donne (aucune liste d'objets magiques n'est fournie). Deux bonus du même type ne s'additionnent pas.</p>
+      <div className="liste-regles">
+        {eq.objetsMagiques.length === 0 && <p className="doux">Aucun objet magique.</p>}
+        {eq.objetsMagiques.map((o) => (
+          <div className="carte regle" key={o.nom}>
+            <div className="regle-texte">
+              <strong>{o.nom}</strong>
+              <p className="doux">{o.effets.join(", ")}</p>
+            </div>
+            <button className="bouton" onClick={() => agir({ ObjetMagiqueRetire: o.nom })}>Retirer</button>
+          </div>
+        ))}
+      </div>
+      <form
+        className="carte formulaire-effet"
+        onSubmit={(e) => {
+          e.preventDefault();
+          const n = nom.trim();
+          agir({ ObjetMagiqueAjoute: { nom: n, effets: [{ cible, type_bonus: type, valeur: Number(valeur) || 0, source: n }] } });
+          setNom("");
+        }}
+      >
+        <div>
+          <label className="etiquette-champ" htmlFor="om-nom">Nom</label>
+          <input id="om-nom" className="champ" value={nom} onChange={(e) => setNom(e.target.value)} placeholder="ex. Cape de résistance +2" />
+        </div>
+        <div>
+          <label className="etiquette-champ" htmlFor="om-cible">Ce qui change</label>
+          <select id="om-cible" className="champ choix" value={cible} onChange={(e) => setCible(e.target.value)}>
+            {CIBLES.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+          </select>
+        </div>
+        <div>
+          <label className="etiquette-champ" htmlFor="om-type">Type de bonus</label>
+          <select id="om-type" className="champ choix" value={type} onChange={(e) => setType(e.target.value)}>
+            {TYPES.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+          </select>
+        </div>
+        <div>
+          <label className="etiquette-champ" htmlFor="om-val">Valeur</label>
+          <input id="om-val" className="champ court" inputMode="numeric" value={valeur} onChange={(e) => setValeur(e.target.value)} />
+        </div>
+        <button className="bouton principal" type="submit" disabled={!nom.trim()}>Ajouter</button>
+      </form>
+    </>
   );
 }
 
