@@ -59,26 +59,6 @@ pub fn elfe_ensorceleuse() -> Fiche {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn json_de_la_fiche_exemple() {
-        let j = serde_json::to_string(&super::elfe_ensorceleuse()).unwrap();
-        println!("JSON>>{j}");
-        let ev = crate::journal::EvenementFiche::Equiper {
-            emplacement: crate::journal::EmplacementProtection::Armure,
-            objet: Some("Chainmail".into()),
-        };
-        println!("EV>>{}", serde_json::to_string(&ev).unwrap());
-        println!(
-            "EV2>>{}",
-            serde_json::to_string(&crate::journal::EvenementFiche::Repos).unwrap()
-        );
-        let back: crate::fiche::Fiche = serde_json::from_str(&j).unwrap();
-        assert_eq!(back, super::elfe_ensorceleuse());
-    }
-}
-
 /// Fiche d'exemple d'un prêtre humain de niveau 3 (Iomédae, Loyal Bon, domaines du Bien et du Soleil),
 /// pour les essais et les démonstrations.
 pub fn pretre_d_iomedae() -> Fiche {
@@ -124,5 +104,25 @@ pub fn pretre_d_iomedae() -> Fiche {
         alignement: Some("LB".into()),
         domaines: vec!["bien".into(), "soleil".into()],
         energie: None,
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn json_de_la_fiche_exemple() {
+        let j = serde_json::to_string(&super::elfe_ensorceleuse()).unwrap();
+        println!("JSON>>{j}");
+        let ev = crate::journal::EvenementFiche::Equiper {
+            emplacement: crate::journal::EmplacementProtection::Armure,
+            objet: Some("Chainmail".into()),
+        };
+        println!("EV>>{}", serde_json::to_string(&ev).unwrap());
+        println!(
+            "EV2>>{}",
+            serde_json::to_string(&crate::journal::EvenementFiche::Repos).unwrap()
+        );
+        let back: crate::fiche::Fiche = serde_json::from_str(&j).unwrap();
+        assert_eq!(back, super::elfe_ensorceleuse());
     }
 }
