@@ -242,7 +242,7 @@ impl Session {
 
     /// Exécute un événement sur la campagne ouverte, puis enregistre.
     pub fn executer(&mut self, ev: Evenement, succes: &str) -> Retour {
-        if self.combat.is_some() && !ev.valide_un_combat() {
+        if self.combat.is_some() && !ev.valide_un_combat() && !ev.est_une_note() {
             return Retour::erreur(
                 "Un combat est en cours : terminez-le (validation ou abandon) avant toute autre action",
             );
