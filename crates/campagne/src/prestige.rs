@@ -521,10 +521,13 @@ mod essais {
                 "Scorching Ray",
                 "Mirror Image",
                 "Fireball",
-                "Fly",
+                "Haste",
             ]
             .map(String::from),
         );
+        // « Mage Armor » est accordé par le lignage au niveau 3 : on ne le choisit pas en double
+        f.sorts_connus.retain(|s| s != "Mage Armor");
+        f.sorts_connus.push("Burning Hands".into());
         f
     }
 

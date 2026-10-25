@@ -88,6 +88,8 @@ pub enum Probleme {
         sort: String,
     },
     SortEnDouble(String),
+    /// Sort déjà accordé automatiquement par le lignage : il ne se choisit pas une seconde fois.
+    SortDeLignageChoisi(String),
     SortsAChoisir {
         classe: String,
         niveau_de_sort: u32,
@@ -209,6 +211,9 @@ impl std::fmt::Display for Probleme {
                 write!(f, "{sort} n'est pas sur la liste de sorts de la classe")
             }
             Probleme::SortEnDouble(s) => write!(f, "sort choisi deux fois : {s}"),
+            Probleme::SortDeLignageChoisi(s) => {
+                write!(f, "{s} est déjà accordé par le lignage : choisir un autre sort")
+            }
             Probleme::SortsAChoisir { classe, niveau_de_sort, attendus, choisis } => write!(
                 f,
                 "{classe} : {attendus} sort(s) connu(s) de niveau {niveau_de_sort} attendu(s), {choisis} choisi(s)"
@@ -270,6 +275,15 @@ pub struct Incantateur {
     pub emplacements: Vec<EmplacementsDeSorts>,
     /// Sorts de lignage obtenus automatiquement : nom (anglais) et niveau de classe d'obtention.
     pub sorts_de_lignage: Vec<(String, u32)>,
+}
+
+/// Sort connu à remplacer, avec les sorts du même niveau proposés à sa place.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct RemplacementSort {
+    pub classe: String,
+    pub ancien: String,
+    pub niveau_de_sort: u32,
+    pub propositions: Vec<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -535,6 +549,76 @@ impl Fiche {
         classe.lignages.iter().find(|l| &l.id == id)
     }
 
+    /// Sorts que le lignage accorde déjà à ce niveau de `classe` (noms anglais).
+    fn sorts_accordes_par_le_lignage(&self, classe: &Classe) -> Vec<String> {
+        let nc = self.niveau_de_classe(&classe.id);
+        self.lignage_de(classe)
+            .map(|l| {
+                l.sorts_bonus
+                    .iter()
+                    .filter(|s| s.niveau_classe <= nc)
+                    .map(|s| s.nom_en.clone())
+                    .collect()
+            })
+            .unwrap_or_default()
+    }
+
+    /// Sorts connus à remplacer (en double, ou déjà accordés par le lignage), chacun avec
+    /// les sorts du même niveau, de la liste de la classe, qu'on peut prendre à la place.
+    /// Les sorts de tous les niveaux du lignage sont écartés des propositions : un sort
+    /// que le lignage accordera plus tard ferait un doublon (lecture à valider).
+    pub fn remplacements_de_sorts(&self, r: &Referentiel) -> Vec<RemplacementSort> {
+        let mut res = Vec::new();
+        for n in &self.niveaux {
+            if res.iter().any(|x: &RemplacementSort| x.classe == n.classe) {
+                continue;
+            }
+            let Some(classe) = r.classe(&n.classe) else {
+                continue;
+            };
+            let cle = classe.nom_en.to_lowercase();
+            let accordes = self.sorts_accordes_par_le_lignage(classe);
+            let tous_lignage: Vec<&str> = self
+                .lignage_de(classe)
+                .map(|l| l.sorts_bonus.iter().map(|s| s.nom_en.as_str()).collect())
+                .unwrap_or_default();
+            let mut pris: Vec<String> = Vec::new();
+            let mut a_remplacer: Vec<(String, u32)> = Vec::new();
+            for s in &self.sorts_connus {
+                let double = pris.iter().any(|v| v.eq_ignore_ascii_case(s));
+                let lignage = accordes.iter().any(|a| a.eq_ignore_ascii_case(s));
+                if double || lignage {
+                    if let Some(sn) = r.sort(s).and_then(|d| d.niveau_pour(&cle)) {
+                        a_remplacer.push((s.clone(), sn));
+                    }
+                } else {
+                    pris.push(s.clone());
+                }
+            }
+            for (ancien, niveau) in a_remplacer {
+                let propositions = r
+                    .sorts
+                    .iter()
+                    .filter(|d| d.niveau_pour(&cle) == Some(niveau))
+                    .filter(|d| !pris.iter().any(|v| v.eq_ignore_ascii_case(&d.nom_en)))
+                    .filter(|d| {
+                        !tous_lignage
+                            .iter()
+                            .any(|a| a.eq_ignore_ascii_case(&d.nom_en))
+                    })
+                    .map(|d| d.nom_en.clone())
+                    .collect();
+                res.push(RemplacementSort {
+                    classe: n.classe.clone(),
+                    ancien,
+                    niveau_de_sort: niveau,
+                    propositions,
+                });
+            }
+        }
+        res
+    }
+
     /// Compétences de classe de tout le personnage, avec celle du lignage.
     fn competences_de_classe(&self, r: &Referentiel) -> Vec<String> {
         let mut v = Vec::new();
@@ -787,6 +871,7 @@ impl Fiche {
             let cle = classe.nom_en.to_lowercase();
             let mut choisis = [0u32; 10];
             let mut vus: Vec<String> = Vec::new();
+            let sorts_accordes = self.sorts_accordes_par_le_lignage(classe);
             let car = carac_depuis_id(&inc.caracteristique).unwrap_or(Carac::Cha);
             let score = self.caracteristique(car).score(car, &effets).total;
             for s in &self.sorts_connus {
@@ -795,6 +880,9 @@ impl Fiche {
                     continue;
                 }
                 vus.push(s.clone());
+                if sorts_accordes.iter().any(|a| a.eq_ignore_ascii_case(s)) {
+                    p.push(Probleme::SortDeLignageChoisi(s.clone()));
+                }
                 let Some(def) = r.sort(s) else {
                     p.push(Probleme::SortInconnu(s.clone()));
                     continue;
@@ -1241,12 +1329,17 @@ pub(crate) mod tests {
         let classe = r.classe("ensorceleur").unwrap();
         let ligne = &classe.progression[f.niveau_de_classe("ensorceleur") as usize - 1];
         let mut choisis: Vec<String> = Vec::new();
+        let lignage: Vec<String> = f
+            .lignage_de(classe)
+            .map(|l| l.sorts_bonus.iter().map(|s| s.nom_en.clone()).collect())
+            .unwrap_or_default();
         for sn in 0..=9usize {
             let n = ligne.sorts_connus[sn].unwrap_or(0) as usize;
             choisis.extend(
                 r.sorts
                     .iter()
                     .filter(|s| s.niveau_pour("sorcerer") == Some(sn as u32))
+                    .filter(|s| !lignage.contains(&s.nom_en))
                     .take(n)
                     .map(|s| s.nom_en.clone()),
             );

@@ -388,6 +388,19 @@ pub(crate) fn montee_auto(r: &Referentiel, f: &Fiche, classe: &str, de: u32) -> 
     let ap = apercu(r, f, classe).unwrap();
     let cle = r.classe(classe).unwrap().nom_en.to_lowercase();
     let mut pris = f.sorts_connus.clone();
+    // les sorts accordés par le lignage ne se choisissent pas
+    pris.extend(
+        f.lignage
+            .as_ref()
+            .and_then(|id| r.classe(classe)?.lignages.iter().find(|l| &l.id == id))
+            .map(|l| {
+                l.sorts_bonus
+                    .iter()
+                    .map(|s| s.nom_en.clone())
+                    .collect::<Vec<_>>()
+            })
+            .unwrap_or_default(),
+    );
     let mut neufs = Vec::new();
     for (sn, nb) in &ap.sorts_connus_gagnes {
         for _ in 0..*nb {
@@ -446,8 +459,28 @@ mod tests {
     use super::*;
     use crate::donnees::Referentiel;
 
+    /// Fiche d'exemple dont le sort « Mage Armor » (accordé par le lignage au niveau 3 de
+    /// classe) est remplacé par un autre sort de niveau 1 : on ne le choisit pas en double.
     fn base() -> Fiche {
-        crate::fiche::tests::elfe_ensorceleuse()
+        let mut f = crate::fiche::tests::elfe_ensorceleuse();
+        let r = Referentiel::core();
+        let neuf = r
+            .sorts
+            .iter()
+            .find(|s| {
+                s.niveau_pour("sorcerer") == Some(1)
+                    && !f.sorts_connus.contains(&s.nom_en)
+                    && s.nom_en != "Mage Armor"
+            })
+            .unwrap()
+            .nom_en
+            .clone();
+        for s in &mut f.sorts_connus {
+            if s == "Mage Armor" {
+                *s = neuf.clone();
+            }
+        }
+        f
     }
 
     fn montee(r: &Referentiel, f: &Fiche, de: u32) -> Montee {
@@ -733,5 +766,127 @@ mod tests {
         m.echange = Some((vieux, neuf));
         let e = appliquer(&r, &regles, &f2, &m, 20).unwrap_err();
         assert!(matches!(e[0], ErreurMontee::EchangeImpossible(_)));
+    }
+
+    /// Fiche de niveau 2 (lignage draconique) ; au niveau 3 de classe, « Mage Armor » est accordé.
+    fn niveau_2() -> Fiche {
+        let r = Referentiel::core();
+        let f = base();
+        appliquer(&r, &ReglesFiche::default(), &f, &montee(&r, &f, 4), 20).unwrap()
+    }
+
+    #[test]
+    fn sort_de_lignage_non_rechoisissable_a_la_montee() {
+        let r = Referentiel::core();
+        let regles = ReglesFiche::default();
+        let f = niveau_2();
+        let mut m = montee(&r, &f, 4);
+        // un niveau de plus : le lignage accorde « Mage Armor »
+        let niveau_1 = m
+            .sorts_appris
+            .iter()
+            .position(|s| r.sort(s).and_then(|d| d.niveau_pour("sorcerer")) == Some(1));
+        // niveau 3 : un seul sort de niveau 1 gagné ? sinon on ajoute le choix interdit à la main
+        match niveau_1 {
+            Some(i) => m.sorts_appris[i] = "Mage Armor".into(),
+            None => {
+                m.sorts_appris.pop();
+                m.sorts_appris.push("Mage Armor".into());
+            }
+        }
+        let e = appliquer(&r, &regles, &f, &m, 20).unwrap_err();
+        assert!(e.iter().any(|x| matches!(
+            x,
+            ErreurMontee::Fiche(Probleme::SortDeLignageChoisi(s)) if s == "Mage Armor"
+        )));
+    }
+
+    #[test]
+    fn sort_de_lignage_choisi_avant_d_etre_accorde_est_a_remplacer() {
+        let r = Referentiel::core();
+        let regles = ReglesFiche::default();
+        // niveau 1 : « Mage Armor » choisi, pas encore accordé : valide
+        let mut f = crate::fiche::tests::elfe_ensorceleuse();
+        assert!(f.sorts_connus.contains(&"Mage Armor".to_string()));
+        assert!(f.valider(&r).is_empty());
+        assert!(f.remplacements_de_sorts(&r).is_empty());
+        // la montée au niveau 3 refuse le doublon
+        for _ in 2..=3 {
+            let m = montee(&r, &f, 4);
+            match appliquer(&r, &regles, &f, &m, 20) {
+                Ok(n) => f = n,
+                Err(e) => {
+                    assert!(e.iter().any(|x| matches!(
+                        x,
+                        ErreurMontee::Fiche(Probleme::SortDeLignageChoisi(_))
+                    )));
+                    // la correction proposée : même niveau, liste de la classe, pas de doublon
+                    let mut g = f.clone();
+                    let mut m2 = m.clone();
+                    g.niveaux.push(NiveauPris {
+                        classe: "ensorceleur".into(),
+                        de_vie_obtenu: 4,
+                        rangs: BTreeMap::new(),
+                        predilection: None,
+                        dons: m.dons.clone(),
+                    });
+                    if let Some(c) = m.augmentation {
+                        g.augmentations.push((g.niveau_de_personnage(), c));
+                    }
+                    g.sorts_connus.extend(m.sorts_appris.iter().cloned());
+                    let rempl = g.remplacements_de_sorts(&r);
+                    assert_eq!(rempl.len(), 1);
+                    assert_eq!(rempl[0].ancien, "Mage Armor");
+                    assert_eq!(rempl[0].niveau_de_sort, 1);
+                    let choix = rempl[0]
+                        .propositions
+                        .first()
+                        .expect("une proposition")
+                        .clone();
+                    assert_ne!(choix, "Mage Armor");
+                    assert_eq!(
+                        r.sort(&choix).unwrap().niveau_pour("sorcerer"),
+                        Some(1),
+                        "même niveau de sort"
+                    );
+                    f.sorts_connus.retain(|s| s != "Mage Armor");
+                    f.sorts_connus.push(choix);
+                    m2.sorts_appris = m.sorts_appris.clone();
+                    let n = appliquer(&r, &regles, &f, &m2, 20).unwrap();
+                    assert!(!n.sorts_connus.contains(&"Mage Armor".to_string()));
+                    return;
+                }
+            }
+        }
+        panic!("le doublon avec le lignage aurait dû être refusé");
+    }
+
+    #[test]
+    fn sort_en_double_propose_un_remplacement_du_meme_niveau() {
+        let r = Referentiel::core();
+        let mut f = niveau_2();
+        let doublon = f
+            .sorts_connus
+            .iter()
+            .find(|s| r.sort(s).unwrap().niveau_pour("sorcerer") == Some(1))
+            .unwrap()
+            .clone();
+        f.sorts_connus.push(doublon.clone());
+        assert!(f
+            .valider(&r)
+            .iter()
+            .any(|p| matches!(p, Probleme::SortEnDouble(_))));
+        let rempl = f.remplacements_de_sorts(&r);
+        assert_eq!(rempl.len(), 1);
+        assert_eq!(rempl[0].ancien, doublon);
+        assert!(!rempl[0].propositions.is_empty());
+        for p in &rempl[0].propositions {
+            assert_eq!(r.sort(p).unwrap().niveau_pour("sorcerer"), Some(1));
+            assert!(!f.sorts_connus.contains(p), "{p} déjà connu");
+            assert_ne!(p, "Mage Armor", "sort de lignage proposé");
+        }
+        // appliquer la première proposition rend la fiche valide
+        f.sorts_connus.pop();
+        assert!(f.valider(&r).is_empty());
     }
 }
