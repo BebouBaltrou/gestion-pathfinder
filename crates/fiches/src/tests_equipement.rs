@@ -315,6 +315,7 @@ fn deux_bonus_de_meme_type_ne_se_cumulent_pas_et_un_emplacement_ne_sert_qu_une_f
         .any(|p| matches!(p, Probleme::EquipementInconnu(_))));
 }
 
+#[test]
 fn les_bonus_magiques_des_armures_et_des_armes() {
     let r = Referentiel::core();
     let avant = equipee().calculer(&r).unwrap();
