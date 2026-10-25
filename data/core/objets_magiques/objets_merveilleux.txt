@@ -1,0 +1,318 @@
+# Objets merveilleux. Transcrit par Antoine depuis son Manuel des joueurs (Tables 15-18 à 15-20),
+# avec les effets des pierres ioun et les détails du collier à boules de feu.
+# Prix de vente. Pages déduites du PDF (page du fichier moins 2) : à vérifier.
+# Les notes de bas de page des tables n'ont pas été transmises : elles manquent ici.
+# Points à confirmer dans le livre (transcrit tel quel) :
+# - « Timbales de panique » : le texte transmis donne « panique3 0 000 po » ; lu comme 30 000 po ;
+# - « Amulette des poings invincibles » à 100 000 po (table 15-20, ligne 79) : sans « (+5) » ;
+# - « Traité de perspicacité (+5) » à 135 500 po, alors que les autres traités (+5) valent 137 500 po ;
+# - « Collier à boules de feu (5e modèle) » : 6 000 po dans la table, 5 850 po dans la description.
+#prefixe=merveilleux
+#type=objet-merveilleux
+#colonnes=nom|prix|poids|effet
+#source=Manuel des joueurs, Table 15-18 : objets merveilleux de faible puissance, p. 503 (page à vérifier)
+@puissance=faible
+Plume magique (ancre)|50 po||
+Solvant universel|50 po||
+Philtre d’amour|150 po||
+Onguent d’intemporalité|150 po||
+Plume magique (éventail)|200 po||
+Poudre de dissimulation des traces|250 po||
+Élixir de discrétion instinctive|250 po||
+Élixir d’acrobatie|250 po||
+Élixir de nage|250 po||
+Élixir d’acuité visuelle|250 po||
+Lustrargent|250 po||
+Plume magique (oiseau)|300 po||
+Plume magique (arbre)|400 po||
+Plume magique (bateau cygne)|450 po||
+Sérum de vérité|500 po||
+Plume magique (fouet)|500 po||
+Poudre dessiccative|850 po||
+Main du mage|900 po||
+Bracelets d’armure (+1)|1 000 po||
+Cape de résistance (+1)|1 000 po||
+Perle de thaumaturge (sort du 1er niveau)|1 000 po||
+Phylactère du croyant|1 000 po||
+Onguent d’insaisissabilité|1 000 po||
+Élixir de souffle enflammé|1 100 po||
+Flûte d’Hamelin|1 150 po||
+Poudre d’illusion|1 150 po||
+Broche de défense|1 500 po||
+Collier à boules de feu (1er modèle)|1 650 po|500 g|
+Poudre d’apparition|1 800 po||
+Couvre-chef de déguisement|1 800 po||
+Flûte à bruitages|1 800 po||
+Carquois efficace|1 800 po||
+Amulette d’armure naturelle (+1)|2 000 po||
+Havresac d’Hévard|2 000 po||
+Corne de brume|2 000 po||
+Gemme à élémentaire|2 250 po||
+Robe d’ossements|2 400 po||
+Colle universelle|2 400 po||
+Sac sans fond (1er modèle)|2 500 po||
+Bottes elfiques|2 500 po||
+Bottes des terres gelées|2 500 po||
+Cierge de vérité|2 500 po||
+Cape elfique|2 500 po||
+Yeux de lynx|2 500 po||
+Lunettes grossissantes|2 500 po||
+Broche antigolems|2 500 po||
+Collier à boules de feu (2e modèle)|2 700 po|500 g|
+Pierre d’alerte|2 700 po||
+Bille de force|3 000 po||
+Carillon d’ouverture|3 000 po||
+Fers à cheval de rapidité|3 000 po||
+Corde d’escalade|3 000 po||
+Sac à malice (gris)|3 400 po||
+Poudre de disparition|3 500 po||
+Loupe de détection|3 500 po||
+Chasuble de druide|3 750 po||
+Statuette merveilleuse (corbeau d’argent)|3 800 po||
+Ceinturon de force de géant (+2)|4 000 po||
+Ceinturon de dextérité du chat (+2)|4 000 po||
+Ceinturon de constitution de l’ours (+2)|4 000 po||
+Bracelets d’armure (+2)|4 000 po||
+Cape de résistance (+2)|4 000 po||
+Gants antiprojectiles|4 000 po||
+Bandeau de belle allure (+2)|4 000 po||
+Bandeau d’inspiration (+2)|4 000 po||
+Bandeau de prouesse mentale (+2)|4 000 po||
+Pierre ioun (fuseau translucide)|4 000 po||Permet de subsister sans boire ni manger
+Onguent de restauration|4 000 po||
+Pigments merveilleux|4 000 po||
+Perle de thaumaturge (sort du 2e niveau)|4 000 po||
+Onguent des roches|4 000 po||
+Amulette des poings invincibles (+1)|4 000 po||
+Collier à boules de feu (3e modèle)|4 350 po|500 g|
+Serre-tête de persuasion|4 500 po||
+Chaussons d’araignée|4 800 po||
+Encens de méditation|4 900 po||
+Sac sans fond (2e modèle)|5 000 po||
+Bracelets d’archer|5 000 po||
+Pierre ioun (prisme rose laiteux)|5 000 po||Bonus d’intuition de +1 à la CA
+Heaume de compréhension|5 200 po||
+Gilet d’évasion|5 200 po||
+Urne fumigène|5 400 po||
+Cuillère nourrissante|5 400 po||
+Collier à boules de feu (4e modèle)|5 400 po|500 g|
+Bottes de sept lieues|5 500 po||
+Éventail enchanté|5 500 po||
+Collier à boules de feu (5e modèle)|6 000 po|500 g|
+Fers à cheval du zéphyr|6 000 po||
+Flûte de hantise|6 000 po||
+Gants de nage et d’escalade|6 250 po||
+Serre-tête de lumière dévastatrice|6 480 po||
+Cor du Bien/du Mal|6 500 po||
+Robe de camelot|7 000 po||
+Bateau pliant|7 200 po||
+Cape de la raie manta|7 200 po||
+Flacon d’air pur|7 250 po||
+Sac sans fond (3e modèle)|7 400 po||
+Charme de bonne santé|7 400 po||
+Bottes de lévitation|7 500 po||
+Harpe de suggestion|7 500 po||
+#source=Manuel des joueurs, Table 15-19 : objets merveilleux de puissance intermédiaire, p. 504 (page à vérifier)
+@puissance=intermédiaire
+Amulette d’armure naturelle (+2)|8 000 po||
+Traité de création des golems de chair|8 000 po||
+Main miraculeuse|8 000 po||
+Pierre ioun (sphère rouge sang)|8 000 po||Bonus d’altération de +2 en Dextérité
+Pierre ioun (sphère bleu incandescent)|8 000 po||Bonus d’altération de +2 en Sagesse
+Pierre ioun (rhombe bleu pâle)|8 000 po||Bonus d’altération de +2 en Force
+Pierre ioun (sphère rose et verte)|8 000 po||Bonus d’altération de +2 en Charisme
+Pierre ioun (rhombe rose vif)|8 000 po||Bonus d’altération de +2 en Constitution
+Pierre ioun (sphère rouge et bleue)|8 000 po||Bonus d’altération de +2 en Intelligence
+Cartes fantasmagoriques|8 100 po||
+Collier à boules de feu (6e modèle)|8 100 po|500 g|
+Cierge d’invocation|8 400 po||
+Robe de mimétisme|8 400 po||
+Sac à malice (rouille)|8 500 po||
+Collier à boules de feu (7e modèle)|8 700 po|500 g|
+Bracelets d’armure (+3)|9 000 po||
+Cape de résistance (+3)|9 000 po||
+Carafe intarissable|9 000 po||
+Collier d’adaptation|9 000 po||
+Perle de thaumaturge (sort du 3e niveau)|9 000 po||
+Statuette merveilleuse (hibou de chrysolite)|9 100 po||
+Chapelet de prières mineur|9 600 po||
+Sac sans fond (4e modèle)|10 000 po||
+Ceinturon de puissance de géant (+2)|10 000 po||
+Statuette merveilleuse (griffon de bronze)|10 000 po||
+Statuette merveilleuse (mouche d’ébène)|10 000 po||
+Gants de rangement|10 000 po||
+Bandeau de prouesse mentale (+2)|10 000 po||
+Pierre ioun (rhombe bleu nuit)|10 000 po||Vigilance (comme le don du même nom)
+Cape de prestidigitateur|10 800 po||
+Phylactère de canalisation négative|11 000 po||
+Phylactère de canalisation positive|11 000 po||
+Gantelet de rouille|11 500 po||
+Bottes de rapidité|12 000 po||
+Lunettes de nyctalope|12 000 po||
+Traité de création des golems d’argile|12 000 po||
+Médaillon des pensées|12 000 po||
+Livre magique|12 500 po||
+Gemme d’illumination|13 000 po||
+Lyre de bâtisseur|13 000 po||
+Robe de moine|13 000 po||
+Cape de l’araignée|14 000 po||
+Ceinture des nains|14 900 po||
+Charme de coagulation|15 000 po||
+Perle des sirènes|15 300 po||
+Statuette merveilleuse (chien d’onyx)|16 000 po||
+Sac à malice (ocre)|16 000 po||
+Ceinturon de force de géant (+4)|16 000 po||
+Ceinturon de dextérité du chat (+4)|16 000 po||
+Ceinturon de constitution de l’ours (+4)|16 000 po||
+Ceinturon de la perfection physique (+2)|16 000 po||
+Bottes ailées|16 000 po||
+Bracelets d’armure (+4)|16 000 po||
+Cape de résistance (+4)|16 000 po||
+Bandeau de belle allure (+4)|16 000 po||
+Bandeau d’inspiration (+4)|16 000 po||
+Bandeau de supériorité mentale (+4)|16 000 po||
+Bandeau d’intelligence (+4)|16 000 po||
+Perle de thaumaturge (sort du 4e niveau)|16 000 po||
+Fourreau d’affûtage|16 000 po||
+Amulette des poings invincibles (+2)|16 000 po||
+Statuette merveilleuse (lions d’or)|16 500 po||
+Carillon d’interruption|16 800 po||
+Balai volant|17 000 po||
+Statuette merveilleuse (éléphant de marbre)|17 000 po||
+Amulette d’armure naturelle (+3)|18 000 po||
+Pierre ioun (fuseau irisé)|18 000 po||Permet de subsister sans respirer
+Bracelet d’assistance|19 000 po||
+Tapis volant (1,50 m x 1,50 m)|20 000 po||
+Cor de destruction|20 000 po||
+Pierre ioun (ellipsoïde lavande)|20 000 po||Absorbe des sorts jusqu’au 4e niveau
+Pierre ioun (fuseau blanc laiteux)|20 000 po||Régénération (1 pv/heure)
+Trou portable|20 000 po||
+Pierre porte-bonheur|20 000 po||
+Statuette merveilleuse (chèvres d’ivoire)|21 000 po||
+Corde d’enchevêtrement|21 000 po||
+Traité de création des golems de pierre|22 000 po||
+Masque de la camarde|22 000 po||
+Pioche des titans|23 350 po||
+Serre-tête de lumière dévastatrice|23 760 po||
+Cape de moindre déplacement (mineure)|24 000 po||
+Casque de l’homme-poisson|24 000 po||
+Bracelets d’archer hors pair|25 000 po||
+Bracelets de défense (+5)|25 000 po||
+Cape de résistance (+5)|25 000 po||
+Yeux d’anathème|25 000 po||
+Perle de thaumaturge (sort du 5e niveau)|25 000 po||
+Maillet des titans|25 300 po||
+Cape de la chauve-souris|26 000 po||
+Liens mystiques de Bilarro|26 000 po||
+Cube de résistance au froid|27 000 po||
+Casque de télépathie|27 000 po||
+Charme antipoison|27 000 po||
+Robe prismatique|27 000 po||
+Manuel de coordination physique (+1)|27 500 po||
+Manuel de remise en forme (+1)|27 500 po||
+Manuel de vitalité (+1)|27 500 po||
+Traité de perspicacité (+1)|27 500 po||
+Traité d’autorité et d’influence (+1)|27 500 po||
+Traité de compréhension (+1)|27 500 po||
+#source=Manuel des joueurs, Table 15-20 : objets merveilleux de grande puissance, p. 505 (page à vérifier)
+@puissance=puissant
+Chaînes dimensionnelles|28 000 po||
+Statuette merveilleuse (destrier d’obsidienne)|28 500 po||
+Timbales de panique|30 000 po||
+Pierre ioun (prisme orange)|30 000 po||Bonus de +1 au niveau de lanceur de sorts
+Pierre ioun (prisme vert pâle)|30 000 po||Bonus d’aptitude de +1 aux jets d’attaque et de sauvegarde, ainsi qu’aux tests de compétence
+Lanterne révélatrice|30 000 po||
+Amulette d’armure naturelle (+4)|32 000 po||
+Amulette d’antidétection|35 000 po||
+Tapis volant (1,50 m x 3 m)|35 000 po||
+Traité de création des golems de fer|35 000 po||
+Ceinturon de force de géant (+6)|36 000 po||
+Ceinturon de dextérité du chat (+6)|36 000 po||
+Ceinturon de constitution de l’ours (+6)|36 000 po||
+Bracelets d’armure (+6)|36 000 po||
+Bandeau de belle allure (+6)|36 000 po||
+Bandeau d’inspiration (+6)|36 000 po||
+Bandeau d’intelligence (+6)|36 000 po||
+Pierre ioun (prisme violet vif)|36 000 po||Stocke trois niveaux de sorts, comme un anneau à stockage de sorts
+Perle de thaumaturge (sort du 6e niveau)|36 000 po||
+Amulettes des poings invincibles (+3)|36 000 po||
+Scarabée de protection|38 000 po||
+Ceinturon de puissance des géants (+4)|40 000 po||
+Bandeau de prouesse mentale (+4)|40 000 po||
+Pierre ioun (ellipsoïde vert et lavande)|40 000 po||Absorbe des sorts jusqu’au 8e niveau
+Anneaux de transport|40 000 po||
+Boule de cristal|42 000 po||
+Traité de création des golems de pierre monumentaux|44 000 po||
+Chapelet de prière courant|45 800 po||
+Orbe des tempêtes|48 000 po||
+Bottes de téléportation|49 000 po||
+Bracelets d’armure (+7)|49 000 po||
+Perle de thaumaturge (sort du 7e niveau)|49 000 po||
+Amulette d’armure naturelle (+5)|50 000 po||
+Cape de déplacement (supérieure)|50 000 po||
+Boule de cristal (détection de l’invisibilité)|50 000 po||
+Cor du Valhalla|50 000 po||
+Boule de cristal (détection des pensées)|51 000 po||
+Ailes de vol|54 000 po||
+Cape éthérée|55 000 po||
+Forteresse instantanée|55 000 po||
+Manuel de vitalité (+2)|55 000 po||
+Manuel de remise en forme (+2)|55 000 po||
+Manuel de coordination physique (+2)|55 000 po||
+Traité de perspicacité (+2)|55 000 po||
+Traité d’autorité et d’influence (+2)|55 000 po||
+Traité de compréhension (+2)|55 000 po||
+Yeux de charme|56 000 po||
+Robe étoilée|58 000 po||
+Tapis volant (3 m x 3 m)|60 000 po||
+Crâne des ténèbres|60 000 po||
+Cube de force|62 000 po||
+Ceinturon de la perfection physique (+4)|64 000 po||
+Bracelets d’armure (+8)|64 000 po||
+Bandeau de supériorité mentale (+4)|64 000 po||
+Perle de thaumaturge (sort du 8e niveau)|64 000 po||
+Amulette des poings invincibles (+4)|64 000 po||
+Boule de cristal (télépathie)|70 000 po||
+Cor de dévastation supérieur|70 000 po||
+Perle de thaumaturge (2 sorts)|70 000 po||
+Casque de téléportation|73 500 po||
+Gemme de vision|75 000 po||
+Robe d’archimage|75 000 po||
+Chasuble de la foi|76 000 po||
+Boule de cristal (vision lucide)|80 000 po||
+Perle de thaumaturge (sort du 9e niveau)|81 000 po||
+Puits des mondes|82 000 po||
+Manuel de coordination physique (+3)|82 500 po||
+Manuel de remise en forme (+3)|82 500 po||
+Manuel de vitalité (+3)|82 500 po||
+Traité d’autorité et d’influence (+3)|82 500 po||
+Traité de compréhension (+3)|82 500 po||
+Traité de perspicacité (+3)|82 500 po||
+Submersible du crabe|90 000 po||
+Ceinturon de puissance des géants (+6)|90 000 po||
+Bandeau de prouesse mentale (+6)|90 000 po||
+Écharpe de résistance à la magie|90 000 po||
+Miroir d’opposition|92 000 po||
+Chapelet de prière (majeur)|92 500 po||
+Amulette des poings invincibles|100 000 po||
+Manuel de coordination physique (+4)|110 000 po||
+Manuel de remise en forme (+4)|110 000 po||
+Manuel de vitalité (+4)|110 000 po||
+Traité d’autorité et d’influence (+4)|110 000 po||
+Traité de compréhension (+4)|110 000 po||
+Traité de perspicacité (+4)|110 000 po||
+Amulette des plans|120 000 po||
+Robe de vision totale|120 000 po||
+Casque de mille feux|125 000 po||
+Manuel de coordination physique (+5)|137 500 po||
+Manuel de remise en forme (+5)|137 500 po||
+Manuel de vitalité (+5)|137 500 po||
+Traité d’autorité et d’influence (+5)|137 500 po||
+Traité de compréhension (+5)|137 500 po||
+Traité de perspicacité (+5)|135 500 po||
+Ceinturon de la perfection physique (+6)|144 000 po||
+Bandeau de supériorité mentale (+6)|144 000 po||
+Urne du mauvais génie|145 000 po||
+Cube des plans|164 000 po||
+Flasque de fer|170 000 po||
+Miroir d’emprisonnement|200 000 po||

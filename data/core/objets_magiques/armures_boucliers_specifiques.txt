@@ -1,0 +1,28 @@
+# Armures et boucliers magiques spécifiques. Transcrit par Antoine depuis son Manuel des joueurs.
+# Prix de vente. Pages déduites du PDF (page du fichier moins 2) : à vérifier.
+#prefixe=armure-magique
+#colonnes=nom|prix
+#source=Manuel des joueurs, Table 15-6 : armures spécifiques, p. 470 (page à vérifier)
+#type=armure-magique
+Chemise de mailles en mithral|1 100 po
+Harnois en peau de dragon|3 300 po
+Cotte de mailles elfique|5 150 po
+Armure de peau de rhinocéros|5 165 po
+Cuirasse en adamantium|10 200 po
+Harnois nain|16 500 po
+Crevice de la seconde chance|18 900 po
+Armure céleste|22 400 po
+Harnois des profondeurs|24 650 po
+Cuirasse de commandement|25 400 po
+Harnois en mithral de vitesse|26 500 po
+Armure démoniaque|52 260 po
+#source=Manuel des joueurs, Table 15-7 : boucliers spécifiques, p. 473 (page à vérifier)
+#type=bouclier-magique
+Rondache en ébénite|205 po
+Écu en ébénite|257 po
+Écu en mithral|1 020 po
+Bouclier des arcanes|3 153 po
+Bouclier de la manticore|5 580 po
+Bouclier du lion|9 170 po
+Bouclier ailé|17 257 po
+Bouclier phagocyte|50 170 po

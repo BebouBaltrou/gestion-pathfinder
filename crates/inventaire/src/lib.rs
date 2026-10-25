@@ -214,6 +214,14 @@ impl Registre {
             .ok_or(Erreur::ExemplaireInconnu(id))
     }
 
+    /// Inventaire racine d'un propriétaire (type et identifiant dans la campagne).
+    pub fn racine_du_proprietaire(&self, type_id: &str, ref_id: &str) -> Option<Id> {
+        self.proprietaires
+            .iter()
+            .find(|(_, p)| p.type_id == type_id && p.ref_id == ref_id)
+            .map(|(id, _)| *id)
+    }
+
     pub fn proprietaire(&self, racine: Id) -> Option<&Proprietaire> {
         self.proprietaires.get(&racine)
     }
@@ -811,6 +819,7 @@ mod tests {
             capacite,
         };
         equipement::ReglesEmplacements {
+            noms_du_livre: BTreeMap::new(),
             emplacements: vec![
                 slot("corps", "Corps", 1),
                 slot("anneau", "Doigts", 2),

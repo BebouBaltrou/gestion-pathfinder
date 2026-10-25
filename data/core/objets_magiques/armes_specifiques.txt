@@ -1,0 +1,42 @@
+# Armes magiques spécifiques. Transcrit par Antoine depuis son Manuel des joueurs (Table 15-11).
+# Prix de vente. Page déduite du PDF (page du fichier moins 2) : à vérifier.
+# Probable erreur du livre : « Épée de bonne fortune (0 souhait) » apparaît deux fois, la seconde à
+# 142 960 po (probablement « 3 souhaits ») ; transcrit tel quel.
+#source=Manuel des joueurs, Table 15-11 : armes spécifiques, p. 477 (page à vérifier)
+#type=arme-magique
+#prefixe=arme-magique
+#colonnes=nom|prix
+Flèche endormante|132 po
+Carreau hurleur|267 po
+Dague de maître en argent|322 po
+Épée longue de maître en fer froid|330 po
+Javeline de foudre|1 500 po
+Flèche mortelle|2 282 po
+Dague en adamantium|3 002 po
+Hache d’armes en adamantium|3 010 po
+Grande flèche mortelle|4 057 po
+Brise-arme|4 315 po
+Dague venimeuse|8 302 po
+Trident d’alerte|10 115 po
+Dague de l’assassin|10 302 po
+Regret du changeant|12 780 po
+Trident de domination aquatique|18 650 po
+Épée ardente|20 715 po
+Épée de bonne fortune (0 souhait)|22 060 po
+Épée de précision|22 310 po
+Épée des plans|22 315 po
+Épée des neuf vies|23 057 po
+Arc du long serment|25 600 po
+Épée voleuse de vie|25 715 po
+Masse d’épouvante|38 552 po
+Hache dévitalisante|40 320 po
+Cimeterre des bois|47 315 po
+Rapière d’anémie|50 320 po
+Épée radieuse|50 335 po
+Épée de givre|54 475 po
+Marteau de lancer nain|60 312 po
+Épée de bonne fortune (1 souhait)|62 360 po
+Masse de démolition|75 312 po
+Épée de bonne fortune (2 souhaits)|102 660 po
+Épée de justice|120 630 po
+Épée de bonne fortune (0 souhait)|142 960 po

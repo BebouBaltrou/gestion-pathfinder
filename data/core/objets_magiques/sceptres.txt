@@ -1,0 +1,44 @@
+# Sceptres magiques. Transcrit par Antoine depuis son Manuel des joueurs (Table 15-14).
+# Prix de vente. Page déduite du PDF (page du fichier moins 2) : à vérifier.
+# Divergence probable du livre : « Métamagie modérée, Incantation rapide » apparaît deux fois,
+# à 24 500 po et à 75 500 po (transcrit tel quel).
+#source=Manuel des joueurs, Table 15-14 : sceptres, p. 491 (page à vérifier)
+#type=sceptre
+#prefixe=sceptre
+#colonnes=nom|prix
+Métamagie mineure, Extension de portée|3 000 po
+Métamagie mineure, Extension de durée|3 000 po
+Métamagie mineure, Incantation silencieuse|3 000 po
+Inamovible|5 000 po
+Métamagie mineure, Extension d’effet|9 000 po
+Détection des métaux et des minéraux|10 500 po
+Oblitération|11 000 po
+Métamagie modérée, Extension de portée|11 000 po
+Métamagie modérée, Extension de durée|11 000 po
+Métamagie modérée, Incantation silencieuse|11 000 po
+Merveilleux|12 000 po
+Python|13 000 po
+Métamagie mineure, Quintessence des sorts|14 000 po
+Extinction des feux|15 000 po
+Vipère|19 000 po
+Détection de l’hostilité|23 500 po
+Métamagie majeure, Extension de portée|24 500 po
+Métamagie modérée, Incantation rapide|24 500 po
+Métamagie majeure, Incantation silencieuse|24 500 po
+Prestance|25 000 po
+Flétrissement|25 000 po
+Métamagie modérée, Extension d’effet|32 500 po
+Orage|33 000 po
+Métamagie mineure, Incantation rapide|35 000 po
+Annulation|37 000 po
+Absorption|50 000 po
+Grand fléau|50 000 po
+Métamagie modérée, Quintessence des sorts|54 000 po
+Suzeraineté|60 000 po
+Sécurité|61 000 po
+Seigneurs de la guerre|70 000 po
+Métamagie majeure, Extension d’effet|73 000 po
+Métamagie modérée, Incantation rapide|75 500 po
+Éternelle vigilance|85 000 po
+Métamagie majeure, Quintessence des sorts|121 500 po
+Métamagie majeure, Incantation rapide|170 000 po

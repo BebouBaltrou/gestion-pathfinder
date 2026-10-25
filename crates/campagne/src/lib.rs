@@ -7,6 +7,7 @@ pub mod aventure;
 pub mod calendrier;
 pub mod catalogue_inventaire;
 pub mod construction;
+pub mod equipement_fiche;
 pub mod etat;
 pub mod evenements;
 #[cfg(feature = "serde")]

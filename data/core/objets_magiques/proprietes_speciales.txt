@@ -1,0 +1,103 @@
+# Propriétés spéciales des armures, boucliers et armes magiques. Transcrit par Antoine depuis son
+# Manuel des joueurs (Tables 15-4, 15-5, 15-9 et 15-10). Pages déduites du PDF (page du fichier
+# moins 2) : à vérifier.
+# « modificateur » : bonus équivalent à ajouter au bonus d’altération pour le prix ; sinon « prix » est
+# un prix fixe en plus du prix de base (note 1 du livre : à ajouter au bonus d’altération de la table
+# 15-3 ou 15-8 pour obtenir le prix de vente total).
+# Les d100 par puissance (faible, intermédiaire, puissante) ne sont pas repris.
+#prefixe=propriete
+#colonnes=nom|prix|modificateur|note
+#source=Manuel des joueurs, Table 15-4 : propriétés spéciales des armures, p. 469 (page à vérifier)
+#type=propriete-armure
+Mimétisme|2 700 po||
+Défense légère||bonus de +1|
+Graisseuse|3 750 po||
+Ombre|3 750 po||
+Résistance à la magie (13)||bonus de +2|
+Graisseuse supérieure|15 000 po||
+Ombre supérieure|15 000 po||
+Résistance aux énergies|18 000 po||
+Spectrale||bonus de +3|
+Invulnérabilité||bonus de +3|
+Défense intermédiaire||bonus de +3|
+Résistance à la magie (15)||bonus de +3|
+Forme animale||bonus de +3|
+Graisseuse suprême|33 750 po||
+Ombre suprême|33 750 po||
+Résistance aux énergies supérieure|42 000 po||
+Résistance à la magie (17)||bonus de +4|
+Éthérée|49 000 po||
+Contrôle des morts-vivants|49 000 po||
+Défense lourde||bonus de +5|
+Résistance à la magie (19)||bonus de +5|
+Résistance aux énergies suprême|66 000 po||
+#source=Manuel des joueurs, Table 15-5 : propriétés spéciales des boucliers, p. 469 (page à vérifier)
+#type=propriete-bouclier
+Interception de projectiles||bonus de +1|
+Attaque||bonus de +1|
+Aveuglant||bonus de +1|
+Défense légère||bonus de +1|
+Antiprojectiles||bonus de +2|
+Animé||bonus de +2|
+Résistance à la magie (13)||bonus de +2|
+Résistance aux énergies|18 000 po||
+Spectral||bonus de +3|
+Défense intermédiaire||bonus de +3|
+Résistance à la magie (15)||bonus de +3|
+Forme animale||bonus de +3|
+Résistance aux énergies supérieure|42 000 po||
+Résistance à la magie (17)||bonus de +4|
+Contrôle des morts-vivants|49 000 po||
+Défense lourde||bonus de +5|
+Réfléchissant||bonus de +5|
+Résistance à la magie (19)||bonus de +5|
+Résistance aux énergies suprême|66 000 po||
+#source=Manuel des joueurs, Table 15-9 : propriétés spéciales des armes de corps à corps, p. 475 (page à vérifier)
+#type=propriete-arme-corps-a-corps
+Tueuse||bonus de +1|
+Gardienne||bonus de +1|
+Feu||bonus de +1|
+Froid||bonus de +1|
+Foudre||bonus de +1|
+Spectrale||bonus de +1|
+Acérée||bonus de +1|Arme tranchante ou perforante uniquement
+Focalisation ki||bonus de +1|
+Miséricordieuse||bonus de +1|
+Enchaînement||bonus de +1|
+Stockage de sort||bonus de +1|
+Lancer||bonus de +1|
+Tonnerre||bonus de +1|
+Vicieuse||bonus de +1|
+Anarchique||bonus de +2|
+Axiomatique||bonus de +2|
+Destruction||bonus de +2|Arme contondante uniquement
+Feu intense||bonus de +2|
+Froid intense||bonus de +2|
+Sainte||bonus de +2|
+Foudre intense||bonus de +2|
+Impie||bonus de +2|
+Sanglante||bonus de +2|
+Rapidité||bonus de +3|
+Lumière||bonus de +4|
+Dansante||bonus de +4|
+Vorpale||bonus de +5|Arme tranchante uniquement
+#source=Manuel des joueurs, Table 15-10 : propriétés spéciales des armes à distance, p. 476 (page à vérifier)
+#type=propriete-arme-distance
+Tueuse||bonus de +1|Un arc, une arbalète ou une fronde avec cette propriété la transmet à ses munitions
+Longue portée||bonus de +1|
+Flamme||bonus de +1|Un arc, une arbalète ou une fronde avec cette propriété la transmet à ses munitions
+Froid||bonus de +1|Un arc, une arbalète ou une fronde avec cette propriété la transmet à ses munitions
+Miséricordieuse||bonus de +1|Un arc, une arbalète ou une fronde avec cette propriété la transmet à ses munitions
+Boomerang||bonus de +1|
+Foudre||bonus de +1|Un arc, une arbalète ou une fronde avec cette propriété la transmet à ses munitions
+Traqueuse||bonus de +1|
+Tonnerre||bonus de +1|Un arc, une arbalète ou une fronde avec cette propriété la transmet à ses munitions
+Anarchique||bonus de +2|Un arc, une arbalète ou une fronde avec cette propriété la transmet à ses munitions
+Axiomatique||bonus de +2|Un arc, une arbalète ou une fronde avec cette propriété la transmet à ses munitions
+Feu intense||bonus de +2|Un arc, une arbalète ou une fronde avec cette propriété la transmet à ses munitions
+Sainte||bonus de +2|Un arc, une arbalète ou une fronde avec cette propriété la transmet à ses munitions
+Froid intense||bonus de +2|
+Foudre intense||bonus de +2|Un arc, une arbalète ou une fronde avec cette propriété la transmet à ses munitions
+Impie||bonus de +2|
+Rapidité||bonus de +3|
+Lumière||bonus de +4|

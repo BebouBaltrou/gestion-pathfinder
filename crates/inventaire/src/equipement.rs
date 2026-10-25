@@ -30,6 +30,9 @@ pub struct Emplacement {
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct ReglesEmplacements {
     pub emplacements: Vec<Emplacement>,
+    /// Noms d'emplacement des données du livre (« front », « ceinture »…) vers nos identifiants.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub noms_du_livre: BTreeMap<String, String>,
     /// Emplacements possibles pour un type d'objet quand le modèle n'en donne pas.
     pub par_type: BTreeMap<String, Vec<String>>,
 }

@@ -6,6 +6,7 @@
 
 use domaine::Montant;
 use fiches::equipement::{CatalogueEquipement, Cout, GenreProtection};
+use fiches::objets_magiques::CatalogueMagique;
 use fiches::traductions::Traductions;
 use inventaire::{Modele, Poids};
 use std::collections::BTreeMap;
@@ -113,6 +114,68 @@ pub fn modeles(catalogue: &CatalogueEquipement, traductions: &Traductions) -> Ve
                 ("note_livre", traductions.note_livre("materiel", &o.nom_en)),
             ]),
         });
+    }
+    modeles
+}
+
+/// Fichiers du catalogue des objets magiques (`data/core/objets_magiques/`) qui décrivent de
+/// vrais objets. Les propriétés spéciales, les améliorations et les tarifs ne sont pas des objets.
+const FICHIERS_OBJETS_MAGIQUES: [&str; 6] = [
+    include_str!("../../../data/core/objets_magiques/anneaux.txt"),
+    include_str!("../../../data/core/objets_magiques/sceptres.txt"),
+    include_str!("../../../data/core/objets_magiques/batons.txt"),
+    include_str!("../../../data/core/objets_magiques/armures_boucliers_specifiques.txt"),
+    include_str!("../../../data/core/objets_magiques/armes_specifiques.txt"),
+    include_str!("../../../data/core/objets_magiques/objets_merveilleux.txt"),
+];
+
+/// Nom comparable : sans parenthèses ni préfixe « Anneau de », apostrophes unifiées.
+fn nom_comparable(nom: &str) -> String {
+    let t = nom.to_lowercase().replace(['(', ')'], "").replace('’', "'");
+    let t = t.strip_prefix("anneau de ").unwrap_or(&t);
+    let t = t.strip_prefix("anneau d'").unwrap_or(t);
+    t.split_whitespace().collect::<Vec<_>>().join(" ")
+}
+
+/// Les objets magiques : ceux de `data/core/objets_magiques.json` (avec leurs effets chiffrés, leur
+/// emplacement et leur page), complétés par les tables du chapitre 15 (nom et prix de vente). Un
+/// objet présent dans les deux vient de `objets_magiques.json`.
+pub fn modeles_magiques(
+    catalogue: &CatalogueMagique,
+    regles: &inventaire::equipement::ReglesEmplacements,
+) -> Vec<Modele> {
+    let mut modeles = Vec::new();
+    let mut connus = std::collections::BTreeSet::new();
+    for i in catalogue.toutes_les_instances() {
+        connus.insert(nom_comparable(&i.nom));
+        let mut proprietes = proprietes(&[
+            ("nom_en", Some(i.nom_en.clone())),
+            ("bonus", Some(i.bonus.to_string())),
+            ("notes", (!i.notes.is_empty()).then(|| i.notes.clone())),
+        ]);
+        if let Some(slot) = i
+            .emplacement
+            .as_deref()
+            .and_then(|e| regles.noms_du_livre.get(e))
+        {
+            proprietes.insert("emplacement".to_string(), slot.clone());
+        }
+        modeles.push(Modele {
+            id: identifiant(&i.nom_en).replacen("equipement:", "objet-magique:", 1),
+            nom: i.nom.clone(),
+            type_objet: "objet-magique".to_string(),
+            valeur: Some(Montant::po(i.prix_po)),
+            poids: None,
+            source: i.source.clone(),
+            proprietes,
+        });
+    }
+    for fichier in FICHIERS_OBJETS_MAGIQUES {
+        for m in inventaire::catalogue::charger(fichier).expect("catalogue des objets magiques") {
+            if !connus.contains(&nom_comparable(&m.nom)) {
+                modeles.push(m);
+            }
+        }
     }
     modeles
 }
@@ -231,5 +294,96 @@ mod tests {
             r.poids_total(racine),
             inventaire::Poids(7_500 + 2_500 + 4_000 + 2_000)
         );
+    }
+
+    fn magiques() -> Vec<Modele> {
+        let catalogue =
+            CatalogueMagique::depuis_json(include_str!("../../../data/core/objets_magiques.json"))
+                .unwrap();
+        let regles: inventaire::equipement::ReglesEmplacements =
+            serde_json::from_str(include_str!("../../../data/equipement/emplacements.json"))
+                .unwrap();
+        modeles_magiques(&catalogue, &regles)
+    }
+
+    #[test]
+    fn les_objets_magiques_ont_des_identifiants_uniques() {
+        let m = magiques();
+        assert!(m.len() > 400, "{} objets magiques", m.len());
+        let mut ids: Vec<&str> = m.iter().map(|x| x.id.as_str()).collect();
+        ids.sort_unstable();
+        let n = ids.len();
+        ids.dedup();
+        assert_eq!(ids.len(), n, "identifiants en double");
+    }
+
+    #[test]
+    fn les_objets_a_bonus_gardent_leurs_effets_leur_emplacement_et_leur_prix() {
+        let m = magiques();
+        let cape = trouver(&m, "Cape de résistance (+2)");
+        assert_eq!(cape.type_objet, "objet-magique");
+        assert_eq!(cape.valeur, Some(Montant::po(4_000)));
+        assert_eq!(cape.proprietes["emplacement"], "epaules");
+        assert_eq!(cape.proprietes["nom_en"], "Cloak of Resistance (+2)");
+        // Un seul anneau de protection +1 : celui de `objets_magiques.json`.
+        let anneaux: Vec<_> = m
+            .iter()
+            .filter(|x| x.nom.to_lowercase().contains("protection") && x.nom.contains("+1"))
+            .collect();
+        assert_eq!(anneaux.len(), 1, "{anneaux:?}");
+        assert_eq!(anneaux[0].proprietes["emplacement"], "anneau");
+    }
+
+    #[test]
+    fn les_tables_completent_le_catalogue() {
+        let m = magiques();
+        assert_eq!(
+            trouver(&m, "Feu d’étoiles").valeur,
+            Some(Montant::po(50_000))
+        );
+        assert_eq!(
+            trouver(&m, "Épée de justice").valeur,
+            Some(Montant::po(120_630))
+        );
+        assert_eq!(trouver(&m, "Forêt profonde").type_objet, "baton");
+        let pierre = trouver(&m, "Pierre ioun (rhombe bleu pâle)");
+        assert_eq!(
+            pierre.proprietes["effet"],
+            "Bonus d’altération de +2 en Force"
+        );
+        assert_eq!(pierre.proprietes["puissance"], "intermédiaire");
+        let collier = trouver(&m, "Collier à boules de feu (1er modèle)");
+        assert_eq!(collier.poids, Some(inventaire::Poids(500)));
+        assert!(collier.source.contains("Table 15-18"));
+    }
+
+    /// Les prix des tables et ceux de `objets_magiques.json` doivent s'accorder.
+    #[test]
+    fn les_prix_des_tables_et_de_objets_magiques_json_s_accordent() {
+        let catalogue =
+            CatalogueMagique::depuis_json(include_str!("../../../data/core/objets_magiques.json"))
+                .unwrap();
+        let connus: std::collections::BTreeMap<String, i64> = catalogue
+            .toutes_les_instances()
+            .map(|i| (nom_comparable(&i.nom), i.prix_po))
+            .collect();
+        let mut ecarts = Vec::new();
+        for fichier in FICHIERS_OBJETS_MAGIQUES {
+            for m in inventaire::catalogue::charger(fichier).unwrap() {
+                if let Some(prix_po) = connus.get(&nom_comparable(&m.nom)) {
+                    // Écart du livre : la table 15-19 donne 16 000 po au « Bandeau de supériorité mentale
+                    // (+4) », la table 15-20 et `objets_magiques.json` 64 000 po (16 000 po vaut le +2).
+                    let ecart_connu = m.nom == "Bandeau de supériorité mentale (+4)"
+                        && m.valeur == Some(Montant::po(16_000));
+                    if !ecart_connu && m.valeur != Some(Montant::po(*prix_po)) {
+                        ecarts.push(format!(
+                            "{} : table {:?}, json {prix_po} po",
+                            m.nom, m.valeur
+                        ));
+                    }
+                }
+            }
+        }
+        assert!(ecarts.is_empty(), "{ecarts:#?}");
     }
 }
