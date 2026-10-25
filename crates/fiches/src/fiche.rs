@@ -87,6 +87,9 @@ pub struct Fiche {
     /// Pacte avec la nature du druide : `domaine` (un des domaines permis, dans `domaines`) ou `compagnon`.
     #[cfg_attr(feature = "serde", serde(default))]
     pub pacte: Option<String>,
+    /// Compagnon animal du druide (pacte `compagnon`).
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub compagnon: Option<crate::compagnon::Compagnon>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -119,6 +122,11 @@ pub enum Probleme {
         domaine: String,
     },
     CompagnonManquant,
+    CompagnonInconnu(String),
+    AugmentationsDeTrop {
+        permises: u32,
+        choisies: u32,
+    },
     EquipementInconnu(String),
     MauvaisEmplacement {
         objet: String,
@@ -289,6 +297,11 @@ impl std::fmt::Display for Probleme {
                 "le domaine {domaine} n'est pas offert par le pacte avec la nature"
             ),
             Probleme::CompagnonManquant => write!(f, "choisir le compagnon animal du druide"),
+            Probleme::CompagnonInconnu(a) => write!(f, "animal compagnon inconnu : {a}"),
+            Probleme::AugmentationsDeTrop { permises, choisies } => write!(
+                f,
+                "le compagnon n'a gagné que {permises} augmentation(s) de caractéristique, {choisies} choisie(s)"
+            ),
             Probleme::EnergieAChoisir => {
                 write!(f, "choisir l'énergie canalisée (positive ou négative)")
             }
@@ -480,6 +493,8 @@ pub struct Valeurs {
     pub domaines: Vec<DomaineVu>,
     /// Pouvoirs limités par jour (canalisation, pouvoirs de domaine, forme animale).
     pub pouvoirs: Vec<PouvoirJournalier>,
+    /// Feuille du compagnon animal (pacte `compagnon` du druide).
+    pub compagnon: Option<crate::compagnon::CompagnonCalcule>,
 }
 
 /// Comme `calculer`, mais plusieurs cibles à la fois (ex. une compétence et « toutes les compétences »),
@@ -943,6 +958,29 @@ impl Fiche {
                             attendus: 0,
                             choisis: self.domaines.len() as u32,
                         });
+                    }
+                    match &self.compagnon {
+                        None => p.push(Probleme::CompagnonManquant),
+                        Some(c) => {
+                            if !r.compagnons.animaux.iter().any(|a| a.id == c.animal) {
+                                p.push(Probleme::CompagnonInconnu(c.animal.clone()));
+                            }
+                            let nc = self
+                                .niveaux
+                                .iter()
+                                .filter_map(|n| r.classe(&n.classe))
+                                .find(|k| !k.pacte_domaines.is_empty())
+                                .map(|k| self.niveau_de_classe(&k.id))
+                                .unwrap_or(0);
+                            let permises =
+                                crate::compagnon::augmentations_permises(&r.compagnons, nc);
+                            if c.augmentations.len() as u32 > permises {
+                                p.push(Probleme::AugmentationsDeTrop {
+                                    permises,
+                                    choisies: c.augmentations.len() as u32,
+                                });
+                            }
+                        }
                     }
                 }
                 Some(autre) => p.push(Probleme::PacteInvalide(autre.to_string())),
@@ -1526,9 +1564,16 @@ impl Fiche {
         let mut canalisation = None;
         let mut domaines_vus = Vec::new();
         let mut pouvoirs: Vec<PouvoirJournalier> = Vec::new();
+        let mut compagnon_calcule = None;
         for id in &vues {
             let Some(classe) = r.classe(id) else { continue };
             let nc = self.niveau_de_classe(id);
+            if !classe.pacte_domaines.is_empty() && self.pacte.as_deref() == Some("compagnon") {
+                compagnon_calcule = self
+                    .compagnon
+                    .as_ref()
+                    .and_then(|c| c.calculer(&r.compagnons, nc));
+            }
             for p in classe.pouvoirs.iter().filter(|p| nc >= p.niveau) {
                 pouvoirs.push(PouvoirJournalier {
                     cle: p.cle.clone(),
@@ -1708,6 +1753,7 @@ impl Fiche {
             canalisation,
             domaines: domaines_vus,
             pouvoirs,
+            compagnon: compagnon_calcule,
         })
     }
 }

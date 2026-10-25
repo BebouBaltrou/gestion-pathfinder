@@ -1,0 +1,785 @@
+{
+  "source": "Manuel des joueurs (version française), druide : compagnons animaux (Table 3-6 et liste, p. 41 à 44)",
+  "table": [
+    {
+      "niveau": 1,
+      "dv": 2,
+      "bba": 1,
+      "reflexes": 3,
+      "vigueur": 3,
+      "volonte": 0,
+      "competences": 2,
+      "dons": 1,
+      "armure_naturelle": 0,
+      "for_dex": 0,
+      "tours": 1,
+      "special": "lien, transfert de sorts"
+    },
+    {
+      "niveau": 2,
+      "dv": 3,
+      "bba": 2,
+      "reflexes": 3,
+      "vigueur": 3,
+      "volonte": 1,
+      "competences": 3,
+      "dons": 2,
+      "armure_naturelle": 0,
+      "for_dex": 0,
+      "tours": 1,
+      "special": ""
+    },
+    {
+      "niveau": 3,
+      "dv": 3,
+      "bba": 2,
+      "reflexes": 3,
+      "vigueur": 3,
+      "volonte": 1,
+      "competences": 3,
+      "dons": 2,
+      "armure_naturelle": 2,
+      "for_dex": 1,
+      "tours": 2,
+      "special": "esquive totale"
+    },
+    {
+      "niveau": 4,
+      "dv": 4,
+      "bba": 3,
+      "reflexes": 4,
+      "vigueur": 4,
+      "volonte": 1,
+      "competences": 4,
+      "dons": 2,
+      "armure_naturelle": 2,
+      "for_dex": 1,
+      "tours": 2,
+      "special": "accroissement d'une caractéristique"
+    },
+    {
+      "niveau": 5,
+      "dv": 5,
+      "bba": 3,
+      "reflexes": 4,
+      "vigueur": 4,
+      "volonte": 1,
+      "competences": 5,
+      "dons": 3,
+      "armure_naturelle": 2,
+      "for_dex": 1,
+      "tours": 2,
+      "special": ""
+    },
+    {
+      "niveau": 6,
+      "dv": 6,
+      "bba": 4,
+      "reflexes": 5,
+      "vigueur": 5,
+      "volonte": 2,
+      "competences": 6,
+      "dons": 3,
+      "armure_naturelle": 4,
+      "for_dex": 2,
+      "tours": 3,
+      "special": "dévotion"
+    },
+    {
+      "niveau": 7,
+      "dv": 6,
+      "bba": 4,
+      "reflexes": 5,
+      "vigueur": 5,
+      "volonte": 2,
+      "competences": 6,
+      "dons": 3,
+      "armure_naturelle": 4,
+      "for_dex": 2,
+      "tours": 3,
+      "special": ""
+    },
+    {
+      "niveau": 8,
+      "dv": 7,
+      "bba": 5,
+      "reflexes": 5,
+      "vigueur": 5,
+      "volonte": 2,
+      "competences": 7,
+      "dons": 4,
+      "armure_naturelle": 4,
+      "for_dex": 2,
+      "tours": 3,
+      "special": ""
+    },
+    {
+      "niveau": 9,
+      "dv": 8,
+      "bba": 6,
+      "reflexes": 6,
+      "vigueur": 6,
+      "volonte": 2,
+      "competences": 8,
+      "dons": 4,
+      "armure_naturelle": 6,
+      "for_dex": 3,
+      "tours": 4,
+      "special": "accroissement d'une caractéristique, attaques multiples"
+    },
+    {
+      "niveau": 10,
+      "dv": 9,
+      "bba": 6,
+      "reflexes": 6,
+      "vigueur": 6,
+      "volonte": 3,
+      "competences": 9,
+      "dons": 5,
+      "armure_naturelle": 6,
+      "for_dex": 3,
+      "tours": 4,
+      "special": ""
+    },
+    {
+      "niveau": 11,
+      "dv": 9,
+      "bba": 6,
+      "reflexes": 6,
+      "vigueur": 6,
+      "volonte": 3,
+      "competences": 9,
+      "dons": 5,
+      "armure_naturelle": 6,
+      "for_dex": 3,
+      "tours": 4,
+      "special": ""
+    },
+    {
+      "niveau": 12,
+      "dv": 10,
+      "bba": 7,
+      "reflexes": 7,
+      "vigueur": 7,
+      "volonte": 3,
+      "competences": 10,
+      "dons": 5,
+      "armure_naturelle": 8,
+      "for_dex": 4,
+      "tours": 5,
+      "special": ""
+    },
+    {
+      "niveau": 13,
+      "dv": 11,
+      "bba": 8,
+      "reflexes": 7,
+      "vigueur": 7,
+      "volonte": 3,
+      "competences": 11,
+      "dons": 6,
+      "armure_naturelle": 8,
+      "for_dex": 4,
+      "tours": 5,
+      "special": ""
+    },
+    {
+      "niveau": 14,
+      "dv": 12,
+      "bba": 9,
+      "reflexes": 8,
+      "vigueur": 8,
+      "volonte": 4,
+      "competences": 12,
+      "dons": 6,
+      "armure_naturelle": 8,
+      "for_dex": 4,
+      "tours": 5,
+      "special": "accroissement d'une caractéristique"
+    },
+    {
+      "niveau": 15,
+      "dv": 12,
+      "bba": 9,
+      "reflexes": 8,
+      "vigueur": 8,
+      "volonte": 4,
+      "competences": 12,
+      "dons": 6,
+      "armure_naturelle": 10,
+      "for_dex": 5,
+      "tours": 6,
+      "special": "esquive extraordinaire"
+    },
+    {
+      "niveau": 16,
+      "dv": 13,
+      "bba": 9,
+      "reflexes": 8,
+      "vigueur": 8,
+      "volonte": 4,
+      "competences": 13,
+      "dons": 7,
+      "armure_naturelle": 10,
+      "for_dex": 5,
+      "tours": 6,
+      "special": ""
+    },
+    {
+      "niveau": 17,
+      "dv": 14,
+      "bba": 10,
+      "reflexes": 9,
+      "vigueur": 9,
+      "volonte": 4,
+      "competences": 14,
+      "dons": 7,
+      "armure_naturelle": 10,
+      "for_dex": 5,
+      "tours": 6,
+      "special": ""
+    },
+    {
+      "niveau": 18,
+      "dv": 15,
+      "bba": 11,
+      "reflexes": 9,
+      "vigueur": 9,
+      "volonte": 5,
+      "competences": 15,
+      "dons": 8,
+      "armure_naturelle": 12,
+      "for_dex": 6,
+      "tours": 7,
+      "special": ""
+    },
+    {
+      "niveau": 19,
+      "dv": 15,
+      "bba": 11,
+      "reflexes": 9,
+      "vigueur": 9,
+      "volonte": 5,
+      "competences": 15,
+      "dons": 8,
+      "armure_naturelle": 12,
+      "for_dex": 6,
+      "tours": 7,
+      "special": ""
+    },
+    {
+      "niveau": 20,
+      "dv": 16,
+      "bba": 12,
+      "reflexes": 10,
+      "vigueur": 10,
+      "volonte": 5,
+      "competences": 16,
+      "dons": 8,
+      "armure_naturelle": 12,
+      "for_dex": 6,
+      "tours": 7,
+      "special": "accroissement d'une caractéristique"
+    }
+  ],
+  "textes": {
+    "lien": "Lien (Ext). Un druide peut diriger son compagnon animal par une action libre ou le pousser par une action de mouvement même s'il ne possède aucun degré de maîtrise dans la compétence Dressage. Le druide obtient un bonus de circonstances de +4 à tous les tests d'empathie sauvage et de Dressage relatifs à son compagnon animal.",
+    "transfert de sorts": "Transfert de sorts (Ext). Lorsque le druide lance un sort dont la cible est « le jeteur de sorts », il peut choisir de cibler son compagnon animal plutôt que lui-même, comme s'il s'agissait d'un sort de contact. Cette aptitude fonctionne même pour les sorts qui ne s'appliquent normalement pas aux créatures de type animal, mais ne peut être utilisée que pour les sorts associés à une classe donnant un compagnon animal. Cette aptitude ne permet pas de transférer d'autres capacités que les sorts, même celles qui fonctionnent comme des sorts.",
+    "esquive totale": "Esquive totale (Ext). Lorsque le compagnon animal est soumis à un effet qui autorise un jet de Réf lexes pour réduire les dégâts de moitié, il ne subit aucun dégât s'il réussit son jet de sauvegarde.",
+    "accroissement d'une caractéristique": "Accroissement d'une caractéristique (Ext). Le compagnon animal augmente une de ses caractéristiques d'un point.",
+    "dévotion": "Dévotion (Ext). La dévotion du compagnon animal pour son maître est telle qu'il obtient un bonus de moral de +4 sur ses jets de sauvegarde contre les sorts et les effets de type enchantement.",
+    "attaques multiples": "Attaques multiples (Ext). Le compagnon animal obtient automatiquement le don Attaques multiples (voir le Bestiaire Pathfinder JdR) comme don supplémentaire, à condition d'avoir au moins trois attaques naturelles et de ne pas déjà le posséder. Si l'animal ne remplit pas la condition des trois attaques naturelles, il obtient à la place de ce don la possibilité de porter une seconde attaque à l'aide de son arme naturelle principale, mais avec un malus de -5.",
+    "esquive extraordinaire": "Esquive extraordinaire (Ext). Lorsque le compagnon animal est soumis à une attaque qui autorise un jet de Réf lexes pour réduire les dégâts de moitié, il ne subit aucun dégât s'il réussit son jet de sauvegarde et seulement la moitié des dégâts dans le cas contraire."
+  },
+  "animaux": [
+    {
+      "id": "blaireau_glouton",
+      "nom": "Blaireau (glouton)",
+      "taille": "P",
+      "vitesse": "9 m, creusement 3 m, escalade 3 m",
+      "armure_naturelle": 2,
+      "attaques": "morsure (1d4), 2 griffes (1d3)",
+      "caracteristiques": {
+        "for": 10,
+        "dex": 17,
+        "con": 15,
+        "int": 2,
+        "sag": 12,
+        "cha": 10
+      },
+      "autres": "Attaques spéciales rage (comme un barbare, 6 rounds par jour) ; Particularités odorat, vision nocturne",
+      "developpement": {
+        "niveau": 4,
+        "taille": "M",
+        "armure_naturelle": 0,
+        "attaques": "morsure (1d6), 2 griffes (1d4)",
+        "caracteristiques": {
+          "for": 4,
+          "dex": -2,
+          "con": 2
+        },
+        "autres": ""
+      }
+    },
+    {
+      "id": "chameau",
+      "nom": "Chameau",
+      "taille": "G",
+      "vitesse": "15 m",
+      "armure_naturelle": 1,
+      "attaques": "morsure (1d4) ou crachat (attaque de contact à distance qui rend la cible nauséeuse pendant 1d4 rounds, portée 3 m)",
+      "caracteristiques": {
+        "for": 18,
+        "dex": 16,
+        "con": 14,
+        "int": 2,
+        "sag": 11,
+        "cha": 4
+      },
+      "autres": "Particularités odorat, vision nocturne",
+      "developpement": {
+        "niveau": 4,
+        "taille": null,
+        "armure_naturelle": 0,
+        "attaques": null,
+        "caracteristiques": {
+          "for": 2,
+          "con": 2
+        },
+        "autres": ""
+      }
+    },
+    {
+      "id": "cheval",
+      "nom": "Cheval",
+      "taille": "G",
+      "vitesse": "15 m",
+      "armure_naturelle": 4,
+      "attaques": "morsure (1d4), 2 sabots* (1d6)",
+      "caracteristiques": {
+        "for": 16,
+        "dex": 13,
+        "con": 15,
+        "int": 2,
+        "sag": 12,
+        "cha": 6
+      },
+      "autres": "Particularités vision nocturne, odorat. *Il s'agit d'une arme naturelle secondaire, voir le Chapitre 8 pour plus d'informations sur la manière dont les attaques secondaires fonctionnent",
+      "developpement": {
+        "niveau": 4,
+        "taille": null,
+        "armure_naturelle": 0,
+        "attaques": null,
+        "caracteristiques": {
+          "for": 2,
+          "con": 2
+        },
+        "autres": "Particularité entraîné au combat (voir la compétence Dressage)"
+      }
+    },
+    {
+      "id": "chien",
+      "nom": "Chien",
+      "taille": "P",
+      "vitesse": "12 m",
+      "armure_naturelle": 2,
+      "attaques": "morsure (1d4)",
+      "caracteristiques": {
+        "for": 13,
+        "dex": 17,
+        "con": 15,
+        "int": 2,
+        "sag": 12,
+        "cha": 6
+      },
+      "autres": "Particularités odorat, vision nocturne",
+      "developpement": {
+        "niveau": 4,
+        "taille": "M",
+        "armure_naturelle": 0,
+        "attaques": "morsure (1d6)",
+        "caracteristiques": {
+          "for": 4,
+          "dex": -2,
+          "con": 2
+        },
+        "autres": ""
+      }
+    },
+    {
+      "id": "crocodile_alligator",
+      "nom": "Crocodile (Alligator)",
+      "taille": "P",
+      "vitesse": "6 m",
+      "armure_naturelle": 4,
+      "attaques": "morsure (1d6)",
+      "caracteristiques": {
+        "for": 15,
+        "dex": 14,
+        "con": 15,
+        "int": 1,
+        "sag": 12,
+        "cha": 2
+      },
+      "autres": "Particularités retenir son souff le, vision nocturne",
+      "developpement": {
+        "niveau": 4,
+        "taille": "M",
+        "armure_naturelle": 0,
+        "attaques": "morsure (1d8) ou coup de queue (1d12)",
+        "caracteristiques": {
+          "for": 4,
+          "dex": -2,
+          "con": 2
+        },
+        "autres": "attaques spéciales étreinte, tournoiement mortel et sprint"
+      }
+    },
+    {
+      "id": "dinosaure_deinonychus_velociraptor",
+      "nom": "Dinosaure (deinonychus, vélociraptor)",
+      "taille": "P",
+      "vitesse": "18 m",
+      "armure_naturelle": 1,
+      "attaques": "2 serres (1d6), morsure (1d4)",
+      "caracteristiques": {
+        "for": 11,
+        "dex": 17,
+        "con": 17,
+        "int": 2,
+        "sag": 12,
+        "cha": 14
+      },
+      "autres": "Particularités odorat, vision nocturne",
+      "developpement": {
+        "niveau": 7,
+        "taille": "M",
+        "armure_naturelle": 2,
+        "attaques": "2 serres (1d8), morsure (1d6), 2 griffes (1d4)",
+        "caracteristiques": {
+          "for": 4,
+          "dex": -2,
+          "con": 2
+        },
+        "autres": "Attaque spéciale bond (voir le Bestiaire Pathfinder.)"
+      }
+    },
+    {
+      "id": "felin_grand_lion_tigre",
+      "nom": "Félin, grand (lion, tigre)",
+      "taille": "M",
+      "vitesse": "12 m",
+      "armure_naturelle": 1,
+      "attaques": "morsure (1d6), 2 griffes (1d4)",
+      "caracteristiques": {
+        "for": 13,
+        "dex": 17,
+        "con": 13,
+        "int": 2,
+        "sag": 15,
+        "cha": 10
+      },
+      "autres": "Attaque spéciale pattes arrière (1d4) ; Particularités odorat, vision nocturne",
+      "developpement": {
+        "niveau": 7,
+        "taille": "G",
+        "armure_naturelle": 2,
+        "attaques": "morsure (1d8), 2 griffes (1d6)",
+        "caracteristiques": {
+          "for": 8,
+          "dex": -2,
+          "con": 4
+        },
+        "autres": "Attaques spéciales bond, étreinte, pattes arrière (1d6) (voir le Bestiaire Pathfinder pour plus de détails sur ces attaques)"
+      }
+    },
+    {
+      "id": "felin_petit_guepard_leopard",
+      "nom": "Félin, petit (guépard, léopard)",
+      "taille": "P",
+      "vitesse": "15 m",
+      "armure_naturelle": 1,
+      "attaques": "morsure (1d4 plus croc-en-jambe), 2 griffes (1d2)",
+      "caracteristiques": {
+        "for": 12,
+        "dex": 21,
+        "con": 13,
+        "int": 2,
+        "sag": 12,
+        "cha": 6
+      },
+      "autres": "Particularités odorat, vision nocturne",
+      "developpement": {
+        "niveau": 4,
+        "taille": "M",
+        "armure_naturelle": 0,
+        "attaques": "morsure (1d6), 2 griffes (1d3)",
+        "caracteristiques": {
+          "for": 4,
+          "dex": -2,
+          "con": 2
+        },
+        "autres": "Particularité sprint (voir le Bestiaire Pathfinder)"
+      }
+    },
+    {
+      "id": "gorille",
+      "nom": "Gorille",
+      "taille": "M",
+      "vitesse": "9 m, escalade 9 m",
+      "armure_naturelle": 1,
+      "attaques": "morsure (1d4), 2 griffes (1d4)",
+      "caracteristiques": {
+        "for": 13,
+        "dex": 17,
+        "con": 10,
+        "int": 2,
+        "sag": 12,
+        "cha": 7
+      },
+      "autres": "Particularités odorat, vision nocturne",
+      "developpement": {
+        "niveau": 4,
+        "taille": "G",
+        "armure_naturelle": 2,
+        "attaques": "morsure (1d6), 2 griffes (1d6)",
+        "caracteristiques": {
+          "for": 8,
+          "dex": -2,
+          "con": 4
+        },
+        "autres": ""
+      }
+    },
+    {
+      "id": "loup",
+      "nom": "Loup",
+      "taille": "M",
+      "vitesse": "15 m",
+      "armure_naturelle": 2,
+      "attaques": "morsure (1d6 plus croc-en-jambe)",
+      "caracteristiques": {
+        "for": 13,
+        "dex": 15,
+        "con": 15,
+        "int": 2,
+        "sag": 12,
+        "cha": 6
+      },
+      "autres": "Particularité odorat, vision nocturne",
+      "developpement": {
+        "niveau": 7,
+        "taille": "G",
+        "armure_naturelle": 2,
+        "attaques": "morsure (1d8 plus croc-en-jambe)",
+        "caracteristiques": {
+          "for": 8,
+          "dex": -2,
+          "con": 4
+        },
+        "autres": ""
+      }
+    },
+    {
+      "id": "oiseau_aigle_faucon_hibou",
+      "nom": "Oiseau (aigle, faucon, hibou)",
+      "taille": "P",
+      "vitesse": "3 m, vol 24 m (moyenne)",
+      "armure_naturelle": 1,
+      "attaques": "morsure (1d4), 2 serres (1d4)",
+      "caracteristiques": {
+        "for": 10,
+        "dex": 15,
+        "con": 12,
+        "int": 2,
+        "sag": 14,
+        "cha": 6
+      },
+      "autres": "Particularité vision nocturne",
+      "developpement": {
+        "niveau": 4,
+        "taille": null,
+        "armure_naturelle": 0,
+        "attaques": null,
+        "caracteristiques": {
+          "for": 2,
+          "con": 2
+        },
+        "autres": ""
+      }
+    },
+    {
+      "id": "ours",
+      "nom": "Ours",
+      "taille": "P",
+      "vitesse": "12 m",
+      "armure_naturelle": 2,
+      "attaques": "morsure (1d4), 2 griffes (1d3)",
+      "caracteristiques": {
+        "for": 15,
+        "dex": 15,
+        "con": 13,
+        "int": 2,
+        "sag": 12,
+        "cha": 6
+      },
+      "autres": "Particularités odorat, vision nocturne",
+      "developpement": {
+        "niveau": 4,
+        "taille": "M",
+        "armure_naturelle": 0,
+        "attaques": "morsure (1d6), 2 griffes (1d4)",
+        "caracteristiques": {
+          "for": 4,
+          "dex": -2,
+          "con": 2
+        },
+        "autres": ""
+      }
+    },
+    {
+      "id": "poney",
+      "nom": "Poney",
+      "taille": "M",
+      "vitesse": "12 m",
+      "armure_naturelle": 2,
+      "attaques": "2 sabots (1d3)",
+      "caracteristiques": {
+        "for": 13,
+        "dex": 13,
+        "con": 12,
+        "int": 2,
+        "sag": 11,
+        "cha": 4
+      },
+      "autres": "Particularités odorat, vision nocturne",
+      "developpement": {
+        "niveau": 4,
+        "taille": null,
+        "armure_naturelle": 0,
+        "attaques": null,
+        "caracteristiques": {
+          "for": 2,
+          "con": 2
+        },
+        "autres": "Particularité entraîné au combat (voir la compétence Dressage)"
+      }
+    },
+    {
+      "id": "requin",
+      "nom": "Requin",
+      "taille": "P",
+      "vitesse": "nage 18 m",
+      "armure_naturelle": 4,
+      "attaques": "morsure (1d4)",
+      "caracteristiques": {
+        "for": 13,
+        "dex": 15,
+        "con": 15,
+        "int": 1,
+        "sag": 12,
+        "cha": 2
+      },
+      "autres": "Particularité odorat, , vision nocturne",
+      "developpement": {
+        "niveau": 4,
+        "taille": "M",
+        "armure_naturelle": 0,
+        "attaques": "morsure (1d6)",
+        "caracteristiques": {
+          "for": 4,
+          "dex": -2,
+          "con": 2
+        },
+        "autres": "Particularité perception aveugle"
+      }
+    },
+    {
+      "id": "sanglier",
+      "nom": "Sanglier",
+      "taille": "P",
+      "vitesse": "12 m",
+      "armure_naturelle": 6,
+      "attaques": "défenses (1d6)",
+      "caracteristiques": {
+        "for": 13,
+        "dex": 12,
+        "con": 15,
+        "int": 2,
+        "sag": 13,
+        "cha": 4
+      },
+      "autres": "Particularités odorat, vision nocturne",
+      "developpement": {
+        "niveau": 4,
+        "taille": "M",
+        "armure_naturelle": 0,
+        "attaques": "défenses (1d8)",
+        "caracteristiques": {
+          "for": 4,
+          "dex": -2,
+          "con": 2
+        },
+        "autres": "Attaque spéciale férocité (voir le Bestiaire Pathfinder)"
+      }
+    },
+    {
+      "id": "serpent_constricteur",
+      "nom": "Serpent constricteur",
+      "taille": "M",
+      "vitesse": "6 m, escalade 6 m, nage 6 m",
+      "armure_naturelle": 2,
+      "attaques": "morsure (1d3)",
+      "caracteristiques": {
+        "for": 15,
+        "dex": 17,
+        "con": 13,
+        "int": 1,
+        "sag": 12,
+        "cha": 2
+      },
+      "autres": "Attaque spéciale étreinte ; Particularité odorat, , vision nocturne",
+      "developpement": {
+        "niveau": 4,
+        "taille": "G",
+        "armure_naturelle": 1,
+        "attaques": "morsure (1d4)",
+        "caracteristiques": {
+          "for": 8,
+          "dex": -2,
+          "con": 4
+        },
+        "autres": "Attaque spéciale constriction 1d4 (voir le Bestiaire Pathfinder)"
+      }
+    },
+    {
+      "id": "vipere",
+      "nom": "Vipère",
+      "taille": "P",
+      "vitesse": "6 m, escalade 6 m, nage 6 m",
+      "armure_naturelle": 2,
+      "attaques": "morsure (1d3 plus poison)",
+      "caracteristiques": {
+        "for": 8,
+        "dex": 17,
+        "con": 11,
+        "int": 1,
+        "sag": 12,
+        "cha": 2
+      },
+      "autres": "Attaque spéciale poison (Fréquence 1 round (6), Effet affaiblissement temporaire 1 Con, Guérison 1 jet de sauvegarde, DD dépendant de la Constitution) ; Particularité odorat, , vision nocturne",
+      "developpement": {
+        "niveau": 4,
+        "taille": "M",
+        "armure_naturelle": 0,
+        "attaques": "morsure (1d4 plus poison)",
+        "caracteristiques": {
+          "for": 4,
+          "dex": -2,
+          "con": 2
+        },
+        "autres": ""
+      }
+    }
+  ]
+}

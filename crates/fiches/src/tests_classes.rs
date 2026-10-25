@@ -44,6 +44,7 @@ fn pretre(niveau: u32, sagesse: i32) -> Fiche {
         domaines: vec![],
         energie: None,
         pacte: None,
+        compagnon: None,
     }
 }
 
@@ -758,5 +759,84 @@ fn le_druide_prend_une_forme_animale() {
     let mut p = Journal::nouveau(pretre(4, 14));
     assert!(p
         .ajouter(adopter("beast_shape_i_animal_de_taille_m"), &r, &regles)
+        .is_err());
+}
+
+#[test]
+fn le_druide_avec_son_compagnon_animal() {
+    use crate::compagnon::Compagnon;
+    let r = Referentiel::core();
+    let regles = ReglesFiche::default();
+    let mut f = druide(4);
+    f.pacte = Some("compagnon".into());
+    // Pacte du compagnon sans animal choisi : fiche inachevée.
+    assert!(f.valider(&r).contains(&crate::Probleme::CompagnonManquant));
+    f.compagnon = Some(Compagnon {
+        animal: "loup".into(),
+        nom: "Croc".into(),
+        ignore_developpement: false,
+        augmentations: vec![],
+    });
+    assert!(
+        f.valider(&r).iter().all(|p| p.est_incomplet()),
+        "{:?}",
+        f.valider(&r)
+    );
+    let v = f.calculer(&r).unwrap();
+    let c = v.compagnon.as_ref().expect("compagnon");
+    // Loup : taille M, développement au niveau 7 ; au niveau 4 : 4 DV, BBA +3.
+    assert_eq!(
+        (c.animal.as_str(), c.taille.as_str(), c.dv, c.bba),
+        ("Loup", "M", 4, 3)
+    );
+    assert!(!c.developpement_applique);
+    assert_eq!(c.augmentations_permises, 1);
+    // Le compagnon ne se calcule pas sans le pacte du compagnon.
+    let mut sans = f.clone();
+    sans.pacte = Some("domaine".into());
+    sans.domaines = vec!["feu".into()];
+    assert!(sans.calculer(&r).unwrap().compagnon.is_none());
+    // Trop d'augmentations pour le niveau (une seule au niveau 4).
+    let mut trop = f.clone();
+    trop.compagnon.as_mut().unwrap().augmentations = vec![Carac::Sag, Carac::Con];
+    assert!(trop
+        .valider(&r)
+        .iter()
+        .any(|p| matches!(p, crate::Probleme::AugmentationsDeTrop { .. })));
+    // Animal inconnu.
+    let mut inconnu = f.clone();
+    inconnu.compagnon.as_mut().unwrap().animal = "dragon".into();
+    assert!(inconnu
+        .valider(&r)
+        .iter()
+        .any(|p| matches!(p, crate::Probleme::CompagnonInconnu(_))));
+    // Le journal modifie le compagnon (nom, augmentation) et refuse un choix invalide.
+    let mut j = Journal::nouveau(f);
+    let mut nouveau = Compagnon {
+        animal: "loup".into(),
+        nom: "Crocs".into(),
+        ignore_developpement: false,
+        augmentations: vec![Carac::Sag],
+    };
+    j.ajouter(
+        EvenementFiche::CompagnonModifie(nouveau.clone()),
+        &r,
+        &regles,
+    )
+    .expect("choix valide");
+    let e = j.etat(&r, &regles).unwrap();
+    let c = e.fiche.calculer(&r).unwrap().compagnon.unwrap();
+    assert_eq!(c.nom, "Crocs");
+    assert_eq!(
+        c.caracteristiques
+            .iter()
+            .find(|x| x.0 == Carac::Sag)
+            .unwrap()
+            .1,
+        12 + 1
+    );
+    nouveau.augmentations = vec![Carac::Sag, Carac::For];
+    assert!(j
+        .ajouter(EvenementFiche::CompagnonModifie(nouveau), &r, &regles)
         .is_err());
 }

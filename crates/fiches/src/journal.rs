@@ -85,6 +85,9 @@ pub enum EvenementFiche {
     },
     /// Le druide reprend sa forme normale.
     FormeQuittee,
+    /// Choix du compagnon animal (nom, développement, augmentations de caractéristique) : remplace
+    /// le précédent.
+    CompagnonModifie(crate::compagnon::Compagnon),
     /// Un prêtre sacrifie un sort préparé (ni oraison ni sort de domaine) pour lancer
     /// spontanément un sort de soins ou de blessure de niveau égal ou inférieur.
     SortConverti {
@@ -140,6 +143,7 @@ impl EvenementFiche {
             EvenementFiche::PouvoirUtilise { cle } => format!("Pouvoir utilisé : {cle}"),
             EvenementFiche::FormeAdoptee { forme } => format!("Forme animale prise : {forme}"),
             EvenementFiche::FormeQuittee => "Forme normale retrouvée".to_string(),
+            EvenementFiche::CompagnonModifie(c) => format!("Compagnon animal modifié : {}", c.nom),
             EvenementFiche::Preparation { sorts, .. } => {
                 format!("Sorts préparés : {} sort(s)", sorts.len())
             }
@@ -380,6 +384,21 @@ impl Journal {
                     fiche
                         .temporaires
                         .retain(|t| !t.nom.starts_with(crate::formes::PREFIXE_FORME));
+                }
+                EvenementFiche::CompagnonModifie(c) => {
+                    if fiche.pacte.as_deref() != Some("compagnon") {
+                        return Err(ErreurJournal::SortLanceImpossible {
+                            evenement: i,
+                            raison: "ce personnage n'a pas choisi le compagnon animal".into(),
+                        });
+                    }
+                    fiche.compagnon = Some(c.clone());
+                    if let Some(p) = fiche.valider(r).iter().find(|p| !p.est_incomplet()) {
+                        return Err(ErreurJournal::SortLanceImpossible {
+                            evenement: i,
+                            raison: p.to_string(),
+                        });
+                    }
                 }
                 EvenementFiche::Repos => {
                     pouvoirs_utilises.clear();

@@ -1675,6 +1675,7 @@ mod tests_pretre {
             domaines: vec!["bien".into(), "soleil".into()],
             energie: None,
             pacte: None,
+            compagnon: None,
         }
     }
 

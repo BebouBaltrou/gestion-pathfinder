@@ -259,6 +259,7 @@ pub struct Referentiel {
     pub domaines: Vec<crate::divin::Domaine>,
     pub divinites: Vec<crate::divin::Divinite>,
     pub formes: Vec<crate::formes::FormeAnimale>,
+    pub compagnons: crate::compagnon::DonneesCompagnons,
 }
 
 impl Referentiel {
@@ -299,6 +300,7 @@ impl Referentiel {
         .and_then(|r| {
             r.avec_objets_magiques(include_str!("../../../data/core/objets_magiques.json"))
         })
+        .and_then(|r| r.avec_compagnons(include_str!("../../../data/core/compagnons_animaux.json")))
         .and_then(|r| r.avec_formes(include_str!("../../../data/core/formes_animales.json")))
         .and_then(|r| {
             r.avec_divinites(
@@ -336,6 +338,7 @@ impl Referentiel {
             domaines: Vec::new(),
             divinites: Vec::new(),
             formes: Vec::new(),
+            compagnons: Default::default(),
         })
     }
 
@@ -361,6 +364,12 @@ impl Referentiel {
         self.domaines = serde_json::from_str::<crate::divin::FichierDomaines>(domaines)?.domaines;
         self.divinites =
             serde_json::from_str::<crate::divin::FichierDivinites>(divinites)?.divinites;
+        Ok(self)
+    }
+
+    /// Ajoute la table et la liste des compagnons animaux du druide.
+    pub fn avec_compagnons(mut self, json: &str) -> Result<Referentiel, serde_json::Error> {
+        self.compagnons = serde_json::from_str(json)?;
         Ok(self)
     }
 

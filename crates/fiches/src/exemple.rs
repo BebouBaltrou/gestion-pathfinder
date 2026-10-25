@@ -47,6 +47,7 @@ pub fn elfe_ensorceleuse() -> Fiche {
         domaines: vec![],
         energie: None,
         pacte: None,
+        compagnon: None,
         sorts_connus: [
             "Acid Splash",
             "Detect Magic",
@@ -106,6 +107,7 @@ pub fn pretre_d_iomedae() -> Fiche {
         domaines: vec!["bien".into(), "soleil".into()],
         energie: None,
         pacte: None,
+        compagnon: None,
     }
 }
 
