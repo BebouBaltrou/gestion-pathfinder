@@ -144,6 +144,11 @@ export const icones: Record<string, (p: P) => ReactElement> = {
       <path d="M9.5 12.5h5" />
     </Icone>
   ),
+  modeles: (p) => (
+    <Icone {...p}>
+      <path d="M12 3l2.4 5 5.4.7-4 3.7 1 5.4L12 15.3 7.2 17.8l1-5.4-4-3.7 5.4-.7z" />
+    </Icone>
+  ),
   fiole: (p) => (
     <Icone {...p}>
       <path d="M9 3h6M10 3v6L4.5 18.5A2 2 0 0 0 6.2 21.5h11.6a2 2 0 0 0 1.7-3L14 9V3" />
