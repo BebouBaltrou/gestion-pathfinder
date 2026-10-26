@@ -1,4 +1,4 @@
-# Sujets à traiter
+﻿# Sujets à traiter
 
 Questions mises de côté et décisions prises pour les étapes suivantes.
 Ce fichier est tenu à jour à chaque étape.
@@ -147,3 +147,14 @@ les notes de bas de page n'ont pas été transmis.
 - Emplacement des objets merveilleux : les tables ne le donnent pas ; décision d'Antoine : ils restent « sans
   emplacement » (illimités). Seuls les objets de
   `objets_magiques.json` et les anneaux peuvent être équipés dans un emplacement du corps.
+## Réattribution des dons et des sorts (à confirmer)
+
+Ajouté sur le modèle des rangs de compétence : on refait les dons (par niveau) et la liste des sorts connus.
+Le cœur refuse ce qui sort des règles (nombre de dons du niveau dépassé, doublon, don hors liste du lignage,
+sort inconnu, sort hors liste de la classe, trop de sorts d'un niveau). Points à confirmer :
+
+- **Changer un don déjà pris à un niveau passé** : permis hors montée de niveau ? Le livre ne le dit pas
+  (lecture à valider). Actuellement permis, comme les rangs.
+- **Prérequis d'un don** : non bloquant ; un prérequis manquant reste signalé sur la fiche (comme après une montée).
+- **Sorts connus** : la liste complète est refaite, sans garder le niveau où chaque sort a été appris.
+- **Lignage** : la liste proposée n'est pas encore filtrée sur le lignage ; le cœur refuse le mauvais choix.
