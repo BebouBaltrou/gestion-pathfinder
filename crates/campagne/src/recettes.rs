@@ -404,6 +404,7 @@ impl Etat {
 
         let mut vus = BTreeSet::new();
         let mut contributions = Vec::new();
+        let mut cles = Vec::new();
         for (cle, aff) in &d.affectations {
             if !vus.insert(*cle) {
                 return Err(Erreur::Recettes("une unité figure deux fois".into()));
@@ -418,6 +419,7 @@ impl Etat {
             }
             c.affectation = aff.clone();
             contributions.push(c);
+            cles.push(*cle);
         }
         // jets : un par jour pour chaque ressource testée
         let mut jets: BTreeMap<Ressource, &Vec<JetJour>> = BTreeMap::new();
@@ -435,6 +437,16 @@ impl Etat {
         let mut po_brut = Montant::ZERO;
         let mut capitaux_bruts = CoutCapitaux::default();
         for jour in 0..d.jours as usize {
+            // une unité ne rapporte qu'à partir du jour où elle produit (construite, achetée…)
+            let jour_numero = du + jour as u32;
+            let actives: Vec<Contribution> = contributions
+                .iter()
+                .zip(&cles)
+                .filter(|(_, cle)| {
+                    self.debut_production.get(cle).copied().unwrap_or(0) <= jour_numero
+                })
+                .map(|(c, _)| c.clone())
+                .collect();
             let du_jour: BTreeMap<Ressource, Jet> = jets
                 .iter()
                 .map(|(res, v)| {
@@ -447,7 +459,7 @@ impl Etat {
                     )
                 })
                 .collect();
-            let tests = tests_du_jour(&contributions, &du_jour, &options)
+            let tests = tests_du_jour(&actives, &du_jour, &options)
                 .map_err(|e| Erreur::Recettes(e.to_string()))?;
             for t in &tests {
                 if !jets.contains_key(&t.ressource) {
@@ -674,6 +686,9 @@ mod tests {
         ] {
             c.executer(ev, &r).unwrap();
         }
+        // le bar est construit au jour 1 : il ne produit qu'à partir du jour 2
+        c.executer(Evenement::JoursAvances { nombre: 1 }, &r)
+            .unwrap();
         Monde { c, r, pj, l, bar }
     }
 
@@ -854,6 +869,43 @@ mod tests {
             [Consequence::TestPrestigeRequis { dd: 21, .. }]
         ));
         assert_eq!(m.etat().prestige_en_attente.get(&l), Some(&21));
+    }
+
+    #[test]
+    fn batiment_ne_rapporte_qu_a_partir_de_sa_construction() {
+        let mut m = monde();
+        m.ev(Evenement::JoursAvances { nombre: 4 }).unwrap();
+        // une seconde salle achetée au jour 6 : elle ne rapporte qu'à partir du jour 7
+        let bar2 = m.c.nouvel_id_salle();
+        let batiment = m.etat().salle(m.bar).unwrap().batiment;
+        let etage = m.etat().salle(m.bar).unwrap().etage;
+        m.ev(Evenement::SalleAjoutee {
+            id: bar2,
+            batiment,
+            etage,
+            reference: "bar".into(),
+            nom: None,
+            deja_construite: true,
+        })
+        .unwrap();
+        m.ev(Evenement::JoursAvances { nombre: 1 }).unwrap();
+        let bonus = m.r.salle("bar").unwrap().recettes.as_ref().unwrap().bonus;
+        let d = DemandeRecettes {
+            localite: m.l,
+            jours: 6,
+            affectations: vec![(CleUnite::Salle(bar2), vec![(Ressource::Po, bonus)])],
+            jets: vec![(Ressource::Po, vec![None; 6])],
+            conserves: CoutCapitaux::default(),
+            payeur: None,
+            regles: ReglesTest::officielles(),
+        };
+        let bilan = m.etat().calculer_recettes(&d, &m.r).unwrap();
+        // seul le jour 7 rapporte : 10 + bonus
+        assert_eq!(bilan.po_brut, Montant::pa(10 + bonus as i64));
+        assert_eq!(
+            bilan.par_jour[..5].iter().filter(|j| !j.is_empty()).count(),
+            0
+        );
     }
 
     #[test]
