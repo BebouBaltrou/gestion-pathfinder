@@ -1,0 +1,13 @@
+[package]
+name = "notes"
+description = "Prise de notes pendant la partie : feuille de session, journal de campagne, notes de MJ"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+
+[dependencies]
+serde = { version = "1", features = ["derive"], optional = true }
+
+[features]
+# Sauvegarde et échange avec l'interface : dérive Serialize/Deserialize.
+serde = ["dep:serde"]

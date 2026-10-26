@@ -8,6 +8,8 @@ license.workspace = true
 [dependencies]
 domaine = { path = "../domaine" }
 regles = { path = "../regles" }
+inventaire = { path = "../inventaire" }
+notes = { path = "../notes" }
 fiches = { path = "../fiches" }
 aventure = { path = "../aventure" }
 temps = { path = "../temps" }
@@ -16,7 +18,7 @@ serde_json = { version = "1", optional = true }
 
 [features]
 # Sauvegarde des campagnes en JSON (activée par l'application).
-serde = ["dep:serde", "dep:serde_json", "domaine/serde", "regles/serde"]
+serde = ["dep:serde", "dep:serde_json", "domaine/serde", "regles/serde", "inventaire/serde", "notes/serde"]
 
 [dev-dependencies]
 combat = { path = "../combat" }

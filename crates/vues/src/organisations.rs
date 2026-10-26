@@ -256,7 +256,7 @@ pub fn creation(
                                 .filter(|x| !x.est_negatif())
                                 .ok_or("Prix illisible : écrivez par exemple 1200 ou 4 po 7 pa")?
                         };
-                        if montant.pa > 0 {
+                        if montant.pc > 0 {
                             evs.push(Evenement::Paiement {
                                 payeur,
                                 montant,

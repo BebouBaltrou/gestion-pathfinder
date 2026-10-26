@@ -1,0 +1,52 @@
+# Anneaux magiques. Transcrit par Antoine depuis son Manuel des joueurs (Table 15-13).
+# Prix de vente. Pages déduites du PDF (page du fichier moins 2) : à vérifier.
+#source=Manuel des joueurs, Table 15-13 : anneaux, p. 485 (page à vérifier)
+#type=anneau
+#prefixe=anneau
+#colonnes=nom|prix
+Protection +1|2 000 po
+Feuille morte|2 200 po
+Subsistance|2 500 po
+Escalade|2 500 po
+Saut|2 500 po
+Nage|2 500 po
+Contresort|4 000 po
+Barrière mentale|8 000 po
+Protection +2|8 000 po
+Bouclier de force|8 500 po
+Bélier|8 600 po
+Escalade supérieure|10 000 po
+Saut supérieur|10 000 po
+Nage supérieure|10 000 po
+Amitié avec les animaux|10 800 po
+Résistance aux énergies destructives, mineur|12 000 po
+Caméléon|12 700 po
+Marche sur l’onde|15 000 po
+Protection +3|18 000 po
+Stockage de sorts mineurs|18 000 po
+Invisibilité|20 000 po
+Arcanes (premiers)|20 000 po
+Esquive totale|25 000 po
+Rayons X|25 000 po
+Clignotement|27 000 po
+Résistance aux énergies destructives, majeur|28 000 po
+Protection +4|32 000 po
+Arcanes (deuxièmes)|40 000 po
+Liberté de mouvement|40 000 po
+Résistance aux énergies destructives, suprême|44 000 po
+Protection mutuelle (une paire)|50 000 po
+Protection +5|50 000 po
+Feu d’étoiles|50 000 po
+Stockage de sorts|50 000 po
+Arcanes (troisièmes)|70 000 po
+Télékinésie|75 000 po
+Régénération|90 000 po
+Renvoi des sorts|100 000 po
+Arcanes (quatrièmes)|100 000 po
+Triple souhait|120 000 po
+Bon génie|125 000 po
+Contrôle des éléments (Air)|200 000 po
+Contrôle des éléments (Terre)|200 000 po
+Contrôle des éléments (Feu)|200 000 po
+Contrôle des éléments (Eau)|200 000 po
+Stockage de sort supérieur|200 000 po

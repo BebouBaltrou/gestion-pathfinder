@@ -1,0 +1,30 @@
+# Prix de vente d’un bonus d’altération magique. Transcrit par Antoine depuis son Manuel des joueurs
+# (Tables 15-3 et 15-8). Pages déduites du PDF (page du fichier moins 2) : à vérifier.
+# Le bonus effectif ne peut pas dépasser +5 : les lignes +6 à +10 servent à calculer le prix des objets
+# qui ont des propriétés spéciales. Pour les flèches, carreaux et billes de fronde, le prix de l’arme
+# concerne 50 unités.
+#prefixe=amelioration
+#type=amelioration
+#colonnes=nom|prix
+#source=Manuel des joueurs, Table 15-3 : armures et boucliers, p. 467 (page à vérifier)
+Armure ou bouclier +1|1 000 po
+Armure ou bouclier +2|4 000 po
+Armure ou bouclier +3|9 000 po
+Armure ou bouclier +4|16 000 po
+Armure ou bouclier +5|25 000 po
+Armure ou bouclier +6|36 000 po
+Armure ou bouclier +7|49 000 po
+Armure ou bouclier +8|64 000 po
+Armure ou bouclier +9|81 000 po
+Armure ou bouclier +10|100 000 po
+#source=Manuel des joueurs, Table 15-8 : armes, p. 474 (page à vérifier)
+Arme +1|2 000 po
+Arme +2|8 000 po
+Arme +3|18 000 po
+Arme +4|32 000 po
+Arme +5|50 000 po
+Arme +6|72 000 po
+Arme +7|98 000 po
+Arme +8|128 000 po
+Arme +9|162 000 po
+Arme +10|200 000 po

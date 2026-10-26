@@ -1,4 +1,4 @@
-# Sujets à traiter
+﻿# Sujets à traiter
 
 Questions mises de côté et décisions prises pour les étapes suivantes.
 Ce fichier est tenu à jour à chaque étape.
@@ -105,3 +105,56 @@ fiches, compatibilité des sauvegardes.
 - **Armes et objets** : « mains nues » et « masse » à confirmer ; Bottes elfiques = Acrobaties dans le livre français à confirmer ; type du bonus de forme bestiale (taille) à confirmer.
 - **Importation PDF** : domaines, divinité, alignement et pacte de nature ne sont pas lus (fonctionnalité en développement).
 - **Autres classes du créateur de fiche** : toutes les classes restantes sont à implémenter (seuls Ensorceleur, Prêtre et Druide existent).
+
+## Monnaie (25/10/2026)
+
+`Montant` compte en pièces de cuivre (1 pa = 10 pc, 1 po = 100 pc, 1 pp = 1 000 pc), pour que les prix du
+Manuel des joueurs (une bougie : 1 pc) soient exacts, sans arrondi. Format de fichier 3 ; l'ancien format
+(`{"pa": n}`) est converti à la lecture. La vente à moitié prix garde l'arrondi à la pièce d'argent d'avant
+(`ventes.rs`) : à confirmer si Antoine préfère la moitié exacte en pc.
+
+## Inventaire et équipement : empilement des bonus (décidé par Antoine, 25/10/2026)
+
+Le moteur d'effets existant (`crates/fiches/src/effet.rs`) est conservé tel quel :
+
+1. Deux bonus du même type ne s'additionnent pas : on retient le plus élevé.
+2. Les bonus d'esquive, de circonstance et sans type s'additionnent.
+3. Les malus s'additionnent toujours. Antoine avait proposé que deux pénalités de même type ne
+   s'additionnent pas, puis a répondu « si tout fonctionne, inutile de changer » : le moteur actuel reste.
+4. Distinguer « armure » (type armure), « armure magique » (altération) et « armure naturelle » (naturel).
+
+## Objets magiques : tables du chapitre 15 (25/10/2026)
+
+Données transcrites par Antoine dans `data/core/objets_magiques/` (anneaux, sceptres, bâtons, armures, boucliers
+et armes spécifiques, objets merveilleux, propriétés spéciales, améliorations, tarifs des potions, parchemins et
+baguettes, estimation du prix). Les 15 objets à bonus chiffré de `data/core/objets_magiques.json` gardent leurs
+effets et leur emplacement ; un objet des tables qui y figure déjà n'est pas répété. Les d100 par puissance et
+les notes de bas de page n'ont pas été transmis.
+
+**À confirmer dans le livre** (écarts ou doutes, transcrits tels quels) :
+
+- « Bandeau de supériorité mentale (+4) » : 16 000 po dans la table 15-19, 64 000 po dans la table 15-20 et
+  dans `objets_magiques.json` (16 000 po vaut le +2).
+- « Épée de bonne fortune (0 souhait) » apparaît deux fois (22 060 po et 142 960 po) ; la seconde est
+  probablement « 3 souhaits ».
+- Sceptre « Métamagie modérée, Incantation rapide » à 24 500 po et à 75 500 po.
+- « Collier à boules de feu (5e modèle) » : 6 000 po dans la table, 5 850 po dans la description.
+- « Traité de perspicacité (+5) » à 135 500 po, les autres traités (+5) à 137 500 po.
+- « Amulette des poings invincibles » à 100 000 po, sans « (+5) ».
+- « Timbales de panique » : le texte transmis donne « panique3 0 000 po », lu comme 30 000 po.
+- Paladin et rôdeur : les tables 15-12, 15-15 et 15-17 et les « Prix de base » de la fin du chapitre donnent
+  des prix différents pour les potions, parchemins et baguettes. Les deux versions sont gardées.
+- Emplacement des objets merveilleux : les tables ne le donnent pas ; décision d'Antoine : ils restent « sans
+  emplacement » (illimités). Seuls les objets de
+  `objets_magiques.json` et les anneaux peuvent être équipés dans un emplacement du corps.
+## Réattribution des dons et des sorts (à confirmer)
+
+Ajouté sur le modèle des rangs de compétence : on refait les dons (par niveau) et la liste des sorts connus.
+Le cœur refuse ce qui sort des règles (nombre de dons du niveau dépassé, doublon, don hors liste du lignage,
+sort inconnu, sort hors liste de la classe, trop de sorts d'un niveau). Points à confirmer :
+
+- **Changer un don déjà pris à un niveau passé** : permis hors montée de niveau ? Le livre ne le dit pas
+  (lecture à valider). Actuellement permis, comme les rangs.
+- **Prérequis d'un don** : non bloquant ; un prérequis manquant reste signalé sur la fiche (comme après une montée).
+- **Sorts connus** : la liste complète est refaite, sans garder le niveau où chaque sort a été appris.
+- **Lignage** : la liste proposée n'est pas encore filtrée sur le lignage ; le cœur refuse le mauvais choix.

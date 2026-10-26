@@ -1,0 +1,27 @@
+# Bâtons magiques. Transcrit par Antoine depuis son Manuel des joueurs (Table 15-16).
+# Prix de vente. Page déduite du PDF (page du fichier moins 2) : à vérifier.
+#source=Manuel des joueurs, Table 15-16 : bâtons, p. 498 (page à vérifier)
+#type=baton
+#prefixe=baton
+#colonnes=nom|prix
+Envoûtement|17 600 po
+Feu|18 950 po
+Grand essaim|22 800 po
+Altération de taille|26 150 po
+Guérison|29 600 po
+Givre|41 400 po
+Clarté|51 500 po
+Défense|62 000 po
+Abjuration|82 000 po
+Invocation|82 000 po
+Divination|82 000 po
+Enchantement|82 000 po
+Évocation|82 000 po
+Illusion|82 000 po
+Nécromancie|82 000 po
+Transmutation|82 000 po
+Pierre et terre|85 800 po
+Forêt profonde|100 400 po
+Vie|109 400 po
+Transport|206 900 po
+Surpuissance|235 000 po

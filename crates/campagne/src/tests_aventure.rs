@@ -268,11 +268,13 @@ fn le_repos_rend_les_emplacements_de_sorts() {
 fn format_du_fichier() {
     let (mut c, r, pj) = campagne();
     let json = crate::fichier::vers_json(&c).unwrap();
-    assert!(json.contains("\"format\": 1")); // sans aventure : l'ancienne application lit encore
+    assert!(json.contains("\"format\": 3")); // montants en pc, avec ou sans aventure
+                                             // Un fichier de l'ancien format 1 (montants en pa) reste lisible.
+    assert!(crate::fichier::depuis_json(&json.replace("\"format\": 3", "\"format\": 1")).is_ok());
     demarrer(&mut c, &r, 8);
     av(&mut c, &r, EvenementAventure::Entree { pj: pj.0 });
     let json = crate::fichier::vers_json(&c).unwrap();
-    assert!(json.contains("\"format\": 2"));
+    assert!(json.contains("\"format\": 3"));
     let mut relue = crate::fichier::depuis_json(&json).unwrap();
     assert!(relue.etat(&r).aventure.is_some());
     assert_eq!(relue.journal.len(), c.journal.len());

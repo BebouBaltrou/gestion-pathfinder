@@ -4,6 +4,7 @@ import { api, formaterPo } from "../../api";
 import type { Charge, EffetDonnees, EvenementFiche, FicheVue, LignePersonnage, StatsSortFiche } from "../../fiche-types";
 import { Chiffre, Choix, Detail, signe, useCatalogue } from "./commun";
 import { Montee } from "./Montee";
+import { SelectionDons } from "./selections";
 import { PanneauFoi, PanneauPreparation } from "./foi";
 import { PanneauCompagnon, PanneauFormes } from "./nature";
 import { PrestigeDon } from "./PrestigeDon";
@@ -49,7 +50,7 @@ export function FicheComplete(p: Props) {
             {id.lignage ? ` · lignage ${id.lignage.toLowerCase()}` : ""} · niveau {id.niveau}
           </p>
           <p className="doux">
-            Compte : {formaterPo(id.compte.pa)}
+            Compte : {formaterPo(id.compte.pc)}
             {id.prestige !== null && (
               <>
                 {" "}· Prestige {id.prestige}
@@ -117,7 +118,7 @@ export function FicheComplete(p: Props) {
 
       {onglet === "combat" && <Combat f={f} />}
       {onglet === "competences" && <Competences f={f} agir={agir} />}
-      {onglet === "dons" && <Dons f={f} />}
+      {onglet === "dons" && <Dons f={f} agir={agir} />}
       {onglet === "foi" && f.divin && <PanneauFoi divin={f.divin} pouvoirs={f.pouvoirs} agir={agir} />}
       {onglet === "forme" && <PanneauFormes f={f} agir={agir} />}
       {onglet === "compagnon" && <PanneauCompagnon f={f} agir={agir} />}
@@ -269,12 +270,101 @@ function Competences({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => vo
   );
 }
 
+// ------------------------------------------------------------------ réattribution des dons et des sorts
+
+/** Dons de chaque niveau refaits, comme les rangs : le cœur vérifie le nombre par niveau et les listes. */
+function ReattributionDons({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => void }) {
+  const cat = useCatalogue();
+  const [edition, setEdition] = useState<string[][] | null>(null);
+  if (!edition) {
+    return (
+      <button className="bouton" onClick={() => setEdition(f.donsParNiveau.map((d) => [...d]))}>
+        Réattribuer les dons
+      </button>
+    );
+  }
+  const complet = edition.every((d) => d.every(Boolean));
+  return (
+    <div className="section">
+      <p className="doux">
+        Le nombre de dons de chaque niveau reste celui que le niveau accorde. Les prérequis manquants sont signalés
+        sur la fiche sans bloquer la modification.
+      </p>
+      {cat &&
+        edition.map((dons, i) =>
+          dons.length > 0 && (
+            <div key={i}>
+              <h3>Niveau {i + 1}</h3>
+              <SelectionDons cat={cat} nombre={dons.length} valeur={dons}
+                onChange={(v) => setEdition(edition.map((x, k) => (k === i ? v : x)))} />
+            </div>
+          ),
+        )}
+      <button className="bouton principal" disabled={!cat || !complet}
+        onClick={() => {
+          edition.forEach((dons, i) => {
+            if (dons.join("|") !== (f.donsParNiveau[i] ?? []).join("|")) agir({ DonsReattribues: { niveau: i + 1, dons } });
+          });
+          setEdition(null);
+        }}>
+        Valider
+      </button>{" "}
+      <button className="bouton" onClick={() => setEdition(null)}>Annuler</button>
+    </div>
+  );
+}
+
+/** Liste des sorts connus refaite ; le cœur vérifie les doublons, les listes de classe et le nombre par niveau. */
+function ReattributionSorts({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => void }) {
+  const cat = useCatalogue();
+  const [edition, setEdition] = useState<string[] | null>(null);
+  if (f.preparation || f.incantateurs.length === 0) return null;
+  if (!edition) {
+    return (
+      <button className="bouton" onClick={() => setEdition([...f.sortsConnus])}>
+        Réattribuer les sorts connus
+      </button>
+    );
+  }
+  const classes = [...new Set(f.incantateurs.map((i) => i.classe))];
+  const choix = cat
+    ? [...new Map(classes.flatMap((c) => cat.sortsParClasse[c] ?? []).map((s) => [s.nomEn, s])).values()].sort(
+        (a, b) => a.niveau - b.niveau || a.nom.localeCompare(b.nom, "fr"),
+      )
+    : [];
+  return (
+    <div className="section">
+      <p className="doux">
+        Les sorts du lignage ne se choisissent pas ici. Le cœur vérifie les doublons, la liste de chaque classe et le
+        nombre de sorts par niveau.
+      </p>
+      {edition.map((s, i) => (
+        <div className="ligne" key={i}>
+          <select className="champ choix" aria-label={`Sort ${i + 1}`} value={s}
+            onChange={(e) => setEdition(edition.map((x, k) => (k === i ? e.target.value : x)))}>
+            <option value="">— choisir —</option>
+            {choix.map((c) => <option key={c.nomEn} value={c.nomEn}>{c.nom} (niveau {c.niveau})</option>)}
+          </select>
+          <button className="croix" aria-label={`Retirer le sort ${i + 1}`} onClick={() => setEdition(edition.filter((_, k) => k !== i))}>×</button>
+        </div>
+      ))}
+      <button className="bouton" onClick={() => setEdition([...edition, ""])}>Ajouter un sort</button>{" "}
+      <button className="bouton principal" disabled={edition.some((s) => !s)}
+        onClick={() => { agir({ SortsReattribues: { sorts: edition } }); setEdition(null); }}>
+        Valider
+      </button>{" "}
+      <button className="bouton" onClick={() => setEdition(null)}>Annuler</button>
+    </div>
+  );
+}
+
 // ------------------------------------------------------------------ dons
 
-function Dons({ f }: { f: FicheVue }) {
+function Dons({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => void }) {
   return (
     <div className="section">
       <h2>Dons</h2>
+      <ReattributionDons f={f} agir={agir} />
       <div className="liste-regles">
         {f.dons.map((d, i) => (
           <div className="carte" key={d.nomEn + i}>
@@ -351,6 +441,7 @@ function Sorts({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => void }) 
   if (f.incantateurs.length === 0) return <p className="doux">Ce personnage ne lance pas de sorts.</p>;
   return (
     <div className="section">
+      <ReattributionSorts f={f} agir={agir} />
       {f.equipement.echecSortsPct > 0 && (
         <p className="alerte-texte">
           Armure et bouclier : {f.equipement.echecSortsPct} % de chances d'échec des sorts profanes à composante gestuelle.

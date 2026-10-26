@@ -1,0 +1,53 @@
+# Prix des potions, parchemins et baguettes par niveau de sort et par classe. Transcrit par Antoine
+# depuis son Manuel des joueurs. Pages déduites du PDF (page du fichier moins 2) : à vérifier.
+# Divergence du livre : pour le paladin et le rôdeur, les tables 15-12, 15-15 et 15-17 et les tables
+# « Prix de base » de la fin du chapitre ne donnent pas les mêmes prix (par exemple potion de niveau 1 :
+# 100 po contre 50 po). Les deux versions sont gardées, distinguées par la colonne « table ».
+# « — » : cette classe n’a pas de sort de ce niveau.
+#prefixe=cout-sort
+#type=tarif
+#colonnes=nom|druide_magicien_pretre|ensorceleur|barde|paladin_rodeur|table
+#source=Manuel des joueurs, Table 15-12 : potions (coût des potions), p. 484 (page à vérifier)
+Potion, sort de niveau 0|25 po|25 po|25 po|—|15-12
+Potion, sort de niveau 1|50 po|50 po|50 po|100 po|15-12
+Potion, sort de niveau 2|300 po|400 po|400 po|300 po|15-12
+Potion, sort de niveau 3|750 po|900 po|1 050 po|750 po|15-12
+#source=Manuel des joueurs, Prix de base des potions et des huiles, p. 559 (page à vérifier)
+Potion, sort de niveau 0|25 po|25 po|25 po|—|prix de base
+Potion, sort de niveau 1|50 po|50 po|50 po|50 po|prix de base
+Potion, sort de niveau 2|300 po|400 po|400 po|400 po|prix de base
+Potion, sort de niveau 3|750 po|900 po|1 050 po|1 050 po|prix de base
+#source=Manuel des joueurs, Table 15-15 : parchemins (coût des parchemins), p. 497 (page à vérifier)
+Parchemin, sort de niveau 0|12,5 po|12,5 po|12,5 po|—|15-15
+Parchemin, sort de niveau 1|25 po|25 po|25 po|50 po|15-15
+Parchemin, sort de niveau 2|150 po|200 po|200 po|150 po|15-15
+Parchemin, sort de niveau 3|375 po|450 po|525 po|375 po|15-15
+Parchemin, sort de niveau 4|700 po|800 po|1 000 po|700 po|15-15
+Parchemin, sort de niveau 5|1 125 po|1 250 po|1 625 po|—|15-15
+Parchemin, sort de niveau 6|1 650 po|1 800 po|2 400 po|—|15-15
+Parchemin, sort de niveau 7|2 275 po|2 450 po|—|—|15-15
+Parchemin, sort de niveau 8|3 000 po|3 200 po|—|—|15-15
+Parchemin, sort de niveau 9|3 825 po|4 050 po|—|—|15-15
+#source=Manuel des joueurs, Prix de base des parchemins (par classe de créateur), p. 558 (page à vérifier)
+Parchemin, sort de niveau 0|12 po 5 pa|12 po 5 pa|12 po 5 pa|—|prix de base
+Parchemin, sort de niveau 1|25 po|25 po|25 po|25 po|prix de base
+Parchemin, sort de niveau 2|150 po|200 po|200 po|200 po|prix de base
+Parchemin, sort de niveau 3|375 po|450 po|525 po|525 po|prix de base
+Parchemin, sort de niveau 4|700 po|800 po|1 000 po|1 000 po|prix de base
+Parchemin, sort de niveau 5|1 125 po|1 250 po|1 625 po|—|prix de base
+Parchemin, sort de niveau 6|1 650 po|1 800 po|2 400 po|—|prix de base
+Parchemin, sort de niveau 7|2 275 po|2 450 po|—|—|prix de base
+Parchemin, sort de niveau 8|3 000 po|3 200 po|—|—|prix de base
+Parchemin, sort de niveau 9|3 825 po|4 050 po|—|—|prix de base
+#source=Manuel des joueurs, Table 15-17 : baguettes (coût des baguettes), p. 502 (page à vérifier)
+Baguette, sort de niveau 0|375 po|375 po|375 po|—|15-17
+Baguette, sort de niveau 1|750 po|750 po|750 po|1 500 po|15-17
+Baguette, sort de niveau 2|4 500 po|6 000 po|6 000 po|4 500 po|15-17
+Baguette, sort de niveau 3|11 250 po|13 500 po|15 750 po|11 250 po|15-17
+Baguette, sort de niveau 4|21 000 po|24 000 po|30 000 po|21 000 po|15-17
+#source=Manuel des joueurs, Prix de base des baguettes, p. 558 (page à vérifier)
+Baguette, sort de niveau 0|375 po|375 po|375 po|—|prix de base
+Baguette, sort de niveau 1|750 po|750 po|750 po|750 po|prix de base
+Baguette, sort de niveau 2|4 500 po|6 000 po|6 000 po|6 000 po|prix de base
+Baguette, sort de niveau 3|11 250 po|13 500 po|15 750 po|15 750 po|prix de base
+Baguette, sort de niveau 4|21 000 po|24 000 po|30 000 po|30 000 po|prix de base

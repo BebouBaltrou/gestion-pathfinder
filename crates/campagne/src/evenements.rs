@@ -45,6 +45,10 @@ pub enum Evenement {
         id: IdPersonnage,
         vers: Option<IdLocalite>,
     },
+    /// Opération sur l'inventaire (objets, conteneurs, transferts).
+    Inventaire(inventaire::Commande),
+    /// Notes de la partie : feuille de session, journal de campagne, notes de MJ.
+    Notes(notes::Commande),
     LocaliteCreee {
         id: IdLocalite,
         nom: String,
@@ -439,6 +443,11 @@ impl Evenement {
             }
             _ => false,
         }
+    }
+
+    /// Prendre une note reste permis pendant un combat.
+    pub fn est_une_note(&self) -> bool {
+        matches!(self, Evenement::Notes(_))
     }
 
     /// Le mode aventure ou combat intervient-il dans cet événement ? (Détermine le format de fichier.)

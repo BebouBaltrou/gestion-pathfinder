@@ -21,18 +21,16 @@ Exigences : voir [docs/CAHIER_DES_CHARGES.md](docs/CAHIER_DES_CHARGES.md).
 ## Structure
 
 ```
-crates/domaine   types purs : capitaux, monnaie (en pa), sources, statuts, fiches
+crates/domaine   types purs : capitaux, monnaie (en pc), sources, statuts, fiches
 crates/regles    référentiel officiel, personnalisations, calculs, contrôles
 crates/campagne  journal d'événements, état, annuler/rétablir, calendrier, sauvegarde JSON
 crates/vues      modèles d'affichage : ce que l'interface montre, calculé par le cœur
 desktop/         nouvelle application (Tauri) : src-tauri/ (Rust), ui/ (React) ; Windows (Linux plus tard)
-app/             application egui (ancienne interface), conservée jusqu'à la fin de la migration
 data/            referentiel_officiel.json : source de vérité des données officielles
 outils/extraction  scripts de relevé depuis le PDF et de génération du code Rust
 ```
 
-Le cœur ne dépend que de serde (optionnel). L'application `app/` dépend d'eframe ;
-GitHub Actions compile l'exécutable Windows à chaque envoi (artefact `gestion-pathfinder-windows`).
+Le cœur ne dépend que de serde (optionnel).
 Les campagnes sont enregistrées dans `%APPDATA%\GestionPathfinder\campagnes` (JSON, copie `.bak`).
 
 ## Commandes

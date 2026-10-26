@@ -283,7 +283,7 @@ pub fn lire_montant(texte: &str) -> Option<Somme> {
 
 fn montant_positif(texte: &str) -> Result<Montant, String> {
     match Montant::depuis_texte(texte) {
-        Some(m) if m.pa > 0 => Ok(m),
+        Some(m) if m.pc > 0 => Ok(m),
         Some(_) => Err("Le montant doit être positif".into()),
         None => Err("Montant illisible : écrivez par exemple 12, 12,5 ou 4 po 7 pa".into()),
     }
@@ -376,7 +376,7 @@ pub fn ajustement(
             .ok_or("Montant illisible : écrivez par exemple -12, 12,5 ou 4 po 7 pa")?
     };
     let (ajout, retrait): (CoutCapitaux, CoutCapitaux) = (ajout.into(), retrait.into());
-    if delta.pa == 0 && ajout.unites() + retrait.unites() == 0 {
+    if delta.pc == 0 && ajout.unites() + retrait.unites() == 0 {
         return Err("Rien à ajuster".into());
     }
     if motif.trim().is_empty() {
@@ -504,7 +504,7 @@ mod tests {
         assert_eq!(p.localites.len(), 2);
         let s = &p.localites[0];
         assert_eq!(s.population, Some(1240));
-        assert_eq!(s.tresorerie.pa, 105);
+        assert_eq!(s.tresorerie.pc, 1050);
         assert_eq!(s.capitaux.marchandises, 3);
         assert_eq!(s.transferts.len(), 1);
         assert!(s.transferts[0].contains("part vers Magnimar"));
@@ -539,6 +539,6 @@ mod tests {
         let attendu = r.categorie_pour_population(1240).map(|c| c.id.clone());
         assert_eq!(categorie_suggeree("1 240", &r).map(|c| c.id), attendu);
         assert!(categorie_suggeree("", &r).is_none());
-        assert_eq!(lire_montant("4 po 7 pa").map(|s| s.pa), Some(47));
+        assert_eq!(lire_montant("4 po 7 pa").map(|s| s.pc), Some(470));
     }
 }

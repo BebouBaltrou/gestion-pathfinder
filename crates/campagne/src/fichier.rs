@@ -7,10 +7,12 @@ use crate::Campagne;
 use std::path::Path;
 
 /// Version du format de fichier ; à incrémenter en cas de changement incompatible.
-pub const FORMAT: u32 = 2;
-
-/// Format écrit quand la campagne n'utilise pas le mode aventure : l'ancienne application la lit encore.
-pub const FORMAT_SANS_AVENTURE: u32 = 1;
+///
+/// - 1 : montants en pa, sans mode aventure ;
+/// - 2 : mode aventure ;
+/// - 3 : montants en pièces de cuivre (`{"pc": n}`) et inventaire. Les montants de l'ancien
+///   format (`{"pa": n}`) sont convertis à la lecture.
+pub const FORMAT: u32 = 3;
 
 #[derive(serde::Serialize, serde::Deserialize)]
 struct Fichier {
@@ -42,11 +44,7 @@ impl std::error::Error for ErreurFichier {}
 
 pub fn vers_json(c: &Campagne) -> Result<String, ErreurFichier> {
     let f = Fichier {
-        format: if c.utilise_aventure() {
-            FORMAT
-        } else {
-            FORMAT_SANS_AVENTURE
-        },
+        format: FORMAT,
         application: "gestion-pathfinder".into(),
         campagne: c.clone(),
     };
@@ -82,6 +80,20 @@ pub fn charger(chemin: &Path) -> Result<Campagne, ErreurFichier> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn montant_ancien_format_en_pa_est_converti() {
+        use domaine::Montant;
+        let ancien: Montant = serde_json::from_str(r#"{"pa":47}"#).unwrap();
+        assert_eq!(ancien, Montant::pa(47));
+        let nouveau: Montant = serde_json::from_str(r#"{"pc":473}"#).unwrap();
+        assert_eq!(nouveau, Montant::pc(473));
+        assert!(serde_json::from_str::<Montant>("{}").is_err());
+        assert_eq!(
+            serde_json::to_string(&Montant::pa(47)).unwrap(),
+            r#"{"pc":470}"#
+        );
+    }
     use crate::evenements::Evenement;
     use crate::modele::*;
     use domaine::Montant;

@@ -91,7 +91,7 @@ pub fn valeur_achat(r: &Referentiel, c: &CoutCapitaux) -> u32 {
 pub fn appliquer_absence(gain_total: Gain, jours_absence: u32) -> Gain {
     let tranches = (jours_absence / 7) as i64;
     match gain_total {
-        Gain::Po(m) => Gain::Po(Montant::pa((m.pa - tranches * 70).max(0))),
+        Gain::Po(m) => Gain::Po(Montant::pc((m.pc - tranches * 700).max(0))),
         Gain::Capital(c, n) => Gain::Capital(c, (n as i64 - tranches).max(0) as u32),
     }
 }

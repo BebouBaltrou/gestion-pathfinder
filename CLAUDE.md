@@ -25,15 +25,17 @@ Règles et points à confirmer du référentiel : page « Points à confirmer »
 ## Architecture
 
 ```
-crates/domaine   types purs : capitaux, monnaie (en pa), sources, statuts, fiches
+crates/domaine   types purs : capitaux, monnaie (en pc), sources, statuts, fiches
 crates/regles    référentiel officiel (données du livre), calculs, contrôles
 crates/campagne  journal d'événements (event sourcing), état recalculé, annuler/rétablir, modèles personnels,
                  calendrier de Golarion, sauvegarde JSON (feature « serde »)
 crates/vues      modèles d'affichage calculés par le cœur pour l'interface
+crates/notes       notes de partie : feuille de session, journal de campagne par rubrique, notes de MJ (liens internes, recherche, export Markdown) ; rubriques dans data/notes/
+crates/inventaire  objets, conteneurs, poids, transferts, équipement porté (emplacements : data/equipement/), import de catalogues texte ;
+                 les modèles d'équipement viennent de data/core/ via campagne::catalogue_inventaire
 crates/fiches      personnages (PF1, Core) : effets typés, fiche, progression, dons, sorts, équipement,
                  états ; données dans data/core/ ; plan : docs/PLAN_PERSONNAGES.md
 desktop/         NOUVELLE application (Tauri 2) : src-tauri/ (Rust, commandes), ui/ (React + TS)
-app/             ANCIENNE application (egui), gardée jusqu'à la fin de la migration
 data/            referentiel_officiel.json (source de vérité des données du livre)
 ```
 
@@ -41,9 +43,8 @@ data/            referentiel_officiel.json (source de vérité des données du l
   ce que `crates/vues` calcule et agit via les commandes de `desktop/src-tauri/src/main.rs`.
 - Chaque action est un `Evenement` du journal ; un ensemble d'actions atomique est un
   `Evenement::Groupe`. Les identifiants nouveaux se calculent par `nouvel_id_*`.
-- Les montants sont en pièces d'argent (`Montant`, i64).
-- Les deux applications lisent et écrivent les mêmes fichiers de campagne
-  (`%APPDATA%\GestionPathfinder\campagnes`).
+- Les montants sont en pièces de cuivre (`Montant`, i64 : 1 pa = 10 pc, 1 po = 100 pc, 1 pp = 1 000 pc). Le format de fichier est 3 ; l'ancien format en pa est converti à la lecture.
+- Les campagnes sont enregistrées dans `%APPDATA%\GestionPathfinder\campagnes`.
 
 ## Plateforme et interface
 
@@ -77,9 +78,9 @@ essai de bout en bout de la nouvelle application (variable `GESTION_PATHFINDER_A
 
 ## État de la migration vers `desktop/`
 
-Toutes les pages de `app/` sont migrées dans `desktop/` (tableau de bord, campagnes avec
+Toutes les pages de l'ancienne application sont migrées dans `desktop/` (tableau de bord, campagnes avec
 export/import, localités, personnages, bâtiments, recettes, organisations, gestionnaires,
 historique, paramètres, référentiel, points à confirmer, modèles personnels). Reste : essai à
-la main de chaque page par l'utilisateur, puis retirer `app/` **avec son accord**. Le détail
+la main de chaque page par l'utilisateur. L'ancienne application egui (`app/`) a été retirée le 25/10/2026 à la demande de l'utilisateur. Le détail
 est dans `docs/A_TRAITER.md`. Pour une page nouvelle : mettre les calculs dans `crates/vues`
 (avec tests), ajouter les commandes Tauri, puis l'interface React.

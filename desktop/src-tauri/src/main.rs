@@ -6,6 +6,8 @@
 mod aventure;
 mod export;
 mod import_fiche;
+mod inventaire;
+mod notes;
 mod personnages;
 mod session;
 
@@ -744,6 +746,23 @@ fn main() {
             aventure::combat_historique,
             aventure::combat_exporter,
             aventure::catalogue_etats,
+            notes::page_notes,
+            notes::liste_notes,
+            notes::chronologie,
+            notes::creer_note,
+            notes::modifier_note,
+            notes::epingler_note,
+            notes::supprimer_note,
+            notes::noter_objet,
+            notes::exporter_notes,
+            inventaire::page_inventaire,
+            inventaire::catalogue_objets,
+            inventaire::types_objets,
+            inventaire::inventaire_commande,
+            inventaire::creer_inventaire_personnage,
+            inventaire::ajouter_objet_catalogue,
+            inventaire::ajouter_conteneur,
+            inventaire::ajouter_objet_libre,
             personnages::liste_personnages,
             personnages::fiche_personnage,
             personnages::catalogue_creation,

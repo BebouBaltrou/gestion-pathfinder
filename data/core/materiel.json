@@ -15,7 +15,7 @@
       "poids_en": "1 lb.",
       "poids_lb": 1,
       "categorie_en": "Alchemical Weapons",
-      "nom": "Acide"
+      "nom": "Acide (flasque)"
     },
     {
       "nom_en": "Alchemist's fire",
@@ -31,7 +31,7 @@
       "poids_en": "1 lb.",
       "poids_lb": 1,
       "categorie_en": "Alchemical Weapons",
-      "nom": "Feu grégeois"
+      "nom": "Feu grégeois (flasque)"
     },
     {
       "nom_en": "Alchemist's lab",
@@ -47,7 +47,7 @@
       "poids_en": "40 lbs.",
       "poids_lb": 40,
       "categorie_en": "Tools",
-      "nom": "Laboratoire d'alchimiste"
+      "nom": "Laboratoire d’alchimie"
     },
     {
       "nom_en": "Ale (gallon)",
@@ -63,7 +63,7 @@
       "poids_en": "2 lb.",
       "poids_lb": 2,
       "categorie_en": null,
-      "nom": "Bière (gallon)"
+      "nom": "Bière (le litre)"
     },
     {
       "nom_en": "Ale (mug)",
@@ -79,7 +79,7 @@
       "poids_en": "1 lb.",
       "poids_lb": 1,
       "categorie_en": null,
-      "nom": "Bière (chope)"
+      "nom": "Bière (la chope)"
     },
     {
       "nom_en": "Antitoxin",
@@ -95,7 +95,7 @@
       "poids_en": "—",
       "poids_lb": null,
       "categorie_en": "Alchemical Remedies",
-      "nom": "Antitoxine"
+      "nom": "Antidote (fiole)"
     },
     {
       "nom_en": "Artisan's outfit",
@@ -111,7 +111,7 @@
       "poids_en": "4 lbs.",
       "poids_lb": 4,
       "categorie_en": "Clothing",
-      "nom": "Tenue d'artisan"
+      "nom": "Tenue d’artisan"
     },
     {
       "nom_en": "Artisan's tools (common)",
@@ -127,7 +127,7 @@
       "poids_en": "5 lbs. (common), 5 lbs. (masterwork)",
       "poids_lb": 5,
       "categorie_en": null,
-      "nom": "Outils d'artisan (courants)"
+      "nom": "Outils d’artisan"
     },
     {
       "nom_en": "Artisan's tools (masterwork)",
@@ -143,7 +143,7 @@
       "poids_en": "5 lbs. (common), 5 lbs. (masterwork)",
       "poids_lb": 5,
       "categorie_en": null,
-      "nom": "Outils d'artisan (de maître)"
+      "nom": "Outils de maître artisan"
     },
     {
       "nom_en": "Backpack (common)",
@@ -159,7 +159,7 @@
       "poids_en": "2 lb.",
       "poids_lb": 2,
       "categorie_en": null,
-      "nom": "Sac à dos (courant)"
+      "nom": "Sac à dos (vide)"
     },
     {
       "nom_en": "Banquet (per person)",
@@ -175,7 +175,7 @@
       "poids_en": "—",
       "poids_lb": null,
       "categorie_en": "Food/Drink",
-      "nom": "Banquet (par personne)"
+      "nom": "Banquet (par convive)"
     },
     {
       "nom_en": "Barding (Large creature)",
@@ -217,7 +217,7 @@
       "poids_en": "30 lbs.",
       "poids_lb": 30,
       "categorie_en": "Adventuring Gear",
-      "nom": "Tonneau"
+      "nom": "Tonneau (vide)"
     },
     {
       "nom_en": "Basket",
@@ -233,7 +233,7 @@
       "poids_en": "1 lb.",
       "poids_lb": 1,
       "categorie_en": "Adventuring Gear",
-      "nom": "Panier"
+      "nom": "Panier (vide)"
     },
     {
       "nom_en": "Bedroll",
@@ -249,7 +249,7 @@
       "poids_en": "5 lbs.",
       "poids_lb": 5,
       "categorie_en": "Adventuring Gear",
-      "nom": "Sac de couchage"
+      "nom": "Paillasse"
     },
     {
       "nom_en": "Bell",
@@ -297,7 +297,7 @@
       "poids_en": "3 lbs.",
       "poids_lb": 3,
       "categorie_en": "Adventuring Gear",
-      "nom": "Couverture"
+      "nom": "Couverture d’hiver"
     },
     {
       "nom_en": "Block and tackle",
@@ -329,7 +329,7 @@
       "poids_en": "—",
       "poids_lb": null,
       "categorie_en": "Adventuring Gear",
-      "nom": "Bouteille"
+      "nom": "Bouteille de vin en verre"
     },
     {
       "nom_en": "Bread",
@@ -345,7 +345,7 @@
       "poids_en": "1/2 lb.",
       "poids_lb": 0.5,
       "categorie_en": "Food/Drink",
-      "nom": "Pain"
+      "nom": "Pain, la miche"
     },
     {
       "nom_en": "Bucket",
@@ -361,7 +361,7 @@
       "poids_en": "2 lbs.",
       "poids_lb": 2,
       "categorie_en": "Adventuring Gear",
-      "nom": "Seau"
+      "nom": "Seau (vide)"
     },
     {
       "nom_en": "Bullseye lantern",
@@ -393,7 +393,7 @@
       "poids_en": "2 lbs.",
       "poids_lb": 2,
       "categorie_en": "Adventuring Gear",
-      "nom": "Chausse-trapes"
+      "nom": "Chausse-trappes"
     },
     {
       "nom_en": "Candle",
@@ -425,7 +425,7 @@
       "poids_en": "2 lb.",
       "poids_lb": 2,
       "categorie_en": "Adventuring Gear",
-      "nom": "Toile (yard carré)"
+      "nom": "Toile (le m²)"
     },
     {
       "nom_en": "Carriage",
@@ -441,7 +441,7 @@
       "poids_en": "600 lb.",
       "poids_lb": 600,
       "categorie_en": "Transport, Land",
-      "nom": "Carrosse"
+      "nom": "Carriole"
     },
     {
       "nom_en": "Cart",
@@ -473,7 +473,7 @@
       "poids_en": "2 lbs.",
       "poids_lb": 2,
       "categorie_en": "Adventuring Gear",
-      "nom": "Chaîne (3 m)"
+      "nom": "Chaîne, 3 m"
     },
     {
       "nom_en": "Chalk",
@@ -489,7 +489,7 @@
       "poids_en": "—",
       "poids_lb": null,
       "categorie_en": "Adventuring Gear",
-      "nom": "Craie"
+      "nom": "Craie, morceau"
     },
     {
       "nom_en": "Cheese",
@@ -505,7 +505,7 @@
       "poids_en": "1/2 lb.",
       "poids_lb": 0.5,
       "categorie_en": "Food/Drink",
-      "nom": "Fromage"
+      "nom": "Fromage, la portion"
     },
     {
       "nom_en": "Chest (small)",
@@ -521,7 +521,7 @@
       "poids_en": "25 lb.",
       "poids_lb": 25,
       "categorie_en": null,
-      "nom": "Coffre (petit)"
+      "nom": "Coffre, vide"
     },
     {
       "nom_en": "Cleric's vestments",
@@ -537,7 +537,7 @@
       "poids_en": "6 lbs.",
       "poids_lb": 6,
       "categorie_en": "Clothing",
-      "nom": "Habits sacerdotaux"
+      "nom": "Tenue sacerdotale"
     },
     {
       "nom_en": "Climber's kit",
@@ -553,7 +553,7 @@
       "poids_en": "5 lbs.",
       "poids_lb": 5,
       "categorie_en": "Tools",
-      "nom": "Matériel d'escalade"
+      "nom": "Matériel d’escalade"
     },
     {
       "nom_en": "Coach cab",
@@ -569,7 +569,7 @@
       "poids_en": null,
       "poids_lb": null,
       "categorie_en": "Transport, Land",
-      "nom": "Fiacre (course)"
+      "nom": "Diligence"
     },
     {
       "nom_en": "Cold-weather outfit",
@@ -585,7 +585,7 @@
       "poids_en": "7 lbs.",
       "poids_lb": 7,
       "categorie_en": "Clothing",
-      "nom": "Tenue de grand froid"
+      "nom": "Tenue polaire"
     },
     {
       "nom_en": "Courtier's outfit",
@@ -601,7 +601,7 @@
       "poids_en": "6 lbs.",
       "poids_lb": 6,
       "categorie_en": "Clothing",
-      "nom": "Tenue de courtisan"
+      "nom": "Habit de cour"
     },
     {
       "nom_en": "Crowbar",
@@ -633,7 +633,7 @@
       "poids_en": "8 lbs.",
       "poids_lb": 8,
       "categorie_en": "Tools",
-      "nom": "Matériel de déguisement"
+      "nom": "Trousse de déguisement"
     },
     {
       "nom_en": "Dog (guard)",
@@ -649,7 +649,7 @@
       "poids_en": "—",
       "poids_lb": null,
       "categorie_en": null,
-      "nom": "Chien (de garde)"
+      "nom": "Chien de garde"
     },
     {
       "nom_en": "Dog (riding)",
@@ -665,7 +665,7 @@
       "poids_en": "—",
       "poids_lb": null,
       "categorie_en": null,
-      "nom": "Chien (de monte)"
+      "nom": "Chien de selle"
     },
     {
       "nom_en": "Entertainer's outfit",
@@ -681,7 +681,7 @@
       "poids_en": "4 lbs.",
       "poids_lb": 4,
       "categorie_en": "Clothing",
-      "nom": "Tenue d'artiste"
+      "nom": "Costume d’artiste"
     },
     {
       "nom_en": "Everburning torch",
@@ -713,7 +713,7 @@
       "poids_en": "8 lbs.",
       "poids_lb": 8,
       "categorie_en": "Clothing",
-      "nom": "Tenue d'explorateur"
+      "nom": "Tenue d’explorateur"
     },
     {
       "nom_en": "Feed (per day)",
@@ -729,7 +729,7 @@
       "poids_en": "10 lbs.",
       "poids_lb": 10,
       "categorie_en": "Animal Gear",
-      "nom": "Fourrage (par jour)"
+      "nom": "Nourriture pour animaux (par jour)"
     },
     {
       "nom_en": "Firewood (per day)",
@@ -745,7 +745,7 @@
       "poids_en": "20 lbs.",
       "poids_lb": 20,
       "categorie_en": "Adventuring Gear",
-      "nom": "Bois de chauffage (par jour)"
+      "nom": "Bois de chauffage (pour un jour)"
     },
     {
       "nom_en": "Fishhook",
@@ -777,7 +777,7 @@
       "poids_en": "5 lbs.",
       "poids_lb": 5,
       "categorie_en": "Adventuring Gear",
-      "nom": "Filet de pêche"
+      "nom": "Filet de pêche, 2,5 m²"
     },
     {
       "nom_en": "Flask",
@@ -793,7 +793,7 @@
       "poids_en": "4.5 lb.",
       "poids_lb": 4.5,
       "categorie_en": "Adventuring Gear",
-      "nom": "Flasque"
+      "nom": "Flasque (vide)"
     },
     {
       "nom_en": "Flint and steel",
@@ -809,7 +809,7 @@
       "poids_en": "—",
       "poids_lb": null,
       "categorie_en": "Adventuring Gear",
-      "nom": "Briquet à silex"
+      "nom": "Silex et amorce"
     },
     {
       "nom_en": "Galley",
@@ -825,7 +825,7 @@
       "poids_en": null,
       "poids_lb": null,
       "categorie_en": "Transport, Sea",
-      "nom": "Galère"
+      "nom": "Trirème"
     },
     {
       "nom_en": "Grappling hook (common)",
@@ -873,7 +873,7 @@
       "poids_en": "1 lb.",
       "poids_lb": 1,
       "categorie_en": "Tools",
-      "nom": "Trousse de soins"
+      "nom": "Trousse de premiers secours"
     },
     {
       "nom_en": "Hireling (trained)",
@@ -889,7 +889,7 @@
       "poids_en": "— (trained), — (untrained)",
       "poids_lb": null,
       "categorie_en": null,
-      "nom": "Employé (qualifié)"
+      "nom": "Employé qualifié"
     },
     {
       "nom_en": "Hireling (untrained)",
@@ -905,7 +905,7 @@
       "poids_en": "— (trained), — (untrained)",
       "poids_lb": null,
       "categorie_en": null,
-      "nom": "Employé (non qualifié)"
+      "nom": "Employé non-qualifié"
     },
     {
       "nom_en": "Holly and mistletoe",
@@ -937,7 +937,7 @@
       "poids_en": "1 lb. (gold), 1 lb. (iron), 1 lb. (platinum), 1 lb. (silver), — (wooden)",
       "poids_lb": 1,
       "categorie_en": null,
-      "nom": "Symbole sacré (argent)"
+      "nom": "Symbole sacré en argent"
     },
     {
       "nom_en": "Holy symbol (wooden)",
@@ -953,7 +953,7 @@
       "poids_en": "—",
       "poids_lb": null,
       "categorie_en": null,
-      "nom": "Symbole sacré (bois)"
+      "nom": "Symbole sacré en bois"
     },
     {
       "nom_en": "Holy water",
@@ -969,7 +969,7 @@
       "poids_en": "1 lb.",
       "poids_lb": 1,
       "categorie_en": "Alchemical Weapons",
-      "nom": "Eau bénite"
+      "nom": "Eau bénite (flasque)"
     },
     {
       "nom_en": "Hooded lantern",
@@ -985,7 +985,7 @@
       "poids_en": "2 lbs.",
       "poids_lb": 2,
       "categorie_en": "Adventuring Gear",
-      "nom": "Lanterne à capuchon"
+      "nom": "Lanterne à capote"
     },
     {
       "nom_en": "Horse (heavy)",
@@ -1001,7 +1001,7 @@
       "poids_en": "—",
       "poids_lb": null,
       "categorie_en": null,
-      "nom": "Cheval (lourd)"
+      "nom": "Cheval — Cheval lourd"
     },
     {
       "nom_en": "Horse (heavy, combat trained)",
@@ -1017,7 +1017,7 @@
       "poids_en": "—",
       "poids_lb": null,
       "categorie_en": null,
-      "nom": "Cheval (lourd, dressé au combat)"
+      "nom": "Cheval — Cheval lourd (entraîné au combat)"
     },
     {
       "nom_en": "Horse (light)",
@@ -1033,7 +1033,7 @@
       "poids_en": "—",
       "poids_lb": null,
       "categorie_en": null,
-      "nom": "Cheval (léger)"
+      "nom": "Cheval — Cheval léger"
     },
     {
       "nom_en": "Horse (light, combat trained)",
@@ -1049,7 +1049,7 @@
       "poids_en": "—",
       "poids_lb": null,
       "categorie_en": null,
-      "nom": "Cheval (léger, dressé au combat)"
+      "nom": "Cheval — Cheval léger (entraîné au combat)"
     },
     {
       "nom_en": "Horse (pony)",
@@ -1065,7 +1065,7 @@
       "poids_en": "—",
       "poids_lb": null,
       "categorie_en": null,
-      "nom": "Poney"
+      "nom": "Cheval — Poney"
     },
     {
       "nom_en": "Horse (pony, combat trained)",
@@ -1081,7 +1081,7 @@
       "poids_en": "—",
       "poids_lb": null,
       "categorie_en": null,
-      "nom": "Poney (dressé au combat)"
+      "nom": "Cheval — Poney (entraîné au combat)"
     },
     {
       "nom_en": "Hourglass",
@@ -1113,7 +1113,7 @@
       "poids_en": "—",
       "poids_lb": null,
       "categorie_en": "Adventuring Gear",
-      "nom": "Encre"
+      "nom": "Encre, la fiole"
     },
     {
       "nom_en": "Inkpen",
@@ -1129,7 +1129,7 @@
       "poids_en": "—",
       "poids_lb": null,
       "categorie_en": "Adventuring Gear",
-      "nom": "Plume"
+      "nom": "Plume d’écriture"
     },
     {
       "nom_en": "Inn stay (common)",
@@ -1145,7 +1145,7 @@
       "poids_en": "— (common), — (good), — (poor), — (suite, average), — (suite, luxurious), — (suite, small)",
       "poids_lb": null,
       "categorie_en": null,
-      "nom": "Séjour à l'auberge (courant)"
+      "nom": "Séjour à l’auberge (par jour) — Qualité convenable"
     },
     {
       "nom_en": "Inn stay (good)",
@@ -1161,7 +1161,7 @@
       "poids_en": "— (common), — (good), — (poor), — (suite, average), — (suite, luxurious), — (suite, small)",
       "poids_lb": null,
       "categorie_en": null,
-      "nom": "Séjour à l'auberge (bon)"
+      "nom": "Séjour à l’auberge (par jour) — Bonne qualité"
     },
     {
       "nom_en": "Inn stay (poor)",
@@ -1177,7 +1177,7 @@
       "poids_en": "— (common), — (good), — (poor), — (suite, average), — (suite, luxurious), — (suite, small)",
       "poids_lb": null,
       "categorie_en": null,
-      "nom": "Séjour à l'auberge (pauvre)"
+      "nom": "Séjour à l’auberge (par jour) — Qualité médiocre"
     },
     {
       "nom_en": "Jug",
@@ -1193,7 +1193,7 @@
       "poids_en": "9 lbs.",
       "poids_lb": 9,
       "categorie_en": "Adventuring Gear",
-      "nom": "Cruche"
+      "nom": "Jarre en terre cuite"
     },
     {
       "nom_en": "Keelboat",
@@ -1209,7 +1209,7 @@
       "poids_en": null,
       "poids_lb": null,
       "categorie_en": "Transport, Sea",
-      "nom": "Bateau à quille"
+      "nom": "Bateau à fond plat"
     },
     {
       "nom_en": "Ladder",
@@ -1225,7 +1225,7 @@
       "poids_en": "20 lbs.",
       "poids_lb": 20,
       "categorie_en": "Adventuring Gear",
-      "nom": "Échelle"
+      "nom": "Échelle, 3 m"
     },
     {
       "nom_en": "Lamp",
@@ -1257,7 +1257,7 @@
       "poids_en": "1 lb. (average), 1 lb. (good), 1 lb. (simple), 1 lb. (superior)",
       "poids_lb": 1,
       "categorie_en": null,
-      "nom": "Serrure (moyenne)"
+      "nom": "Cadenas (moyen)"
     },
     {
       "nom_en": "Lock (good)",
@@ -1273,7 +1273,7 @@
       "poids_en": "1 lb. (average), 1 lb. (good), 1 lb. (simple), 1 lb. (superior)",
       "poids_lb": 1,
       "categorie_en": null,
-      "nom": "Serrure (bonne)"
+      "nom": "Cadenas (bon)"
     },
     {
       "nom_en": "Lock (simple)",
@@ -1289,7 +1289,7 @@
       "poids_en": "1 lb. (average), 1 lb. (good), 1 lb. (simple), 1 lb. (superior)",
       "poids_lb": 1,
       "categorie_en": null,
-      "nom": "Serrure (simple)"
+      "nom": "Cadenas (très simple)"
     },
     {
       "nom_en": "Lock (superior)",
@@ -1305,7 +1305,7 @@
       "poids_en": "1 lb. (average), 1 lb. (good), 1 lb. (simple), 1 lb. (superior)",
       "poids_lb": 1,
       "categorie_en": null,
-      "nom": "Serrure (supérieure)"
+      "nom": "Cadenas (excellent)"
     },
     {
       "nom_en": "Longship",
@@ -1353,7 +1353,7 @@
       "poids_en": "2 lbs. (common), 2 lbs. (masterwork), 2 lbs. (mithral)",
       "poids_lb": 2,
       "categorie_en": null,
-      "nom": "Menottes (courantes)"
+      "nom": "Menottes"
     },
     {
       "nom_en": "Manacles (masterwork)",
@@ -1369,7 +1369,7 @@
       "poids_en": "2 lbs. (common), 2 lbs. (masterwork), 2 lbs. (mithral)",
       "poids_lb": 2,
       "categorie_en": null,
-      "nom": "Menottes (de maître)"
+      "nom": "Menottes de qualité supérieure"
     },
     {
       "nom_en": "Masterwork tool",
@@ -1385,7 +1385,7 @@
       "poids_en": "1 lb.",
       "poids_lb": 1,
       "categorie_en": "Tools",
-      "nom": "Outil de maître"
+      "nom": "Outil de qualité supérieure"
     },
     {
       "nom_en": "Meal (common, per day)",
@@ -1401,7 +1401,7 @@
       "poids_en": "— (common, per day), — (good, per day), — (poor, per day)",
       "poids_lb": null,
       "categorie_en": null,
-      "nom": "Repas (courant, par jour)"
+      "nom": "Repas (par jour) — Qualité convenable"
     },
     {
       "nom_en": "Meal (good, per day)",
@@ -1417,7 +1417,7 @@
       "poids_en": "— (common, per day), — (good, per day), — (poor, per day)",
       "poids_lb": null,
       "categorie_en": null,
-      "nom": "Repas (bon, par jour)"
+      "nom": "Repas (par jour) — Bonne qualité"
     },
     {
       "nom_en": "Meal (poor, per day)",
@@ -1433,7 +1433,7 @@
       "poids_en": "— (common, per day), — (good, per day), — (poor, per day)",
       "poids_lb": null,
       "categorie_en": null,
-      "nom": "Repas (pauvre, par jour)"
+      "nom": "Repas (par jour) — Qualité médiocre"
     },
     {
       "nom_en": "Meat",
@@ -1449,7 +1449,7 @@
       "poids_en": "1 lb.",
       "poids_lb": 1,
       "categorie_en": "Food/Drink",
-      "nom": "Viande"
+      "nom": "Viande, la portion"
     },
     {
       "nom_en": "Merchant's scale",
@@ -1465,7 +1465,7 @@
       "poids_en": "1 lb.",
       "poids_lb": 1,
       "categorie_en": "Tools",
-      "nom": "Balance de marchand"
+      "nom": "Balance"
     },
     {
       "nom_en": "Messenger",
@@ -1513,7 +1513,7 @@
       "poids_en": "1/2 lb.",
       "poids_lb": 0.5,
       "categorie_en": "Adventuring Gear",
-      "nom": "Miroir"
+      "nom": "Petit miroir en acier"
     },
     {
       "nom_en": "Monk's outfit",
@@ -1529,7 +1529,7 @@
       "poids_en": "2 lbs.",
       "poids_lb": 2,
       "categorie_en": "Clothing",
-      "nom": "Tenue de moine"
+      "nom": "Habit de moine"
     },
     {
       "nom_en": "Mug/tankard",
@@ -1545,7 +1545,7 @@
       "poids_en": "1 lb.",
       "poids_lb": 1,
       "categorie_en": "Adventuring Gear",
-      "nom": "Chope"
+      "nom": "Chope en terre cuite"
     },
     {
       "nom_en": "Musical instrument (common)",
@@ -1561,7 +1561,7 @@
       "poids_en": "3 lbs. (common), 3 lbs. (masterwork)",
       "poids_lb": 3,
       "categorie_en": null,
-      "nom": "Instrument de musique (courant)"
+      "nom": "Instrument de musique courant"
     },
     {
       "nom_en": "Musical instrument (masterwork)",
@@ -1577,7 +1577,7 @@
       "poids_en": "3 lbs. (common), 3 lbs. (masterwork)",
       "poids_lb": 3,
       "categorie_en": null,
-      "nom": "Instrument de musique (de maître)"
+      "nom": "Instrument de musique de maître"
     },
     {
       "nom_en": "Noble's outfit",
@@ -1593,7 +1593,7 @@
       "poids_en": "10 lbs.",
       "poids_lb": 10,
       "categorie_en": "Clothing",
-      "nom": "Tenue de noble"
+      "nom": "Habit de noble"
     },
     {
       "nom_en": "Oar",
@@ -1625,7 +1625,7 @@
       "poids_en": "1 lb.",
       "poids_lb": 1,
       "categorie_en": "Adventuring Gear",
-      "nom": "Huile"
+      "nom": "Huile, la flasque"
     },
     {
       "nom_en": "Pack animal (donkey/mule)",
@@ -1641,7 +1641,7 @@
       "poids_en": "—",
       "poids_lb": null,
       "categorie_en": null,
-      "nom": "Bête de somme (âne ou mule)"
+      "nom": "Âne ou mulet"
     },
     {
       "nom_en": "Paper (sheet)",
@@ -1657,7 +1657,7 @@
       "poids_en": "—",
       "poids_lb": null,
       "categorie_en": "Adventuring Gear",
-      "nom": "Papier (feuille)"
+      "nom": "Papier, la feuille"
     },
     {
       "nom_en": "Parchment (sheet)",
@@ -1673,7 +1673,7 @@
       "poids_en": "—",
       "poids_lb": null,
       "categorie_en": "Adventuring Gear",
-      "nom": "Parchemin vierge (feuille)"
+      "nom": "Parchemin, la feuille"
     },
     {
       "nom_en": "Peasant's outfit",
@@ -1689,7 +1689,7 @@
       "poids_en": "2 lbs.",
       "poids_lb": 2,
       "categorie_en": "Clothing",
-      "nom": "Tenue de paysan"
+      "nom": "Habit de paysan"
     },
     {
       "nom_en": "Pitcher",
@@ -1705,7 +1705,7 @@
       "poids_en": "5 lbs.",
       "poids_lb": 5,
       "categorie_en": "Adventuring Gear",
-      "nom": "Pichet"
+      "nom": "Cruche en terre cuite"
     },
     {
       "nom_en": "Piton",
@@ -1737,7 +1737,7 @@
       "poids_en": "8 lbs.",
       "poids_lb": 8,
       "categorie_en": "Adventuring Gear",
-      "nom": "Perche"
+      "nom": "Perche, 3 m"
     },
     {
       "nom_en": "Portable ram",
@@ -1753,7 +1753,7 @@
       "poids_en": "20 lbs.",
       "poids_lb": 20,
       "categorie_en": "Adventuring Gear",
-      "nom": "Bélier portatif"
+      "nom": "Bélier portable"
     },
     {
       "nom_en": "Pot (common)",
@@ -1769,7 +1769,7 @@
       "poids_en": "4 lbs. (common), 2 lbs. (mithral)",
       "poids_lb": 4,
       "categorie_en": null,
-      "nom": "Marmite"
+      "nom": "Pot en fer"
     },
     {
       "nom_en": "Pouch, belt (empty)",
@@ -1785,7 +1785,7 @@
       "poids_en": "1 lb.",
       "poids_lb": 1,
       "categorie_en": "Adventuring Gear",
-      "nom": "Bourse de ceinture (vide)"
+      "nom": "Sacoche de ceinture (vide)"
     },
     {
       "nom_en": "Road or gate toll",
@@ -1801,7 +1801,7 @@
       "poids_en": "—",
       "poids_lb": null,
       "categorie_en": "Lodging/Services",
-      "nom": "Péage de route ou de porte"
+      "nom": "Droit de passage ou d’entrée"
     },
     {
       "nom_en": "Rope (50 ft.)",
@@ -1817,7 +1817,7 @@
       "poids_en": "10 lbs.",
       "poids_lb": 10,
       "categorie_en": "Adventuring Gear",
-      "nom": "Corde (15 m)"
+      "nom": "Corde en chanvre, 15 m"
     },
     {
       "nom_en": "Rowboat",
@@ -1849,7 +1849,7 @@
       "poids_en": "15 lbs.",
       "poids_lb": 15,
       "categorie_en": "Clothing",
-      "nom": "Tenue royale"
+      "nom": "Toilette royale"
     },
     {
       "nom_en": "Sack",
@@ -1865,7 +1865,7 @@
       "poids_en": "1/2 lb.",
       "poids_lb": 0.5,
       "categorie_en": "Adventuring Gear",
-      "nom": "Sac"
+      "nom": "Sac (vide)"
     },
     {
       "nom_en": "Saddle (exotic, military)",
@@ -1881,7 +1881,7 @@
       "poids_en": "40 lbs. (exotic, military), 20 lbs. (exotic, pack), 30 lbs. (exotic, riding), 30 lbs. (military), 15 lbs. (pack), 25 lbs. (riding)",
       "poids_lb": 40,
       "categorie_en": null,
-      "nom": "Selle (exotique, de guerre)"
+      "nom": "Selle spéciale de guerre"
     },
     {
       "nom_en": "Saddle (exotic, pack)",
@@ -1897,7 +1897,7 @@
       "poids_en": "20 lb.",
       "poids_lb": 20,
       "categorie_en": null,
-      "nom": "Selle (exotique, de bât)"
+      "nom": "Selle spéciale de bât"
     },
     {
       "nom_en": "Saddle (exotic, riding)",
@@ -1913,7 +1913,7 @@
       "poids_en": "30 lb.",
       "poids_lb": 30,
       "categorie_en": null,
-      "nom": "Selle (exotique, de monte)"
+      "nom": "Selle spéciale d’équitation"
     },
     {
       "nom_en": "Saddle (military)",
@@ -1929,7 +1929,7 @@
       "poids_en": "30 lb.",
       "poids_lb": 30,
       "categorie_en": null,
-      "nom": "Selle (de guerre)"
+      "nom": "Selle de guerre"
     },
     {
       "nom_en": "Saddle (pack)",
@@ -1945,7 +1945,7 @@
       "poids_en": "15 lb.",
       "poids_lb": 15,
       "categorie_en": null,
-      "nom": "Selle (de bât)"
+      "nom": "Selle de bât"
     },
     {
       "nom_en": "Saddle (riding)",
@@ -1961,7 +1961,7 @@
       "poids_en": "25 lb.",
       "poids_lb": 25,
       "categorie_en": null,
-      "nom": "Selle (de monte)"
+      "nom": "Selle d’équitation"
     },
     {
       "nom_en": "Saddlebags",
@@ -1977,7 +1977,7 @@
       "poids_en": "8 lbs.",
       "poids_lb": 8,
       "categorie_en": "Animal Gear",
-      "nom": "Sacoches de selle"
+      "nom": "Fontes"
     },
     {
       "nom_en": "Sailing ship",
@@ -1993,7 +1993,7 @@
       "poids_en": null,
       "poids_lb": null,
       "categorie_en": "Transport, Sea",
-      "nom": "Voilier"
+      "nom": "Navire de haute mer"
     },
     {
       "nom_en": "Scholar's outfit",
@@ -2009,7 +2009,7 @@
       "poids_en": "6 lbs.",
       "poids_lb": 6,
       "categorie_en": "Clothing",
-      "nom": "Tenue d'érudit"
+      "nom": "Habit d’érudit"
     },
     {
       "nom_en": "Scroll case",
@@ -2025,7 +2025,7 @@
       "poids_en": "1/2 lb.",
       "poids_lb": 0.5,
       "categorie_en": "Adventuring Gear",
-      "nom": "Étui à parchemins"
+      "nom": "Étui à carte ou à parchemin"
     },
     {
       "nom_en": "Sealing wax",
@@ -2073,7 +2073,7 @@
       "poids_en": null,
       "poids_lb": null,
       "categorie_en": "Transport, Sea",
-      "nom": "Passage sur un navire"
+      "nom": "Traversée en bateau"
     },
     {
       "nom_en": "Shovel, common",
@@ -2121,7 +2121,7 @@
       "poids_en": "5 lbs.",
       "poids_lb": 5,
       "categorie_en": "Adventuring Gear",
-      "nom": "Corde de soie (15 m)"
+      "nom": "Corde en soie, 15 m"
     },
     {
       "nom_en": "Sled",
@@ -2153,7 +2153,7 @@
       "poids_en": "10 lbs.",
       "poids_lb": 10,
       "categorie_en": "Adventuring Gear",
-      "nom": "Masse de forgeron"
+      "nom": "Masse"
     },
     {
       "nom_en": "Smokestick",
@@ -2185,7 +2185,7 @@
       "poids_en": "1 lb.",
       "poids_lb": 1,
       "categorie_en": "Adventuring Gear",
-      "nom": "Savon"
+      "nom": "Savon, 1 livre"
     },
     {
       "nom_en": "Spell component pouch",
@@ -2201,7 +2201,7 @@
       "poids_en": "2 lbs.",
       "poids_lb": 2,
       "categorie_en": "Tools",
-      "nom": "Sacoche de composantes de sorts"
+      "nom": "Sacoche à composantes"
     },
     {
       "nom_en": "Spellbook",
@@ -2217,7 +2217,7 @@
       "poids_en": "3 lbs.",
       "poids_lb": 3,
       "categorie_en": "Tools",
-      "nom": "Grimoire"
+      "nom": "Grimoire (vierge)"
     },
     {
       "nom_en": "Spellcasting",
@@ -2265,7 +2265,7 @@
       "poids_en": "—",
       "poids_lb": null,
       "categorie_en": "Animal Gear",
-      "nom": "Écurie (par jour)"
+      "nom": "Écurie (pour une journée)"
     },
     {
       "nom_en": "Sunrod",
@@ -2297,7 +2297,7 @@
       "poids_en": "4 lbs.",
       "poids_lb": 4,
       "categorie_en": "Alchemical Weapons",
-      "nom": "Sac collant"
+      "nom": "Sacoche immobilisante"
     },
     {
       "nom_en": "Tent",
@@ -2329,7 +2329,7 @@
       "poids_en": "1 lb. (common), 2 lbs. (masterwork)",
       "poids_lb": 1,
       "categorie_en": null,
-      "nom": "Outils de voleur (courants)"
+      "nom": "Outils de cambrioleur"
     },
     {
       "nom_en": "Thieves' tools (masterwork)",
@@ -2345,7 +2345,7 @@
       "poids_en": "2 lb.",
       "poids_lb": 2,
       "categorie_en": null,
-      "nom": "Outils de voleur (de maître)"
+      "nom": "Outils de cambrioleur de qualité supérieure"
     },
     {
       "nom_en": "Thunderstone",
@@ -2377,7 +2377,7 @@
       "poids_en": "—",
       "poids_lb": null,
       "categorie_en": "Alchemical Tools",
-      "nom": "Allumette"
+      "nom": "Allume-feu"
     },
     {
       "nom_en": "Torch",
@@ -2409,7 +2409,7 @@
       "poids_en": "1 lb.",
       "poids_lb": 1,
       "categorie_en": "Food/Drink",
-      "nom": "Rations de voyage"
+      "nom": "Rations de survie (par jour)"
     },
     {
       "nom_en": "Traveler's outfit",
@@ -2425,7 +2425,7 @@
       "poids_en": "5 lbs.",
       "poids_lb": 5,
       "categorie_en": "Clothing",
-      "nom": "Tenue de voyageur"
+      "nom": "Tenue de voyage"
     },
     {
       "nom_en": "Vial",
@@ -2441,7 +2441,7 @@
       "poids_en": "0.1 lb.",
       "poids_lb": 0.1,
       "categorie_en": "Adventuring Gear",
-      "nom": "Fiole"
+      "nom": "Fiole pour encre ou potion"
     },
     {
       "nom_en": "Wagon (light)",
@@ -2457,7 +2457,7 @@
       "poids_en": "400 lb.",
       "poids_lb": 400,
       "categorie_en": null,
-      "nom": "Chariot (léger)"
+      "nom": "Chariot"
     },
     {
       "nom_en": "Warship",
@@ -2473,7 +2473,7 @@
       "poids_en": null,
       "poids_lb": null,
       "categorie_en": "Transport, Sea",
-      "nom": "Navire de guerre"
+      "nom": "Vaisseau de guerre"
     },
     {
       "nom_en": "Water clock",
@@ -2553,7 +2553,7 @@
       "poids_en": "6 lbs. (common, pitcher), 1-1/2 lbs. (fine, bottle)",
       "poids_lb": 6,
       "categorie_en": null,
-      "nom": "Vin (courant, pichet)"
+      "nom": "Vin de table (le pichet)"
     },
     {
       "nom_en": "Wine (fine, bottle)",
@@ -2569,7 +2569,7 @@
       "poids_en": "1.5 lb.",
       "poids_lb": 1.5,
       "categorie_en": null,
-      "nom": "Vin (fin, bouteille)"
+      "nom": "Vin, bon cru (la bouteille)"
     }
   ]
 }

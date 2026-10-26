@@ -5,7 +5,9 @@
 
 pub mod aventure;
 pub mod calendrier;
+pub mod catalogue_inventaire;
 pub mod construction;
+pub mod equipement_fiche;
 pub mod etat;
 pub mod evenements;
 #[cfg(feature = "serde")]
@@ -292,6 +294,16 @@ impl Campagne {
                 nom,
             } => format!("{} recrute le partisan {nom} (niveau {niveau})", pj(maitre)),
             PartisanRetire { maitre, .. } => format!("{} retire un partisan", pj(maitre)),
+            Inventaire(_) => "Opération sur l'inventaire".to_string(),
+            Notes(c) => match c {
+                notes::Commande::Creer { titre, texte, .. } => {
+                    format!("Note ajoutée : {}", if titre.is_empty() { texte } else { titre })
+                }
+                notes::Commande::Modifier { titre, .. } => format!("Note modifiée : {titre}"),
+                notes::Commande::Epingler { epingle: true, .. } => "Note épinglée".to_string(),
+                notes::Commande::Epingler { .. } => "Note désépinglée".to_string(),
+                notes::Commande::Supprimer { .. } => "Note supprimée".to_string(),
+            },
             PersonnageDeplace { id, vers } => match vers {
                 Some(l) => format!("{} se rend à {}", pj(id), lo(l)),
                 None => format!("{} quitte toute localité", pj(id)),
@@ -335,7 +347,7 @@ impl Campagne {
                 motif,
             } => {
                 let mut parts = Vec::new();
-                if delta_po.pa != 0 {
+                if delta_po.pc != 0 {
                     parts.push(format!("{delta_po}"));
                 }
                 if ajout.unites() > 0 {
@@ -847,6 +859,95 @@ mod tests {
         )
         .unwrap();
         assert!(c.etat(&r).localite(a).unwrap().tresorerie.est_negatif());
+    }
+
+    #[test]
+    fn inventaire_annulable_et_rejouable() {
+        use inventaire::{Commande, Conteneur, Modele, Poids, Proprietaire};
+        let (mut c, r, _pj, _a, _) = base();
+        let modele = Modele {
+            id: "epee".into(),
+            nom: "Épée".into(),
+            type_objet: "arme".into(),
+            valeur: Some(Montant::po(15)),
+            poids: Some(Poids(150)),
+            source: "saisie libre".into(),
+            proprietes: Default::default(),
+        };
+        let conteneur = Conteneur {
+            capacite: None,
+            types_autorises: None,
+            contenu_compte: true,
+        };
+        let proprietaire = Proprietaire {
+            type_id: "personnage".into(),
+            ref_id: "1".into(),
+        };
+        for commande in [
+            Commande::AjouterModele(modele),
+            Commande::CreerInventaire {
+                proprietaire,
+                conteneur,
+            },
+            Commande::Ajouter {
+                modele: "epee".into(),
+                quantite: 1,
+                dans: 1,
+            },
+        ] {
+            c.executer(Evenement::Inventaire(commande), &r).unwrap();
+        }
+        assert_eq!(c.etat(&r).inventaire.poids_total(1), Poids(150));
+        c.annuler();
+        assert!(c.etat(&r).inventaire.exemplaire(2).is_err());
+        c.retablir();
+        assert_eq!(c.etat(&r).inventaire.poids_total(1), Poids(150));
+    }
+
+    #[test]
+    fn notes_annulables_et_rejouables() {
+        use notes::{Commande, Genre, Quand};
+        let (mut c, r, ..) = base();
+        c.executer(
+            Evenement::Notes(Commande::Creer {
+                genre: Genre::Mj,
+                rubrique: None,
+                titre: "Le MJ a dit".into(),
+                texte: "Le dragon est rouge".into(),
+                etiquettes: vec![],
+                quand: Quand {
+                    jour: 1,
+                    heure: None,
+                    reel: 0,
+                },
+            }),
+            &r,
+        )
+        .unwrap();
+        assert_eq!(c.etat(&r).notes.nombre(), 1);
+        assert!(c.journal.last().unwrap().evenement.est_une_note());
+        c.annuler();
+        assert_eq!(c.etat(&r).notes.nombre(), 0);
+        c.retablir();
+        assert_eq!(c.etat(&r).notes.nombre(), 1);
+        // Une note vide est refusée et ne change rien.
+        let refus = c.executer(
+            Evenement::Notes(Commande::Creer {
+                genre: Genre::Session,
+                rubrique: None,
+                titre: " ".into(),
+                texte: String::new(),
+                etiquettes: vec![],
+                quand: Quand {
+                    jour: 1,
+                    heure: None,
+                    reel: 0,
+                },
+            }),
+            &r,
+        );
+        assert!(refus.is_err());
+        assert_eq!(c.etat(&r).notes.nombre(), 1);
     }
 
     #[test]

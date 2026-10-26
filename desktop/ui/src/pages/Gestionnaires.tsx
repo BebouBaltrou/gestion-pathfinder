@@ -35,8 +35,8 @@ export function Gestionnaires({ outils }: { outils: Outils }) {
             {p.salaires.map((s) => (
               <div className="carte pile" key={s.localite} style={{ minWidth: 220 }}>
                 <strong style={{ color: "var(--texte-fort)" }}>{s.localite}</strong>
-                <span>Salaires : <strong style={{ color: "var(--po)" }}>{formaterPo(s.salairesJour.pa)}</strong> / jour</span>
-                <span>Trésorerie : <strong style={{ color: s.negative ? "var(--rouge)" : "var(--po)" }}>{formaterPo(s.tresorerie.pa)}</strong></span>
+                <span>Salaires : <strong style={{ color: "var(--po)" }}>{formaterPo(s.salairesJour.pc)}</strong> / jour</span>
+                <span>Trésorerie : <strong style={{ color: s.negative ? "var(--rouge)" : "var(--po)" }}>{formaterPo(s.tresorerie.pc)}</strong></span>
                 {s.negative ? (
                   <span style={{ color: "var(--rouge)" }}>trésorerie négative</span>
                 ) : (
@@ -114,7 +114,7 @@ export function Gestionnaires({ outils }: { outils: Outils }) {
             <div className="ligne" style={{ gap: 12 }}>
               <strong style={{ fontSize: 17, color: "var(--texte-fort)" }}>{g.nom}</strong>
               {g.exemple && <span className="doux">{g.exemple}</span>}
-              <strong style={{ color: "var(--po)" }}>{formaterPo(g.salaireJour.pa)}</strong>
+              <strong style={{ color: "var(--po)" }}>{formaterPo(g.salaireJour.pc)}</strong>
               <span className="doux">/ jour</span>
               {!g.actif && <span className="badge" style={{ border: "1px solid var(--bord-fort)" }}>inactif (non payé)</span>}
             </div>

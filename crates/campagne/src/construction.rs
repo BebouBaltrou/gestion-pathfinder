@@ -398,7 +398,7 @@ impl Etat {
                 }
                 let loc = self.batiment(s.batiment)?.localite;
                 let payeur = payeur.unwrap_or(Payeur::Localite(loc));
-                if prix.pa > 0 {
+                if prix.pc > 0 {
                     self.debiter(payeur, prix)?;
                 }
                 self.salle_mut(*salle)?.statut = StatutSalle::Construite;
@@ -556,7 +556,7 @@ impl Etat {
                     return Err(Erreur::MontantNonPositif);
                 }
                 let loc = self.batiment(s.batiment)?.localite;
-                if prix.pa > 0 {
+                if prix.pc > 0 {
                     self.debiter(payeur.unwrap_or(Payeur::Localite(loc)), prix)?;
                 }
                 let m = self.salle_mut(*salle)?;

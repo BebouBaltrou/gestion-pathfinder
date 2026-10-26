@@ -1,0 +1,116 @@
+{
+  "emplacements": [
+    {
+      "id": "tete",
+      "zone": "Tête",
+      "nom": "Casque, couvre-chef",
+      "capacite": 1
+    },
+    {
+      "id": "visage",
+      "zone": "Visage",
+      "nom": "Lunettes, masque",
+      "capacite": 1
+    },
+    {
+      "id": "cou",
+      "zone": "Cou",
+      "nom": "Amulette, collier",
+      "capacite": 1
+    },
+    {
+      "id": "epaules",
+      "zone": "Épaules",
+      "nom": "Cape, manteau",
+      "capacite": 1
+    },
+    {
+      "id": "torse",
+      "zone": "Torse",
+      "nom": "Veste, chemise",
+      "capacite": 1
+    },
+    {
+      "id": "corps",
+      "zone": "Corps",
+      "nom": "Robe, armure",
+      "capacite": 1
+    },
+    {
+      "id": "taille",
+      "zone": "Taille",
+      "nom": "Ceinture",
+      "capacite": 1
+    },
+    {
+      "id": "poignets",
+      "zone": "Poignets",
+      "nom": "Bracelets, brassards",
+      "capacite": 1
+    },
+    {
+      "id": "mains",
+      "zone": "Mains",
+      "nom": "Gants",
+      "capacite": 1
+    },
+    {
+      "id": "anneau",
+      "zone": "Doigts",
+      "nom": "Anneau",
+      "capacite": 2
+    },
+    {
+      "id": "pieds",
+      "zone": "Pieds",
+      "nom": "Bottes",
+      "capacite": 1
+    },
+    {
+      "id": "main_directrice",
+      "zone": "Mains tenues",
+      "nom": "Main directrice",
+      "capacite": 1
+    },
+    {
+      "id": "main_non_directrice",
+      "zone": "Mains tenues",
+      "nom": "Main non directrice",
+      "capacite": 1
+    },
+    {
+      "id": "sans_emplacement",
+      "zone": "Sans emplacement",
+      "nom": "Objets sans emplacement",
+      "capacite": 0
+    }
+  ],
+  "par_type": {
+    "armure": [
+      "corps"
+    ],
+    "bouclier": [
+      "main_non_directrice"
+    ],
+    "arme": [
+      "main_directrice",
+      "main_non_directrice"
+    ],
+    "anneau": [
+      "anneau"
+    ],
+    "objet-merveilleux": [
+      "sans_emplacement"
+    ]
+  },
+  "noms_du_livre": {
+    "front": "tete",
+    "ceinture": "taille",
+    "poignets": "poignets",
+    "anneau": "anneau",
+    "cou": "cou",
+    "épaules": "epaules",
+    "pieds": "pieds",
+    "mains": "mains"
+  }
+}

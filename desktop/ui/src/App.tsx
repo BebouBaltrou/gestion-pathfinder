@@ -7,6 +7,9 @@ import { Localites } from "./pages/Localites";
 import { Batiments } from "./pages/Batiments";
 import { Gestionnaires } from "./pages/Gestionnaires";
 import { Historique } from "./pages/Historique";
+import { Notes } from "./pages/Notes";
+import { PanneauNotes } from "./composants/PanneauNotes";
+import { Inventaire } from "./pages/Inventaire";
 import { Parametres } from "./pages/Parametres";
 import { Points } from "./pages/Points";
 import { Referentiel } from "./pages/Referentiel";
@@ -17,16 +20,16 @@ import { Aventure } from "./pages/Aventure";
 import { Tableau } from "./pages/Tableau";
 
 export type Page =
-  | "tableau" | "aventure" | "recettes" | "historique"
-  | "localites" | "batiments" | "organisations" | "gestionnaires" | "personnages"
+  | "tableau" | "aventure" | "recettes" | "historique" | "notes"
+  | "localites" | "batiments" | "organisations" | "gestionnaires" | "personnages" | "inventaire"
   | "referentiel" | "points" | "parametres" | "campagnes";
 
 const NAVIGATION: { titre: string; pages: [Page, string][] }[] = [
   { titre: "Table de jeu", pages: [["aventure", "Aventure et combat"]] },
-  { titre: "Campagne", pages: [["tableau", "Tableau de bord"], ["recettes", "Recettes"], ["historique", "Historique"]] },
+  { titre: "Campagne", pages: [["tableau", "Tableau de bord"], ["recettes", "Recettes"], ["notes", "Notes"], ["historique", "Historique"]] },
   {
     titre: "Domaines",
-    pages: [["localites", "Localités"], ["batiments", "Bâtiments"], ["organisations", "Organisations"], ["gestionnaires", "Gestionnaires"], ["personnages", "Personnages"]],
+    pages: [["localites", "Localités"], ["batiments", "Bâtiments"], ["organisations", "Organisations"], ["gestionnaires", "Gestionnaires"], ["personnages", "Personnages"], ["inventaire", "Inventaire"]],
   },
   { titre: "Référence", pages: [["referentiel", "Référentiel"], ["points", "Points à confirmer"], ["parametres", "Paramètres"], ["campagnes", "Campagnes"]] },
 ];
@@ -49,6 +52,7 @@ export function App() {
   const [etat, setEtat] = useState<EtatApp | null>(null);
   const [page, setPage] = useState<Page>("tableau");
   const [version, setVersion] = useState(0);
+  const [panneauNotes, setPanneauNotes] = useState(false);
   const [notifs, setNotifs] = useState<Notification[]>([]);
   const prochain = useRef(1);
 
@@ -91,6 +95,11 @@ export function App() {
   // Ctrl+Z / Ctrl+Y (hors des champs de saisie)
   useEffect(() => {
     const clavier = (e: KeyboardEvent) => {
+      if (e.altKey && e.key.toLowerCase() === "n") {
+        e.preventDefault();
+        setPanneauNotes((v) => !v);
+        return;
+      }
       const cible = e.target as HTMLElement | null;
       if (cible && ["INPUT", "TEXTAREA", "SELECT"].includes(cible.tagName)) return;
       if (!(e.ctrlKey || e.metaKey)) return;
@@ -159,6 +168,14 @@ export function App() {
                 <span className="jour-campagne">jour {entete.jour}</span>
               </div>
               <button
+                className={"bouton" + (panneauNotes ? " principal" : "")}
+                aria-pressed={panneauNotes}
+                title="Notes de la partie (Alt+N)"
+                onClick={() => setPanneauNotes((v) => !v)}
+              >
+                {icones.notes({})} <span className="masquable">Notes</span>
+              </button>
+              <button
                 className="bouton icone"
                 aria-label="Annuler"
                 title={entete.derniereAction ? `Annuler : ${entete.derniereAction} (Ctrl+Z)` : "Rien à annuler"}
@@ -224,6 +241,8 @@ export function App() {
           {pageActive === "campagnes" && <Campagnes outils={outils} />}
           {pageActive === "localites" && <Localites outils={outils} />}
           {pageActive === "personnages" && <Personnages outils={outils} />}
+          {pageActive === "inventaire" && <Inventaire outils={outils} />}
+          {pageActive === "notes" && <Notes outils={outils} />}
           {pageActive === "batiments" && <Batiments outils={outils} />}
           {pageActive === "organisations" && <Organisations outils={outils} />}
           {pageActive === "gestionnaires" && <Gestionnaires outils={outils} />}
@@ -232,9 +251,11 @@ export function App() {
           {pageActive === "referentiel" && <Referentiel outils={outils} />}
           {pageActive === "parametres" && <Parametres outils={outils} />}
           {pageActive === "recettes" && <Recettes outils={outils} />}
-          {!["tableau", "aventure", "campagnes", "localites", "personnages", "batiments", "recettes", "organisations", "gestionnaires", "historique", "points", "parametres", "referentiel"].includes(pageActive) && <EnAttente nom={NOMS_PAGES[pageActive]} />}
+          {!["tableau", "aventure", "campagnes", "localites", "personnages", "inventaire", "notes", "batiments", "recettes", "organisations", "gestionnaires", "historique", "points", "parametres", "referentiel"].includes(pageActive) && <EnAttente nom={NOMS_PAGES[pageActive]} />}
         </main>
       </div>
+
+      {panneauNotes && entete && <PanneauNotes outils={outils} onFermer={() => setPanneauNotes(false)} />}
 
       <div className="notifications" aria-live="polite">
         {notifs.map((n) => (

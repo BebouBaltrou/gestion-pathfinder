@@ -6,8 +6,10 @@ pub mod aventure;
 pub mod batiments;
 pub mod gestionnaires;
 pub mod historique;
+pub mod inventaire;
 pub mod localites;
 pub mod localites_modeles;
+pub mod notes;
 pub mod organisations;
 pub mod parametres;
 pub mod personnage;
@@ -32,18 +34,18 @@ pub mod page {
     pub const PERSONNAGES: &str = "personnages";
 }
 
-/// Somme en pièces d'argent, avec son libellé (« 4 po 7 pa »).
+/// Somme en pièces de cuivre, avec son libellé (« 4 po 7 pa »).
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize))]
 pub struct Somme {
-    pub pa: i64,
+    pub pc: i64,
     pub texte: String,
 }
 
 impl From<Montant> for Somme {
     fn from(m: Montant) -> Self {
         Somme {
-            pa: m.pa,
+            pc: m.pc,
             texte: m.to_string(),
         }
     }

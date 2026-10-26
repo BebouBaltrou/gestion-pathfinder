@@ -270,13 +270,13 @@ export function Recettes({ outils }: { outils: Outils }) {
             <hr className="separateur" />
             <div className="ligne" style={{ gap: 14 }}>
               <span>Total sur {bilan.jours} jour(s) :</span>
-              <strong style={{ color: "var(--po)" }}>{formaterPo(bilan.poBrut.pa)}</strong>
+              <strong style={{ color: "var(--po)" }}>{formaterPo(bilan.poBrut.pc)}</strong>
               <BlocCapitaux c={bilan.capitauxBruts} />
             </div>
             {bilan.absence && <span style={{ color: "var(--orange)" }}>{bilan.absence}</span>}
             <div className="ligne" style={{ gap: 14 }}>
               <strong>Gagné :</strong>
-              <strong style={{ color: "var(--po)", fontSize: 18 }}>{formaterPo(bilan.poNet.pa)}</strong>
+              <strong style={{ color: "var(--po)", fontSize: 18 }}>{formaterPo(bilan.poNet.pc)}</strong>
               <BlocCapitaux c={bilan.capitauxNets} />
             </div>
 
@@ -333,10 +333,10 @@ export function Recettes({ outils }: { outils: Outils }) {
             )}
 
             <div className="ligne" style={{ gap: 14 }}>
-              {bilan.coutConserves.pa > 0 && (
+              {bilan.coutConserves.pc > 0 && (
                 <>
                   <span>Coût des capitaux gardés :</span>
-                  <strong style={{ color: "var(--po)" }}>{formaterPo(bilan.coutConserves.pa)}</strong>
+                  <strong style={{ color: "var(--po)" }}>{formaterPo(bilan.coutConserves.pc)}</strong>
                 </>
               )}
               <button className="bouton principal" disabled={!v.encaissable} onClick={encaisser}>
