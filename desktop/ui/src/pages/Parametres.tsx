@@ -8,9 +8,11 @@ import { ParametresIntermede } from "./ParametresIntermede";
 /** Registre des règles optionnelles de la campagne : description, impact, valeur par défaut. */
 export function Parametres({ outils }: { outils: Outils }) {
   const [regles, setRegles] = useState<RegleInfo[]>([]);
+  const [campagne, setCampagne] = useState<string | null>(null);
 
   useEffect(() => {
     api.reglesCampagne().then(setRegles);
+    api.pageParametres().then((p) => setCampagne(p?.campagne ?? null));
   }, [outils.version]);
 
   const groupes: [string, RegleInfo[]][] = [
@@ -22,6 +24,7 @@ export function Parametres({ outils }: { outils: Outils }) {
     <div className="page">
       <div className="titre-page">
         <h1>Paramètres de la campagne</h1>
+        {campagne && <p className="doux">Campagne « {campagne} »</p>}
         <p>
           Chaque règle optionnelle de cette campagne, ce qu'elle change et sa valeur d'origine. Les changements des
           personnages sont enregistrés dans l'historique et peuvent être annulés.
