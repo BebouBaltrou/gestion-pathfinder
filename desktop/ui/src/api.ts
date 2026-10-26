@@ -502,6 +502,10 @@ export type SaisieCalendrier = {
   bissextile: "quatre" | "huit";
 };
 
+export type ModelePerso = { id: string; nom: string; detail: string };
+
+export type PageModeles = { batiments: ModelePerso[]; organisations: ModelePerso[] };
+
 export type PageParametres = {
   campagne: string;
   reglages: { id: string; titre: string; aide: string; actif: boolean; statut: "officiel" | "personnalise" | null; point: string | null }[];
@@ -684,6 +688,7 @@ export const api = {
   pagePoints: () => appeler<PagePoints>("page_points"),
   pageReferentiel: () => appeler<PageReferentiel>("page_referentiel"),
   pageParametres: () => appeler<PageParametres | null>("page_parametres"),
+  pageModeles: () => appeler<PageModeles>("page_modeles"),
   regler: (id: string, actif: boolean) => appeler<Retour>("regler", { id, actif }),
   reglerCalendrier: (jourSemaine: number, jour: number, mois: number, annee: number, bissextile: "quatre" | "huit") =>
     appeler<Retour>("regler_calendrier", { jourSemaine, jour, mois, annee, bissextile }),

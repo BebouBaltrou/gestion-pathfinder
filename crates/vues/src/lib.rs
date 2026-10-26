@@ -9,6 +9,7 @@ pub mod historique;
 pub mod inventaire;
 pub mod localites;
 pub mod localites_modeles;
+pub mod modeles;
 pub mod notes;
 pub mod organisations;
 pub mod parametres;

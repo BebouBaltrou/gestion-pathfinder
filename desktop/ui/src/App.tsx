@@ -11,6 +11,7 @@ import { Notes } from "./pages/Notes";
 import { PanneauNotes } from "./composants/PanneauNotes";
 import { Inventaire } from "./pages/Inventaire";
 import { Parametres } from "./pages/Parametres";
+import { Modeles } from "./pages/Modeles";
 import { Points } from "./pages/Points";
 import { Referentiel } from "./pages/Referentiel";
 import { Organisations } from "./pages/Organisations";
@@ -22,14 +23,14 @@ import { Tableau } from "./pages/Tableau";
 export type Page =
   | "tableau" | "aventure" | "recettes" | "historique" | "notes"
   | "localites" | "batiments" | "organisations" | "gestionnaires" | "personnages" | "inventaire"
-  | "referentiel" | "points" | "parametres" | "campagnes";
+  | "referentiel" | "points" | "parametres" | "campagnes" | "modeles";
 
 const NAVIGATION: { titre: string; pages: [Page, string][] }[] = [
   { titre: "Table de jeu", pages: [["aventure", "Aventure et combat"]] },
   { titre: "Campagne", pages: [["tableau", "Tableau de bord"], ["recettes", "Recettes"], ["notes", "Notes"], ["historique", "Historique"]] },
   {
     titre: "Domaines",
-    pages: [["localites", "Localités"], ["batiments", "Bâtiments"], ["organisations", "Organisations"], ["gestionnaires", "Gestionnaires"], ["personnages", "Personnages"], ["inventaire", "Inventaire"]],
+    pages: [["localites", "Localités"], ["batiments", "Bâtiments"], ["organisations", "Organisations"], ["gestionnaires", "Gestionnaires"], ["personnages", "Personnages"], ["inventaire", "Inventaire"], ["modeles", "Modèles personnels"]],
   },
   { titre: "Référence", pages: [["referentiel", "Référentiel"], ["points", "Points à confirmer"], ["parametres", "Paramètres"], ["campagnes", "Campagnes"]] },
 ];
@@ -250,8 +251,9 @@ export function App() {
           {pageActive === "points" && <Points outils={outils} />}
           {pageActive === "referentiel" && <Referentiel outils={outils} />}
           {pageActive === "parametres" && <Parametres outils={outils} />}
+          {pageActive === "modeles" && <Modeles outils={outils} />}
           {pageActive === "recettes" && <Recettes outils={outils} />}
-          {!["tableau", "aventure", "campagnes", "localites", "personnages", "inventaire", "notes", "batiments", "recettes", "organisations", "gestionnaires", "historique", "points", "parametres", "referentiel"].includes(pageActive) && <EnAttente nom={NOMS_PAGES[pageActive]} />}
+          {!["tableau", "aventure", "campagnes", "localites", "personnages", "inventaire", "notes", "batiments", "recettes", "organisations", "gestionnaires", "historique", "points", "parametres", "referentiel", "modeles"].includes(pageActive) && <EnAttente nom={NOMS_PAGES[pageActive]} />}
         </main>
       </div>
 

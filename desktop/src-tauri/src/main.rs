@@ -526,6 +526,11 @@ fn page_referentiel(s: S) -> vues::referentiel::PageReferentiel {
 }
 
 #[tauri::command]
+fn page_modeles(s: S) -> vues::modeles::PageModeles {
+    vues::modeles::page_modeles(&session(&s).modeles)
+}
+
+#[tauri::command]
 fn page_parametres(s: S) -> Option<vues::parametres::PageParametres> {
     let mut x = session(&s);
     let r = x.r.clone();
@@ -716,6 +721,7 @@ fn main() {
             page_points,
             page_referentiel,
             page_parametres,
+            page_modeles,
             regler,
             regler_calendrier,
             vue_recettes,
