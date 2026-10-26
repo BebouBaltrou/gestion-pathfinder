@@ -15,10 +15,10 @@ fiches = { path = "../fiches" }
 aventure = { path = "../aventure" }
 combat = { path = "../combat" }
 temps = { path = "../temps" }
-serde = { version = "1", features = ["derive"], optional = true }
+serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 
 [features]
 # Sérialisation vers l'interface (activée par l'application de bureau).
-serde = ["dep:serde", "campagne/serde"]
+serde = ["campagne/serde"]
 

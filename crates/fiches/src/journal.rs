@@ -1272,9 +1272,14 @@ mod tests {
         };
         // le don déjà pris est accepté tel quel (aucun changement)
         j.ajouter(dons(&["Toughness"]), &r, &regles).unwrap();
-        assert_eq!(j.etat(&r, &regles).unwrap().fiche.niveaux[0].dons, ["Toughness"]);
+        assert_eq!(
+            j.etat(&r, &regles).unwrap().fiche.niveaux[0].dons,
+            ["Toughness"]
+        );
         // plus de dons que le niveau n'en accorde, don inconnu, niveau absent : refusés
-        assert!(j.ajouter(dons(&["Toughness", "Toughness"]), &r, &regles).is_err());
+        assert!(j
+            .ajouter(dons(&["Toughness", "Toughness"]), &r, &regles)
+            .is_err());
         assert!(j.ajouter(dons(&["Inconnu"]), &r, &regles).is_err());
         let niveau_2 = EvenementFiche::DonsReattribues {
             niveau: 2,
