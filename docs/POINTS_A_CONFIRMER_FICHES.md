@@ -120,3 +120,9 @@ Chaque point : ce que le moteur fait aujourd'hui, et ce qu'il faut te demander.
 38. **Table 3-9 (p. 55)** : valeurs vérifiées aux niveaux 1, 11 et 20. À relire contre le livre.
 39. **Dons supplémentaires** (niveaux 1, 4, 6, 8…, 20) : comptés comme un don de plus au niveau de classe concerné. **À confirmer** : la liste de dons parmi laquelle le guerrier les choisit n'est pas restreinte (le livre renvoie aux dons de combat et de guerrier) ; le moteur accepte tout don du catalogue.
 40. **Non calculé pour l'instant** : courage (+1 à +5 contre la terreur, bonus conditionnel), entraînement aux armures et aux armes (malus d'armure réduit, Dex maximale, groupes d'armes à choisir), maîtrise des armures et des armes. Le texte est dans `special_en` par niveau.
+
+## Moine (classe ajoutée)
+
+41. **Table 3-11 (p. 65)** : BBA et jets vérifiés aux niveaux 1, 8 et 20. Dégâts à mains nues, bonus à la CA, déplacement accéléré et colonnes de ki non saisis (texte seulement). À relire contre le livre.
+42. **Dons supplémentaires** (niveaux 1, 2, 6, 10, 14, 18) : comptés en plus. **À confirmer** : la liste de dons du moine (p. 64, complétée au niveau 6) n'est pas appliquée ; le moteur accepte tout don du catalogue.
+43. **Non calculé pour l'instant** : réserve de ki (points selon le niveau et la Sagesse : à confirmer, la moitié du niveau arrondie), déluge de coups, attaques à mains nues, bonus de Sagesse à la CA sans armure, chute ralentie, pureté physique, et autres pouvoirs. Le texte est dans `special_en` par niveau.

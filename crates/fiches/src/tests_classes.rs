@@ -1118,3 +1118,54 @@ fn un_guerrier_monte_du_niveau_1_au_niveau_5() {
     assert_eq!(f.niveau_de_personnage(), 5);
     assert_eq!(f.niveaux.len(), 5);
 }
+
+fn moine(niveau: u32, sagesse: i32) -> Fiche {
+    let mut f = barbare(niveau, 14);
+    f.niveaux.iter_mut().for_each(|n| {
+        n.classe = "moine".into();
+        n.de_vie_obtenu = 8;
+    });
+    f.classes_de_predilection = vec!["moine".into()];
+    f.scores_base.insert(Carac::Sag, sagesse);
+    f
+}
+
+#[test]
+fn la_classe_moine_est_chargee_depuis_le_livre() {
+    let r = Referentiel::core();
+    let c = r.classe("moine").expect("moine");
+    assert_eq!(c.de_vie, 8);
+    assert_eq!(c.rangs_par_niveau, 4);
+    assert_eq!(c.progression.len(), 20);
+    assert!(c.incantation.is_none());
+    assert_eq!(c.source.page, Some(65));
+}
+
+#[test]
+fn table_3_11_du_moine() {
+    let r = Referentiel::core();
+    let c = r.classe("moine").unwrap();
+    let l = |n: usize| &c.progression[n - 1];
+    // Niveau 1 : BBA +0, jets +2/+2/+2.
+    assert_eq!(l(1).bba, vec![0]);
+    assert_eq!((l(1).reflexes, l(1).vigueur, l(1).volonte), (2, 2, 2));
+    // Niveau 8 : BBA +6/+1, jets +6/+6/+6.
+    assert_eq!(l(8).bba, vec![6, 1]);
+    assert_eq!((l(8).reflexes, l(8).vigueur, l(8).volonte), (6, 6, 6));
+    // Niveau 20 : BBA +15/+10/+5, jets +12/+12/+12.
+    assert_eq!(l(20).bba, vec![15, 10, 5]);
+    assert_eq!((l(20).reflexes, l(20).vigueur, l(20).volonte), (12, 12, 12));
+}
+
+#[test]
+fn le_moine_gagne_des_dons_supplementaires_aux_niveaux_1_2_6_10() {
+    let r = Referentiel::core();
+    // Niveau 1 : don du niveau 1 + don de moine + don de race humaine.
+    assert_eq!(moine(3, 14).dons_attendus_a(&r, 0), 3);
+    // Niveau 2 : don de moine seulement.
+    assert_eq!(moine(3, 14).dons_attendus_a(&r, 1), 1);
+    // Niveau 6 : don de moine seulement (les dons standard tombent aux niveaux impairs).
+    assert_eq!(moine(6, 14).dons_attendus_a(&r, 5), 1);
+    // Niveau 4 : aucun don.
+    assert_eq!(moine(4, 14).dons_attendus_a(&r, 3), 0);
+}

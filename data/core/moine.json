@@ -1,0 +1,323 @@
+{
+  "source": "Manuel des joueurs (version française), classe Moine, Table 3-11 (p. 65)",
+  "classe": {
+    "id": "moine",
+    "nom": "Moine",
+    "nom_en": "Monk",
+    "source": {
+      "livre": "Manuel des joueurs (VF)",
+      "page": 65
+    },
+    "de_vie": 8,
+    "rangs_par_niveau": 4,
+    "caracteristique_rangs": "int",
+    "competences_de_classe_en": [
+      "Acrobatics",
+      "Craft",
+      "Knowledge (history)",
+      "Knowledge (religion)",
+      "Stealth",
+      "Ride",
+      "Climb",
+      "Escape Artist",
+      "Intimidate",
+      "Swim",
+      "Perception",
+      "Profession",
+      "Sense Motive",
+      "Perform"
+    ],
+    "bba": "moyen",
+    "vigueur": "rapide",
+    "reflexes": "rapide",
+    "volonte": "rapide",
+    "maitrises_fr": "Arbalète (légère ou lourde), bâton, dague, épée courte, épieu, fronde, gourdin, hachette, javeline, kama, lance, nunchaku, sai, shuriken, siangham. Pas d'armure ni de bouclier.",
+    "domaines_choisis": 0,
+    "canalisation": false,
+    "incantation": null,
+    "don_bonus_niveau_1": null,
+    "effets": [],
+    "pouvoirs": [],
+    "progression": [
+      {
+        "niveau": 1,
+        "bba": [
+          0
+        ],
+        "vigueur": 2,
+        "reflexes": 2,
+        "volonte": 2,
+        "special_en": "don supplémentaire, déluge de coups, coup étourdissant, combat à mains nues",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 2,
+        "bba": [
+          1
+        ],
+        "vigueur": 3,
+        "reflexes": 3,
+        "volonte": 3,
+        "special_en": "don supplémentaire, esquive totale",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 3,
+        "bba": [
+          2
+        ],
+        "vigueur": 3,
+        "reflexes": 3,
+        "volonte": 3,
+        "special_en": "déplacement accéléré, entraînement aux manoeuvres offensives, sérénité",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 4,
+        "bba": [
+          3
+        ],
+        "vigueur": 4,
+        "reflexes": 4,
+        "volonte": 4,
+        "special_en": "réserve de ki (magique), chute ralentie 6 m",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 5,
+        "bba": [
+          3
+        ],
+        "vigueur": 4,
+        "reflexes": 4,
+        "volonte": 4,
+        "special_en": "sauts puissants, pureté physique",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 6,
+        "bba": [
+          4
+        ],
+        "vigueur": 5,
+        "reflexes": 5,
+        "volonte": 5,
+        "special_en": "don supplémentaire, chute ralentie 9 m",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 7,
+        "bba": [
+          5
+        ],
+        "vigueur": 5,
+        "reflexes": 5,
+        "volonte": 5,
+        "special_en": "réserve de ki (fer froid/argent), plénitude physique",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 8,
+        "bba": [
+          6,
+          1
+        ],
+        "vigueur": 6,
+        "reflexes": 6,
+        "volonte": 6,
+        "special_en": "chute ralentie 12 m",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 9,
+        "bba": [
+          6,
+          1
+        ],
+        "vigueur": 6,
+        "reflexes": 6,
+        "volonte": 6,
+        "special_en": "esquive surnaturelle",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 10,
+        "bba": [
+          7,
+          2
+        ],
+        "vigueur": 7,
+        "reflexes": 7,
+        "volonte": 7,
+        "special_en": "don supplémentaire, réserve de ki (loyale), chute ralentie 15 m",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 11,
+        "bba": [
+          8,
+          3
+        ],
+        "vigueur": 7,
+        "reflexes": 7,
+        "volonte": 7,
+        "special_en": "corps de diamant",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 12,
+        "bba": [
+          9,
+          4
+        ],
+        "vigueur": 8,
+        "reflexes": 8,
+        "volonte": 8,
+        "special_en": "pas chassé, chute ralentie 18 m",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 13,
+        "bba": [
+          9,
+          4
+        ],
+        "vigueur": 8,
+        "reflexes": 8,
+        "volonte": 8,
+        "special_en": "âme de diamant",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 14,
+        "bba": [
+          10,
+          5
+        ],
+        "vigueur": 9,
+        "reflexes": 9,
+        "volonte": 9,
+        "special_en": "don supplémentaire, chute ralentie 21 m",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 15,
+        "bba": [
+          11,
+          6,
+          1
+        ],
+        "vigueur": 9,
+        "reflexes": 9,
+        "volonte": 9,
+        "special_en": "paume vibratoire",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 16,
+        "bba": [
+          12,
+          7,
+          2
+        ],
+        "vigueur": 10,
+        "reflexes": 10,
+        "volonte": 10,
+        "special_en": "réserve de ki (adamantium), chute ralentie 24 m",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 17,
+        "bba": [
+          12,
+          7,
+          2
+        ],
+        "vigueur": 10,
+        "reflexes": 10,
+        "volonte": 10,
+        "special_en": "éternelle jeunesse, langue du soleil et de la lune",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 18,
+        "bba": [
+          13,
+          8,
+          3
+        ],
+        "vigueur": 11,
+        "reflexes": 11,
+        "volonte": 11,
+        "special_en": "don supplémentaire, chute ralentie 27 m",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 19,
+        "bba": [
+          14,
+          9,
+          4
+        ],
+        "vigueur": 11,
+        "reflexes": 11,
+        "volonte": 11,
+        "special_en": "désertion de l'âme",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 20,
+        "bba": [
+          15,
+          10,
+          5
+        ],
+        "vigueur": 12,
+        "reflexes": 12,
+        "volonte": 12,
+        "special_en": "perfection de l'être, chute ralentie (n'importe quelle distance)",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      }
+    ]
+  }
+}

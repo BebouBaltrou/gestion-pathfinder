@@ -292,6 +292,7 @@ impl Referentiel {
                 include_str!("../../../data/core/barbare.json"),
                 include_str!("../../../data/core/barde.json"),
                 include_str!("../../../data/core/guerrier.json"),
+                include_str!("../../../data/core/moine.json"),
             ],
             include_str!("../../../data/core/progression.json"),
         )
