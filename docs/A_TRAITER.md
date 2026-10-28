@@ -104,7 +104,7 @@ fiches, compatibilité des sauvegardes.
 - **Domaines** : résistances (Air, Eau, Feu, Terre) en texte seulement ; domaines de Calistria (table et pages du livre ne concordent pas), sorts de domaine non résolus (Obscurité 8e, Runes 6e) : points à confirmer.
 - **Armes et objets** : « mains nues » et « masse » à confirmer ; Bottes elfiques = Acrobaties dans le livre français à confirmer ; type du bonus de forme bestiale (taille) à confirmer.
 - **Importation PDF** : domaines, divinité, alignement et pacte de nature ne sont pas lus (fonctionnalité en développement).
-- **Autres classes du créateur de fiche** : toutes les classes restantes sont à implémenter (seuls Ensorceleur, Prêtre et Druide existent).
+- **Autres classes du créateur de fiche** : Barbare fait (voir POINTS_A_CONFIRMER_FICHES n° 30-33). Restent Barde, Guerrier, Moine, Paladin, Rôdeur, Roublard, Magicien.
 
 ## Monnaie (25/10/2026)
 
