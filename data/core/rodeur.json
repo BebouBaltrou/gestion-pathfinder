@@ -1,0 +1,405 @@
+{
+  "source": "Manuel des joueurs (version française), classe Rôdeur, Table 3-15 (p. 82)",
+  "classe": {
+    "id": "rodeur",
+    "nom": "Rôdeur",
+    "nom_en": "Ranger",
+    "source": {
+      "livre": "Manuel des joueurs (VF)",
+      "page": 82
+    },
+    "de_vie": 10,
+    "rangs_par_niveau": 6,
+    "caracteristique_rangs": "int",
+    "competences_de_classe_en": [
+      "Spellcraft",
+      "Craft",
+      "Knowledge (dungeoneering)",
+      "Knowledge (geography)",
+      "Knowledge (nature)",
+      "Stealth",
+      "Handle Animal",
+      "Climb",
+      "Intimidate",
+      "Swim",
+      "Perception",
+      "Heal",
+      "Profession",
+      "Survival"
+    ],
+    "bba": "rapide",
+    "vigueur": "rapide",
+    "reflexes": "rapide",
+    "volonte": "lente",
+    "maitrises_fr": "Toutes les armes courantes et de guerre, armures légères et intermédiaires, boucliers (sauf pavois).",
+    "domaines_choisis": 0,
+    "canalisation": false,
+    "incantation": {
+      "type": "divin",
+      "mode": "préparé",
+      "caracteristique": "sag"
+    },
+    "don_bonus_niveau_1": null,
+    "effets": [],
+    "pouvoirs": [],
+    "progression": [
+      {
+        "niveau": 1,
+        "bba": [
+          1
+        ],
+        "vigueur": 2,
+        "reflexes": 2,
+        "volonte": 0,
+        "special_en": "ennemi juré (1er), empathie sauvage, pistage",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 2,
+        "bba": [
+          2
+        ],
+        "vigueur": 3,
+        "reflexes": 3,
+        "volonte": 0,
+        "special_en": "don supplémentaire de style de combat",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 3,
+        "bba": [
+          3
+        ],
+        "vigueur": 3,
+        "reflexes": 3,
+        "volonte": 1,
+        "special_en": "environnement de prédilection (1er), endurance",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 4,
+        "bba": [
+          4
+        ],
+        "vigueur": 4,
+        "reflexes": 4,
+        "volonte": 1,
+        "special_en": "pacte du chasseur",
+        "sorts_par_jour": [
+          0
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 5,
+        "bba": [
+          5
+        ],
+        "vigueur": 4,
+        "reflexes": 4,
+        "volonte": 1,
+        "special_en": "ennemi juré (2e)",
+        "sorts_par_jour": [
+          1
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 6,
+        "bba": [
+          6,
+          1
+        ],
+        "vigueur": 5,
+        "reflexes": 5,
+        "volonte": 2,
+        "special_en": "don supplémentaire de style de combat",
+        "sorts_par_jour": [
+          1
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 7,
+        "bba": [
+          7,
+          2
+        ],
+        "vigueur": 5,
+        "reflexes": 5,
+        "volonte": 2,
+        "special_en": "déplacement facilité",
+        "sorts_par_jour": [
+          1,
+          0
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 8,
+        "bba": [
+          8,
+          3
+        ],
+        "vigueur": 6,
+        "reflexes": 6,
+        "volonte": 2,
+        "special_en": "environnement de prédilection (2e), pistage accéléré",
+        "sorts_par_jour": [
+          1,
+          1
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 9,
+        "bba": [
+          9,
+          4
+        ],
+        "vigueur": 6,
+        "reflexes": 6,
+        "volonte": 3,
+        "special_en": "esquive totale",
+        "sorts_par_jour": [
+          2,
+          1
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 10,
+        "bba": [
+          10,
+          5
+        ],
+        "vigueur": 7,
+        "reflexes": 7,
+        "volonte": 3,
+        "special_en": "ennemi juré (3e), don supplémentaire de style de combat",
+        "sorts_par_jour": [
+          2,
+          1,
+          0
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 11,
+        "bba": [
+          11,
+          6,
+          1
+        ],
+        "vigueur": 7,
+        "reflexes": 7,
+        "volonte": 3,
+        "special_en": "proie du chasseur",
+        "sorts_par_jour": [
+          2,
+          1,
+          1
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 12,
+        "bba": [
+          12,
+          7,
+          2
+        ],
+        "vigueur": 8,
+        "reflexes": 8,
+        "volonte": 4,
+        "special_en": "camouflage",
+        "sorts_par_jour": [
+          2,
+          2,
+          1
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 13,
+        "bba": [
+          13,
+          8,
+          3
+        ],
+        "vigueur": 8,
+        "reflexes": 8,
+        "volonte": 4,
+        "special_en": "environnement de prédilection (3e)",
+        "sorts_par_jour": [
+          3,
+          2,
+          1,
+          0
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 14,
+        "bba": [
+          14,
+          9,
+          4
+        ],
+        "vigueur": 9,
+        "reflexes": 9,
+        "volonte": 4,
+        "special_en": "don supplémentaire de style de combat",
+        "sorts_par_jour": [
+          3,
+          2,
+          1,
+          1
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 15,
+        "bba": [
+          15,
+          10,
+          5
+        ],
+        "vigueur": 9,
+        "reflexes": 9,
+        "volonte": 5,
+        "special_en": "ennemi juré (4e)",
+        "sorts_par_jour": [
+          3,
+          2,
+          2,
+          1
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 16,
+        "bba": [
+          16,
+          11,
+          6,
+          1
+        ],
+        "vigueur": 10,
+        "reflexes": 10,
+        "volonte": 5,
+        "special_en": "esquive surnaturelle",
+        "sorts_par_jour": [
+          3,
+          3,
+          2,
+          1
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 17,
+        "bba": [
+          17,
+          12,
+          7,
+          2
+        ],
+        "vigueur": 10,
+        "reflexes": 10,
+        "volonte": 5,
+        "special_en": "discrétion totale",
+        "sorts_par_jour": [
+          4,
+          3,
+          2,
+          1
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 18,
+        "bba": [
+          18,
+          13,
+          8,
+          3
+        ],
+        "vigueur": 11,
+        "reflexes": 11,
+        "volonte": 6,
+        "special_en": "environnement de prédilection (4e), don supplémentaire de style de combat",
+        "sorts_par_jour": [
+          4,
+          3,
+          2,
+          2
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 19,
+        "bba": [
+          19,
+          14,
+          9,
+          4
+        ],
+        "vigueur": 11,
+        "reflexes": 11,
+        "volonte": 6,
+        "special_en": "proie du maître chasseur",
+        "sorts_par_jour": [
+          4,
+          3,
+          3,
+          2
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 20,
+        "bba": [
+          20,
+          15,
+          10,
+          5
+        ],
+        "vigueur": 12,
+        "reflexes": 12,
+        "volonte": 6,
+        "special_en": "ennemi juré (5e), maître chasseur",
+        "sorts_par_jour": [
+          4,
+          4,
+          3,
+          3
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      }
+    ]
+  }
+}

@@ -132,3 +132,9 @@ Chaque point : ce que le moteur fait aujourd'hui, et ce qu'il faut te demander.
 44. **Table 3-12 (p. 68)** : valeurs vérifiées aux niveaux 1, 4, 11 et 20 (sorts par jour : la colonne du 1er niveau est 0 au niveau 4, sorts de sagesse seuls). À relire contre le livre.
 45. **Châtiment du mal** : 1 par jour, +1 tous les 3 niveaux (formule du moteur, valeurs de la table). **Imposition des mains** : moitié du niveau (arrondi inférieur) + Charisme, à partir du niveau 2 ; à confirmer avec le texte (« un nombre de fois par jour égal à la moitié de son niveau + Charisme »).
 46. **Non calculé pour l'instant** : grâces (choix à faire), aura du bien, canalisation d'énergie positive (niveau 4), santé divine, pacte divin, champion sacré, et les effets de soins. Le texte est dans `special_en` par niveau.
+
+## Rôdeur (classe ajoutée)
+
+47. **Table 3-15 (p. 82)** : valeurs vérifiées aux niveaux 1, 11 et 20. À relire contre le livre.
+48. **Dons de style de combat** (niveaux 2, 6, 10, 14, 18) : comptés en plus, sans restriction de liste (le moteur accepte tout don du catalogue). À confirmer : la liste des dons de style de combat.
+49. **Non calculé pour l'instant** : ennemis jurés et environnements de prédilection (bonus contre le type choisi), pistage, empathie sauvage, pacte du chasseur, proie du chasseur, camouflage et discrétion totale, maître chasseur. Le texte est dans `special_en` par niveau.

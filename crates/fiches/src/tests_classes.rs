@@ -1247,3 +1247,52 @@ fn le_paladin_monte_du_niveau_1_au_niveau_5() {
     assert_eq!(f.niveau_de_personnage(), 5);
     assert_eq!(pouvoir_du_paladin(&f, "imposition"), Some(4));
 }
+
+fn rodeur(niveau: u32, sagesse: i32) -> Fiche {
+    let mut f = barbare(niveau, 14);
+    f.niveaux.iter_mut().for_each(|n| {
+        n.classe = "rodeur".into();
+        n.de_vie_obtenu = 10;
+    });
+    f.classes_de_predilection = vec!["rodeur".into()];
+    f.scores_base.insert(Carac::Sag, sagesse);
+    f
+}
+
+#[test]
+fn la_classe_rodeur_est_chargee_depuis_le_livre() {
+    let r = Referentiel::core();
+    let c = r.classe("rodeur").expect("rôdeur");
+    assert_eq!(c.de_vie, 10);
+    assert_eq!(c.rangs_par_niveau, 6);
+    assert_eq!(c.progression.len(), 20);
+    assert!(c.incantation.as_ref().unwrap().prepare());
+    assert_eq!(c.source.page, Some(82));
+}
+
+#[test]
+fn table_3_15_du_rodeur() {
+    let r = Referentiel::core();
+    let c = r.classe("rodeur").unwrap();
+    let l = |n: usize| &c.progression[n - 1];
+    // Niveau 1 : BBA +1, Réf +2, Vig +2, Vol +0.
+    assert_eq!(l(1).bba, vec![1]);
+    assert_eq!((l(1).reflexes, l(1).vigueur, l(1).volonte), (2, 2, 0));
+    // Niveau 11 : BBA +11/+6/+1, Réf +7, Vig +7, Vol +3 ; 2/1/1 sorts.
+    assert_eq!(l(11).bba, vec![11, 6, 1]);
+    assert_eq!((l(11).reflexes, l(11).vigueur, l(11).volonte), (7, 7, 3));
+    assert_eq!(l(11).sorts_par_jour, vec![Some(2), Some(1), Some(1)]);
+    // Niveau 20 : Réf +12, Vig +12, Vol +6.
+    assert_eq!((l(20).reflexes, l(20).vigueur, l(20).volonte), (12, 12, 6));
+}
+
+#[test]
+fn le_rodeur_gagne_un_don_de_style_de_combat_aux_niveaux_2_6_10_14_18() {
+    let r = Referentiel::core();
+    // Niveau 1 : don du niveau 1 + don de race humaine, pas de don de style.
+    assert_eq!(rodeur(2, 14).dons_attendus_a(&r, 0), 2);
+    // Niveau 2 : don de style de combat.
+    assert_eq!(rodeur(2, 14).dons_attendus_a(&r, 1), 1);
+    // Niveau 4 : aucun don.
+    assert_eq!(rodeur(4, 14).dons_attendus_a(&r, 3), 0);
+}
