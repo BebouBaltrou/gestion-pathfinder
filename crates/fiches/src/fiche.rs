@@ -1719,7 +1719,8 @@ impl Fiche {
                             .into_iter()
                             .find(|c| c.abrege().eq_ignore_ascii_case(&f.carac));
                         let bonus = carac.map_or(0, m);
-                        Some(f.base + f.par_niveau * (nc as i32 - 1) + bonus)
+                        let echelons = (nc.saturating_sub(f.depart) / f.diviseur.max(1)) as i32;
+                        Some(f.base + f.par_niveau * echelons + bonus)
                     } else if p.a_volonte.is_some_and(|l| nc >= l) {
                         None
                     } else {

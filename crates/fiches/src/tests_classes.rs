@@ -1169,3 +1169,81 @@ fn le_moine_gagne_des_dons_supplementaires_aux_niveaux_1_2_6_10() {
     // Niveau 4 : aucun don.
     assert_eq!(moine(4, 14).dons_attendus_a(&r, 3), 0);
 }
+
+fn paladin(niveau: u32, charisme: i32) -> Fiche {
+    let mut f = barbare(niveau, 14);
+    f.niveaux.iter_mut().for_each(|n| {
+        n.classe = "paladin".into();
+        n.de_vie_obtenu = 10;
+    });
+    f.classes_de_predilection = vec!["paladin".into()];
+    f.scores_base.insert(Carac::Cha, charisme);
+    f
+}
+
+fn pouvoir_du_paladin(f: &Fiche, cle: &str) -> Option<i32> {
+    let r = Referentiel::core();
+    f.calculer(&r)
+        .unwrap()
+        .pouvoirs
+        .iter()
+        .find(|p| p.cle == cle)
+        .and_then(|p| p.max)
+}
+
+#[test]
+fn la_classe_paladin_est_chargee_depuis_le_livre() {
+    let r = Referentiel::core();
+    let c = r.classe("paladin").expect("paladin");
+    assert_eq!(c.de_vie, 10);
+    assert_eq!(c.rangs_par_niveau, 2);
+    assert_eq!(c.progression.len(), 20);
+    assert!(c.incantation.as_ref().unwrap().prepare());
+    assert_eq!(c.source.page, Some(68));
+}
+
+#[test]
+fn table_3_12_du_paladin() {
+    let r = Referentiel::core();
+    let c = r.classe("paladin").unwrap();
+    let l = |n: usize| &c.progression[n - 1];
+    // Niveau 1 : BBA +1, Réf +0, Vig +2, Vol +2 ; pas encore de sorts.
+    assert_eq!(l(1).bba, vec![1]);
+    assert_eq!((l(1).reflexes, l(1).vigueur, l(1).volonte), (0, 2, 2));
+    assert!(l(1).sorts_par_jour.is_empty());
+    // Niveau 4 : un sort de niveau 1 uniquement grâce à la sagesse.
+    assert_eq!(l(4).sorts_par_jour, vec![Some(0)]);
+    // Niveau 11 : BBA +11/+6/+1, Réf +3, Vig +7, Vol +7 ; 2/1/1 sorts.
+    assert_eq!(l(11).bba, vec![11, 6, 1]);
+    assert_eq!((l(11).reflexes, l(11).vigueur, l(11).volonte), (3, 7, 7));
+    assert_eq!(l(11).sorts_par_jour, vec![Some(2), Some(1), Some(1)]);
+    // Niveau 20 : Réf +6, Vig +12, Vol +12 ; 4/4/3/3 sorts.
+    assert_eq!((l(20).reflexes, l(20).vigueur, l(20).volonte), (6, 12, 12));
+    assert_eq!(l(20).sorts_par_jour.len(), 4);
+}
+
+#[test]
+fn chatiment_et_imposition_des_mains_du_paladin() {
+    // Châtiment : 1/jour au niveau 1, +1 tous les 3 niveaux (2 au niveau 4, 4 au niveau 10).
+    assert_eq!(pouvoir_du_paladin(&paladin(1, 14), "chatiment"), Some(1));
+    assert_eq!(pouvoir_du_paladin(&paladin(4, 14), "chatiment"), Some(2));
+    assert_eq!(pouvoir_du_paladin(&paladin(10, 14), "chatiment"), Some(4));
+    // Imposition des mains : moitié du niveau + Charisme (14 : +2). Niveau 2 : 1 + 2 = 3 ; niveau 5 : 2 + 2 = 4.
+    assert_eq!(pouvoir_du_paladin(&paladin(2, 14), "imposition"), Some(3));
+    assert_eq!(pouvoir_du_paladin(&paladin(5, 14), "imposition"), Some(4));
+}
+
+#[test]
+fn le_paladin_monte_du_niveau_1_au_niveau_5() {
+    use crate::progression::{appliquer, montee_auto};
+    let r = Referentiel::core();
+    let regles = ReglesFiche::default();
+    let mut f = paladin(1, 14);
+    f.niveaux[0].dons = vec!["Toughness".into(), "Alertness".into()];
+    for _ in 2..=5 {
+        let m = montee_auto(&r, &f, "paladin", 7);
+        f = appliquer(&r, &regles, &f, &m, 20).expect("montée valide");
+    }
+    assert_eq!(f.niveau_de_personnage(), 5);
+    assert_eq!(pouvoir_du_paladin(&f, "imposition"), Some(4));
+}

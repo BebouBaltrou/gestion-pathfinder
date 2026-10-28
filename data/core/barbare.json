@@ -43,7 +43,8 @@
         "formule": {
           "base": 4,
           "par_niveau": 2,
-          "carac": "con"
+          "carac": "con",
+          "depart": 1
         }
       }
     ],

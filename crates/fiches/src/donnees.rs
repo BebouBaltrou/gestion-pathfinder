@@ -207,12 +207,22 @@ pub struct PouvoirClasse {
     pub formule: Option<FormuleUtilisations>,
 }
 
-/// Utilisations = `base` + `par_niveau` × (niveau de classe − 1) + modificateur de `carac`.
+/// Utilisations = `base` + `par_niveau` × ((niveau de classe − `depart`) ÷ `diviseur`) + modificateur de `carac`.
 #[derive(Debug, Clone, Deserialize)]
 pub struct FormuleUtilisations {
     pub base: i32,
     pub par_niveau: i32,
     pub carac: String,
+    /// Niveaux de classe non comptés (rage : 1, car la rage augmente à partir du niveau 2).
+    #[serde(default)]
+    pub depart: u32,
+    /// Division du niveau (imposition des mains : moitié du niveau).
+    #[serde(default = "diviseur_unite")]
+    pub diviseur: u32,
+}
+
+fn diviseur_unite() -> u32 {
+    1
 }
 
 /// Bonus chiffré d'une capacité de classe, acquis à partir d'un niveau de classe.
@@ -293,6 +303,7 @@ impl Referentiel {
                 include_str!("../../../data/core/barde.json"),
                 include_str!("../../../data/core/guerrier.json"),
                 include_str!("../../../data/core/moine.json"),
+                include_str!("../../../data/core/paladin.json"),
             ],
             include_str!("../../../data/core/progression.json"),
         )

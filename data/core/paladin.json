@@ -1,0 +1,423 @@
+{
+  "source": "Manuel des joueurs (version française), classe Paladin, Table 3-12 (p. 68)",
+  "classe": {
+    "id": "paladin",
+    "nom": "Paladin",
+    "nom_en": "Paladin",
+    "source": {
+      "livre": "Manuel des joueurs (VF)",
+      "page": 68
+    },
+    "de_vie": 10,
+    "rangs_par_niveau": 2,
+    "caracteristique_rangs": "int",
+    "competences_de_classe_en": [
+      "Spellcraft",
+      "Craft",
+      "Knowledge (nobility)",
+      "Knowledge (religion)",
+      "Diplomacy",
+      "Handle Animal",
+      "Ride",
+      "Heal",
+      "Profession",
+      "Sense Motive"
+    ],
+    "bba": "rapide",
+    "vigueur": "rapide",
+    "reflexes": "lente",
+    "volonte": "rapide",
+    "maitrises_fr": "Toutes les armes courantes et de guerre, toutes les armures et tous les boucliers (sauf pavois).",
+    "domaines_choisis": 0,
+    "canalisation": false,
+    "incantation": {
+      "type": "divin",
+      "mode": "préparé",
+      "caracteristique": "sag"
+    },
+    "don_bonus_niveau_1": null,
+    "effets": [],
+    "pouvoirs": [
+      {
+        "cle": "chatiment",
+        "nom": "Châtiment du mal",
+        "niveau": 1,
+        "pas": 3,
+        "a_volonte": null
+      },
+      {
+        "cle": "imposition",
+        "nom": "Imposition des mains",
+        "niveau": 2,
+        "pas": 1,
+        "a_volonte": null,
+        "formule": {
+          "base": 0,
+          "par_niveau": 1,
+          "carac": "cha",
+          "depart": 0,
+          "diviseur": 2
+        }
+      }
+    ],
+    "progression": [
+      {
+        "niveau": 1,
+        "bba": [
+          1
+        ],
+        "vigueur": 2,
+        "reflexes": 0,
+        "volonte": 2,
+        "special_en": "aura du bien, châtiment du mal 1/jour, détection du mal",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 2,
+        "bba": [
+          2
+        ],
+        "vigueur": 3,
+        "reflexes": 0,
+        "volonte": 3,
+        "special_en": "grâce divine, imposition des mains",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 3,
+        "bba": [
+          3
+        ],
+        "vigueur": 3,
+        "reflexes": 1,
+        "volonte": 3,
+        "special_en": "aura de courage, grâce, santé divine",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 4,
+        "bba": [
+          4
+        ],
+        "vigueur": 4,
+        "reflexes": 1,
+        "volonte": 4,
+        "special_en": "canalisation d'énergie positive, châtiment du mal 2/jour",
+        "sorts_par_jour": [
+          0
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 5,
+        "bba": [
+          5
+        ],
+        "vigueur": 4,
+        "reflexes": 1,
+        "volonte": 4,
+        "special_en": "pacte divin",
+        "sorts_par_jour": [
+          1
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 6,
+        "bba": [
+          6,
+          1
+        ],
+        "vigueur": 5,
+        "reflexes": 2,
+        "volonte": 5,
+        "special_en": "grâce",
+        "sorts_par_jour": [
+          1
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 7,
+        "bba": [
+          7,
+          2
+        ],
+        "vigueur": 5,
+        "reflexes": 2,
+        "volonte": 5,
+        "special_en": "châtiment du mal 3/jour",
+        "sorts_par_jour": [
+          1,
+          0
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 8,
+        "bba": [
+          8,
+          3
+        ],
+        "vigueur": 6,
+        "reflexes": 2,
+        "volonte": 6,
+        "special_en": "aura de fermeté",
+        "sorts_par_jour": [
+          1,
+          1
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 9,
+        "bba": [
+          9,
+          4
+        ],
+        "vigueur": 6,
+        "reflexes": 3,
+        "volonte": 6,
+        "special_en": "grâce",
+        "sorts_par_jour": [
+          2,
+          1
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 10,
+        "bba": [
+          10,
+          5
+        ],
+        "vigueur": 7,
+        "reflexes": 3,
+        "volonte": 7,
+        "special_en": "châtiment du mal 4/jour",
+        "sorts_par_jour": [
+          2,
+          1,
+          0
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 11,
+        "bba": [
+          11,
+          6,
+          1
+        ],
+        "vigueur": 7,
+        "reflexes": 3,
+        "volonte": 7,
+        "special_en": "aura de justice",
+        "sorts_par_jour": [
+          2,
+          1,
+          1
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 12,
+        "bba": [
+          12,
+          7,
+          2
+        ],
+        "vigueur": 8,
+        "reflexes": 4,
+        "volonte": 8,
+        "special_en": "grâce",
+        "sorts_par_jour": [
+          2,
+          2,
+          1
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 13,
+        "bba": [
+          13,
+          8,
+          3
+        ],
+        "vigueur": 8,
+        "reflexes": 4,
+        "volonte": 8,
+        "special_en": "châtiment du mal 5/jour",
+        "sorts_par_jour": [
+          3,
+          2,
+          1,
+          0
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 14,
+        "bba": [
+          14,
+          9,
+          4
+        ],
+        "vigueur": 9,
+        "reflexes": 4,
+        "volonte": 9,
+        "special_en": "aura de foi",
+        "sorts_par_jour": [
+          3,
+          2,
+          1,
+          1
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 15,
+        "bba": [
+          15,
+          10,
+          5
+        ],
+        "vigueur": 9,
+        "reflexes": 5,
+        "volonte": 9,
+        "special_en": "grâce",
+        "sorts_par_jour": [
+          3,
+          2,
+          2,
+          1
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 16,
+        "bba": [
+          16,
+          11,
+          6,
+          1
+        ],
+        "vigueur": 10,
+        "reflexes": 5,
+        "volonte": 10,
+        "special_en": "châtiment du mal 6/jour",
+        "sorts_par_jour": [
+          3,
+          3,
+          2,
+          1
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 17,
+        "bba": [
+          17,
+          12,
+          7,
+          2
+        ],
+        "vigueur": 10,
+        "reflexes": 5,
+        "volonte": 10,
+        "special_en": "aura de droiture",
+        "sorts_par_jour": [
+          4,
+          3,
+          2,
+          1
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 18,
+        "bba": [
+          18,
+          13,
+          8,
+          3
+        ],
+        "vigueur": 11,
+        "reflexes": 6,
+        "volonte": 11,
+        "special_en": "grâce",
+        "sorts_par_jour": [
+          4,
+          3,
+          2,
+          2
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 19,
+        "bba": [
+          19,
+          14,
+          9,
+          4
+        ],
+        "vigueur": 11,
+        "reflexes": 6,
+        "volonte": 11,
+        "special_en": "châtiment du mal 7/jour",
+        "sorts_par_jour": [
+          4,
+          3,
+          3,
+          2
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 20,
+        "bba": [
+          20,
+          15,
+          10,
+          5
+        ],
+        "vigueur": 12,
+        "reflexes": 6,
+        "volonte": 12,
+        "special_en": "champion sacré",
+        "sorts_par_jour": [
+          4,
+          4,
+          3,
+          3
+        ],
+        "sorts_connus": [],
+        "domaine": false
+      }
+    ]
+  }
+}

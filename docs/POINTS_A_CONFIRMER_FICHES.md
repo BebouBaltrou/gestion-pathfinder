@@ -126,3 +126,9 @@ Chaque point : ce que le moteur fait aujourd'hui, et ce qu'il faut te demander.
 41. **Table 3-11 (p. 65)** : BBA et jets vérifiés aux niveaux 1, 8 et 20. Dégâts à mains nues, bonus à la CA, déplacement accéléré et colonnes de ki non saisis (texte seulement). À relire contre le livre.
 42. **Dons supplémentaires** (niveaux 1, 2, 6, 10, 14, 18) : comptés en plus. **À confirmer** : la liste de dons du moine (p. 64, complétée au niveau 6) n'est pas appliquée ; le moteur accepte tout don du catalogue.
 43. **Non calculé pour l'instant** : réserve de ki (points selon le niveau et la Sagesse : à confirmer, la moitié du niveau arrondie), déluge de coups, attaques à mains nues, bonus de Sagesse à la CA sans armure, chute ralentie, pureté physique, et autres pouvoirs. Le texte est dans `special_en` par niveau.
+
+## Paladin (classe ajoutée)
+
+44. **Table 3-12 (p. 68)** : valeurs vérifiées aux niveaux 1, 4, 11 et 20 (sorts par jour : la colonne du 1er niveau est 0 au niveau 4, sorts de sagesse seuls). À relire contre le livre.
+45. **Châtiment du mal** : 1 par jour, +1 tous les 3 niveaux (formule du moteur, valeurs de la table). **Imposition des mains** : moitié du niveau (arrondi inférieur) + Charisme, à partir du niveau 2 ; à confirmer avec le texte (« un nombre de fois par jour égal à la moitié de son niveau + Charisme »).
+46. **Non calculé pour l'instant** : grâces (choix à faire), aura du bien, canalisation d'énergie positive (niveau 4), santé divine, pacte divin, champion sacré, et les effets de soins. Le texte est dans `special_en` par niveau.
