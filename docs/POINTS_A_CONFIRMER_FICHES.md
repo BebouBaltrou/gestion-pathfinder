@@ -114,3 +114,9 @@ Chaque point : ce que le moteur fait aujourd'hui, et ce qu'il faut te demander.
 35. **Représentation bardique** : rounds par jour = 4 + Charisme, +2 par niveau après le premier (même formule que la rage du barbare).
 36. **Non calculé pour l'instant** : savoir bardique (moitié du niveau aux Connaissances), inspiration (vaillante, talentueuse, héroïque, glorieuse), maître du savoir, versatilité artistique, et les effets de représentation (contre-chant, distraction, fascination, etc.). Le texte est dans `special_en` par niveau.
 37. **Compétence « Connaissances (toutes) »** : la compétence de classe couvre toutes les Connaissances (règle ajoutée au moteur, valable pour toute classe qui la liste).
+
+## Guerrier (classe ajoutée)
+
+38. **Table 3-9 (p. 55)** : valeurs vérifiées aux niveaux 1, 11 et 20. À relire contre le livre.
+39. **Dons supplémentaires** (niveaux 1, 4, 6, 8…, 20) : comptés comme un don de plus au niveau de classe concerné. **À confirmer** : la liste de dons parmi laquelle le guerrier les choisit n'est pas restreinte (le livre renvoie aux dons de combat et de guerrier) ; le moteur accepte tout don du catalogue.
+40. **Non calculé pour l'instant** : courage (+1 à +5 contre la terreur, bonus conditionnel), entraînement aux armures et aux armes (malus d'armure réduit, Dex maximale, groupes d'armes à choisir), maîtrise des armures et des armes. Le texte est dans `special_en` par niveau.

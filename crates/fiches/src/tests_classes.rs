@@ -1053,3 +1053,68 @@ fn le_savoir_du_barde_couvre_toutes_les_connaissances() {
     assert!(de_classe("bluff"));
     assert!(!de_classe("survival"));
 }
+
+fn guerrier(niveau: u32, force: i32) -> Fiche {
+    let mut f = barbare(niveau, 14);
+    f.niveaux.iter_mut().for_each(|n| {
+        n.classe = "guerrier".into();
+        n.de_vie_obtenu = 10;
+    });
+    f.classes_de_predilection = vec!["guerrier".into()];
+    f.scores_base.insert(Carac::For, force);
+    f
+}
+
+#[test]
+fn la_classe_guerrier_est_chargee_depuis_le_livre() {
+    let r = Referentiel::core();
+    let c = r.classe("guerrier").expect("guerrier");
+    assert_eq!(c.de_vie, 10);
+    assert_eq!(c.rangs_par_niveau, 2);
+    assert_eq!(c.progression.len(), 20);
+    assert!(c.incantation.is_none());
+    assert_eq!(c.source.page, Some(55));
+}
+
+#[test]
+fn table_3_9_du_guerrier() {
+    let r = Referentiel::core();
+    let c = r.classe("guerrier").unwrap();
+    let l = |n: usize| &c.progression[n - 1];
+    // Niveau 1 : BBA +1, Réf +0, Vig +2, Vol +0.
+    assert_eq!(l(1).bba, vec![1]);
+    assert_eq!((l(1).reflexes, l(1).vigueur, l(1).volonte), (0, 2, 0));
+    // Niveau 11 : BBA +11/+6/+1, Réf +3, Vig +7, Vol +3.
+    assert_eq!(l(11).bba, vec![11, 6, 1]);
+    assert_eq!((l(11).reflexes, l(11).vigueur, l(11).volonte), (3, 7, 3));
+    // Niveau 20 : BBA +20/+15/+10/+5, Réf +6, Vig +12, Vol +6.
+    assert_eq!(l(20).bba, vec![20, 15, 10, 5]);
+    assert_eq!((l(20).reflexes, l(20).vigueur, l(20).volonte), (6, 12, 6));
+}
+
+#[test]
+fn le_guerrier_gagne_un_don_supplementaire_a_ses_niveaux_pairs() {
+    let r = Referentiel::core();
+    let f = guerrier(4, 14);
+    // Niveau 1 : don du niveau 1 + don supplémentaire de guerrier + don de race humaine.
+    assert_eq!(f.dons_attendus_a(&r, 0), 3);
+    // Niveau 2 : aucun don (ni standard ni de classe).
+    assert_eq!(f.dons_attendus_a(&r, 1), 0);
+    // Niveau 4 : don supplémentaire de guerrier.
+    assert_eq!(f.dons_attendus_a(&r, 3), 1);
+}
+
+#[test]
+fn un_guerrier_monte_du_niveau_1_au_niveau_5() {
+    use crate::progression::{appliquer, montee_auto};
+    let r = Referentiel::core();
+    let regles = ReglesFiche::default();
+    let mut f = guerrier(1, 16);
+    f.niveaux[0].dons = vec!["Toughness".into(), "Alertness".into(), "Dodge".into()];
+    for _ in 2..=5 {
+        let m = montee_auto(&r, &f, "guerrier", 7);
+        f = appliquer(&r, &regles, &f, &m, 20).expect("montée valide");
+    }
+    assert_eq!(f.niveau_de_personnage(), 5);
+    assert_eq!(f.niveaux.len(), 5);
+}

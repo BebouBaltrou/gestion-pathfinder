@@ -208,6 +208,9 @@ fn dons_attendus(r: &Referentiel, f: &Fiche, classe: &crate::donnees::Classe, ni
     if table_a(classe, nc).is_some_and(|l| l.special_en.contains("Bloodline feat")) {
         n += 1;
     }
+    if table_a(classe, nc).is_some_and(|l| l.special_en.contains("don supplémentaire")) {
+        n += 1;
+    }
     n
 }
 

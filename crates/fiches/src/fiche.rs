@@ -1204,19 +1204,28 @@ impl Fiche {
     /// Nombre de dons supplémentaires de lignage (à prendre dans la liste du lignage) au niveau de
     /// personnage `i + 1` (index `i`).
     pub(crate) fn dons_de_lignage_a(&self, r: &Referentiel, i: usize) -> u32 {
+        u32::from(self.capacite_de_classe_a(r, i, "Bloodline feat"))
+    }
+
+    /// Don supplémentaire de classe (guerrier) au niveau de personnage `i + 1` (index `i`).
+    pub(crate) fn dons_de_classe_a(&self, r: &Referentiel, i: usize) -> u32 {
+        u32::from(self.capacite_de_classe_a(r, i, "don supplémentaire"))
+    }
+
+    /// Vrai si la ligne de progression de la classe, au niveau de classe atteint en `i`, cite `motif`.
+    fn capacite_de_classe_a(&self, r: &Referentiel, i: usize, motif: &str) -> bool {
         let Some(classe) = r.classe(&self.niveaux[i].classe) else {
-            return 0;
+            return false;
         };
         let nc = self.niveaux[..=i]
             .iter()
             .filter(|n| n.classe == classe.id)
             .count();
-        let bonus = nc >= 1
+        nc >= 1
             && classe
                 .progression
                 .get(nc - 1)
-                .is_some_and(|l| l.special_en.contains("Bloodline feat"));
-        u32::from(bonus)
+                .is_some_and(|l| l.special_en.contains(motif))
     }
 
     /// Nombre de dons à choisir au niveau de personnage `i + 1` (index `i`).
@@ -1225,7 +1234,7 @@ impl Fiche {
         if r.classe(&self.niveaux[i].classe).is_none() {
             return 0;
         }
-        let mut n = self.dons_de_lignage_a(r, i);
+        let mut n = self.dons_de_lignage_a(r, i) + self.dons_de_classe_a(r, i);
         if r.ligne_progression(niveau).is_some_and(|l| l.don) {
             n += 1;
         }
