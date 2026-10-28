@@ -1,0 +1,330 @@
+{
+  "source": "Manuel des joueurs (version française), classe Roublard, Table 3-16 (p. 85)",
+  "classe": {
+    "id": "roublard",
+    "nom": "Roublard",
+    "nom_en": "Rogue",
+    "source": {
+      "livre": "Manuel des joueurs (VF)",
+      "page": 85
+    },
+    "de_vie": 8,
+    "rangs_par_niveau": 8,
+    "caracteristique_rangs": "int",
+    "competences_de_classe_en": [
+      "Acrobatics",
+      "Craft",
+      "Bluff",
+      "Knowledge (dungeoneering)",
+      "Knowledge (local)",
+      "Disguise",
+      "Diplomacy",
+      "Stealth",
+      "Climb",
+      "Sleight of Hand",
+      "Appraise",
+      "Escape Artist",
+      "Intimidate",
+      "Linguistics",
+      "Swim",
+      "Perception",
+      "Profession",
+      "Sense Motive",
+      "Perform",
+      "Disable Device",
+      "Use Magic Device"
+    ],
+    "bba": "moyen",
+    "vigueur": "lente",
+    "reflexes": "rapide",
+    "volonte": "lente",
+    "maitrises_fr": "Toutes les armes courantes, arbalètes de poing, arcs courts, épées courtes, matraques, rapières ; armures légères ; pas de bouclier.",
+    "domaines_choisis": 0,
+    "canalisation": false,
+    "incantation": null,
+    "don_bonus_niveau_1": null,
+    "effets": [],
+    "pouvoirs": [],
+    "progression": [
+      {
+        "niveau": 1,
+        "bba": [
+          0
+        ],
+        "vigueur": 0,
+        "reflexes": 2,
+        "volonte": 0,
+        "special_en": "attaque sournoise +1d6, recherche de pièges",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 2,
+        "bba": [
+          1
+        ],
+        "vigueur": 0,
+        "reflexes": 3,
+        "volonte": 0,
+        "special_en": "esquive totale, talent de roublard",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 3,
+        "bba": [
+          2
+        ],
+        "vigueur": 1,
+        "reflexes": 3,
+        "volonte": 1,
+        "special_en": "attaque sournoise +2d6, sens des pièges +1",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 4,
+        "bba": [
+          3
+        ],
+        "vigueur": 1,
+        "reflexes": 4,
+        "volonte": 1,
+        "special_en": "esquive instinctive, talent de roublard",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 5,
+        "bba": [
+          3
+        ],
+        "vigueur": 1,
+        "reflexes": 4,
+        "volonte": 1,
+        "special_en": "attaque sournoise +3d6",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 6,
+        "bba": [
+          4
+        ],
+        "vigueur": 2,
+        "reflexes": 5,
+        "volonte": 2,
+        "special_en": "sens des pièges +2, talent de roublard",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 7,
+        "bba": [
+          5
+        ],
+        "vigueur": 2,
+        "reflexes": 5,
+        "volonte": 2,
+        "special_en": "attaque sournoise +4d6",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 8,
+        "bba": [
+          6,
+          1
+        ],
+        "vigueur": 2,
+        "reflexes": 6,
+        "volonte": 2,
+        "special_en": "esquive instinctive supérieure, talent de roublard",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 9,
+        "bba": [
+          6,
+          1
+        ],
+        "vigueur": 3,
+        "reflexes": 6,
+        "volonte": 3,
+        "special_en": "attaque sournoise +5d6, sens des pièges +3",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 10,
+        "bba": [
+          7,
+          2
+        ],
+        "vigueur": 3,
+        "reflexes": 7,
+        "volonte": 3,
+        "special_en": "talent de maître roublard",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 11,
+        "bba": [
+          8,
+          3
+        ],
+        "vigueur": 3,
+        "reflexes": 7,
+        "volonte": 3,
+        "special_en": "attaque sournoise +6d6",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 12,
+        "bba": [
+          9,
+          4
+        ],
+        "vigueur": 4,
+        "reflexes": 8,
+        "volonte": 4,
+        "special_en": "sens des pièges +4, talent de maître roublard",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 13,
+        "bba": [
+          9,
+          4
+        ],
+        "vigueur": 4,
+        "reflexes": 8,
+        "volonte": 4,
+        "special_en": "attaque sournoise +7d6",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 14,
+        "bba": [
+          10,
+          5
+        ],
+        "vigueur": 4,
+        "reflexes": 9,
+        "volonte": 4,
+        "special_en": "talent de maître roublard",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 15,
+        "bba": [
+          11,
+          6,
+          1
+        ],
+        "vigueur": 5,
+        "reflexes": 9,
+        "volonte": 5,
+        "special_en": "attaque sournoise +8d6, sens des pièges +5",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 16,
+        "bba": [
+          12,
+          7,
+          2
+        ],
+        "vigueur": 5,
+        "reflexes": 10,
+        "volonte": 5,
+        "special_en": "talent de maître roublard",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 17,
+        "bba": [
+          12,
+          7,
+          2
+        ],
+        "vigueur": 5,
+        "reflexes": 10,
+        "volonte": 5,
+        "special_en": "attaque sournoise +9d6",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 18,
+        "bba": [
+          13,
+          8,
+          3
+        ],
+        "vigueur": 6,
+        "reflexes": 11,
+        "volonte": 6,
+        "special_en": "sens des pièges +6, talent de maître roublard",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 19,
+        "bba": [
+          14,
+          9,
+          4
+        ],
+        "vigueur": 6,
+        "reflexes": 11,
+        "volonte": 6,
+        "special_en": "attaque sournoise +10d6",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      },
+      {
+        "niveau": 20,
+        "bba": [
+          15,
+          10,
+          5
+        ],
+        "vigueur": 6,
+        "reflexes": 12,
+        "volonte": 6,
+        "special_en": "coup de maître, talent de maître roublard",
+        "sorts_par_jour": [],
+        "sorts_connus": [],
+        "domaine": false
+      }
+    ]
+  }
+}

@@ -1296,3 +1296,72 @@ fn le_rodeur_gagne_un_don_de_style_de_combat_aux_niveaux_2_6_10_14_18() {
     // Niveau 4 : aucun don.
     assert_eq!(rodeur(4, 14).dons_attendus_a(&r, 3), 0);
 }
+
+fn roublard(niveau: u32, dexterite: i32) -> Fiche {
+    let mut f = barbare(niveau, 14);
+    f.niveaux.iter_mut().for_each(|n| {
+        n.classe = "roublard".into();
+        n.de_vie_obtenu = 8;
+    });
+    f.classes_de_predilection = vec!["roublard".into()];
+    f.scores_base.insert(Carac::Dex, dexterite);
+    f
+}
+
+#[test]
+fn la_classe_roublard_est_chargee_depuis_le_livre() {
+    let r = Referentiel::core();
+    let c = r.classe("roublard").expect("roublard");
+    assert_eq!(c.de_vie, 8);
+    assert_eq!(c.rangs_par_niveau, 8);
+    assert_eq!(c.progression.len(), 20);
+    assert!(c.incantation.is_none());
+    assert_eq!(c.source.page, Some(85));
+}
+
+#[test]
+fn table_3_16_du_roublard() {
+    let r = Referentiel::core();
+    let c = r.classe("roublard").unwrap();
+    let l = |n: usize| &c.progression[n - 1];
+    // Niveau 1 : BBA +0, Réf +2, Vig +0, Vol +0.
+    assert_eq!(l(1).bba, vec![0]);
+    assert_eq!((l(1).reflexes, l(1).vigueur, l(1).volonte), (2, 0, 0));
+    // Niveau 11 : BBA +8/+3, Réf +7, Vig +3, Vol +3.
+    assert_eq!(l(11).bba, vec![8, 3]);
+    assert_eq!((l(11).reflexes, l(11).vigueur, l(11).volonte), (7, 3, 3));
+    // Niveau 20 : BBA +15/+10/+5, Réf +12, Vig +6, Vol +6.
+    assert_eq!(l(20).bba, vec![15, 10, 5]);
+    assert_eq!((l(20).reflexes, l(20).vigueur, l(20).volonte), (12, 6, 6));
+}
+
+#[test]
+fn les_competences_de_classe_du_roublard() {
+    let r = Referentiel::core();
+    let mut f = roublard(1, 14);
+    f.niveaux[0].rangs.insert("disable_device".into(), 1);
+    f.niveaux[0].rangs.insert("survival".into(), 1);
+    let v = f.calculer(&r).unwrap();
+    let de_classe = |cle: &str| {
+        v.competences[cle]
+            .termes
+            .iter()
+            .any(|t| t.libelle == "compétence de classe")
+    };
+    assert!(de_classe("disable_device"));
+    assert!(!de_classe("survival"));
+}
+
+#[test]
+fn un_roublard_monte_du_niveau_1_au_niveau_5() {
+    use crate::progression::{appliquer, montee_auto};
+    let r = Referentiel::core();
+    let regles = ReglesFiche::default();
+    let mut f = roublard(1, 16);
+    f.niveaux[0].dons = vec!["Toughness".into(), "Alertness".into()];
+    for _ in 2..=5 {
+        let m = montee_auto(&r, &f, "roublard", 5);
+        f = appliquer(&r, &regles, &f, &m, 20).expect("montée valide");
+    }
+    assert_eq!(f.niveau_de_personnage(), 5);
+}

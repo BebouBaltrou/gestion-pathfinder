@@ -138,3 +138,8 @@ Chaque point : ce que le moteur fait aujourd'hui, et ce qu'il faut te demander.
 47. **Table 3-15 (p. 82)** : valeurs vérifiées aux niveaux 1, 11 et 20. À relire contre le livre.
 48. **Dons de style de combat** (niveaux 2, 6, 10, 14, 18) : comptés en plus, sans restriction de liste (le moteur accepte tout don du catalogue). À confirmer : la liste des dons de style de combat.
 49. **Non calculé pour l'instant** : ennemis jurés et environnements de prédilection (bonus contre le type choisi), pistage, empathie sauvage, pacte du chasseur, proie du chasseur, camouflage et discrétion totale, maître chasseur. Le texte est dans `special_en` par niveau.
+
+## Roublard (classe ajoutée)
+
+50. **Table 3-16 (p. 85)** : valeurs vérifiées aux niveaux 1, 11 et 20. À relire contre le livre.
+51. **Non calculé pour l'instant** : attaque sournoise (+1d6 au niveau 1, +1d6 tous les deux niveaux, le nombre de dés suit le niveau), recherche de pièges, sens des pièges, esquive instinctive et totale, talents de roublard et de maître roublard (choix à faire), coup de maître. Le texte est dans `special_en` par niveau.
