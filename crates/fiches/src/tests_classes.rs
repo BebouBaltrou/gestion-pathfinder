@@ -840,3 +840,134 @@ fn le_druide_avec_son_compagnon_animal() {
         .ajouter(EvenementFiche::CompagnonModifie(nouveau), &r, &regles)
         .is_err());
 }
+
+fn barbare(niveau: u32, constitution: i32) -> Fiche {
+    let scores = [
+        (Carac::For, 15),
+        (Carac::Dex, 12),
+        (Carac::Con, constitution),
+        (Carac::Int, 10),
+        (Carac::Sag, 10),
+        (Carac::Cha, 8),
+    ];
+    Fiche {
+        nom: "Test".into(),
+        race: "humain".into(),
+        bonus_racial_libre: Some(Carac::For),
+        scores_base: scores.into_iter().collect(),
+        dommages: BTreeMap::new(),
+        drain: BTreeMap::new(),
+        augmentations: vec![],
+        niveaux: (0..niveau)
+            .map(|i| NiveauPris {
+                classe: "barbare".into(),
+                de_vie_obtenu: if i == 0 { 12 } else { 7 },
+                rangs: BTreeMap::new(),
+                predilection: Some(BonusPredilection::PointDeVie),
+                dons: vec![],
+            })
+            .collect(),
+        classes_de_predilection: vec!["barbare".into()],
+        lignage: None,
+        connaissance_de_lignage: None,
+        effets: vec![],
+        sorts_connus: vec![],
+        equipement: Default::default(),
+        etats: vec![],
+        temporaires: vec![],
+        divinite: None,
+        alignement: None,
+        domaines: vec![],
+        energie: None,
+        pacte: None,
+        compagnon: None,
+    }
+}
+
+#[test]
+fn la_classe_barbare_est_chargee_depuis_le_livre() {
+    let r = Referentiel::core();
+    let c = r.classe("barbare").expect("barbare");
+    assert_eq!(c.de_vie, 12);
+    assert_eq!(c.rangs_par_niveau, 4);
+    assert_eq!(c.progression.len(), 20);
+    assert!(c.incantation.is_none());
+    assert_eq!(c.source.page, Some(32));
+}
+
+#[test]
+fn table_3_2_du_barbare() {
+    let r = Referentiel::core();
+    let c = r.classe("barbare").unwrap();
+    let l = |n: usize| &c.progression[n - 1];
+    // Niveau 1 : BBA +1, Réf +0, Vig +2, Vol +0.
+    assert_eq!(l(1).bba, vec![1]);
+    assert_eq!((l(1).reflexes, l(1).vigueur, l(1).volonte), (0, 2, 0));
+    // Niveau 6 : BBA +6/+1, Réf +2, Vig +5, Vol +2.
+    assert_eq!(l(6).bba, vec![6, 1]);
+    assert_eq!((l(6).reflexes, l(6).vigueur, l(6).volonte), (2, 5, 2));
+    // Niveau 11 : BBA +11/+6/+1, Réf +3, Vig +7, Vol +3.
+    assert_eq!(l(11).bba, vec![11, 6, 1]);
+    assert_eq!((l(11).reflexes, l(11).vigueur, l(11).volonte), (3, 7, 3));
+    // Niveau 20 : BBA +20/+15/+10/+5, Réf +6, Vig +12, Vol +6.
+    assert_eq!(l(20).bba, vec![20, 15, 10, 5]);
+    assert_eq!((l(20).reflexes, l(20).vigueur, l(20).volonte), (6, 12, 6));
+}
+
+#[test]
+fn la_rage_du_barbare_suit_4_plus_constitution_et_2_par_niveau() {
+    let r = Referentiel::core();
+    // Constitution 14 : modificateur +2.
+    let rage = |niveau: u32| {
+        barbare(niveau, 14)
+            .calculer(&r)
+            .unwrap()
+            .pouvoirs
+            .iter()
+            .find(|p| p.cle == "rage")
+            .and_then(|p| p.max)
+    };
+    assert_eq!(rage(1), Some(6));
+    assert_eq!(rage(2), Some(8));
+    assert_eq!(rage(5), Some(14));
+}
+
+#[test]
+fn les_competences_de_classe_du_barbare() {
+    let r = Referentiel::core();
+    let mut f = barbare(1, 14);
+    f.niveaux[0].rangs.insert("intimidate".into(), 1);
+    f.niveaux[0].rangs.insert("bluff".into(), 1);
+    let v = f.calculer(&r).unwrap();
+    assert!(v.competences["intimidate"]
+        .termes
+        .iter()
+        .any(|t| t.libelle == "compétence de classe"));
+    assert!(!v.competences["bluff"]
+        .termes
+        .iter()
+        .any(|t| t.libelle == "compétence de classe"));
+}
+
+#[test]
+fn un_barbare_monte_du_niveau_1_au_niveau_5() {
+    use crate::progression::{appliquer, montee_auto};
+    let r = Referentiel::core();
+    let regles = ReglesFiche::default();
+    let mut f = barbare(1, 14);
+    f.niveaux[0].dons = vec!["Toughness".into(), "Alertness".into()];
+    for _ in 2..=5 {
+        let m = montee_auto(&r, &f, "barbare", 7);
+        f = appliquer(&r, &regles, &f, &m, 20).expect("montée valide");
+    }
+    assert_eq!(f.niveau_de_personnage(), 5);
+    assert_eq!(f.niveaux.len(), 5);
+    let v = f.calculer(&r).unwrap();
+    assert_eq!(
+        v.pouvoirs
+            .iter()
+            .find(|p| p.cle == "rage")
+            .and_then(|p| p.max),
+        Some(14)
+    );
+}

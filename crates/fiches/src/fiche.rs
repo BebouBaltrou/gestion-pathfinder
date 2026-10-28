@@ -1705,7 +1705,13 @@ impl Fiche {
                 pouvoirs.push(PouvoirJournalier {
                     cle: p.cle.clone(),
                     nom: p.nom.clone(),
-                    max: if p.a_volonte.is_some_and(|l| nc >= l) {
+                    max: if let Some(f) = &p.formule {
+                        let carac = Carac::TOUTES
+                            .into_iter()
+                            .find(|c| c.abrege().eq_ignore_ascii_case(&f.carac));
+                        let bonus = carac.map_or(0, m);
+                        Some(f.base + f.par_niveau * (nc as i32 - 1) + bonus)
+                    } else if p.a_volonte.is_some_and(|l| nc >= l) {
                         None
                     } else {
                         Some(1 + ((nc - p.niveau) / p.pas.max(1)) as i32)

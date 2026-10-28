@@ -202,6 +202,17 @@ pub struct PouvoirClasse {
     pub niveau: u32,
     pub pas: u32,
     pub a_volonte: Option<u32>,
+    /// Nombre fixé par une formule au lieu de `pas` (barbare : rounds de rage).
+    #[serde(default)]
+    pub formule: Option<FormuleUtilisations>,
+}
+
+/// Utilisations = `base` + `par_niveau` × (niveau de classe − 1) + modificateur de `carac`.
+#[derive(Debug, Clone, Deserialize)]
+pub struct FormuleUtilisations {
+    pub base: i32,
+    pub par_niveau: i32,
+    pub carac: String,
 }
 
 /// Bonus chiffré d'une capacité de classe, acquis à partir d'un niveau de classe.
@@ -278,6 +289,7 @@ impl Referentiel {
                 include_str!("../../../data/core/ensorceleur.json"),
                 include_str!("../../../data/core/pretre.json"),
                 include_str!("../../../data/core/druide.json"),
+                include_str!("../../../data/core/barbare.json"),
             ],
             include_str!("../../../data/core/progression.json"),
         )

@@ -95,3 +95,15 @@ Chaque point : ce que le moteur fait aujourd'hui, et ce qu'il faut te demander.
     ce qui change, le type de bonus et la valeur ; le moteur applique le cumul du Core (deux
     bonus du même type ne s'additionnent pas, sauf esquive, circonstance et sans type). Aucune
     limite d'emplacements corporels (un anneau par doigt, une cape…) n'est contrôlée : à confirmer.
+
+## Barbare (classe ajoutée)
+
+30. **Table 3-2 (p. 32)** : lue dans le texte du PDF (extraction brute, page 34 du fichier). Valeurs
+    vérifiées : BBA, jets et aptitudes aux niveaux 1, 6, 11 et 20. À relire contre le livre.
+31. **Rage** : nombre de rounds par jour = 4 + Constitution, +2 par niveau après le premier
+    (formule dans `data/core/barbare.json`). Le moteur compte les rounds comme des utilisations
+    du jour ; le repos les renouvelle.
+32. **Non calculé pour l'instant** : bonus de rage (+4 Force et Constitution, +2 Volonté, −2 CA,
+    état temporaire), sens des pièges, réduction de dégâts, déplacement accéléré (conditionnel à
+    l'armure), esquive instinctive. Le texte des aptitudes est dans `special_en` par niveau.
+33. **Choix des pouvoirs de rage** (un au niveau 2, puis tous les deux niveaux) : pas encore saisis.
