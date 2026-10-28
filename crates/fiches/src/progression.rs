@@ -695,9 +695,9 @@ mod tests {
         let r = Referentiel::core();
         let f = base();
         let mut m = montee(&r, &f, 4);
-        m.classe = "magicien".into();
+        m.classe = "samourai".into();
         let e = appliquer(&r, &ReglesFiche::default(), &f, &m, 20).unwrap_err();
-        assert_eq!(e, vec![ErreurMontee::ClasseInconnue("magicien".into())]);
+        assert_eq!(e, vec![ErreurMontee::ClasseInconnue("samourai".into())]);
     }
 
     #[test]

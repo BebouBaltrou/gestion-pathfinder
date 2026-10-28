@@ -1365,3 +1365,56 @@ fn un_roublard_monte_du_niveau_1_au_niveau_5() {
     }
     assert_eq!(f.niveau_de_personnage(), 5);
 }
+
+fn magicien(niveau: u32, intelligence: i32) -> Fiche {
+    let mut f = barbare(niveau, 14);
+    f.niveaux.iter_mut().for_each(|n| {
+        n.classe = "magicien".into();
+        n.de_vie_obtenu = 6;
+    });
+    f.classes_de_predilection = vec!["magicien".into()];
+    f.scores_base.insert(Carac::Int, intelligence);
+    f
+}
+
+#[test]
+fn la_classe_magicien_est_chargee_depuis_le_livre() {
+    let r = Referentiel::core();
+    let c = r.classe("magicien").expect("magicien");
+    assert_eq!(c.de_vie, 6);
+    assert_eq!(c.rangs_par_niveau, 2);
+    assert_eq!(c.progression.len(), 20);
+    assert!(c.incantation.as_ref().unwrap().prepare());
+    assert_eq!(c.source.page, Some(60));
+}
+
+#[test]
+fn table_3_10_du_magicien() {
+    let r = Referentiel::core();
+    let c = r.classe("magicien").unwrap();
+    let l = |n: usize| &c.progression[n - 1];
+    // Niveau 1 : BBA +0, Réf +0, Vig +0, Vol +2 ; 3 tours de magie, 1 sort de niveau 1.
+    assert_eq!(l(1).bba, vec![0]);
+    assert_eq!((l(1).reflexes, l(1).vigueur, l(1).volonte), (0, 0, 2));
+    assert_eq!(l(1).oraisons, Some(3));
+    assert_eq!(l(1).sorts_par_jour, vec![Some(1)]);
+    // Niveau 11 : BBA +5, Réf +3, Vig +3, Vol +7 ; 4/4/4/3/2/1 sorts.
+    assert_eq!(l(11).bba, vec![5]);
+    assert_eq!((l(11).reflexes, l(11).vigueur, l(11).volonte), (3, 3, 7));
+    assert_eq!(l(11).sorts_par_jour.len(), 6);
+    // Niveau 20 : BBA +10/+5, Réf +6, Vig +6, Vol +12 ; 4 sorts de chaque niveau 1 à 9.
+    assert_eq!((l(20).reflexes, l(20).vigueur, l(20).volonte), (6, 6, 12));
+    assert!(l(20).sorts_par_jour.iter().all(|s| *s == Some(4)));
+    assert_eq!(l(20).sorts_par_jour.len(), 9);
+}
+
+#[test]
+fn le_magicien_gagne_un_don_supplementaire_au_niveau_5() {
+    let r = Referentiel::core();
+    // Niveau 1 : don du niveau 1 + don de race humaine.
+    assert_eq!(magicien(1, 16).dons_attendus_a(&r, 0), 2);
+    // Niveau 4 : aucun don.
+    assert_eq!(magicien(4, 16).dons_attendus_a(&r, 3), 0);
+    // Niveau 5 : don standard du niveau impair + don supplémentaire de magicien.
+    assert_eq!(magicien(5, 16).dons_attendus_a(&r, 4), 2);
+}

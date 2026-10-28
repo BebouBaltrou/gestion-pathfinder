@@ -1,0 +1,458 @@
+{
+  "source": "Manuel des joueurs (version française), classe Magicien, Table 3-10 (p. 60)",
+  "classe": {
+    "id": "magicien",
+    "nom": "Magicien",
+    "nom_en": "Wizard",
+    "source": {
+      "livre": "Manuel des joueurs (VF)",
+      "page": 60
+    },
+    "de_vie": 6,
+    "rangs_par_niveau": 2,
+    "caracteristique_rangs": "int",
+    "competences_de_classe_en": [
+      "Spellcraft",
+      "Craft",
+      "Knowledge (all)",
+      "Appraise",
+      "Linguistics",
+      "Profession",
+      "Fly"
+    ],
+    "bba": "lente",
+    "vigueur": "lente",
+    "reflexes": "lente",
+    "volonte": "rapide",
+    "maitrises_fr": "Arbalètes légères et lourdes, bâton, dague, gourdin. Pas d'armure ni de bouclier.",
+    "domaines_choisis": 0,
+    "canalisation": false,
+    "incantation": {
+      "type": "profane",
+      "mode": "préparé",
+      "caracteristique": "int"
+    },
+    "don_bonus_niveau_1": null,
+    "effets": [],
+    "pouvoirs": [],
+    "progression": [
+      {
+        "niveau": 1,
+        "bba": [
+          0
+        ],
+        "vigueur": 0,
+        "reflexes": 0,
+        "volonte": 2,
+        "special_en": "école de magie, écriture de parchemins, pacte magique, tours de magie",
+        "sorts_par_jour": [
+          1
+        ],
+        "sorts_connus": [],
+        "oraisons": 3,
+        "domaine": false
+      },
+      {
+        "niveau": 2,
+        "bba": [
+          1
+        ],
+        "vigueur": 0,
+        "reflexes": 0,
+        "volonte": 3,
+        "special_en": "",
+        "sorts_par_jour": [
+          2
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 3,
+        "bba": [
+          1
+        ],
+        "vigueur": 1,
+        "reflexes": 1,
+        "volonte": 3,
+        "special_en": "",
+        "sorts_par_jour": [
+          2,
+          1
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 4,
+        "bba": [
+          2
+        ],
+        "vigueur": 1,
+        "reflexes": 1,
+        "volonte": 4,
+        "special_en": "",
+        "sorts_par_jour": [
+          3,
+          2
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 5,
+        "bba": [
+          2
+        ],
+        "vigueur": 1,
+        "reflexes": 1,
+        "volonte": 4,
+        "special_en": "don supplémentaire",
+        "sorts_par_jour": [
+          3,
+          2,
+          1
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 6,
+        "bba": [
+          3
+        ],
+        "vigueur": 2,
+        "reflexes": 2,
+        "volonte": 5,
+        "special_en": "",
+        "sorts_par_jour": [
+          3,
+          3,
+          2
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 7,
+        "bba": [
+          3
+        ],
+        "vigueur": 2,
+        "reflexes": 2,
+        "volonte": 5,
+        "special_en": "",
+        "sorts_par_jour": [
+          4,
+          3,
+          2,
+          1
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 8,
+        "bba": [
+          4
+        ],
+        "vigueur": 2,
+        "reflexes": 2,
+        "volonte": 6,
+        "special_en": "",
+        "sorts_par_jour": [
+          4,
+          3,
+          3,
+          2
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 9,
+        "bba": [
+          4
+        ],
+        "vigueur": 3,
+        "reflexes": 3,
+        "volonte": 6,
+        "special_en": "",
+        "sorts_par_jour": [
+          4,
+          4,
+          3,
+          2,
+          1
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 10,
+        "bba": [
+          5
+        ],
+        "vigueur": 3,
+        "reflexes": 3,
+        "volonte": 7,
+        "special_en": "don supplémentaire",
+        "sorts_par_jour": [
+          4,
+          4,
+          3,
+          3,
+          2
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 11,
+        "bba": [
+          5
+        ],
+        "vigueur": 3,
+        "reflexes": 3,
+        "volonte": 7,
+        "special_en": "",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          3,
+          2,
+          1
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 12,
+        "bba": [
+          6,
+          1
+        ],
+        "vigueur": 4,
+        "reflexes": 4,
+        "volonte": 8,
+        "special_en": "",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          3,
+          3,
+          2
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 13,
+        "bba": [
+          6,
+          1
+        ],
+        "vigueur": 4,
+        "reflexes": 4,
+        "volonte": 8,
+        "special_en": "",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          1
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 14,
+        "bba": [
+          7,
+          2
+        ],
+        "vigueur": 4,
+        "reflexes": 4,
+        "volonte": 9,
+        "special_en": "",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          4,
+          3,
+          3,
+          2
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 15,
+        "bba": [
+          7,
+          2
+        ],
+        "vigueur": 5,
+        "reflexes": 5,
+        "volonte": 9,
+        "special_en": "don supplémentaire",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          1
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 16,
+        "bba": [
+          8,
+          3
+        ],
+        "vigueur": 5,
+        "reflexes": 5,
+        "volonte": 10,
+        "special_en": "",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          3,
+          2
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 17,
+        "bba": [
+          8,
+          3
+        ],
+        "vigueur": 5,
+        "reflexes": 5,
+        "volonte": 10,
+        "special_en": "",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          2,
+          1
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 18,
+        "bba": [
+          9,
+          4
+        ],
+        "vigueur": 6,
+        "reflexes": 6,
+        "volonte": 11,
+        "special_en": "",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          3,
+          2
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 19,
+        "bba": [
+          9,
+          4
+        ],
+        "vigueur": 6,
+        "reflexes": 6,
+        "volonte": 11,
+        "special_en": "",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3,
+          3
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      },
+      {
+        "niveau": 20,
+        "bba": [
+          10,
+          5
+        ],
+        "vigueur": 6,
+        "reflexes": 6,
+        "volonte": 12,
+        "special_en": "don supplémentaire",
+        "sorts_par_jour": [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        "sorts_connus": [],
+        "oraisons": 4,
+        "domaine": false
+      }
+    ]
+  }
+}

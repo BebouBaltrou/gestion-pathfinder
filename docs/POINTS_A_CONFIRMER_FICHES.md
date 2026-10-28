@@ -143,3 +143,10 @@ Chaque point : ce que le moteur fait aujourd'hui, et ce qu'il faut te demander.
 
 50. **Table 3-16 (p. 85)** : valeurs vérifiées aux niveaux 1, 11 et 20. À relire contre le livre.
 51. **Non calculé pour l'instant** : attaque sournoise (+1d6 au niveau 1, +1d6 tous les deux niveaux, le nombre de dés suit le niveau), recherche de pièges, sens des pièges, esquive instinctive et totale, talents de roublard et de maître roublard (choix à faire), coup de maître. Le texte est dans `special_en` par niveau.
+
+## Magicien (classe ajoutée)
+
+52. **Table 3-10 (p. 60)** : lue dans le texte brut du PDF, colonnes lues par programme ; valeurs vérifiées aux niveaux 1, 11 et 20. À relire contre le livre.
+53. **Grimoire** : le nombre de sorts du grimoire (et les sorts de départ) n'est pas encore saisi ; la liste de sorts connus du magicien est vide. Le magicien prépare chaque jour selon les sorts par jour de la table.
+54. **Non calculé pour l'instant** : école de magie (choix et interdictions), écriture de parchemins, pacte magique (familier), et les effets des sorts. Le texte est dans `special_en`.
+55. **Dons supplémentaires** (niveaux 5, 10, 15, 20) : comptés en plus, sans restriction de liste.
