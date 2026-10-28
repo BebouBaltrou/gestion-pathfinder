@@ -71,8 +71,8 @@
 
 .ajout-rapide { display: flex; flex-direction: column; gap: 10px; padding-top: 12px; }
 .resultats-catalogue { list-style: none; margin: 0; padding: 0; max-height: 260px; overflow: auto; display: flex; flex-direction: column; gap: 4px; }
-.resultats-catalogue li { display: grid; grid-template-columns: minmax(0, 1fr) 130px 80px 90px auto; gap: 8px; align-items: center; padding: 4px 8px; border-radius: 8px; background: var(--panneau); }
-.resultats-catalogue .nom-objet { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.resultats-catalogue li { display: grid; grid-template-columns: minmax(180px, 1fr) minmax(0, 110px) 70px 80px auto; gap: 8px; align-items: center; padding: 4px 8px; border-radius: 8px; background: var(--panneau); }
+.resultats-catalogue .nom-objet { overflow-wrap: anywhere; line-height: 1.25; }
 .resultats-catalogue .type-objet { color: var(--texte-doux); font-size: 12px; }
 .resultats-catalogue .poids-objet, .resultats-catalogue .valeur-objet { text-align: right; font-size: 13px; color: var(--texte-moyen); }
 .formulaire-libre { display: flex; flex-wrap: wrap; gap: 8px; }
