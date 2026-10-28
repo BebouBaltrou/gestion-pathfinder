@@ -400,7 +400,8 @@ button.ligne-ref:hover { background: var(--carte-survol); }
 .formulaire { display: flex; flex-direction: column; gap: 12px; }
 .champ.large { min-width: 0; width: 100%; }
 .champ.court { min-width: 0; width: 90px; }
-.champ.choix { min-width: 240px; padding-right: 8px; }
+/* Menu de choix : sa largeur ne rétrécit pas sous 420 px (ou la largeur de la ligne), pour que le nom de l'objet tienne */
+.champ.choix { min-width: 240px; flex: 1 0 min(100%, 420px); width: auto; padding-right: 8px; }
 .fiche { display: flex; flex-direction: column; gap: 18px; }
 .entete-fiche { display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between; align-items: center; }
 .nom-fiche { font-size: 24px; }
