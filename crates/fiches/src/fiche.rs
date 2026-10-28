@@ -571,7 +571,7 @@ fn est_de_classe(liste: &[String], cle: &str) -> bool {
         match entree.split_once(" (") {
             Some((nom, reste)) => {
                 let s = reste.trim_end_matches(')');
-                nom.replace(' ', "_") == base && sous == Some(s)
+                nom.replace(' ', "_") == base && (s == "all" || sous == Some(s))
             }
             None => entree.replace(' ', "_") == base,
         }

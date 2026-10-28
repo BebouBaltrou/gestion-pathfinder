@@ -1,0 +1,555 @@
+{
+  "source": "Manuel des joueurs (version française), classe Barde, Tables 3-3 (p. 38) et 3-4 (p. 39)",
+  "classe": {
+    "id": "barde",
+    "nom": "Barde",
+    "nom_en": "Bard",
+    "source": {
+      "livre": "Manuel des joueurs (VF)",
+      "page": 38
+    },
+    "de_vie": 8,
+    "rangs_par_niveau": 6,
+    "caracteristique_rangs": "int",
+    "competences_de_classe_en": [
+      "Acrobatics",
+      "Appraise",
+      "Bluff",
+      "Climb",
+      "Craft",
+      "Diplomacy",
+      "Disguise",
+      "Escape Artist",
+      "Intimidate",
+      "Knowledge (all)",
+      "Linguistics",
+      "Perception",
+      "Perform",
+      "Profession",
+      "Sense Motive",
+      "Sleight of Hand",
+      "Spellcraft",
+      "Stealth",
+      "Use Magic Device"
+    ],
+    "bba": "moyen",
+    "vigueur": "lente",
+    "reflexes": "rapide",
+    "volonte": "rapide",
+    "maitrises_fr": "Toutes les armes courantes, arc court, épée courte, épée longue, matraque, rapière, fouet ; armures légères ; boucliers (sauf pavois).",
+    "domaines_choisis": 0,
+    "canalisation": false,
+    "incantation": {
+      "type": "profane",
+      "mode": "spontané",
+      "caracteristique": "cha"
+    },
+    "don_bonus_niveau_1": null,
+    "effets": [],
+    "pouvoirs": [
+      {
+        "cle": "representation",
+        "nom": "Représentation bardique",
+        "niveau": 1,
+        "pas": 1,
+        "a_volonte": null,
+        "formule": {
+          "base": 4,
+          "par_niveau": 2,
+          "carac": "cha"
+        }
+      }
+    ],
+    "progression": [
+      {
+        "niveau": 1,
+        "bba": [
+          0
+        ],
+        "vigueur": 0,
+        "reflexes": 2,
+        "volonte": 2,
+        "special_en": "contre-chant, distraction, fascination, inspiration vaillante +1, représentation bardique, savoir bardique, tours de magie",
+        "sorts_par_jour": [
+          1
+        ],
+        "sorts_connus": [
+          4,
+          2
+        ],
+        "domaine": false
+      },
+      {
+        "niveau": 2,
+        "bba": [
+          1
+        ],
+        "vigueur": 0,
+        "reflexes": 3,
+        "volonte": 3,
+        "special_en": "érudition, versatilité artistique",
+        "sorts_par_jour": [
+          2
+        ],
+        "sorts_connus": [
+          5,
+          3
+        ],
+        "domaine": false
+      },
+      {
+        "niveau": 3,
+        "bba": [
+          2
+        ],
+        "vigueur": 1,
+        "reflexes": 3,
+        "volonte": 3,
+        "special_en": "inspiration talentueuse +2",
+        "sorts_par_jour": [
+          3
+        ],
+        "sorts_connus": [
+          6,
+          4
+        ],
+        "domaine": false
+      },
+      {
+        "niveau": 4,
+        "bba": [
+          3
+        ],
+        "vigueur": 1,
+        "reflexes": 4,
+        "volonte": 4,
+        "special_en": "",
+        "sorts_par_jour": [
+          3,
+          1
+        ],
+        "sorts_connus": [
+          6,
+          4,
+          2
+        ],
+        "domaine": false
+      },
+      {
+        "niveau": 5,
+        "bba": [
+          3
+        ],
+        "vigueur": 1,
+        "reflexes": 4,
+        "volonte": 4,
+        "special_en": "inspiration vaillante +2, maître du savoir 1/jour",
+        "sorts_par_jour": [
+          4,
+          2
+        ],
+        "sorts_connus": [
+          6,
+          4,
+          3
+        ],
+        "domaine": false
+      },
+      {
+        "niveau": 6,
+        "bba": [
+          4
+        ],
+        "vigueur": 2,
+        "reflexes": 5,
+        "volonte": 5,
+        "special_en": "suggestion, versatilité artistique",
+        "sorts_par_jour": [
+          4,
+          3
+        ],
+        "sorts_connus": [
+          6,
+          4,
+          4
+        ],
+        "domaine": false
+      },
+      {
+        "niveau": 7,
+        "bba": [
+          5
+        ],
+        "vigueur": 2,
+        "reflexes": 5,
+        "volonte": 5,
+        "special_en": "inspiration talentueuse +3",
+        "sorts_par_jour": [
+          4,
+          3,
+          1
+        ],
+        "sorts_connus": [
+          6,
+          5,
+          4,
+          2
+        ],
+        "domaine": false
+      },
+      {
+        "niveau": 8,
+        "bba": [
+          6,
+          1
+        ],
+        "vigueur": 2,
+        "reflexes": 6,
+        "volonte": 6,
+        "special_en": "chant funeste",
+        "sorts_par_jour": [
+          4,
+          4,
+          2
+        ],
+        "sorts_connus": [
+          6,
+          5,
+          4,
+          3
+        ],
+        "domaine": false
+      },
+      {
+        "niveau": 9,
+        "bba": [
+          6,
+          1
+        ],
+        "vigueur": 3,
+        "reflexes": 6,
+        "volonte": 6,
+        "special_en": "inspiration glorieuse",
+        "sorts_par_jour": [
+          5,
+          4,
+          3
+        ],
+        "sorts_connus": [
+          6,
+          5,
+          4,
+          4
+        ],
+        "domaine": false
+      },
+      {
+        "niveau": 10,
+        "bba": [
+          7,
+          2
+        ],
+        "vigueur": 3,
+        "reflexes": 7,
+        "volonte": 7,
+        "special_en": "touche-à-tout, versatilité artistique",
+        "sorts_par_jour": [
+          5,
+          4,
+          3,
+          1
+        ],
+        "sorts_connus": [
+          6,
+          5,
+          5,
+          4,
+          2
+        ],
+        "domaine": false
+      },
+      {
+        "niveau": 11,
+        "bba": [
+          8,
+          3
+        ],
+        "vigueur": 3,
+        "reflexes": 7,
+        "volonte": 7,
+        "special_en": "inspiration talentueuse +4, inspiration vaillante +3, maître du savoir 2/jour",
+        "sorts_par_jour": [
+          5,
+          4,
+          4,
+          2
+        ],
+        "sorts_connus": [
+          6,
+          6,
+          5,
+          4,
+          3
+        ],
+        "domaine": false
+      },
+      {
+        "niveau": 12,
+        "bba": [
+          9,
+          4
+        ],
+        "vigueur": 4,
+        "reflexes": 8,
+        "volonte": 8,
+        "special_en": "représentation apaisante",
+        "sorts_par_jour": [
+          5,
+          5,
+          4,
+          3
+        ],
+        "sorts_connus": [
+          6,
+          6,
+          5,
+          4,
+          4
+        ],
+        "domaine": false
+      },
+      {
+        "niveau": 13,
+        "bba": [
+          9,
+          4
+        ],
+        "vigueur": 4,
+        "reflexes": 8,
+        "volonte": 8,
+        "special_en": "",
+        "sorts_par_jour": [
+          5,
+          5,
+          4,
+          3,
+          1
+        ],
+        "sorts_connus": [
+          6,
+          6,
+          5,
+          5,
+          4,
+          2
+        ],
+        "domaine": false
+      },
+      {
+        "niveau": 14,
+        "bba": [
+          10,
+          5
+        ],
+        "vigueur": 4,
+        "reflexes": 9,
+        "volonte": 9,
+        "special_en": "mélodie effrayante, versatilité artistique",
+        "sorts_par_jour": [
+          5,
+          5,
+          4,
+          4,
+          2
+        ],
+        "sorts_connus": [
+          6,
+          6,
+          6,
+          5,
+          4,
+          3
+        ],
+        "domaine": false
+      },
+      {
+        "niveau": 15,
+        "bba": [
+          11,
+          6,
+          1
+        ],
+        "vigueur": 5,
+        "reflexes": 9,
+        "volonte": 9,
+        "special_en": "inspiration héroïque, inspiration talentueuse +5",
+        "sorts_par_jour": [
+          5,
+          5,
+          5,
+          4,
+          3
+        ],
+        "sorts_connus": [
+          6,
+          6,
+          6,
+          5,
+          4,
+          4
+        ],
+        "domaine": false
+      },
+      {
+        "niveau": 16,
+        "bba": [
+          12,
+          7,
+          2
+        ],
+        "vigueur": 5,
+        "reflexes": 10,
+        "volonte": 10,
+        "special_en": "",
+        "sorts_par_jour": [
+          5,
+          5,
+          5,
+          4,
+          3,
+          1
+        ],
+        "sorts_connus": [
+          6,
+          6,
+          6,
+          5,
+          5,
+          4,
+          2
+        ],
+        "domaine": false
+      },
+      {
+        "niveau": 17,
+        "bba": [
+          12,
+          7,
+          2
+        ],
+        "vigueur": 5,
+        "reflexes": 10,
+        "volonte": 10,
+        "special_en": "inspiration vaillante +4, maître du savoir 3/jour",
+        "sorts_par_jour": [
+          5,
+          5,
+          5,
+          4,
+          4,
+          2
+        ],
+        "sorts_connus": [
+          6,
+          6,
+          6,
+          6,
+          5,
+          4,
+          3
+        ],
+        "domaine": false
+      },
+      {
+        "niveau": 18,
+        "bba": [
+          13,
+          8,
+          3
+        ],
+        "vigueur": 6,
+        "reflexes": 11,
+        "volonte": 11,
+        "special_en": "suggestion de groupe, versatilité artistique",
+        "sorts_par_jour": [
+          5,
+          5,
+          5,
+          5,
+          4,
+          3
+        ],
+        "sorts_connus": [
+          6,
+          6,
+          6,
+          6,
+          5,
+          4,
+          4
+        ],
+        "domaine": false
+      },
+      {
+        "niveau": 19,
+        "bba": [
+          14,
+          9,
+          4
+        ],
+        "vigueur": 6,
+        "reflexes": 11,
+        "volonte": 11,
+        "special_en": "inspiration talentueuse +6",
+        "sorts_par_jour": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          4
+        ],
+        "sorts_connus": [
+          6,
+          6,
+          6,
+          6,
+          5,
+          5,
+          4
+        ],
+        "domaine": false
+      },
+      {
+        "niveau": 20,
+        "bba": [
+          15,
+          10,
+          5
+        ],
+        "vigueur": 6,
+        "reflexes": 12,
+        "volonte": 12,
+        "special_en": "représentation mortelle",
+        "sorts_par_jour": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "sorts_connus": [
+          6,
+          6,
+          6,
+          6,
+          6,
+          5,
+          5
+        ],
+        "domaine": false
+      }
+    ]
+  }
+}

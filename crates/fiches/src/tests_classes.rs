@@ -971,3 +971,85 @@ fn un_barbare_monte_du_niveau_1_au_niveau_5() {
         Some(14)
     );
 }
+
+fn barde(niveau: u32, charisme: i32) -> Fiche {
+    let mut f = barbare(niveau, 14);
+    f.niveaux.iter_mut().for_each(|n| {
+        n.classe = "barde".into();
+        n.de_vie_obtenu = 8;
+    });
+    f.classes_de_predilection = vec!["barde".into()];
+    f.scores_base.insert(Carac::Cha, charisme);
+    f
+}
+
+#[test]
+fn la_classe_barde_est_chargee_depuis_le_livre() {
+    let r = Referentiel::core();
+    let c = r.classe("barde").expect("barde");
+    assert_eq!(c.de_vie, 8);
+    assert_eq!(c.rangs_par_niveau, 6);
+    assert_eq!(c.progression.len(), 20);
+    assert!(!c.incantation.as_ref().unwrap().prepare());
+    assert_eq!(c.source.page, Some(38));
+}
+
+#[test]
+fn table_3_3_du_barde() {
+    let r = Referentiel::core();
+    let c = r.classe("barde").unwrap();
+    let l = |n: usize| &c.progression[n - 1];
+    // Niveau 1 : BBA +0, Réf +2, Vig +0, Vol +2 ; 1 sort de niveau 1.
+    assert_eq!(l(1).bba, vec![0]);
+    assert_eq!((l(1).reflexes, l(1).vigueur, l(1).volonte), (2, 0, 2));
+    assert_eq!(l(1).sorts_par_jour[0], Some(1));
+    assert_eq!(l(1).sorts_connus, vec![Some(4), Some(2)]);
+    // Niveau 11 : BBA +8/+3, Réf +7, Vig +3, Vol +7 ; 5/4/4/2 sorts.
+    assert_eq!(l(11).bba, vec![8, 3]);
+    assert_eq!((l(11).reflexes, l(11).vigueur, l(11).volonte), (7, 3, 7));
+    assert_eq!(
+        &l(11).sorts_par_jour[..4],
+        &[Some(5), Some(4), Some(4), Some(2)]
+    );
+    // Niveau 20 : BBA +15/+10/+5, Réf +12, Vig +6, Vol +12 ; 5 sorts de chaque niveau 1 à 6.
+    assert_eq!((l(20).reflexes, l(20).vigueur, l(20).volonte), (12, 6, 12));
+    assert!(l(20).sorts_par_jour.iter().take(6).all(|s| *s == Some(5)));
+}
+
+#[test]
+fn la_representation_bardique_suit_4_plus_charisme() {
+    let r = Referentiel::core();
+    // Charisme 16 : modificateur +3.
+    let rounds = |niveau: u32| {
+        barde(niveau, 16)
+            .calculer(&r)
+            .unwrap()
+            .pouvoirs
+            .iter()
+            .find(|p| p.cle == "representation")
+            .and_then(|p| p.max)
+    };
+    assert_eq!(rounds(1), Some(7));
+    assert_eq!(rounds(3), Some(11));
+}
+
+#[test]
+fn le_savoir_du_barde_couvre_toutes_les_connaissances() {
+    let r = Referentiel::core();
+    let mut f = barde(1, 14);
+    f.niveaux[0].rangs.insert("knowledge:arcana".into(), 1);
+    f.niveaux[0].rangs.insert("knowledge:nature".into(), 1);
+    f.niveaux[0].rangs.insert("bluff".into(), 1);
+    f.niveaux[0].rangs.insert("survival".into(), 1);
+    let v = f.calculer(&r).unwrap();
+    let de_classe = |cle: &str| {
+        v.competences[cle]
+            .termes
+            .iter()
+            .any(|t| t.libelle == "compétence de classe")
+    };
+    assert!(de_classe("knowledge:arcana"));
+    assert!(de_classe("knowledge:nature"));
+    assert!(de_classe("bluff"));
+    assert!(!de_classe("survival"));
+}

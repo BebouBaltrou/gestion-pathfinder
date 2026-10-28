@@ -107,3 +107,10 @@ Chaque point : ce que le moteur fait aujourd'hui, et ce qu'il faut te demander.
     état temporaire), sens des pièges, réduction de dégâts, déplacement accéléré (conditionnel à
     l'armure), esquive instinctive. Le texte des aptitudes est dans `special_en` par niveau.
 33. **Choix des pouvoirs de rage** (un au niveau 2, puis tous les deux niveaux) : pas encore saisis.
+
+## Barde (classe ajoutée)
+
+34. **Tables 3-3 (p. 38) et 3-4 (p. 39)** : lues dans le texte brut du PDF. Valeurs vérifiées aux niveaux 1, 11 et 20. À relire contre le livre.
+35. **Représentation bardique** : rounds par jour = 4 + Charisme, +2 par niveau après le premier (même formule que la rage du barbare).
+36. **Non calculé pour l'instant** : savoir bardique (moitié du niveau aux Connaissances), inspiration (vaillante, talentueuse, héroïque, glorieuse), maître du savoir, versatilité artistique, et les effets de représentation (contre-chant, distraction, fascination, etc.). Le texte est dans `special_en` par niveau.
+37. **Compétence « Connaissances (toutes) »** : la compétence de classe couvre toutes les Connaissances (règle ajoutée au moteur, valable pour toute classe qui la liste).
