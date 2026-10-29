@@ -209,6 +209,8 @@ export type ChoixClassesVue = {
   ennemisAttendus: number;
   ennemisJures: string[];
   typesEnnemis: string[];
+  augmentationsAttendues: number;
+  augmentationsEnnemis: string[];
   rageAttendus: number;
   rageChoisis: PouvoirRageVue[];
   /** Pouvoirs de rage accessibles, pas encore pris. `mjra` : règles avancées (APG). */
@@ -491,6 +493,7 @@ export type EvenementFiche =
   | { GraceChoisie: string }
   | { TalentRoublardChoisi: string }
   | { EnnemiJureChoisi: string }
+  | { EnnemiJureAugmente: string }
   | { PouvoirRageChoisi: string }
   | "RageCommencee"
   | "RageTerminee"

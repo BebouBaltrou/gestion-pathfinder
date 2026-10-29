@@ -571,6 +571,9 @@ pub struct ChoixClassesVue {
     pub ennemis_attendus: u32,
     pub ennemis_jures: Vec<String>,
     pub types_ennemis: Vec<String>,
+    /// Augmentations de +2 attendues (une de moins que de choix d’ennemi) et déjà choisies.
+    pub augmentations_attendues: u32,
+    pub augmentations_ennemis: Vec<String>,
     /// Nombre de pouvoirs de rage attendus au niveau de barbare actuel.
     pub rage_attendus: u32,
     pub rage_choisis: Vec<PouvoirRageVue>,
@@ -652,6 +655,10 @@ fn choix_classes(r: &Referentiel, f: &Fiche) -> ChoixClassesVue {
         ennemis_attendus: c.nombre_ennemis_jures(f.niveau_de_classe("rodeur")),
         ennemis_jures: f.ennemis_jures.clone(),
         types_ennemis: c.ennemis_jures_rodeur.types.clone(),
+        augmentations_attendues: c
+            .nombre_ennemis_jures(f.niveau_de_classe("rodeur"))
+            .saturating_sub(1),
+        augmentations_ennemis: f.augmentations_ennemis.clone(),
     }
 }
 
@@ -2242,6 +2249,7 @@ mod tests_pretre {
             graces: vec![],
             talents_roublard: vec![],
             ennemis_jures: vec![],
+            augmentations_ennemis: vec![],
             pouvoirs_rage: vec![],
             en_rage: false,
             rounds_de_rage: 0,

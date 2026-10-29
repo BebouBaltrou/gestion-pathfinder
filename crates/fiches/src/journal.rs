@@ -76,6 +76,8 @@ pub enum EvenementFiche {
     TalentRoublardChoisi(String),
     /// Ennemi juré du rôdeur choisi (type de créature).
     EnnemiJureChoisi(String),
+    /// +2 au bonus contre un ennemi juré déjà choisi (dès le niveau 5).
+    EnnemiJureAugmente(String),
     /// Pouvoir de rage du barbare choisi.
     PouvoirRageChoisi(String),
     /// Le barbare entre en rage (refusé s'il est fatigué ou épuisé).
@@ -193,6 +195,7 @@ impl EvenementFiche {
             EvenementFiche::GraceChoisie(g) => format!("Grâce : {g}"),
             EvenementFiche::TalentRoublardChoisi(t) => format!("Talent de roublard : {t}"),
             EvenementFiche::EnnemiJureChoisi(e) => format!("Ennemi juré : {e}"),
+            EvenementFiche::EnnemiJureAugmente(e) => format!("Ennemi juré, bonus +2 : {e}"),
             EvenementFiche::PouvoirRageChoisi(p) => format!("Pouvoir de rage : {p}"),
             EvenementFiche::RageCommencee => "Entrée en rage".to_string(),
             EvenementFiche::RageTerminee => "Fin de la rage".to_string(),
@@ -749,6 +752,9 @@ impl Journal {
                     fiche.talents_roublard.push(t.clone());
                 }
                 EvenementFiche::EnnemiJureChoisi(e) => fiche.ennemis_jures.push(e.clone()),
+                EvenementFiche::EnnemiJureAugmente(e) => {
+                    fiche.augmentations_ennemis.push(e.clone())
+                }
                 EvenementFiche::PouvoirRageChoisi(p) => fiche.pouvoirs_rage.push(p.clone()),
                 EvenementFiche::RageCommencee => {
                     let refus = if fiche.niveau_de_classe("barbare") == 0 {

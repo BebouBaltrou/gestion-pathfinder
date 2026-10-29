@@ -129,8 +129,23 @@ impl Fiche {
         if attendus != choisis {
             p.push(Probleme::EnnemisJuresAChoisir { attendus, choisis });
         }
-        for e in &self.ennemis_jures {
+        for (i, e) in self.ennemis_jures.iter().enumerate() {
             if !c.ennemis_jures_rodeur.types.contains(e) {
+                p.push(Probleme::EnnemiJureInconnu(e.clone()));
+            }
+            if self.ennemis_jures[..i].contains(e) {
+                p.push(Probleme::EnnemiJureEnDouble(e.clone()));
+            }
+        }
+        // Dès le niveau 5, chaque nouveau choix s'accompagne d'une augmentation de +2 contre
+        // l'un des ennemis jurés : une de moins que de choix d'ennemis.
+        let attendus = attendus.saturating_sub(1);
+        let choisis = self.augmentations_ennemis.len() as u32;
+        if attendus != choisis {
+            p.push(Probleme::AugmentationsEnnemisAChoisir { attendus, choisis });
+        }
+        for e in &self.augmentations_ennemis {
+            if !self.ennemis_jures.contains(e) {
                 p.push(Probleme::EnnemiJureInconnu(e.clone()));
             }
         }
@@ -367,6 +382,55 @@ pub fn capacites_chiffrees(fiche: &Fiche) -> Vec<String> {
         l.push(format!(
             "Inspiration héroïque : {cibles} cible(s), +4 aux jets de sauvegarde (moral) et +4 à la CA (esquive)"
         ));
+    }
+    for (i, t) in fiche.ennemis_jures.iter().enumerate() {
+        if fiche.ennemis_jures[..i].contains(t) {
+            continue;
+        }
+        let augmentations = fiche
+            .augmentations_ennemis
+            .iter()
+            .filter(|a| *a == t)
+            .count() as u32;
+        l.push(format!(
+            "Ennemi juré ({t}) : +{} aux tests de Bluff, Connaissances, Perception, Psychologie et Survie, et aux jets d'attaque et de dégâts contre ces créatures",
+            2 + 2 * augmentations
+        ));
+    }
+    if !fiche.ennemis_jures.is_empty() {
+        l.push("Ennemis jurés : si une créature relève de deux familles, seul le bonus le plus élevé s'applique".to_string());
+    }
+    let roublard = fiche.niveau_de_classe("roublard");
+    if roublard >= 1 {
+        l.push(format!(
+            "Recherche des pièges : +{} aux tests de Perception pour repérer les pièges et aux tests de Sabotage",
+            (roublard / 2).max(1)
+        ));
+    }
+    if roublard >= 3 {
+        let b = roublard / 3;
+        l.push(format!(
+            "Sens des pièges : +{b} aux jets de Réflexes contre les pièges et +{b} à la CA (esquive) contre leurs attaques"
+        ));
+    }
+    let moine = fiche.niveau_de_classe("moine");
+    if moine >= 4 {
+        let mut armes = vec!["armes magiques"];
+        if moine >= 7 {
+            armes.push("fer froid et argent");
+        }
+        if moine >= 10 {
+            armes.push("armes Loyales");
+        }
+        if moine >= 16 {
+            armes.push("adamantium");
+        }
+        l.push(format!(
+            "Frappe ki (1 point de ki restant au moins) : attaques à mains nues considérées comme {}, pour ignorer la réduction de dégâts{}",
+            armes.join(", "),
+            if moine >= 16 { " ou la solidité des objets" } else { "" }
+        ));
+        l.push("Dépenser 1 point de ki (action rapide) : une attaque de plus dans un déluge de coups, ou +6 m de vitesse pendant 1 round, ou +4 à la CA (esquive) pendant 1 round".to_string());
     }
     let guerrier = fiche.niveau_de_classe("guerrier");
     if guerrier >= 2 {

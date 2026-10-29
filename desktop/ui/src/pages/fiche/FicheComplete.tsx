@@ -455,10 +455,22 @@ function ChoixClasses({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => v
           <p>Ennemis jurés ({c.ennemisJures.length}/{c.ennemisAttendus}) : {c.ennemisJures.join(", ") || "aucun"}</p>
           {ennemis > 0 && (
             <div className="grille-boutons">
-              {c.typesEnnemis.map((e) => (
+              {c.typesEnnemis.filter((e) => !c.ennemisJures.includes(e)).map((e) => (
                 <button key={e} className="bouton" onClick={() => agir({ EnnemiJureChoisi: e })}>{e}</button>
               ))}
             </div>
+          )}
+          {c.augmentationsAttendues > 0 && (
+            <>
+              <p>Augmentations de +2 ({c.augmentationsEnnemis.length}/{c.augmentationsAttendues}){c.augmentationsEnnemis.length > 0 && " : " + c.augmentationsEnnemis.join(", ")}</p>
+              {c.augmentationsEnnemis.length < c.augmentationsAttendues && (
+                <div className="grille-boutons">
+                  {c.ennemisJures.filter((e, i) => c.ennemisJures.indexOf(e) === i).map((e) => (
+                    <button key={e} className="bouton" onClick={() => agir({ EnnemiJureAugmente: e })}>+2 contre {e}</button>
+                  ))}
+                </div>
+              )}
+            </>
           )}
         </div>
       )}

@@ -807,6 +807,7 @@ pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32, r: &Referentiel) -> Result
         graces: vec![],
         talents_roublard: vec![],
         ennemis_jures: vec![],
+        augmentations_ennemis: vec![],
         pouvoirs_rage: vec![],
         en_rage: false,
         rounds_de_rage: 0,

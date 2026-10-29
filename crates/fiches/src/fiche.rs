@@ -102,6 +102,9 @@ pub struct Fiche {
     /// Ennemis jurés du rôdeur choisis (types de créatures).
     #[cfg_attr(feature = "serde", serde(default))]
     pub ennemis_jures: Vec<String>,
+    /// Augmentations de +2 du bonus contre un ennemi juré déjà choisi (une par choix dès le niveau 5).
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub augmentations_ennemis: Vec<String>,
     /// Pouvoirs de rage choisis par le barbare (noms de `data/core/pouvoirs_rage.json`).
     #[cfg_attr(feature = "serde", serde(default))]
     pub pouvoirs_rage: Vec<String>,
@@ -216,6 +219,11 @@ pub enum Probleme {
         choisis: u32,
     },
     EnnemiJureInconnu(String),
+    EnnemiJureEnDouble(String),
+    AugmentationsEnnemisAChoisir {
+        attendus: u32,
+        choisis: u32,
+    },
     PouvoirsRageAChoisir {
         attendus: u32,
         choisis: u32,
@@ -291,6 +299,7 @@ impl Probleme {
             | Probleme::DomainesAChoisir { attendus, choisis }
             | Probleme::GracesAChoisir { attendus, choisis }
             | Probleme::EnnemisJuresAChoisir { attendus, choisis }
+            | Probleme::AugmentationsEnnemisAChoisir { attendus, choisis }
             | Probleme::PouvoirsRageAChoisir { attendus, choisis } => choisis < attendus,
             Probleme::AlignementManquant
             | Probleme::EnergieAChoisir
@@ -442,6 +451,11 @@ impl std::fmt::Display for Probleme {
                 write!(f, "ennemis jurés du rôdeur : {choisis} choisi(s) sur {attendus}")
             }
             Probleme::EnnemiJureInconnu(e) => write!(f, "ennemi juré inconnu : {e}"),
+            Probleme::EnnemiJureEnDouble(e) => write!(f, "ennemi juré déjà choisi : {e}"),
+            Probleme::AugmentationsEnnemisAChoisir { attendus, choisis } => write!(
+                f,
+                "ennemis jurés : {choisis} augmentation(s) de +2 choisie(s) sur {attendus}"
+            ),
             Probleme::PouvoirsRageAChoisir { attendus, choisis } => {
                 write!(f, "pouvoirs de rage : {choisis} choisi(s) sur {attendus}")
             }

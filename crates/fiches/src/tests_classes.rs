@@ -49,6 +49,7 @@ fn pretre(niveau: u32, sagesse: i32) -> Fiche {
         graces: vec![],
         talents_roublard: vec![],
         ennemis_jures: vec![],
+        augmentations_ennemis: vec![],
         pouvoirs_rage: vec![],
         en_rage: false,
         rounds_de_rage: 0,
@@ -893,6 +894,7 @@ fn barbare(niveau: u32, constitution: i32) -> Fiche {
         graces: vec![],
         talents_roublard: vec![],
         ennemis_jures: vec![],
+        augmentations_ennemis: vec![],
         pouvoirs_rage: vec![],
         en_rage: false,
         rounds_de_rage: 0,
@@ -1710,4 +1712,49 @@ fn la_fatigue_apres_la_rage_dure_le_double_des_rounds_et_s_use_avec_le_temps() {
     let f = j.etat(&r, &regles).unwrap().fiche;
     assert_eq!(f.fatigue_rage, None);
     assert!(!f.etats.contains(&"fatigued".to_string()));
+}
+
+#[test]
+fn chaque_nouvel_ennemi_juré_dès_le_niveau_5_s_accompagne_d_une_augmentation_de_2() {
+    let r = Referentiel::core();
+    // Niveau 5 : 2 ennemis et 1 augmentation.
+    let mut f = de_classe("rodeur", 5);
+    f.ennemis_jures = vec!["Mort-vivant".into(), "Dragon".into()];
+    let p = f.problemes_choix_de_classe(&r);
+    assert!(p.contains(&Probleme::AugmentationsEnnemisAChoisir {
+        attendus: 1,
+        choisis: 0
+    }));
+    f.augmentations_ennemis = vec!["Mort-vivant".into()];
+    assert!(f.problemes_choix_de_classe(&r).is_empty());
+    let l = crate::choix_classe::capacites_chiffrees(&f);
+    assert!(l
+        .iter()
+        .any(|x| x.starts_with("Ennemi juré (Mort-vivant) : +4 ")));
+    assert!(l
+        .iter()
+        .any(|x| x.starts_with("Ennemi juré (Dragon) : +2 ")));
+    // Un ennemi pris deux fois est refusé ; l'augmentation vise un ennemi déjà choisi.
+    f.ennemis_jures = vec!["Dragon".into(), "Dragon".into()];
+    f.augmentations_ennemis = vec!["Vase".into()];
+    let p = f.problemes_choix_de_classe(&r);
+    assert!(p.contains(&Probleme::EnnemiJureEnDouble("Dragon".into())));
+    assert!(p.contains(&Probleme::EnnemiJureInconnu("Vase".into())));
+    // Niveau 1 : un seul ennemi, pas d'augmentation.
+    let mut f = de_classe("rodeur", 1);
+    f.ennemis_jures = vec!["Animal".into()];
+    assert!(f.problemes_choix_de_classe(&r).is_empty());
+}
+
+#[test]
+fn roublard_et_moine_affichent_leurs_valeurs() {
+    let l = crate::choix_classe::capacites_chiffrees(&de_classe("roublard", 9));
+    assert!(l
+        .iter()
+        .any(|x| x.starts_with("Recherche des pièges : +4 ")));
+    assert!(l.iter().any(|x| x.starts_with("Sens des pièges : +3 ")));
+    let l = crate::choix_classe::capacites_chiffrees(&de_classe("moine", 10));
+    assert!(l
+        .iter()
+        .any(|x| x.contains("fer froid et argent, armes Loyales")));
 }
