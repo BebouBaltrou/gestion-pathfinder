@@ -102,6 +102,9 @@ pub struct Fiche {
     /// Ennemis jurés du rôdeur choisis (types de créatures).
     #[cfg_attr(feature = "serde", serde(default))]
     pub ennemis_jures: Vec<String>,
+    /// Pouvoirs de rage choisis par le barbare (noms de `data/core/pouvoirs_rage.json`).
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub pouvoirs_rage: Vec<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -204,6 +207,20 @@ pub enum Probleme {
         choisis: u32,
     },
     EnnemiJureInconnu(String),
+    PouvoirsRageAChoisir {
+        attendus: u32,
+        choisis: u32,
+    },
+    PouvoirRageInconnu(String),
+    PouvoirRageEnDouble(String),
+    PouvoirRageNonDisponible {
+        nom: String,
+        niveau: u32,
+    },
+    PouvoirRagePrerequisManquant {
+        nom: String,
+        requis: String,
+    },
     DonsAuNiveau {
         niveau: u32,
         attendus: u32,
@@ -261,7 +278,8 @@ impl Probleme {
             }
             | Probleme::DomainesAChoisir { attendus, choisis }
             | Probleme::GracesAChoisir { attendus, choisis }
-            | Probleme::EnnemisJuresAChoisir { attendus, choisis } => choisis < attendus,
+            | Probleme::EnnemisJuresAChoisir { attendus, choisis }
+            | Probleme::PouvoirsRageAChoisir { attendus, choisis } => choisis < attendus,
             Probleme::AlignementManquant
             | Probleme::EnergieAChoisir
             | Probleme::PacteManquant
@@ -412,6 +430,18 @@ impl std::fmt::Display for Probleme {
                 write!(f, "ennemis jurés du rôdeur : {choisis} choisi(s) sur {attendus}")
             }
             Probleme::EnnemiJureInconnu(e) => write!(f, "ennemi juré inconnu : {e}"),
+            Probleme::PouvoirsRageAChoisir { attendus, choisis } => {
+                write!(f, "pouvoirs de rage : {choisis} choisi(s) sur {attendus}")
+            }
+            Probleme::PouvoirRageInconnu(p) => write!(f, "pouvoir de rage inconnu : {p}"),
+            Probleme::PouvoirRageEnDouble(p) => write!(f, "pouvoir de rage pris deux fois : {p}"),
+            Probleme::PouvoirRageNonDisponible { nom, niveau } => write!(
+                f,
+                "{nom} : pouvoir de rage accessible au niveau de barbare {niveau}"
+            ),
+            Probleme::PouvoirRagePrerequisManquant { nom, requis } => {
+                write!(f, "{nom} : le pouvoir de rage {requis} doit être pris avant")
+            }
             Probleme::DonImposeManquant(d) => write!(f, "don imposé par la race manquant : {d}"),
             Probleme::EquipementInconnu(n) => write!(f, "équipement inconnu du catalogue : {n}"),
             Probleme::MauvaisEmplacement { objet, attendu } => {

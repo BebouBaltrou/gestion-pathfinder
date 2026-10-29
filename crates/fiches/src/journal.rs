@@ -76,6 +76,8 @@ pub enum EvenementFiche {
     TalentRoublardChoisi(String),
     /// Ennemi juré du rôdeur choisi (type de créature).
     EnnemiJureChoisi(String),
+    /// Pouvoir de rage du barbare choisi.
+    PouvoirRageChoisi(String),
     EtatAjoute(String),
     EtatRetire(String),
     EffetTemporaireAjoute(EffetTemporaire),
@@ -187,6 +189,7 @@ impl EvenementFiche {
             EvenementFiche::GraceChoisie(g) => format!("Grâce : {g}"),
             EvenementFiche::TalentRoublardChoisi(t) => format!("Talent de roublard : {t}"),
             EvenementFiche::EnnemiJureChoisi(e) => format!("Ennemi juré : {e}"),
+            EvenementFiche::PouvoirRageChoisi(p) => format!("Pouvoir de rage : {p}"),
             EvenementFiche::EtatAjoute(e) => format!("État subi : {e}"),
             EvenementFiche::EtatRetire(e) => format!("État terminé : {e}"),
             EvenementFiche::EffetTemporaireAjoute(t) => format!("Effet temporaire : {}", t.nom),
@@ -724,6 +727,7 @@ impl Journal {
                     fiche.talents_roublard.push(t.clone());
                 }
                 EvenementFiche::EnnemiJureChoisi(e) => fiche.ennemis_jures.push(e.clone()),
+                EvenementFiche::PouvoirRageChoisi(p) => fiche.pouvoirs_rage.push(p.clone()),
                 EvenementFiche::EtatAjoute(e) => {
                     if !fiche.etats.contains(e) {
                         fiche.etats.push(e.clone());

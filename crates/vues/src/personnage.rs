@@ -2180,6 +2180,7 @@ mod tests_pretre {
             graces: vec![],
             talents_roublard: vec![],
             ennemis_jures: vec![],
+            pouvoirs_rage: vec![],
         }
     }
 

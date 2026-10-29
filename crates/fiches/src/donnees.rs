@@ -313,6 +313,7 @@ pub struct Referentiel {
     pub formes: Vec<crate::formes::FormeAnimale>,
     pub compagnons: crate::compagnon::DonneesCompagnons,
     pub choix: crate::choix_classe::ChoixDeClasse,
+    pub rage: crate::choix_classe::PouvoirsRage,
 }
 
 impl Referentiel {
@@ -365,6 +366,12 @@ impl Referentiel {
         .and_then(|r| r.avec_formes(include_str!("../../../data/core/formes_animales.json")))
         .and_then(|r| r.avec_choix(include_str!("../../../data/core/choix_de_classe.json")))
         .and_then(|r| {
+            r.avec_rage(
+                include_str!("../../../data/core/pouvoirs_rage.json"),
+                include_str!("../../../data/core/pouvoirs_rage_prerequis.json"),
+            )
+        })
+        .and_then(|r| {
             r.avec_divinites(
                 include_str!("../../../data/core/domaines.json"),
                 include_str!("../../../data/core/divinites.json"),
@@ -402,7 +409,18 @@ impl Referentiel {
             formes: Vec::new(),
             compagnons: Default::default(),
             choix: Default::default(),
+            rage: Default::default(),
         })
+    }
+
+    /// Ajoute les pouvoirs de rage du barbare et leurs prérequis.
+    pub fn avec_rage(
+        mut self,
+        pouvoirs: &str,
+        prerequis: &str,
+    ) -> Result<Referentiel, serde_json::Error> {
+        self.rage = crate::choix_classe::PouvoirsRage::depuis_json(pouvoirs, prerequis)?;
+        Ok(self)
     }
 
     /// Ajoute les choix génériques des classes (grâces, talents, ennemis jurés).

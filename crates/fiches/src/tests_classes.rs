@@ -49,6 +49,7 @@ fn pretre(niveau: u32, sagesse: i32) -> Fiche {
         graces: vec![],
         talents_roublard: vec![],
         ennemis_jures: vec![],
+        pouvoirs_rage: vec![],
     }
 }
 
@@ -889,6 +890,7 @@ fn barbare(niveau: u32, constitution: i32) -> Fiche {
         graces: vec![],
         talents_roublard: vec![],
         ennemis_jures: vec![],
+        pouvoirs_rage: vec![],
     }
 }
 
@@ -1517,4 +1519,51 @@ fn le_rodeur_choisit_un_ennemi_juré_aux_niveaux_1_5_10_15_20() {
     assert!(f
         .problemes_choix_de_classe(&r)
         .contains(&Probleme::EnnemiJureInconnu("Type inventé".into())));
+}
+
+#[test]
+fn le_barbare_choisit_un_pouvoir_de_rage_au_niveau_2_puis_tous_les_2_niveaux() {
+    use crate::choix_classe::PouvoirsRage;
+    assert_eq!(
+        [1, 2, 3, 4, 6, 20].map(PouvoirsRage::attendus),
+        [0, 1, 1, 2, 3, 10]
+    );
+    let r = Referentiel::core();
+    let p = de_classe("barbare", 2).problemes_choix_de_classe(&r);
+    assert!(p.contains(&Probleme::PouvoirsRageAChoisir {
+        attendus: 1,
+        choisis: 0
+    }));
+    let mut f = de_classe("barbare", 2);
+    f.pouvoirs_rage = vec!["Bagarreur".into()];
+    assert!(f.problemes_choix_de_classe(&r).is_empty());
+}
+
+#[test]
+fn un_pouvoir_de_rage_doit_etre_de_niveau_et_avoir_son_prerequis() {
+    let r = Referentiel::core();
+    // Bagarreur majeur demande Bagarreur (niveau 1 de table) : pris sans Bagarreur, c'est un prérequis manquant.
+    let mut f = de_classe("barbare", 2);
+    f.pouvoirs_rage = vec!["Bagarreur majeur".into()];
+    assert!(f
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::PouvoirRagePrerequisManquant {
+            nom: "Bagarreur majeur".into(),
+            requis: "Bagarreur".into()
+        }));
+    // Coup redoutable est de niveau 12 : pas accessible au niveau 2.
+    let mut f = de_classe("barbare", 2);
+    f.pouvoirs_rage = vec!["Coup redoutable".into()];
+    assert!(f
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::PouvoirRageNonDisponible {
+            nom: "Coup redoutable".into(),
+            niveau: 12
+        }));
+    // Un pouvoir masqué (UC) n'est pas dans la liste : inconnu.
+    let mut f = de_classe("barbare", 2);
+    f.pouvoirs_rage = vec!["Coup handicapant".into()];
+    assert!(f
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::PouvoirRageInconnu("Coup handicapant".into())));
 }

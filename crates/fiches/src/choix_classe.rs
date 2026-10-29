@@ -134,6 +134,121 @@ impl Fiche {
                 p.push(Probleme::EnnemiJureInconnu(e.clone()));
             }
         }
+
+        let niveau_barbare = self.niveau_de_classe("barbare");
+        let attendus = PouvoirsRage::attendus(niveau_barbare);
+        let choisis = self.pouvoirs_rage.len() as u32;
+        if attendus != choisis {
+            p.push(Probleme::PouvoirsRageAChoisir { attendus, choisis });
+        }
+        for (i, nom) in self.pouvoirs_rage.iter().enumerate() {
+            let rage = &r.rage;
+            if self.pouvoirs_rage[..i].contains(nom) {
+                p.push(Probleme::PouvoirRageEnDouble(nom.clone()));
+            }
+            let Some(&nt) = rage.niveau_de_table.get(nom) else {
+                p.push(Probleme::PouvoirRageInconnu(nom.clone()));
+                continue;
+            };
+            if nt > niveau_barbare {
+                p.push(Probleme::PouvoirRageNonDisponible {
+                    nom: nom.clone(),
+                    niveau: nt,
+                });
+            }
+            if let Some(pr) = rage.prerequis.get(nom) {
+                if pr.niveau > niveau_barbare {
+                    p.push(Probleme::PouvoirRageNonDisponible {
+                        nom: nom.clone(),
+                        niveau: pr.niveau,
+                    });
+                }
+                for requis in &pr.pouvoirs {
+                    if !self.pouvoirs_rage.contains(requis) {
+                        p.push(Probleme::PouvoirRagePrerequisManquant {
+                            nom: nom.clone(),
+                            requis: requis.clone(),
+                        });
+                    }
+                }
+            }
+        }
         p
+    }
+}
+
+/// Pouvoirs de rage du barbare : table par niveau, source (icône MJRA) et prérequis.
+/// Données : `data/core/pouvoirs_rage.json` et `data/core/pouvoirs_rage_prerequis.json`.
+#[derive(Debug, Clone, Default)]
+pub struct PouvoirsRage {
+    /// Nom du pouvoir → niveau de barbare de la table (1, 4, 6…).
+    pub niveau_de_table: BTreeMap<String, u32>,
+    /// Pouvoir issu d'un livre avancé : nom → source (`APG` = icône MJRA).
+    pub sources: BTreeMap<String, String>,
+    pub prerequis: BTreeMap<String, PrerequisPouvoir>,
+}
+
+#[derive(Debug, Clone, Default, Deserialize)]
+pub struct PrerequisPouvoir {
+    #[serde(default)]
+    pub pouvoirs: Vec<String>,
+    #[serde(default)]
+    pub niveau: u32,
+}
+
+#[derive(Deserialize)]
+struct FichierPouvoirsRage {
+    niveaux: Vec<NiveauRage>,
+    sources: BTreeMap<String, String>,
+}
+
+#[derive(Deserialize)]
+struct NiveauRage {
+    niveau: u32,
+    pouvoirs: Vec<String>,
+}
+
+#[derive(Deserialize)]
+struct FichierPrerequisRage {
+    prerequis: BTreeMap<String, PrerequisPouvoir>,
+}
+
+impl PouvoirsRage {
+    pub fn depuis_json(pouvoirs: &str, prerequis: &str) -> Result<Self, serde_json::Error> {
+        let t: FichierPouvoirsRage = serde_json::from_str(pouvoirs)?;
+        let p: FichierPrerequisRage = serde_json::from_str(prerequis)?;
+        let mut niveau_de_table = BTreeMap::new();
+        for n in &t.niveaux {
+            for nom in &n.pouvoirs {
+                niveau_de_table.insert(nom.clone(), n.niveau);
+            }
+        }
+        Ok(PouvoirsRage {
+            niveau_de_table,
+            sources: t.sources,
+            prerequis: p.prerequis,
+        })
+    }
+
+    /// Pouvoirs à choisir au niveau de barbare `niveau` : un au niveau 2, puis un tous les deux niveaux.
+    pub fn attendus(niveau: u32) -> u32 {
+        if niveau < 2 {
+            0
+        } else {
+            (niveau - 2) / 2 + 1
+        }
+    }
+
+    /// Vrai si le pouvoir est dans la table, de niveau atteint, et que ses prérequis sont pris.
+    pub fn accessible(&self, nom: &str, niveau: u32, choisis: &[String]) -> bool {
+        let Some(&nt) = self.niveau_de_table.get(nom) else {
+            return false;
+        };
+        if nt > niveau {
+            return false;
+        }
+        self.prerequis
+            .get(nom)
+            .is_none_or(|p| p.niveau <= niveau && p.pouvoirs.iter().all(|r| choisis.contains(r)))
     }
 }
