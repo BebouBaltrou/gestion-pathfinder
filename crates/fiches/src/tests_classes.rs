@@ -1567,3 +1567,27 @@ fn un_pouvoir_de_rage_doit_etre_de_niveau_et_avoir_son_prerequis() {
         .problemes_choix_de_classe(&r)
         .contains(&Probleme::PouvoirRageInconnu("Coup handicapant".into())));
 }
+
+#[test]
+fn les_pouvoirs_totemiques_ne_viennent_que_d_un_seul_groupe() {
+    use crate::choix_classe::{groupe_rage, FamilleRage};
+    assert_eq!(
+        groupe_rage("Ailes totémiques draconiques"),
+        Some((FamilleRage::Totem, "draconique".to_string()))
+    );
+    assert_eq!(groupe_rage("Bagarreur"), None);
+    let r = Referentiel::core();
+    let mut f = de_classe("barbare", 6);
+    f.pouvoirs_rage = vec!["Animal totem mineur".into(), "Totem fiélon mineur".into()];
+    assert!(f
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::PouvoirRageGroupeDifferent {
+            nom: "Totem fiélon mineur".into()
+        }));
+    let mut f = de_classe("barbare", 6);
+    f.pouvoirs_rage = vec!["Animal totem mineur".into(), "Animal totem".into()];
+    assert!(!f
+        .problemes_choix_de_classe(&r)
+        .iter()
+        .any(|p| matches!(p, Probleme::PouvoirRageGroupeDifferent { .. })));
+}

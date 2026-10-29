@@ -141,6 +141,17 @@ impl Fiche {
         if attendus != choisis {
             p.push(Probleme::PouvoirsRageAChoisir { attendus, choisis });
         }
+        let mut vus: Vec<(FamilleRage, String)> = Vec::new();
+        for nom in &self.pouvoirs_rage {
+            if let Some((fam, g)) = groupe_rage(nom) {
+                if vus.iter().any(|(f2, g2)| *f2 == fam && *g2 != g) {
+                    p.push(Probleme::PouvoirRageGroupeDifferent { nom: nom.clone() });
+                }
+                if !vus.contains(&(fam, g.clone())) {
+                    vus.push((fam, g));
+                }
+            }
+        }
         for (i, nom) in self.pouvoirs_rage.iter().enumerate() {
             let rage = &r.rage;
             if self.pouvoirs_rage[..i].contains(nom) {
@@ -251,4 +262,44 @@ impl PouvoirsRage {
             .get(nom)
             .is_none_or(|p| p.niveau <= niveau && p.pouvoirs.iter().all(|r| choisis.contains(r)))
     }
+}
+
+/// Famille d'un pouvoir de rage : totémique (un seul groupe autorisé) ou de sang (un seul groupe).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum FamilleRage {
+    Totem,
+    Sang,
+}
+
+/// Groupe d'un pouvoir de rage. Totémique : mot-clé du nom (animal, draconique…).
+/// De sang : le nom sans « Sang » ni « mineur/majeur » (infernal, abyssal…).
+pub fn groupe_rage(nom: &str) -> Option<(FamilleRage, String)> {
+    const TOTEMS: [&str; 7] = [
+        "animal",
+        "draconique",
+        "chaos",
+        "fiélon",
+        "spirituel",
+        "serpent-monde",
+        "ruche",
+    ];
+    let bas = nom.to_lowercase();
+    if let Some(reste) = bas.strip_prefix("sang ") {
+        let groupe = reste
+            .trim_end_matches(" mineur")
+            .trim_end_matches(" majeur")
+            .trim_start_matches("de ")
+            .to_string();
+        return Some((FamilleRage::Sang, groupe));
+    }
+    if ["totem", "totémique", "serpent-monde", "ruche"]
+        .iter()
+        .any(|m| bas.contains(m))
+    {
+        return TOTEMS
+            .iter()
+            .find(|t| bas.contains(*t))
+            .map(|t| (FamilleRage::Totem, t.to_string()));
+    }
+    None
 }

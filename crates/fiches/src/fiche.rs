@@ -213,6 +213,9 @@ pub enum Probleme {
     },
     PouvoirRageInconnu(String),
     PouvoirRageEnDouble(String),
+    PouvoirRageGroupeDifferent {
+        nom: String,
+    },
     PouvoirRageNonDisponible {
         nom: String,
         niveau: u32,
@@ -435,6 +438,10 @@ impl std::fmt::Display for Probleme {
             }
             Probleme::PouvoirRageInconnu(p) => write!(f, "pouvoir de rage inconnu : {p}"),
             Probleme::PouvoirRageEnDouble(p) => write!(f, "pouvoir de rage pris deux fois : {p}"),
+            Probleme::PouvoirRageGroupeDifferent { nom } => write!(
+                f,
+                "{nom} : les pouvoirs totémiques ou de sang ne viennent que d'un seul groupe"
+            ),
             Probleme::PouvoirRageNonDisponible { nom, niveau } => write!(
                 f,
                 "{nom} : pouvoir de rage accessible au niveau de barbare {niveau}"
