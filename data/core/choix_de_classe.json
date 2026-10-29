@@ -9,56 +9,75 @@
       {
         "a_partir_du": 3,
         "graces": [
-          "Agité",
           "Fatigué",
           "Fiévreux",
-          "Secoué",
-          "Trompé"
+          "Secoué"
         ]
       },
       {
         "a_partir_du": 6,
         "graces": [
-          "Affaibli",
           "Chancelant",
-          "Ciblé",
           "Guérison de la maladie",
-          "Hanté",
           "Hébété"
         ]
       },
       {
         "a_partir_du": 9,
         "graces": [
-          "Blessé",
-          "Confus",
           "Délivrance de la malédiction",
           "Effrayé",
           "Épuisé",
           "Guérison du poison",
-          "Nauséeux",
-          "Restauratrice"
+          "Nauséeux"
         ]
       },
       {
         "a_partir_du": 12,
         "graces": [
-          "Amputé",
           "Aveugle",
           "Assourdi",
-          "Ensorcelé",
           "Étourdi",
-          "Paralysé",
-          "Pétrifié"
+          "Paralysé"
         ]
       }
     ],
     "prerequis_de_grace": {
       "Effrayé": "Secoué",
       "Épuisé": "Fatigué",
-      "Nauséeux": "Fiévreux",
-      "Restauratrice": "Affaibli"
-    }
+      "Nauséeux": "Fiévreux"
+    },
+    "textes": {
+      "Fatigué": "la cible n’est plus fatiguée.",
+      "Fiévreux": "la cible n’est plus fiévreuse.",
+      "Secoué": "la cible n’est plus secouée.",
+      "Chancelant": "la cible n’est plus chancelante, sauf si elle a exactement 0 point de vie.",
+      "Guérison de la maladie": "l’imposition des mains du paladin agit également comme un sort de guérison des maladies avec un NLS égal au niveau du paladin.",
+      "Hébété": "la cible n’est plus hébétée.",
+      "Délivrance de la malédiction": "l’imposition des mains du paladin agit également comme un sort de délivrance des malédictions avec un NLS égal au niveau du paladin.",
+      "Effrayé": "la cible n’est plus effrayée (le paladin doit posséder la grâce Secoué avant de pouvoir choisir cette option).",
+      "Épuisé": "la cible n’est plus épuisée (le paladin doit posséder la grâce Fatigué avant de pouvoir choisir cette option).",
+      "Guérison du poison": "l’imposition des mains du paladin agit également comme un sort de neutralisation du poison avec un NLS égal au niveau du paladin.",
+      "Nauséeux": "la cible n’est plus nauséeuse (le paladin doit posséder la grâce Fiévreux avant de pouvoir choisir cette option).",
+      "Aveugle": "la cible n’est plus aveugle.",
+      "Assourdi": "la cible n’est plus assourdie.",
+      "Étourdi": "la cible n’est plus étourdie.",
+      "Paralysé": "la cible n’est plus paralysée."
+    },
+    "masquees": [
+      "Agité",
+      "Trompé",
+      "Affaibli",
+      "Ciblé",
+      "Hanté",
+      "Blessé",
+      "Confus",
+      "Restauratrice",
+      "Amputé",
+      "Ensorcelé",
+      "Pétrifié"
+    ],
+    "note": "Seules les grâces décrites par le Manuel des joueurs (texte fourni) sont proposées ; les autres (listées dans « masquees », issues d’autres livres) sont masquées. Les effets se cumulent ; une grâce choisie ne peut plus être modifiée."
   },
   "talents_roublard": {
     "classe": "roublard",

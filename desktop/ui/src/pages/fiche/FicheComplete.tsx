@@ -406,11 +406,17 @@ function ChoixClasses({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => v
       )}
       {c.gracesAttendues > 0 && (
         <div className="carte">
-          <p>Grâces ({c.graces.length}/{c.gracesAttendues}) : {c.graces.join(", ") || "aucune"}</p>
+          <p>Grâces ({c.graces.length}/{c.gracesAttendues}){c.graces.length === 0 && " : aucune"}</p>
+          {c.graces.map((g) => (
+            <details key={g}>
+              <summary>{g}</summary>
+              <p className="doux">{g} : {c.gracesTextes[g] ?? ""}</p>
+            </details>
+          ))}
           {graces > 0 && (
             <div className="grille-boutons">
               {c.gracesDisponibles.map((g) => (
-                <button key={g} className="bouton" onClick={() => agir({ GraceChoisie: g })}>{g}</button>
+                <button key={g} className="bouton" title={c.gracesTextes[g] ?? ""} onClick={() => agir({ GraceChoisie: g })}>{g}</button>
               ))}
             </div>
           )}

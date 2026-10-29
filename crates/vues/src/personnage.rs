@@ -564,6 +564,8 @@ pub struct ChoixClassesVue {
     pub graces: Vec<String>,
     /// Grâces accessibles au niveau de paladin actuel, pas encore prises.
     pub graces_disponibles: Vec<String>,
+    /// Texte du livre de chaque grâce.
+    pub graces_textes: std::collections::BTreeMap<String, String>,
     pub talents: Vec<String>,
     /// Talents de roublard et de maître pas encore pris.
     pub talents_disponibles: Vec<String>,
@@ -664,6 +666,7 @@ fn choix_classes(r: &Referentiel, f: &Fiche) -> ChoixClassesVue {
         graces_attendues: c.nombre_graces(niveau_paladin),
         graces: f.graces.clone(),
         graces_disponibles,
+        graces_textes: c.grace_paladin.textes.clone(),
         talents: f.talents_roublard.clone(),
         talents_disponibles,
         talents_textes: c.talents_roublard.textes.clone(),

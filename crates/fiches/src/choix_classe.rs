@@ -35,6 +35,8 @@ pub struct GracePaladin {
     pub listes: Vec<ListeGraces>,
     /// Grâce → grâce qu'il faut avoir déjà choisie.
     pub prerequis_de_grace: BTreeMap<String, String>,
+    /// Texte du livre de chaque grâce.
+    pub textes: BTreeMap<String, String>,
 }
 
 #[derive(Debug, Clone, Default, Deserialize)]

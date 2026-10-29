@@ -1476,25 +1476,25 @@ fn le_paladin_choisit_une_grace_tous_les_3_niveaux_a_partir_du_3() {
 fn une_grace_doit_etre_accessible_au_niveau_et_avoir_son_prerequis() {
     let r = Referentiel::core();
     let mut f = de_classe("paladin", 3);
-    f.graces = vec!["Affaibli".into()];
+    f.graces = vec!["Chancelant".into()];
     let p = f.problemes_choix_de_classe(&r);
     assert!(p.contains(&Probleme::GraceNonDisponible {
-        nom: "Affaibli".into(),
+        nom: "Chancelant".into(),
         niveau: 6
     }));
 
     let mut f = de_classe("paladin", 9);
-    f.graces = vec!["Effrayé".into(), "Trompé".into(), "Agité".into()];
+    f.graces = vec!["Effrayé".into(), "Fatigué".into(), "Fiévreux".into()];
     let p = f.problemes_choix_de_classe(&r);
     assert!(p.contains(&Probleme::GracePrerequisManquante {
         nom: "Effrayé".into(),
         requis: "Secoué".into()
     }));
 
-    f.graces = vec!["Secoué".into(), "Effrayé".into(), "Trompé".into()];
+    f.graces = vec!["Secoué".into(), "Effrayé".into(), "Fatigué".into()];
     assert!(f.problemes_choix_de_classe(&r).is_empty());
 
-    f.graces = vec!["Nexistepas".into(), "Trompé".into(), "Agité".into()];
+    f.graces = vec!["Nexistepas".into(), "Fatigué".into(), "Fiévreux".into()];
     assert!(f
         .problemes_choix_de_classe(&r)
         .contains(&Probleme::GraceInconnue("Nexistepas".into())));

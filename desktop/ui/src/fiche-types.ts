@@ -204,6 +204,8 @@ export type ChoixClassesVue = {
   gracesAttendues: number;
   graces: string[];
   gracesDisponibles: string[];
+  /** Texte du livre de chaque grâce. */
+  gracesTextes: Record<string, string>;
   talents: string[];
   talentsDisponibles: string[];
   /** Texte du livre de chaque talent (nom sans astérisque). */
