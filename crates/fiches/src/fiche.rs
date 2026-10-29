@@ -1621,15 +1621,32 @@ impl Fiche {
         let race = r.race(&self.race);
         let force =
             scores[&Carac::For].total - self.dommages.get(&Carac::For).copied().unwrap_or(0);
-        let bilan = self.equipement.evaluer(
-            &r.equipement,
-            &ContexteEquipement {
-                force,
-                vitesse_base: race.map(|x| x.vitesse).unwrap_or(30),
-                vitesse_jamais_reduite: race.is_some_and(|x| x.vitesse_jamais_reduite),
-                maitrises: &maitrises,
-            },
-        );
+        let vitesse_de_race = race.map(|x| x.vitesse).unwrap_or(30);
+        let evaluer = |vitesse_base: u32| {
+            self.equipement.evaluer(
+                &r.equipement,
+                &ContexteEquipement {
+                    force,
+                    vitesse_base,
+                    vitesse_jamais_reduite: race.is_some_and(|x| x.vitesse_jamais_reduite),
+                    maitrises: &maitrises,
+                },
+            )
+        };
+        let mut bilan = evaluer(vitesse_de_race);
+        // Déplacement accéléré du barbare : +3 m (10 pieds) sans armure lourde ni charge lourde,
+        // appliqué avant la réduction due à l'armure et à la charge (Manuel des joueurs).
+        if self.niveau_de_classe("barbare") >= 1
+            && crate::choix_classe::deplacement_accelere_du_barbare(self, r, &bilan.charge)
+        {
+            bilan = evaluer(vitesse_de_race + 10);
+        }
+        effets.extend(crate::choix_classe::effets_dependant_des_caracs(
+            self,
+            r,
+            &m,
+            &bilan.charge,
+        ));
         effets.extend(bilan.effets.iter().cloned());
         let (malus_armure, source_malus) = &bilan.malus_d_armure;
         if *malus_armure < 0 {

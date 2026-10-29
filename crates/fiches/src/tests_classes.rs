@@ -1889,3 +1889,71 @@ fn les_textes_du_manuel_sont_ranges_par_capacite_de_classe() {
     assert!(texte("rodeur", "environnement de prédilection").contains("+2"));
     assert!(texte("roublard", "coup de maître").contains("endormie"));
 }
+
+#[test]
+fn grace_divine_bonus_a_la_ca_du_moine_et_deplacement_du_barbare() {
+    let r = Referentiel::core();
+    // Paladin niveau 2 : le bonus de Charisme s'ajoute à tous les jets de sauvegarde.
+    let mut f = de_classe("paladin", 2);
+    f.scores_base.insert(Carac::Cha, 10);
+    let sans = f.calculer(&r).unwrap();
+    f.scores_base.insert(Carac::Cha, 14);
+    let avec = f.calculer(&r).unwrap();
+    assert!(avec
+        .vigueur
+        .termes
+        .iter()
+        .any(|t| t.libelle.starts_with("Grâce divine") && t.valeur == 2));
+    assert_eq!(avec.vigueur.total, sans.vigueur.total + 2);
+    assert_eq!(avec.volonte.total, sans.volonte.total + 2);
+    // Au niveau 1, pas de grâce divine.
+    let mut f1 = de_classe("paladin", 1);
+    f1.scores_base.insert(Carac::Cha, 14);
+    assert!(!f1
+        .calculer(&r)
+        .unwrap()
+        .vigueur
+        .termes
+        .iter()
+        .any(|t| t.libelle == "Grâce divine"));
+
+    // Moine niveau 4, Sagesse 14 (+2) : +2 de Sagesse et +1 de niveau à la CA et au DMD sans armure.
+    let mut m = de_classe("moine", 4);
+    m.scores_base.insert(Carac::Sag, 14);
+    let v = m.calculer(&r).unwrap();
+    assert!(v
+        .ca
+        .termes
+        .iter()
+        .any(|t| t.libelle.starts_with("Bonus à la CA (moine)") && t.valeur == 3));
+    assert!(v
+        .dmd
+        .termes
+        .iter()
+        .any(|t| t.libelle.starts_with("Bonus à la CA (moine)") && t.valeur == 3));
+    // Avec une armure, le bonus est perdu.
+    m.equipement.armure = Some("Chainmail".into());
+    let v = m.calculer(&r).unwrap();
+    assert!(!v
+        .ca
+        .termes
+        .iter()
+        .any(|t| t.libelle.starts_with("Bonus à la CA (moine)")));
+
+    // Barbare : +3 m (10 pieds) à la vitesse, perdus avec une armure lourde.
+    let b = de_classe("barbare", 1);
+    let v = b.calculer(&r).unwrap();
+    assert_eq!(v.vitesse, 40);
+    let mut lourd = de_classe("barbare", 1);
+    lourd.equipement.armure = Some("Full Plate".into());
+    let v = lourd.calculer(&r).unwrap();
+    assert!(
+        v.vitesse <= 30,
+        "vitesse avec armure lourde : {}",
+        v.vitesse
+    );
+    let mut inter = de_classe("barbare", 1);
+    inter.equipement.armure = Some("Chainmail".into());
+    // Armure intermédiaire : 40 − réduction d'armure = 30 pour une race de vitesse 30.
+    assert_eq!(inter.calculer(&r).unwrap().vitesse, 30);
+}

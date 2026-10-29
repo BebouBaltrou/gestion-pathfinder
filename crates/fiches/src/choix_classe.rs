@@ -593,3 +593,69 @@ pub fn capacites_chiffrees(fiche: &Fiche) -> Vec<String> {
     }
     l
 }
+
+/// Genre de l'armure portée, s'il y en a une et que le catalogue la connaît.
+fn genre_de_l_armure(fiche: &Fiche, r: &Referentiel) -> Option<crate::equipement::GenreProtection> {
+    fiche
+        .equipement
+        .armure
+        .as_deref()
+        .and_then(|n| r.equipement.armure(n))
+        .map(|a| a.genre)
+}
+
+/// Vrai si le barbare profite du déplacement accéléré : aucune armure, légère ou intermédiaire,
+/// et pas de charge lourde (Manuel des joueurs, Barbare).
+pub fn deplacement_accelere_du_barbare(
+    fiche: &Fiche,
+    r: &Referentiel,
+    charge: &crate::equipement::Charge,
+) -> bool {
+    use crate::equipement::{Charge, GenreProtection};
+    !matches!(genre_de_l_armure(fiche, r), Some(GenreProtection::Lourde))
+        && matches!(charge, Charge::Legere | Charge::Intermediaire)
+}
+
+/// Effets chiffrés qui dépendent d'un modificateur de caractéristique ou de l'équipement :
+/// grâce divine du paladin (bonus de Charisme à tous les jets de sauvegarde, dès le niveau 2) et
+/// bonus à la CA et au DMD du moine (Sagesse + bonus de niveau, sans armure, sans bouclier, sans
+/// charge intermédiaire ou lourde).
+pub fn effets_dependant_des_caracs(
+    fiche: &Fiche,
+    r: &Referentiel,
+    modificateur: &dyn Fn(crate::caracteristiques::Carac) -> i32,
+    charge: &crate::equipement::Charge,
+) -> Vec<crate::effet::Effet> {
+    use crate::caracteristiques::Carac;
+    use crate::effet::{Effet, TypeBonus};
+    let mut e = Vec::new();
+    if fiche.niveau_de_classe("paladin") >= 2 {
+        let cha = modificateur(Carac::Cha);
+        if cha > 0 {
+            for cible in ["jds.vig", "jds.ref", "jds.vol"] {
+                e.push(Effet::new(cible, TypeBonus::SansType, cha, "Grâce divine"));
+            }
+        }
+    }
+    let moine = fiche.niveau_de_classe("moine");
+    if moine >= 1
+        && fiche.equipement.armure.is_none()
+        && fiche.equipement.bouclier.is_none()
+        && matches!(charge, crate::equipement::Charge::Legere)
+    {
+        let niveau = if moine >= 4 { 1 + (moine - 4) / 4 } else { 0 } as i32;
+        let total = modificateur(Carac::Sag).max(0) + niveau;
+        if total > 0 {
+            for cible in ["ca", "dmd"] {
+                e.push(Effet::new(
+                    cible,
+                    TypeBonus::SansType,
+                    total,
+                    "Bonus à la CA (moine)",
+                ));
+            }
+        }
+    }
+    let _ = r;
+    e
+}
