@@ -217,6 +217,10 @@ export type FicheVue = {
   dons: DonVue[];
   /** Dons choisis de chaque niveau (noms anglais). */
   donsParNiveau: string[][];
+  /** Dés d'attaque sournoise du roublard (0 hors roublard). */
+  attaqueSournoiseDes: number;
+  /** Style de combat du rôdeur (« tir_a_distance » ou « deux_armes »), null tant qu'il n'est pas choisi. */
+  styleDeCombat: string | null;
   /** Clé minuscule (ex. « fighter ») de la classe de chaque niveau. */
   classesParNiveau: string[];
   /** Sorts connus choisis (noms anglais). */
@@ -454,6 +458,7 @@ export type EvenementFiche =
   | { ObjetMagiqueRetire: string }
   | { ObjetAjoute: { nom_en: string; quantite: number } }
   | { ObjetRetire: { nom_en: string; quantite: number } }
+  | { StyleDeCombatChoisi: string }
   | { EtatAjoute: string }
   | { EtatRetire: string }
   | { EffetTemporaireAjoute: { nom: string; effets: EffetDonnees[]; rounds_restants: number | null } }

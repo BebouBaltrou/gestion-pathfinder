@@ -381,6 +381,8 @@ vue! {
         pub arme_de_predilection: Option<String>,
         pub domaines: Vec<DomaineVue>,
         pub canalisation: Option<CanalisationVue>,
+        /// Dés d'attaque sournoise du roublard (0 hors roublard).
+        pub attaque_sournoise_des: u32,
         /// Prêtre Neutre : l'énergie canalisée reste à choisir.
         pub energie_a_choisir: bool,
     }
@@ -506,6 +508,8 @@ vue! {
         pub dons: Vec<DonVue>,
         /// Dons choisis de chaque niveau (noms anglais), pour les réattribuer niveau par niveau.
         pub dons_par_niveau: Vec<Vec<String>>,
+        /// Style de combat du rôdeur (« tir_a_distance » ou « deux_armes »), absent tant qu'il n'est pas choisi.
+        pub style_de_combat: Option<String>,
         /// Clé anglaise minuscule de la classe de chaque niveau, pour filtrer les dons par classe.
         pub classes_par_niveau: Vec<String>,
         /// Sorts connus choisis (noms anglais), pour les réattribuer.
@@ -837,6 +841,7 @@ pub fn fiche_complete(
                         .collect(),
                 })
                 .collect(),
+            attaque_sournoise_des: v.attaque_sournoise,
             canalisation: v.canalisation.as_ref().map(|c| CanalisationVue {
                 positive: c.positive,
                 des: c.des,
@@ -1158,6 +1163,7 @@ pub fn fiche_complete(
             .collect(),
         dons,
         dons_par_niveau: f.niveaux.iter().map(|n| n.dons.clone()).collect(),
+        style_de_combat: f.style_de_combat.clone(),
         classes_par_niveau: f
             .niveaux
             .iter()
@@ -2107,6 +2113,7 @@ mod tests_pretre {
             classes_de_predilection: vec!["pretre".into()],
             lignage: None,
             connaissance_de_lignage: None,
+            style_de_combat: None,
             effets: vec![],
             sorts_connus: vec![],
             equipement: Default::default(),

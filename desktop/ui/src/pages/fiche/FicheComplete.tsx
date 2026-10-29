@@ -360,10 +360,27 @@ function ReattributionSorts({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche
 
 // ------------------------------------------------------------------ dons
 
+/** Style de combat du rôdeur : choisi une fois (niveau 2), il ne se modifie pas ensuite. */
+function ChoixStyleRodeur({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => void }) {
+  if (f.styleDeCombat) {
+    const nom = f.styleDeCombat === "tir_a_distance" ? "Combat à distance" : "Combat à deux armes";
+    return <p className="doux">Style de combat : {nom}</p>;
+  }
+  return (
+    <div className="carte">
+      <p>Style de combat (à choisir une fois) :</p>
+      <button className="bouton principal" onClick={() => agir({ StyleDeCombatChoisi: "tir_a_distance" })}>Combat à distance</button>{" "}
+      <button className="bouton principal" onClick={() => agir({ StyleDeCombatChoisi: "deux_armes" })}>Combat à deux armes</button>
+    </div>
+  );
+}
+
 function Dons({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => void }) {
   return (
     <div className="section">
       <h2>Dons</h2>
+      {f.attaqueSournoiseDes > 0 && <p className="doux">Attaque sournoise : {f.attaqueSournoiseDes}d6</p>}
+      {f.classesParNiveau.includes("ranger") && <ChoixStyleRodeur f={f} agir={agir} />}
       <ReattributionDons f={f} agir={agir} />
       <div className="liste-regles">
         {f.dons.map((d, i) => (

@@ -179,6 +179,10 @@ pub struct Classe {
     /// Canalisation d'énergie (prêtre).
     #[serde(default)]
     pub canalisation: bool,
+    /// Canalisation du paladin : énergie positive, niveau effectif de prêtre = niveau de paladin,
+    /// chaque canalisation coûte 2 utilisations d'imposition des mains (moitié du niveau + Charisme).
+    #[serde(default)]
+    pub canalisation_par_imposition: bool,
     /// Identifiants des domaines que le « pacte avec la nature » du druide peut donner.
     #[serde(default)]
     pub pacte_domaines: Vec<String>,
@@ -191,6 +195,33 @@ pub struct Classe {
     /// Bonus chiffrés accordés par la classe (ex. instinct naturel du druide).
     #[serde(default)]
     pub effets: Vec<EffetClasse>,
+    /// Listes de dons que la classe permet de prendre comme dons supplémentaires (moine).
+    /// Les dons de ces listes s'obtiennent même sans en remplir les conditions.
+    #[serde(default)]
+    pub dons_supplementaires: Vec<ListeDonsSupplementaires>,
+}
+
+/// Dons de la liste, ouverts à partir du niveau de classe `a_partir_du` (cumulatifs).
+#[derive(Debug, Clone, Deserialize)]
+pub struct ListeDonsSupplementaires {
+    pub a_partir_du: u32,
+    pub source: String,
+    /// Style de combat concerné (rôdeur : « tir_a_distance » ou « deux_armes »). Absent : toutes.
+    #[serde(default)]
+    pub style: Option<String>,
+    pub dons_en: Vec<String>,
+}
+
+impl Classe {
+    /// Dons de la classe ouverts au niveau de classe `nc`, sans condition, pour ce style de combat.
+    pub fn dons_supplementaires_pour(&self, nc: u32, style: Option<&str>) -> Vec<&str> {
+        self.dons_supplementaires
+            .iter()
+            .filter(|l| l.a_partir_du <= nc)
+            .filter(|l| l.style.as_deref().is_none_or(|s| Some(s) == style))
+            .flat_map(|l| l.dons_en.iter().map(String::as_str))
+            .collect()
+    }
 }
 
 /// Pouvoir de classe limité par jour : une utilisation au niveau `niveau`, une de plus tous les

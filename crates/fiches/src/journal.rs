@@ -68,6 +68,8 @@ pub enum EvenementFiche {
         nom_en: String,
         quantite: u32,
     },
+    /// Style de combat du rôdeur (« tir_a_distance » ou « deux_armes »).
+    StyleDeCombatChoisi(String),
     EtatAjoute(String),
     EtatRetire(String),
     EffetTemporaireAjoute(EffetTemporaire),
@@ -175,6 +177,7 @@ impl EvenementFiche {
             EvenementFiche::ObjetRetire { nom_en, quantite } => {
                 format!("Objet retiré : {nom_en} × {quantite}")
             }
+            EvenementFiche::StyleDeCombatChoisi(s) => format!("Style de combat : {s}"),
             EvenementFiche::EtatAjoute(e) => format!("État subi : {e}"),
             EvenementFiche::EtatRetire(e) => format!("État terminé : {e}"),
             EvenementFiche::EffetTemporaireAjoute(t) => format!("Effet temporaire : {}", t.nom),
@@ -704,6 +707,9 @@ impl Journal {
                         });
                     }
                 }
+                EvenementFiche::StyleDeCombatChoisi(s) => {
+                    fiche.style_de_combat = Some(s.clone());
+                }
                 EvenementFiche::EtatAjoute(e) => {
                     if !fiche.etats.contains(e) {
                         fiche.etats.push(e.clone());
@@ -865,7 +871,11 @@ impl Journal {
                     pris.dons = dons.clone();
                     let trouve = fiche.valider(r).into_iter().find(|p| match p {
                         Probleme::DonInconnu(d) => dons.contains(d),
-                        Probleme::DonEnDouble(_) | Probleme::DonDeLignageManquant { .. } => true,
+                        Probleme::DonEnDouble(_)
+                        | Probleme::DonDeLignageManquant { .. }
+                        | Probleme::DonDeClasseHorsCombat { .. }
+                        | Probleme::DonDeClasseHorsListe { .. }
+                        | Probleme::StyleDeCombatManquant { .. } => true,
                         Probleme::DonsAuNiveau {
                             niveau: n,
                             attendus,

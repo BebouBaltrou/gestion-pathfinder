@@ -36,8 +36,60 @@
     "canalisation": false,
     "incantation": null,
     "don_bonus_niveau_1": null,
+    "dons_supplementaires": [
+      {
+        "a_partir_du": 1,
+        "source": "Manuel des joueurs (VF), Moine, p. 64",
+        "dons_en": [
+          "Throw Anything",
+          "Combat Reflexes",
+          "Scorpion Style",
+          "Dodge",
+          "Deflect Arrows",
+          "Improved Grapple",
+          "Catch Off-Guard"
+        ]
+      },
+      {
+        "a_partir_du": 6,
+        "source": "Manuel des joueurs (VF), Moine, p. 64",
+        "dons_en": [
+          "Gorgon's Fist",
+          "Improved Bull Rush",
+          "Improved Feint",
+          "Improved Trip",
+          "Improved Disarm",
+          "Mobility"
+        ]
+      },
+      {
+        "a_partir_du": 10,
+        "source": "Manuel des joueurs (VF), Moine, p. 64",
+        "dons_en": [
+          "Spring Attack",
+          "Medusa's Wrath",
+          "Snatch Arrows",
+          "Improved Critical"
+        ]
+      }
+    ],
     "effets": [],
-    "pouvoirs": [],
+    "pouvoirs": [
+      {
+        "cle": "ki",
+        "nom": "Réserve de ki",
+        "niveau": 3,
+        "pas": 1,
+        "a_volonte": null,
+        "formule": {
+          "base": 0,
+          "par_niveau": 1,
+          "carac": "sag",
+          "depart": 0,
+          "diviseur": 2
+        }
+      }
+    ],
     "progression": [
       {
         "niveau": 1,

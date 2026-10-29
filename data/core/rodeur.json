@@ -40,6 +40,44 @@
       "caracteristique": "sag"
     },
     "don_bonus_niveau_1": null,
+    "dons_supplementaires": [
+      {
+        "a_partir_du": 2,
+        "style": "tir_a_distance",
+        "source": "Manuel des joueurs (VF), Rôdeur, p. 82",
+        "dons_en": ["Point-Blank Shot", "Far Shot", "Precise Shot", "Rapid Shot"]
+      },
+      {
+        "a_partir_du": 6,
+        "style": "tir_a_distance",
+        "source": "Manuel des joueurs (VF), Rôdeur, p. 82",
+        "dons_en": ["Manyshot", "Improved Precise Shot"]
+      },
+      {
+        "a_partir_du": 10,
+        "style": "tir_a_distance",
+        "source": "Manuel des joueurs (VF), Rôdeur, p. 82",
+        "dons_en": ["Shot on the Run", "Pinpoint Targeting"]
+      },
+      {
+        "a_partir_du": 2,
+        "style": "deux_armes",
+        "source": "Manuel des joueurs (VF), Rôdeur, p. 82",
+        "dons_en": ["Quick Draw", "Two-Weapon Fighting", "Double Slice", "Improved Shield Bash"]
+      },
+      {
+        "a_partir_du": 6,
+        "style": "deux_armes",
+        "source": "Manuel des joueurs (VF), Rôdeur, p. 82",
+        "dons_en": ["Two-Weapon Defense", "Improved Two-Weapon Fighting"]
+      },
+      {
+        "a_partir_du": 10,
+        "style": "deux_armes",
+        "source": "Manuel des joueurs (VF), Rôdeur, p. 82",
+        "dons_en": ["Two-Weapon Rend", "Greater Two-Weapon Fighting"]
+      }
+    ],
     "effets": [],
     "pouvoirs": [],
     "progression": [

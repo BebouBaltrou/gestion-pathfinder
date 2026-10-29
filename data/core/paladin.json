@@ -30,6 +30,7 @@
     "maitrises_fr": "Toutes les armes courantes et de guerre, toutes les armures et tous les boucliers (sauf pavois).",
     "domaines_choisis": 0,
     "canalisation": false,
+    "canalisation_par_imposition": true,
     "incantation": {
       "type": "divin",
       "mode": "préparé",

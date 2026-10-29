@@ -236,9 +236,12 @@ pub fn dons_invalides(
 ) -> Vec<(String, Verification)> {
     let mut possedes: Vec<String> = fiche.dons_automatiques(r);
     let mut invalides = Vec::new();
-    for n in &fiche.niveaux {
+    for (i, n) in fiche.niveaux.iter().enumerate() {
+        // Les dons de la liste de classe (moine) s'obtiennent sans en remplir les conditions.
+        let liste = fiche.liste_dons_supplementaires_a(r, i);
         for d in &n.dons {
-            if let Some(def) = r.don(nom_de_base(d)) {
+            let sans_condition = liste.iter().any(|x| x.eq_ignore_ascii_case(nom_de_base(d)));
+            if let (Some(def), false) = (r.don(nom_de_base(d)), sans_condition) {
                 let ctx = Contexte {
                     referentiel: r,
                     fiche,

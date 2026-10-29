@@ -56,6 +56,9 @@ pub struct Fiche {
     #[cfg_attr(feature = "serde", serde(default))]
     pub classes_de_predilection: Vec<String>,
     pub lignage: Option<String>,
+    /// Style de combat du rôdeur (« tir_a_distance » ou « deux_armes »), choisi au niveau 2.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub style_de_combat: Option<String>,
     /// Sous-type choisi pour « Knowledge (any one) » du lignage arcanique.
     pub connaissance_de_lignage: Option<String>,
     /// Effets supplémentaires (objets, sorts, états…) ajoutés à ceux de la race.
@@ -160,6 +163,18 @@ pub enum Probleme {
     DonDeLignageManquant {
         niveau: u32,
         lignage: String,
+    },
+    /// Le don supplémentaire du guerrier doit être un don de combat (type « Combat »).
+    DonDeClasseHorsCombat {
+        niveau: u32,
+    },
+    /// Le don supplémentaire de la classe doit être pris dans sa liste (moine).
+    DonDeClasseHorsListe {
+        niveau: u32,
+    },
+    /// Le rôdeur doit avoir choisi son style de combat avant ses dons de style.
+    StyleDeCombatManquant {
+        niveau: u32,
     },
     DonsAuNiveau {
         niveau: u32,
@@ -338,6 +353,18 @@ impl std::fmt::Display for Probleme {
             Probleme::DonDeLignageManquant { niveau, lignage } => write!(
                 f,
                 "niveau {niveau} : un des dons doit être un don du lignage {lignage}"
+            ),
+            Probleme::DonDeClasseHorsCombat { niveau } => write!(
+                f,
+                "niveau {niveau} : le don supplémentaire de guerrier doit être un don de combat"
+            ),
+            Probleme::DonDeClasseHorsListe { niveau } => write!(
+                f,
+                "niveau {niveau} : le don supplémentaire doit être pris dans la liste de la classe"
+            ),
+            Probleme::StyleDeCombatManquant { niveau } => write!(
+                f,
+                "niveau {niveau} : le style de combat doit être choisi avant ce don"
             ),
             Probleme::DonImposeManquant(d) => write!(f, "don imposé par la race manquant : {d}"),
             Probleme::EquipementInconnu(n) => write!(f, "équipement inconnu du catalogue : {n}"),
@@ -532,6 +559,8 @@ pub struct Valeurs {
     pub rangs: Vec<BilanRangs>,
     pub incantateurs: Vec<Incantateur>,
     pub canalisation: Option<Canalisation>,
+    /// Dés d'attaque sournoise du roublard : 1d6 au niveau 1, puis 1d6 tous les deux niveaux (0 hors roublard).
+    pub attaque_sournoise: u32,
     pub domaines: Vec<DomaineVu>,
     /// Pouvoirs limités par jour (canalisation, pouvoirs de domaine, forme animale).
     pub pouvoirs: Vec<PouvoirJournalier>,
@@ -1212,6 +1241,22 @@ impl Fiche {
         u32::from(self.capacite_de_classe_a(r, i, "don supplémentaire"))
     }
 
+    /// Dons de la liste de classe ouverts au niveau `i` (moine). Vide si la classe n'en a pas.
+    pub(crate) fn liste_dons_supplementaires_a(&self, r: &Referentiel, i: usize) -> Vec<String> {
+        let Some(classe) = r.classe(&self.niveaux[i].classe) else {
+            return Vec::new();
+        };
+        let nc = self.niveaux[..=i]
+            .iter()
+            .filter(|n| n.classe == classe.id)
+            .count() as u32;
+        classe
+            .dons_supplementaires_pour(nc, self.style_de_combat.as_deref())
+            .into_iter()
+            .map(String::from)
+            .collect()
+    }
+
     /// Vrai si la ligne de progression de la classe, au niveau de classe atteint en `i`, cite `motif`.
     fn capacite_de_classe_a(&self, r: &Referentiel, i: usize, motif: &str) -> bool {
         let Some(classe) = r.classe(&self.niveaux[i].classe) else {
@@ -1255,6 +1300,47 @@ impl Fiche {
                     attendus,
                     choisis: n.dons.len() as u32,
                 });
+            }
+            let de_classe = self.dons_de_classe_a(r, i) as usize;
+            if de_classe > 0 {
+                let liste = self.liste_dons_supplementaires_a(r, i);
+                let a_des_listes = r
+                    .classe(&n.classe)
+                    .is_some_and(|c| !c.dons_supplementaires.is_empty());
+                if a_des_listes && liste.is_empty() {
+                    p.push(Probleme::StyleDeCombatManquant {
+                        niveau: i as u32 + 1,
+                    });
+                } else if !a_des_listes {
+                    let combat = n
+                        .dons
+                        .iter()
+                        .filter(|d| {
+                            r.don(crate::catalogue::nom_de_base(d))
+                                .is_some_and(|x| x.types_en.iter().any(|t| t == "Combat"))
+                        })
+                        .count();
+                    if combat < de_classe {
+                        p.push(Probleme::DonDeClasseHorsCombat {
+                            niveau: i as u32 + 1,
+                        });
+                    }
+                } else {
+                    let dans_la_liste = n
+                        .dons
+                        .iter()
+                        .filter(|d| {
+                            liste
+                                .iter()
+                                .any(|x| x.eq_ignore_ascii_case(crate::catalogue::nom_de_base(d)))
+                        })
+                        .count();
+                    if dans_la_liste < de_classe {
+                        p.push(Probleme::DonDeClasseHorsListe {
+                            niveau: i as u32 + 1,
+                        });
+                    }
+                }
             }
             let a_lignage = self.dons_de_lignage_a(r, i);
             if a_lignage > 0 {
@@ -1728,6 +1814,20 @@ impl Fiche {
                     },
                 });
             }
+            if classe.canalisation_par_imposition && nc >= 4 {
+                let utilisations = ((nc / 2) as i32 + m(Carac::Cha)).max(0) / 2;
+                pouvoirs.push(PouvoirJournalier {
+                    cle: "canalisation".into(),
+                    nom: "Canalisation d'énergie".into(),
+                    max: Some(utilisations),
+                });
+                canalisation = Some(Canalisation {
+                    positive: Some(true),
+                    des: 1 + nc.saturating_sub(1) / 2,
+                    dd: 10 + (nc / 2) as i32 + m(Carac::Cha),
+                    utilisations,
+                });
+            }
             if classe.canalisation {
                 let positive = match self.alignement.as_deref().and_then(crate::divin::axes) {
                     Some((_, 0)) => Some(true),
@@ -1911,6 +2011,12 @@ impl Fiche {
             rangs,
             incantateurs,
             canalisation,
+            attaque_sournoise: (self
+                .niveaux
+                .iter()
+                .filter(|n| n.classe == "roublard")
+                .count() as u32)
+                .div_ceil(2),
             domaines: domaines_vus,
             pouvoirs,
             compagnon: compagnon_calcule,

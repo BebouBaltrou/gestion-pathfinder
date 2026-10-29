@@ -786,6 +786,7 @@ pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32, r: &Referentiel) -> Result
             Some(lignage_lu(f, classe, r)?)
         },
         connaissance_de_lignage: None,
+        style_de_combat: None,
         effets,
         sorts_connus: vec![],
         equipement: {
