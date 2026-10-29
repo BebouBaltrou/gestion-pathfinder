@@ -243,7 +243,8 @@ impl Fiche {
         }
         for (i, nom) in self.pouvoirs_rage.iter().enumerate() {
             let rage = &r.rage;
-            if self.pouvoirs_rage[..i].contains(nom) {
+            let deja = self.pouvoirs_rage[..i].iter().filter(|x| *x == nom).count() as u32;
+            if deja >= rage.repetables.get(nom).copied().unwrap_or(1) {
                 p.push(Probleme::PouvoirRageEnDouble(nom.clone()));
             }
             let Some(&nt) = rage.niveau_de_table.get(nom) else {
@@ -286,6 +287,8 @@ pub struct PouvoirsRage {
     /// Pouvoir issu d'un livre avancé : nom → source (`APG` = icône MJRA).
     pub sources: BTreeMap<String, String>,
     pub prerequis: BTreeMap<String, PrerequisPouvoir>,
+    /// Pouvoirs que l'on peut prendre plusieurs fois : nom → nombre maximal.
+    pub repetables: BTreeMap<String, u32>,
     /// Texte du livre de chaque pouvoir affiché.
     pub textes: BTreeMap<String, String>,
 }
@@ -302,6 +305,13 @@ pub struct PrerequisPouvoir {
 struct FichierPouvoirsRage {
     niveaux: Vec<NiveauRage>,
     sources: BTreeMap<String, String>,
+    regles: ReglesRage,
+}
+
+#[derive(Deserialize)]
+struct ReglesRage {
+    #[serde(default)]
+    repetables: BTreeMap<String, u32>,
 }
 
 #[derive(Deserialize)]
@@ -338,6 +348,7 @@ impl PouvoirsRage {
         Ok(PouvoirsRage {
             niveau_de_table,
             sources: t.sources,
+            repetables: t.regles.repetables,
             prerequis: p.prerequis,
             textes: x.textes,
         })
@@ -350,6 +361,13 @@ impl PouvoirsRage {
         } else {
             (niveau - 2) / 2 + 1
         }
+    }
+
+    /// Vrai si `nom` peut encore être pris, compte tenu des pouvoirs déjà choisis
+    /// (une fois, ou plusieurs fois pour les pouvoirs répétables).
+    pub fn encore_prenable(&self, nom: &str, choisis: &[String]) -> bool {
+        let deja = choisis.iter().filter(|c| *c == nom).count() as u32;
+        deja < self.repetables.get(nom).copied().unwrap_or(1)
     }
 
     /// Vrai si le pouvoir est dans la table, de niveau atteint, et que ses prérequis sont pris.
@@ -427,6 +445,39 @@ pub fn effets_de_rage(niveau: u32) -> Vec<crate::effet::Effet> {
         Effet::new("jds.vol", TypeBonus::Moral, volonte, nom),
         Effet::new("ca", TypeBonus::SansType, -2, nom),
     ]
+}
+
+/// Effets chiffrés des pouvoirs de rage choisis, tant que le barbare est en rage (Manuel des
+/// joueurs : Escalade en rage et Nage en rage donnent un bonus d'altération égal au niveau).
+pub fn effets_des_pouvoirs_de_rage(fiche: &Fiche) -> Vec<crate::effet::Effet> {
+    use crate::effet::{Effet, TypeBonus};
+    if !fiche.en_rage {
+        return Vec::new();
+    }
+    let niveau = fiche.niveau_de_classe("barbare") as i32;
+    let mut e = Vec::new();
+    for (pouvoir, cible) in [
+        ("Escalade en rage", "comp.climb"),
+        ("Nage en rage", "comp.swim"),
+    ] {
+        if fiche.pouvoirs_rage.iter().any(|p| p == pouvoir) {
+            e.push(Effet::new(cible, TypeBonus::Alteration, niveau, pouvoir));
+        }
+    }
+    e
+}
+
+/// Bonus de vitesse (en pieds, 5 = 1,50 m) des pouvoirs de rage choisis : Pas rapides, jusqu'à trois fois.
+pub fn bonus_de_vitesse_de_rage(fiche: &Fiche) -> u32 {
+    if !fiche.en_rage {
+        return 0;
+    }
+    5 * (fiche
+        .pouvoirs_rage
+        .iter()
+        .filter(|p| *p == "Pas rapides")
+        .count() as u32)
+        .min(3)
 }
 
 /// Valeurs chiffrées des capacités de classe conditionnelles, à afficher (Manuel des joueurs).

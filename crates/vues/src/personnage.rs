@@ -632,7 +632,7 @@ fn choix_classes(r: &Referentiel, f: &Fiche) -> ChoixClassesVue {
     let rage_disponibles = rage
         .niveau_de_table
         .keys()
-        .filter(|n| !f.pouvoirs_rage.contains(n))
+        .filter(|n| rage.encore_prenable(n, &f.pouvoirs_rage))
         .filter(|n| rage.accessible(n, niveau_barbare, &f.pouvoirs_rage))
         .map(|n| pouvoir_rage_vue(rage, n))
         .collect();

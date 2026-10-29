@@ -825,6 +825,7 @@ impl Fiche {
             e.extend(crate::choix_classe::effets_de_rage(
                 self.niveau_de_classe("barbare"),
             ));
+            e.extend(crate::choix_classe::effets_des_pouvoirs_de_rage(self));
         }
         Ok(e)
     }
@@ -2059,7 +2060,7 @@ impl Fiche {
             }
         }
 
-        let mut vitesse = bilan.vitesse;
+        let mut vitesse = bilan.vitesse + crate::choix_classe::bonus_de_vitesse_de_rage(self);
         if etats_actifs.iter().any(|e| e.vitesse_moitie) {
             vitesse /= 2;
         }

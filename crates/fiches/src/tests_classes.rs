@@ -1799,3 +1799,46 @@ fn roublard_et_moine_affichent_leurs_valeurs() {
         .iter()
         .any(|x| x.contains("fer froid et argent, armes Loyales")));
 }
+
+#[test]
+fn pouvoirs_de_rage_repetables_et_effets_chiffres() {
+    let r = Referentiel::core();
+    let regles = ReglesFiche::default();
+    // Pas rapides jusqu'à trois fois, pas quatre ; Bagarreur une seule fois.
+    let mut f = de_classe("barbare", 8);
+    f.pouvoirs_rage = vec!["Pas rapides".into(); 3];
+    f.pouvoirs_rage.push("Bagarreur".into());
+    assert!(!f
+        .problemes_choix_de_classe(&r)
+        .iter()
+        .any(|p| matches!(p, Probleme::PouvoirRageEnDouble(_))));
+    f.pouvoirs_rage.push("Pas rapides".into());
+    f.pouvoirs_rage.push("Bagarreur".into());
+    let p = f.problemes_choix_de_classe(&r);
+    assert!(p.contains(&Probleme::PouvoirRageEnDouble("Pas rapides".into())));
+    assert!(p.contains(&Probleme::PouvoirRageEnDouble("Bagarreur".into())));
+    assert!(r
+        .rage
+        .encore_prenable("Pas rapides", &vec!["Pas rapides".to_string(); 2]));
+    assert!(!r
+        .rage
+        .encore_prenable("Bagarreur", &["Bagarreur".to_string()]));
+
+    // En rage : Pas rapides ajoute 1,50 m (5 pieds) par choix, Escalade en rage le niveau à Escalade.
+    let mut f = de_classe("barbare", 6);
+    f.pouvoirs_rage = vec![
+        "Pas rapides".into(),
+        "Pas rapides".into(),
+        "Escalade en rage".into(),
+    ];
+    let mut j = Journal::nouveau(f);
+    let hors = j.etat(&r, &regles).unwrap().fiche.calculer(&r).unwrap();
+    assert!(j
+        .ajouter(EvenementFiche::RageCommencee, &r, &regles)
+        .is_ok());
+    let en = j.etat(&r, &regles).unwrap().fiche.calculer(&r).unwrap();
+    assert_eq!(en.vitesse, hors.vitesse + 10);
+    let escalade = |v: &crate::fiche::Valeurs| v.competences.get("climb").map(|d| d.total);
+    // +6 d'altération (niveau) et +2 de modificateur de Force (+4 de rage) : au moins +6.
+    assert!(escalade(&en).unwrap() >= escalade(&hors).unwrap() + 6);
+}

@@ -311,6 +311,12 @@
     "sang_superieur_niveau": 10,
     "sang_intermediaire_exige_mineur": "Pouvoir intermédiaire de sang : niveau 6 et le pouvoir mineur du même groupe.",
     "sang_superieur_exige_intermediaire": "Pouvoir supérieur de sang : niveau 10 et le pouvoir intermédiaire du même groupe.",
-    "action_specifique": "Certains pouvoirs demandent une action spécifique (détail à saisir par pouvoir)."
+    "action_specifique": "Certains pouvoirs demandent une action spécifique (détail à saisir par pouvoir).",
+    "repetables": {
+      "Pas rapides": 3,
+      "Réduction de dégâts accrue": 3,
+      "Résistance à l'énergie": 5
+    },
+    "repetables_note": "Texte du livre : Pas rapides et Réduction de dégâts accrue jusqu'à trois fois ; Résistance à l'énergie plusieurs fois, un type d'énergie différent à chaque fois (acide, froid, électricité, feu, son : 5 au plus)."
   }
 }
