@@ -510,6 +510,8 @@ vue! {
         pub dons_par_niveau: Vec<Vec<String>>,
         /// Style de combat du rôdeur (« tir_a_distance » ou « deux_armes »), absent tant qu'il n'est pas choisi.
         pub style_de_combat: Option<String>,
+        /// Grâces, talents et ennemis jurés : pris et à prendre.
+        pub choix_classes: ChoixClassesVue,
         /// Clé anglaise minuscule de la classe de chaque niveau, pour filtrer les dons par classe.
         pub classes_par_niveau: Vec<String>,
         /// Sorts connus choisis (noms anglais), pour les réattribuer.
@@ -554,6 +556,55 @@ fn objet_vue(r: &Referentiel, nom_en: &str, quantite: u32) -> ObjetVue {
 }
 
 /// Construit la fiche complète d'un personnage à partir de son état.
+/// Choix génériques des classes : ce qui est pris et ce qui reste à prendre.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize)]
+pub struct ChoixClassesVue {
+    /// Nombre de grâces attendues au niveau de paladin actuel.
+    pub graces_attendues: u32,
+    pub graces: Vec<String>,
+    /// Grâces accessibles au niveau de paladin actuel, pas encore prises.
+    pub graces_disponibles: Vec<String>,
+    pub talents: Vec<String>,
+    /// Talents de roublard et de maître pas encore pris.
+    pub talents_disponibles: Vec<String>,
+    /// Nombre d'ennemis jurés attendus au niveau de rôdeur actuel.
+    pub ennemis_attendus: u32,
+    pub ennemis_jures: Vec<String>,
+    pub types_ennemis: Vec<String>,
+}
+
+fn choix_classes(r: &Referentiel, f: &Fiche) -> ChoixClassesVue {
+    let c = &r.choix;
+    let niveau_paladin = f.niveau_de_classe("paladin");
+    let t = &c.talents_roublard;
+    let graces_disponibles = c
+        .grace_paladin
+        .listes
+        .iter()
+        .filter(|l| l.a_partir_du <= niveau_paladin)
+        .flat_map(|l| l.graces.iter())
+        .filter(|g| !f.graces.contains(g))
+        .cloned()
+        .collect();
+    let talents_disponibles = t
+        .talents
+        .iter()
+        .chain(&t.talents_de_maitre)
+        .filter(|x| !f.talents_roublard.iter().any(|p| p == *x))
+        .cloned()
+        .collect();
+    ChoixClassesVue {
+        graces_attendues: c.nombre_graces(niveau_paladin),
+        graces: f.graces.clone(),
+        graces_disponibles,
+        talents: f.talents_roublard.clone(),
+        talents_disponibles,
+        ennemis_attendus: c.nombre_ennemis_jures(f.niveau_de_classe("rodeur")),
+        ennemis_jures: f.ennemis_jures.clone(),
+        types_ennemis: c.ennemis_jures_rodeur.types.clone(),
+    }
+}
+
 pub fn fiche_complete(
     e: &EtatPersonnage,
     historique: Vec<String>,
@@ -1164,6 +1215,7 @@ pub fn fiche_complete(
         dons,
         dons_par_niveau: f.niveaux.iter().map(|n| n.dons.clone()).collect(),
         style_de_combat: f.style_de_combat.clone(),
+        choix_classes: choix_classes(r, f),
         classes_par_niveau: f
             .niveaux
             .iter()

@@ -196,6 +196,18 @@ export type IdentiteVue = {
   compte: Somme;
 };
 
+/** Choix génériques des classes (grâces, talents de roublard, ennemis jurés). */
+export type ChoixClassesVue = {
+  gracesAttendues: number;
+  graces: string[];
+  gracesDisponibles: string[];
+  talents: string[];
+  talentsDisponibles: string[];
+  ennemisAttendus: number;
+  ennemisJures: string[];
+  typesEnnemis: string[];
+};
+
 export type FicheVue = {
   identite: IdentiteVue;
   caracteristiques: CaracVue[];
@@ -221,6 +233,8 @@ export type FicheVue = {
   attaqueSournoiseDes: number;
   /** Style de combat du rôdeur (« tir_a_distance » ou « deux_armes »), null tant qu'il n'est pas choisi. */
   styleDeCombat: string | null;
+  /** Grâces, talents et ennemis jurés : pris et à prendre. */
+  choixClasses: ChoixClassesVue;
   /** Clé minuscule (ex. « fighter ») de la classe de chaque niveau. */
   classesParNiveau: string[];
   /** Sorts connus choisis (noms anglais). */
@@ -459,6 +473,9 @@ export type EvenementFiche =
   | { ObjetAjoute: { nom_en: string; quantite: number } }
   | { ObjetRetire: { nom_en: string; quantite: number } }
   | { StyleDeCombatChoisi: string }
+  | { GraceChoisie: string }
+  | { TalentRoublardChoisi: string }
+  | { EnnemiJureChoisi: string }
   | { EtatAjoute: string }
   | { EtatRetire: string }
   | { EffetTemporaireAjoute: { nom: string; effets: EffetDonnees[]; rounds_restants: number | null } }

@@ -375,12 +375,59 @@ function ChoixStyleRodeur({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) 
   );
 }
 
+/** Grâces du paladin, talents du roublard et ennemis jurés du rôdeur : on choisit ce qui manque. */
+function ChoixClasses({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => void }) {
+  const c = f.choixClasses;
+  const aPrendre = (attendus: number, pris: number) => Math.max(attendus - pris, 0);
+  const graces = aPrendre(c.gracesAttendues, c.graces.length);
+  const ennemis = aPrendre(c.ennemisAttendus, c.ennemisJures.length);
+  return (
+    <>
+      {c.gracesAttendues > 0 && (
+        <div className="carte">
+          <p>Grâces ({c.graces.length}/{c.gracesAttendues}) : {c.graces.join(", ") || "aucune"}</p>
+          {graces > 0 && (
+            <div className="grille-boutons">
+              {c.gracesDisponibles.map((g) => (
+                <button key={g} className="bouton" onClick={() => agir({ GraceChoisie: g })}>{g}</button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+      {f.classesParNiveau.includes("rogue") && (
+        <div className="carte">
+          <p>Talents de roublard : {c.talents.join(", ") || "aucun"}</p>
+          <div className="grille-boutons">
+            {c.talentsDisponibles.map((t) => (
+              <button key={t} className="bouton" onClick={() => agir({ TalentRoublardChoisi: t })}>{t}</button>
+            ))}
+          </div>
+        </div>
+      )}
+      {c.ennemisAttendus > 0 && (
+        <div className="carte">
+          <p>Ennemis jurés ({c.ennemisJures.length}/{c.ennemisAttendus}) : {c.ennemisJures.join(", ") || "aucun"}</p>
+          {ennemis > 0 && (
+            <div className="grille-boutons">
+              {c.typesEnnemis.map((e) => (
+                <button key={e} className="bouton" onClick={() => agir({ EnnemiJureChoisi: e })}>{e}</button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </>
+  );
+}
+
 function Dons({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => void }) {
   return (
     <div className="section">
       <h2>Dons</h2>
       {f.attaqueSournoiseDes > 0 && <p className="doux">Attaque sournoise : {f.attaqueSournoiseDes}d6</p>}
       {f.classesParNiveau.includes("ranger") && <ChoixStyleRodeur f={f} agir={agir} />}
+      <ChoixClasses f={f} agir={agir} />
       <ReattributionDons f={f} agir={agir} />
       <div className="liste-regles">
         {f.dons.map((d, i) => (
