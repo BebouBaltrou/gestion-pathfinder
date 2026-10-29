@@ -206,6 +206,10 @@ export type ChoixClassesVue = {
   ennemisAttendus: number;
   ennemisJures: string[];
   typesEnnemis: string[];
+  rageAttendus: number;
+  rageChoisis: string[];
+  /** Pouvoirs de rage accessibles, pas encore pris. `mjra` : règles avancées (APG). */
+  rageDisponibles: { nom: string; mjra: boolean }[];
 };
 
 export type FicheVue = {
@@ -476,6 +480,7 @@ export type EvenementFiche =
   | { GraceChoisie: string }
   | { TalentRoublardChoisi: string }
   | { EnnemiJureChoisi: string }
+  | { PouvoirRageChoisi: string }
   | { EtatAjoute: string }
   | { EtatRetire: string }
   | { EffetTemporaireAjoute: { nom: string; effets: EffetDonnees[]; rounds_restants: number | null } }
