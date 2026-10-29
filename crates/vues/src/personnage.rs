@@ -581,6 +581,9 @@ pub struct ChoixClassesVue {
     pub en_rage: bool,
     /// Valeurs chiffrées des capacités conditionnelles (inspirations, courage).
     pub capacites_chiffrees: Vec<String>,
+    /// Rounds passés dans la rage en cours et rounds de fatigue restants après une rage.
+    pub rounds_de_rage: u32,
+    pub fatigue_rage: Option<u32>,
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Serialize)]
@@ -632,6 +635,8 @@ fn choix_classes(r: &Referentiel, f: &Fiche) -> ChoixClassesVue {
         rage_attendus: fiches::choix_classe::PouvoirsRage::attendus(niveau_barbare),
         niveau_barbare,
         en_rage: f.en_rage,
+        rounds_de_rage: f.rounds_de_rage,
+        fatigue_rage: f.fatigue_rage,
         capacites_chiffrees: fiches::choix_classe::capacites_chiffrees(f),
         rage_choisis: f
             .pouvoirs_rage
@@ -2239,6 +2244,8 @@ mod tests_pretre {
             ennemis_jures: vec![],
             pouvoirs_rage: vec![],
             en_rage: false,
+            rounds_de_rage: 0,
+            fatigue_rage: None,
         }
     }
 

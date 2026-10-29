@@ -387,12 +387,15 @@ function ChoixClasses({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => v
         <div className="carte">
           {c.enRage ? (
             <>
-              <p>En rage : les bonus de moral à la Force, à la Constitution et à la Volonté, et le malus de −2 à la CA, sont appliqués.</p>
+              <p>En rage ({c.roundsDeRage} round(s)) : les bonus de moral à la Force, à la Constitution et à la Volonté, et le malus de −2 à la CA, sont appliqués.</p>
               <button className="bouton principal" onClick={() => agir("RageTerminee")}>Fin de la rage</button>
-              <p className="doux">Ensuite fatigué pendant le double des rounds passés en rage (sauf rage sans fatigue, niveau 17) : retirer l'état à la main.</p>
+              <p className="doux">Ensuite fatigué pendant le double des rounds passés en rage (sauf rage sans fatigue, niveau 17). Faire passer les rounds dans le suivi du temps.</p>
             </>
           ) : (
-            <button className="bouton principal" onClick={() => agir("RageCommencee")}>Entrer en rage</button>
+            <>
+              {c.fatigueRage !== null && <p className="doux">Fatigué encore {c.fatigueRage} round(s) : pas de nouvelle rage avant.</p>}
+              <button className="bouton principal" onClick={() => agir("RageCommencee")}>Entrer en rage</button>
+            </>
           )}
         </div>
       )}

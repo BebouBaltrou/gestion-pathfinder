@@ -218,6 +218,9 @@ export type ChoixClassesVue = {
   enRage: boolean;
   /** Valeurs chiffrées des capacités conditionnelles (inspirations, courage). */
   capacitesChiffrees: string[];
+  /** Rounds passés dans la rage en cours et rounds de fatigue restants après une rage. */
+  roundsDeRage: number;
+  fatigueRage: number | null;
 };
 
 export type FicheVue = {

@@ -771,6 +771,7 @@ impl Journal {
                         });
                     }
                     fiche.en_rage = true;
+                    fiche.rounds_de_rage = 0;
                 }
                 EvenementFiche::RageTerminee => {
                     if !fiche.en_rage {
@@ -780,12 +781,15 @@ impl Journal {
                         });
                     }
                     fiche.en_rage = false;
-                    // Rage sans fatigue au niveau 17 ; sinon fatigué (durée : le double des rounds de rage).
-                    if fiche.niveau_de_classe("barbare") < 17
-                        && !fiche.etats.iter().any(|e| e == "fatigued")
-                    {
-                        fiche.etats.push("fatigued".to_string());
+                    // Rage sans fatigue au niveau 17 ; sinon fatigué pendant le double des rounds
+                    // passés en rage (au moins 1 round de rage : lecture à valider).
+                    if fiche.niveau_de_classe("barbare") < 17 {
+                        if !fiche.etats.iter().any(|e| e == "fatigued") {
+                            fiche.etats.push("fatigued".to_string());
+                        }
+                        fiche.fatigue_rage = Some(2 * fiche.rounds_de_rage.max(1));
                     }
+                    fiche.rounds_de_rage = 0;
                 }
                 EvenementFiche::EtatAjoute(e) => {
                     if !fiche.etats.contains(e) {
@@ -824,6 +828,21 @@ impl Journal {
                         }
                     }
                     fiche.temporaires.retain(|t| t.rounds_restants != Some(0));
+                    if fiche.en_rage {
+                        fiche.rounds_de_rage += *rounds;
+                    }
+                    // Fatigue de la rage : elle s'use avec le temps, ou disparaît si l'état a été retiré.
+                    if let Some(restants) = fiche.fatigue_rage {
+                        let reste = restants.saturating_sub(*rounds);
+                        if reste == 0 || !fiche.etats.iter().any(|e| e == "fatigued") {
+                            fiche.fatigue_rage = None;
+                            if reste == 0 {
+                                fiche.etats.retain(|e| e != "fatigued");
+                            }
+                        } else {
+                            fiche.fatigue_rage = Some(reste);
+                        }
+                    }
                 }
                 EvenementFiche::DommagesCaracteristique { carac, delta } => {
                     let d = fiche.dommages.entry(*carac).or_insert(0);

@@ -51,6 +51,8 @@ fn pretre(niveau: u32, sagesse: i32) -> Fiche {
         ennemis_jures: vec![],
         pouvoirs_rage: vec![],
         en_rage: false,
+        rounds_de_rage: 0,
+        fatigue_rage: None,
     }
 }
 
@@ -893,6 +895,8 @@ fn barbare(niveau: u32, constitution: i32) -> Fiche {
         ennemis_jures: vec![],
         pouvoirs_rage: vec![],
         en_rage: false,
+        rounds_de_rage: 0,
+        fatigue_rage: None,
     }
 }
 
@@ -1670,4 +1674,40 @@ fn inspirations_du_barde_et_courage_du_guerrier() {
         l,
         vec!["Courage : +3 aux jets de sauvegarde contre la terreur".to_string()]
     );
+}
+
+#[test]
+fn la_fatigue_apres_la_rage_dure_le_double_des_rounds_et_s_use_avec_le_temps() {
+    let r = Referentiel::core();
+    let regles = ReglesFiche::default();
+    let mut j = Journal::nouveau(de_classe("barbare", 1));
+    let temps = |rounds| EvenementFiche::TempsEcoule { rounds };
+    assert!(j
+        .ajouter(EvenementFiche::RageCommencee, &r, &regles)
+        .is_ok());
+    assert!(j.ajouter(temps(3), &r, &regles).is_ok());
+    assert_eq!(j.etat(&r, &regles).unwrap().fiche.rounds_de_rage, 3);
+    assert!(j.ajouter(EvenementFiche::RageTerminee, &r, &regles).is_ok());
+    let f = j.etat(&r, &regles).unwrap().fiche;
+    assert_eq!(f.fatigue_rage, Some(6));
+    assert!(f.etats.contains(&"fatigued".to_string()));
+    assert!(j.ajouter(temps(4), &r, &regles).is_ok());
+    assert_eq!(j.etat(&r, &regles).unwrap().fiche.fatigue_rage, Some(2));
+    assert!(j.ajouter(temps(2), &r, &regles).is_ok());
+    let f = j.etat(&r, &regles).unwrap().fiche;
+    assert_eq!(f.fatigue_rage, None);
+    assert!(!f.etats.contains(&"fatigued".to_string()));
+    // Plus fatigué : il peut entrer en rage de nouveau.
+    assert!(j
+        .ajouter(EvenementFiche::RageCommencee, &r, &regles)
+        .is_ok());
+    // Au niveau 17, aucune fatigue.
+    let mut j = Journal::nouveau(de_classe("barbare", 17));
+    assert!(j
+        .ajouter(EvenementFiche::RageCommencee, &r, &regles)
+        .is_ok());
+    assert!(j.ajouter(EvenementFiche::RageTerminee, &r, &regles).is_ok());
+    let f = j.etat(&r, &regles).unwrap().fiche;
+    assert_eq!(f.fatigue_rage, None);
+    assert!(!f.etats.contains(&"fatigued".to_string()));
 }

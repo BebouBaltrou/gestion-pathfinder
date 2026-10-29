@@ -108,6 +108,12 @@ pub struct Fiche {
     /// Le barbare est en rage : ses bonus s'appliquent à la fiche.
     #[cfg_attr(feature = "serde", serde(default))]
     pub en_rage: bool,
+    /// Rounds passés dans la rage en cours.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub rounds_de_rage: u32,
+    /// Rounds de fatigue restants après une rage (le double des rounds passés en rage).
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub fatigue_rage: Option<u32>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
