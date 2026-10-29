@@ -178,7 +178,9 @@
     "Sang draconique majeur",
     "Absorption d'énergie",
     "Viens m'attraper",
-    "Précision létale"
+    "Précision létale",
+    "Bête féroce",
+    "Bête féroce supérieure"
   ],
   "sources": {
     "Animal totem": "APG",
@@ -297,7 +299,9 @@
     "Sang infernal": "ACG",
     "Sang infernal majeur": "ACG",
     "Vitalité renouvelée": "ACG",
-    "Viens m'attraper": "ACG"
+    "Viens m'attraper": "ACG",
+    "Bête féroce": "Animal Archive",
+    "Bête féroce supérieure": "Animal Archive"
   },
   "regles": {
     "source": "Manuel des joueurs (VF), Barbare, pouvoirs de rage (texte fourni par l'utilisateur) ; Advanced Player's Guide, Ultimate Combat et Advanced Class Guide cités dans ce texte.",

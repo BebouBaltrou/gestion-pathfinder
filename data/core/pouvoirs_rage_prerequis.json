@@ -472,6 +472,15 @@
         "Précision mortelle"
       ],
       "niveau": 16
+    },
+    "Bête féroce": {
+      "texte": "Compagnon animal"
+    },
+    "Bête féroce supérieure": {
+      "pouvoirs": [
+        "Bête féroce"
+      ],
+      "niveau": 8
     }
   }
 }
