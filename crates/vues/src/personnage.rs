@@ -660,7 +660,11 @@ fn choix_classes(r: &Referentiel, f: &Fiche) -> ChoixClassesVue {
         en_rage: f.en_rage,
         rounds_de_rage: f.rounds_de_rage,
         fatigue_rage: f.fatigue_rage,
-        capacites_chiffrees: fiches::choix_classe::capacites_chiffrees(f),
+        capacites_chiffrees: {
+            let mut l = fiches::choix_classe::capacites_chiffrees(f);
+            l.extend(fiches::choix_classe::lignes_dependant_de_la_race(f, r));
+            l
+        },
         rage_choisis: f
             .pouvoirs_rage
             .iter()

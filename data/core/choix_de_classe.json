@@ -486,5 +486,52 @@
       }
     ],
     "note": "Un groupe d’armes aux niveaux 5, 9, 13 et 17 : +1 aux jets d’attaque et de dégâts avec ce groupe, et +1 de plus sur chaque groupe déjà choisi. Une arme de plusieurs groupes : seul le bonus le plus élevé. Le texte donne « masse d’arme lourde » (singulier) : lu « masse d’armes lourde ». Armes naturelles : le texte cite « toutes les attaques naturelles comme les cornes, les coups d’aile, les coups de queue, les griffes, les morsures »."
+  },
+  "moine_mains_nues": {
+    "classe": "moine",
+    "source": "Manuel des joueurs (VF), Moine, Dégâts à mains nues des moines de taille P ou G (texte fourni par l’utilisateur)",
+    "tranches": [
+      [
+        1,
+        3
+      ],
+      [
+        4,
+        7
+      ],
+      [
+        8,
+        11
+      ],
+      [
+        12,
+        15
+      ],
+      [
+        16,
+        19
+      ],
+      [
+        20,
+        20
+      ]
+    ],
+    "petite": [
+      "1d4",
+      "1d6",
+      "1d8",
+      "1d10",
+      "2d6",
+      "2d8"
+    ],
+    "grande": [
+      "1d8",
+      "2d6",
+      "2d8",
+      "3d6",
+      "3d8",
+      "4d8"
+    ],
+    "note": "La colonne de taille M de la table 3-11 n’a pas été fournie : les dégâts à mains nues d’un moine de taille M ne sont pas indiqués."
   }
 }

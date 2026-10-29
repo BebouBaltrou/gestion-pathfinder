@@ -2112,3 +2112,42 @@ fn l_entrainement_aux_armes_du_guerrier_donne_des_bonus_par_groupe() {
         a.armes[0].bonus_degats.total + 1
     );
 }
+
+#[test]
+fn deluge_de_coups_mains_nues_des_petits_moines_et_volonte_indomptable() {
+    let r = Referentiel::core();
+    let texte = |classe: &str, cle: &str| {
+        r.classe(classe)
+            .and_then(|c| c.textes_capacites.get(cle))
+            .map(String::as_str)
+            .unwrap_or("")
+    };
+    assert!(texte("guerrier", "courage").contains("+1 aux jets de sauvegarde contre la terreur"));
+    assert!(texte("rodeur", "ennemi juré").contains("Bluff, Connaissances"));
+    assert!(texte("barbare", "volonté indomptable").contains("sorts d’Enchantement"));
+    // Déluge de coups : 1, 2 puis 3 attaques supplémentaires aux niveaux 1, 8 et 15.
+    for (niveau, attendu) in [
+        (1, "1 attaque(s)"),
+        (8, "2 attaque(s)"),
+        (15, "3 attaque(s)"),
+    ] {
+        let l = crate::choix_classe::capacites_chiffrees(&de_classe("moine", niveau));
+        assert!(
+            l.iter()
+                .any(|x| x.starts_with("Déluge de coups : ") && x.contains(attendu)),
+            "niveau {niveau}"
+        );
+    }
+    // Dégâts à mains nues : colonne de taille P pour un halfelin, rien d'inventé pour la taille M.
+    let mut petit = de_classe("moine", 4);
+    petit.race = "halfelin".into();
+    let l = crate::choix_classe::lignes_dependant_de_la_race(&petit, &r);
+    assert_eq!(
+        l,
+        vec!["Dégâts à mains nues : 1d6 (taille de la race)".to_string()]
+    );
+    let l = crate::choix_classe::lignes_dependant_de_la_race(&de_classe("moine", 4), &r);
+    assert!(l[0].contains("taille M"));
+    let l = crate::choix_classe::capacites_chiffrees(&de_classe("barbare", 14));
+    assert!(l.iter().any(|x| x.starts_with("Volonté indomptable : +4")));
+}

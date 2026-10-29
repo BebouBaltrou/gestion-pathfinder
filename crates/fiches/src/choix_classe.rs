@@ -14,6 +14,14 @@ pub struct ChoixDeClasse {
     pub environnements_rodeur: EnvironnementsRodeur,
     pub pacte_du_chasseur: PacteDuChasseur,
     pub entrainement_aux_armes_guerrier: EntrainementAuxArmes,
+    pub moine_mains_nues: MoineMainsNues,
+}
+
+#[derive(Debug, Clone, Default, Deserialize)]
+pub struct MoineMainsNues {
+    pub tranches: Vec<(u32, u32)>,
+    pub petite: Vec<String>,
+    pub grande: Vec<String>,
 }
 
 #[derive(Debug, Clone, Default, Deserialize)]
@@ -755,6 +763,21 @@ pub fn capacites_chiffrees(fiche: &Fiche) -> Vec<String> {
         ));
     }
     let moine = fiche.niveau_de_classe("moine");
+    if moine >= 1 {
+        let extra = if moine >= 15 {
+            3
+        } else if moine >= 8 {
+            2
+        } else {
+            1
+        };
+        l.push(format!(
+            "Déluge de coups : {extra} attaque(s) supplémentaire(s) lors d'une attaque à outrance, malus de −2 à toutes les attaques du round ; bonus de base à l'attaque égal au niveau de moine ({moine}) ; bonus de Force entier aux dégâts"
+        ));
+    }
+    if barbare >= 14 {
+        l.push("Volonté indomptable : +4 aux jets de Volonté contre les sorts d'Enchantement tant que le barbare est en rage (se cumule avec le bonus de moral de la rage)".to_string());
+    }
     if moine >= 4 {
         let mut armes = vec!["armes magiques"];
         if moine >= 7 {
@@ -878,4 +901,28 @@ pub fn appliquer_entrainement_aux_armures(
     if libre && matches!(bilan.charge, Charge::Legere) {
         bilan.vitesse = bilan.vitesse.max(vitesse_sans_armure);
     }
+}
+
+/// Lignes qui dépendent de la race du personnage : dégâts à mains nues du moine (tailles P et G).
+pub fn lignes_dependant_de_la_race(fiche: &Fiche, r: &Referentiel) -> Vec<String> {
+    let moine = fiche.niveau_de_classe("moine");
+    if moine == 0 {
+        return Vec::new();
+    }
+    let t = &r.choix.moine_mains_nues;
+    let colonne = match r.race(&fiche.race).map(|x| x.taille.as_str()) {
+        Some("petite") => &t.petite,
+        Some("grande") => &t.grande,
+        _ => {
+            return vec![
+                "Dégâts à mains nues : la colonne de taille M de la table 3-11 n'est pas encore saisie".to_string(),
+            ];
+        }
+    };
+    t.tranches
+        .iter()
+        .position(|(a, b)| moine >= *a && moine <= *b)
+        .and_then(|i| colonne.get(i))
+        .map(|d| vec![format!("Dégâts à mains nues : {d} (taille de la race)")])
+        .unwrap_or_default()
 }
