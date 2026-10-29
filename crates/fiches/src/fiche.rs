@@ -105,6 +105,15 @@ pub struct Fiche {
     /// Augmentations de +2 du bonus contre un ennemi juré déjà choisi (une par choix dès le niveau 5).
     #[cfg_attr(feature = "serde", serde(default))]
     pub augmentations_ennemis: Vec<String>,
+    /// Environnements de prédilection du rôdeur (niveaux 3, 8, 13, 18).
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub environnements: Vec<String>,
+    /// Augmentations de +2 du bonus contre un environnement déjà choisi (une par choix dès le niveau 8).
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub augmentations_environnements: Vec<String>,
+    /// Pacte du chasseur du rôdeur (niveau 4), choix définitif.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub pacte_du_chasseur: Option<String>,
     /// Pouvoirs de rage choisis par le barbare (noms de `data/core/pouvoirs_rage.json`).
     #[cfg_attr(feature = "serde", serde(default))]
     pub pouvoirs_rage: Vec<String>,
@@ -237,6 +246,18 @@ pub enum Probleme {
     },
     EnnemiJureInconnu(String),
     EnnemiJureEnDouble(String),
+    EnvironnementsAChoisir {
+        attendus: u32,
+        choisis: u32,
+    },
+    AugmentationsEnvironnementsAChoisir {
+        attendus: u32,
+        choisis: u32,
+    },
+    EnvironnementInconnu(String),
+    EnvironnementEnDouble(String),
+    PacteDuChasseurManquant,
+    PacteDuChasseurInconnu(String),
     AugmentationsEnnemisAChoisir {
         attendus: u32,
         choisis: u32,
@@ -317,11 +338,14 @@ impl Probleme {
             | Probleme::GracesAChoisir { attendus, choisis }
             | Probleme::EnnemisJuresAChoisir { attendus, choisis }
             | Probleme::AugmentationsEnnemisAChoisir { attendus, choisis }
+            | Probleme::EnvironnementsAChoisir { attendus, choisis }
+            | Probleme::AugmentationsEnvironnementsAChoisir { attendus, choisis }
             | Probleme::TalentsAChoisir { attendus, choisis }
             | Probleme::PouvoirsRageAChoisir { attendus, choisis } => choisis < attendus,
             Probleme::AlignementManquant
             | Probleme::EnergieAChoisir
             | Probleme::PacteManquant
+            | Probleme::PacteDuChasseurManquant
             | Probleme::CompagnonManquant => true,
             _ => false,
         }
@@ -483,6 +507,18 @@ impl std::fmt::Display for Probleme {
                 write!(f, "ennemis jurés du rôdeur : {choisis} choisi(s) sur {attendus}")
             }
             Probleme::EnnemiJureInconnu(e) => write!(f, "ennemi juré inconnu : {e}"),
+            Probleme::EnvironnementsAChoisir { attendus, choisis } => write!(
+                f,
+                "environnements de prédilection : {choisis} choisi(s) sur {attendus}"
+            ),
+            Probleme::AugmentationsEnvironnementsAChoisir { attendus, choisis } => write!(
+                f,
+                "environnements de prédilection : {choisis} augmentation(s) de +2 choisie(s) sur {attendus}"
+            ),
+            Probleme::EnvironnementInconnu(e) => write!(f, "environnement de prédilection inconnu : {e}"),
+            Probleme::EnvironnementEnDouble(e) => write!(f, "environnement déjà choisi : {e}"),
+            Probleme::PacteDuChasseurManquant => write!(f, "pacte du chasseur à choisir (niveau 4)"),
+            Probleme::PacteDuChasseurInconnu(p) => write!(f, "pacte du chasseur inconnu : {p}"),
             Probleme::EnnemiJureEnDouble(e) => write!(f, "ennemi juré déjà choisi : {e}"),
             Probleme::AugmentationsEnnemisAChoisir { attendus, choisis } => write!(
                 f,

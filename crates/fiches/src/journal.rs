@@ -78,6 +78,12 @@ pub enum EvenementFiche {
     EnnemiJureChoisi(String),
     /// +2 au bonus contre un ennemi juré déjà choisi (dès le niveau 5).
     EnnemiJureAugmente(String),
+    /// Environnement de prédilection du rôdeur choisi.
+    EnvironnementChoisi(String),
+    /// +2 au bonus contre un environnement de prédilection déjà choisi (dès le niveau 8).
+    EnvironnementAugmente(String),
+    /// Pacte du chasseur du rôdeur (choix définitif).
+    PacteDuChasseurChoisi(String),
     /// Pouvoir de rage du barbare choisi.
     PouvoirRageChoisi(String),
     /// Le barbare entre en rage (refusé s'il est fatigué ou épuisé).
@@ -196,6 +202,13 @@ impl EvenementFiche {
             EvenementFiche::TalentRoublardChoisi(t) => format!("Talent de roublard : {t}"),
             EvenementFiche::EnnemiJureChoisi(e) => format!("Ennemi juré : {e}"),
             EvenementFiche::EnnemiJureAugmente(e) => format!("Ennemi juré, bonus +2 : {e}"),
+            EvenementFiche::EnvironnementChoisi(e) => {
+                format!("Environnement de prédilection : {e}")
+            }
+            EvenementFiche::EnvironnementAugmente(e) => {
+                format!("Environnement de prédilection, bonus +2 : {e}")
+            }
+            EvenementFiche::PacteDuChasseurChoisi(p) => format!("Pacte du chasseur : {p}"),
             EvenementFiche::PouvoirRageChoisi(p) => format!("Pouvoir de rage : {p}"),
             EvenementFiche::RageCommencee => "Entrée en rage".to_string(),
             EvenementFiche::RageTerminee => "Fin de la rage".to_string(),
@@ -754,6 +767,19 @@ impl Journal {
                 EvenementFiche::EnnemiJureChoisi(e) => fiche.ennemis_jures.push(e.clone()),
                 EvenementFiche::EnnemiJureAugmente(e) => {
                     fiche.augmentations_ennemis.push(e.clone())
+                }
+                EvenementFiche::EnvironnementChoisi(e) => fiche.environnements.push(e.clone()),
+                EvenementFiche::EnvironnementAugmente(e) => {
+                    fiche.augmentations_environnements.push(e.clone());
+                }
+                EvenementFiche::PacteDuChasseurChoisi(p) => {
+                    if fiche.pacte_du_chasseur.is_some() {
+                        return Err(ErreurJournal::Choix {
+                            evenement: i,
+                            raison: "le pacte du chasseur ne se modifie pas".to_string(),
+                        });
+                    }
+                    fiche.pacte_du_chasseur = Some(p.clone());
                 }
                 EvenementFiche::PouvoirRageChoisi(p) => fiche.pouvoirs_rage.push(p.clone()),
                 EvenementFiche::RageCommencee => {

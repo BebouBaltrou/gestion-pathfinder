@@ -254,5 +254,40 @@
     ],
     "bonus_de_base": 2,
     "note": "Bonus de +2 de départ, augmentable de +2 à chaque nouveau choix. Les bonus de deux familles ennemies ne se cumulent pas."
+  },
+  "environnements_rodeur": {
+    "classe": "rodeur",
+    "source": "Manuel des joueurs (VF), Rôdeur, Environnements de prédilection (texte fourni par l’utilisateur)",
+    "choix_aux_niveaux": [
+      3,
+      8,
+      13,
+      18
+    ],
+    "types": [
+      "Aquatique (sur et sous la surface)",
+      "Désert (déserts de sable ou étendues désertiques)",
+      "Forêt (de conifères ou à feuilles caduques)",
+      "Froid (territoires enneigés ou gelés, glaciers et toundra)",
+      "Jungle",
+      "Marais",
+      "Montagnes (y compris les collines)",
+      "Plaines",
+      "Plans (choisir un plan autre que le plan Matériel)",
+      "Sous terre (grottes et complexes souterrains)",
+      "Urbain (bâtiments, rues et égouts)"
+    ],
+    "bonus_de_base": 2,
+    "note": "Bonus de +2 aux jets d’initiative et aux tests de Connaissances (géographie), Discrétion, Perception et Survie dans l’environnement. À chaque nouveau choix (niveau 8 puis tous les cinq niveaux), nouvel environnement et +2 sur l’un des environnements. Les bonus de plusieurs environnements ne se cumulent pas."
+  },
+  "pacte_du_chasseur": {
+    "classe": "rodeur",
+    "source": "Manuel des joueurs (VF), Rôdeur, Pacte du chasseur (texte fourni par l’utilisateur)",
+    "niveau": 4,
+    "formes": [
+      "lien avec les compagnons de chasse",
+      "compagnon animal"
+    ],
+    "note": "Choix définitif. Le choix de l’animal du compagnon n’est pas encore saisi."
   }
 }

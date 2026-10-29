@@ -578,6 +578,16 @@ pub struct ChoixClassesVue {
     /// Augmentations de +2 attendues (une de moins que de choix d’ennemi) et déjà choisies.
     pub augmentations_attendues: u32,
     pub augmentations_ennemis: Vec<String>,
+    /// Environnements de prédilection du rôdeur : attendus, choisis, choix possibles, augmentations.
+    pub environnements_attendus: u32,
+    pub environnements: Vec<String>,
+    pub types_environnements: Vec<String>,
+    pub augmentations_environnements_attendues: u32,
+    pub augmentations_environnements: Vec<String>,
+    /// Pacte du chasseur : à choisir (niveau 4 atteint), choisi, formes possibles.
+    pub pacte_du_chasseur_a_choisir: bool,
+    pub pacte_du_chasseur: Option<String>,
+    pub formes_du_pacte: Vec<String>,
     /// Nombre de pouvoirs de rage attendus au niveau de barbare actuel.
     pub rage_attendus: u32,
     pub rage_choisis: Vec<PouvoirRageVue>,
@@ -665,6 +675,17 @@ fn choix_classes(r: &Referentiel, f: &Fiche) -> ChoixClassesVue {
             .nombre_ennemis_jures(f.niveau_de_classe("rodeur"))
             .saturating_sub(1),
         augmentations_ennemis: f.augmentations_ennemis.clone(),
+        environnements_attendus: c.nombre_environnements(f.niveau_de_classe("rodeur")),
+        environnements: f.environnements.clone(),
+        types_environnements: c.environnements_rodeur.types.clone(),
+        augmentations_environnements_attendues: c
+            .nombre_environnements(f.niveau_de_classe("rodeur"))
+            .saturating_sub(1),
+        augmentations_environnements: f.augmentations_environnements.clone(),
+        pacte_du_chasseur_a_choisir: c.pacte_du_chasseur.niveau > 0
+            && f.niveau_de_classe("rodeur") >= c.pacte_du_chasseur.niveau,
+        pacte_du_chasseur: f.pacte_du_chasseur.clone(),
+        formes_du_pacte: c.pacte_du_chasseur.formes.clone(),
     }
 }
 
@@ -2262,6 +2283,9 @@ mod tests_pretre {
             talents_roublard: vec![],
             ennemis_jures: vec![],
             augmentations_ennemis: vec![],
+            environnements: vec![],
+            augmentations_environnements: vec![],
+            pacte_du_chasseur: None,
             pouvoirs_rage: vec![],
             en_rage: false,
             rounds_de_rage: 0,

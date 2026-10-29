@@ -11,6 +11,21 @@ pub struct ChoixDeClasse {
     pub grace_paladin: GracePaladin,
     pub talents_roublard: TalentsRoublard,
     pub ennemis_jures_rodeur: EnnemisJures,
+    pub environnements_rodeur: EnvironnementsRodeur,
+    pub pacte_du_chasseur: PacteDuChasseur,
+}
+
+#[derive(Debug, Clone, Default, Deserialize)]
+pub struct EnvironnementsRodeur {
+    pub choix_aux_niveaux: Vec<u32>,
+    pub types: Vec<String>,
+    pub bonus_de_base: i32,
+}
+
+#[derive(Debug, Clone, Default, Deserialize)]
+pub struct PacteDuChasseur {
+    pub niveau: u32,
+    pub formes: Vec<String>,
 }
 
 #[derive(Debug, Clone, Default, Deserialize)]
@@ -101,6 +116,15 @@ impl ChoixDeClasse {
             return 0;
         }
         (niveau - t.premier_niveau_de_maitre) / t.un_tous_les + 1
+    }
+
+    /// Nombre de choix d'environnement de prédilection acquis au niveau de rôdeur `niveau`.
+    pub fn nombre_environnements(&self, niveau: u32) -> u32 {
+        self.environnements_rodeur
+            .choix_aux_niveaux
+            .iter()
+            .filter(|n| **n <= niveau)
+            .count() as u32
     }
 
     /// Vrai si le talent est un talent de maître roublard.
@@ -248,6 +272,41 @@ impl Fiche {
         for e in &self.augmentations_ennemis {
             if !self.ennemis_jures.contains(e) {
                 p.push(Probleme::EnnemiJureInconnu(e.clone()));
+            }
+        }
+
+        let niveau_rodeur = self.niveau_de_classe("rodeur");
+        let attendus = c.nombre_environnements(niveau_rodeur);
+        let choisis = self.environnements.len() as u32;
+        if attendus != choisis {
+            p.push(Probleme::EnvironnementsAChoisir { attendus, choisis });
+        }
+        for (i, e) in self.environnements.iter().enumerate() {
+            if !c.environnements_rodeur.types.contains(e) {
+                p.push(Probleme::EnvironnementInconnu(e.clone()));
+            }
+            if self.environnements[..i].contains(e) {
+                p.push(Probleme::EnvironnementEnDouble(e.clone()));
+            }
+        }
+        let attendus = attendus.saturating_sub(1);
+        let choisis = self.augmentations_environnements.len() as u32;
+        if attendus != choisis {
+            p.push(Probleme::AugmentationsEnvironnementsAChoisir { attendus, choisis });
+        }
+        for e in &self.augmentations_environnements {
+            if !self.environnements.contains(e) {
+                p.push(Probleme::EnvironnementInconnu(e.clone()));
+            }
+        }
+        let pacte = &c.pacte_du_chasseur;
+        if pacte.niveau > 0 && niveau_rodeur >= pacte.niveau {
+            match &self.pacte_du_chasseur {
+                None => p.push(Probleme::PacteDuChasseurManquant),
+                Some(forme) if !pacte.formes.contains(forme) => {
+                    p.push(Probleme::PacteDuChasseurInconnu(forme.clone()));
+                }
+                Some(_) => {}
             }
         }
 
@@ -551,6 +610,23 @@ pub fn capacites_chiffrees(fiche: &Fiche) -> Vec<String> {
     }
     if !fiche.ennemis_jures.is_empty() {
         l.push("Ennemis jurés : si une créature relève de deux familles, seul le bonus le plus élevé s'applique".to_string());
+    }
+    for (i, e) in fiche.environnements.iter().enumerate() {
+        if fiche.environnements[..i].contains(e) {
+            continue;
+        }
+        let augmentations = fiche
+            .augmentations_environnements
+            .iter()
+            .filter(|a| *a == e)
+            .count() as u32;
+        l.push(format!(
+            "Environnement de prédilection ({e}) : +{} aux jets d'initiative et aux tests de Connaissances (géographie), Discrétion, Perception et Survie ; aucune trace laissée",
+            2 + 2 * augmentations
+        ));
+    }
+    if let Some(forme) = &fiche.pacte_du_chasseur {
+        l.push(format!("Pacte du chasseur : {forme}"));
     }
     let roublard = fiche.niveau_de_classe("roublard");
     if roublard >= 1 {

@@ -458,6 +458,46 @@ function ChoixClasses({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => v
           )}
         </div>
       )}
+      {c.environnementsAttendus > 0 && (
+        <div className="carte">
+          <p>Environnements de prédilection ({c.environnements.length}/{c.environnementsAttendus}) : {c.environnements.join(", ") || "aucun"}</p>
+          {c.environnements.length < c.environnementsAttendus && (
+            <div className="grille-boutons">
+              {c.typesEnvironnements.filter((e) => !c.environnements.includes(e)).map((e) => (
+                <button key={e} className="bouton" onClick={() => agir({ EnvironnementChoisi: e })}>{e}</button>
+              ))}
+            </div>
+          )}
+          {c.augmentationsEnvironnementsAttendues > 0 && (
+            <>
+              <p>Augmentations de +2 ({c.augmentationsEnvironnements.length}/{c.augmentationsEnvironnementsAttendues}){c.augmentationsEnvironnements.length > 0 && " : " + c.augmentationsEnvironnements.join(", ")}</p>
+              {c.augmentationsEnvironnements.length < c.augmentationsEnvironnementsAttendues && (
+                <div className="grille-boutons">
+                  {c.environnements.map((e) => (
+                    <button key={e} className="bouton" onClick={() => agir({ EnvironnementAugmente: e })}>+2 pour {e}</button>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      )}
+      {c.pacteDuChasseurAChoisir && (
+        <div className="carte">
+          {c.pacteDuChasseur ? (
+            <p>Pacte du chasseur : {c.pacteDuChasseur}</p>
+          ) : (
+            <>
+              <p>Pacte du chasseur (choix définitif) :</p>
+              <div className="grille-boutons">
+                {c.formesDuPacte.map((p) => (
+                  <button key={p} className="bouton" onClick={() => agir({ PacteDuChasseurChoisi: p })}>{p}</button>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      )}
       {c.ennemisAttendus > 0 && (
         <div className="carte">
           <p>Ennemis jurés ({c.ennemisJures.length}/{c.ennemisAttendus}) : {c.ennemisJures.join(", ") || "aucun"}</p>

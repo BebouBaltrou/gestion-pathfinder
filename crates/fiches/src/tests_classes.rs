@@ -50,6 +50,9 @@ fn pretre(niveau: u32, sagesse: i32) -> Fiche {
         talents_roublard: vec![],
         ennemis_jures: vec![],
         augmentations_ennemis: vec![],
+        environnements: vec![],
+        augmentations_environnements: vec![],
+        pacte_du_chasseur: None,
         pouvoirs_rage: vec![],
         en_rage: false,
         rounds_de_rage: 0,
@@ -895,6 +898,9 @@ fn barbare(niveau: u32, constitution: i32) -> Fiche {
         talents_roublard: vec![],
         ennemis_jures: vec![],
         augmentations_ennemis: vec![],
+        environnements: vec![],
+        augmentations_environnements: vec![],
+        pacte_du_chasseur: None,
         pouvoirs_rage: vec![],
         en_rage: false,
         rounds_de_rage: 0,
@@ -1764,6 +1770,9 @@ fn chaque_nouvel_ennemi_juré_dès_le_niveau_5_s_accompagne_d_une_augmentation_d
         choisis: 0
     }));
     f.augmentations_ennemis = vec!["Mort-vivant".into()];
+    // Dès le niveau 5, le rôdeur a aussi son premier environnement (niveau 3) et son pacte (niveau 4).
+    f.environnements = vec!["Jungle".into()];
+    f.pacte_du_chasseur = Some("compagnon animal".into());
     assert!(f.problemes_choix_de_classe(&r).is_empty());
     let l = crate::choix_classe::capacites_chiffrees(&f);
     assert!(l
@@ -1990,4 +1999,63 @@ fn entrainement_aux_armures_du_guerrier_et_valeurs_du_barbare_et_du_rodeur() {
     assert!(l
         .iter()
         .any(|x| x.starts_with("Proie du chasseur : bonus d'intuition de +2")));
+}
+
+#[test]
+fn le_rodeur_choisit_ses_environnements_et_son_pacte_du_chasseur() {
+    let r = Referentiel::core();
+    let c = &r.choix;
+    assert_eq!(
+        [2, 3, 7, 8, 13, 18, 20].map(|n| c.nombre_environnements(n)),
+        [0, 1, 1, 2, 3, 4, 4]
+    );
+    // Niveau 3 : un environnement, pas d'augmentation, pas encore de pacte.
+    let mut f = de_classe("rodeur", 3);
+    f.ennemis_jures = vec!["Animal".into()];
+    assert!(f
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::EnvironnementsAChoisir {
+            attendus: 1,
+            choisis: 0
+        }));
+    f.environnements = vec!["Jungle".into()];
+    assert!(f.problemes_choix_de_classe(&r).is_empty());
+    // Niveau 8 : deux environnements, une augmentation ; le pacte (niveau 4) est requis.
+    let mut f = de_classe("rodeur", 8);
+    f.ennemis_jures = vec!["Animal".into(), "Dragon".into()];
+    f.augmentations_ennemis = vec!["Animal".into()];
+    f.environnements = vec!["Jungle".into(), "Marais".into()];
+    f.augmentations_environnements = vec!["Jungle".into()];
+    let p = f.problemes_choix_de_classe(&r);
+    assert_eq!(p, vec![Probleme::PacteDuChasseurManquant]);
+    f.pacte_du_chasseur = Some("compagnon animal".into());
+    assert!(f.problemes_choix_de_classe(&r).is_empty());
+    f.pacte_du_chasseur = Some("autre".into());
+    assert!(f
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::PacteDuChasseurInconnu("autre".into())));
+    let l = crate::choix_classe::capacites_chiffrees(&f);
+    assert!(l
+        .iter()
+        .any(|x| x.starts_with("Environnement de prédilection (Jungle) : +4")));
+    assert!(l
+        .iter()
+        .any(|x| x.starts_with("Environnement de prédilection (Marais) : +2")));
+    // Le pacte ne se change pas une fois choisi.
+    let mut j = Journal::nouveau(de_classe("rodeur", 4));
+    let regles = ReglesFiche::default();
+    assert!(j
+        .ajouter(
+            EvenementFiche::PacteDuChasseurChoisi("compagnon animal".into()),
+            &r,
+            &regles
+        )
+        .is_ok());
+    assert!(j
+        .ajouter(
+            EvenementFiche::PacteDuChasseurChoisi("lien avec les compagnons de chasse".into()),
+            &r,
+            &regles
+        )
+        .is_err());
 }

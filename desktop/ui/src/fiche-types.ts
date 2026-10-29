@@ -214,6 +214,14 @@ export type ChoixClassesVue = {
   typesEnnemis: string[];
   augmentationsAttendues: number;
   augmentationsEnnemis: string[];
+  environnementsAttendus: number;
+  environnements: string[];
+  typesEnvironnements: string[];
+  augmentationsEnvironnementsAttendues: number;
+  augmentationsEnvironnements: string[];
+  pacteDuChasseurAChoisir: boolean;
+  pacteDuChasseur: string | null;
+  formesDuPacte: string[];
   rageAttendus: number;
   rageChoisis: PouvoirRageVue[];
   /** Pouvoirs de rage accessibles, pas encore pris. `mjra` : règles avancées (APG). */
@@ -497,6 +505,9 @@ export type EvenementFiche =
   | { TalentRoublardChoisi: string }
   | { EnnemiJureChoisi: string }
   | { EnnemiJureAugmente: string }
+  | { EnvironnementChoisi: string }
+  | { EnvironnementAugmente: string }
+  | { PacteDuChasseurChoisi: string }
   | { PouvoirRageChoisi: string }
   | "RageCommencee"
   | "RageTerminee"
