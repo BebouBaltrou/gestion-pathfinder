@@ -325,6 +325,13 @@
         "sorts_connus": [],
         "domaine": false
       }
-    ]
-  }
+    ],
+    "textes_capacites": {
+      "esquive totale": "L'agilité phénoménale d'un roublard de niveau 2 lui permet d'esquiver les attaques magiques ou inhabituelles. S'il réussit un jet de Réflexes contre une attaque dont les dégâts devraient être réduits de moitié en cas de jet de Réflexes réussi, il évite l'attaque et ne subit pas le moindre dégât. Le roublard bénéficie de cet avantage uniquement s'il porte une armure légère ou aucune armure. Un roublard sans défense ne bénéficie pas des avantages de l'esquive totale.",
+      "esquive instinctive": "Au niveau 2, le roublard gagne la capacité de réagir aux dangers avant même que ses sens les perçoivent. Il conserve son bonus de Dextérité à la classe d'armure lorsqu'il est pris au dépourvu, et ce même s'il est attaqué par un adversaire invisible. La règle normale s'applique cependant lorsqu'il est immobilisé : dans ce cas, il perd son bonus de Dextérité à la classe d'armure. Un roublard disposant de cette capacité perd également son bonus de Dextérité à la classe d'armure si un adversaire parvient à réaliser une feinte en combat à son encontre (voir le Chapitre 8). Si un roublard possède déjà la capacité d'esquive instinctive (grâce à une autre classe par exemple), il gagne à la place la capacité d'esquive instinctive supérieure (voir plus bas).",
+      "esquive instinctive supérieure": "À partir du niveau 8, un roublard ne peut plus être pris en tenaille. Un autre roublard ne peut donc pas utiliser ses capacités pour lui porter une attaque sournoise en le prenant en tenaille, à moins de posséder au moins quatre niveaux de roublard de plus que lui. Si le personnage dispose déjà de la capacité d'esquive instinctive (voir plus haut) grâce à une autre classe, les niveaux de toutes les classes qui lui donnent cette capacité se cumulent pour déterminer le nombre de niveaux de roublard qu'un attaquant doit posséder pour pouvoir le prendre en tenaille.",
+      "coup de maître": "Lorsque le roublard atteint le niveau 20, ses attaques sournoises deviennent incroyablement létales. Chaque fois qu'il inflige des dégâts d'attaque sournoise, il peut choisir un des trois effets suivants : la cible peut être endormie pendant 1d4 heures, paralysée pendant 2d6 rounds, ou tuée. Quel que soit l'effet choisi, la cible bénéficie d'un jet de Vigueur pour annuler l'effet additionnel. Le DD de ce jet de sauvegarde est égal à 10 + la moitié du niveau du roublard + le modificateur d'Intelligence du roublard. Une créature prise pour cible par un coup de maître ne peut plus être affectée par un autre coup de maître du même roublard au cours des vingt-quatre heures qui suivent, et ceci qu'elle ait réussi son jet de sauvegarde ou non. Les créatures qui sont immunisées aux attaques sournoises le sont également aux coups de maître."
+    }
+  },
+  "textes_capacites_source": "Manuel des joueurs (VF), descriptif de la classe : textes fournis par l’utilisateur (29/10/2026)."
 }

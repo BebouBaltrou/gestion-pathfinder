@@ -514,19 +514,19 @@ pub fn capacites_chiffrees(fiche: &Fiche) -> Vec<String> {
     if barde >= 1 {
         let b = 1 + (barde + 1) / 6;
         l.push(format!(
-            "Inspiration vaillante : +{b} aux jets d'attaque et de dégâts avec des armes (compétence), +{b} aux jets de sauvegarde contre la terreur et le charme (moral)"
+            "Inspiration vaillante : +{b} aux jets d'attaque et de dégâts avec des armes (aptitude), +{b} aux jets de sauvegarde contre la terreur et le charme (moral)"
         ));
     }
     if barde >= 3 {
         let b = 2 + (barde - 3) / 4;
         l.push(format!(
-            "Inspiration talentueuse : +{b} aux tests d'une compétence au choix d'un allié (compétence)"
+            "Inspiration talentueuse : +{b} aux tests d'une compétence au choix d'un allié (aptitude)"
         ));
     }
     if barde >= 9 {
         let cibles = (1 + (barde - 9) / 3).min(4);
         l.push(format!(
-            "Inspiration glorieuse : {cibles} cible(s), 2 DV supplémentaires (d10), +2 aux jets d'attaque et +1 aux jets de Vigueur (compétence)"
+            "Inspiration glorieuse : {cibles} cible(s), 2 DV supplémentaires (d10), +2 aux jets d'attaque et +1 aux jets de Vigueur (aptitude)"
         ));
     }
     if barde >= 15 {

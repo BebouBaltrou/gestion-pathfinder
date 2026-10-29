@@ -45,37 +45,59 @@
         "a_partir_du": 2,
         "style": "tir_a_distance",
         "source": "Manuel des joueurs (VF), Rôdeur, p. 82",
-        "dons_en": ["Point-Blank Shot", "Far Shot", "Precise Shot", "Rapid Shot"]
+        "dons_en": [
+          "Point-Blank Shot",
+          "Far Shot",
+          "Precise Shot",
+          "Rapid Shot"
+        ]
       },
       {
         "a_partir_du": 6,
         "style": "tir_a_distance",
         "source": "Manuel des joueurs (VF), Rôdeur, p. 82",
-        "dons_en": ["Manyshot", "Improved Precise Shot"]
+        "dons_en": [
+          "Manyshot",
+          "Improved Precise Shot"
+        ]
       },
       {
         "a_partir_du": 10,
         "style": "tir_a_distance",
         "source": "Manuel des joueurs (VF), Rôdeur, p. 82",
-        "dons_en": ["Shot on the Run", "Pinpoint Targeting"]
+        "dons_en": [
+          "Shot on the Run",
+          "Pinpoint Targeting"
+        ]
       },
       {
         "a_partir_du": 2,
         "style": "deux_armes",
         "source": "Manuel des joueurs (VF), Rôdeur, p. 82",
-        "dons_en": ["Quick Draw", "Two-Weapon Fighting", "Double Slice", "Improved Shield Bash"]
+        "dons_en": [
+          "Quick Draw",
+          "Two-Weapon Fighting",
+          "Double Slice",
+          "Improved Shield Bash"
+        ]
       },
       {
         "a_partir_du": 6,
         "style": "deux_armes",
         "source": "Manuel des joueurs (VF), Rôdeur, p. 82",
-        "dons_en": ["Two-Weapon Defense", "Improved Two-Weapon Fighting"]
+        "dons_en": [
+          "Two-Weapon Defense",
+          "Improved Two-Weapon Fighting"
+        ]
       },
       {
         "a_partir_du": 10,
         "style": "deux_armes",
         "source": "Manuel des joueurs (VF), Rôdeur, p. 82",
-        "dons_en": ["Two-Weapon Rend", "Greater Two-Weapon Fighting"]
+        "dons_en": [
+          "Two-Weapon Rend",
+          "Greater Two-Weapon Fighting"
+        ]
       }
     ],
     "effets": [],
@@ -438,6 +460,23 @@
         "sorts_connus": [],
         "domaine": false
       }
-    ]
-  }
+    ],
+    "textes_capacites": {
+      "pistage": "Le rôdeur ajoute la moitié de son niveau (au minimum +1) aux tests de Survie pour suivre des traces.",
+      "empathie sauvage": "Un rôdeur peut améliorer l'attitude d'un animal. Cette aptitude suit les mêmes règles que les tests de Diplomatie visant à modifier l'attitude d'une personne (voir le Chapitre 4). Le résultat d'un test d'empathie sauvage est déterminé par 1d20 + le niveau du rôdeur + son modificateur de Charisme. L'attitude initiale des animaux domestiques est l'indifférence, tandis que les animaux sauvages sont généralement inamicaux. Pour utiliser l'empathie sauvage, le rôdeur et l'animal doivent être à moins de 9 m de distance dans des conditions de visibilité normales. Il faut en moyenne une minute pour influencer un animal de cette façon, mais, comme pour la diplomatie, cela peut parfois prendre plus longtemps ou être plus rapide. Un rôdeur peut également utiliser cette aptitude pour influencer une créature magique dont la valeur d'Intelligence est de 1 ou 2, mais avec un malus de -4 sur son test.",
+      "endurance": "Un rôdeur de niveau 3 reçoit gratuitement le don Endurance en tant que don supplémentaire.",
+      "environnement de prédilection": "Au niveau 3, un rôdeur choisit un type d'environnement sur la table des environnements de prédilection du rôdeur. Il bénéficie d'un bonus de +2 aux jets d'initiative et aux tests de Connaissances (géographie), Discrétion, Perception et Survie lorsqu'il se trouve dans cet environnement. De plus, lorsqu'il voyage dans son environnement de prédilection, le rôdeur ne laisse aucune trace et ne peut être suivi (il peut cependant laisser des traces s'il le désire).Au niveau 8 et tous les cinq niveaux par la suite, le rôdeur peut choisir un nouvel environnement de prédilection. En même temps, il peut augmenter de +2 le bonus dont il bénéficie dans l'un de ses environnements de prédilection (y compris celui qu'il vient de choisir, s'il le désire). Si l'endroit où le rôdeur se trouve entre dans plusieurs catégories d'environnements de prédilection, les bonus ne se cumulent pas : le rôdeur ne bénéficie que du bonus le plus élevé. Environnements de prédilection du rôdeur Aquatique (sur et sous la surface) Désert (déserts de sable ou étendues désertiques) Forêt (de conifères ou à feuilles caduques) Froid (territoires enneigés ou gelés, glaciers et toundra) Jungle Marais Montagnes (y compris les collines) Plaines Plans (choisir un plan autre que le plan Matériel) Sous terre (grottes et complexes souterrains) Urbain (bâtiments, rues et égouts)",
+      "pacte du chasseur": "Au niveau 4, un lien se tisse entre le rôdeur et ses compagnons de chasse. Ce lien peut prendre l'une des deux formes suivantes. Une fois qu'une forme a été choisie, cette décision ne peut plus être modifiée. La première forme est un lien entre le rôdeur et ses compagnons qui lui permet, en utilisant une action de mouvement, de faire bénéficier tous ses alliés distants de 9 m ou moins et qui peuvent le voir ou l'entendre de la moitié de son bonus d'ennemi juré contre une cible unique (appartenant au type adéquat). Ce bonus persiste pendant un nombre de rounds égal au modificateur de Sagesse du rôdeur (au minimum 1 round) et ne se cumule pas avec les bonus d'ennemis jurés que ses alliés pourraient posséder (ils ne bénéficient que du bonus le plus élevé). Sous sa seconde forme, le pacte permet au rôdeur de tisser un lien étroit avec un compagnon animal. Un rôdeur qui opte pour cette forme doit choisir un animal dans la liste suivante : blaireau, chameau, cheval (lourd ou léger), chien, loup, oiseau, petit félin, poney, rat sanguinaire ou serpent (vipère ou serpent constricteur). Si la campagne se déroule en grande partie ou entièrement en milieu aquatique, le rôdeur peut également choisir un requin. Cet animal est un compagnon loyal qui accompagne le rôdeur au cours de ses aventures et l'aide au mieux de ses possibilités. Le compagnon animal partage les bonus d'ennemis jurés et d'environnements de prédilection du rôdeur. Le compagnon suit les mêmes règles que les compagnons animaux des druides (voir la capacité de druide de pacte avec la nature), avec un niveau de druide effectif égal au niveau du rôdeur -3.",
+      "sorts": "Dès le niveau 4, un rôdeur peut lancer un petit nombre de sorts divins appartenant à la liste de sorts de rôdeur présentée dans le Chapitre 10. Un rôdeur doit choisir et préparer ses sorts à l'avance. Pour préparer ou lancer un sort, un rôdeur doit avoir une valeur de Sagesse au moins égale à 10 + le niveau du sort. Le DD des jets de sauvegarde contre les sorts du rôdeur est égal à 10 + le niveau du sort + le modificateur de Sagesse du rôdeur. Comme les autres lanceurs de sorts, le rôdeur ne peut lancer qu'un nombre de sorts donné de chaque niveau chaque jour. Son quota de sorts quotidiens est indiqué dans la Table 3‑15. En plus de cela, il reçoit des sorts en bonus si sa valeur de Sagesse est suffisamment élevée (voir la Table 1‑3). Quand la Table 3‑12 indique que le rôdeur peut lancer 0 sort d'un niveau de sort par jour, il ne dispose, pour ce niveau de sorts, que des sorts en bonus que peut lui accorder une Sagesse élevée. Chaque jour, le rôdeur doit passer une heure à méditer afin de renouveler son quota journalier de sorts. Le rôdeur peut préparer et lancer n'importe quel sort de la liste des sorts de rôdeur, pour autant qu'il puisse lancer des sorts de ce niveau. Il doit cependant choisir quels sorts préparer au cours de sa méditation quotidienne. Jusqu'au niveau 3, le rôdeur n'a pas de niveau de lanceur de sorts. À partir du niveau 4, son niveau de lanceur de sorts est égal à son niveau de rôdeur -3.",
+      "pistage accéléré": "Lorsqu'un rôdeur de niveau 8 suit une piste, il peut se déplacer à vitesse normale sans subir le malus de -5 sur ses tests de Survie. De plus, il ne subit qu'un malus de -10 (au lieu de -20) sur ses tests de Survie lorsqu'il suit une piste en se déplaçant au double de sa vitesse.",
+      "esquive totale": "L'agilité phénoménale d'un rôdeur de niveau 9 lui permet d'esquiver les attaques magiques ou inhabituelles. S'il réussit un jet de Réflexes contre une attaque dont les dégâts devraient être réduits de moitié en cas de jet de Réflexes réussi, il évite l'attaque et ne subit pas le moindre dégât. Le rôdeur bénéficie de cet avantage uniquement s'il porte une armure légère ou aucune armure. Un rôdeur sans défense ne bénéficie pas des avantages de l'esquive totale.",
+      "proie du chasseur": "Au niveau 11, un rôdeur peut choisir une cible dans sa ligne de mire et la désigner comme proie en utilisant une action simple. Chaque fois qu'il suit les traces de sa proie, le rôdeur peut faire 10 sur ses tests de Survie tout en se déplaçant à vitesse normale sans pour autant subir de pénalité. De plus, il reçoit un bonus d'intuition de +2 aux jets d'attaque contre sa cible et toutes les possibilités de critique sont automatiquement confirmées. Le rôdeur ne peut avoir qu'une seule cible à la fois et celle-ci doit appartenir à une de ses catégories d'ennemis jurés. Il peut mettre fin à cet effet à n'importe quel moment (par une action libre) mais il doit alors attendre vingtquatre heures avant de désigner une nouvelle proie. Si le rôdeur a la preuve que sa cible est morte, ce délai d'attente est réduit à une heure.",
+      "camouflage": "Un rôdeur de niveau 12 ou plus peut utiliser la compétence Discrétion même s'il ne bénéficie pas d'un abri ou de camouflage, à condition de se trouver dans un de ses environnements de prédilection.",
+      "esquive surnaturelle": "Au niveau 16, l'esquive totale du rôdeur s'améliore. Quand il est victime d'une attaque qui autorise un jet de Réflexes pour réduire les dégâts de moitié, il ne subit aucun dégât en cas de jet de sauvegarde réussi mais, en plus, il ne subit que la moitié des dégâts en cas d'échec du jet de sauvegarde. Un rôdeur sans défense perd les avantages de l'esquive surnaturelle.",
+      "discrétion totale": "Un rôdeur de niveau 17 ou plus se trouvant dans un de ses environnements de prédilection peut utiliser la compétence Discrétion même s'il est observé.",
+      "proie du maître chasseur": "Au niveau 19, le rôdeur améliore sa capacité à chasser sa proie. Une action libre lui suffit désormais pour désigner une proie et il peut faire 20 aux tests de Survie pour la pister tout en se déplacement à sa vitesse normale sans pour autant subir de pénalité. De plus, son bonus d'intuition aux jets d'attaque passe à +4. Si la cible est tuée ou si le rôdeur décide d'en changer, il ne doit plus attendre que dix minutes avant de pouvoir sélectionner une nouvelle cible.",
+      "maître chasseur": "Un rôdeur de niveau 20 devient un maître chasseur. Lorsqu'il suit une piste, il peut toujours se déplacer à sa vitesse normale sans subir de pénalité aux tests de Survie. En utilisant une action simple, il peut porter une attaque unique contre un ennemi juré en utilisant son bonus d'attaque maximal. Si cette attaque touche, elle inflige des dégâts normaux et la cible doit réussir un jet de Vigueur pour éviter de mourir. Le DD de ce jet de sauvegarde est de 10 + la moitié du niveau du rôdeur + le modificateur de Sagesse du rôdeur. Plutôt que de tuer la cible en cas d'échec du jet de sauvegarde, le rôdeur peut choisir de lui infliger autant de points de dégâts non-létaux que celle-ci possède de points de vie. Un jet de sauvegarde réussi annule ces dégâts. Le rôdeur peut utiliser cette capacité une fois par jour par catégorie d'ennemis jurés qu'il possède, mais jamais deux fois contre la même créature au cours d'une période de vingt-quatre heures."
+    }
+  },
+  "textes_capacites_source": "Manuel des joueurs (VF), descriptif de la classe : textes fournis par l’utilisateur (29/10/2026)."
 }

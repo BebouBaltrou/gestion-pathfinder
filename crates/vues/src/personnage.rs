@@ -798,13 +798,15 @@ pub fn fiche_complete(
     let mut capacites = Vec::new();
     if let Some(c) = classe_principale {
         let nc = f.niveau_de_classe(&c.id) as usize;
+        // Le texte du livre n'est donné qu'à la première apparition d'une capacité qui progresse.
+        let mut deja = std::collections::HashSet::new();
         for l in c.progression.iter().take(nc) {
             for cap in t.capacites_de_niveau(&l.special_en) {
                 // Texte du livre quand la classe en donne un (« forme animale (2/jour) » → « forme animale »).
                 let cle = cle_capacite(&cap);
                 let mut texte = match c.textes_capacites.get(&cle) {
-                    Some(desc) => format!("{cap} — {desc}"),
-                    None => cap,
+                    Some(desc) if deja.insert(cle.clone()) => format!("{cap} — {desc}"),
+                    _ => cap,
                 };
                 // Empathie sauvage : 1d20 + niveau de druide + modificateur de Charisme.
                 if cle == "empathie sauvage" {
@@ -1568,15 +1570,19 @@ fn cle_capacite(cap: &str) -> String {
     if let Some(i) = s.find(" (") {
         s.truncate(i);
     }
-    let mots: Vec<&str> = s.split(' ').collect();
-    if mots.len() > 1
+    // On retire les valeurs de fin (« +1 », « 2/jour », « 1d6 », « 6 m », « 1/-- »).
+    let mut mots: Vec<&str> = s.split(' ').collect();
+    while mots.len() > 1
         && mots.last().is_some_and(|m| {
-            m.contains('d') && m.chars().next().is_some_and(|c| c.is_ascii_digit())
+            *m == "m"
+                || m.chars()
+                    .next()
+                    .is_some_and(|c| c == '+' || c.is_ascii_digit())
         })
     {
-        return mots[..mots.len() - 1].join(" ");
+        mots.pop();
     }
-    s.trim().to_string()
+    mots.join(" ").trim().to_string()
 }
 
 pub fn catalogue_creation() -> CatalogueCreation {

@@ -1866,3 +1866,26 @@ fn magie_mineure_et_majeure_demandent_10_et_11_d_intelligence() {
             minimum: 10
         }));
 }
+
+#[test]
+fn les_textes_du_manuel_sont_ranges_par_capacite_de_classe() {
+    let r = Referentiel::core();
+    let texte = |classe: &str, cle: &str| {
+        r.classe(classe)
+            .and_then(|c| c.textes_capacites.get(cle))
+            .map(String::as_str)
+            .unwrap_or("")
+    };
+    assert!(texte("barbare", "rage de berserker").contains("4 + son modificateur de Constitution"));
+    assert!(texte("barbare", "pouvoir de rage").contains("tous les deux niveaux"));
+    assert!(texte("barde", "inspiration glorieuse").contains("2 dés de vie supplémentaires"));
+    assert!(texte("barde", "inspiration héroïque").contains("bonus de moral de +4"));
+    assert!(
+        texte("guerrier", "entraînement aux armes").contains("groupe d’armes")
+            || texte("guerrier", "entraînement aux armes").contains("groupe d'armes")
+    );
+    assert!(texte("moine", "réserve de ki").contains("moitié du niveau du moine"));
+    assert!(texte("paladin", "grâce").contains("Secoué"));
+    assert!(texte("rodeur", "environnement de prédilection").contains("+2"));
+    assert!(texte("roublard", "coup de maître").contains("endormie"));
+}
