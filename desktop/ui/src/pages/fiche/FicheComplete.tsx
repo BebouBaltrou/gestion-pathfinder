@@ -407,11 +407,20 @@ function ChoixClasses({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => v
       )}
       {c.rageAttendus > 0 && (
         <div className="carte">
-          <p>Pouvoirs de rage ({c.rageChoisis.length}/{c.rageAttendus}) : {c.rageChoisis.join(", ") || "aucun"}</p>
+          <p>Pouvoirs de rage ({c.rageChoisis.length}/{c.rageAttendus}){c.rageChoisis.length === 0 && " : aucun"}</p>
+          {c.rageChoisis.map((p) => (
+            <details key={p.nom}>
+              <summary>
+                {p.nom}
+                {p.mjra && <span className="badge" title="Règles avancées (MJRA)"> MJRA</span>}
+              </summary>
+              <p className="doux">{p.texte}</p>
+            </details>
+          ))}
           {c.rageChoisis.length < c.rageAttendus && (
             <div className="grille-boutons">
               {c.rageDisponibles.map((p) => (
-                <button key={p.nom} className="bouton" onClick={() => agir({ PouvoirRageChoisi: p.nom })}>
+                <button key={p.nom} className="bouton" title={p.texte} onClick={() => agir({ PouvoirRageChoisi: p.nom })}>
                   {p.nom}
                   {p.mjra && <span className="badge" title="Règles avancées (MJRA)"> MJRA</span>}
                 </button>

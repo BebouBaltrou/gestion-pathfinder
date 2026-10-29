@@ -573,7 +573,7 @@ pub struct ChoixClassesVue {
     pub types_ennemis: Vec<String>,
     /// Nombre de pouvoirs de rage attendus au niveau de barbare actuel.
     pub rage_attendus: u32,
-    pub rage_choisis: Vec<String>,
+    pub rage_choisis: Vec<PouvoirRageVue>,
     /// Pouvoirs de rage accessibles et pas encore pris. `mjra` : source APG (règles avancées).
     pub rage_disponibles: Vec<PouvoirRageVue>,
 }
@@ -582,6 +582,16 @@ pub struct ChoixClassesVue {
 pub struct PouvoirRageVue {
     pub nom: String,
     pub mjra: bool,
+    /// Texte du livre (vide s'il n'est pas saisi).
+    pub texte: String,
+}
+
+fn pouvoir_rage_vue(rage: &fiches::choix_classe::PouvoirsRage, nom: &str) -> PouvoirRageVue {
+    PouvoirRageVue {
+        nom: nom.to_string(),
+        mjra: rage.sources.get(nom).is_some_and(|s| s == "APG"),
+        texte: rage.textes.get(nom).cloned().unwrap_or_default(),
+    }
 }
 
 fn choix_classes(r: &Referentiel, f: &Fiche) -> ChoixClassesVue {
@@ -611,14 +621,15 @@ fn choix_classes(r: &Referentiel, f: &Fiche) -> ChoixClassesVue {
         .keys()
         .filter(|n| !f.pouvoirs_rage.contains(n))
         .filter(|n| rage.accessible(n, niveau_barbare, &f.pouvoirs_rage))
-        .map(|n| PouvoirRageVue {
-            nom: n.clone(),
-            mjra: rage.sources.get(n).is_some_and(|s| s == "APG"),
-        })
+        .map(|n| pouvoir_rage_vue(rage, n))
         .collect();
     ChoixClassesVue {
         rage_attendus: fiches::choix_classe::PouvoirsRage::attendus(niveau_barbare),
-        rage_choisis: f.pouvoirs_rage.clone(),
+        rage_choisis: f
+            .pouvoirs_rage
+            .iter()
+            .map(|n| pouvoir_rage_vue(rage, n))
+            .collect(),
         rage_disponibles,
         graces_attendues: c.nombre_graces(niveau_paladin),
         graces: f.graces.clone(),

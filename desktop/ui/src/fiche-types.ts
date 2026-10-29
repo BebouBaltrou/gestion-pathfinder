@@ -196,6 +196,9 @@ export type IdentiteVue = {
   compte: Somme;
 };
 
+/** Pouvoir de rage : nom, icône MJRA (règles avancées, APG) et texte du livre. */
+export type PouvoirRageVue = { nom: string; mjra: boolean; texte: string };
+
 /** Choix génériques des classes (grâces, talents de roublard, ennemis jurés). */
 export type ChoixClassesVue = {
   gracesAttendues: number;
@@ -207,9 +210,9 @@ export type ChoixClassesVue = {
   ennemisJures: string[];
   typesEnnemis: string[];
   rageAttendus: number;
-  rageChoisis: string[];
+  rageChoisis: PouvoirRageVue[];
   /** Pouvoirs de rage accessibles, pas encore pris. `mjra` : règles avancées (APG). */
-  rageDisponibles: { nom: string; mjra: boolean }[];
+  rageDisponibles: PouvoirRageVue[];
 };
 
 export type FicheVue = {

@@ -369,6 +369,7 @@ impl Referentiel {
             r.avec_rage(
                 include_str!("../../../data/core/pouvoirs_rage.json"),
                 include_str!("../../../data/core/pouvoirs_rage_prerequis.json"),
+                include_str!("../../../data/core/pouvoirs_rage_textes.json"),
             )
         })
         .and_then(|r| {
@@ -413,13 +414,14 @@ impl Referentiel {
         })
     }
 
-    /// Ajoute les pouvoirs de rage du barbare et leurs prérequis.
+    /// Ajoute les pouvoirs de rage du barbare, leurs prérequis et leurs textes.
     pub fn avec_rage(
         mut self,
         pouvoirs: &str,
         prerequis: &str,
+        textes: &str,
     ) -> Result<Referentiel, serde_json::Error> {
-        self.rage = crate::choix_classe::PouvoirsRage::depuis_json(pouvoirs, prerequis)?;
+        self.rage = crate::choix_classe::PouvoirsRage::depuis_json(pouvoirs, prerequis, textes)?;
         Ok(self)
     }
 

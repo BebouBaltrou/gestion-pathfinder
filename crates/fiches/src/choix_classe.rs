@@ -197,6 +197,8 @@ pub struct PouvoirsRage {
     /// Pouvoir issu d'un livre avancé : nom → source (`APG` = icône MJRA).
     pub sources: BTreeMap<String, String>,
     pub prerequis: BTreeMap<String, PrerequisPouvoir>,
+    /// Texte du livre de chaque pouvoir affiché.
+    pub textes: BTreeMap<String, String>,
 }
 
 #[derive(Debug, Clone, Default, Deserialize)]
@@ -220,14 +222,24 @@ struct NiveauRage {
 }
 
 #[derive(Deserialize)]
+struct FichierTextesRage {
+    textes: BTreeMap<String, String>,
+}
+
+#[derive(Deserialize)]
 struct FichierPrerequisRage {
     prerequis: BTreeMap<String, PrerequisPouvoir>,
 }
 
 impl PouvoirsRage {
-    pub fn depuis_json(pouvoirs: &str, prerequis: &str) -> Result<Self, serde_json::Error> {
+    pub fn depuis_json(
+        pouvoirs: &str,
+        prerequis: &str,
+        textes: &str,
+    ) -> Result<Self, serde_json::Error> {
         let t: FichierPouvoirsRage = serde_json::from_str(pouvoirs)?;
         let p: FichierPrerequisRage = serde_json::from_str(prerequis)?;
+        let x: FichierTextesRage = serde_json::from_str(textes)?;
         let mut niveau_de_table = BTreeMap::new();
         for n in &t.niveaux {
             for nom in &n.pouvoirs {
@@ -238,6 +250,7 @@ impl PouvoirsRage {
             niveau_de_table,
             sources: t.sources,
             prerequis: p.prerequis,
+            textes: x.textes,
         })
     }
 
