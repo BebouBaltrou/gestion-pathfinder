@@ -10,12 +10,15 @@ export function SelectionDons({
   onChange,
   imposes = [],
   lignage,
+  classe,
 }: {
   cat: CatalogueCreation;
   nombre: number;
   valeur: string[];
   onChange: (v: string[]) => void;
   imposes?: string[];
+  /** Clé de la classe (minuscules, ex. « fighter ») : ne propose que les dons ouverts à cette classe. */
+  classe?: string;
   /** Les premiers dons sont des dons de lignage : on ne peut les prendre que dans la liste du lignage. */
   lignage?: { nombre: number; possibles: { nomEn: string; nom: string }[]; dejaPris: string[] };
 }) {
@@ -68,7 +71,9 @@ export function SelectionDons({
               etiquette={`Don ${i + 1}`}
               vide="Choisir un don…"
               valeur={def ? def.nomEn : ""}
-              options={cat.dons.map((x) => ({ v: x.nomEn, l: x.nom }))}
+              options={cat.dons
+                .filter((x) => !classe || x.classesRequises.length === 0 || x.classesRequises.includes(classe))
+                .map((x) => ({ v: x.nomEn, l: x.nom }))}
               onChange={(v) => maj(i, v)}
             />
             {def?.aUnChoix && (

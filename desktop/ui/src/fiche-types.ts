@@ -217,6 +217,8 @@ export type FicheVue = {
   dons: DonVue[];
   /** Dons choisis de chaque niveau (noms anglais). */
   donsParNiveau: string[][];
+  /** Clé minuscule (ex. « fighter ») de la classe de chaque niveau. */
+  classesParNiveau: string[];
   /** Sorts connus choisis (noms anglais). */
   sortsConnus: string[];
   traits: TexteVue[];
@@ -265,6 +267,7 @@ export type LignageVue = {
 export type ClasseVue = {
   id: string;
   nom: string;
+  cle: string;
   deVie: number;
   rangsParNiveau: number;
   incantation: boolean;
@@ -305,6 +308,8 @@ export type DonCatalogue = {
   prerequis: string | null;
   repetable: boolean;
   aUnChoix: boolean;
+  /** Classes exigées (clés minuscules). Vide : ouvert à toutes les classes. */
+  classesRequises: string[];
 };
 export type SortCatalogue = { nomEn: string; nom: string; ecole: string; niveau: number; resume: string; source: string | null; noteLivre: string | null; descripteurs: string[] };
 export type EquipementCatalogue = { nomEn: string; nom: string; genre: string; poidsLb: number | null; source: string | null; noteLivre: string | null; description: string | null };

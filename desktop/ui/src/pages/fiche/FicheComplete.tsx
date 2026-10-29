@@ -295,7 +295,7 @@ function ReattributionDons({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche)
           dons.length > 0 && (
             <div key={i}>
               <h3>Niveau {i + 1}</h3>
-              <SelectionDons cat={cat} nombre={dons.length} valeur={dons}
+              <SelectionDons cat={cat} nombre={dons.length} valeur={dons} classe={f.classesParNiveau[i]}
                 onChange={(v) => setEdition(edition.map((x, k) => (k === i ? v : x)))} />
             </div>
           ),

@@ -362,6 +362,7 @@ export function Creation({ outils, pj, onFini }: { outils: Outils; pj: LignePers
             valeur={fiche.niveaux[0].dons}
             onChange={(dons) => majNiveau({ dons })}
             imposes={race?.donImpose ? [race.donImpose] : []}
+            classe={classe.cle}
           />
           {apercu && apercu.problemes.filter((p) => p.includes("don")).map((p, i) => <p key={i} className="alerte-texte">{p}</p>)}
         </div>

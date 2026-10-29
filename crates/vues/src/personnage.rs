@@ -506,6 +506,8 @@ vue! {
         pub dons: Vec<DonVue>,
         /// Dons choisis de chaque niveau (noms anglais), pour les réattribuer niveau par niveau.
         pub dons_par_niveau: Vec<Vec<String>>,
+        /// Clé anglaise minuscule de la classe de chaque niveau, pour filtrer les dons par classe.
+        pub classes_par_niveau: Vec<String>,
         /// Sorts connus choisis (noms anglais), pour les réattribuer.
         pub sorts_connus: Vec<String>,
         pub traits: Vec<TexteVue>,
@@ -1156,6 +1158,15 @@ pub fn fiche_complete(
             .collect(),
         dons,
         dons_par_niveau: f.niveaux.iter().map(|n| n.dons.clone()).collect(),
+        classes_par_niveau: f
+            .niveaux
+            .iter()
+            .map(|n| {
+                r.classe(&n.classe)
+                    .map(|c| c.nom_en.to_lowercase())
+                    .unwrap_or_default()
+            })
+            .collect(),
         sorts_connus: f.sorts_connus.clone(),
         traits,
         capacites,
@@ -1256,6 +1267,8 @@ vue! {
     pub struct ClasseVue {
         pub id: String,
         pub nom: String,
+        /// Clé anglaise minuscule (« fighter »), celle que citent les conditions de don.
+        pub cle: String,
         pub de_vie: u32,
         pub rangs_par_niveau: i32,
         pub incantation: bool,
@@ -1333,6 +1346,8 @@ vue! {
         pub prerequis: Option<String>,
         pub repetable: bool,
         pub a_un_choix: bool,
+        /// Classes exigées (clés anglaises minuscules). Vide : le don est ouvert à toutes les classes.
+        pub classes_requises: Vec<String>,
     }
 }
 vue! {
@@ -1470,6 +1485,7 @@ pub fn catalogue_creation() -> CatalogueCreation {
         .map(|c| ClasseVue {
             id: c.id.clone(),
             nom: c.nom.clone(),
+            cle: c.nom_en.to_lowercase(),
             de_vie: c.de_vie,
             rangs_par_niveau: c.rangs_par_niveau,
             incantation: c.incantation.is_some(),
@@ -1625,6 +1641,7 @@ pub fn catalogue_creation() -> CatalogueCreation {
                 prerequis: fr.and_then(|x| x.prerequis.clone()),
                 repetable: d.repetable(),
                 a_un_choix: d.a_un_choix(),
+                classes_requises: d.classes_requises().into_iter().map(String::from).collect(),
             }
         })
         .collect();

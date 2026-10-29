@@ -69,6 +69,25 @@ impl Don {
             .is_some_and(|s| s.contains("multiple times"))
     }
 
+    /// Classes (clés anglaises en minuscules, ex. « fighter ») dont le don exige un niveau.
+    /// Vide quand le don n'exige aucune classe : il est alors disponible pour toutes les classes.
+    pub fn classes_requises(&self) -> Vec<&str> {
+        self.prerequis
+            .iter()
+            .filter_map(|p| match p {
+                Prerequis::NiveauDeClasse { classe, .. } => Some(classe.as_str()),
+                _ => None,
+            })
+            .collect()
+    }
+
+    /// Le don est-il ouvert à cette classe (clé anglaise minuscule) ?
+    /// Sans classe exigée, oui pour toutes les classes.
+    pub fn ouvert_a_la_classe(&self, classe: &str) -> bool {
+        let requises = self.classes_requises();
+        requises.is_empty() || requises.iter().any(|c| c.eq_ignore_ascii_case(classe))
+    }
+
     /// Le don porte-t-il un choix (arme, compétence, école…) ? Détecté d'après le texte du livre.
     pub fn a_un_choix(&self) -> bool {
         let t = format!(
@@ -149,6 +168,24 @@ mod tests {
                 s.nom_en
             );
         }
+    }
+
+    #[test]
+    fn don_sans_classe_ouvert_a_toutes_les_classes() {
+        let r = Referentiel::core();
+        let acrobatique = r.don("Acrobatic").unwrap();
+        assert!(acrobatique.classes_requises().is_empty());
+        assert!(acrobatique.ouvert_a_la_classe("fighter"));
+        assert!(acrobatique.ouvert_a_la_classe("wizard"));
+    }
+
+    #[test]
+    fn don_de_classe_reserve_a_sa_classe() {
+        let r = Referentiel::core();
+        let maitrise = r.don("Spell Mastery").unwrap();
+        assert_eq!(maitrise.classes_requises(), vec!["wizard"]);
+        assert!(maitrise.ouvert_a_la_classe("wizard"));
+        assert!(!maitrise.ouvert_a_la_classe("fighter"));
     }
 
     #[test]

@@ -164,6 +164,7 @@ export function Montee({
               nombre={apercu.donsAChoisir}
               valeur={dons}
               onChange={setDons}
+              classe={cat.classes.find((c) => c.id === classe)?.cle}
               lignage={
                 apercu.donsDeLignage > 0
                   ? { nombre: apercu.donsDeLignage, possibles: apercu.donsDeLignagePossibles, dejaPris: fiche.dons.map((d) => d.nomEn) }
