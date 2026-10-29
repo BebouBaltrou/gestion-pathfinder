@@ -1688,10 +1688,9 @@ impl Fiche {
         let mut vitesse_sans_armure = vitesse_de_race;
         // Déplacement accéléré du barbare : +3 m (10 pieds) sans armure lourde ni charge lourde,
         // appliqué avant la réduction due à l'armure et à la charge (Manuel des joueurs).
-        if self.niveau_de_classe("barbare") >= 1
-            && crate::choix_classe::deplacement_accelere_du_barbare(self, r, &bilan.charge)
-        {
-            vitesse_sans_armure += 10;
+        let accelere = crate::choix_classe::bonus_de_deplacement_accelere(self, r, &bilan.charge);
+        if accelere > 0 {
+            vitesse_sans_armure += accelere;
             bilan = evaluer(vitesse_sans_armure);
         }
         crate::choix_classe::appliquer_entrainement_aux_armures(

@@ -2142,12 +2142,21 @@ fn deluge_de_coups_mains_nues_des_petits_moines_et_volonte_indomptable() {
     let mut petit = de_classe("moine", 4);
     petit.race = "halfelin".into();
     let l = crate::choix_classe::lignes_dependant_de_la_race(&petit, &r);
-    assert_eq!(
-        l,
-        vec!["Dégâts à mains nues : 1d6 (taille de la race)".to_string()]
-    );
+    assert_eq!(l[0], "Dégâts à mains nues (taille P) : 1d6");
+    // Taille M (humain), niveau 4 : 1d8 ; déluge de coups +2/+2 (table 3-11).
     let l = crate::choix_classe::lignes_dependant_de_la_race(&de_classe("moine", 4), &r);
-    assert!(l[0].contains("taille M"));
+    assert_eq!(l[0], "Dégâts à mains nues (taille M) : 1d8");
+    assert!(l[1].ends_with("+2/+2"));
+    let l = crate::choix_classe::lignes_dependant_de_la_race(&de_classe("moine", 20), &r);
+    assert_eq!(l[0], "Dégâts à mains nues (taille M) : 2d10");
+    assert!(l[1].ends_with("+18/+18/+13/+13/+8/+8/+3"));
+    // Déplacement accéléré : +3 m (10 pieds) tous les 3 niveaux, perdu avec une armure.
+    let sans_armure = de_classe("moine", 6).calculer(&r).unwrap();
+    assert_eq!(sans_armure.vitesse, 50);
+    let mut arme = de_classe("moine", 6);
+    arme.equipement.armure = Some("Chainmail".into());
+    assert!(arme.calculer(&r).unwrap().vitesse <= 30);
+    assert_eq!(de_classe("moine", 2).calculer(&r).unwrap().vitesse, 30);
     let l = crate::choix_classe::capacites_chiffrees(&de_classe("barbare", 14));
     assert!(l.iter().any(|x| x.starts_with("Volonté indomptable : +4")));
 }

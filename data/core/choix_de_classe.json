@@ -489,7 +489,7 @@
   },
   "moine_mains_nues": {
     "classe": "moine",
-    "source": "Manuel des joueurs (VF), Moine, Dégâts à mains nues des moines de taille P ou G (texte fourni par l’utilisateur)",
+    "source": "Manuel des joueurs (VF), Moine, table 3-11 (texte fourni par l’utilisateur) ; colonnes de taille P et G : texte du descriptif.",
     "tranches": [
       [
         1,
@@ -532,6 +532,37 @@
       "3d8",
       "4d8"
     ],
-    "note": "La colonne de taille M de la table 3-11 n’a pas été fournie : les dégâts à mains nues d’un moine de taille M ne sont pas indiqués."
+    "note": "Dégâts à mains nues de la table 3-11 pour la taille M ; tailles P et G dans le texte. Déplacement accéléré : +3 m (10 pieds) tous les 3 niveaux à partir du niveau 3 (6 m au niveau 6… 18 m au niveau 18), perdu avec une armure ou une charge intermédiaire ou lourde.",
+    "moyenne": [
+      "1d6",
+      "1d8",
+      "1d10",
+      "2d6",
+      "2d8",
+      "2d10"
+    ],
+    "deluge": [
+      "–1/–1",
+      "+0/+0",
+      "+1/+1",
+      "+2/+2",
+      "+3/+3",
+      "+4/+4/–1",
+      "+5/+5/+0",
+      "+6/+6/+1/+1",
+      "+7/+7/+2/+2",
+      "+8/+8/+3/+3",
+      "+9/+9/+4/+4/–1",
+      "+10/+10/+5/+5/+0",
+      "+11/+11/+6/+6/+1",
+      "+12/+12/+7/+7/+2",
+      "+13/+13/+8/+8/+3/+3",
+      "+14/+14/+9/+9/+4/+4/–1",
+      "+15/+15/+10/+10/+5/+5/+0",
+      "+16/+16/+11/+11/+6/+6/+1",
+      "+17/+17/+12/+12/+7/+7/+2",
+      "+18/+18/+13/+13/+8/+8/+3"
+    ],
+    "deplacement_accelere_metres_tous_les_3_niveaux": 3
   }
 }

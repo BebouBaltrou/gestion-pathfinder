@@ -21,7 +21,10 @@ pub struct ChoixDeClasse {
 pub struct MoineMainsNues {
     pub tranches: Vec<(u32, u32)>,
     pub petite: Vec<String>,
+    pub moyenne: Vec<String>,
     pub grande: Vec<String>,
+    /// Bonus d'attaque du déluge de coups, niveau par niveau (taille M).
+    pub deluge: Vec<String>,
 }
 
 #[derive(Debug, Clone, Default, Deserialize)]
@@ -910,19 +913,54 @@ pub fn lignes_dependant_de_la_race(fiche: &Fiche, r: &Referentiel) -> Vec<String
         return Vec::new();
     }
     let t = &r.choix.moine_mains_nues;
-    let colonne = match r.race(&fiche.race).map(|x| x.taille.as_str()) {
-        Some("petite") => &t.petite,
-        Some("grande") => &t.grande,
-        _ => {
-            return vec![
-                "Dégâts à mains nues : la colonne de taille M de la table 3-11 n'est pas encore saisie".to_string(),
-            ];
-        }
+    let (colonne, taille) = match r.race(&fiche.race).map(|x| x.taille.as_str()) {
+        Some("petite") => (&t.petite, "P"),
+        Some("grande") => (&t.grande, "G"),
+        _ => (&t.moyenne, "M"),
     };
-    t.tranches
+    let mut lignes = Vec::new();
+    if let Some(d) = t
+        .tranches
         .iter()
         .position(|(a, b)| moine >= *a && moine <= *b)
         .and_then(|i| colonne.get(i))
-        .map(|d| vec![format!("Dégâts à mains nues : {d} (taille de la race)")])
-        .unwrap_or_default()
+    {
+        lignes.push(format!("Dégâts à mains nues (taille {taille}) : {d}"));
+    }
+    if let Some(b) = t.deluge.get(moine as usize - 1) {
+        lignes.push(format!(
+            "Déluge de coups, jets d'attaque (table 3-11, taille M) : {b}"
+        ));
+    }
+    lignes
+}
+
+/// Bonus de vitesse (en pieds) du déplacement accéléré du moine : +3 m (10 pieds) tous les 3
+/// niveaux à partir du niveau 3, perdu avec une armure ou une charge intermédiaire ou lourde.
+pub fn deplacement_accelere_du_moine(fiche: &Fiche, charge: &crate::equipement::Charge) -> u32 {
+    let moine = fiche.niveau_de_classe("moine");
+    if moine < 3
+        || fiche.equipement.armure.is_some()
+        || !matches!(charge, crate::equipement::Charge::Legere)
+    {
+        return 0;
+    }
+    10 * (moine / 3)
+}
+
+/// Bonus total de déplacement accéléré (barbare et moine), en pieds, avant la réduction due à
+/// l'armure et à la charge.
+pub fn bonus_de_deplacement_accelere(
+    fiche: &Fiche,
+    r: &Referentiel,
+    charge: &crate::equipement::Charge,
+) -> u32 {
+    let barbare = if fiche.niveau_de_classe("barbare") >= 1
+        && deplacement_accelere_du_barbare(fiche, r, charge)
+    {
+        10
+    } else {
+        0
+    };
+    barbare + deplacement_accelere_du_moine(fiche, charge)
 }
