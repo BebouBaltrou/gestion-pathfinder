@@ -1501,10 +1501,51 @@ fn le_roublard_ne_peut_prendre_que_des_talents_du_livre() {
     assert!(r.choix.talent_connu("Attaque distrayante"));
     assert!(r.choix.talent_connu("Un jour de plus"));
     assert!(!r.choix.talent_connu("Talent inventé"));
-    let mut f = de_classe("roublard", 2);
+    let mut f = de_classe("roublard", 4);
     f.talents_roublard = vec!["Talent inventé".into(), "Acrobate inégalable".into()];
     let p = f.problemes_choix_de_classe(&r);
     assert_eq!(p, vec![Probleme::TalentInconnu("Talent inventé".into())]);
+}
+
+#[test]
+fn talents_du_roublard_nombre_doublons_maitre_et_prerequis() {
+    let r = Referentiel::core();
+    let c = &r.choix;
+    assert_eq!(
+        [1, 2, 3, 4, 10, 20].map(|n| c.nombre_talents(n)),
+        [0, 1, 1, 2, 5, 10]
+    );
+    assert_eq!(
+        [9, 10, 12, 20].map(|n| c.talents_de_maitre_permis(n)),
+        [0, 1, 2, 6]
+    );
+    let mut f = de_classe("roublard", 2);
+    assert!(f
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::TalentsAChoisir {
+            attendus: 1,
+            choisis: 0
+        }));
+    f.talents_roublard = vec!["Acrobate inégalable".into()];
+    assert!(f.problemes_choix_de_classe(&r).is_empty());
+    // Doublon refusé, sauf Maîtrise des compétences.
+    let mut f = de_classe("roublard", 4);
+    f.talents_roublard = vec!["Debout".into(), "Debout".into()];
+    assert!(f
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::TalentEnDouble("Debout".into())));
+    // Talent de maître avant le niveau 10 : refusé. Prérequis : Magie majeure demande Magie mineure.
+    let mut f = de_classe("roublard", 4);
+    f.talents_roublard = vec!["Esprit fuyant".into(), "Magie majeure".into()];
+    let p = f.problemes_choix_de_classe(&r);
+    assert!(p.contains(&Probleme::TalentsDeMaitreTropNombreux {
+        permis: 0,
+        choisis: 1
+    }));
+    assert!(p.contains(&Probleme::TalentPrerequisManquant {
+        nom: "Magie majeure".into(),
+        requis: "Magie mineure".into()
+    }));
 }
 
 #[test]

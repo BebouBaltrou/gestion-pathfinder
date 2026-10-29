@@ -416,14 +416,16 @@ function ChoixClasses({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => v
           )}
         </div>
       )}
-      {f.classesParNiveau.includes("rogue") && (
+      {c.talentsAttendus > 0 && (
         <div className="carte">
-          <p>Talents de roublard : {c.talents.join(", ") || "aucun"}</p>
-          <div className="grille-boutons">
-            {c.talentsDisponibles.map((t) => (
-              <button key={t} className="bouton" onClick={() => agir({ TalentRoublardChoisi: t })}>{t}</button>
-            ))}
-          </div>
+          <p>Talents de roublard ({c.talents.length}/{c.talentsAttendus}) : {c.talents.join(", ") || "aucun"}</p>
+          {c.talents.length < c.talentsAttendus && (
+            <div className="grille-boutons">
+              {c.talentsDisponibles.map((t) => (
+                <button key={t} className="bouton" onClick={() => agir({ TalentRoublardChoisi: t })}>{t}</button>
+              ))}
+            </div>
+          )}
         </div>
       )}
       {c.rageAttendus > 0 && (

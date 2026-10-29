@@ -32,6 +32,13 @@ pub struct ListeGraces {
 pub struct TalentsRoublard {
     pub talents: Vec<String>,
     pub talents_de_maitre: Vec<String>,
+    pub premier_niveau: u32,
+    pub un_tous_les: u32,
+    pub premier_niveau_de_maitre: u32,
+    /// Talents que l'on peut prendre plusieurs fois.
+    pub repetables: Vec<String>,
+    /// Talent → talents qu'il faut déjà avoir.
+    pub prerequis_de_talent: BTreeMap<String, Vec<String>>,
 }
 
 #[derive(Debug, Clone, Default, Deserialize)]
@@ -72,6 +79,33 @@ impl ChoixDeClasse {
             .iter()
             .filter(|n| **n <= niveau)
             .count() as u32
+    }
+
+    /// Talents à choisir au niveau de roublard `niveau` (un au niveau 2, puis un tous les 2 niveaux).
+    pub fn nombre_talents(&self, niveau: u32) -> u32 {
+        let t = &self.talents_roublard;
+        if t.un_tous_les == 0 || niveau < t.premier_niveau {
+            return 0;
+        }
+        (niveau - t.premier_niveau) / t.un_tous_les + 1
+    }
+
+    /// Talents de maître permis au niveau de roublard `niveau` (ils remplacent un talent dès le niveau 10).
+    pub fn talents_de_maitre_permis(&self, niveau: u32) -> u32 {
+        let t = &self.talents_roublard;
+        if t.un_tous_les == 0 || niveau < t.premier_niveau_de_maitre {
+            return 0;
+        }
+        (niveau - t.premier_niveau_de_maitre) / t.un_tous_les + 1
+    }
+
+    /// Vrai si le talent est un talent de maître roublard.
+    pub fn talent_de_maitre(&self, nom: &str) -> bool {
+        let n = nom_sans_etoile(nom);
+        self.talents_roublard
+            .talents_de_maitre
+            .iter()
+            .any(|x| nom_sans_etoile(x) == n)
     }
 
     /// Vrai si le talent (de roublard ou de maître) existe, astérisque ignorée.
@@ -118,10 +152,50 @@ impl Fiche {
             }
         }
 
-        for t in &self.talents_roublard {
+        let niveau_roublard = self.niveau_de_classe("roublard");
+        let attendus = c.nombre_talents(niveau_roublard);
+        let choisis = self.talents_roublard.len() as u32;
+        if attendus != choisis {
+            p.push(Probleme::TalentsAChoisir { attendus, choisis });
+        }
+        let regles = &c.talents_roublard;
+        let mut maitres = 0;
+        for (i, t) in self.talents_roublard.iter().enumerate() {
             if !c.talent_connu(t) {
                 p.push(Probleme::TalentInconnu(t.clone()));
             }
+            let sans = nom_sans_etoile(t);
+            let repetable = regles.repetables.iter().any(|r| nom_sans_etoile(r) == sans);
+            let deja = self.talents_roublard[..i]
+                .iter()
+                .any(|x| nom_sans_etoile(x) == sans);
+            if deja && !repetable {
+                p.push(Probleme::TalentEnDouble(t.clone()));
+            }
+            if c.talent_de_maitre(t) {
+                maitres += 1;
+            }
+            if let Some(requis) = regles.prerequis_de_talent.get(sans) {
+                for r in requis {
+                    if !self
+                        .talents_roublard
+                        .iter()
+                        .any(|x| nom_sans_etoile(x) == r)
+                    {
+                        p.push(Probleme::TalentPrerequisManquant {
+                            nom: t.clone(),
+                            requis: r.clone(),
+                        });
+                    }
+                }
+            }
+        }
+        let permis = c.talents_de_maitre_permis(niveau_roublard);
+        if maitres > permis {
+            p.push(Probleme::TalentsDeMaitreTropNombreux {
+                permis,
+                choisis: maitres,
+            });
         }
 
         let attendus = c.nombre_ennemis_jures(self.niveau_de_classe("rodeur"));

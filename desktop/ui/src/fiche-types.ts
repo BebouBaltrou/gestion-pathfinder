@@ -206,6 +206,7 @@ export type ChoixClassesVue = {
   gracesDisponibles: string[];
   talents: string[];
   talentsDisponibles: string[];
+  talentsAttendus: number;
   ennemisAttendus: number;
   ennemisJures: string[];
   typesEnnemis: string[];

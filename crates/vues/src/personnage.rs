@@ -567,6 +567,8 @@ pub struct ChoixClassesVue {
     pub talents: Vec<String>,
     /// Talents de roublard et de maître pas encore pris.
     pub talents_disponibles: Vec<String>,
+    /// Nombre de talents de roublard attendus au niveau actuel (dont des talents de maître dès le niveau 10).
+    pub talents_attendus: u32,
     /// Nombre d'ennemis jurés attendus au niveau de rôdeur actuel.
     pub ennemis_attendus: u32,
     pub ennemis_jures: Vec<String>,
@@ -652,6 +654,7 @@ fn choix_classes(r: &Referentiel, f: &Fiche) -> ChoixClassesVue {
         graces_disponibles,
         talents: f.talents_roublard.clone(),
         talents_disponibles,
+        talents_attendus: c.nombre_talents(f.niveau_de_classe("roublard")),
         ennemis_attendus: c.nombre_ennemis_jures(f.niveau_de_classe("rodeur")),
         ennemis_jures: f.ennemis_jures.clone(),
         types_ennemis: c.ennemis_jures_rodeur.types.clone(),

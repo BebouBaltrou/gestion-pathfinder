@@ -214,6 +214,19 @@ pub enum Probleme {
         requis: String,
     },
     TalentInconnu(String),
+    TalentsAChoisir {
+        attendus: u32,
+        choisis: u32,
+    },
+    TalentEnDouble(String),
+    TalentPrerequisManquant {
+        nom: String,
+        requis: String,
+    },
+    TalentsDeMaitreTropNombreux {
+        permis: u32,
+        choisis: u32,
+    },
     EnnemisJuresAChoisir {
         attendus: u32,
         choisis: u32,
@@ -300,6 +313,7 @@ impl Probleme {
             | Probleme::GracesAChoisir { attendus, choisis }
             | Probleme::EnnemisJuresAChoisir { attendus, choisis }
             | Probleme::AugmentationsEnnemisAChoisir { attendus, choisis }
+            | Probleme::TalentsAChoisir { attendus, choisis }
             | Probleme::PouvoirsRageAChoisir { attendus, choisis } => choisis < attendus,
             Probleme::AlignementManquant
             | Probleme::EnergieAChoisir
@@ -447,6 +461,17 @@ impl std::fmt::Display for Probleme {
                 write!(f, "{nom} : la grâce {requis} doit être choisie avant")
             }
             Probleme::TalentInconnu(t) => write!(f, "talent de roublard inconnu : {t}"),
+            Probleme::TalentsAChoisir { attendus, choisis } => {
+                write!(f, "talents de roublard : {choisis} choisi(s) sur {attendus}")
+            }
+            Probleme::TalentEnDouble(t) => write!(f, "talent de roublard pris deux fois : {t}"),
+            Probleme::TalentPrerequisManquant { nom, requis } => {
+                write!(f, "{nom} : le talent {requis} doit être pris avant")
+            }
+            Probleme::TalentsDeMaitreTropNombreux { permis, choisis } => write!(
+                f,
+                "talents de maître roublard : {choisis} choisi(s), {permis} permis (dès le niveau 10)"
+            ),
             Probleme::EnnemisJuresAChoisir { attendus, choisis } => {
                 write!(f, "ennemis jurés du rôdeur : {choisis} choisi(s) sur {attendus}")
             }

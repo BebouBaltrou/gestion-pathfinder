@@ -6,10 +6,52 @@
     "choix_tous_les": 3,
     "premier_niveau": 3,
     "listes": [
-      { "a_partir_du": 3, "graces": ["Agité", "Fatigué", "Fiévreux", "Secoué", "Trompé"] },
-      { "a_partir_du": 6, "graces": ["Affaibli", "Chancelant", "Ciblé", "Guérison de la maladie", "Hanté", "Hébété"] },
-      { "a_partir_du": 9, "graces": ["Blessé", "Confus", "Délivrance de la malédiction", "Effrayé", "Épuisé", "Guérison du poison", "Nauséeux", "Restauratrice"] },
-      { "a_partir_du": 12, "graces": ["Amputé", "Aveugle", "Assourdi", "Ensorcelé", "Étourdi", "Paralysé", "Pétrifié"] }
+      {
+        "a_partir_du": 3,
+        "graces": [
+          "Agité",
+          "Fatigué",
+          "Fiévreux",
+          "Secoué",
+          "Trompé"
+        ]
+      },
+      {
+        "a_partir_du": 6,
+        "graces": [
+          "Affaibli",
+          "Chancelant",
+          "Ciblé",
+          "Guérison de la maladie",
+          "Hanté",
+          "Hébété"
+        ]
+      },
+      {
+        "a_partir_du": 9,
+        "graces": [
+          "Blessé",
+          "Confus",
+          "Délivrance de la malédiction",
+          "Effrayé",
+          "Épuisé",
+          "Guérison du poison",
+          "Nauséeux",
+          "Restauratrice"
+        ]
+      },
+      {
+        "a_partir_du": 12,
+        "graces": [
+          "Amputé",
+          "Aveugle",
+          "Assourdi",
+          "Ensorcelé",
+          "Étourdi",
+          "Paralysé",
+          "Pétrifié"
+        ]
+      }
     ],
     "prerequis_de_grace": {
       "Effrayé": "Secoué",
@@ -20,25 +62,163 @@
   },
   "talents_roublard": {
     "classe": "roublard",
-    "source": "Manuel des joueurs (VF), Roublard, Talents",
+    "source": "Manuel des joueurs (VF), Roublard, Talents (texte fourni par l’utilisateur)",
     "talents": [
-      "Acrobate inégalable", "Appropriation d'histoire", "Astuce de ninja", "Attaque distrayante*", "Attaque et changement de position", "Attaque sanglante*", "Attaque sournoise puissante*", "Attaque surprise", "Audace", "Beau parleur", "Botte secrète", "Brasse vigoureuse", "Brouiller les pistes", "Camouflage", "Charmeur", "Connaissances ésotériques", "Contacts au marché noir", "Coup bouleversant*", "Crochetage rapide", "Debout", "Défense offensive*", "Déclenchement extraordinaire", "Déguisement rapide", "Dénicheur de pièges", "Désamorçage rapide", "Difficile à berner", "Discret et rapide", "Doigts rapides", "Empoisonnement rapide", "Entraînement aux armes à feu", "Équilibriste", "Expert en survie", "Extraire des informations", "Faire le mur", "Faux ami", "Fin observateur", "Formation martiale", "Forte impression", "Fuite rapide", "Grimpeur agile", "Installation de pièges rapide", "Organiser l'attaque", "Maintenant que j'y repense", "Magie majeure", "Magie mineure", "Main agile", "Maîtrise du terrain", "Maître des cordes", "Mensonge convaincant", "Mouvement à quatre pattes", "Oeil de l'archer", "Poison persistant", "Polyglotte doué", "Réactions lentes*", "Réserve de ki", "Résilience", "Retenir son souffle", "Roublard en finesse", "Saut de l'expert", "Sournois*", "Spécialiste de la fuite", "Subtilisation au combat", "Suivre les indices", "Tir soudain", "Tripes d'acier"
+      "Acrobate inégalable",
+      "Appropriation d'histoire",
+      "Astuce de ninja",
+      "Attaque distrayante*",
+      "Attaque et changement de position",
+      "Attaque sanglante*",
+      "Attaque sournoise puissante*",
+      "Attaque surprise",
+      "Audace",
+      "Beau parleur",
+      "Botte secrète",
+      "Brasse vigoureuse",
+      "Brouiller les pistes",
+      "Camouflage",
+      "Charmeur",
+      "Connaissances ésotériques",
+      "Contacts au marché noir",
+      "Coup bouleversant*",
+      "Crochetage rapide",
+      "Debout",
+      "Défense offensive*",
+      "Déclenchement extraordinaire",
+      "Déguisement rapide",
+      "Dénicheur de pièges",
+      "Désamorçage rapide",
+      "Difficile à berner",
+      "Discret et rapide",
+      "Doigts rapides",
+      "Empoisonnement rapide",
+      "Entraînement aux armes à feu",
+      "Équilibriste",
+      "Expert en survie",
+      "Extraire des informations",
+      "Faire le mur",
+      "Faux ami",
+      "Fin observateur",
+      "Formation martiale",
+      "Forte impression",
+      "Fuite rapide",
+      "Grimpeur agile",
+      "Installation de pièges rapide",
+      "Organiser l'attaque",
+      "Maintenant que j'y repense",
+      "Magie majeure",
+      "Magie mineure",
+      "Main agile",
+      "Maîtrise du terrain",
+      "Maître des cordes",
+      "Mensonge convaincant",
+      "Mouvement à quatre pattes",
+      "Oeil de l'archer",
+      "Poison persistant",
+      "Polyglotte doué",
+      "Réactions lentes*",
+      "Réserve de ki",
+      "Résilience",
+      "Retenir son souffle",
+      "Roublard en finesse",
+      "Saut de l'expert",
+      "Sournois*",
+      "Spécialiste de la fuite",
+      "Subtilisation au combat",
+      "Suivre les indices",
+      "Tir soudain",
+      "Tripes d'acier"
     ],
     "talents_de_maitre": [
-      "Acrobaties rapides", "Allié involontaire", "Astuce de maître ninja", "Attaque dissipante*", "Attaque handicapante*", "Attaque redirigée", "Attaque sournoise mortelle*", "Caché en pleine lumière", "Cocktail mortel", "Colporteur de rumeurs", "Coup assommant", "Difficile à envoûter", "Don", "Esprit fuyant", "Esquive extraordinaire", "Fabricant de pièges économe", "Familier", "Lames de confusion*", "Lames entremêlées*", "Maître de la fuite", "Maître du déguisement", "Maîtrise des compétences", "Opportunisme", "Roulé-boulé", "Subtilisation d'arme", "Surprise du chasseur", "Tireur discret", "Un jour de plus"
+      "Acrobaties rapides",
+      "Allié involontaire",
+      "Astuce de maître ninja",
+      "Attaque dissipante*",
+      "Attaque handicapante*",
+      "Attaque redirigée",
+      "Attaque sournoise mortelle*",
+      "Caché en pleine lumière",
+      "Cocktail mortel",
+      "Colporteur de rumeurs",
+      "Coup assommant",
+      "Difficile à envoûter",
+      "Don",
+      "Esprit fuyant",
+      "Esquive extraordinaire",
+      "Fabricant de pièges économe",
+      "Familier",
+      "Lames de confusion*",
+      "Lames entremêlées*",
+      "Maître de la fuite",
+      "Maître du déguisement",
+      "Maîtrise des compétences",
+      "Opportunisme",
+      "Roulé-boulé",
+      "Subtilisation d'arme",
+      "Surprise du chasseur",
+      "Tireur discret",
+      "Un jour de plus"
     ],
-    "note": "Les talents marqués * ajoutent un effet à l'attaque sournoise ; un seul de ces effets par attaque, choisi avant le jet d'attaque. Les conditions de niveau des talents ne sont pas saisies."
+    "note": "Premier talent au niveau 2, puis un tous les deux niveaux. Dès le niveau 10 et tous les deux niveaux, un talent de maître peut remplacer un talent. Aucun talent n’est pris deux fois, sauf Maîtrise des compétences. Les valeurs d’Intelligence exigées (10 pour Magie mineure, 11 pour Magie majeure) ne sont pas encore contrôlées. « Don » : répétable ou non, à confirmer.",
+    "premier_niveau": 2,
+    "un_tous_les": 2,
+    "premier_niveau_de_maitre": 10,
+    "repetables": [
+      "Maîtrise des compétences"
+    ],
+    "prerequis_de_talent": {
+      "Magie majeure": [
+        "Magie mineure"
+      ],
+      "Attaque dissipante": [
+        "Magie majeure"
+      ]
+    }
   },
   "ennemis_jures_rodeur": {
     "classe": "rodeur",
     "source": "Manuel des joueurs (VF), Rôdeur, Ennemis jurés",
-    "choix_aux_niveaux": [1, 5, 10, 15, 20],
+    "choix_aux_niveaux": [
+      1,
+      5,
+      10,
+      15,
+      20
+    ],
     "types": [
-      "Aberration", "Animal", "Créature artificielle", "Créature magique", "Dragon",
-      "Extérieur (Air)", "Extérieur (Bien)", "Extérieur (Chaos)", "Extérieur (Eau)", "Extérieur (Feu)", "Extérieur (Loi)", "Extérieur (Mal)", "Extérieur (natif)", "Extérieur (Terre)",
+      "Aberration",
+      "Animal",
+      "Créature artificielle",
+      "Créature magique",
+      "Dragon",
+      "Extérieur (Air)",
+      "Extérieur (Bien)",
+      "Extérieur (Chaos)",
+      "Extérieur (Eau)",
+      "Extérieur (Feu)",
+      "Extérieur (Loi)",
+      "Extérieur (Mal)",
+      "Extérieur (natif)",
+      "Extérieur (Terre)",
       "Fée",
-      "Humanoïde (autre sous-type)", "Humanoïde (aquatique)", "Humanoïde (elfe)", "Humanoïde (géant)", "Humanoïde (gnoll)", "Humanoïde (gnome)", "Humanoïde (gobelinoïde)", "Humanoïde (halfelin)", "Humanoïde (humain)", "Humanoïde (nain)", "Humanoïde (orque)", "Humanoïde (reptilien)",
-      "Humanoïde monstrueux", "Mort-vivant", "Plante", "Vase", "Vermine"
+      "Humanoïde (autre sous-type)",
+      "Humanoïde (aquatique)",
+      "Humanoïde (elfe)",
+      "Humanoïde (géant)",
+      "Humanoïde (gnoll)",
+      "Humanoïde (gnome)",
+      "Humanoïde (gobelinoïde)",
+      "Humanoïde (halfelin)",
+      "Humanoïde (humain)",
+      "Humanoïde (nain)",
+      "Humanoïde (orque)",
+      "Humanoïde (reptilien)",
+      "Humanoïde monstrueux",
+      "Mort-vivant",
+      "Plante",
+      "Vase",
+      "Vermine"
     ],
     "bonus_de_base": 2,
     "note": "Bonus de +2 de départ, augmentable de +2 à chaque nouveau choix. Les bonus de deux familles ennemies ne se cumulent pas."
