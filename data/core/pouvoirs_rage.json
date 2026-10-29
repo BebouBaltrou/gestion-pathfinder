@@ -9,5 +9,19 @@
     { "niveau": 12, "pouvoirs": ["Absorption d'énergie", "Coup redoutable", "Projectile majeur", "Rage sans peur", "Briseur de sorts", "Piétinement féroce majeur", "Rage élémentaire majeure", "Viens m'attraper"] },
     { "niveau": 16, "pouvoirs": ["Éruption d'énergie", "Précision létale"] }
   ],
-  "note": "Le texte des pouvoirs et leurs prérequis ne sont pas encore saisis. Monture féroce et Piétinement féroce ont été placés selon la description du livre fournie."
+  "regles": {
+    "source": "Manuel des joueurs (VF), Barbare, pouvoirs de rage (texte fourni par l'utilisateur) ; Advanced Player's Guide, Ultimate Combat et Advanced Class Guide cités dans ce texte.",
+    "premier_pouvoir_niveau": 2,
+    "pouvoir_tous_les": 2,
+    "en_rage_pour_en_profiter": true,
+    "meme_pouvoir_deux_fois": false,
+    "groupe_totemique_unique": "Un barbare ne peut pas prendre des pouvoirs totémiques de plusieurs groupes (animal, draconique, chaos, fiélon, spirituel, serpent-monde, ruche…).",
+    "groupe_de_sang_unique": "Les pouvoirs de sang d'un barbare ne peuvent provenir que d'un seul groupe (infernal, abyssal, céleste, etc.).",
+    "sang_intermediaire_niveau": 6,
+    "sang_superieur_niveau": 10,
+    "sang_intermediaire_exige_mineur": "Pouvoir intermédiaire de sang : niveau 6 et le pouvoir mineur du même groupe.",
+    "sang_superieur_exige_intermediaire": "Pouvoir supérieur de sang : niveau 10 et le pouvoir intermédiaire du même groupe.",
+    "action_specifique": "Certains pouvoirs demandent une action spécifique (détail à saisir par pouvoir)."
+  },
+  "note": "Le texte détaillé de chaque pouvoir n'est pas encore saisi. Les prérequis de groupe ci-dessus sont saisis mais pas encore appliqués par le moteur."
 }
