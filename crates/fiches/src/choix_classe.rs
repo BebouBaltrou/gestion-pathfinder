@@ -41,6 +41,8 @@ pub struct TalentsRoublard {
     pub repetables: Vec<String>,
     /// Talent → talents qu'il faut déjà avoir.
     pub prerequis_de_talent: BTreeMap<String, Vec<String>>,
+    /// Talent → Intelligence minimale.
+    pub prerequis_intelligence: BTreeMap<String, i32>,
 }
 
 #[derive(Debug, Clone, Default, Deserialize)]
@@ -188,6 +190,29 @@ impl Fiche {
                             nom: t.clone(),
                             requis: r.clone(),
                         });
+                    }
+                }
+            }
+        }
+        if self.talents_roublard.iter().any(|t| {
+            regles
+                .prerequis_intelligence
+                .contains_key(nom_sans_etoile(t))
+        }) {
+            let intelligence = self.calculer(r).ok().and_then(|v| {
+                v.scores
+                    .get(&crate::caracteristiques::Carac::Int)
+                    .map(|d| d.total)
+            });
+            if let Some(int) = intelligence {
+                for t in &self.talents_roublard {
+                    if let Some(&minimum) = regles.prerequis_intelligence.get(nom_sans_etoile(t)) {
+                        if int < minimum {
+                            p.push(Probleme::TalentIntelligenceInsuffisante {
+                                nom: t.clone(),
+                                minimum,
+                            });
+                        }
                     }
                 }
             }

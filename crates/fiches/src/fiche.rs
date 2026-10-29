@@ -219,6 +219,10 @@ pub enum Probleme {
         choisis: u32,
     },
     TalentEnDouble(String),
+    TalentIntelligenceInsuffisante {
+        nom: String,
+        minimum: i32,
+    },
     TalentPrerequisManquant {
         nom: String,
         requis: String,
@@ -463,6 +467,9 @@ impl std::fmt::Display for Probleme {
             Probleme::TalentInconnu(t) => write!(f, "talent de roublard inconnu : {t}"),
             Probleme::TalentsAChoisir { attendus, choisis } => {
                 write!(f, "talents de roublard : {choisis} choisi(s) sur {attendus}")
+            }
+            Probleme::TalentIntelligenceInsuffisante { nom, minimum } => {
+                write!(f, "{nom} : Intelligence {minimum} minimum")
             }
             Probleme::TalentEnDouble(t) => write!(f, "talent de roublard pris deux fois : {t}"),
             Probleme::TalentPrerequisManquant { nom, requis } => {

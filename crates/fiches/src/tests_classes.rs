@@ -1842,3 +1842,27 @@ fn pouvoirs_de_rage_repetables_et_effets_chiffres() {
     // +6 d'altération (niveau) et +2 de modificateur de Force (+4 de rage) : au moins +6.
     assert!(escalade(&en).unwrap() >= escalade(&hors).unwrap() + 6);
 }
+
+#[test]
+fn magie_mineure_et_majeure_demandent_10_et_11_d_intelligence() {
+    let r = Referentiel::core();
+    let mut f = de_classe("roublard", 4);
+    f.talents_roublard = vec!["Magie mineure".into(), "Magie majeure".into()];
+    f.scores_base.insert(Carac::Int, 10);
+    f.bonus_racial_libre = Some(Carac::For);
+    let p = f.problemes_choix_de_classe(&r);
+    assert!(!p.iter().any(|x| matches!(x, Probleme::TalentIntelligenceInsuffisante { nom, .. } if nom == "Magie mineure")));
+    assert!(p.contains(&Probleme::TalentIntelligenceInsuffisante {
+        nom: "Magie majeure".into(),
+        minimum: 11
+    }));
+    f.scores_base.insert(Carac::Int, 12);
+    assert!(f.problemes_choix_de_classe(&r).is_empty());
+    f.scores_base.insert(Carac::Int, 8);
+    assert!(f
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::TalentIntelligenceInsuffisante {
+            nom: "Magie mineure".into(),
+            minimum: 10
+        }));
+}

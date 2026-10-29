@@ -90,7 +90,7 @@
       "Opportunisme",
       "Roulé-boulé"
     ],
-    "note": "Premier talent au niveau 2, puis un tous les deux niveaux. Dès le niveau 10 et tous les deux niveaux, un talent de maître peut remplacer un talent. Aucun talent n’est pris deux fois, sauf Maîtrise des compétences. Les valeurs d’Intelligence exigées (10 pour Magie mineure, 11 pour Magie majeure) ne sont pas encore contrôlées. « Don » : répétable ou non, à confirmer.",
+    "note": "Premier talent au niveau 2, puis un tous les deux niveaux. Dès le niveau 10 et tous les deux niveaux, un talent de maître peut remplacer un talent. Aucun talent n’est pris deux fois, sauf Maîtrise des compétences. Intelligence minimale : 10 pour Magie mineure, 11 pour Magie majeure (contrôlée). « Don » : répétable ou non, à confirmer.",
     "premier_niveau": 2,
     "un_tous_les": 2,
     "premier_niveau_de_maitre": 10,
@@ -202,7 +202,11 @@
       "Tireur discret",
       "Un jour de plus"
     ],
-    "note_filtre": "Seuls les talents dont le texte du Manuel des joueurs a été fourni sont proposés. Les autres talents (listés dans « masques », issus d’autres livres) sont masqués en attendant leur source."
+    "note_filtre": "Seuls les talents dont le texte du Manuel des joueurs a été fourni sont proposés. Les autres talents (listés dans « masques », issus d’autres livres) sont masqués en attendant leur source.",
+    "prerequis_intelligence": {
+      "Magie mineure": 10,
+      "Magie majeure": 11
+    }
   },
   "ennemis_jures_rodeur": {
     "classe": "rodeur",
