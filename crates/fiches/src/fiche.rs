@@ -114,6 +114,9 @@ pub struct Fiche {
     /// Pacte du chasseur du rôdeur (niveau 4), choix définitif.
     #[cfg_attr(feature = "serde", serde(default))]
     pub pacte_du_chasseur: Option<String>,
+    /// Groupes d'armes de l'entraînement aux armes du guerrier (niveaux 5, 9, 13, 17), dans l'ordre.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub groupes_d_armes: Vec<String>,
     /// Pouvoirs de rage choisis par le barbare (noms de `data/core/pouvoirs_rage.json`).
     #[cfg_attr(feature = "serde", serde(default))]
     pub pouvoirs_rage: Vec<String>,
@@ -257,6 +260,12 @@ pub enum Probleme {
     EnvironnementInconnu(String),
     EnvironnementEnDouble(String),
     PacteDuChasseurManquant,
+    GroupesDArmesAChoisir {
+        attendus: u32,
+        choisis: u32,
+    },
+    GroupeDArmesInconnu(String),
+    GroupeDArmesEnDouble(String),
     PacteDuChasseurInconnu(String),
     AugmentationsEnnemisAChoisir {
         attendus: u32,
@@ -339,6 +348,7 @@ impl Probleme {
             | Probleme::EnnemisJuresAChoisir { attendus, choisis }
             | Probleme::AugmentationsEnnemisAChoisir { attendus, choisis }
             | Probleme::EnvironnementsAChoisir { attendus, choisis }
+            | Probleme::GroupesDArmesAChoisir { attendus, choisis }
             | Probleme::AugmentationsEnvironnementsAChoisir { attendus, choisis }
             | Probleme::TalentsAChoisir { attendus, choisis }
             | Probleme::PouvoirsRageAChoisir { attendus, choisis } => choisis < attendus,
@@ -518,6 +528,11 @@ impl std::fmt::Display for Probleme {
             Probleme::EnvironnementInconnu(e) => write!(f, "environnement de prédilection inconnu : {e}"),
             Probleme::EnvironnementEnDouble(e) => write!(f, "environnement déjà choisi : {e}"),
             Probleme::PacteDuChasseurManquant => write!(f, "pacte du chasseur à choisir (niveau 4)"),
+            Probleme::GroupesDArmesAChoisir { attendus, choisis } => {
+                write!(f, "entraînement aux armes : {choisis} groupe(s) choisi(s) sur {attendus}")
+            }
+            Probleme::GroupeDArmesInconnu(g) => write!(f, "groupe d'armes inconnu : {g}"),
+            Probleme::GroupeDArmesEnDouble(g) => write!(f, "groupe d'armes déjà choisi : {g}"),
             Probleme::PacteDuChasseurInconnu(p) => write!(f, "pacte du chasseur inconnu : {p}"),
             Probleme::EnnemiJureEnDouble(e) => write!(f, "ennemi juré déjà choisi : {e}"),
             Probleme::AugmentationsEnnemisAChoisir { attendus, choisis } => write!(
@@ -2173,6 +2188,24 @@ impl Fiche {
             } else {
                 ("FOR", m(Carac::For))
             };
+            // Entraînement aux armes du guerrier : bonus aux jets d'attaque et de dégâts.
+            let entrainement = r
+                .choix
+                .bonus_d_entrainement(&self.groupes_d_armes, &def.nom);
+            if entrainement > 0 {
+                ef.push(Effet::new(
+                    "attaque",
+                    TypeBonus::SansType,
+                    entrainement,
+                    "entraînement aux armes",
+                ));
+                ef_degats.push(Effet::new(
+                    "degats",
+                    TypeBonus::SansType,
+                    entrainement,
+                    "entraînement aux armes",
+                ));
+            }
             let attaque = calculer(&[("BBA", bba_classe), (lib, val)], &ef, &eff("attaque"));
             let f = m(Carac::For);
             let force_degats = if def.est_a_distance() {

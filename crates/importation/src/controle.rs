@@ -811,6 +811,7 @@ pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32, r: &Referentiel) -> Result
         environnements: vec![],
         augmentations_environnements: vec![],
         pacte_du_chasseur: None,
+        groupes_d_armes: vec![],
         pouvoirs_rage: vec![],
         en_rage: false,
         rounds_de_rage: 0,

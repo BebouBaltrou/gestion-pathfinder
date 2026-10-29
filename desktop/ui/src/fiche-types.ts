@@ -224,6 +224,9 @@ export type ChoixClassesVue = {
   pacteDuChasseurAChoisir: boolean;
   pacteDuChasseur: string | null;
   formesDuPacte: string[];
+  groupesDArmesAttendus: number;
+  groupesDArmes: string[];
+  groupesDArmesDisponibles: string[];
   rageAttendus: number;
   rageChoisis: PouvoirRageVue[];
   /** Pouvoirs de rage accessibles, pas encore pris. `mjra` : règles avancées (APG). */
@@ -510,6 +513,7 @@ export type EvenementFiche =
   | { EnvironnementChoisi: string }
   | { EnvironnementAugmente: string }
   | { PacteDuChasseurChoisi: string }
+  | { GroupeDArmesChoisi: string }
   | { PouvoirRageChoisi: string }
   | "RageCommencee"
   | "RageTerminee"

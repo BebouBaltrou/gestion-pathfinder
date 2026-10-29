@@ -53,6 +53,7 @@ fn pretre(niveau: u32, sagesse: i32) -> Fiche {
         environnements: vec![],
         augmentations_environnements: vec![],
         pacte_du_chasseur: None,
+        groupes_d_armes: vec![],
         pouvoirs_rage: vec![],
         en_rage: false,
         rounds_de_rage: 0,
@@ -901,6 +902,7 @@ fn barbare(niveau: u32, constitution: i32) -> Fiche {
         environnements: vec![],
         augmentations_environnements: vec![],
         pacte_du_chasseur: None,
+        groupes_d_armes: vec![],
         pouvoirs_rage: vec![],
         en_rage: false,
         rounds_de_rage: 0,
@@ -1986,10 +1988,15 @@ fn entrainement_aux_armures_du_guerrier_et_valeurs_du_barbare_et_du_rodeur() {
     assert!(l
         .iter()
         .any(|x| x.starts_with("Entraînement aux armures : −1")));
-    let l = crate::choix_classe::capacites_chiffrees(&de_classe("guerrier", 9));
+    let mut g9 = de_classe("guerrier", 9);
+    g9.groupes_d_armes = vec!["Haches".into(), "Lames légères".into()];
+    let l = crate::choix_classe::capacites_chiffrees(&g9);
     assert!(l
         .iter()
-        .any(|x| x.starts_with("Entraînement aux armes : 2 groupe(s)")));
+        .any(|x| x.starts_with("Entraînement aux armes (Haches) : +2")));
+    assert!(l
+        .iter()
+        .any(|x| x.starts_with("Entraînement aux armes (Lames légères) : +1")));
     // Barbare niveau 10 : sens des pièges +3, réduction de dégâts 2/— ; barbare 6 + roublard 3 se cumulent.
     let l = crate::choix_classe::capacites_chiffrees(&de_classe("barbare", 10));
     assert!(l.iter().any(|x| x.starts_with("Sens des pièges : +3")));
@@ -2058,4 +2065,50 @@ fn le_rodeur_choisit_ses_environnements_et_son_pacte_du_chasseur() {
             &regles
         )
         .is_err());
+}
+
+#[test]
+fn l_entrainement_aux_armes_du_guerrier_donne_des_bonus_par_groupe() {
+    let r = Referentiel::core();
+    let c = &r.choix;
+    assert_eq!(
+        [4, 5, 8, 9, 17, 20].map(|n| c.nombre_groupes_d_armes(n)),
+        [0, 1, 1, 2, 4, 4]
+    );
+    // Niveau 9 : Lames longues... le premier groupe a +2, le second +1 ; une arme de plusieurs groupes : le plus haut.
+    let groupes = vec!["Haches".to_string(), "Lames légères".to_string()];
+    assert_eq!(c.bonus_d_entrainement(&groupes, "Hachette"), 2);
+    assert_eq!(c.bonus_d_entrainement(&groupes, "Kukri"), 1);
+    assert_eq!(c.bonus_d_entrainement(&groupes, "Marteau, léger"), 0);
+    let seul = vec!["Armes de lancer".to_string(), "Haches".to_string()];
+    // La hache de lancer est dans deux groupes : bonus le plus élevé (2 pour le premier groupe).
+    assert_eq!(c.bonus_d_entrainement(&seul, "Hache de lancer"), 2);
+    assert_eq!(c.bonus_d_entrainement(&seul, "Marteau, léger"), 2);
+
+    let mut f = de_classe("guerrier", 5);
+    assert!(f
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::GroupesDArmesAChoisir {
+            attendus: 1,
+            choisis: 0
+        }));
+    f.groupes_d_armes = vec!["Lames lourdes".into()];
+    assert!(f.problemes_choix_de_classe(&r).is_empty());
+    f.groupes_d_armes = vec!["Lames lourdes".into(), "Lames lourdes".into()];
+    assert!(f
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::GroupeDArmesEnDouble("Lames lourdes".into())));
+
+    // Dans la fiche : l'épée longue gagne +1 à l'attaque et aux dégâts.
+    let mut sans = de_classe("guerrier", 5);
+    sans.equipement.armes = vec!["Longsword".into()];
+    let mut avec = sans.clone();
+    avec.groupes_d_armes = vec!["Lames lourdes".into()];
+    let a = sans.calculer(&r).unwrap();
+    let b = avec.calculer(&r).unwrap();
+    assert_eq!(b.armes[0].attaque.total, a.armes[0].attaque.total + 1);
+    assert_eq!(
+        b.armes[0].bonus_degats.total,
+        a.armes[0].bonus_degats.total + 1
+    );
 }

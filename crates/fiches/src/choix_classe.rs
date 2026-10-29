@@ -13,6 +13,30 @@ pub struct ChoixDeClasse {
     pub ennemis_jures_rodeur: EnnemisJures,
     pub environnements_rodeur: EnvironnementsRodeur,
     pub pacte_du_chasseur: PacteDuChasseur,
+    pub entrainement_aux_armes_guerrier: EntrainementAuxArmes,
+}
+
+#[derive(Debug, Clone, Default, Deserialize)]
+pub struct EntrainementAuxArmes {
+    pub premier_niveau: u32,
+    pub tous_les: u32,
+    pub groupes: Vec<GroupeDArmes>,
+}
+
+#[derive(Debug, Clone, Default, Deserialize)]
+pub struct GroupeDArmes {
+    pub nom: String,
+    pub armes: Vec<String>,
+}
+
+/// Nom d'arme comparable : minuscules, apostrophes droites, sans virgule.
+fn nom_d_arme(nom: &str) -> String {
+    nom.to_lowercase()
+        .replace('’', "'")
+        .replace(',', "")
+        .split_whitespace()
+        .collect::<Vec<_>>()
+        .join(" ")
 }
 
 #[derive(Debug, Clone, Default, Deserialize)]
@@ -127,6 +151,34 @@ impl ChoixDeClasse {
             .iter()
             .filter(|n| **n <= niveau)
             .count() as u32
+    }
+
+    /// Groupes d'armes à choisir au niveau de guerrier `niveau` (niveaux 5, 9, 13, 17).
+    pub fn nombre_groupes_d_armes(&self, niveau: u32) -> u32 {
+        let e = &self.entrainement_aux_armes_guerrier;
+        if e.tous_les == 0 || niveau < e.premier_niveau {
+            return 0;
+        }
+        (niveau - e.premier_niveau) / e.tous_les + 1
+    }
+
+    /// Bonus d'entraînement aux armes pour l'arme `nom` (nom français du catalogue) : le plus élevé
+    /// des groupes choisis qui la contiennent. Le premier groupe choisi gagne +1 à chaque nouveau groupe.
+    pub fn bonus_d_entrainement(&self, groupes_choisis: &[String], nom: &str) -> i32 {
+        let cible = nom_d_arme(nom);
+        let n = groupes_choisis.len() as i32;
+        groupes_choisis
+            .iter()
+            .enumerate()
+            .filter(|(_, g)| {
+                self.entrainement_aux_armes_guerrier
+                    .groupes
+                    .iter()
+                    .any(|x| &x.nom == *g && x.armes.iter().any(|a| nom_d_arme(a) == cible))
+            })
+            .map(|(i, _)| n - i as i32)
+            .max()
+            .unwrap_or(0)
     }
 
     /// Vrai si le talent est un talent de maître roublard.
@@ -309,6 +361,25 @@ impl Fiche {
                     p.push(Probleme::PacteDuChasseurInconnu(forme.clone()));
                 }
                 Some(_) => {}
+            }
+        }
+
+        let attendus = c.nombre_groupes_d_armes(self.niveau_de_classe("guerrier"));
+        let choisis = self.groupes_d_armes.len() as u32;
+        if attendus != choisis {
+            p.push(Probleme::GroupesDArmesAChoisir { attendus, choisis });
+        }
+        for (i, g) in self.groupes_d_armes.iter().enumerate() {
+            if !c
+                .entrainement_aux_armes_guerrier
+                .groupes
+                .iter()
+                .any(|x| &x.nom == g)
+            {
+                p.push(Probleme::GroupeDArmesInconnu(g.clone()));
+            }
+            if self.groupes_d_armes[..i].contains(g) {
+                p.push(Probleme::GroupeDArmesEnDouble(g.clone()));
             }
         }
 
@@ -656,10 +727,13 @@ pub fn capacites_chiffrees(fiche: &Fiche) -> Vec<String> {
         ));
     }
     if guerrier_niveau >= 5 {
-        let groupes = (1 + (guerrier_niveau - 5) / 4).min(4);
-        l.push(format!(
-            "Entraînement aux armes : {groupes} groupe(s) d'armes, de +{groupes} (premier groupe) à +1 (dernier) aux jets d'attaque et de dégâts"
-        ));
+        let n = fiche.groupes_d_armes.len() as u32;
+        for (i, g) in fiche.groupes_d_armes.iter().enumerate() {
+            l.push(format!(
+                "Entraînement aux armes ({g}) : +{} aux jets d'attaque et de dégâts avec ces armes (appliqué aux armes du groupe de la fiche)",
+                n - i as u32
+            ));
+        }
     }
     if guerrier_niveau >= 19 {
         l.push(

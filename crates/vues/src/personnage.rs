@@ -590,6 +590,10 @@ pub struct ChoixClassesVue {
     pub pacte_du_chasseur_a_choisir: bool,
     pub pacte_du_chasseur: Option<String>,
     pub formes_du_pacte: Vec<String>,
+    /// Entraînement aux armes du guerrier : groupes attendus, choisis, choix possibles.
+    pub groupes_d_armes_attendus: u32,
+    pub groupes_d_armes: Vec<String>,
+    pub groupes_d_armes_disponibles: Vec<String>,
     /// Nombre de pouvoirs de rage attendus au niveau de barbare actuel.
     pub rage_attendus: u32,
     pub rage_choisis: Vec<PouvoirRageVue>,
@@ -689,6 +693,15 @@ fn choix_classes(r: &Referentiel, f: &Fiche) -> ChoixClassesVue {
             && f.niveau_de_classe("rodeur") >= c.pacte_du_chasseur.niveau,
         pacte_du_chasseur: f.pacte_du_chasseur.clone(),
         formes_du_pacte: c.pacte_du_chasseur.formes.clone(),
+        groupes_d_armes_attendus: c.nombre_groupes_d_armes(f.niveau_de_classe("guerrier")),
+        groupes_d_armes: f.groupes_d_armes.clone(),
+        groupes_d_armes_disponibles: c
+            .entrainement_aux_armes_guerrier
+            .groupes
+            .iter()
+            .map(|g| g.nom.clone())
+            .filter(|n| !f.groupes_d_armes.contains(n))
+            .collect(),
     }
 }
 
@@ -2289,6 +2302,7 @@ mod tests_pretre {
             environnements: vec![],
             augmentations_environnements: vec![],
             pacte_du_chasseur: None,
+            groupes_d_armes: vec![],
             pouvoirs_rage: vec![],
             en_rage: false,
             rounds_de_rage: 0,

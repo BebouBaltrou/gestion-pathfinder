@@ -84,6 +84,8 @@ pub enum EvenementFiche {
     EnvironnementAugmente(String),
     /// Pacte du chasseur du rôdeur (choix définitif).
     PacteDuChasseurChoisi(String),
+    /// Groupe d'armes de l'entraînement aux armes du guerrier.
+    GroupeDArmesChoisi(String),
     /// Pouvoir de rage du barbare choisi.
     PouvoirRageChoisi(String),
     /// Le barbare entre en rage (refusé s'il est fatigué ou épuisé).
@@ -209,6 +211,7 @@ impl EvenementFiche {
                 format!("Environnement de prédilection, bonus +2 : {e}")
             }
             EvenementFiche::PacteDuChasseurChoisi(p) => format!("Pacte du chasseur : {p}"),
+            EvenementFiche::GroupeDArmesChoisi(g) => format!("Entraînement aux armes : {g}"),
             EvenementFiche::PouvoirRageChoisi(p) => format!("Pouvoir de rage : {p}"),
             EvenementFiche::RageCommencee => "Entrée en rage".to_string(),
             EvenementFiche::RageTerminee => "Fin de la rage".to_string(),
@@ -772,6 +775,7 @@ impl Journal {
                 EvenementFiche::EnvironnementAugmente(e) => {
                     fiche.augmentations_environnements.push(e.clone());
                 }
+                EvenementFiche::GroupeDArmesChoisi(g) => fiche.groupes_d_armes.push(g.clone()),
                 EvenementFiche::PacteDuChasseurChoisi(p) => {
                     if fiche.pacte_du_chasseur.is_some() {
                         return Err(ErreurJournal::Choix {

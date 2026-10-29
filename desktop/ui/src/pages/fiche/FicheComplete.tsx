@@ -488,6 +488,18 @@ function ChoixClasses({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => v
           )}
         </div>
       )}
+      {c.groupesDArmesAttendus > 0 && (
+        <div className="carte">
+          <p>Entraînement aux armes ({c.groupesDArmes.length}/{c.groupesDArmesAttendus}) : {c.groupesDArmes.join(", ") || "aucun groupe"}</p>
+          {c.groupesDArmes.length < c.groupesDArmesAttendus && (
+            <div className="grille-boutons">
+              {c.groupesDArmesDisponibles.map((g) => (
+                <button key={g} className="bouton" onClick={() => agir({ GroupeDArmesChoisi: g })}>{g}</button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
       {c.pacteDuChasseurAChoisir && (
         <div className="carte">
           {c.pacteDuChasseur ? (

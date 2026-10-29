@@ -308,5 +308,183 @@
       "compagnon animal"
     ],
     "note": "Choix définitif. Le choix de l’animal du compagnon n’est pas encore saisi."
+  },
+  "entrainement_aux_armes_guerrier": {
+    "classe": "guerrier",
+    "source": "Manuel des joueurs (VF), Guerrier, Entraînement aux armes (texte fourni par l’utilisateur)",
+    "premier_niveau": 5,
+    "tous_les": 4,
+    "groupes": [
+      {
+        "nom": "Arbalètes",
+        "armes": [
+          "arbalète de poing",
+          "arbalète légère",
+          "arbalète légère à répétition",
+          "arbalète lourde",
+          "arbalète lourde à répétition"
+        ]
+      },
+      {
+        "nom": "Arcs",
+        "armes": [
+          "arc court",
+          "arc court composite",
+          "arc long",
+          "arc long composite"
+        ]
+      },
+      {
+        "nom": "Armes d'hast",
+        "armes": [
+          "corsèque",
+          "coutille",
+          "guisarme",
+          "hallebarde"
+        ]
+      },
+      {
+        "nom": "Armes de lancer",
+        "armes": [
+          "bâton de jet halfelin",
+          "bolas",
+          "dague",
+          "dard",
+          "épieu",
+          "filet",
+          "fronde",
+          "gourdin",
+          "hache de lancer",
+          "javeline",
+          "lamétoile",
+          "lance",
+          "marteau léger",
+          "sarbacane",
+          "shuriken",
+          "trident"
+        ]
+      },
+      {
+        "nom": "Armes de moine",
+        "armes": [
+          "attaques à mains nues",
+          "bâton",
+          "kama",
+          "nunchaku",
+          "sai",
+          "shuriken",
+          "siangham"
+        ]
+      },
+      {
+        "nom": "Armes de proximité",
+        "armes": [
+          "armure à pointes",
+          "attaques à mains nues",
+          "bouclier à pointes",
+          "dague coup-de-poing",
+          "écu",
+          "gantelet clouté",
+          "gantelet",
+          "matraque",
+          "rondache"
+        ]
+      },
+      {
+        "nom": "Armes doubles",
+        "armes": [
+          "bâton",
+          "double-lame",
+          "fléau double",
+          "hache double orque",
+          "marteau-piolet gnome",
+          "urgrosh nain"
+        ]
+      },
+      {
+        "nom": "Armes naturelles",
+        "armes": [
+          "attaques à mains nues",
+          "cornes",
+          "coups d’aile",
+          "coups de queue",
+          "griffes",
+          "morsures"
+        ]
+      },
+      {
+        "nom": "Fléaux d'armes",
+        "armes": [
+          "chaîne cloutée",
+          "fléau d'armes",
+          "fléau d'armes lourd",
+          "fléau double",
+          "fouet",
+          "morgenstern",
+          "nunchaku"
+        ]
+      },
+      {
+        "nom": "Haches",
+        "armes": [
+          "grande hache",
+          "hache de guerre naine",
+          "hache d'armes",
+          "hache de lancer",
+          "hache double orque",
+          "hachette",
+          "pic de guerre léger",
+          "pic de guerre lourd"
+        ]
+      },
+      {
+        "nom": "Lames légères",
+        "armes": [
+          "dague",
+          "épée courte",
+          "kama",
+          "kukri",
+          "lamétoile",
+          "rapière",
+          "serpe"
+        ]
+      },
+      {
+        "nom": "Lames lourdes",
+        "armes": [
+          "cimeterre à deux mains",
+          "cimeterre",
+          "double-lame",
+          "épée à deux mains",
+          "épée bâtarde",
+          "épée longue",
+          "faux",
+          "lame elfique incurvée"
+        ]
+      },
+      {
+        "nom": "Lances",
+        "armes": [
+          "épieu",
+          "javeline",
+          "lance d'arçon",
+          "lance",
+          "pique",
+          "trident"
+        ]
+      },
+      {
+        "nom": "Marteaux",
+        "armes": [
+          "gourdin",
+          "marteau de guerre",
+          "marteau léger",
+          "masse d'armes légère",
+          "masse d'armes lourde",
+          "massue"
+        ]
+      }
+    ],
+    "note": "Un groupe d’armes aux niveaux 5, 9, 13 et 17 : +1 aux jets d’attaque et de dégâts avec ce groupe, et +1 de plus sur chaque groupe déjà choisi. Une arme de plusieurs groupes : seul le bonus le plus élevé. Le texte donne « masse d’arme lourde » (singulier) : lu « masse d’armes lourde ». Armes naturelles : le texte cite « toutes les attaques naturelles comme les cornes, les coups d’aile, les coups de queue, les griffes, les morsures »."
   }
 }
