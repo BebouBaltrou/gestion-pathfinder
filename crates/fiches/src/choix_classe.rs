@@ -316,3 +316,64 @@ pub fn groupe_rage(nom: &str) -> Option<(FamilleRage, String)> {
     }
     None
 }
+
+/// Effets de la rage du barbare selon son niveau (Manuel des joueurs, Barbare : Rage de
+/// berserker +4/+4/+2, Rage de grand berserker au niveau 11 +6/+3, Rage de maître berserker
+/// au niveau 20 +8/+4), malus de −2 à la CA.
+pub fn effets_de_rage(niveau: u32) -> Vec<crate::effet::Effet> {
+    use crate::effet::{Effet, TypeBonus};
+    if niveau == 0 {
+        return Vec::new();
+    }
+    let (nom, carac, volonte) = if niveau >= 20 {
+        ("Rage de maître berserker", 8, 4)
+    } else if niveau >= 11 {
+        ("Rage de grand berserker", 6, 3)
+    } else {
+        ("Rage de berserker", 4, 2)
+    };
+    vec![
+        Effet::new("carac.for", TypeBonus::Moral, carac, nom),
+        Effet::new("carac.con", TypeBonus::Moral, carac, nom),
+        Effet::new("jds.vol", TypeBonus::Moral, volonte, nom),
+        Effet::new("ca", TypeBonus::SansType, -2, nom),
+    ]
+}
+
+/// Valeurs chiffrées des capacités de classe conditionnelles, à afficher (Manuel des joueurs).
+pub fn capacites_chiffrees(fiche: &Fiche) -> Vec<String> {
+    let mut l = Vec::new();
+    let barde = fiche.niveau_de_classe("barde");
+    if barde >= 1 {
+        let b = 1 + (barde + 1) / 6;
+        l.push(format!(
+            "Inspiration vaillante : +{b} aux jets d'attaque et de dégâts avec des armes (compétence), +{b} aux jets de sauvegarde contre la terreur et le charme (moral)"
+        ));
+    }
+    if barde >= 3 {
+        let b = 2 + (barde - 3) / 4;
+        l.push(format!(
+            "Inspiration talentueuse : +{b} aux tests d'une compétence au choix d'un allié (compétence)"
+        ));
+    }
+    if barde >= 9 {
+        let cibles = (1 + (barde - 9) / 3).min(4);
+        l.push(format!(
+            "Inspiration glorieuse : {cibles} cible(s), 2 DV supplémentaires (d10), +2 aux jets d'attaque et +1 aux jets de Vigueur (compétence)"
+        ));
+    }
+    if barde >= 15 {
+        let cibles = 1 + (barde - 15) / 3;
+        l.push(format!(
+            "Inspiration héroïque : {cibles} cible(s), +4 aux jets de sauvegarde (moral) et +4 à la CA (esquive)"
+        ));
+    }
+    let guerrier = fiche.niveau_de_classe("guerrier");
+    if guerrier >= 2 {
+        let b = 1 + (guerrier - 2) / 4;
+        l.push(format!(
+            "Courage : +{b} aux jets de sauvegarde contre la terreur"
+        ));
+    }
+    l
+}

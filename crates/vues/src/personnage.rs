@@ -576,6 +576,11 @@ pub struct ChoixClassesVue {
     pub rage_choisis: Vec<PouvoirRageVue>,
     /// Pouvoirs de rage accessibles et pas encore pris. `mjra` : source APG (règles avancées).
     pub rage_disponibles: Vec<PouvoirRageVue>,
+    /// Niveau de barbare (0 hors barbare) et rage en cours.
+    pub niveau_barbare: u32,
+    pub en_rage: bool,
+    /// Valeurs chiffrées des capacités conditionnelles (inspirations, courage).
+    pub capacites_chiffrees: Vec<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Serialize)]
@@ -625,6 +630,9 @@ fn choix_classes(r: &Referentiel, f: &Fiche) -> ChoixClassesVue {
         .collect();
     ChoixClassesVue {
         rage_attendus: fiches::choix_classe::PouvoirsRage::attendus(niveau_barbare),
+        niveau_barbare,
+        en_rage: f.en_rage,
+        capacites_chiffrees: fiches::choix_classe::capacites_chiffrees(f),
         rage_choisis: f
             .pouvoirs_rage
             .iter()
@@ -2230,6 +2238,7 @@ mod tests_pretre {
             talents_roublard: vec![],
             ennemis_jures: vec![],
             pouvoirs_rage: vec![],
+            en_rage: false,
         }
     }
 

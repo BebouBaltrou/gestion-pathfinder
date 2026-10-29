@@ -53,6 +53,7 @@ pub fn elfe_ensorceleuse() -> Fiche {
         talents_roublard: vec![],
         ennemis_jures: vec![],
         pouvoirs_rage: vec![],
+        en_rage: false,
         sorts_connus: [
             "Acid Splash",
             "Detect Magic",
@@ -118,6 +119,7 @@ pub fn pretre_d_iomedae() -> Fiche {
         talents_roublard: vec![],
         ennemis_jures: vec![],
         pouvoirs_rage: vec![],
+        en_rage: false,
     }
 }
 

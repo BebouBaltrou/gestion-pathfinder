@@ -213,6 +213,11 @@ export type ChoixClassesVue = {
   rageChoisis: PouvoirRageVue[];
   /** Pouvoirs de rage accessibles, pas encore pris. `mjra` : règles avancées (APG). */
   rageDisponibles: PouvoirRageVue[];
+  /** Niveau de barbare (0 hors barbare) et rage en cours. */
+  niveauBarbare: number;
+  enRage: boolean;
+  /** Valeurs chiffrées des capacités conditionnelles (inspirations, courage). */
+  capacitesChiffrees: string[];
 };
 
 export type FicheVue = {
@@ -484,6 +489,8 @@ export type EvenementFiche =
   | { TalentRoublardChoisi: string }
   | { EnnemiJureChoisi: string }
   | { PouvoirRageChoisi: string }
+  | "RageCommencee"
+  | "RageTerminee"
   | { EtatAjoute: string }
   | { EtatRetire: string }
   | { EffetTemporaireAjoute: { nom: string; effets: EffetDonnees[]; rounds_restants: number | null } }

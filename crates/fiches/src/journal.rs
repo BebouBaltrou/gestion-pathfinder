@@ -78,6 +78,10 @@ pub enum EvenementFiche {
     EnnemiJureChoisi(String),
     /// Pouvoir de rage du barbare choisi.
     PouvoirRageChoisi(String),
+    /// Le barbare entre en rage (refusé s'il est fatigué ou épuisé).
+    RageCommencee,
+    /// Fin de la rage : fatigué ensuite, sauf à partir du niveau 17 (rage sans fatigue).
+    RageTerminee,
     EtatAjoute(String),
     EtatRetire(String),
     EffetTemporaireAjoute(EffetTemporaire),
@@ -190,6 +194,8 @@ impl EvenementFiche {
             EvenementFiche::TalentRoublardChoisi(t) => format!("Talent de roublard : {t}"),
             EvenementFiche::EnnemiJureChoisi(e) => format!("Ennemi juré : {e}"),
             EvenementFiche::PouvoirRageChoisi(p) => format!("Pouvoir de rage : {p}"),
+            EvenementFiche::RageCommencee => "Entrée en rage".to_string(),
+            EvenementFiche::RageTerminee => "Fin de la rage".to_string(),
             EvenementFiche::EtatAjoute(e) => format!("État subi : {e}"),
             EvenementFiche::EtatRetire(e) => format!("État terminé : {e}"),
             EvenementFiche::EffetTemporaireAjoute(t) => format!("Effet temporaire : {}", t.nom),
@@ -744,6 +750,43 @@ impl Journal {
                 }
                 EvenementFiche::EnnemiJureChoisi(e) => fiche.ennemis_jures.push(e.clone()),
                 EvenementFiche::PouvoirRageChoisi(p) => fiche.pouvoirs_rage.push(p.clone()),
+                EvenementFiche::RageCommencee => {
+                    let refus = if fiche.niveau_de_classe("barbare") == 0 {
+                        Some("seul un barbare peut entrer en rage")
+                    } else if fiche.en_rage {
+                        Some("le barbare est déjà en rage")
+                    } else if fiche
+                        .etats
+                        .iter()
+                        .any(|e| e == "fatigued" || e == "exhausted")
+                    {
+                        Some("un barbare fatigué ou épuisé ne peut pas entrer en rage")
+                    } else {
+                        None
+                    };
+                    if let Some(raison) = refus {
+                        return Err(ErreurJournal::Choix {
+                            evenement: i,
+                            raison: raison.to_string(),
+                        });
+                    }
+                    fiche.en_rage = true;
+                }
+                EvenementFiche::RageTerminee => {
+                    if !fiche.en_rage {
+                        return Err(ErreurJournal::Choix {
+                            evenement: i,
+                            raison: "le barbare n'est pas en rage".to_string(),
+                        });
+                    }
+                    fiche.en_rage = false;
+                    // Rage sans fatigue au niveau 17 ; sinon fatigué (durée : le double des rounds de rage).
+                    if fiche.niveau_de_classe("barbare") < 17
+                        && !fiche.etats.iter().any(|e| e == "fatigued")
+                    {
+                        fiche.etats.push("fatigued".to_string());
+                    }
+                }
                 EvenementFiche::EtatAjoute(e) => {
                     if !fiche.etats.contains(e) {
                         fiche.etats.push(e.clone());

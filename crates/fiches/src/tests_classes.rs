@@ -50,6 +50,7 @@ fn pretre(niveau: u32, sagesse: i32) -> Fiche {
         talents_roublard: vec![],
         ennemis_jures: vec![],
         pouvoirs_rage: vec![],
+        en_rage: false,
     }
 }
 
@@ -891,6 +892,7 @@ fn barbare(niveau: u32, constitution: i32) -> Fiche {
         talents_roublard: vec![],
         ennemis_jures: vec![],
         pouvoirs_rage: vec![],
+        en_rage: false,
     }
 }
 
@@ -1622,4 +1624,50 @@ fn la_canalisation_du_paladin_puise_2_utilisations_d_imposition_des_mains() {
     assert!(!e.pouvoirs_utilises.contains_key("canalisation"));
     // Réserve vide (ou une seule utilisation restante) : la canalisation est refusée.
     assert!(j.ajouter(canaliser(), &r, &regles).is_err());
+}
+
+#[test]
+fn la_rage_donne_ses_bonus_puis_fatigue_le_barbare() {
+    use crate::choix_classe::effets_de_rage;
+    let v = |n: u32| {
+        effets_de_rage(n)
+            .iter()
+            .map(|e| e.valeur)
+            .collect::<Vec<_>>()
+    };
+    assert_eq!(v(1), vec![4, 4, 2, -2]);
+    assert_eq!(v(11), vec![6, 6, 3, -2]);
+    assert_eq!(v(20), vec![8, 8, 4, -2]);
+    assert!(effets_de_rage(0).is_empty());
+
+    let r = Referentiel::core();
+    let regles = ReglesFiche::default();
+    let mut j = Journal::nouveau(de_classe("barbare", 1));
+    assert!(j
+        .ajouter(EvenementFiche::RageCommencee, &r, &regles)
+        .is_ok());
+    let e = j.etat(&r, &regles).unwrap();
+    assert!(e.fiche.en_rage);
+    assert!(j.ajouter(EvenementFiche::RageTerminee, &r, &regles).is_ok());
+    let e = j.etat(&r, &regles).unwrap();
+    assert!(!e.fiche.en_rage);
+    assert!(e.fiche.etats.contains(&"fatigued".to_string()));
+    // Fatigué : pas de nouvelle rage.
+    assert!(j
+        .ajouter(EvenementFiche::RageCommencee, &r, &regles)
+        .is_err());
+}
+
+#[test]
+fn inspirations_du_barde_et_courage_du_guerrier() {
+    let l = crate::choix_classe::capacites_chiffrees(&de_classe("barde", 11));
+    assert!(l[0].starts_with("Inspiration vaillante : +3"));
+    assert!(l[1].starts_with("Inspiration talentueuse : +4"));
+    assert!(l[2].starts_with("Inspiration glorieuse : 1 cible(s)"));
+    assert_eq!(l.len(), 3);
+    let l = crate::choix_classe::capacites_chiffrees(&de_classe("guerrier", 10));
+    assert_eq!(
+        l,
+        vec!["Courage : +3 aux jets de sauvegarde contre la terreur".to_string()]
+    );
 }

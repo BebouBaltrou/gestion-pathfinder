@@ -105,6 +105,9 @@ pub struct Fiche {
     /// Pouvoirs de rage choisis par le barbare (noms de `data/core/pouvoirs_rage.json`).
     #[cfg_attr(feature = "serde", serde(default))]
     pub pouvoirs_rage: Vec<String>,
+    /// Le barbare est en rage : ses bonus s'appliquent à la fiche.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub en_rage: bool,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -772,6 +775,11 @@ impl Fiche {
         }
         for o in &self.equipement.objets_magiques {
             e.extend(o.effets.iter().cloned());
+        }
+        if self.en_rage {
+            e.extend(crate::choix_classe::effets_de_rage(
+                self.niveau_de_classe("barbare"),
+            ));
         }
         Ok(e)
     }
