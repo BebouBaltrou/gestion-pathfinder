@@ -559,10 +559,47 @@ pub fn capacites_chiffrees(fiche: &Fiche) -> Vec<String> {
             (roublard / 2).max(1)
         ));
     }
-    if roublard >= 3 {
-        let b = roublard / 3;
+    let barbare = fiche.niveau_de_classe("barbare");
+    // Les bonus de sens des pièges de classes différentes se cumulent (Manuel des joueurs).
+    let sens = roublard / 3 + barbare / 3;
+    if sens >= 1 {
         l.push(format!(
-            "Sens des pièges : +{b} aux jets de Réflexes contre les pièges et +{b} à la CA (esquive) contre leurs attaques"
+            "Sens des pièges : +{sens} aux jets de Réflexes contre les pièges et +{sens} à la CA (esquive) contre leurs attaques"
+        ));
+    }
+    if barbare >= 7 {
+        l.push(format!("Réduction de dégâts : {}/—", 1 + (barbare - 7) / 3));
+    }
+    let guerrier_niveau = fiche.niveau_de_classe("guerrier");
+    if guerrier_niveau >= 3 {
+        let n = (1 + (guerrier_niveau - 3) / 4).min(4);
+        l.push(format!(
+            "Entraînement aux armures : −{n} au malus d'armure, +{n} au bonus de DEX maximal (appliqués à la fiche)"
+        ));
+    }
+    if guerrier_niveau >= 5 {
+        let groupes = (1 + (guerrier_niveau - 5) / 4).min(4);
+        l.push(format!(
+            "Entraînement aux armes : {groupes} groupe(s) d'armes, de +{groupes} (premier groupe) à +1 (dernier) aux jets d'attaque et de dégâts"
+        ));
+    }
+    if guerrier_niveau >= 19 {
+        l.push(
+            "Maîtrise des armures : réduction de dégâts 5/— avec une armure ou un bouclier"
+                .to_string(),
+        );
+    }
+    let rodeur = fiche.niveau_de_classe("rodeur");
+    if rodeur >= 1 {
+        l.push(format!(
+            "Pistage : +{} aux tests de Survie pour suivre des traces",
+            (rodeur / 2).max(1)
+        ));
+    }
+    if rodeur >= 11 {
+        l.push(format!(
+            "Proie du chasseur : bonus d'intuition de +{} aux jets d'attaque contre la proie, critiques confirmés automatiquement",
+            if rodeur >= 19 { 4 } else { 2 }
         ));
     }
     let moine = fiche.niveau_de_classe("moine");
@@ -658,4 +695,35 @@ pub fn effets_dependant_des_caracs(
     }
     let _ = r;
     e
+}
+
+/// Entraînement aux armures du guerrier (Manuel des joueurs) : dès le niveau 3, le malus d'armure
+/// aux compétences diminue de 1 et le bonus de DEX maximal augmente de 1, puis de 1 aux niveaux 7,
+/// 11 et 15 (jusqu'à −4 et +4). Le guerrier se déplace à sa vitesse normale en armure
+/// intermédiaire, et en armure lourde dès le niveau 7 (la charge reste prise en compte).
+pub fn appliquer_entrainement_aux_armures(
+    fiche: &Fiche,
+    r: &Referentiel,
+    bilan: &mut crate::equipement::BilanEquipement,
+    vitesse_sans_armure: u32,
+) {
+    use crate::equipement::{Charge, GenreProtection};
+    let niveau = fiche.niveau_de_classe("guerrier");
+    let genre = genre_de_l_armure(fiche, r);
+    if niveau < 3 || genre.is_none() {
+        return;
+    }
+    let n = (1 + (niveau - 3) / 4).min(4) as i32;
+    bilan.malus_d_armure.0 = (bilan.malus_d_armure.0 + n).min(0);
+    if let Some((plafond, _)) = bilan.dex_max.as_mut() {
+        *plafond += n;
+    }
+    let libre = match genre {
+        Some(GenreProtection::Intermediaire) => true,
+        Some(GenreProtection::Lourde) => niveau >= 7,
+        _ => false,
+    };
+    if libre && matches!(bilan.charge, Charge::Legere) {
+        bilan.vitesse = bilan.vitesse.max(vitesse_sans_armure);
+    }
 }

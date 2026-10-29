@@ -1713,10 +1713,7 @@ fn inspirations_du_barde_et_courage_du_guerrier() {
     assert!(l[2].starts_with("Inspiration glorieuse : 1 cible(s)"));
     assert_eq!(l.len(), 3);
     let l = crate::choix_classe::capacites_chiffrees(&de_classe("guerrier", 10));
-    assert_eq!(
-        l,
-        vec!["Courage : +3 aux jets de sauvegarde contre la terreur".to_string()]
-    );
+    assert!(l.contains(&"Courage : +3 aux jets de sauvegarde contre la terreur".to_string()));
 }
 
 #[test]
@@ -1956,4 +1953,41 @@ fn grace_divine_bonus_a_la_ca_du_moine_et_deplacement_du_barbare() {
     inter.equipement.armure = Some("Chainmail".into());
     // Armure intermédiaire : 40 − réduction d'armure = 30 pour une race de vitesse 30.
     assert_eq!(inter.calculer(&r).unwrap().vitesse, 30);
+}
+
+#[test]
+fn entrainement_aux_armures_du_guerrier_et_valeurs_du_barbare_et_du_rodeur() {
+    let r = Referentiel::core();
+    // Cotte de mailles : sans entraînement, malus et plafond de DEX de l'armure ; au niveau 3, −1 et +1.
+    let mut f1 = de_classe("guerrier", 2);
+    f1.equipement.armure = Some("Chainmail".into());
+    let v1 = f1.calculer(&r).unwrap();
+    let mut f3 = de_classe("guerrier", 3);
+    f3.equipement.armure = Some("Chainmail".into());
+    let v3 = f3.calculer(&r).unwrap();
+    assert_eq!(
+        v3.equipement.malus_d_armure.0,
+        (v1.equipement.malus_d_armure.0 + 1).min(0)
+    );
+    assert_eq!(
+        v3.equipement.dex_max.as_ref().map(|d| d.0),
+        v1.equipement.dex_max.as_ref().map(|d| d.0 + 1)
+    );
+    let l = crate::choix_classe::capacites_chiffrees(&f3);
+    assert!(l
+        .iter()
+        .any(|x| x.starts_with("Entraînement aux armures : −1")));
+    let l = crate::choix_classe::capacites_chiffrees(&de_classe("guerrier", 9));
+    assert!(l
+        .iter()
+        .any(|x| x.starts_with("Entraînement aux armes : 2 groupe(s)")));
+    // Barbare niveau 10 : sens des pièges +3, réduction de dégâts 2/— ; barbare 6 + roublard 3 se cumulent.
+    let l = crate::choix_classe::capacites_chiffrees(&de_classe("barbare", 10));
+    assert!(l.iter().any(|x| x.starts_with("Sens des pièges : +3")));
+    assert!(l.contains(&"Réduction de dégâts : 2/—".to_string()));
+    let l = crate::choix_classe::capacites_chiffrees(&de_classe("rodeur", 11));
+    assert!(l.iter().any(|x| x.starts_with("Pistage : +5")));
+    assert!(l
+        .iter()
+        .any(|x| x.starts_with("Proie du chasseur : bonus d'intuition de +2")));
 }
