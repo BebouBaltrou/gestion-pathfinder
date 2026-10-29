@@ -93,6 +93,15 @@ pub struct Fiche {
     /// Compagnon animal du druide (pacte `compagnon`).
     #[cfg_attr(feature = "serde", serde(default))]
     pub compagnon: Option<crate::compagnon::Compagnon>,
+    /// Grâces choisies par le paladin (voir `data/core/choix_de_classe.json`).
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub graces: Vec<String>,
+    /// Talents de roublard choisis (de base ou de maître).
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub talents_roublard: Vec<String>,
+    /// Ennemis jurés du rôdeur choisis (types de créatures).
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub ennemis_jures: Vec<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -176,6 +185,25 @@ pub enum Probleme {
     StyleDeCombatManquant {
         niveau: u32,
     },
+    GracesAChoisir {
+        attendus: u32,
+        choisis: u32,
+    },
+    GraceInconnue(String),
+    GraceNonDisponible {
+        nom: String,
+        niveau: u32,
+    },
+    GracePrerequisManquante {
+        nom: String,
+        requis: String,
+    },
+    TalentInconnu(String),
+    EnnemisJuresAChoisir {
+        attendus: u32,
+        choisis: u32,
+    },
+    EnnemiJureInconnu(String),
     DonsAuNiveau {
         niveau: u32,
         attendus: u32,
@@ -231,7 +259,9 @@ impl Probleme {
             | Probleme::SortsAChoisir {
                 attendus, choisis, ..
             }
-            | Probleme::DomainesAChoisir { attendus, choisis } => choisis < attendus,
+            | Probleme::DomainesAChoisir { attendus, choisis }
+            | Probleme::GracesAChoisir { attendus, choisis }
+            | Probleme::EnnemisJuresAChoisir { attendus, choisis } => choisis < attendus,
             Probleme::AlignementManquant
             | Probleme::EnergieAChoisir
             | Probleme::PacteManquant
@@ -366,6 +396,22 @@ impl std::fmt::Display for Probleme {
                 f,
                 "niveau {niveau} : le style de combat doit être choisi avant ce don"
             ),
+            Probleme::GracesAChoisir { attendus, choisis } => {
+                write!(f, "grâces du paladin : {choisis} choisie(s) sur {attendus}")
+            }
+            Probleme::GraceInconnue(g) => write!(f, "grâce inconnue : {g}"),
+            Probleme::GraceNonDisponible { nom, niveau } => write!(
+                f,
+                "{nom} : grâce accessible au niveau de paladin {niveau}"
+            ),
+            Probleme::GracePrerequisManquante { nom, requis } => {
+                write!(f, "{nom} : la grâce {requis} doit être choisie avant")
+            }
+            Probleme::TalentInconnu(t) => write!(f, "talent de roublard inconnu : {t}"),
+            Probleme::EnnemisJuresAChoisir { attendus, choisis } => {
+                write!(f, "ennemis jurés du rôdeur : {choisis} choisi(s) sur {attendus}")
+            }
+            Probleme::EnnemiJureInconnu(e) => write!(f, "ennemi juré inconnu : {e}"),
             Probleme::DonImposeManquant(d) => write!(f, "don imposé par la race manquant : {d}"),
             Probleme::EquipementInconnu(n) => write!(f, "équipement inconnu du catalogue : {n}"),
             Probleme::MauvaisEmplacement { objet, attendu } => {
@@ -1212,6 +1258,7 @@ impl Fiche {
                 p.push(Probleme::EnergieAChoisir);
             }
         }
+        p.extend(self.problemes_choix_de_classe(r));
         p
     }
 

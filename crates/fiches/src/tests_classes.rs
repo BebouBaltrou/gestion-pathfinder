@@ -1,7 +1,7 @@
 //! Essais des classes autres que l'ensorceleur (tables du Manuel des joueurs).
 
 use crate::donnees::Referentiel;
-use crate::fiche::{BonusPredilection, Fiche, NiveauPris};
+use crate::fiche::{BonusPredilection, Fiche, NiveauPris, Probleme};
 use crate::Carac;
 use std::collections::BTreeMap;
 
@@ -46,6 +46,9 @@ fn pretre(niveau: u32, sagesse: i32) -> Fiche {
         energie: None,
         pacte: None,
         compagnon: None,
+        graces: vec![],
+        talents_roublard: vec![],
+        ennemis_jures: vec![],
     }
 }
 
@@ -883,6 +886,9 @@ fn barbare(niveau: u32, constitution: i32) -> Fiche {
         energie: None,
         pacte: None,
         compagnon: None,
+        graces: vec![],
+        talents_roublard: vec![],
+        ennemis_jures: vec![],
     }
 }
 
@@ -1419,4 +1425,96 @@ fn le_magicien_gagne_un_don_supplementaire_au_niveau_5() {
     assert_eq!(magicien(4, 16).dons_attendus_a(&r, 3), 0);
     // Niveau 5 : don standard du niveau impair + don supplémentaire de magicien.
     assert_eq!(magicien(5, 16).dons_attendus_a(&r, 4), 2);
+}
+
+/// Fiche de test d'une classe donnée, sur le modèle du barbare (seul le nom de classe change).
+fn de_classe(classe: &str, niveau: u32) -> Fiche {
+    let mut f = barbare(niveau, 14);
+    f.niveaux.iter_mut().for_each(|n| n.classe = classe.into());
+    f.classes_de_predilection = vec![classe.into()];
+    f
+}
+
+#[test]
+fn le_paladin_choisit_une_grace_tous_les_3_niveaux_a_partir_du_3() {
+    let r = Referentiel::core();
+    let c = &r.choix;
+    assert_eq!(
+        [2, 3, 5, 6, 9, 12].map(|n| c.nombre_graces(n)),
+        [0, 1, 1, 2, 3, 4]
+    );
+    let p = de_classe("paladin", 3).problemes_choix_de_classe(&r);
+    assert!(p.contains(&Probleme::GracesAChoisir {
+        attendus: 1,
+        choisis: 0
+    }));
+    let mut f = de_classe("paladin", 3);
+    f.graces = vec!["Secoué".into()];
+    assert!(!f
+        .problemes_choix_de_classe(&r)
+        .iter()
+        .any(|p| matches!(p, Probleme::GracesAChoisir { .. })));
+}
+
+#[test]
+fn une_grace_doit_etre_accessible_au_niveau_et_avoir_son_prerequis() {
+    let r = Referentiel::core();
+    let mut f = de_classe("paladin", 3);
+    f.graces = vec!["Affaibli".into()];
+    let p = f.problemes_choix_de_classe(&r);
+    assert!(p.contains(&Probleme::GraceNonDisponible {
+        nom: "Affaibli".into(),
+        niveau: 6
+    }));
+
+    let mut f = de_classe("paladin", 9);
+    f.graces = vec!["Effrayé".into(), "Trompé".into(), "Agité".into()];
+    let p = f.problemes_choix_de_classe(&r);
+    assert!(p.contains(&Probleme::GracePrerequisManquante {
+        nom: "Effrayé".into(),
+        requis: "Secoué".into()
+    }));
+
+    f.graces = vec!["Secoué".into(), "Effrayé".into(), "Trompé".into()];
+    assert!(f.problemes_choix_de_classe(&r).is_empty());
+
+    f.graces = vec!["Nexistepas".into(), "Trompé".into(), "Agité".into()];
+    assert!(f
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::GraceInconnue("Nexistepas".into())));
+}
+
+#[test]
+fn le_roublard_ne_peut_prendre_que_des_talents_du_livre() {
+    let r = Referentiel::core();
+    assert!(r.choix.talent_connu("Attaque distrayante*"));
+    assert!(r.choix.talent_connu("Attaque distrayante"));
+    assert!(r.choix.talent_connu("Un jour de plus"));
+    assert!(!r.choix.talent_connu("Talent inventé"));
+    let mut f = de_classe("roublard", 2);
+    f.talents_roublard = vec!["Talent inventé".into(), "Acrobate inégalable".into()];
+    let p = f.problemes_choix_de_classe(&r);
+    assert_eq!(p, vec![Probleme::TalentInconnu("Talent inventé".into())]);
+}
+
+#[test]
+fn le_rodeur_choisit_un_ennemi_juré_aux_niveaux_1_5_10_15_20() {
+    let r = Referentiel::core();
+    let c = &r.choix;
+    assert_eq!(
+        [1, 4, 5, 10, 20].map(|n| c.nombre_ennemis_jures(n)),
+        [1, 1, 2, 3, 5]
+    );
+    let p = de_classe("rodeur", 5).problemes_choix_de_classe(&r);
+    assert!(p.contains(&Probleme::EnnemisJuresAChoisir {
+        attendus: 2,
+        choisis: 0
+    }));
+    let mut f = de_classe("rodeur", 1);
+    f.ennemis_jures = vec!["Mort-vivant".into()];
+    assert!(f.problemes_choix_de_classe(&r).is_empty());
+    f.ennemis_jures = vec!["Type inventé".into()];
+    assert!(f
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::EnnemiJureInconnu("Type inventé".into())));
 }

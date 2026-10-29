@@ -804,6 +804,9 @@ pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32, r: &Referentiel) -> Result
         energie: None,
         pacte: None,
         compagnon: None,
+        graces: vec![],
+        talents_roublard: vec![],
+        ennemis_jures: vec![],
     };
     // Rangs : la feuille ne dit pas à quel niveau ils ont été pris. On les répartit niveau par
     // niveau dans ce que le moteur permet (rangs disponibles, rang maximum = niveau), en

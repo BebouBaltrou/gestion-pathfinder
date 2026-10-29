@@ -49,6 +49,9 @@ pub fn elfe_ensorceleuse() -> Fiche {
         energie: None,
         pacte: None,
         compagnon: None,
+        graces: vec![],
+        talents_roublard: vec![],
+        ennemis_jures: vec![],
         sorts_connus: [
             "Acid Splash",
             "Detect Magic",
@@ -110,6 +113,9 @@ pub fn pretre_d_iomedae() -> Fiche {
         energie: None,
         pacte: None,
         compagnon: None,
+        graces: vec![],
+        talents_roublard: vec![],
+        ennemis_jures: vec![],
     }
 }
 

@@ -312,6 +312,7 @@ pub struct Referentiel {
     pub divinites: Vec<crate::divin::Divinite>,
     pub formes: Vec<crate::formes::FormeAnimale>,
     pub compagnons: crate::compagnon::DonneesCompagnons,
+    pub choix: crate::choix_classe::ChoixDeClasse,
 }
 
 impl Referentiel {
@@ -362,6 +363,7 @@ impl Referentiel {
         })
         .and_then(|r| r.avec_compagnons(include_str!("../../../data/core/compagnons_animaux.json")))
         .and_then(|r| r.avec_formes(include_str!("../../../data/core/formes_animales.json")))
+        .and_then(|r| r.avec_choix(include_str!("../../../data/core/choix_de_classe.json")))
         .and_then(|r| {
             r.avec_divinites(
                 include_str!("../../../data/core/domaines.json"),
@@ -399,7 +401,14 @@ impl Referentiel {
             divinites: Vec::new(),
             formes: Vec::new(),
             compagnons: Default::default(),
+            choix: Default::default(),
         })
+    }
+
+    /// Ajoute les choix génériques des classes (grâces, talents, ennemis jurés).
+    pub fn avec_choix(mut self, choix: &str) -> Result<Referentiel, serde_json::Error> {
+        self.choix = serde_json::from_str(choix)?;
+        Ok(self)
     }
 
     /// Ajoute les catalogues de dons et de sorts.

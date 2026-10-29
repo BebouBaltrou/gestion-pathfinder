@@ -2125,6 +2125,9 @@ mod tests_pretre {
             energie: None,
             pacte: None,
             compagnon: None,
+            graces: vec![],
+            talents_roublard: vec![],
+            ennemis_jures: vec![],
         }
     }
 

@@ -70,6 +70,12 @@ pub enum EvenementFiche {
     },
     /// Style de combat du rôdeur (« tir_a_distance » ou « deux_armes »).
     StyleDeCombatChoisi(String),
+    /// Grâce du paladin choisie.
+    GraceChoisie(String),
+    /// Talent de roublard choisi.
+    TalentRoublardChoisi(String),
+    /// Ennemi juré du rôdeur choisi (type de créature).
+    EnnemiJureChoisi(String),
     EtatAjoute(String),
     EtatRetire(String),
     EffetTemporaireAjoute(EffetTemporaire),
@@ -178,6 +184,9 @@ impl EvenementFiche {
                 format!("Objet retiré : {nom_en} × {quantite}")
             }
             EvenementFiche::StyleDeCombatChoisi(s) => format!("Style de combat : {s}"),
+            EvenementFiche::GraceChoisie(g) => format!("Grâce : {g}"),
+            EvenementFiche::TalentRoublardChoisi(t) => format!("Talent de roublard : {t}"),
+            EvenementFiche::EnnemiJureChoisi(e) => format!("Ennemi juré : {e}"),
             EvenementFiche::EtatAjoute(e) => format!("État subi : {e}"),
             EvenementFiche::EtatRetire(e) => format!("État terminé : {e}"),
             EvenementFiche::EffetTemporaireAjoute(t) => format!("Effet temporaire : {}", t.nom),
@@ -710,6 +719,11 @@ impl Journal {
                 EvenementFiche::StyleDeCombatChoisi(s) => {
                     fiche.style_de_combat = Some(s.clone());
                 }
+                EvenementFiche::GraceChoisie(g) => fiche.graces.push(g.clone()),
+                EvenementFiche::TalentRoublardChoisi(t) => {
+                    fiche.talents_roublard.push(t.clone());
+                }
+                EvenementFiche::EnnemiJureChoisi(e) => fiche.ennemis_jures.push(e.clone()),
                 EvenementFiche::EtatAjoute(e) => {
                     if !fiche.etats.contains(e) {
                         fiche.etats.push(e.clone());

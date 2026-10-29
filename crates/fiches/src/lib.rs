@@ -9,6 +9,7 @@ pub mod caracteristiques;
 #[cfg(feature = "serde")]
 pub mod catalogue;
 #[cfg(feature = "serde")]
+pub mod choix_classe;
 pub mod compagnon;
 #[cfg(feature = "serde")]
 pub mod divin;
