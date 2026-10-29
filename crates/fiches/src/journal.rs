@@ -782,7 +782,7 @@ impl Journal {
                     }
                     fiche.en_rage = false;
                     // Rage sans fatigue au niveau 17 ; sinon fatigué pendant le double des rounds
-                    // passés en rage (au moins 1 round de rage : lecture à valider).
+                    // passés en rage (au moins 1 round de rage : validé).
                     if fiche.niveau_de_classe("barbare") < 17 {
                         if !fiche.etats.iter().any(|e| e == "fatigued") {
                             fiche.etats.push("fatigued".to_string());

@@ -103,7 +103,7 @@ Chaque point : ce que le moteur fait aujourd'hui, et ce qu'il faut te demander.
 31. **Rage** : nombre de rounds par jour = 4 + Constitution, +2 par niveau après le premier
     (formule dans `data/core/barbare.json`). Le moteur compte les rounds comme des utilisations
     du jour ; le repos les renouvelle.
-32. *(Rage faite le 29/10 : +4/+4/+2 et −2 CA, +6/+3 au niveau 11, +8/+4 au niveau 20, fatigué en sortant sauf au niveau 17 ; durée de la fatigue suivie avec le temps écoulé (au moins 1 round de rage : lecture à valider).)* **Non calculé pour l'instant** : bonus de rage (+4 Force et Constitution, +2 Volonté, −2 CA,
+32. *(Rage faite le 29/10 : +4/+4/+2 et −2 CA, +6/+3 au niveau 11, +8/+4 au niveau 20, fatigué en sortant sauf au niveau 17 ; durée de la fatigue suivie avec le temps écoulé (au moins 1 round de rage, soit 2 rounds de fatigue : validé par Antoine).)* **Non calculé pour l'instant** : bonus de rage (+4 Force et Constitution, +2 Volonté, −2 CA,
     état temporaire), sens des pièges, réduction de dégâts, déplacement accéléré (conditionnel à
     l'armure), esquive instinctive. Le texte des aptitudes est dans `special_en` par niveau.
 33. *(Fait le 29/10.)* **Choix des pouvoirs de rage** : un au niveau 2, puis tous les deux niveaux ; niveau, prérequis, doublons et groupe unique (totémique, sang) vérifiés. Pouvoirs de base et APG (icône MJRA) seuls affichés ; UC, ACG et Animal Archive masqués. À vérifier : Percussion (APG d’après le wiki) et Précision étonnante (sans source).
