@@ -151,9 +151,12 @@ p { margin: 0; }
 .bouton.discret { background: transparent; border-color: transparent; color: var(--or); padding: 0 8px; height: 32px; }
 .bouton.discret:hover:not(:disabled) { background: #2a2416; border-color: transparent; }
 .bouton.danger { color: var(--rouge); }
-.groupe-boutons { display: inline-flex; border: 1px solid var(--bord-fort); border-radius: var(--rayon-petit); overflow: hidden; }
-.groupe-boutons .bouton { border: none; border-radius: 0; border-right: 1px solid var(--bord-fort); }
-.groupe-boutons .bouton:last-child { border-right: none; }
+/* Rangée de boutons collés : elle revient à la ligne si elle dépasse le cadre. Chaque bouton garde sa
+   bordure ; les marges négatives de 1 px superposent les bordures voisines, sur chaque ligne. */
+.groupe-boutons { display: inline-flex; flex-wrap: wrap; max-width: 100%; padding: 0 1px 1px 0; }
+.groupe-boutons .bouton { border-radius: 0; margin: 0 -1px -1px 0; }
+.groupe-boutons .bouton:first-child { border-top-left-radius: var(--rayon-petit); }
+.groupe-boutons .bouton:last-child { border-bottom-right-radius: var(--rayon-petit); }
 
 /* ---------------------------------------------------------------- cartes */
 .carte {
