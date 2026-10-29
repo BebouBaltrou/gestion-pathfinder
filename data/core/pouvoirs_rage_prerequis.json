@@ -1,6 +1,6 @@
 {
   "source": "Manuel des joueurs (VF), Barbare, pouvoirs de rage : prérequis tels que donnés par l'utilisateur (Advanced Player's Guide, Ultimate Combat, Advanced Class Guide).",
-  "note": "« niveau » = niveau de barbare minimum en plus du niveau de la table. Les pouvoirs absents n'ont pas de prérequis. Les pouvoirs MJRA (sources dans pouvoirs_rage.json) sont inclus. Pouvoirs UC/ACG masqués retirés de ce fichier (voir pouvoirs_rage.json, « masques »).",
+  "note": "« niveau » = niveau de barbare minimum en plus du niveau de la table. Les pouvoirs absents n'ont pas de prérequis. Les pouvoirs MJRA (sources dans pouvoirs_rage.json) sont inclus. Les prérequis des pouvoirs masqués (UC/ACG) sont dans « prerequis_masques ».",
   "prerequis": {
     "Ailes totémiques draconiques": {
       "pouvoirs": [
@@ -273,6 +273,205 @@
         "Saut en rage"
       ],
       "niveau": 6
+    }
+  },
+  "prerequis_masques": {
+    "Vision dans le noir": {
+      "texte": "pouvoir de rage ou trait racial de Vision nocturne"
+    },
+    "Vitalité renouvelée": {
+      "pouvoirs": [
+        "Nouvelle vigueur"
+      ],
+      "niveau": 4
+    },
+    "Sang de mort-vivant": {
+      "pouvoirs": [
+        "Sang de mort-vivant mineur"
+      ],
+      "niveau": 6
+    },
+    "Nageur bestial": {
+      "pouvoirs": [
+        "Nage en rage"
+      ],
+      "niveau": 6
+    },
+    "Sang draconique": {
+      "pouvoirs": [
+        "Sang draconique mineur"
+      ],
+      "niveau": 6
+    },
+    "Brise roc": {
+      "niveau": 6
+    },
+    "Sang élémentaire": {
+      "pouvoirs": [
+        "Sang élémentaire mineur"
+      ],
+      "niveau": 6
+    },
+    "Destruction de sort": {
+      "pouvoirs": [
+        "Chasseur de sorcière"
+      ],
+      "niveau": 6
+    },
+    "Sang féerique": {
+      "pouvoirs": [
+        "Sang féerique mineur"
+      ],
+      "niveau": 6
+    },
+    "Vie préservée supérieure": {
+      "pouvoirs": [
+        "Vie préservée"
+      ],
+      "niveau": 6
+    },
+    "Sang infernal": {
+      "pouvoirs": [
+        "Sang infernal mineur"
+      ],
+      "niveau": 6
+    },
+    "Rugissement de guerre": {
+      "pouvoirs": [
+        "Regard intimidant"
+      ],
+      "niveau": 6
+    },
+    "Sang abyssal": {
+      "pouvoirs": [
+        "Sang abyssal mineur"
+      ],
+      "niveau": 6
+    },
+    "Totem draconique": {
+      "pouvoirs": [
+        "Fureur animale",
+        "Regard intimidant"
+      ],
+      "niveau": 6
+    },
+    "Lucidité ultime": {
+      "pouvoirs": [
+        "Lucidité parfaite",
+        "Moment de lucidité"
+      ],
+      "niveau": 6
+    },
+    "Sang céleste": {
+      "pouvoirs": [
+        "Sang céleste mineur"
+      ],
+      "niveau": 6
+    },
+    "Sauteur bestial": {
+      "pouvoirs": [
+        "Saut en rage"
+      ],
+      "niveau": 6
+    },
+    "Coup handicapant": {
+      "pouvoirs": [
+        "Coup puissant"
+      ],
+      "niveau": 8
+    },
+    "Résilience totémique draconique": {
+      "pouvoirs": [
+        "Totem draconique"
+      ],
+      "niveau": 8
+    },
+    "Toxicité de la ruche": {
+      "pouvoirs": [
+        "Résilience totémique de la ruche"
+      ],
+      "niveau": 8
+    },
+    "Esprit vide": {
+      "niveau": 8
+    },
+    "Vigueur interne": {
+      "niveau": 8
+    },
+    "Sang élémentaire majeur": {
+      "pouvoirs": [
+        "Sang élémentaire"
+      ],
+      "niveau": 10
+    },
+    "Totem spirituel supérieur": {
+      "pouvoirs": [
+        "Totem spirituel"
+      ],
+      "niveau": 10
+    },
+    "Sang abyssal majeur": {
+      "pouvoirs": [
+        "Sang abyssal"
+      ],
+      "niveau": 10
+    },
+    "Sang féerique majeur": {
+      "pouvoirs": [
+        "Sang féerique"
+      ],
+      "niveau": 10
+    },
+    "Destruction d'enchantement": {
+      "pouvoirs": [
+        "Destruction de sort"
+      ],
+      "niveau": 8
+    },
+    "Sang céleste majeur": {
+      "pouvoirs": [
+        "Sang céleste"
+      ],
+      "niveau": 10
+    },
+    "Sang infernal majeur": {
+      "pouvoirs": [
+        "Sang infernal"
+      ],
+      "niveau": 10
+    },
+    "Dévoreur de magie": {
+      "pouvoirs": [
+        "Superstition"
+      ],
+      "niveau": 10
+    },
+    "Sang de mort-vivant majeur": {
+      "pouvoirs": [
+        "Sang de mort-vivant"
+      ],
+      "niveau": 10
+    },
+    "Sang draconique majeur": {
+      "pouvoirs": [
+        "Sang draconique"
+      ],
+      "niveau": 10
+    },
+    "Absorption d'énergie": {
+      "pouvoirs": [
+        "Résistance à l'énergie majeur"
+      ],
+      "niveau": 12
+    },
+    "Viens m'attraper": {
+      "niveau": 12
+    },
+    "Précision létale": {
+      "pouvoirs": [
+        "Précision mortelle"
+      ],
+      "niveau": 16
     }
   }
 }
