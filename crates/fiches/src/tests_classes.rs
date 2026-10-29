@@ -1497,12 +1497,12 @@ fn une_grace_doit_etre_accessible_au_niveau_et_avoir_son_prerequis() {
 #[test]
 fn le_roublard_ne_peut_prendre_que_des_talents_du_livre() {
     let r = Referentiel::core();
-    assert!(r.choix.talent_connu("Attaque distrayante*"));
-    assert!(r.choix.talent_connu("Attaque distrayante"));
-    assert!(r.choix.talent_connu("Un jour de plus"));
+    assert!(r.choix.talent_connu("Attaque sanglante*"));
+    assert!(r.choix.talent_connu("Attaque sanglante"));
+    assert!(r.choix.talent_connu("Esprit fuyant"));
     assert!(!r.choix.talent_connu("Talent inventé"));
     let mut f = de_classe("roublard", 4);
-    f.talents_roublard = vec!["Talent inventé".into(), "Acrobate inégalable".into()];
+    f.talents_roublard = vec!["Talent inventé".into(), "Debout".into()];
     let p = f.problemes_choix_de_classe(&r);
     assert_eq!(p, vec![Probleme::TalentInconnu("Talent inventé".into())]);
 }
@@ -1526,7 +1526,7 @@ fn talents_du_roublard_nombre_doublons_maitre_et_prerequis() {
             attendus: 1,
             choisis: 0
         }));
-    f.talents_roublard = vec!["Acrobate inégalable".into()];
+    f.talents_roublard = vec!["Debout".into()];
     assert!(f.problemes_choix_de_classe(&r).is_empty());
     // Doublon refusé, sauf Maîtrise des compétences.
     let mut f = de_classe("roublard", 4);

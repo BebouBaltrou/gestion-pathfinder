@@ -567,6 +567,8 @@ pub struct ChoixClassesVue {
     pub talents: Vec<String>,
     /// Talents de roublard et de maître pas encore pris.
     pub talents_disponibles: Vec<String>,
+    /// Texte du livre de chaque talent (nom sans astérisque).
+    pub talents_textes: std::collections::BTreeMap<String, String>,
     /// Nombre de talents de roublard attendus au niveau actuel (dont des talents de maître dès le niveau 10).
     pub talents_attendus: u32,
     /// Nombre d'ennemis jurés attendus au niveau de rôdeur actuel.
@@ -654,6 +656,7 @@ fn choix_classes(r: &Referentiel, f: &Fiche) -> ChoixClassesVue {
         graces_disponibles,
         talents: f.talents_roublard.clone(),
         talents_disponibles,
+        talents_textes: c.talents_roublard.textes.clone(),
         talents_attendus: c.nombre_talents(f.niveau_de_classe("roublard")),
         ennemis_attendus: c.nombre_ennemis_jures(f.niveau_de_classe("rodeur")),
         ennemis_jures: f.ennemis_jures.clone(),

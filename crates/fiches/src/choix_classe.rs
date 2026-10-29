@@ -32,6 +32,8 @@ pub struct ListeGraces {
 pub struct TalentsRoublard {
     pub talents: Vec<String>,
     pub talents_de_maitre: Vec<String>,
+    /// Texte du livre de chaque talent (nom sans astérisque).
+    pub textes: BTreeMap<String, String>,
     pub premier_niveau: u32,
     pub un_tous_les: u32,
     pub premier_niveau_de_maitre: u32,

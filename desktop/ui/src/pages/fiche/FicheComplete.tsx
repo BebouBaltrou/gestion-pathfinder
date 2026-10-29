@@ -418,11 +418,17 @@ function ChoixClasses({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => v
       )}
       {c.talentsAttendus > 0 && (
         <div className="carte">
-          <p>Talents de roublard ({c.talents.length}/{c.talentsAttendus}) : {c.talents.join(", ") || "aucun"}</p>
+          <p>Talents de roublard ({c.talents.length}/{c.talentsAttendus}){c.talents.length === 0 && " : aucun"}</p>
+          {c.talents.map((t) => (
+            <details key={t}>
+              <summary>{t}</summary>
+              <p className="doux">{c.talentsTextes[t.replace(/\*$/, "")] ?? ""}</p>
+            </details>
+          ))}
           {c.talents.length < c.talentsAttendus && (
             <div className="grille-boutons">
               {c.talentsDisponibles.map((t) => (
-                <button key={t} className="bouton" onClick={() => agir({ TalentRoublardChoisi: t })}>{t}</button>
+                <button key={t} className="bouton" title={c.talentsTextes[t.replace(/\*$/, "")] ?? ""} onClick={() => agir({ TalentRoublardChoisi: t })}>{t}</button>
               ))}
             </div>
           )}
