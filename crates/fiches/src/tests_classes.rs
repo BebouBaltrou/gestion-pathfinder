@@ -1591,3 +1591,35 @@ fn les_pouvoirs_totemiques_ne_viennent_que_d_un_seul_groupe() {
         .iter()
         .any(|p| matches!(p, Probleme::PouvoirRageGroupeDifferent { .. })));
 }
+
+#[test]
+fn la_canalisation_du_paladin_puise_2_utilisations_d_imposition_des_mains() {
+    let r = Referentiel::core();
+    let regles = ReglesFiche::default();
+    let mut f = de_classe("paladin", 4);
+    f.scores_base.insert(Carac::Cha, 14);
+    f.graces = vec!["Secoué".into()];
+    let mut j = Journal::nouveau(f);
+    let v = j.etat(&r, &regles).unwrap().fiche.calculer(&r).unwrap();
+    let imposition = v
+        .pouvoirs
+        .iter()
+        .find(|p| p.cle == "imposition")
+        .and_then(|p| p.max)
+        .unwrap();
+    assert!(imposition >= 2);
+    let canaliser = || EvenementFiche::PouvoirUtilise {
+        cle: "canalisation".into(),
+    };
+    for _ in 0..imposition / 2 {
+        assert!(j.ajouter(canaliser(), &r, &regles).is_ok());
+    }
+    let e = j.etat(&r, &regles).unwrap();
+    assert_eq!(
+        e.pouvoirs_utilises.get("imposition"),
+        Some(&((imposition / 2 * 2) as u32))
+    );
+    assert!(!e.pouvoirs_utilises.contains_key("canalisation"));
+    // Réserve vide (ou une seule utilisation restante) : la canalisation est refusée.
+    assert!(j.ajouter(canaliser(), &r, &regles).is_err());
+}

@@ -547,6 +547,9 @@ pub struct PouvoirJournalier {
     pub nom: String,
     /// `None` : à volonté.
     pub max: Option<i32>,
+    /// Réserve partagée : (clé du pouvoir dont on puise les utilisations, coût par usage).
+    /// Paladin : chaque canalisation coûte 2 utilisations d'imposition des mains.
+    pub partage: Option<(String, u32)>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -1882,6 +1885,7 @@ impl Fiche {
             }
             for p in classe.pouvoirs.iter().filter(|p| nc >= p.niveau) {
                 pouvoirs.push(PouvoirJournalier {
+                    partage: None,
                     cle: p.cle.clone(),
                     nom: p.nom.clone(),
                     max: if let Some(f) = &p.formule {
@@ -1900,7 +1904,9 @@ impl Fiche {
             }
             if classe.canalisation_par_imposition && nc >= 4 {
                 let utilisations = ((nc / 2) as i32 + m(Carac::Cha)).max(0) / 2;
+                // Réserve partagée : chaque canalisation coûte 2 utilisations d'imposition des mains.
                 pouvoirs.push(PouvoirJournalier {
+                    partage: Some(("imposition".into(), 2)),
                     cle: "canalisation".into(),
                     nom: "Canalisation d'énergie".into(),
                     max: Some(utilisations),
@@ -1925,6 +1931,7 @@ impl Fiche {
                 };
                 let utilisations = (3 + m(Carac::Cha)).max(0);
                 pouvoirs.push(PouvoirJournalier {
+                    partage: None,
                     cle: "canalisation".into(),
                     nom: "Canalisation d'énergie".into(),
                     max: Some(utilisations),
@@ -1966,6 +1973,7 @@ impl Fiche {
                                 let cle = format!("domaine:{}:{k}", d.id);
                                 if let Some(max) = utilisations {
                                     pouvoirs.push(PouvoirJournalier {
+                                        partage: None,
                                         cle: cle.clone(),
                                         nom: p.nom.clone(),
                                         max: Some(max),

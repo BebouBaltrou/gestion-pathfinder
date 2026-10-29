@@ -356,6 +356,22 @@ fn consommer_pouvoir(
         .iter()
         .find(|p| p.cle == cle)
         .ok_or_else(|| format!("pouvoir inconnu ou pas encore accordé : {cle}"))?;
+    if let Some((reserve, cout)) = &pouvoir.partage {
+        let max = valeurs
+            .pouvoirs
+            .iter()
+            .find(|p| &p.cle == reserve)
+            .and_then(|p| p.max);
+        let n = utilises.entry(reserve.clone()).or_default();
+        if max.is_some_and(|m| (*n + cout) as i32 > m) {
+            return Err(format!(
+                "plus assez d'utilisations pour « {} » aujourd'hui",
+                pouvoir.nom
+            ));
+        }
+        *n += cout;
+        return Ok(());
+    }
     let n = utilises.entry(cle.to_string()).or_default();
     if pouvoir.max.is_some_and(|m| *n as i32 >= m) {
         return Err(format!(

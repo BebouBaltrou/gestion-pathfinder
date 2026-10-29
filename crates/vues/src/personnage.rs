@@ -940,9 +940,21 @@ pub fn fiche_complete(
             cle: p.cle.clone(),
             nom: p.nom.clone(),
             max: p.max,
-            restants: p
-                .max
-                .map(|m| (m - e.pouvoirs_utilises.get(&p.cle).copied().unwrap_or(0) as i32).max(0)),
+            restants: match &p.partage {
+                // Réserve partagée : ce qui reste de la réserve, divisé par le coût d'un usage.
+                Some((reserve, cout)) => v
+                    .pouvoirs
+                    .iter()
+                    .find(|q| &q.cle == reserve)
+                    .and_then(|q| q.max)
+                    .map(|m| {
+                        let pris = e.pouvoirs_utilises.get(reserve).copied().unwrap_or(0) as i32;
+                        ((m - pris) / (*cout).max(1) as i32).max(0)
+                    }),
+                None => p.max.map(|m| {
+                    (m - e.pouvoirs_utilises.get(&p.cle).copied().unwrap_or(0) as i32).max(0)
+                }),
+            },
         })
         .collect();
 
