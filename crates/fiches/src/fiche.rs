@@ -120,6 +120,9 @@ pub struct Fiche {
     /// Type d'arme de la maîtrise des armes du guerrier (niveau 20).
     #[cfg_attr(feature = "serde", serde(default))]
     pub arme_de_maitrise: Option<String>,
+    /// Pacte divin du paladin (niveau 5) : `arme liée` ou `destrier`, choix définitif.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub pacte_divin: Option<String>,
     /// Pouvoirs de rage choisis par le barbare (noms de `data/core/pouvoirs_rage.json`).
     #[cfg_attr(feature = "serde", serde(default))]
     pub pouvoirs_rage: Vec<String>,
@@ -270,6 +273,8 @@ pub enum Probleme {
     GroupeDArmesInconnu(String),
     ArmeDeMaitriseManquante,
     ArmeDeMaitriseInconnue(String),
+    PacteDivinManquant,
+    PacteDivinInconnu(String),
     GroupeDArmesEnDouble(String),
     PacteDuChasseurInconnu(String),
     AugmentationsEnnemisAChoisir {
@@ -362,6 +367,7 @@ impl Probleme {
             | Probleme::PacteManquant
             | Probleme::PacteDuChasseurManquant
             | Probleme::ArmeDeMaitriseManquante
+            | Probleme::PacteDivinManquant
             | Probleme::CompagnonManquant => true,
             _ => false,
         }
@@ -540,6 +546,8 @@ impl std::fmt::Display for Probleme {
             Probleme::ArmeDeMaitriseManquante => {
                 write!(f, "maîtrise des armes : l'arme est à choisir (niveau 20)")
             }
+            Probleme::PacteDivinManquant => write!(f, "pacte divin à choisir (niveau 5)"),
+            Probleme::PacteDivinInconnu(p) => write!(f, "pacte divin inconnu : {p}"),
             Probleme::ArmeDeMaitriseInconnue(a) => write!(f, "maîtrise des armes : arme inconnue : {a}"),
             Probleme::GroupeDArmesInconnu(g) => write!(f, "groupe d'armes inconnu : {g}"),
             Probleme::GroupeDArmesEnDouble(g) => write!(f, "groupe d'armes déjà choisi : {g}"),
@@ -2057,6 +2065,16 @@ impl Fiche {
                     nom: "Canalisation d'énergie".into(),
                     max: Some(utilisations),
                 });
+                if nc >= 5 {
+                    if let Some(forme) = &self.pacte_divin {
+                        pouvoirs.push(PouvoirJournalier {
+                            partage: None,
+                            cle: "pacte_divin".into(),
+                            nom: format!("Pacte divin ({forme})"),
+                            max: Some(1 + (nc as i32 - 5) / 4),
+                        });
+                    }
+                }
                 canalisation = Some(Canalisation {
                     positive: Some(true),
                     des: 1 + nc.saturating_sub(1) / 2,

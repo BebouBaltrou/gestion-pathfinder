@@ -813,6 +813,7 @@ pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32, r: &Referentiel) -> Result
         pacte_du_chasseur: None,
         groupes_d_armes: vec![],
         arme_de_maitrise: None,
+        pacte_divin: None,
         pouvoirs_rage: vec![],
         en_rage: false,
         rounds_de_rage: 0,

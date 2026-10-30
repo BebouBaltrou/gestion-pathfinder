@@ -55,6 +55,7 @@ fn pretre(niveau: u32, sagesse: i32) -> Fiche {
         pacte_du_chasseur: None,
         groupes_d_armes: vec![],
         arme_de_maitrise: None,
+        pacte_divin: None,
         pouvoirs_rage: vec![],
         en_rage: false,
         rounds_de_rage: 0,
@@ -905,6 +906,7 @@ fn barbare(niveau: u32, constitution: i32) -> Fiche {
         pacte_du_chasseur: None,
         groupes_d_armes: vec![],
         arme_de_maitrise: None,
+        pacte_divin: None,
         pouvoirs_rage: vec![],
         en_rage: false,
         rounds_de_rage: 0,
@@ -1496,6 +1498,7 @@ fn une_grace_doit_etre_accessible_au_niveau_et_avoir_son_prerequis() {
     }));
 
     f.graces = vec!["Secoué".into(), "Effrayé".into(), "Fatigué".into()];
+    f.pacte_divin = Some("destrier".into()); // requis dès le niveau 5
     assert!(f.problemes_choix_de_classe(&r).is_empty());
 
     f.graces = vec!["Nexistepas".into(), "Fatigué".into(), "Fiévreux".into()];
@@ -2230,4 +2233,54 @@ fn valeurs_des_pouvoirs_de_rage_choisis() {
         .iter()
         .any(|x| x.starts_with("Pouvoir de rage (Nouvelle vigueur) : soigne 2d8")));
     assert!(!l.iter().any(|x| x.contains("Resistance inconnue")));
+}
+
+#[test]
+fn le_paladin_choisit_son_pacte_divin_au_niveau_5() {
+    let r = Referentiel::core();
+    let mut f = de_classe("paladin", 5);
+    f.graces = vec!["Fatigué".into(), "Fiévreux".into()];
+    f.graces.truncate(r.choix.nombre_graces(5) as usize);
+    assert!(f
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::PacteDivinManquant));
+    f.pacte_divin = Some("arme liée".into());
+    assert!(f.problemes_choix_de_classe(&r).is_empty());
+    f.pacte_divin = Some("autre".into());
+    assert!(f
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::PacteDivinInconnu("autre".into())));
+    f.pacte_divin = Some("arme liée".into());
+    let v = f.calculer(&r).unwrap();
+    assert!(v
+        .pouvoirs
+        .iter()
+        .any(|p| p.cle == "pacte_divin" && p.max == Some(1)));
+    let l = crate::choix_classe::capacites_chiffrees(&f);
+    assert!(l
+        .iter()
+        .any(|x| x.starts_with("Pacte divin (arme liée)") && x.contains("+1 à l'arme")));
+    let mut haut = de_classe("paladin", 17);
+    haut.pacte_divin = Some("destrier".into());
+    let l = crate::choix_classe::capacites_chiffrees(&haut);
+    assert!(l.iter().any(|x| x.contains("4 appel(s) par jour")
+        && x.contains("archétype céleste")
+        && x.contains("résistance à la magie 28")));
+    // Le choix est définitif.
+    let regles = ReglesFiche::default();
+    let mut j = Journal::nouveau(de_classe("paladin", 5));
+    assert!(j
+        .ajouter(
+            EvenementFiche::PacteDivinChoisi("destrier".into()),
+            &r,
+            &regles
+        )
+        .is_ok());
+    assert!(j
+        .ajouter(
+            EvenementFiche::PacteDivinChoisi("arme liée".into()),
+            &r,
+            &regles
+        )
+        .is_err());
 }

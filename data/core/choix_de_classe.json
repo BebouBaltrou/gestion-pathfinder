@@ -564,5 +564,15 @@
       "+18/+18/+13/+13/+8/+8/+3"
     ],
     "deplacement_accelere_metres_tous_les_3_niveaux": 3
+  },
+  "pacte_divin_paladin": {
+    "classe": "paladin",
+    "source": "Manuel des joueurs (VF), Paladin, Pacte divin (texte fourni par l’utilisateur)",
+    "niveau": 5,
+    "formes": [
+      "arme liée",
+      "destrier"
+    ],
+    "note": "Choix définitif au niveau 5. Une utilisation par jour au niveau 5, une de plus tous les quatre niveaux (quatre au niveau 17). Arme liée : +1 d’altération au niveau 5 puis +1 tous les trois niveaux (+6 au niveau 20), pendant 1 minute par niveau de paladin. Destrier : suit les règles du compagnon animal du druide, niveau de druide effectif égal au niveau de paladin ; archétype céleste au niveau 11, résistance à la magie égale au niveau + 11 au niveau 15. Le choix de l’animal du destrier n’est pas encore fait."
   }
 }

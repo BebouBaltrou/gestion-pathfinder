@@ -517,6 +517,22 @@ function ChoixClasses({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => v
           )}
         </div>
       )}
+      {c.pacteDivinAChoisir && (
+        <div className="carte">
+          {c.pacteDivin ? (
+            <p>Pacte divin : {c.pacteDivin}</p>
+          ) : (
+            <>
+              <p>Pacte divin (choix définitif) :</p>
+              <div className="grille-boutons">
+                {c.formesDuPacteDivin.map((p) => (
+                  <button key={p} className="bouton" onClick={() => agir({ PacteDivinChoisi: p })}>{p}</button>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      )}
       {c.pacteDuChasseurAChoisir && (
         <div className="carte">
           {c.pacteDuChasseur ? (

@@ -598,6 +598,10 @@ pub struct ChoixClassesVue {
     pub arme_de_maitrise_a_choisir: bool,
     pub arme_de_maitrise: Option<String>,
     pub armes_de_maitrise_possibles: Vec<String>,
+    /// Pacte divin du paladin : à choisir (niveau 5 atteint), choisi, formes possibles.
+    pub pacte_divin_a_choisir: bool,
+    pub pacte_divin: Option<String>,
+    pub formes_du_pacte_divin: Vec<String>,
     /// Nombre de pouvoirs de rage attendus au niveau de barbare actuel.
     pub rage_attendus: u32,
     pub rage_choisis: Vec<PouvoirRageVue>,
@@ -705,6 +709,10 @@ fn choix_classes(r: &Referentiel, f: &Fiche) -> ChoixClassesVue {
         groupes_d_armes: f.groupes_d_armes.clone(),
         arme_de_maitrise_a_choisir: f.niveau_de_classe("guerrier") >= 20,
         arme_de_maitrise: f.arme_de_maitrise.clone(),
+        pacte_divin_a_choisir: c.pacte_divin_paladin.niveau > 0
+            && f.niveau_de_classe("paladin") >= c.pacte_divin_paladin.niveau,
+        pacte_divin: f.pacte_divin.clone(),
+        formes_du_pacte_divin: c.pacte_divin_paladin.formes.clone(),
         armes_de_maitrise_possibles: r
             .equipement
             .armes
@@ -2321,6 +2329,7 @@ mod tests_pretre {
             pacte_du_chasseur: None,
             groupes_d_armes: vec![],
             arme_de_maitrise: None,
+            pacte_divin: None,
             pouvoirs_rage: vec![],
             en_rage: false,
             rounds_de_rage: 0,

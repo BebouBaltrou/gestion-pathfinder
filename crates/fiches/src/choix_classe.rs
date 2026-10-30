@@ -15,6 +15,13 @@ pub struct ChoixDeClasse {
     pub pacte_du_chasseur: PacteDuChasseur,
     pub entrainement_aux_armes_guerrier: EntrainementAuxArmes,
     pub moine_mains_nues: MoineMainsNues,
+    pub pacte_divin_paladin: PacteDivin,
+}
+
+#[derive(Debug, Clone, Default, Deserialize)]
+pub struct PacteDivin {
+    pub niveau: u32,
+    pub formes: Vec<String>,
 }
 
 #[derive(Debug, Clone, Default, Deserialize)]
@@ -410,6 +417,17 @@ impl Fiche {
             }
         }
 
+        let pacte = &c.pacte_divin_paladin;
+        if pacte.niveau > 0 && self.niveau_de_classe("paladin") >= pacte.niveau {
+            match &self.pacte_divin {
+                None => p.push(Probleme::PacteDivinManquant),
+                Some(forme) if !pacte.formes.contains(forme) => {
+                    p.push(Probleme::PacteDivinInconnu(forme.clone()));
+                }
+                Some(_) => {}
+            }
+        }
+
         let niveau_barbare = self.niveau_de_classe("barbare");
         let attendus = PouvoirsRage::attendus(niveau_barbare);
         let choisis = self.pouvoirs_rage.len() as u32;
@@ -794,6 +812,23 @@ pub fn capacites_chiffrees(fiche: &Fiche) -> Vec<String> {
             "Proie du chasseur : bonus d'intuition de +{} aux jets d'attaque contre la proie, critiques confirmés automatiquement",
             if rodeur >= 19 { 4 } else { 2 }
         ));
+    }
+    let paladin = fiche.niveau_de_classe("paladin");
+    if paladin >= 5 {
+        match fiche.pacte_divin.as_deref() {
+            Some("arme liée") => l.push(format!(
+                "Pacte divin (arme liée) : esprit céleste pendant {paladin} minute(s), bonus d'altération de +{} à l'arme (jusqu'à +5 cumulés avec ceux qu'elle a déjà), ou propriétés au même coût ; {} utilisation(s) par jour",
+                (1 + (paladin - 5) / 3).min(6),
+                1 + (paladin - 5) / 4
+            )),
+            Some("destrier") => l.push(format!(
+                "Pacte divin (destrier) : compagnon animal de niveau de druide effectif {paladin}, appelé par une action complexe ; {} appel(s) par jour{}{}",
+                1 + (paladin - 5) / 4,
+                if paladin >= 11 { " ; archétype céleste" } else { "" },
+                if paladin >= 15 { format!(" ; résistance à la magie {}", paladin + 11) } else { String::new() }
+            )),
+            _ => {}
+        }
     }
     let moine = fiche.niveau_de_classe("moine");
     if moine >= 1 {
