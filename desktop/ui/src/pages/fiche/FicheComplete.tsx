@@ -533,6 +533,24 @@ function ChoixClasses({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => v
           )}
         </div>
       )}
+      {c.animauxDuCompagnon.length > 0 && (
+        <div className="carte">
+          <p>Compagnon animal ou destrier (niveau de druide effectif {c.niveauDeDruideEffectif}) : {c.compagnonChoisi ? (c.animauxDuCompagnon.find(([id]) => id === c.compagnonChoisi)?.[1] ?? c.compagnonChoisi) : "à choisir"}</p>
+          {!c.compagnonChoisi && (
+            <div className="grille-boutons">
+              {c.animauxDuCompagnon.map(([id, nom]) => (
+                <button
+                  key={id}
+                  className="bouton"
+                  onClick={() => agir({ CompagnonModifie: { animal: id, nom, ignore_developpement: false, augmentations: [] } })}
+                >
+                  {nom}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
       {c.pacteDuChasseurAChoisir && (
         <div className="carte">
           {c.pacteDuChasseur ? (

@@ -574,5 +574,39 @@
       "destrier"
     ],
     "note": "Choix définitif au niveau 5. Une utilisation par jour au niveau 5, une de plus tous les quatre niveaux (quatre au niveau 17). Arme liée : +1 d’altération au niveau 5 puis +1 tous les trois niveaux (+6 au niveau 20), pendant 1 minute par niveau de paladin. Destrier : suit les règles du compagnon animal du druide, niveau de druide effectif égal au niveau de paladin ; archétype céleste au niveau 11, résistance à la magie égale au niveau + 11 au niveau 15. Le choix de l’animal du destrier n’est pas encore fait."
+  },
+  "compagnon_rodeur": {
+    "classe": "rodeur",
+    "source": "Manuel des joueurs (VF), Rôdeur, Pacte du chasseur, compagnon animal (texte fourni par l’utilisateur)",
+    "niveau": 4,
+    "decalage": -3,
+    "animaux": [
+      "blaireau_glouton",
+      "chameau",
+      "cheval",
+      "chien",
+      "loup",
+      "oiseau_aigle_faucon_hibou",
+      "poney",
+      "felin_petit_guepard_leopard",
+      "serpent_constricteur",
+      "vipere",
+      "requin"
+    ],
+    "note": "Niveau de druide effectif = niveau de rôdeur −3. Le texte cite aussi le rat sanguinaire, absent de la liste des compagnons saisie ; le requin n’est permis que si la campagne se déroule en milieu aquatique. « Cheval (lourd ou léger) » et « petit félin » lus comme les entrées Cheval et Félin, petit de la liste."
+  },
+  "compagnon_destrier": {
+    "classe": "paladin",
+    "source": "Manuel des joueurs (VF), Paladin, Pacte divin, destrier (texte fourni par l’utilisateur)",
+    "niveau": 5,
+    "decalage": 0,
+    "animaux": [
+      "cheval",
+      "poney",
+      "sanglier",
+      "chameau",
+      "chien"
+    ],
+    "note": "Niveau de druide effectif = niveau de paladin. Cheval lourd (taille M) ou poney (taille P) en général ; sanglier, chameau ou chien possibles. Intelligence d’au moins 6. Cumul avec d’autres sources de compagnon : non précisé."
   }
 }

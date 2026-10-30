@@ -16,6 +16,17 @@ pub struct ChoixDeClasse {
     pub entrainement_aux_armes_guerrier: EntrainementAuxArmes,
     pub moine_mains_nues: MoineMainsNues,
     pub pacte_divin_paladin: PacteDivin,
+    pub compagnon_rodeur: SourceDeCompagnon,
+    pub compagnon_destrier: SourceDeCompagnon,
+}
+
+/// Compagnon animal obtenu par une classe autre que le druide (rôdeur, paladin).
+#[derive(Debug, Clone, Default, Deserialize)]
+pub struct SourceDeCompagnon {
+    pub niveau: u32,
+    /// Ajouté au niveau de classe pour obtenir le niveau de druide effectif.
+    pub decalage: i32,
+    pub animaux: Vec<String>,
 }
 
 #[derive(Debug, Clone, Default, Deserialize)]
@@ -425,6 +436,24 @@ impl Fiche {
                     p.push(Probleme::PacteDivinInconnu(forme.clone()));
                 }
                 Some(_) => {}
+            }
+        }
+
+        if let Some((source, niveau)) = compagnon_hors_druide(self, r) {
+            match &self.compagnon {
+                None => p.push(Probleme::CompagnonManquant),
+                Some(comp) => {
+                    if !source.animaux.contains(&comp.animal) {
+                        p.push(Probleme::AnimalNonPermis(comp.animal.clone()));
+                    }
+                    let permises = crate::compagnon::augmentations_permises(&r.compagnons, niveau);
+                    if comp.augmentations.len() as u32 > permises {
+                        p.push(Probleme::AugmentationsDeTrop {
+                            permises,
+                            choisies: comp.augmentations.len() as u32,
+                        });
+                    }
+                }
             }
         }
 
@@ -1105,4 +1134,29 @@ pub fn valeur_du_pouvoir_de_rage(nom: &str, niveau: u32) -> Option<String> {
         "Nage en rage" => format!("+{niveau} (altération) aux tests de Natation en rage (appliqué à la fiche)"),
         _ => return None,
     })
+}
+
+/// Compagnon animal du rôdeur ou destrier du paladin : animaux permis et niveau de druide
+/// effectif, si le pacte choisi donne un compagnon et que le druide n'en a pas déjà un.
+pub fn compagnon_hors_druide<'a>(
+    fiche: &Fiche,
+    r: &'a Referentiel,
+) -> Option<(&'a SourceDeCompagnon, u32)> {
+    if fiche.pacte.as_deref() == Some("compagnon") {
+        return None;
+    }
+    let c = &r.choix;
+    let rodeur = fiche.niveau_de_classe("rodeur");
+    if fiche.pacte_du_chasseur.as_deref() == Some("compagnon animal")
+        && rodeur >= c.compagnon_rodeur.niveau
+    {
+        let niveau = (rodeur as i32 + c.compagnon_rodeur.decalage).max(1) as u32;
+        return Some((&c.compagnon_rodeur, niveau));
+    }
+    let paladin = fiche.niveau_de_classe("paladin");
+    if fiche.pacte_divin.as_deref() == Some("destrier") && paladin >= c.compagnon_destrier.niveau {
+        let niveau = (paladin as i32 + c.compagnon_destrier.decalage).max(1) as u32;
+        return Some((&c.compagnon_destrier, niveau));
+    }
+    None
 }

@@ -602,6 +602,10 @@ pub struct ChoixClassesVue {
     pub pacte_divin_a_choisir: bool,
     pub pacte_divin: Option<String>,
     pub formes_du_pacte_divin: Vec<String>,
+    /// Compagnon du rôdeur ou destrier du paladin : animaux permis (identifiant, nom) et choix.
+    pub animaux_du_compagnon: Vec<(String, String)>,
+    pub compagnon_choisi: Option<String>,
+    pub niveau_de_druide_effectif: u32,
     /// Nombre de pouvoirs de rage attendus au niveau de barbare actuel.
     pub rage_attendus: u32,
     pub rage_choisis: Vec<PouvoirRageVue>,
@@ -713,6 +717,24 @@ fn choix_classes(r: &Referentiel, f: &Fiche) -> ChoixClassesVue {
             && f.niveau_de_classe("paladin") >= c.pacte_divin_paladin.niveau,
         pacte_divin: f.pacte_divin.clone(),
         formes_du_pacte_divin: c.pacte_divin_paladin.formes.clone(),
+        animaux_du_compagnon: fiches::choix_classe::compagnon_hors_druide(f, r)
+            .map(|(source, _)| {
+                source
+                    .animaux
+                    .iter()
+                    .filter_map(|id| {
+                        r.compagnons
+                            .animaux
+                            .iter()
+                            .find(|a| &a.id == id)
+                            .map(|a| (a.id.clone(), a.nom.clone()))
+                    })
+                    .collect()
+            })
+            .unwrap_or_default(),
+        compagnon_choisi: f.compagnon.as_ref().map(|x| x.animal.clone()),
+        niveau_de_druide_effectif: fiches::choix_classe::compagnon_hors_druide(f, r)
+            .map_or(0, |(_, n)| n),
         armes_de_maitrise_possibles: r
             .equipement
             .armes

@@ -1498,7 +1498,7 @@ fn une_grace_doit_etre_accessible_au_niveau_et_avoir_son_prerequis() {
     }));
 
     f.graces = vec!["Secoué".into(), "Effrayé".into(), "Fatigué".into()];
-    f.pacte_divin = Some("destrier".into()); // requis dès le niveau 5
+    f.pacte_divin = Some("arme liée".into()); // requis dès le niveau 5
     assert!(f.problemes_choix_de_classe(&r).is_empty());
 
     f.graces = vec!["Nexistepas".into(), "Fatigué".into(), "Fiévreux".into()];
@@ -1779,7 +1779,7 @@ fn chaque_nouvel_ennemi_juré_dès_le_niveau_5_s_accompagne_d_une_augmentation_d
     f.augmentations_ennemis = vec!["Mort-vivant".into()];
     // Dès le niveau 5, le rôdeur a aussi son premier environnement (niveau 3) et son pacte (niveau 4).
     f.environnements = vec!["Jungle".into()];
-    f.pacte_du_chasseur = Some("compagnon animal".into());
+    f.pacte_du_chasseur = Some("lien avec les compagnons de chasse".into());
     assert!(f.problemes_choix_de_classe(&r).is_empty());
     let l = crate::choix_classe::capacites_chiffrees(&f);
     assert!(l
@@ -2040,7 +2040,7 @@ fn le_rodeur_choisit_ses_environnements_et_son_pacte_du_chasseur() {
     f.augmentations_environnements = vec!["Jungle".into()];
     let p = f.problemes_choix_de_classe(&r);
     assert_eq!(p, vec![Probleme::PacteDuChasseurManquant]);
-    f.pacte_du_chasseur = Some("compagnon animal".into());
+    f.pacte_du_chasseur = Some("lien avec les compagnons de chasse".into());
     assert!(f.problemes_choix_de_classe(&r).is_empty());
     f.pacte_du_chasseur = Some("autre".into());
     assert!(f
@@ -2283,4 +2283,60 @@ fn le_paladin_choisit_son_pacte_divin_au_niveau_5() {
             &regles
         )
         .is_err());
+}
+
+#[test]
+fn le_compagnon_du_rodeur_et_le_destrier_du_paladin_suivent_les_regles_du_druide() {
+    let r = Referentiel::core();
+    let comp = |animal: &str| {
+        Some(crate::compagnon::Compagnon {
+            animal: animal.into(),
+            nom: "Bête".into(),
+            ignore_developpement: false,
+            augmentations: vec![],
+        })
+    };
+    // Rôdeur niveau 7 avec le pacte « compagnon animal » : niveau de druide effectif 4.
+    let mut f = de_classe("rodeur", 7);
+    f.ennemis_jures = vec!["Animal".into(), "Dragon".into()];
+    f.augmentations_ennemis = vec!["Animal".into()];
+    f.environnements = vec!["Jungle".into()];
+    f.pacte_du_chasseur = Some("compagnon animal".into());
+    assert!(f
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::CompagnonManquant));
+    f.compagnon = comp("ours");
+    assert!(f
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::AnimalNonPermis("ours".into())));
+    f.compagnon = comp("loup");
+    assert!(f.problemes_choix_de_classe(&r).is_empty());
+    let (source, niveau) = crate::choix_classe::compagnon_hors_druide(&f, &r).unwrap();
+    assert_eq!(niveau, 4);
+    assert!(source.animaux.contains(&"loup".to_string()));
+    let v = f.calculer(&r).unwrap();
+    let c = v.compagnon.expect("fiche du compagnon");
+    assert_eq!(c.animal, "Loup");
+    // Sans le pacte du compagnon, pas de compagnon calculé.
+    f.pacte_du_chasseur = Some("lien avec les compagnons de chasse".into());
+    assert!(f.calculer(&r).unwrap().compagnon.is_none());
+
+    // Paladin niveau 5 avec le destrier : niveau de druide effectif 5.
+    let mut p = de_classe("paladin", 5);
+    p.pacte_divin = Some("destrier".into());
+    p.compagnon = comp("sanglier");
+    assert_eq!(
+        crate::choix_classe::compagnon_hors_druide(&p, &r)
+            .unwrap()
+            .1,
+        5
+    );
+    assert!(!p
+        .problemes_choix_de_classe(&r)
+        .iter()
+        .any(|x| matches!(x, Probleme::AnimalNonPermis(_))));
+    p.compagnon = comp("loup");
+    assert!(p
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::AnimalNonPermis("loup".into())));
 }

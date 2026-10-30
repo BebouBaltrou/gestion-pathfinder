@@ -233,6 +233,10 @@ export type ChoixClassesVue = {
   pacteDivinAChoisir: boolean;
   pacteDivin: string | null;
   formesDuPacteDivin: string[];
+  /** Animaux permis (identifiant, nom) pour le compagnon du rôdeur ou le destrier du paladin. */
+  animauxDuCompagnon: [string, string][];
+  compagnonChoisi: string | null;
+  niveauDeDruideEffectif: number;
   rageAttendus: number;
   rageChoisis: PouvoirRageVue[];
   /** Pouvoirs de rage accessibles, pas encore pris. `mjra` : règles avancées (APG). */

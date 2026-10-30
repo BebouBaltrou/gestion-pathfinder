@@ -275,6 +275,7 @@ pub enum Probleme {
     ArmeDeMaitriseInconnue(String),
     PacteDivinManquant,
     PacteDivinInconnu(String),
+    AnimalNonPermis(String),
     GroupeDArmesEnDouble(String),
     PacteDuChasseurInconnu(String),
     AugmentationsEnnemisAChoisir {
@@ -547,6 +548,7 @@ impl std::fmt::Display for Probleme {
                 write!(f, "maîtrise des armes : l'arme est à choisir (niveau 20)")
             }
             Probleme::PacteDivinManquant => write!(f, "pacte divin à choisir (niveau 5)"),
+            Probleme::AnimalNonPermis(a) => write!(f, "animal non permis pour ce compagnon : {a}"),
             Probleme::PacteDivinInconnu(p) => write!(f, "pacte divin inconnu : {p}"),
             Probleme::ArmeDeMaitriseInconnue(a) => write!(f, "maîtrise des armes : arme inconnue : {a}"),
             Probleme::GroupeDArmesInconnu(g) => write!(f, "groupe d'armes inconnu : {g}"),
@@ -2028,6 +2030,13 @@ impl Fiche {
         let mut domaines_vus = Vec::new();
         let mut pouvoirs: Vec<PouvoirJournalier> = Vec::new();
         let mut compagnon_calcule = None;
+        // Compagnon animal du rôdeur ou destrier du paladin (niveau de druide effectif).
+        if let Some((_, niveau)) = crate::choix_classe::compagnon_hors_druide(self, r) {
+            compagnon_calcule = self
+                .compagnon
+                .as_ref()
+                .and_then(|c| c.calculer(&r.compagnons, niveau));
+        }
         for id in &vues {
             let Some(classe) = r.classe(id) else { continue };
             let nc = self.niveau_de_classe(id);
