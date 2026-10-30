@@ -2211,3 +2211,23 @@ fn la_maitrise_des_armes_du_guerrier_majore_le_critique_de_l_arme_choisie() {
         )
         .is_err());
 }
+
+#[test]
+fn valeurs_des_pouvoirs_de_rage_choisis() {
+    let mut f = de_classe("barbare", 8);
+    f.pouvoirs_rage = vec![
+        "Coup puissant".into(),
+        "Posture défensive".into(),
+        "Resistance inconnue".into(),
+        "Nouvelle vigueur".into(),
+    ];
+    let l = crate::choix_classe::capacites_chiffrees(&f);
+    assert!(l.contains(&"Pouvoir de rage (Coup puissant) : +3 à un jet de dégâts (action rapide avant l'attaque, une fois par rage)".to_string()));
+    assert!(l
+        .iter()
+        .any(|x| x.starts_with("Pouvoir de rage (Posture défensive) : bonus d'esquive de +2")));
+    assert!(l
+        .iter()
+        .any(|x| x.starts_with("Pouvoir de rage (Nouvelle vigueur) : soigne 2d8")));
+    assert!(!l.iter().any(|x| x.contains("Resistance inconnue")));
+}

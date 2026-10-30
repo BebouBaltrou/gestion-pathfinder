@@ -736,6 +736,14 @@ pub fn capacites_chiffrees(fiche: &Fiche) -> Vec<String> {
         ));
     }
     let barbare = fiche.niveau_de_classe("barbare");
+    for (i, p) in fiche.pouvoirs_rage.iter().enumerate() {
+        if fiche.pouvoirs_rage[..i].contains(p) {
+            continue;
+        }
+        if let Some(v) = valeur_du_pouvoir_de_rage(p, barbare) {
+            l.push(format!("Pouvoir de rage ({p}) : {v}"));
+        }
+    }
     // Les bonus de sens des pièges de classes différentes se cumulent (Manuel des joueurs).
     let sens = roublard / 3 + barbare / 3;
     if sens >= 1 {
@@ -1016,4 +1024,50 @@ pub fn est_l_arme_de_maitrise(fiche: &Fiche, def: &crate::equipement::ArmeDef) -
             let cible = nom_d_arme(a);
             nom_d_arme(&def.nom) == cible || nom_d_arme(&def.nom_en) == cible
         })
+}
+
+/// Valeur, au niveau de barbare `niveau`, du pouvoir de rage `nom` quand le texte du livre donne
+/// un chiffre qui progresse avec le niveau (affichage seulement). Les formules « +1, +1 par tranche
+/// de quatre niveaux » sont lues « 1 + niveau ÷ 4 » : lecture à valider.
+pub fn valeur_du_pouvoir_de_rage(nom: &str, niveau: u32) -> Option<String> {
+    let quatre = 1 + niveau / 4;
+    Some(match nom {
+        "Chasseur de sorcière" => format!(
+            "+{quatre} aux jets de dégâts contre les créatures qui possèdent des sorts ou des pouvoirs magiques"
+        ),
+        "Coup puissant" => format!(
+            "+{quatre} à un jet de dégâts (action rapide avant l'attaque, une fois par rage)"
+        ),
+        "Précision étonnante" => format!(
+            "+{quatre} (moral) à un jet d'attaque (action rapide avant l'attaque, une fois par rage)"
+        ),
+        "Imprudente désinvolture" => {
+            format!("−{quatre} à la CA pour +{quatre} aux jets d'attaque, si le barbare le choisit")
+        }
+        "Animal totem" => format!("bonus d'armure naturelle de +{quatre} en rage"),
+        "Buveur prodigieux" => format!(
+            "bonus d'esquive à la CA contre les attaques d'opportunité : +1 par dose d'alcool, jusqu'à +{}",
+            niveau / 4
+        ),
+        "Posture défensive" => format!(
+            "bonus d'esquive de +{} à la CA contre les attaques au corps à corps (rounds égaux au modificateur de Constitution, au moins 1)",
+            1 + niveau / 6
+        ),
+        "Pic de force" => format!(
+            "+{niveau} à un jet de Force, un test de manœuvre offensive ou la défense contre une manœuvre (une fois par rage)"
+        ),
+        "Résistance à l'énergie" => format!(
+            "résistance de {} au type d'énergie choisi (acide, froid, électricité, feu ou son)",
+            (niveau / 2).max(1)
+        ),
+        "Nouvelle vigueur" if niveau >= 4 => format!(
+            "soigne {}d8 + modificateur de Constitution (une fois par jour, action simple, en rage)",
+            (1 + (niveau - 4) / 4).min(5)
+        ),
+        "Réduction de dégâts accrue" => "réduction de dégâts +1/— par choix, tant que le barbare est en rage".to_string(),
+        "Pas rapides" => "vitesse +1,50 m par choix (appliquée à la fiche en rage)".to_string(),
+        "Escalade en rage" => format!("+{niveau} (altération) aux tests d'Escalade en rage (appliqué à la fiche)"),
+        "Nage en rage" => format!("+{niveau} (altération) aux tests de Natation en rage (appliqué à la fiche)"),
+        _ => return None,
+    })
 }
