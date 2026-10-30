@@ -117,6 +117,9 @@ pub struct Fiche {
     /// Groupes d'armes de l'entraînement aux armes du guerrier (niveaux 5, 9, 13, 17), dans l'ordre.
     #[cfg_attr(feature = "serde", serde(default))]
     pub groupes_d_armes: Vec<String>,
+    /// Type d'arme de la maîtrise des armes du guerrier (niveau 20).
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub arme_de_maitrise: Option<String>,
     /// Pouvoirs de rage choisis par le barbare (noms de `data/core/pouvoirs_rage.json`).
     #[cfg_attr(feature = "serde", serde(default))]
     pub pouvoirs_rage: Vec<String>,
@@ -265,6 +268,8 @@ pub enum Probleme {
         choisis: u32,
     },
     GroupeDArmesInconnu(String),
+    ArmeDeMaitriseManquante,
+    ArmeDeMaitriseInconnue(String),
     GroupeDArmesEnDouble(String),
     PacteDuChasseurInconnu(String),
     AugmentationsEnnemisAChoisir {
@@ -356,6 +361,7 @@ impl Probleme {
             | Probleme::EnergieAChoisir
             | Probleme::PacteManquant
             | Probleme::PacteDuChasseurManquant
+            | Probleme::ArmeDeMaitriseManquante
             | Probleme::CompagnonManquant => true,
             _ => false,
         }
@@ -531,6 +537,10 @@ impl std::fmt::Display for Probleme {
             Probleme::GroupesDArmesAChoisir { attendus, choisis } => {
                 write!(f, "entraînement aux armes : {choisis} groupe(s) choisi(s) sur {attendus}")
             }
+            Probleme::ArmeDeMaitriseManquante => {
+                write!(f, "maîtrise des armes : l'arme est à choisir (niveau 20)")
+            }
+            Probleme::ArmeDeMaitriseInconnue(a) => write!(f, "maîtrise des armes : arme inconnue : {a}"),
             Probleme::GroupeDArmesInconnu(g) => write!(f, "groupe d'armes inconnu : {g}"),
             Probleme::GroupeDArmesEnDouble(g) => write!(f, "groupe d'armes déjà choisi : {g}"),
             Probleme::PacteDuChasseurInconnu(p) => write!(f, "pacte du chasseur inconnu : {p}"),
@@ -2226,7 +2236,13 @@ impl Fiche {
                 attaque,
                 des: def.degats_moyens(),
                 bonus_degats,
-                critique: def.critique_en.clone(),
+                critique: if crate::choix_classe::est_l_arme_de_maitrise(self, def) {
+                    def.critique_en
+                        .as_deref()
+                        .map(crate::choix_classe::critique_majore)
+                } else {
+                    def.critique_en.clone()
+                },
                 portee: def.portee_en.clone(),
                 type_degats: def.type_en.clone(),
             });

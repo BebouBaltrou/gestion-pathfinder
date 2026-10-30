@@ -86,6 +86,8 @@ pub enum EvenementFiche {
     PacteDuChasseurChoisi(String),
     /// Groupe d'armes de l'entraînement aux armes du guerrier.
     GroupeDArmesChoisi(String),
+    /// Type d'arme de la maîtrise des armes du guerrier (niveau 20), choix définitif.
+    ArmeDeMaitriseChoisie(String),
     /// Pouvoir de rage du barbare choisi.
     PouvoirRageChoisi(String),
     /// Le barbare entre en rage (refusé s'il est fatigué ou épuisé).
@@ -212,6 +214,7 @@ impl EvenementFiche {
             }
             EvenementFiche::PacteDuChasseurChoisi(p) => format!("Pacte du chasseur : {p}"),
             EvenementFiche::GroupeDArmesChoisi(g) => format!("Entraînement aux armes : {g}"),
+            EvenementFiche::ArmeDeMaitriseChoisie(a) => format!("Maîtrise des armes : {a}"),
             EvenementFiche::PouvoirRageChoisi(p) => format!("Pouvoir de rage : {p}"),
             EvenementFiche::RageCommencee => "Entrée en rage".to_string(),
             EvenementFiche::RageTerminee => "Fin de la rage".to_string(),
@@ -776,6 +779,15 @@ impl Journal {
                     fiche.augmentations_environnements.push(e.clone());
                 }
                 EvenementFiche::GroupeDArmesChoisi(g) => fiche.groupes_d_armes.push(g.clone()),
+                EvenementFiche::ArmeDeMaitriseChoisie(a) => {
+                    if fiche.arme_de_maitrise.is_some() {
+                        return Err(ErreurJournal::Choix {
+                            evenement: i,
+                            raison: "l'arme de la maîtrise des armes ne se modifie pas".to_string(),
+                        });
+                    }
+                    fiche.arme_de_maitrise = Some(a.clone());
+                }
                 EvenementFiche::PacteDuChasseurChoisi(p) => {
                     if fiche.pacte_du_chasseur.is_some() {
                         return Err(ErreurJournal::Choix {

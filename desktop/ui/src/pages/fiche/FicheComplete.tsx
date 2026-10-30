@@ -500,6 +500,23 @@ function ChoixClasses({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => v
           )}
         </div>
       )}
+      {c.armeDeMaitriseAChoisir && (
+        <div className="carte">
+          {c.armeDeMaitrise ? (
+            <p>Maîtrise des armes : {c.armeDeMaitrise}</p>
+          ) : (
+            <>
+              <p>Maîtrise des armes (choix définitif) :</p>
+              <select defaultValue="" onChange={(e) => e.target.value && agir({ ArmeDeMaitriseChoisie: e.target.value })}>
+                <option value="">Choisir une arme…</option>
+                {c.armesDeMaitrisePossibles.map((a) => (
+                  <option key={a} value={a}>{a}</option>
+                ))}
+              </select>
+            </>
+          )}
+        </div>
+      )}
       {c.pacteDuChasseurAChoisir && (
         <div className="carte">
           {c.pacteDuChasseur ? (

@@ -41,7 +41,7 @@ pub struct GroupeDArmes {
 }
 
 /// Nom d'arme comparable : minuscules, apostrophes droites, sans virgule.
-fn nom_d_arme(nom: &str) -> String {
+pub fn nom_d_arme(nom: &str) -> String {
     nom.to_lowercase()
         .replace('’', "'")
         .replace(',', "")
@@ -391,6 +391,22 @@ impl Fiche {
             }
             if self.groupes_d_armes[..i].contains(g) {
                 p.push(Probleme::GroupeDArmesEnDouble(g.clone()));
+            }
+        }
+
+        if self.niveau_de_classe("guerrier") >= 20 {
+            match self.arme_de_maitrise.as_deref() {
+                None => p.push(Probleme::ArmeDeMaitriseManquante),
+                Some(a) => {
+                    let cible = nom_d_arme(a);
+                    let connue = r.equipement.armes.iter().any(|x| {
+                        x.est_maniable()
+                            && (nom_d_arme(&x.nom) == cible || nom_d_arme(&x.nom_en) == cible)
+                    });
+                    if !connue {
+                        p.push(Probleme::ArmeDeMaitriseInconnue(a.to_string()));
+                    }
+                }
             }
         }
 
@@ -746,6 +762,12 @@ pub fn capacites_chiffrees(fiche: &Fiche) -> Vec<String> {
             ));
         }
     }
+    if guerrier_niveau >= 20 {
+        let arme = fiche.arme_de_maitrise.as_deref().unwrap_or("à choisir");
+        l.push(format!(
+            "Maîtrise des armes ({arme}) : critiques automatiquement confirmés, multiplicateur de dégâts +1 (appliqué à la fiche), ne peut plus être désarmé avec cette arme"
+        ));
+    }
     if guerrier_niveau >= 19 {
         l.push(
             "Maîtrise des armures : réduction de dégâts 5/— avec une armure ou un bouclier"
@@ -963,4 +985,35 @@ pub fn bonus_de_deplacement_accelere(
         0
     };
     barbare + deplacement_accelere_du_moine(fiche, charge)
+}
+
+/// Critique d'une arme dont le multiplicateur augmente de 1 (maîtrise des armes du guerrier) :
+/// « 19-20/x2 » devient « 19-20/x3 », « x3/x4 » devient « x4/x5 ».
+pub fn critique_majore(critique: &str) -> String {
+    let mut sortie = String::new();
+    let mut chars = critique.chars().peekable();
+    while let Some(c) = chars.next() {
+        sortie.push(c);
+        if c == 'x' || c == '×' {
+            let mut chiffres = String::new();
+            while let Some(d) = chars.peek().copied().filter(char::is_ascii_digit) {
+                chiffres.push(d);
+                chars.next();
+            }
+            match chiffres.parse::<u32>() {
+                Ok(n) => sortie.push_str(&(n + 1).to_string()),
+                Err(_) => sortie.push_str(&chiffres),
+            }
+        }
+    }
+    sortie
+}
+
+/// Vrai si l'arme `nom` (nom français ou anglais du catalogue) est l'arme de maîtrise du guerrier.
+pub fn est_l_arme_de_maitrise(fiche: &Fiche, def: &crate::equipement::ArmeDef) -> bool {
+    fiche.niveau_de_classe("guerrier") >= 20
+        && fiche.arme_de_maitrise.as_deref().is_some_and(|a| {
+            let cible = nom_d_arme(a);
+            nom_d_arme(&def.nom) == cible || nom_d_arme(&def.nom_en) == cible
+        })
 }

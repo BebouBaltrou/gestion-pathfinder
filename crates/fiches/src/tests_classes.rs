@@ -54,6 +54,7 @@ fn pretre(niveau: u32, sagesse: i32) -> Fiche {
         augmentations_environnements: vec![],
         pacte_du_chasseur: None,
         groupes_d_armes: vec![],
+        arme_de_maitrise: None,
         pouvoirs_rage: vec![],
         en_rage: false,
         rounds_de_rage: 0,
@@ -903,6 +904,7 @@ fn barbare(niveau: u32, constitution: i32) -> Fiche {
         augmentations_environnements: vec![],
         pacte_du_chasseur: None,
         groupes_d_armes: vec![],
+        arme_de_maitrise: None,
         pouvoirs_rage: vec![],
         en_rage: false,
         rounds_de_rage: 0,
@@ -2159,4 +2161,53 @@ fn deluge_de_coups_mains_nues_des_petits_moines_et_volonte_indomptable() {
     assert_eq!(de_classe("moine", 2).calculer(&r).unwrap().vitesse, 30);
     let l = crate::choix_classe::capacites_chiffrees(&de_classe("barbare", 14));
     assert!(l.iter().any(|x| x.starts_with("Volonté indomptable : +4")));
+}
+
+#[test]
+fn la_maitrise_des_armes_du_guerrier_majore_le_critique_de_l_arme_choisie() {
+    use crate::choix_classe::critique_majore;
+    assert_eq!(critique_majore("19-20/x2"), "19-20/x3");
+    assert_eq!(critique_majore("x3/x4"), "x4/x5");
+    assert_eq!(critique_majore("x2"), "x3");
+    assert_eq!(critique_majore("—"), "—");
+    let r = Referentiel::core();
+    // Niveau 20 : l'arme est à choisir ; une arme inconnue est refusée.
+    let mut f = de_classe("guerrier", 20);
+    f.groupes_d_armes = vec![
+        "Lames lourdes".into(),
+        "Haches".into(),
+        "Arcs".into(),
+        "Lances".into(),
+    ];
+    f.equipement.armes = vec!["Longsword".into()];
+    assert!(f
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::ArmeDeMaitriseManquante));
+    f.arme_de_maitrise = Some("Arme inventée".into());
+    assert!(f
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::ArmeDeMaitriseInconnue("Arme inventée".into())));
+    let sans = f.calculer(&r).unwrap();
+    f.arme_de_maitrise = Some("Épée longue".into());
+    assert!(f.problemes_choix_de_classe(&r).is_empty());
+    let avec = f.calculer(&r).unwrap();
+    assert_eq!(sans.armes[0].critique.as_deref(), Some("19-20/x2"));
+    assert_eq!(avec.armes[0].critique.as_deref(), Some("19-20/x3"));
+    // Le choix est définitif.
+    let regles = ReglesFiche::default();
+    let mut j = Journal::nouveau(de_classe("guerrier", 20));
+    assert!(j
+        .ajouter(
+            EvenementFiche::ArmeDeMaitriseChoisie("Épée longue".into()),
+            &r,
+            &regles
+        )
+        .is_ok());
+    assert!(j
+        .ajouter(
+            EvenementFiche::ArmeDeMaitriseChoisie("Rapière".into()),
+            &r,
+            &regles
+        )
+        .is_err());
 }
