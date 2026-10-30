@@ -2340,3 +2340,44 @@ fn le_compagnon_du_rodeur_et_le_destrier_du_paladin_suivent_les_regles_du_druide
         .problemes_choix_de_classe(&r)
         .contains(&Probleme::AnimalNonPermis("loup".into())));
 }
+
+#[test]
+fn le_rat_sanguinaire_est_un_compagnon_du_rodeur_pas_du_druide() {
+    let r = Referentiel::core();
+    let rat = r
+        .compagnons
+        .animaux
+        .iter()
+        .find(|a| a.id == "rat_sanguinaire")
+        .expect("rat sanguinaire");
+    assert!(rat.hors_druide);
+    assert_eq!(rat.caracteristiques.dex, 17);
+    assert!(r
+        .choix
+        .compagnon_rodeur
+        .animaux
+        .contains(&"rat_sanguinaire".to_string()));
+    assert!(!r
+        .choix
+        .compagnon_destrier
+        .animaux
+        .contains(&"rat_sanguinaire".to_string()));
+    let mut f = de_classe("rodeur", 4);
+    f.ennemis_jures = vec!["Animal".into()];
+    f.environnements = vec!["Urbain (bâtiments, rues et égouts)".into()];
+    f.pacte_du_chasseur = Some("compagnon animal".into());
+    f.compagnon = Some(crate::compagnon::Compagnon {
+        animal: "rat_sanguinaire".into(),
+        nom: "Rongeur".into(),
+        ignore_developpement: false,
+        augmentations: vec![],
+    });
+    assert!(f.problemes_choix_de_classe(&r).is_empty());
+    let c = f
+        .calculer(&r)
+        .unwrap()
+        .compagnon
+        .expect("fiche du compagnon");
+    assert_eq!(c.animal, "Rat sanguinaire");
+    assert_eq!(c.taille, "P");
+}

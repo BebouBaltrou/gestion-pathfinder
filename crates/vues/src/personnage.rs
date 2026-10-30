@@ -1930,6 +1930,7 @@ pub fn catalogue_creation() -> CatalogueCreation {
         .compagnons
         .animaux
         .iter()
+        .filter(|a| !a.hors_druide)
         .map(|a| {
             let c = &a.caracteristiques;
             let d = &a.developpement;

@@ -780,6 +780,36 @@
         },
         "autres": ""
       }
+    },
+    {
+      "id": "rat_sanguinaire",
+      "nom": "Rat sanguinaire",
+      "taille": "P",
+      "vitesse": "12 m, escalade 6 m, nage 6 m",
+      "armure_naturelle": 0,
+      "attaques": "morsure (1d4)",
+      "caracteristiques": {
+        "for": 10,
+        "dex": 17,
+        "con": 12,
+        "int": 2,
+        "sag": 12,
+        "cha": 4
+      },
+      "autres": "Particularités odorat, vision nocturne",
+      "hors_druide": true,
+      "developpement": {
+        "niveau": 4,
+        "taille": null,
+        "armure_naturelle": 0,
+        "attaques": "morsure (1d4 plus maladie)",
+        "caracteristiques": {
+          "for": 2,
+          "con": 2
+        },
+        "autres": ""
+      }
     }
-  ]
+  ],
+  "source_rat_sanguinaire": "Rat sanguinaire, compagnon animal : fiche fournie par l’utilisateur (caractéristiques de départ et évolution au niveau 4). Réservé au rôdeur : absent de la liste du druide."
 }

@@ -58,6 +58,9 @@ pub struct AnimalCompagnon {
     pub attaques: String,
     pub caracteristiques: CaracsAnimal,
     pub autres: String,
+    /// Animal que le druide ne peut pas choisir (rat sanguinaire : compagnon du rôdeur).
+    #[serde(default)]
+    pub hors_druide: bool,
     pub developpement: DeveloppementAnimal,
 }
 
@@ -253,7 +256,7 @@ mod tests {
         let r = Referentiel::partage();
         let d = &r.compagnons;
         assert_eq!(d.table.len(), 20);
-        assert_eq!(d.animaux.len(), 17);
+        assert_eq!(d.animaux.len(), 18);
         // Niveau 1 : 2 DV, BBA +1, jets 3/3/0, 2 rangs, 1 don, 1 tour ; niveau 20 : 16 DV, BBA +12.
         let n1 = &d.table[0];
         assert_eq!(
