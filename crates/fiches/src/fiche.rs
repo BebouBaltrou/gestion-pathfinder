@@ -123,6 +123,9 @@ pub struct Fiche {
     /// Pacte divin du paladin (niveau 5) : `arme liée` ou `destrier`, choix définitif.
     #[cfg_attr(feature = "serde", serde(default))]
     pub pacte_divin: Option<String>,
+    /// Formes de Représentation de la versatilité artistique du barde (niveaux 2, 6, 10, 14, 18).
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub formes_de_representation: Vec<String>,
     /// Pouvoirs de rage choisis par le barbare (noms de `data/core/pouvoirs_rage.json`).
     #[cfg_attr(feature = "serde", serde(default))]
     pub pouvoirs_rage: Vec<String>,
@@ -275,6 +278,12 @@ pub enum Probleme {
     ArmeDeMaitriseInconnue(String),
     PacteDivinManquant,
     PacteDivinInconnu(String),
+    FormesDeRepresentationAChoisir {
+        attendus: u32,
+        choisis: u32,
+    },
+    FormeDeRepresentationInconnue(String),
+    FormeDeRepresentationEnDouble(String),
     AnimalNonPermis(String),
     GroupeDArmesEnDouble(String),
     PacteDuChasseurInconnu(String),
@@ -358,6 +367,7 @@ impl Probleme {
             | Probleme::GracesAChoisir { attendus, choisis }
             | Probleme::EnnemisJuresAChoisir { attendus, choisis }
             | Probleme::AugmentationsEnnemisAChoisir { attendus, choisis }
+            | Probleme::FormesDeRepresentationAChoisir { attendus, choisis }
             | Probleme::EnvironnementsAChoisir { attendus, choisis }
             | Probleme::GroupesDArmesAChoisir { attendus, choisis }
             | Probleme::AugmentationsEnvironnementsAChoisir { attendus, choisis }
@@ -548,6 +558,12 @@ impl std::fmt::Display for Probleme {
                 write!(f, "maîtrise des armes : l'arme est à choisir (niveau 20)")
             }
             Probleme::PacteDivinManquant => write!(f, "pacte divin à choisir (niveau 5)"),
+            Probleme::FormesDeRepresentationAChoisir { attendus, choisis } => write!(
+                f,
+                "versatilité artistique : {choisis} forme(s) choisie(s) sur {attendus}"
+            ),
+            Probleme::FormeDeRepresentationInconnue(x) => write!(f, "forme de Représentation inconnue : {x}"),
+            Probleme::FormeDeRepresentationEnDouble(x) => write!(f, "forme de Représentation déjà choisie : {x}"),
             Probleme::AnimalNonPermis(a) => write!(f, "animal non permis pour ce compagnon : {a}"),
             Probleme::PacteDivinInconnu(p) => write!(f, "pacte divin inconnu : {p}"),
             Probleme::ArmeDeMaitriseInconnue(a) => write!(f, "maîtrise des armes : arme inconnue : {a}"),
@@ -898,6 +914,16 @@ impl Fiche {
         }
         for o in &self.equipement.objets_magiques {
             e.extend(o.effets.iter().cloned());
+        }
+        // Savoir bardique : la moitié du niveau de barde (au moins 1) à tous les tests de Connaissances.
+        let barde = self.niveau_de_classe("barde");
+        if barde >= 1 {
+            e.push(Effet::new(
+                "comp.knowledge",
+                TypeBonus::SansType,
+                ((barde / 2).max(1)) as i32,
+                "Savoir bardique",
+            ));
         }
         if self.en_rage {
             e.extend(crate::choix_classe::effets_de_rage(

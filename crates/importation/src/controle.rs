@@ -814,6 +814,7 @@ pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32, r: &Referentiel) -> Result
         groupes_d_armes: vec![],
         arme_de_maitrise: None,
         pacte_divin: None,
+        formes_de_representation: vec![],
         pouvoirs_rage: vec![],
         en_rage: false,
         rounds_de_rage: 0,

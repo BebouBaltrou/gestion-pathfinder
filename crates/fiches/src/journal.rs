@@ -90,6 +90,8 @@ pub enum EvenementFiche {
     ArmeDeMaitriseChoisie(String),
     /// Pacte divin du paladin (niveau 5), choix définitif : `arme liée` ou `destrier`.
     PacteDivinChoisi(String),
+    /// Forme de Représentation de la versatilité artistique du barde.
+    FormeDeRepresentationChoisie(String),
     /// Pouvoir de rage du barbare choisi.
     PouvoirRageChoisi(String),
     /// Le barbare entre en rage (refusé s'il est fatigué ou épuisé).
@@ -218,6 +220,9 @@ impl EvenementFiche {
             EvenementFiche::GroupeDArmesChoisi(g) => format!("Entraînement aux armes : {g}"),
             EvenementFiche::ArmeDeMaitriseChoisie(a) => format!("Maîtrise des armes : {a}"),
             EvenementFiche::PacteDivinChoisi(p) => format!("Pacte divin : {p}"),
+            EvenementFiche::FormeDeRepresentationChoisie(x) => {
+                format!("Versatilité artistique : {x}")
+            }
             EvenementFiche::PouvoirRageChoisi(p) => format!("Pouvoir de rage : {p}"),
             EvenementFiche::RageCommencee => "Entrée en rage".to_string(),
             EvenementFiche::RageTerminee => "Fin de la rage".to_string(),
@@ -782,6 +787,9 @@ impl Journal {
                     fiche.augmentations_environnements.push(e.clone());
                 }
                 EvenementFiche::GroupeDArmesChoisi(g) => fiche.groupes_d_armes.push(g.clone()),
+                EvenementFiche::FormeDeRepresentationChoisie(x) => {
+                    fiche.formes_de_representation.push(x.clone());
+                }
                 EvenementFiche::PacteDivinChoisi(p) => {
                     if fiche.pacte_divin.is_some() {
                         return Err(ErreurJournal::Choix {

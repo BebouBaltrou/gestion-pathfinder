@@ -517,6 +517,18 @@ function ChoixClasses({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => v
           )}
         </div>
       )}
+      {c.formesAttendues > 0 && (
+        <div className="carte">
+          <p>Versatilité artistique ({c.formesDeRepresentation.length}/{c.formesAttendues}){c.formesDeRepresentation.length > 0 && " : " + c.formesDeRepresentation.join(", ")}</p>
+          {c.formesDeRepresentation.length < c.formesAttendues && (
+            <div className="grille-boutons">
+              {c.formesPossibles.map(([nom, comps]) => (
+                <button key={nom} className="bouton" title={comps} onClick={() => agir({ FormeDeRepresentationChoisie: nom })}>{nom}</button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
       {c.pacteDivinAChoisir && (
         <div className="carte">
           {c.pacteDivin ? (

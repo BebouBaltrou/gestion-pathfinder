@@ -233,6 +233,10 @@ export type ChoixClassesVue = {
   pacteDivinAChoisir: boolean;
   pacteDivin: string | null;
   formesDuPacteDivin: string[];
+  formesAttendues: number;
+  formesDeRepresentation: string[];
+  /** Formes de Représentation encore possibles : (nom, compétences associées). */
+  formesPossibles: [string, string][];
   /** Animaux permis (identifiant, nom) pour le compagnon du rôdeur ou le destrier du paladin. */
   animauxDuCompagnon: [string, string][];
   compagnonChoisi: string | null;
@@ -526,6 +530,7 @@ export type EvenementFiche =
   | { GroupeDArmesChoisi: string }
   | { ArmeDeMaitriseChoisie: string }
   | { PacteDivinChoisi: string }
+  | { FormeDeRepresentationChoisie: string }
   | { PouvoirRageChoisi: string }
   | "RageCommencee"
   | "RageTerminee"

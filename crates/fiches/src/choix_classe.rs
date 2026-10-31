@@ -18,6 +18,37 @@ pub struct ChoixDeClasse {
     pub pacte_divin_paladin: PacteDivin,
     pub compagnon_rodeur: SourceDeCompagnon,
     pub compagnon_destrier: SourceDeCompagnon,
+    pub versatilite_artistique_barde: Versatilite,
+}
+
+#[derive(Debug, Clone, Default, Deserialize)]
+pub struct Versatilite {
+    pub premier_niveau: u32,
+    pub puis_tous_les: u32,
+    pub puis_a_partir_du: u32,
+    pub formes: Vec<FormeDeRepresentation>,
+}
+
+#[derive(Debug, Clone, Default, Deserialize)]
+pub struct FormeDeRepresentation {
+    pub nom: String,
+    pub competences: Vec<String>,
+}
+
+impl Versatilite {
+    /// Formes de Représentation choisies au niveau de barde `niveau` : une au niveau 2, une de plus
+    /// au niveau 6 puis tous les quatre niveaux.
+    pub fn nombre(&self, niveau: u32) -> u32 {
+        if self.premier_niveau == 0 || niveau < self.premier_niveau {
+            return 0;
+        }
+        let plus = if self.puis_tous_les == 0 || niveau < self.puis_a_partir_du {
+            0
+        } else {
+            (niveau - self.puis_a_partir_du) / self.puis_tous_les + 1
+        };
+        1 + plus
+    }
 }
 
 /// Compagnon animal obtenu par une classe autre que le druide (rôdeur, paladin).
@@ -457,6 +488,21 @@ impl Fiche {
             }
         }
 
+        let versatilite = &c.versatilite_artistique_barde;
+        let attendus = versatilite.nombre(self.niveau_de_classe("barde"));
+        let choisis = self.formes_de_representation.len() as u32;
+        if attendus != choisis {
+            p.push(Probleme::FormesDeRepresentationAChoisir { attendus, choisis });
+        }
+        for (i, forme) in self.formes_de_representation.iter().enumerate() {
+            if !versatilite.formes.iter().any(|x| &x.nom == forme) {
+                p.push(Probleme::FormeDeRepresentationInconnue(forme.clone()));
+            }
+            if self.formes_de_representation[..i].contains(forme) {
+                p.push(Probleme::FormeDeRepresentationEnDouble(forme.clone()));
+            }
+        }
+
         let niveau_barbare = self.niveau_de_classe("barbare");
         let attendus = PouvoirsRage::attendus(niveau_barbare);
         let choisis = self.pouvoirs_rage.len() as u32;
@@ -841,6 +887,43 @@ pub fn capacites_chiffrees(fiche: &Fiche) -> Vec<String> {
             "Proie du chasseur : bonus d'intuition de +{} aux jets d'attaque contre la proie, critiques confirmés automatiquement",
             if rodeur >= 19 { 4 } else { 2 }
         ));
+    }
+    for forme in &fiche.formes_de_representation {
+        l.push(format!("Versatilité artistique ({forme}) : le bonus total de Représentation remplace celui de la compétence associée"));
+    }
+    if barde >= 5 {
+        l.push(format!(
+            "Maître du savoir : faire 10 aux compétences de Connaissances où le barde a des rangs ; faire 20 {} fois par jour (action simple)",
+            (1 + (barde - 5) / 6).min(3)
+        ));
+    }
+    if barde >= 7 {
+        l.push(format!(
+            "Représentation bardique : activer un effet demande {}",
+            if barde >= 13 {
+                "une action rapide"
+            } else {
+                "une action de mouvement"
+            }
+        ));
+    }
+    if barde >= 10 {
+        l.push(format!(
+            "Touche-à-tout : toutes les compétences peuvent être utilisées sans formation{}{}",
+            if barde >= 16 {
+                " ; toutes sont des compétences de classe"
+            } else {
+                ""
+            },
+            if barde >= 19 {
+                " ; faire 10 à toutes les compétences"
+            } else {
+                ""
+            }
+        ));
+    }
+    if barde >= 2 {
+        l.push("Érudition : +4 aux jets de sauvegarde contre les représentations bardiques, les effets de son et les effets de langage".to_string());
     }
     let paladin = fiche.niveau_de_classe("paladin");
     if paladin >= 5 {

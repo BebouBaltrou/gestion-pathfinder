@@ -602,6 +602,10 @@ pub struct ChoixClassesVue {
     pub pacte_divin_a_choisir: bool,
     pub pacte_divin: Option<String>,
     pub formes_du_pacte_divin: Vec<String>,
+    /// Versatilité artistique du barde : formes attendues, choisies, possibles (nom, compétences associées).
+    pub formes_attendues: u32,
+    pub formes_de_representation: Vec<String>,
+    pub formes_possibles: Vec<(String, String)>,
     /// Compagnon du rôdeur ou destrier du paladin : animaux permis (identifiant, nom) et choix.
     pub animaux_du_compagnon: Vec<(String, String)>,
     pub compagnon_choisi: Option<String>,
@@ -717,6 +721,17 @@ fn choix_classes(r: &Referentiel, f: &Fiche) -> ChoixClassesVue {
             && f.niveau_de_classe("paladin") >= c.pacte_divin_paladin.niveau,
         pacte_divin: f.pacte_divin.clone(),
         formes_du_pacte_divin: c.pacte_divin_paladin.formes.clone(),
+        formes_attendues: c
+            .versatilite_artistique_barde
+            .nombre(f.niveau_de_classe("barde")),
+        formes_de_representation: f.formes_de_representation.clone(),
+        formes_possibles: c
+            .versatilite_artistique_barde
+            .formes
+            .iter()
+            .filter(|x| !f.formes_de_representation.contains(&x.nom))
+            .map(|x| (x.nom.clone(), x.competences.join(", ")))
+            .collect(),
         animaux_du_compagnon: fiches::choix_classe::compagnon_hors_druide(f, r)
             .map(|(source, _)| {
                 source
@@ -2353,6 +2368,7 @@ mod tests_pretre {
             groupes_d_armes: vec![],
             arme_de_maitrise: None,
             pacte_divin: None,
+            formes_de_representation: vec![],
             pouvoirs_rage: vec![],
             en_rage: false,
             rounds_de_rage: 0,

@@ -56,6 +56,7 @@ fn pretre(niveau: u32, sagesse: i32) -> Fiche {
         groupes_d_armes: vec![],
         arme_de_maitrise: None,
         pacte_divin: None,
+        formes_de_representation: vec![],
         pouvoirs_rage: vec![],
         en_rage: false,
         rounds_de_rage: 0,
@@ -907,6 +908,7 @@ fn barbare(niveau: u32, constitution: i32) -> Fiche {
         groupes_d_armes: vec![],
         arme_de_maitrise: None,
         pacte_divin: None,
+        formes_de_representation: vec![],
         pouvoirs_rage: vec![],
         en_rage: false,
         rounds_de_rage: 0,
@@ -1720,7 +1722,10 @@ fn la_rage_donne_ses_bonus_puis_fatigue_le_barbare() {
 
 #[test]
 fn inspirations_du_barde_et_courage_du_guerrier() {
-    let l = crate::choix_classe::capacites_chiffrees(&de_classe("barde", 11));
+    let l: Vec<String> = crate::choix_classe::capacites_chiffrees(&de_classe("barde", 11))
+        .into_iter()
+        .filter(|x| x.starts_with("Inspiration"))
+        .collect();
     assert!(l[0].starts_with("Inspiration vaillante : +3"));
     assert!(l[1].starts_with("Inspiration talentueuse : +4"));
     assert!(l[2].starts_with("Inspiration glorieuse : 1 cible(s)"));
@@ -2405,4 +2410,61 @@ fn la_liste_de_convocation_d_allies_naturels_est_saisie_avec_ses_fiches() {
         .find(|c| c["nom"] == "Rat sanguinaire")
         .unwrap();
     assert_eq!(rat["fp"], "1/3");
+}
+
+#[test]
+fn le_barde_savoir_bardique_versatilite_artistique_et_lignes() {
+    let r = Referentiel::core();
+    let v = &r.choix.versatilite_artistique_barde;
+    assert_eq!(
+        [1, 2, 5, 6, 9, 10, 14, 18, 20].map(|n| v.nombre(n)),
+        [0, 1, 1, 2, 2, 3, 4, 5, 5]
+    );
+    let mut f = de_classe("barde", 6);
+    assert!(f
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::FormesDeRepresentationAChoisir {
+            attendus: 2,
+            choisis: 0
+        }));
+    f.formes_de_representation = vec!["chant".into(), "danse".into()];
+    assert!(f.problemes_choix_de_classe(&r).is_empty());
+    f.formes_de_representation = vec!["chant".into(), "chant".into()];
+    assert!(f
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::FormeDeRepresentationEnDouble("chant".into())));
+    // Savoir bardique : la moitié du niveau (au moins 1) à tous les tests de Connaissances.
+    let avec_rang = |classe: &str, niveau: u32| {
+        let mut f = de_classe(classe, niveau);
+        f.niveaux[0].rangs.insert("knowledge:arcana".into(), 1);
+        f.calculer(&r).unwrap()
+    };
+    let b1 = avec_rang("barde", 1);
+    let non_barde = avec_rang("barbare", 1);
+    assert!(non_barde.competences.contains_key("knowledge:arcana"));
+    assert!(!non_barde.competences["knowledge:arcana"]
+        .termes
+        .iter()
+        .any(|t| t.libelle.starts_with("Savoir bardique")));
+    assert!(b1
+        .competences
+        .get("knowledge:arcana")
+        .unwrap()
+        .termes
+        .iter()
+        .any(|t| t.libelle.starts_with("Savoir bardique") && t.valeur == 1));
+    let b10 = avec_rang("barde", 10);
+    assert!(b10
+        .competences
+        .get("knowledge:arcana")
+        .unwrap()
+        .termes
+        .iter()
+        .any(|t| t.libelle.starts_with("Savoir bardique") && t.valeur == 5));
+    let l = crate::choix_classe::capacites_chiffrees(&de_classe("barde", 17));
+    assert!(l
+        .iter()
+        .any(|x| x.starts_with("Maître du savoir") && x.contains("3 fois par jour")));
+    assert!(l.iter().any(|x| x.contains("une action rapide")));
+    assert!(l.iter().any(|x| x.starts_with("Touche-à-tout")));
 }

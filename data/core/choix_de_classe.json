@@ -609,5 +609,78 @@
       "chien"
     ],
     "note": "Niveau de druide effectif = niveau de paladin. Cheval lourd (taille M) ou poney (taille P) en général ; sanglier, chameau ou chien possibles. Intelligence d’au moins 6. Cumul avec d’autres sources de compagnon : non précisé."
+  },
+  "versatilite_artistique_barde": {
+    "classe": "barde",
+    "source": "Manuel des joueurs (VF), Barde, Versatilité artistique (texte fourni par l’utilisateur)",
+    "premier_niveau": 2,
+    "puis_tous_les": 4,
+    "puis_a_partir_du": 6,
+    "formes": [
+      {
+        "nom": "chant",
+        "competences": [
+          "Bluff",
+          "Psychologie"
+        ]
+      },
+      {
+        "nom": "danse",
+        "competences": [
+          "Acrobaties",
+          "Vol"
+        ]
+      },
+      {
+        "nom": "déclamation",
+        "competences": [
+          "Diplomatie",
+          "Psychologie"
+        ]
+      },
+      {
+        "nom": "farce",
+        "competences": [
+          "Bluff",
+          "Intimidation"
+        ]
+      },
+      {
+        "nom": "instruments à clavier",
+        "competences": [
+          "Diplomatie",
+          "Intimidation"
+        ]
+      },
+      {
+        "nom": "instruments à cordes",
+        "competences": [
+          "Bluff",
+          "Diplomatie"
+        ]
+      },
+      {
+        "nom": "instruments à vent",
+        "competences": [
+          "Diplomatie",
+          "Dressage"
+        ]
+      },
+      {
+        "nom": "percussions",
+        "competences": [
+          "Dressage",
+          "Intimidation"
+        ]
+      },
+      {
+        "nom": "scène",
+        "competences": [
+          "Bluff",
+          "Déguisement"
+        ]
+      }
+    ],
+    "note": "Une forme au niveau 2, puis une nouvelle au niveau 6 et tous les quatre niveaux (10, 14, 18). Le barde utilise son bonus total de Représentation à la place de celui de la compétence associée. Cette substitution n’est pas appliquée aux totaux : elle est affichée."
   }
 }
