@@ -2381,3 +2381,28 @@ fn le_rat_sanguinaire_est_un_compagnon_du_rodeur_pas_du_druide() {
     assert_eq!(c.animal, "Rat sanguinaire");
     assert_eq!(c.taille, "P");
 }
+
+#[test]
+fn la_liste_de_convocation_d_allies_naturels_est_saisie_avec_ses_fiches() {
+    let j: serde_json::Value =
+        serde_json::from_str(include_str!("../../../data/core/convocation_allies.json")).unwrap();
+    let niveaux = j["niveaux"].as_array().unwrap();
+    assert_eq!(niveaux.len(), 9);
+    let creatures: Vec<&serde_json::Value> = niveaux
+        .iter()
+        .flat_map(|n| n["creatures"].as_array().unwrap())
+        .collect();
+    assert!(creatures.len() > 100);
+    // Seule la punaise de feu géante n'a pas de page sur le wiki.
+    let sans: Vec<&str> = creatures
+        .iter()
+        .filter(|c| c.get("introuvable").is_some())
+        .map(|c| c["nom"].as_str().unwrap())
+        .collect();
+    assert_eq!(sans, vec!["Punaise de feu géante"]);
+    let rat = creatures
+        .iter()
+        .find(|c| c["nom"] == "Rat sanguinaire")
+        .unwrap();
+    assert_eq!(rat["fp"], "1/3");
+}
