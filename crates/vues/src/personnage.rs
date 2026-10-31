@@ -558,6 +558,7 @@ fn objet_vue(r: &Referentiel, nom_en: &str, quantite: u32) -> ObjetVue {
 /// Construit la fiche complète d'un personnage à partir de son état.
 /// Choix génériques des classes : ce qui est pris et ce qui reste à prendre.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct ChoixClassesVue {
     /// Nombre de grâces attendues au niveau de paladin actuel.
     pub graces_attendues: u32,
