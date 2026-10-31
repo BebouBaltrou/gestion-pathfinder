@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 
-export const VERSION = "1.2.0";
+export const VERSION = "1.2.1";
 const DEPOT = "BebouBaltrou/gestion-pathfinder";
 const CLE = "gestion-pathfinder.maj-auto";
 
