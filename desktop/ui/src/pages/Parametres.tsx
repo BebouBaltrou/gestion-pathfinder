@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { Outils } from "../App";
 import { api } from "../api";
 import { Apparence } from "../composants/Apparence";
+import { MiseAJour } from "../composants/MiseAJour";
 import type { RegleInfo } from "../fiche-types";
 import { ParametresIntermede } from "./ParametresIntermede";
 
@@ -31,6 +32,7 @@ export function Parametres({ outils }: { outils: Outils }) {
         </p>
       </div>
       <Apparence />
+      <MiseAJour />
       {groupes.map(([titre, liste]) => (
         <section className="section" key={titre}>
           <h2>{titre}</h2>

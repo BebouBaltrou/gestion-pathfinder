@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { api, EtatApp, Retour } from "./api";
+import { chercherMiseAJour, miseAJourActive, Nouvelle } from "./composants/MiseAJour";
 import { icones } from "./icones";
 import { Campagnes } from "./pages/Campagnes";
 import { EnAttente } from "./pages/EnAttente";
@@ -92,6 +93,12 @@ export function App() {
   useEffect(() => {
     rafraichir();
   }, [rafraichir]);
+
+  // Mise à jour : une seule vérification au lancement, si l'option est active
+  const [maj, setMaj] = useState<Nouvelle | null>(null);
+  useEffect(() => {
+    if (miseAJourActive()) chercherMiseAJour().then(setMaj);
+  }, []);
 
   // Ctrl+Z / Ctrl+Y (hors des champs de saisie)
   useEffect(() => {
@@ -236,6 +243,17 @@ export function App() {
           </div>
         )}
 
+        {maj && (
+          <div className="doux" role="status" style={{ padding: "6px 12px" }}>
+            Version {maj.version} disponible.{" "}
+            <a href={maj.page} target="_blank" rel="noreferrer">
+              Voir la nouveauté
+            </a>{" "}
+            <button className="bouton discret" onClick={() => setMaj(null)}>
+              Masquer
+            </button>
+          </div>
+        )}
         <main className="contenu">
           {pageActive === "tableau" && <Tableau outils={outils} />}
           {pageActive === "aventure" && <Aventure outils={outils} />}
