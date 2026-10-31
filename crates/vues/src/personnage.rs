@@ -606,6 +606,18 @@ pub struct ChoixClassesVue {
     pub formes_attendues: u32,
     pub formes_de_representation: Vec<String>,
     pub formes_possibles: Vec<(String, String)>,
+    /// Magicien : école (identifiant, nom), écoles opposées, pouvoirs de l'école choisie, pacte magique.
+    pub magicien: bool,
+    pub ecoles: Vec<(String, String)>,
+    pub ecole: Option<String>,
+    pub ecoles_opposees: Vec<String>,
+    pub pouvoirs_d_ecole: Vec<PouvoirDEcoleVue>,
+    pub formes_du_pacte_magique: Vec<String>,
+    pub pacte_magique: Option<String>,
+    pub familiers: Vec<(String, String)>,
+    pub familier: Option<String>,
+    pub objets_fetiches: Vec<String>,
+    pub objet_fetiche: Option<String>,
     /// Compagnon du rôdeur ou destrier du paladin : animaux permis (identifiant, nom) et choix.
     pub animaux_du_compagnon: Vec<(String, String)>,
     pub compagnon_choisi: Option<String>,
@@ -623,6 +635,14 @@ pub struct ChoixClassesVue {
     /// Rounds passés dans la rage en cours et rounds de fatigue restants après une rage.
     pub rounds_de_rage: u32,
     pub fatigue_rage: Option<u32>,
+}
+
+#[derive(Debug, Clone, PartialEq, serde::Serialize)]
+pub struct PouvoirDEcoleVue {
+    pub nom: String,
+    pub niveau: u32,
+    pub actif: bool,
+    pub texte: String,
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Serialize)]
@@ -679,6 +699,7 @@ fn choix_classes(r: &Referentiel, f: &Fiche) -> ChoixClassesVue {
         capacites_chiffrees: {
             let mut l = fiches::choix_classe::capacites_chiffrees(f);
             l.extend(fiches::choix_classe::lignes_dependant_de_la_race(f, r));
+            l.extend(fiches::choix_classe::lignes_du_magicien(f, r));
             l
         },
         rage_choisis: f
@@ -721,6 +742,42 @@ fn choix_classes(r: &Referentiel, f: &Fiche) -> ChoixClassesVue {
             && f.niveau_de_classe("paladin") >= c.pacte_divin_paladin.niveau,
         pacte_divin: f.pacte_divin.clone(),
         formes_du_pacte_divin: c.pacte_divin_paladin.formes.clone(),
+        magicien: f.niveau_de_classe("magicien") >= 1,
+        ecoles: c
+            .ecoles_magicien
+            .ecoles
+            .iter()
+            .map(|e| (e.id.clone(), e.nom.clone()))
+            .collect(),
+        ecole: f.ecole.clone(),
+        ecoles_opposees: f.ecoles_opposees.clone(),
+        pouvoirs_d_ecole: f
+            .ecole
+            .as_deref()
+            .and_then(|id| c.ecoles_magicien.ecole(id))
+            .map(|e| {
+                e.pouvoirs
+                    .iter()
+                    .map(|p| PouvoirDEcoleVue {
+                        nom: p.nom.clone(),
+                        niveau: p.niveau,
+                        actif: p.niveau <= f.niveau_de_classe("magicien"),
+                        texte: p.texte.clone(),
+                    })
+                    .collect()
+            })
+            .unwrap_or_default(),
+        formes_du_pacte_magique: c.pacte_magique_magicien.formes.clone(),
+        pacte_magique: f.pacte_magique.clone(),
+        familiers: c
+            .pacte_magique_magicien
+            .familiers
+            .iter()
+            .map(|x| (x.nom.clone(), x.capacite.clone()))
+            .collect(),
+        familier: f.familier.clone(),
+        objets_fetiches: c.pacte_magique_magicien.objets_fetiches.clone(),
+        objet_fetiche: f.objet_fetiche.clone(),
         formes_attendues: c
             .versatilite_artistique_barde
             .nombre(f.niveau_de_classe("barde")),
@@ -2369,6 +2426,11 @@ mod tests_pretre {
             arme_de_maitrise: None,
             pacte_divin: None,
             formes_de_representation: vec![],
+            ecole: None,
+            ecoles_opposees: vec![],
+            pacte_magique: None,
+            familier: None,
+            objet_fetiche: None,
             pouvoirs_rage: vec![],
             en_rage: false,
             rounds_de_rage: 0,

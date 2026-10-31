@@ -517,6 +517,67 @@ function ChoixClasses({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => v
           )}
         </div>
       )}
+      {c.magicien && (
+        <div className="carte">
+          {c.ecole ? (
+            <>
+              <p>École de magie : {c.ecoles.find(([id]) => id === c.ecole)?.[1] ?? c.ecole}{c.ecolesOpposees.length > 0 && " ; écoles opposées : " + c.ecolesOpposees.map((o) => c.ecoles.find(([id]) => id === o)?.[1] ?? o).join(", ")}</p>
+              {c.ecole !== "universelle" && c.ecolesOpposees.length < 2 && (
+                <div className="grille-boutons">
+                  {c.ecoles.filter(([id]) => id !== "universelle" && id !== c.ecole && !c.ecolesOpposees.includes(id)).map(([id, nom]) => (
+                    <button key={id} className="bouton" onClick={() => agir({ EcoleOpposeeChoisie: id })}>Opposée : {nom}</button>
+                  ))}
+                </div>
+              )}
+              {c.pouvoirsDEcole.map((p) => (
+                <details key={p.nom}>
+                  <summary>{p.nom}{!p.actif && " (niveau " + p.niveau + ")"}</summary>
+                  <p className="doux">{p.texte}</p>
+                </details>
+              ))}
+            </>
+          ) : (
+            <>
+              <p>École de magie (choix définitif) :</p>
+              <div className="grille-boutons">
+                {c.ecoles.map(([id, nom]) => (
+                  <button key={id} className="bouton" onClick={() => agir({ EcoleChoisie: id })}>{nom}</button>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      )}
+      {c.magicien && (
+        <div className="carte">
+          {c.pacteMagique ? (
+            <p>Pacte magique : {c.pacteMagique}{c.familier && " — " + c.familier}{c.objetFetiche && " — " + c.objetFetiche}</p>
+          ) : (
+            <>
+              <p>Pacte magique (choix définitif) :</p>
+              <div className="grille-boutons">
+                {c.formesDuPacteMagique.map((p) => (
+                  <button key={p} className="bouton" onClick={() => agir({ PacteMagiqueChoisi: p })}>{p}</button>
+                ))}
+              </div>
+            </>
+          )}
+          {c.pacteMagique === "familier" && !c.familier && (
+            <div className="grille-boutons">
+              {c.familiers.map(([nom, capacite]) => (
+                <button key={nom} className="bouton" title={capacite} onClick={() => agir({ FamilierChoisi: nom })}>{nom}</button>
+              ))}
+            </div>
+          )}
+          {c.pacteMagique && c.pacteMagique !== "familier" && !c.objetFetiche && (
+            <div className="grille-boutons">
+              {c.objetsFetiches.map((o) => (
+                <button key={o} className="bouton" onClick={() => agir({ ObjetFetichChoisi: o })}>{o}</button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
       {c.formesAttendues > 0 && (
         <div className="carte">
           <p>Versatilité artistique ({c.formesDeRepresentation.length}/{c.formesAttendues}){c.formesDeRepresentation.length > 0 && " : " + c.formesDeRepresentation.join(", ")}</p>

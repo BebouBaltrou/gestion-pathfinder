@@ -237,6 +237,18 @@ export type ChoixClassesVue = {
   formesDeRepresentation: string[];
   /** Formes de Représentation encore possibles : (nom, compétences associées). */
   formesPossibles: [string, string][];
+  /** Magicien : école de magie, écoles opposées, pouvoirs de l'école choisie, pacte magique. */
+  magicien: boolean;
+  ecoles: [string, string][];
+  ecole: string | null;
+  ecolesOpposees: string[];
+  pouvoirsDEcole: { nom: string; niveau: number; actif: boolean; texte: string }[];
+  formesDuPacteMagique: string[];
+  pacteMagique: string | null;
+  familiers: [string, string][];
+  familier: string | null;
+  objetsFetiches: string[];
+  objetFetiche: string | null;
   /** Animaux permis (identifiant, nom) pour le compagnon du rôdeur ou le destrier du paladin. */
   animauxDuCompagnon: [string, string][];
   compagnonChoisi: string | null;
@@ -531,6 +543,11 @@ export type EvenementFiche =
   | { ArmeDeMaitriseChoisie: string }
   | { PacteDivinChoisi: string }
   | { FormeDeRepresentationChoisie: string }
+  | { EcoleChoisie: string }
+  | { EcoleOpposeeChoisie: string }
+  | { PacteMagiqueChoisi: string }
+  | { FamilierChoisi: string }
+  | { ObjetFetichChoisi: string }
   | { PouvoirRageChoisi: string }
   | "RageCommencee"
   | "RageTerminee"

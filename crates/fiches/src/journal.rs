@@ -92,6 +92,16 @@ pub enum EvenementFiche {
     PacteDivinChoisi(String),
     /// Forme de Représentation de la versatilité artistique du barde.
     FormeDeRepresentationChoisie(String),
+    /// École de magie du magicien (niveau 1), choix définitif.
+    EcoleChoisie(String),
+    /// École opposée du magicien spécialiste (deux au plus).
+    EcoleOpposeeChoisie(String),
+    /// Pacte magique du magicien : `familier` ou `objet fétiche`, choix définitif.
+    PacteMagiqueChoisi(String),
+    /// Familier du magicien, choix définitif.
+    FamilierChoisi(String),
+    /// Objet fétiche du magicien, choix définitif.
+    ObjetFetichChoisi(String),
     /// Pouvoir de rage du barbare choisi.
     PouvoirRageChoisi(String),
     /// Le barbare entre en rage (refusé s'il est fatigué ou épuisé).
@@ -223,6 +233,11 @@ impl EvenementFiche {
             EvenementFiche::FormeDeRepresentationChoisie(x) => {
                 format!("Versatilité artistique : {x}")
             }
+            EvenementFiche::EcoleChoisie(x) => format!("École de magie : {x}"),
+            EvenementFiche::EcoleOpposeeChoisie(x) => format!("École opposée : {x}"),
+            EvenementFiche::PacteMagiqueChoisi(x) => format!("Pacte magique : {x}"),
+            EvenementFiche::FamilierChoisi(x) => format!("Familier : {x}"),
+            EvenementFiche::ObjetFetichChoisi(x) => format!("Objet fétiche : {x}"),
             EvenementFiche::PouvoirRageChoisi(p) => format!("Pouvoir de rage : {p}"),
             EvenementFiche::RageCommencee => "Entrée en rage".to_string(),
             EvenementFiche::RageTerminee => "Fin de la rage".to_string(),
@@ -790,6 +805,19 @@ impl Journal {
                 EvenementFiche::FormeDeRepresentationChoisie(x) => {
                     fiche.formes_de_representation.push(x.clone());
                 }
+                EvenementFiche::EcoleOpposeeChoisie(x) => fiche.ecoles_opposees.push(x.clone()),
+                EvenementFiche::EcoleChoisie(x) => {
+                    definitif(&mut fiche.ecole, x, "l'école de magie", i)?;
+                }
+                EvenementFiche::PacteMagiqueChoisi(x) => {
+                    definitif(&mut fiche.pacte_magique, x, "le pacte magique", i)?;
+                }
+                EvenementFiche::FamilierChoisi(x) => {
+                    definitif(&mut fiche.familier, x, "le familier", i)?;
+                }
+                EvenementFiche::ObjetFetichChoisi(x) => {
+                    definitif(&mut fiche.objet_fetiche, x, "l'objet fétiche", i)?;
+                }
                 EvenementFiche::PacteDivinChoisi(p) => {
                     if fiche.pacte_divin.is_some() {
                         return Err(ErreurJournal::Choix {
@@ -1126,6 +1154,23 @@ impl Journal {
     pub fn historique(&self) -> Vec<String> {
         self.evenements.iter().map(|e| e.description()).collect()
     }
+}
+
+/// Enregistre un choix définitif : refusé s'il a déjà été fait.
+fn definitif(
+    champ: &mut Option<String>,
+    valeur: &str,
+    quoi: &str,
+    evenement: usize,
+) -> Result<(), ErreurJournal> {
+    if champ.is_some() {
+        return Err(ErreurJournal::Choix {
+            evenement,
+            raison: format!("{quoi} ne se modifie pas"),
+        });
+    }
+    *champ = Some(valeur.to_string());
+    Ok(())
 }
 
 #[cfg(test)]

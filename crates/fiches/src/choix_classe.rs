@@ -19,6 +19,258 @@ pub struct ChoixDeClasse {
     pub compagnon_rodeur: SourceDeCompagnon,
     pub compagnon_destrier: SourceDeCompagnon,
     pub versatilite_artistique_barde: Versatilite,
+    pub ecoles_magicien: EcolesMagicien,
+    pub pacte_magique_magicien: PacteMagique,
+}
+
+#[derive(Debug, Clone, Default, Deserialize)]
+pub struct EcolesMagicien {
+    pub ecoles: Vec<EcoleDeMagie>,
+}
+
+#[derive(Debug, Clone, Default, Deserialize)]
+pub struct EcoleDeMagie {
+    pub id: String,
+    pub nom: String,
+    pub pouvoirs: Vec<PouvoirDEcole>,
+}
+
+#[derive(Debug, Clone, Default, Deserialize)]
+pub struct PouvoirDEcole {
+    pub nom: String,
+    pub niveau: u32,
+    pub texte: String,
+    #[serde(default)]
+    pub usage: Option<UsageDEcole>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct UsageDEcole {
+    #[serde(rename = "type")]
+    pub genre: String,
+}
+
+#[derive(Debug, Clone, Default, Deserialize)]
+pub struct PacteMagique {
+    pub niveau: u32,
+    pub formes: Vec<String>,
+    pub objets_fetiches: Vec<String>,
+    pub familiers: Vec<Familier>,
+}
+
+#[derive(Debug, Clone, Default, Deserialize)]
+pub struct Familier {
+    pub nom: String,
+    pub capacite: String,
+    pub effet: Option<EffetFamilier>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct EffetFamilier {
+    pub cible: String,
+    pub valeur: i32,
+}
+
+impl EcolesMagicien {
+    pub fn ecole(&self, id: &str) -> Option<&EcoleDeMagie> {
+        self.ecoles.iter().find(|e| e.id == id)
+    }
+}
+
+/// Nombre d'utilisations par jour d'un pouvoir d'école au niveau de magicien `niveau`
+/// (`modificateur` : modificateur d'Intelligence).
+pub fn usages_d_un_pouvoir_d_ecole(genre: &str, niveau: u32, modificateur: i32) -> i32 {
+    let n = niveau as i32;
+    match genre {
+        "fois" => 3 + modificateur,
+        "rounds" => n,
+        "points" => 3 * n,
+        "metres" => 9 * n,
+        "metamagie" => 1 + (n - 8).max(0) / 2,
+        _ => 0,
+    }
+}
+
+/// Vrai si l'école est une spécialité (pas l'école universelle).
+pub fn est_specialiste(fiche: &Fiche) -> bool {
+    fiche.niveau_de_classe("magicien") >= 1
+        && fiche.ecole.as_deref().is_some_and(|e| e != "universelle")
+}
+
+/// Effets chiffrés de l'école et du familier du magicien qui ne dépendent que du niveau.
+pub fn effets_de_magicien(fiche: &Fiche, r: &Referentiel) -> Vec<crate::effet::Effet> {
+    use crate::effet::{Effet, TypeBonus};
+    let niveau = fiche.niveau_de_classe("magicien");
+    let mut e = Vec::new();
+    if niveau == 0 {
+        return e;
+    }
+    match fiche.ecole.as_deref() {
+        Some("enchantement") => {
+            let bonus = (2 + niveau / 5).min(6) as i32;
+            for cible in ["comp.bluff", "comp.diplomacy", "comp.intimidate"] {
+                e.push(Effet::new(
+                    cible,
+                    TypeBonus::Alteration,
+                    bonus,
+                    "Sourire enchanteur",
+                ));
+            }
+        }
+        Some("divination") => {
+            e.push(Effet::new(
+                "init",
+                TypeBonus::SansType,
+                ((niveau / 2).max(1)) as i32,
+                "Mis en garde",
+            ));
+        }
+        _ => {}
+    }
+    if fiche.pacte_magique.as_deref() == Some("familier") {
+        if let Some(nom) = fiche.familier.as_deref() {
+            let effet = r
+                .choix
+                .pacte_magique_magicien
+                .familiers
+                .iter()
+                .find(|x| x.nom == nom)
+                .and_then(|x| x.effet.as_ref());
+            if let Some(ef) = effet {
+                e.push(Effet::new(
+                    &ef.cible,
+                    TypeBonus::SansType,
+                    ef.valeur,
+                    &format!("Familier ({nom})"),
+                ));
+            }
+        }
+    }
+    e
+}
+
+/// Lignes chiffrées de l'école et du pacte magique du magicien.
+pub fn lignes_du_magicien(fiche: &Fiche, r: &Referentiel) -> Vec<String> {
+    let niveau = fiche.niveau_de_classe("magicien");
+    let mut l = Vec::new();
+    if niveau == 0 {
+        return l;
+    }
+    let moitie = (niveau / 2).max(1);
+    let cinq = niveau / 5;
+    match fiche.ecole.as_deref() {
+        Some("abjuration") => {
+            let res = if niveau >= 20 {
+                "immunité"
+            } else if niveau >= 11 {
+                "résistance 10"
+            } else {
+                "résistance 5"
+            };
+            l.push(format!(
+                "Abjuration — Résistance : {res} à un type d'énergie choisi en préparant les sorts"
+            ));
+            l.push(format!("Abjuration — Champ de protection : bonus de parade de +{} à la CA des alliés dans 6 m", 1 + cinq));
+            if niveau >= 6 {
+                l.push(format!(
+                    "Abjuration — Absorption d'énergie : {} points d'énergie absorbés par jour",
+                    3 * niveau
+                ));
+            }
+        }
+        Some("divination") => {
+            l.push(format!(
+                "Divination — Chance du devin : bonus d'intuition de +{moitie} pendant 1 round"
+            ));
+            if niveau >= 20 {
+                l.push(
+                    "Divination — Mis en garde : l'initiative est considérée comme un 20 naturel"
+                        .to_string(),
+                );
+            }
+        }
+        Some("enchantement") => {
+            l.push(format!("Enchantement — Sourire enchanteur : +{} aux tests de Bluff, de Diplomatie et d'Intimidation (appliqué à la fiche)", (2 + cinq).min(6)));
+        }
+        Some("evocation") => {
+            l.push(format!("Évocation — Sorts intenses : +{moitie} aux dégâts de chaque sort infligeant des dégâts"));
+            l.push(format!(
+                "Évocation — Projectile de force : 1d4 + {moitie} de dégâts de force"
+            ));
+        }
+        Some("illusion") => {
+            l.push(format!("Illusion — Illusions durables : {moitie} round(s) supplémentaire(s) après la fin de la concentration"));
+        }
+        Some("invocation") => {
+            l.push(format!("Invocation — Maîtrise des invocations : +{moitie} round(s) de durée aux sorts de convocation"));
+            l.push(format!(
+                "Invocation — Fléchette d'acide : 1d6 + {} de dégâts d'acide",
+                niveau / 2
+            ));
+        }
+        Some("necromancie") => {
+            l.push(format!(
+                "Nécromancie — Toucher du tombeau : secoué {moitie} round(s)"
+            ));
+            if niveau >= 8 {
+                let portee = if niveau >= 12 {
+                    3 + 3 * (1 + (niveau - 12) / 4)
+                } else {
+                    3
+                };
+                l.push(format!("Nécromancie — Perception de la vie : vision aveugle de {portee} m pendant {niveau} round(s) par jour"));
+            }
+        }
+        Some("transmutation") => {
+            l.push(format!(
+                "Transmutation — Amélioration physique : +{} (altération) à une caractéristique physique choisie en préparant les sorts{}",
+                (1 + cinq).min(5),
+                if niveau >= 20 { ", à deux caractéristiques" } else { "" }
+            ));
+            l.push(format!(
+                "Transmutation — Poing télékinétique : 1d4 + {} de dégâts contondants",
+                niveau / 2
+            ));
+        }
+        _ => {}
+    }
+    if fiche.pacte_magique.as_deref() == Some("familier") {
+        let ligne = r
+            .choix
+            .pacte_magique_magicien
+            .familiers
+            .iter()
+            .find(|x| Some(x.nom.as_str()) == fiche.familier.as_deref());
+        if let Some(fam) = ligne {
+            l.push(format!("Familier ({}) : {}", fam.nom, fam.capacite));
+            let (armure, int, special) = match niveau {
+                1..=2 => (
+                    1,
+                    6,
+                    "esquive extraordinaire, lien empathique, transfert de sorts, vigilance",
+                ),
+                3..=4 => (2, 7, "conduit"),
+                5..=6 => (3, 8, "communication avec le maître"),
+                7..=8 => (4, 9, "communication avec les animaux de la même espèce"),
+                9..=10 => (5, 10, "—"),
+                11..=12 => (6, 11, "résistance à la magie"),
+                13..=14 => (7, 12, "scrutation sur le familier"),
+                15..=16 => (8, 13, "—"),
+                17..=18 => (9, 14, "—"),
+                _ => (10, 15, "—"),
+            };
+            l.push(format!(
+                "Familier : armure naturelle +{armure}, Intelligence {int}{} (capacités cumulatives, voir le texte)",
+                if special == "—" { String::new() } else { format!(", nouveauté : {special}") }
+            ));
+            if niveau >= 11 {
+                l.push(format!("Familier : résistance à la magie {}", niveau + 5));
+            }
+        }
+    } else if let Some(objet) = fiche.objet_fetiche.as_deref() {
+        l.push(format!("Objet fétiche ({objet}) : un sort du grimoire par jour sans préparation, hors écoles opposées"));
+    }
+    l
 }
 
 #[derive(Debug, Clone, Default, Deserialize)]
@@ -500,6 +752,56 @@ impl Fiche {
             }
             if self.formes_de_representation[..i].contains(forme) {
                 p.push(Probleme::FormeDeRepresentationEnDouble(forme.clone()));
+            }
+        }
+
+        if self.niveau_de_classe("magicien") >= 1 {
+            let ecoles = &c.ecoles_magicien;
+            match self.ecole.as_deref() {
+                None => p.push(Probleme::EcoleManquante),
+                Some(id) if ecoles.ecole(id).is_none() => {
+                    p.push(Probleme::EcoleInconnue(id.to_string()));
+                }
+                Some(id) => {
+                    let attendues = if id == "universelle" { 0 } else { 2 };
+                    let choisies = self.ecoles_opposees.len() as u32;
+                    if attendues != choisies {
+                        p.push(Probleme::EcolesOpposeesAChoisir {
+                            attendues,
+                            choisies,
+                        });
+                    }
+                    for (i, o) in self.ecoles_opposees.iter().enumerate() {
+                        let valide = ecoles.ecole(o).is_some()
+                            && o != "universelle"
+                            && o != id
+                            && !self.ecoles_opposees[..i].contains(o);
+                        if !valide {
+                            p.push(Probleme::EcoleOpposeeInvalide(o.clone()));
+                        }
+                    }
+                }
+            }
+            let pacte = &c.pacte_magique_magicien;
+            match self.pacte_magique.as_deref() {
+                None => p.push(Probleme::PacteMagiqueManquant),
+                Some(forme) if !pacte.formes.iter().any(|x| x == forme) => {
+                    p.push(Probleme::PacteMagiqueInconnu(forme.to_string()));
+                }
+                Some("familier") => match self.familier.as_deref() {
+                    None => p.push(Probleme::FamilierManquant),
+                    Some(nom) if !pacte.familiers.iter().any(|x| x.nom == nom) => {
+                        p.push(Probleme::FamilierInconnu(nom.to_string()));
+                    }
+                    Some(_) => {}
+                },
+                Some(_) => match self.objet_fetiche.as_deref() {
+                    None => p.push(Probleme::ObjetFetichManquant),
+                    Some(o) if !pacte.objets_fetiches.iter().any(|x| x == o) => {
+                        p.push(Probleme::ObjetFetichInconnu(o.to_string()));
+                    }
+                    Some(_) => {}
+                },
             }
         }
 

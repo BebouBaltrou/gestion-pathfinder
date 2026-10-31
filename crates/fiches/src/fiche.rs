@@ -126,6 +126,19 @@ pub struct Fiche {
     /// Formes de Représentation de la versatilité artistique du barde (niveaux 2, 6, 10, 14, 18).
     #[cfg_attr(feature = "serde", serde(default))]
     pub formes_de_representation: Vec<String>,
+    /// École de magie du magicien (niveau 1), choix définitif : `abjuration`… ou `universelle`.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub ecole: Option<String>,
+    /// Les deux écoles opposées du magicien spécialiste.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub ecoles_opposees: Vec<String>,
+    /// Pacte magique du magicien : `familier` ou `objet fétiche`, choix définitif.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub pacte_magique: Option<String>,
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub familier: Option<String>,
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub objet_fetiche: Option<String>,
     /// Pouvoirs de rage choisis par le barbare (noms de `data/core/pouvoirs_rage.json`).
     #[cfg_attr(feature = "serde", serde(default))]
     pub pouvoirs_rage: Vec<String>,
@@ -278,6 +291,19 @@ pub enum Probleme {
     ArmeDeMaitriseInconnue(String),
     PacteDivinManquant,
     PacteDivinInconnu(String),
+    EcoleManquante,
+    EcoleInconnue(String),
+    EcolesOpposeesAChoisir {
+        attendues: u32,
+        choisies: u32,
+    },
+    EcoleOpposeeInvalide(String),
+    PacteMagiqueManquant,
+    PacteMagiqueInconnu(String),
+    FamilierManquant,
+    FamilierInconnu(String),
+    ObjetFetichManquant,
+    ObjetFetichInconnu(String),
     FormesDeRepresentationAChoisir {
         attendus: u32,
         choisis: u32,
@@ -379,6 +405,11 @@ impl Probleme {
             | Probleme::PacteDuChasseurManquant
             | Probleme::ArmeDeMaitriseManquante
             | Probleme::PacteDivinManquant
+            | Probleme::EcoleManquante
+            | Probleme::EcolesOpposeesAChoisir { .. }
+            | Probleme::PacteMagiqueManquant
+            | Probleme::FamilierManquant
+            | Probleme::ObjetFetichManquant
             | Probleme::CompagnonManquant => true,
             _ => false,
         }
@@ -558,6 +589,19 @@ impl std::fmt::Display for Probleme {
                 write!(f, "maîtrise des armes : l'arme est à choisir (niveau 20)")
             }
             Probleme::PacteDivinManquant => write!(f, "pacte divin à choisir (niveau 5)"),
+            Probleme::EcoleManquante => write!(f, "école de magie à choisir (niveau 1)"),
+            Probleme::EcoleInconnue(e) => write!(f, "école de magie inconnue : {e}"),
+            Probleme::EcolesOpposeesAChoisir { attendues, choisies } => write!(
+                f,
+                "écoles opposées : {choisies} choisie(s) sur {attendues}"
+            ),
+            Probleme::EcoleOpposeeInvalide(e) => write!(f, "école opposée invalide : {e}"),
+            Probleme::PacteMagiqueManquant => write!(f, "pacte magique à choisir (niveau 1)"),
+            Probleme::PacteMagiqueInconnu(p) => write!(f, "pacte magique inconnu : {p}"),
+            Probleme::FamilierManquant => write!(f, "familier à choisir"),
+            Probleme::FamilierInconnu(n) => write!(f, "familier inconnu : {n}"),
+            Probleme::ObjetFetichManquant => write!(f, "objet fétiche à choisir"),
+            Probleme::ObjetFetichInconnu(o) => write!(f, "objet fétiche inconnu : {o}"),
             Probleme::FormesDeRepresentationAChoisir { attendus, choisis } => write!(
                 f,
                 "versatilité artistique : {choisis} forme(s) choisie(s) sur {attendus}"
@@ -915,6 +959,7 @@ impl Fiche {
         for o in &self.equipement.objets_magiques {
             e.extend(o.effets.iter().cloned());
         }
+        e.extend(crate::choix_classe::effets_de_magicien(self, r));
         // Savoir bardique : la moitié du niveau de barde (au moins 1) à tous les tests de Connaissances.
         let barde = self.niveau_de_classe("barde");
         if barde >= 1 {
@@ -2029,7 +2074,12 @@ impl Fiche {
                     connus: connus.unwrap_or(0),
                     dd: dd_sort(sn, m(car), 0),
                     domaine: u32::from(
-                        (ligne.domaine || self.pacte.as_deref() == Some("domaine")) && sn > 0,
+                        ((ligne.domaine || self.pacte.as_deref() == Some("domaine")) && sn > 0)
+                            || (n.classe == "magicien"
+                                && crate::choix_classe::est_specialiste(self)
+                                && sn > 0
+                                && base.is_some()
+                                && peut),
                     ),
                 });
             }
@@ -2056,6 +2106,32 @@ impl Fiche {
         let mut domaines_vus = Vec::new();
         let mut pouvoirs: Vec<PouvoirJournalier> = Vec::new();
         let mut compagnon_calcule = None;
+        // Pouvoirs d'école du magicien : utilisations par jour.
+        let niveau_magicien = self.niveau_de_classe("magicien");
+        if niveau_magicien >= 1 {
+            if let Some(ecole) = self
+                .ecole
+                .as_deref()
+                .and_then(|id| r.choix.ecoles_magicien.ecole(id))
+            {
+                for (i, pouv) in ecole.pouvoirs.iter().enumerate() {
+                    let Some(usage) = &pouv.usage else { continue };
+                    if pouv.niveau > niveau_magicien {
+                        continue;
+                    }
+                    pouvoirs.push(PouvoirJournalier {
+                        partage: None,
+                        cle: format!("ecole:{}:{i}", ecole.id),
+                        nom: format!("{} ({})", pouv.nom, ecole.nom),
+                        max: Some(crate::choix_classe::usages_d_un_pouvoir_d_ecole(
+                            &usage.genre,
+                            niveau_magicien,
+                            m(Carac::Int),
+                        )),
+                    });
+                }
+            }
+        }
         // Compagnon animal du rôdeur ou destrier du paladin (niveau de druide effectif).
         if let Some((_, niveau)) = crate::choix_classe::compagnon_hors_druide(self, r) {
             compagnon_calcule = self

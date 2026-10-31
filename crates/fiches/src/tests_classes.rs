@@ -57,6 +57,11 @@ fn pretre(niveau: u32, sagesse: i32) -> Fiche {
         arme_de_maitrise: None,
         pacte_divin: None,
         formes_de_representation: vec![],
+        ecole: None,
+        ecoles_opposees: vec![],
+        pacte_magique: None,
+        familier: None,
+        objet_fetiche: None,
         pouvoirs_rage: vec![],
         en_rage: false,
         rounds_de_rage: 0,
@@ -909,6 +914,11 @@ fn barbare(niveau: u32, constitution: i32) -> Fiche {
         arme_de_maitrise: None,
         pacte_divin: None,
         formes_de_representation: vec![],
+        ecole: None,
+        ecoles_opposees: vec![],
+        pacte_magique: None,
+        familier: None,
+        objet_fetiche: None,
         pouvoirs_rage: vec![],
         en_rage: false,
         rounds_de_rage: 0,
@@ -2467,4 +2477,136 @@ fn le_barde_savoir_bardique_versatilite_artistique_et_lignes() {
         .any(|x| x.starts_with("Maître du savoir") && x.contains("3 fois par jour")));
     assert!(l.iter().any(|x| x.contains("une action rapide")));
     assert!(l.iter().any(|x| x.starts_with("Touche-à-tout")));
+}
+
+#[test]
+fn le_magicien_choisit_son_ecole_ses_ecoles_opposees_et_son_pacte_magique() {
+    let r = Referentiel::core();
+    let mut f = de_classe("magicien", 1);
+    let p = f.problemes_choix_de_classe(&r);
+    assert!(p.contains(&Probleme::EcoleManquante));
+    assert!(p.contains(&Probleme::PacteMagiqueManquant));
+    // Universaliste : aucune école opposée.
+    f.ecole = Some("universelle".into());
+    f.pacte_magique = Some("objet fétiche".into());
+    f.objet_fetiche = Some("bâton".into());
+    assert!(f.problemes_choix_de_classe(&r).is_empty());
+    // Spécialiste : deux écoles opposées, différentes de l'école et entre elles.
+    f.ecole = Some("evocation".into());
+    assert!(f
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::EcolesOpposeesAChoisir {
+            attendues: 2,
+            choisies: 0
+        }));
+    f.ecoles_opposees = vec!["necromancie".into(), "necromancie".into()];
+    assert!(f
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::EcoleOpposeeInvalide("necromancie".into())));
+    f.ecoles_opposees = vec!["evocation".into(), "illusion".into()];
+    assert!(f
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::EcoleOpposeeInvalide("evocation".into())));
+    f.ecoles_opposees = vec!["necromancie".into(), "illusion".into()];
+    assert!(f.problemes_choix_de_classe(&r).is_empty());
+    // Familier : choisi dans la liste.
+    f.pacte_magique = Some("familier".into());
+    f.objet_fetiche = None;
+    assert!(f
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::FamilierManquant));
+    f.familier = Some("Chat".into());
+    assert!(f.problemes_choix_de_classe(&r).is_empty());
+    // Choix définitifs dans le journal.
+    let regles = ReglesFiche::default();
+    let mut j = Journal::nouveau(de_classe("magicien", 1));
+    assert!(j
+        .ajouter(
+            EvenementFiche::EcoleChoisie("abjuration".into()),
+            &r,
+            &regles
+        )
+        .is_ok());
+    assert!(j
+        .ajouter(
+            EvenementFiche::EcoleChoisie("divination".into()),
+            &r,
+            &regles
+        )
+        .is_err());
+    assert!(j
+        .ajouter(
+            EvenementFiche::PacteMagiqueChoisi("familier".into()),
+            &r,
+            &regles
+        )
+        .is_ok());
+    assert!(j
+        .ajouter(
+            EvenementFiche::PacteMagiqueChoisi("objet fétiche".into()),
+            &r,
+            &regles
+        )
+        .is_err());
+}
+
+#[test]
+fn ecoles_de_magie_emplacement_en_plus_pouvoirs_du_jour_et_bonus_du_familier() {
+    let r = Referentiel::core();
+    let regles = ReglesFiche::default();
+    let _ = regles;
+    let mut f = de_classe("magicien", 3);
+    f.scores_base.insert(Carac::Int, 16);
+    let sans_ecole = f.calculer(&r).unwrap();
+    let niveau1 = |v: &crate::fiche::Valeurs| {
+        v.incantateurs[0]
+            .emplacements
+            .iter()
+            .find(|e| e.niveau_de_sort == 1)
+            .map(|e| e.domaine)
+    };
+    assert_eq!(niveau1(&sans_ecole), Some(0));
+    // Spécialiste : un emplacement de plus par niveau de sort (sauf 0).
+    f.ecole = Some("evocation".into());
+    let v = f.calculer(&r).unwrap();
+    assert_eq!(niveau1(&v), Some(1));
+    let niveau0 = v.incantateurs[0]
+        .emplacements
+        .iter()
+        .find(|e| e.niveau_de_sort == 0)
+        .map(|e| e.domaine);
+    assert_eq!(niveau0, Some(0));
+    // Projectile de force : 3 + modificateur d'Intelligence (+3) = 6 par jour.
+    let pouvoir = v
+        .pouvoirs
+        .iter()
+        .find(|p| p.cle == "ecole:evocation:1")
+        .expect("projectile de force");
+    assert_eq!(pouvoir.max, Some(6));
+    // Mur élémentaire : niveau 8 requis.
+    assert!(!v
+        .pouvoirs
+        .iter()
+        .any(|p| p.nom.starts_with("Mur élémentaire")));
+    // Enchantement : sourire enchanteur +2 en Bluff au niveau 3.
+    let mut e = de_classe("magicien", 3);
+    e.ecole = Some("enchantement".into());
+    e.niveaux[0].rangs.insert("bluff".into(), 1);
+    let ve = e.calculer(&r).unwrap();
+    assert!(ve.competences["bluff"]
+        .termes
+        .iter()
+        .any(|t| t.libelle.starts_with("Sourire enchanteur") && t.valeur == 2));
+    // Familier chat : +3 en Discrétion.
+    let mut c = de_classe("magicien", 1);
+    c.pacte_magique = Some("familier".into());
+    c.familier = Some("Chat".into());
+    c.niveaux[0].rangs.insert("stealth".into(), 1);
+    let vc = c.calculer(&r).unwrap();
+    assert!(vc.competences["stealth"]
+        .termes
+        .iter()
+        .any(|t| t.libelle.starts_with("Familier (Chat)") && t.valeur == 3));
+    let l = crate::choix_classe::lignes_du_magicien(&c, &r);
+    assert!(l.iter().any(|x| x.starts_with("Familier (Chat)")));
 }
