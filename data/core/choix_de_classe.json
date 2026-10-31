@@ -682,5 +682,475 @@
       }
     ],
     "note": "Une forme au niveau 2, puis une nouvelle au niveau 6 et tous les quatre niveaux (10, 14, 18). Le barde utilise son bonus total de Représentation à la place de celui de la compétence associée. Cette substitution n’est pas appliquée aux totaux : elle est affichée."
+  },
+  "ecoles_magicien": {
+    "classe": "magicien",
+    "source": "Manuel des joueurs (VF), Magicien, Écoles de magie (texte fourni par l’utilisateur)",
+    "note": "Choix de l’école au niveau 1, définitif ; un spécialiste choisit deux écoles opposées (préparer un sort d’une école opposée coûte deux emplacements du même niveau) et gagne un emplacement de sort supplémentaire par niveau de sort (sauf 0), pour un sort de son école ; l’universaliste n’a ni école opposée ni emplacement supplémentaire. Utilisations par jour : « fois » = 3 + modificateur d’Intelligence ; « rounds » = niveau de magicien ; « points » = 3 × niveau ; « mètres » = 9 × niveau ; « metamagie » = 1 au niveau 8 puis 1 de plus tous les 2 niveaux.",
+    "ecoles": [
+      {
+        "id": "abjuration",
+        "nom": "Abjuration",
+        "intro": "Les abjurateurs retournent la magie contre elle-même et se spécialisent dans les sorts qui protègent ou bloquent les assaillants.",
+        "pouvoirs": [
+          {
+            "nom": "Résistance",
+            "niveau": 1,
+            "genre": "Ext",
+            "texte": "L’abjurateur gagne une résistance de 5 points à un type d’énergie qu’il choisit lorsqu’il prépare ses sorts et qui peut être différente d’un jour à l’autre. Au niveau 11, cette résistance passe à 10 points. Au niveau 20, elle se transforme en une immunité au type d’énergie choisi."
+          },
+          {
+            "nom": "Champ de protection",
+            "niveau": 1,
+            "genre": "Sur",
+            "usage": {
+              "type": "fois"
+            },
+            "texte": "Par une action simple, l’abjurateur peut créer un champ de protection magique de 6 m de rayon. Ce champ est centré sur lui et persiste pendant un nombre de rounds égal à son modificateur d’Intelligence. Tous les alliés de l’abjurateur se trouvant dans ce champ (y compris l’abjurateur lui-même) gagnent un bonus de parade de +1 à leur CA. Ce bonus s’accroît de +1 par tranche de cinq niveaux de magicien. Chaque jour, l’abjurateur peut utiliser ce pouvoir un nombre de fois égal à 3 + son modificateur d’Intelligence."
+          },
+          {
+            "nom": "Absorption d’énergie",
+            "niveau": 6,
+            "genre": "Sur",
+            "usage": {
+              "type": "points"
+            },
+            "texte": "Au niveau 6, l’abjurateur acquiert la capacité d’absorber chaque jour une certaine quantité d’énergie égale à trois fois son niveau de magicien. Chaque fois qu’il subit des dégâts d’énergie, son immunité, sa vulnérabilité ou sa résistance éventuelles s’appliquent en premier lieu puis le reste des dégâts est déduit de son total d’absorption quotidien. Si tous les dégâts ne peuvent pas être absorbés, ceux en excès s’appliquent normalement à l’abjurateur."
+          }
+        ]
+      },
+      {
+        "id": "divination",
+        "nom": "Divination",
+        "intro": "Les devins maîtrisent les sorts qui permettent d’espionner à distance, de formuler des prophéties ou d’explorer le monde.",
+        "pouvoirs": [
+          {
+            "nom": "Mis en garde",
+            "niveau": 1,
+            "genre": "Sur",
+            "texte": "Le devin peut toujours agir au cours du round de surprise, même s’il échoue lors du test de Perception visant à repérer ses ennemis. Il reste cependant pris au dépourvu jusqu’à ce qu’il puisse agir. De plus, il bénéficie d’un bonus aux tests d’initiative égal à la moitié de son niveau de magicien (au minimum +1). Au niveau 20, chaque fois que le devin doit déterminer son initiative, on considère qu’il obtient un 20 naturel sur le dé."
+          },
+          {
+            "nom": "Chance du devin",
+            "niveau": 1,
+            "genre": "Mag",
+            "usage": {
+              "type": "fois"
+            },
+            "texte": "En une action simple, le devin peut toucher une créature et lui conférer un bonus d’intuition à tous ses jets d’attaque, tests de compétence, tests de caractéristique et jets de sauvegarde. Ce bonus est égal à la moitié de son niveau de magicien (au minimum +1) et persiste pendant 1 round. Chaque jour, le devin peut utiliser ce pouvoir un nombre de fois égal à 3 + son modificateur d’Intelligence."
+          },
+          {
+            "nom": "Adepte de la scrutation",
+            "niveau": 8,
+            "genre": "Sur",
+            "texte": "Au niveau 8, lorsque quelqu’un l’observe par magie, le devin en est automatiquement conscient, comme s’il était sous l’effet d’un sort permanent de détection de la scrutation. De plus, chaque fois que le devin espionne une créature par magie, on considère que la connaissance qu’il a de cette créature est meilleure (d’une catégorie) que ce qu’elle est normalement. Les cibles dont le personnage a « une grande connaissance », quant à elles, subissent un malus de -10 au jet de sauvegarde pour résister à la tentative de scrutation."
+          }
+        ]
+      },
+      {
+        "id": "enchantement",
+        "nom": "Enchantement",
+        "intro": "Les enchanteurs utilisent la magie pour contrôler et manipuler l’esprit de leurs victimes.",
+        "pouvoirs": [
+          {
+            "nom": "Sourire enchanteur",
+            "niveau": 1,
+            "genre": "Sur",
+            "texte": "L’enchanteur gagne un bonus d’altération de +2 aux tests de Bluff, de Diplomatie et d’Intimidation. Ce bonus augmente de +1 par tranche de cinq niveaux de magicien, jusqu’à un maximum de +6 au niveau 20. Au niveau 20, chaque fois que l’enchanteur réussit un jet de sauvegarde contre un sort de l’école d’Enchantement, ce sort est renvoyé vers la créature qui l’a lancé comme par le sort renvoi des sorts."
+          },
+          {
+            "nom": "Toucher hébétant",
+            "niveau": 1,
+            "genre": "Mag",
+            "usage": {
+              "type": "fois"
+            },
+            "texte": "L’enchanteur peut rendre une créature hébétée pendant 1 round en réussissant une attaque de contact au corps à corps à son encontre. Les créatures possédant un nombre de DV supérieur au niveau de magicien de l’enchanteur ne peuvent pas être affectées. Chaque jour, l’enchanteur peut utiliser ce pouvoir un nombre de fois égal à 3 + son modificateur d’Intelligence."
+          },
+          {
+            "nom": "Aura de désespoir",
+            "niveau": 8,
+            "genre": "Sur",
+            "usage": {
+              "type": "rounds"
+            },
+            "texte": "Au niveau 8, l’enchanteur peut s’entourer d’une aura de désespoir de 9 m de rayon chaque jour pendant un nombre total de rounds égal à son niveau de magicien. Les ennemis pris dans cette aura subissent un malus de -2 aux tests de caractéristiques, jets d’attaque, jets de dégâts, jets de sauvegarde et tests de compétence. Ces rounds ne doivent pas forcément être consécutifs. C’est un effet mental."
+          }
+        ]
+      },
+      {
+        "id": "evocation",
+        "nom": "Évocation",
+        "intro": "Les évocateurs s’intéressent à la puissance brute de la magie et parviennent à l’utiliser pour créer ou détruire avec une aisance déconcertante.",
+        "pouvoirs": [
+          {
+            "nom": "Sorts intenses",
+            "niveau": 1,
+            "genre": "Sur",
+            "texte": "Chaque fois qu’un évocateur lance un sort infligeant des points de dégâts, ceux-ci sont augmentés de la moitié de son niveau de magicien (au minimum +1). Ce bonus aux dégâts ne s’applique qu’une seule fois par sort (pas une fois par projectile ou par rayon) et ne peut être divisé entre plusieurs projectiles ou rayons. Les dégâts supplémentaires sont du même type que ceux du sort. Au niveau 20, chaque fois que l’évocateur lance un sort d’Évocation et doit réussir un test pour vaincre la résistance à la magie de sa cible, il peut réaliser deux jets et choisir le meilleur résultat des deux."
+          },
+          {
+            "nom": "Projectile de force",
+            "niveau": 1,
+            "genre": "Mag",
+            "usage": {
+              "type": "fois"
+            },
+            "texte": "Par une action simple, l’évocateur peut créer un projectile de force qui touche automatiquement sa cible, comme un projectile magique. Le projectile de force inflige 1d4 points de dégâts en plus du bonus découlant du pouvoir de sorts intenses. Il s’agit d’un effet de force. Chaque jour, l’évocateur peut utiliser cette capacité un nombre de fois égal à 3 + son modificateur d’Intelligence."
+          },
+          {
+            "nom": "Mur élémentaire",
+            "niveau": 8,
+            "genre": "Mag",
+            "usage": {
+              "type": "rounds"
+            },
+            "texte": "Au niveau 8, l’évocateur peut créer un mur d’énergie qui existe, chaque jour, pendant un nombre total de rounds égal à son niveau de magicien. Ces rounds ne doivent pas forcément être consécutifs. Le mur inflige des dégâts d’acide, d’électricité, de feu ou de froid, au choix de l’évocateur au moment de sa création. Le mur élémentaire fonctionne par ailleurs comme un mur de feu."
+          }
+        ]
+      },
+      {
+        "id": "illusion",
+        "nom": "Illusion",
+        "intro": "Les illusionnistes se servent de la magie pour créer des images trompeuses, des chimères et des faux-semblants destinés à dérouter et à duper leurs ennemis.",
+        "pouvoirs": [
+          {
+            "nom": "Illusions durables",
+            "niveau": 1,
+            "genre": "Sur",
+            "texte": "Lorsque l’illusionniste lance une illusion dont la durée dépend de la concentration du lanceur de sorts, celle-ci persiste pendant un nombre de rounds supplémentaires égal à la moitié de son niveau de magicien (au minimum +1 round) après la fin de sa concentration. Au niveau 20, l’illusionniste peut rendre permanente une illusion qui requiert normalement de la concentration. Il ne peut cependant rendre permanente qu’une seule illusion à la fois : s’il choisit de rendre permanente une autre illusion nécessitant de la concentration, la première prend fin."
+          },
+          {
+            "nom": "Rayon aveuglant",
+            "niveau": 1,
+            "genre": "Mag",
+            "usage": {
+              "type": "fois"
+            },
+            "texte": "Par une action simple, l’illusionniste peut lancer un rayon scintillant sur un ennemi distant d’au plus 9 m en réussissant une attaque de contact à distance. Le rayon aveugle la cible pendant 1 round. Les créatures possédant un nombre de DV supérieur au niveau de magicien de l’illusionniste ne sont pas aveuglées mais étourdies pendant 1 round. Chaque jour, l’illusionniste peut utiliser ce pouvoir un nombre de fois égal à 3 + son modificateur d’Intelligence."
+          },
+          {
+            "nom": "Champ d’invisibilité",
+            "niveau": 8,
+            "genre": "Mag",
+            "usage": {
+              "type": "rounds"
+            },
+            "texte": "Au niveau 8, l’illusionniste peut se rendre invisible chaque jour pendant un nombre total de rounds égal à son niveau de magicien. Ces rounds ne doivent pas forcément être consécutifs. Ce pouvoir, qui s’active par une action rapide, fonctionne par ailleurs comme le sort d’invisibilité suprême."
+          }
+        ]
+      },
+      {
+        "id": "invocation",
+        "nom": "Invocation",
+        "intro": "L’invocateur étudie principalement les sorts qui lui permettent de conjurer des monstres et de les soumettre à sa volonté.",
+        "pouvoirs": [
+          {
+            "nom": "Maîtrise des invocations",
+            "niveau": 1,
+            "genre": "Sur",
+            "texte": "Chaque fois que l’invocateur lance un sort d’invocation (convocation), la durée de celui-ci augmente d’un nombre de rounds égal à la moitié de son niveau de magicien (au minimum +1 round). Au niveau 20, l’invocateur peut changer la durée de n’importe quel sort de convocation de monstres en « permanente ». Il ne peut cependant maintenir qu’un seul sort de convocation de monstres permanent à la fois. S’il lance un autre sort de convocation de monstres en décidant de le rendre permanent, le sort précédent prend immédiatement fin."
+          },
+          {
+            "nom": "Fléchette d’acide",
+            "niveau": 1,
+            "genre": "Mag",
+            "usage": {
+              "type": "fois"
+            },
+            "texte": "Par une action simple, l’invocateur peut envoyer une fléchette d’acide sur un ennemi distant de 9 m ou moins en réussissant une attaque de contact à distance. La fléchette d’acide inflige 1d6 points de dégâts d’acide + 1 point par deux niveaux de magicien. Chaque jour, l’invocateur peut utiliser ce pouvoir un nombre de fois égal à 3 + son modificateur d’Intelligence. Cette attaque ignore la résistance à la magie."
+          },
+          {
+            "nom": "Pas interdimensionnels",
+            "niveau": 8,
+            "genre": "Mag",
+            "usage": {
+              "type": "metres"
+            },
+            "texte": "Ce pouvoir permet à un invocateur de niveau 8 de se téléporter chaque jour sur une distance totale de 9 m par niveau de lanceur de sorts. Chaque utilisation de ce pouvoir nécessite une action simple, ne provoque pas d’attaque d’opportunité et doit correspondre à une distance exprimable sous la forme d’un multiple de 1,50 m. L’invocateur peut emmener d’autres créatures avec lui (pour autant qu’elles soient d’accord) mais il doit alors décompter plusieurs fois la distance parcourue de son quota journalier (une fois pour lui et une fois de plus pour chaque personne qui l’accompagne)."
+          }
+        ]
+      },
+      {
+        "id": "necromancie",
+        "nom": "Nécromancie",
+        "intro": "Les nécromanciens sont des magiciens terrifiants et souvent craints qui commandent aux morts et utilisent les sombres pouvoirs de la non-vie contre leurs ennemis.",
+        "pouvoirs": [
+          {
+            "nom": "Emprise sur les morts-vivants",
+            "niveau": 1,
+            "genre": "Sur",
+            "usage": {
+              "type": "fois"
+            },
+            "texte": "Le nécromancien reçoit Contrôle des morts-vivants ou Renvoi des morts-vivants comme don supplémentaire. Chaque jour, il peut canaliser de l’énergie un nombre de fois égal à 3 + son modificateur d’Intelligence, mais seulement pour utiliser le don choisi. Il peut acquérir d’autres dons permettant d’améliorer ce pouvoir (comme Canalisation supplémentaire et Science de la canalisation) mais pas ceux qui le modifient (comme Canalisation alignée et Canalisation élémentaire). Le DD du jet de sauvegarde contre ces dons est égal à 10 + la moitié du niveau de magicien du nécromancien + le modificateur de Charisme du nécromancien. Lorsque le nécromancien atteint le niveau 20, les morts-vivants ne peuvent plus ajouter leur résistance à la canalisation à leur jet de sauvegarde contre ce pouvoir."
+          },
+          {
+            "nom": "Toucher du tombeau",
+            "niveau": 1,
+            "genre": "Mag",
+            "usage": {
+              "type": "fois"
+            },
+            "texte": "Par une action simple, le nécromancien peut porter une attaque de contact au corps à corps visant à secouer une créature vivante pendant un nombre de rounds égal à la moitié de son niveau de magicien (1 round au minimum). S’il touche à nouveau une créature déjà secouée par ce pouvoir, elle devient effrayée pour 1 round si elle possède un nombre de DV inférieur au niveau de magicien du nécromancien. Chaque jour, le nécromancien peut utiliser ce pouvoir un nombre de fois égal à 3 + son modificateur d’Intelligence."
+          },
+          {
+            "nom": "Perception de la vie",
+            "niveau": 8,
+            "genre": "Sur",
+            "usage": {
+              "type": "rounds"
+            },
+            "texte": "Au niveau 8, le nécromancien peut acquérir le pouvoir de vision aveugle avec une portée de 3 m chaque jour pendant un nombre total de rounds égal à son niveau de magicien. Ce pouvoir lui permet seulement de détecter et de distinguer les créatures vivantes et les morts-vivants. Les créatures artificielles et les autres créatures qui ne sont ni vivantes ni mortes-vivantes ne sont pas visibles. La portée de ce pouvoir augmente de 3 m au niveau 12, ainsi que tous les quatre niveaux au-delà du niveau 12."
+          }
+        ]
+      },
+      {
+        "id": "transmutation",
+        "nom": "Transmutation",
+        "intro": "Les transmutateurs utilisent la magie pour modifier le monde qui les entoure.",
+        "pouvoirs": [
+          {
+            "nom": "Amélioration physique",
+            "niveau": 1,
+            "genre": "Mag",
+            "texte": "Le transmutateur acquiert un bonus d’altération de +1 à une de ses valeurs de caractéristiques physiques (Force, Dextérité ou Constitution). Ce bonus s’accroît de +1 par tranche de cinq niveaux de magicien, jusqu’à un maximum de +5 au niveau 20. Le transmutateur peut choisir de changer la caractéristique physique à laquelle ce bonus s’applique lorsqu’il prépare ses sorts. Au niveau 20, ce bonus s’applique à deux scores de caractéristiques physiques de son choix."
+          },
+          {
+            "nom": "Poing télékinétique",
+            "niveau": 1,
+            "genre": "Mag",
+            "usage": {
+              "type": "fois"
+            },
+            "texte": "Par une action simple, le transmutateur peut envoyer un poing télékinétique frapper une cible distante de 9 m ou moins en réussissant une attaque de contact à distance. Le poing télékinétique inflige 1d4 points de dégâts de type contondant + 1 point par deux niveaux de magicien. Chaque jour, le transmutateur peut utiliser ce pouvoir un nombre de fois égal à 3 + son modificateur d’Intelligence."
+          },
+          {
+            "nom": "Changement de la forme",
+            "niveau": 8,
+            "genre": "Mag",
+            "usage": {
+              "type": "rounds"
+            },
+            "texte": "Au niveau 8, le transmutateur peut modifier la forme de son corps chaque jour pendant un nombre de rounds total égal à son niveau de magicien. Ces rounds ne doivent pas forcément être consécutifs. En dehors de cela, ce pouvoir fonctionne comme forme bestiale II ou corps élémentaire I. Au niveau 12, ce pouvoir fonctionne comme forme bestiale III ou corps élémentaire II."
+          }
+        ]
+      },
+      {
+        "id": "universelle",
+        "nom": "Universelle",
+        "intro": "Les magiciens qui ne se spécialisent pas dans une école de magie (les universalistes) sont les plus polyvalents de tous les lanceurs de sorts.",
+        "pouvoirs": [
+          {
+            "nom": "Main de l’apprenti",
+            "niveau": 1,
+            "genre": "Sur",
+            "usage": {
+              "type": "fois"
+            },
+            "texte": "L’universaliste peut faire s’envoler l’arme de corps à corps qu’il tient et l’envoyer frapper un ennemi avant de la faire revenir instantanément dans sa main. Il peut utiliser une action simple pour attaquer un ennemi distant de 9 m ou moins avec son arme de corps à corps. On considère qu’il s’agit d’une attaque à distance avec une arme de jet mais c’est le modificateur d’Intelligence du personnage (et non son modificateur de Dextérité) qui s’applique au jet d’attaque (les dégâts, eux, restent basés sur la Force). Ce pouvoir ne permet pas de tenter une manoeuvre offensive. Chaque jour, l’universaliste peut utiliser ce pouvoir un nombre de fois égal à 3 + son modificateur d’Intelligence."
+          },
+          {
+            "nom": "Maîtrise de la métamagie",
+            "niveau": 8,
+            "genre": "Sur",
+            "usage": {
+              "type": "metamagie"
+            },
+            "texte": "Au niveau 8, l’universaliste peut choisir d’appliquer les effets d’un don de métamagie qu’il connaît à un sort qu’il est sur le point de lancer et ce, sans en modifier le niveau ni le temps d’incantation. Il peut utiliser ce pouvoir une fois par jour au niveau 8 et une fois de plus par jour tous les deux niveaux de magicien suivants. Si l’universaliste choisit d’appliquer les effets d’un don de métamagie qui élève normalement le niveau du sort affecté de plus d’une unité, il doit sacrifier un nombre d’utilisations de ce pouvoir égal au nombre de niveaux que le don ajoute au sort. Même si ce pouvoir ne modifie pas le niveau effectif du sort, l’universaliste ne peut pas l’employer pour lancer un sort dont le niveau modifié serait supérieur au plus haut niveau de sorts auquel il a accès."
+          }
+        ]
+      }
+    ]
+  },
+  "pacte_magique_magicien": {
+    "classe": "magicien",
+    "source": "Manuel des joueurs (VF), Magicien, Pacte magique et familiers (texte fourni par l’utilisateur)",
+    "niveau": 1,
+    "formes": [
+      "familier",
+      "objet fétiche"
+    ],
+    "objets_fetiches": [
+      "amulette",
+      "anneau",
+      "arme",
+      "baguette",
+      "bâton"
+    ],
+    "familiers": [
+      {
+        "nom": "Belette",
+        "capacite": "Le maître obtient un bonus de +2 aux jets de Réflexes.",
+        "effet": {
+          "cible": "jds.ref",
+          "valeur": 2
+        }
+      },
+      {
+        "nom": "Chat",
+        "capacite": "Le maître obtient un bonus de +3 aux tests de Discrétion.",
+        "effet": {
+          "cible": "comp.stealth",
+          "valeur": 3
+        }
+      },
+      {
+        "nom": "Chauve-souris",
+        "capacite": "Le maître obtient un bonus de +3 aux tests de Vol.",
+        "effet": {
+          "cible": "comp.fly",
+          "valeur": 3
+        }
+      },
+      {
+        "nom": "Chouette",
+        "capacite": "Le maître obtient un bonus de +3 aux tests de perception opposés ou dépendant de la vue dans l’obscurité ou les zones d’ombres.",
+        "effet": null
+      },
+      {
+        "nom": "Corbeau",
+        "capacite": "Le maître obtient un bonus de +3 aux tests d’Estimation. Un familier corbeau peut parler une langue (choisie par son maître). C’est un pouvoir surnaturel.",
+        "effet": {
+          "cible": "comp.appraise",
+          "valeur": 3
+        }
+      },
+      {
+        "nom": "Crapaud",
+        "capacite": "Le maître obtient +3 points de vie.",
+        "effet": null
+      },
+      {
+        "nom": "Faucon",
+        "capacite": "Le maître obtient un bonus de +3 aux tests de Perception opposés ou dépendant de la vue sous une lumière vive.",
+        "effet": null
+      },
+      {
+        "nom": "Lézard",
+        "capacite": "Le maître obtient un bonus de +3 aux tests d’Escalade.",
+        "effet": {
+          "cible": "comp.climb",
+          "valeur": 3
+        }
+      },
+      {
+        "nom": "Rat",
+        "capacite": "Le maître obtient un bonus de +2 aux jets de Vigueur.",
+        "effet": {
+          "cible": "jds.vig",
+          "valeur": 2
+        }
+      },
+      {
+        "nom": "Singe",
+        "capacite": "Le maître obtient un bonus de +3 aux tests d’Acrobaties.",
+        "effet": {
+          "cible": "comp.acrobatics",
+          "valeur": 3
+        }
+      },
+      {
+        "nom": "Vipère",
+        "capacite": "Le maître obtient un bonus de +3 aux tests de Bluff.",
+        "effet": {
+          "cible": "comp.bluff",
+          "valeur": 3
+        }
+      }
+    ],
+    "table_familier": [
+      {
+        "niveaux": [
+          1,
+          2
+        ],
+        "armure_naturelle": 1,
+        "int": 6,
+        "special": "esquive extraordinaire, lien empathique, transfert de sorts, vigilance"
+      },
+      {
+        "niveaux": [
+          3,
+          4
+        ],
+        "armure_naturelle": 2,
+        "int": 7,
+        "special": "conduit"
+      },
+      {
+        "niveaux": [
+          5,
+          6
+        ],
+        "armure_naturelle": 3,
+        "int": 8,
+        "special": "communication avec le maître"
+      },
+      {
+        "niveaux": [
+          7,
+          8
+        ],
+        "armure_naturelle": 4,
+        "int": 9,
+        "special": "communication avec les animaux de la même espèce"
+      },
+      {
+        "niveaux": [
+          9,
+          10
+        ],
+        "armure_naturelle": 5,
+        "int": 10,
+        "special": "—"
+      },
+      {
+        "niveaux": [
+          11,
+          12
+        ],
+        "armure_naturelle": 6,
+        "int": 11,
+        "special": "résistance à la magie"
+      },
+      {
+        "niveaux": [
+          13,
+          14
+        ],
+        "armure_naturelle": 7,
+        "int": 12,
+        "special": "scrutation sur le familier"
+      },
+      {
+        "niveaux": [
+          15,
+          16
+        ],
+        "armure_naturelle": 8,
+        "int": 13,
+        "special": "—"
+      },
+      {
+        "niveaux": [
+          17,
+          18
+        ],
+        "armure_naturelle": 9,
+        "int": 14,
+        "special": "—"
+      },
+      {
+        "niveaux": [
+          19,
+          20
+        ],
+        "armure_naturelle": 10,
+        "int": 15,
+        "special": "—"
+      }
+    ],
+    "note": "Choix définitif au niveau 1. Les bonus du familier aux compétences et jets de sauvegarde sont appliqués ; les autres (perception, points de vie) sont affichés. La feuille du familier (dés de vie, points de vie, attaques…) n’est pas calculée."
   }
 }
