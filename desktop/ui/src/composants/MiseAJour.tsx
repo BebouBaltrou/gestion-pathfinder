@@ -4,6 +4,7 @@
 import { useState } from "react";
 
 export const VERSION = "1.2.1";
+declare const __MAJ_TOKEN__: string;
 const DEPOT = "BebouBaltrou/gestion-pathfinder";
 const CLE = "gestion-pathfinder.maj-auto";
 
@@ -41,7 +42,7 @@ export function plusRecente(a: string, b: string): boolean {
 export async function chercherMiseAJour(): Promise<Nouvelle | null> {
   try {
     // Jeton de lecture seule injecté à la compilation (secret MAJ_TOKEN), pour un dépôt privé.
-    const jeton = import.meta.env.VITE_MAJ_TOKEN;
+    const jeton = __MAJ_TOKEN__;
     const r = await fetch(`https://api.github.com/repos/${DEPOT}/releases/latest`, {
       headers: {
         Accept: "application/vnd.github+json",
