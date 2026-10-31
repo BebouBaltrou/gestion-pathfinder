@@ -62,6 +62,7 @@ fn pretre(niveau: u32, sagesse: i32) -> Fiche {
         pacte_magique: None,
         familier: None,
         objet_fetiche: None,
+        grimoire: vec![],
         pouvoirs_rage: vec![],
         en_rage: false,
         rounds_de_rage: 0,
@@ -919,6 +920,7 @@ fn barbare(niveau: u32, constitution: i32) -> Fiche {
         pacte_magique: None,
         familier: None,
         objet_fetiche: None,
+        grimoire: vec![],
         pouvoirs_rage: vec![],
         en_rage: false,
         rounds_de_rage: 0,
@@ -2483,6 +2485,16 @@ fn le_barde_savoir_bardique_versatilite_artistique_et_lignes() {
 fn le_magicien_choisit_son_ecole_ses_ecoles_opposees_et_son_pacte_magique() {
     let r = Referentiel::core();
     let mut f = de_classe("magicien", 1);
+    f.grimoire = [
+        "Magic Missile",
+        "Mage Armor",
+        "Shield",
+        "Sleep",
+        "Burning Hands",
+        "Grease",
+    ]
+    .map(String::from)
+    .to_vec();
     let p = f.problemes_choix_de_classe(&r);
     assert!(p.contains(&Probleme::EcoleManquante));
     assert!(p.contains(&Probleme::PacteMagiqueManquant));
@@ -2609,4 +2621,101 @@ fn ecoles_de_magie_emplacement_en_plus_pouvoirs_du_jour_et_bonus_du_familier() {
         .any(|t| t.libelle.starts_with("Familier (Chat)") && t.valeur == 3));
     let l = crate::choix_classe::lignes_du_magicien(&c, &r);
     assert!(l.iter().any(|x| x.starts_with("Familier (Chat)")));
+}
+
+#[test]
+fn le_grimoire_du_magicien_se_compte_et_commande_la_preparation() {
+    use crate::preparation::{valider, SortPrepare};
+    let r = Referentiel::core();
+    let regles = ReglesFiche::default();
+    let _ = regles;
+    let prepare = |niveau: u32, sort: &str, domaine: bool| SortPrepare {
+        niveau,
+        sort: sort.into(),
+        domaine,
+    };
+    // Niveau 1, Intelligence 14 (+2) : 3 + 2 = 5 sorts de niveau 1 attendus.
+    let mut f = de_classe("magicien", 1);
+    f.scores_base.insert(Carac::Int, 14);
+    f.ecole = Some("universelle".into());
+    f.pacte_magique = Some("familier".into());
+    f.familier = Some("Chat".into());
+    assert_eq!(
+        crate::choix_classe::sorts_attendus_dans_le_grimoire(&f, &r),
+        5 + f.calculer(&r).unwrap().modificateurs[&Carac::Int].max(0) as u32 - 2
+    );
+    let attendus = crate::choix_classe::sorts_attendus_dans_le_grimoire(&f, &r);
+    assert!(f
+        .problemes_choix_de_classe(&r)
+        .contains(&Probleme::GrimoireIncomplet {
+            attendus,
+            choisis: 0
+        }));
+    f.grimoire = vec![
+        "Magic Missile".into(),
+        "Mage Armor".into(),
+        "Shield".into(),
+        "Sleep".into(),
+        "Burning Hands".into(),
+    ];
+    f.grimoire.truncate(attendus as usize);
+    let p = f.problemes_choix_de_classe(&r);
+    assert!(
+        !p.iter()
+            .any(|x| matches!(x, Probleme::GrimoireIncomplet { .. })),
+        "{p:?}"
+    );
+    // Un sort inaccessible, inconnu ou en double est signalé.
+    f.grimoire.push("Fireball".into());
+    f.grimoire.push("Magic Missile".into());
+    f.grimoire.push("Light".into());
+    let p = f.problemes_choix_de_classe(&r);
+    assert!(p.contains(&Probleme::SortDuGrimoireInaccessible {
+        sort: "Fireball".into(),
+        niveau: 3
+    }));
+    assert!(p.contains(&Probleme::SortDuGrimoireEnDouble("Magic Missile".into())));
+    assert!(p.contains(&Probleme::SortDuGrimoireInconnu("Light".into())));
+    f.grimoire.truncate(attendus as usize);
+    // Préparation : un sort du grimoire passe, un autre non ; les tours de magie sont d'office.
+    assert!(valider(
+        &f,
+        &r,
+        "magicien",
+        &[
+            prepare(1, "Magic Missile", false),
+            prepare(0, "Light", false)
+        ]
+    )
+    .is_ok());
+    let refus = valider(&f, &r, "magicien", &[prepare(1, "Charm Person", false)]).unwrap_err();
+    assert!(refus.contains("grimoire"), "{refus}");
+    // Spécialiste de l'évocation avec l'enchantement et l'illusion interdits.
+    f.ecole = Some("evocation".into());
+    f.ecoles_opposees = vec!["enchantement".into(), "illusion".into()];
+    f.grimoire[0] = "Charm Person".into();
+    f.grimoire.push("Magic Missile".into());
+    // Un sort d'une école opposée coûte deux emplacements : à un emplacement par jour, refus.
+    assert!(valider(&f, &r, "magicien", &[prepare(1, "Charm Person", false)]).is_ok());
+    let refus = valider(
+        &f,
+        &r,
+        "magicien",
+        &[
+            prepare(1, "Charm Person", false),
+            prepare(1, "Sleep", false),
+        ],
+    )
+    .unwrap_err();
+    assert!(refus.contains("permis"), "{refus}");
+    // Emplacement supplémentaire : un sort de l'école de spécialisation seulement.
+    let refus = valider(&f, &r, "magicien", &[prepare(1, "Mage Armor", true)]).unwrap_err();
+    assert!(refus.contains("école de spécialisation"), "{refus}");
+    assert!(valider(&f, &r, "magicien", &[prepare(1, "Magic Missile", true)]).is_ok());
+    // Les tours de magie des écoles interdites ne sont pas dans le grimoire.
+    let tours = crate::choix_classe::tours_de_magie_du_grimoire(&f, &r);
+    assert!(!tours.iter().any(|n| r
+        .sort(n)
+        .is_some_and(|x| x.ecole == "enchantment" || x.ecole == "illusion")));
+    assert!(tours.contains(&"Light"));
 }

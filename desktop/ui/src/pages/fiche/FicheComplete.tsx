@@ -550,6 +550,20 @@ function ChoixClasses({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => v
       )}
       {c.magicien && (
         <div className="carte">
+          <p>Grimoire ({c.grimoire.length}/{c.grimoireAttendu} sorts, sans les tours de magie)</p>
+          {c.grimoire.map(([en, nom, niveau]) => (
+            <p key={en} className="doux">Niveau {niveau} : {nom}</p>
+          ))}
+          <select defaultValue="" onChange={(e) => { if (e.target.value) { agir({ SortAjouteAuGrimoire: e.target.value }); e.target.value = ""; } }}>
+            <option value="">Ajouter un sort au grimoire…</option>
+            {c.sortsAjoutables.map(([en, nom, niveau]) => (
+              <option key={en} value={en}>Niveau {niveau} : {nom}</option>
+            ))}
+          </select>
+        </div>
+      )}
+      {c.magicien && (
+        <div className="carte">
           {c.pacteMagique ? (
             <p>Pacte magique : {c.pacteMagique}{c.familier && " — " + c.familier}{c.objetFetiche && " — " + c.objetFetiche}</p>
           ) : (

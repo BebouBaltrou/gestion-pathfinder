@@ -249,6 +249,10 @@ export type ChoixClassesVue = {
   familier: string | null;
   objetsFetiches: string[];
   objetFetiche: string | null;
+  /** Grimoire : sorts de niveau 1 et plus (nom anglais, nom, niveau), nombre attendu, sorts ajoutables. */
+  grimoire: [string, string, number][];
+  grimoireAttendu: number;
+  sortsAjoutables: [string, string, number][];
   /** Animaux permis (identifiant, nom) pour le compagnon du rôdeur ou le destrier du paladin. */
   animauxDuCompagnon: [string, string][];
   compagnonChoisi: string | null;
@@ -544,6 +548,7 @@ export type EvenementFiche =
   | { PacteDivinChoisi: string }
   | { FormeDeRepresentationChoisie: string }
   | { EcoleChoisie: string }
+  | { SortAjouteAuGrimoire: string }
   | { EcoleOpposeeChoisie: string }
   | { PacteMagiqueChoisi: string }
   | { FamilierChoisi: string }

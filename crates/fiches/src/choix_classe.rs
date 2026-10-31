@@ -805,6 +805,28 @@ impl Fiche {
             }
         }
 
+        if self.niveau_de_classe("magicien") >= 1 {
+            let attendus = sorts_attendus_dans_le_grimoire(self, r);
+            let choisis = self.grimoire.len() as u32;
+            if choisis < attendus {
+                p.push(Probleme::GrimoireIncomplet { attendus, choisis });
+            }
+            let maximal = niveau_maximal_de_sort(self, r);
+            for (i, nom) in self.grimoire.iter().enumerate() {
+                match r.sort(nom).and_then(|x| x.niveau_pour("wizard")) {
+                    None | Some(0) => p.push(Probleme::SortDuGrimoireInconnu(nom.clone())),
+                    Some(n) if n > maximal => p.push(Probleme::SortDuGrimoireInaccessible {
+                        sort: nom.clone(),
+                        niveau: n,
+                    }),
+                    Some(_) => {}
+                }
+                if self.grimoire[..i].contains(nom) {
+                    p.push(Probleme::SortDuGrimoireEnDouble(nom.clone()));
+                }
+            }
+        }
+
         let niveau_barbare = self.niveau_de_classe("barbare");
         let attendus = PouvoirsRage::attendus(niveau_barbare);
         let choisis = self.pouvoirs_rage.len() as u32;
@@ -1544,4 +1566,75 @@ pub fn compagnon_hors_druide<'a>(
         return Some((&c.compagnon_destrier, niveau));
     }
     None
+}
+
+/// Nom de l'école dans le catalogue des sorts d'après l'identifiant d'école du magicien.
+pub fn ecole_du_catalogue(id: &str) -> &'static str {
+    match id {
+        "abjuration" => "abjuration",
+        "divination" => "divination",
+        "enchantement" => "enchantment",
+        "evocation" => "evocation",
+        "illusion" => "illusion",
+        "invocation" => "conjuration",
+        "necromancie" => "necromancy",
+        "transmutation" => "transmutation",
+        _ => "universal",
+    }
+}
+
+/// Écoles interdites du magicien spécialiste, avec les noms du catalogue des sorts.
+pub fn ecoles_opposees_du_catalogue(fiche: &Fiche) -> Vec<&'static str> {
+    fiche
+        .ecoles_opposees
+        .iter()
+        .map(|e| ecole_du_catalogue(e))
+        .collect()
+}
+
+/// Plus haut niveau de sort accessible au magicien à son niveau actuel (0 s'il n'a que des tours de magie).
+pub fn niveau_maximal_de_sort(fiche: &Fiche, r: &Referentiel) -> u32 {
+    let nc = fiche.niveau_de_classe("magicien") as usize;
+    if nc == 0 {
+        return 0;
+    }
+    r.classe("magicien")
+        .and_then(|c| c.progression.get(nc - 1))
+        .map_or(0, |l| {
+            l.sorts_par_jour
+                .iter()
+                .rposition(Option::is_some)
+                .map_or(0, |i| i as u32 + 1)
+        })
+}
+
+/// Sorts que le grimoire doit contenir en plus des tours de magie : trois sorts de niveau 1, un de
+/// plus par point de bonus d'Intelligence, puis deux nouveaux sorts à chaque niveau gagné.
+pub fn sorts_attendus_dans_le_grimoire(fiche: &Fiche, r: &Referentiel) -> u32 {
+    let nc = fiche.niveau_de_classe("magicien");
+    if nc == 0 {
+        return 0;
+    }
+    let bonus = fiche
+        .calculer(r)
+        .ok()
+        .and_then(|v| {
+            v.modificateurs
+                .get(&crate::caracteristiques::Carac::Int)
+                .copied()
+        })
+        .unwrap_or(0)
+        .max(0) as u32;
+    3 + bonus + 2 * (nc - 1)
+}
+
+/// Tours de magie du grimoire : tous ceux de la liste du magicien, sauf ceux d'une école interdite.
+pub fn tours_de_magie_du_grimoire<'a>(fiche: &Fiche, r: &'a Referentiel) -> Vec<&'a str> {
+    let interdites = ecoles_opposees_du_catalogue(fiche);
+    r.sorts
+        .iter()
+        .filter(|x| x.niveau_pour("wizard") == Some(0))
+        .filter(|x| !interdites.contains(&x.ecole.as_str()))
+        .map(|x| x.nom_en.as_str())
+        .collect()
 }

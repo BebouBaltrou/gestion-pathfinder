@@ -84,11 +84,29 @@ pub fn valider(
                 .filter_map(|s| s.nom_en.as_deref().map(|n| (s.niveau, n)))
         })
         .collect();
+    // Magicien : un sort d'une école opposée coûte deux emplacements du même niveau.
+    let magicien = classe == "magicien";
+    let interdites = if magicien {
+        crate::choix_classe::ecoles_opposees_du_catalogue(fiche)
+    } else {
+        Vec::new()
+    };
+    let double = |s: &SortPrepare| -> u32 {
+        let opposee = r
+            .sort(&s.sort)
+            .is_some_and(|x| interdites.contains(&x.ecole.as_str()));
+        if opposee {
+            2
+        } else {
+            1
+        }
+    };
     for sn in 0..=9u32 {
         let normaux = sorts
             .iter()
             .filter(|s| s.niveau == sn && !s.domaine)
-            .count() as u32;
+            .map(double)
+            .sum::<u32>();
         let de_domaine = sorts.iter().filter(|s| s.niveau == sn && s.domaine).count() as u32;
         let e = inc.emplacements.iter().find(|e| e.niveau_de_sort == sn);
         let (permis, domaine) = match e {
@@ -114,7 +132,41 @@ pub fn valider(
         if s.niveau > 9 {
             return Err(format!("{} : niveau {} impossible", s.sort, s.niveau));
         }
-        if s.domaine {
+        if magicien {
+            // Grimoire : tours de magie d'office (sauf école interdite), autres sorts s'ils y figurent.
+            if s.niveau == 0 {
+                if interdites.contains(&def_sort.ecole.as_str()) {
+                    return Err(format!(
+                        "{} appartient à une école interdite : il n'est pas dans le grimoire",
+                        s.sort
+                    ));
+                }
+            } else if !fiche
+                .grimoire
+                .iter()
+                .any(|g| g.eq_ignore_ascii_case(&s.sort))
+            {
+                return Err(format!("{} ne figure pas dans le grimoire", s.sort));
+            }
+            if s.domaine {
+                let ecole = fiche
+                    .ecole
+                    .as_deref()
+                    .map(crate::choix_classe::ecole_du_catalogue);
+                if s.niveau == 0 || Some(def_sort.ecole.as_str()) != ecole {
+                    return Err(format!(
+                        "{} : l'emplacement supplémentaire sert à un sort de l'école de spécialisation",
+                        s.sort
+                    ));
+                }
+            }
+            if def_sort.niveau_pour(&cle) != Some(s.niveau) {
+                return Err(format!(
+                    "{} n'est pas un sort de {} de niveau {}",
+                    s.sort, def.nom, s.niveau
+                ));
+            }
+        } else if s.domaine {
             if !domaine_permis
                 .iter()
                 .any(|(n, nom)| *n == s.niveau && nom.eq_ignore_ascii_case(&s.sort))

@@ -618,6 +618,11 @@ pub struct ChoixClassesVue {
     pub familier: Option<String>,
     pub objets_fetiches: Vec<String>,
     pub objet_fetiche: Option<String>,
+    /// Grimoire : sorts de niveau 1 et plus (nom anglais, nom, niveau), nombre attendu, sorts ajoutables.
+    pub grimoire: Vec<(String, String, u32)>,
+    pub grimoire_attendu: u32,
+    pub sorts_ajoutables: Vec<(String, String, u32)>,
+    /// Pouvoirs
     /// Compagnon du rôdeur ou destrier du paladin : animaux permis (identifiant, nom) et choix.
     pub animaux_du_compagnon: Vec<(String, String)>,
     pub compagnon_choisi: Option<String>,
@@ -659,6 +664,18 @@ fn pouvoir_rage_vue(rage: &fiches::choix_classe::PouvoirsRage, nom: &str) -> Pou
         mjra: rage.sources.get(nom).is_some_and(|s| s == "APG"),
         texte: rage.textes.get(nom).cloned().unwrap_or_default(),
     }
+}
+
+/// Sort du grimoire pour l'affichage : nom anglais, nom français (s'il existe), niveau de magicien.
+fn sort_pour_grimoire(r: &Referentiel, nom_en: &str) -> (String, String, u32) {
+    let nom = Traductions::partage()
+        .sort(nom_en)
+        .map_or_else(|| nom_en.to_string(), |s| s.nom.clone());
+    let niveau = r
+        .sort(nom_en)
+        .and_then(|x| x.niveau_pour("wizard"))
+        .unwrap_or(0);
+    (nom_en.to_string(), nom, niveau)
 }
 
 fn choix_classes(r: &Referentiel, f: &Fiche) -> ChoixClassesVue {
@@ -778,6 +795,26 @@ fn choix_classes(r: &Referentiel, f: &Fiche) -> ChoixClassesVue {
         familier: f.familier.clone(),
         objets_fetiches: c.pacte_magique_magicien.objets_fetiches.clone(),
         objet_fetiche: f.objet_fetiche.clone(),
+        grimoire: f
+            .grimoire
+            .iter()
+            .map(|n| sort_pour_grimoire(r, n))
+            .collect(),
+        grimoire_attendu: fiches::choix_classe::sorts_attendus_dans_le_grimoire(f, r),
+        sorts_ajoutables: if f.niveau_de_classe("magicien") >= 1 {
+            let maximal = fiches::choix_classe::niveau_maximal_de_sort(f, r);
+            let mut v: Vec<(String, String, u32)> = r
+                .sorts
+                .iter()
+                .filter(|x| matches!(x.niveau_pour("wizard"), Some(n) if n >= 1 && n <= maximal))
+                .filter(|x| !f.grimoire.contains(&x.nom_en))
+                .map(|x| sort_pour_grimoire(r, &x.nom_en))
+                .collect();
+            v.sort_by(|a, b| a.2.cmp(&b.2).then(a.1.cmp(&b.1)));
+            v
+        } else {
+            Vec::new()
+        },
         formes_attendues: c
             .versatilite_artistique_barde
             .nombre(f.niveau_de_classe("barde")),
@@ -2431,6 +2468,7 @@ mod tests_pretre {
             pacte_magique: None,
             familier: None,
             objet_fetiche: None,
+            grimoire: vec![],
             pouvoirs_rage: vec![],
             en_rage: false,
             rounds_de_rage: 0,

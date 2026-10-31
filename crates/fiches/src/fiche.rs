@@ -139,6 +139,10 @@ pub struct Fiche {
     pub familier: Option<String>,
     #[cfg_attr(feature = "serde", serde(default))]
     pub objet_fetiche: Option<String>,
+    /// Sorts de niveau 1 et plus du grimoire du magicien (noms anglais du catalogue) ; les tours de
+    /// magie y figurent d'office.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub grimoire: Vec<String>,
     /// Pouvoirs de rage choisis par le barbare (noms de `data/core/pouvoirs_rage.json`).
     #[cfg_attr(feature = "serde", serde(default))]
     pub pouvoirs_rage: Vec<String>,
@@ -292,6 +296,16 @@ pub enum Probleme {
     PacteDivinManquant,
     PacteDivinInconnu(String),
     EcoleManquante,
+    GrimoireIncomplet {
+        attendus: u32,
+        choisis: u32,
+    },
+    SortDuGrimoireInconnu(String),
+    SortDuGrimoireInaccessible {
+        sort: String,
+        niveau: u32,
+    },
+    SortDuGrimoireEnDouble(String),
     EcoleInconnue(String),
     EcolesOpposeesAChoisir {
         attendues: u32,
@@ -393,6 +407,7 @@ impl Probleme {
             | Probleme::GracesAChoisir { attendus, choisis }
             | Probleme::EnnemisJuresAChoisir { attendus, choisis }
             | Probleme::AugmentationsEnnemisAChoisir { attendus, choisis }
+            | Probleme::GrimoireIncomplet { attendus, choisis }
             | Probleme::FormesDeRepresentationAChoisir { attendus, choisis }
             | Probleme::EnvironnementsAChoisir { attendus, choisis }
             | Probleme::GroupesDArmesAChoisir { attendus, choisis }
@@ -590,6 +605,18 @@ impl std::fmt::Display for Probleme {
             }
             Probleme::PacteDivinManquant => write!(f, "pacte divin à choisir (niveau 5)"),
             Probleme::EcoleManquante => write!(f, "école de magie à choisir (niveau 1)"),
+            Probleme::GrimoireIncomplet { attendus, choisis } => write!(
+                f,
+                "grimoire : {choisis} sort(s) sur {attendus} (sans les tours de magie)"
+            ),
+            Probleme::SortDuGrimoireInconnu(n) => {
+                write!(f, "grimoire : {n} n'est pas un sort de magicien de niveau 1 ou plus")
+            }
+            Probleme::SortDuGrimoireInaccessible { sort, niveau } => write!(
+                f,
+                "grimoire : {sort} est de niveau {niveau}, pas encore accessible"
+            ),
+            Probleme::SortDuGrimoireEnDouble(n) => write!(f, "grimoire : {n} est déjà dans le grimoire"),
             Probleme::EcoleInconnue(e) => write!(f, "école de magie inconnue : {e}"),
             Probleme::EcolesOpposeesAChoisir { attendues, choisies } => write!(
                 f,

@@ -94,6 +94,8 @@ pub enum EvenementFiche {
     FormeDeRepresentationChoisie(String),
     /// École de magie du magicien (niveau 1), choix définitif.
     EcoleChoisie(String),
+    /// Un sort (nom anglais du catalogue) est ajouté au grimoire du magicien.
+    SortAjouteAuGrimoire(String),
     /// École opposée du magicien spécialiste (deux au plus).
     EcoleOpposeeChoisie(String),
     /// Pacte magique du magicien : `familier` ou `objet fétiche`, choix définitif.
@@ -234,6 +236,7 @@ impl EvenementFiche {
                 format!("Versatilité artistique : {x}")
             }
             EvenementFiche::EcoleChoisie(x) => format!("École de magie : {x}"),
+            EvenementFiche::SortAjouteAuGrimoire(x) => format!("Sort ajouté au grimoire : {x}"),
             EvenementFiche::EcoleOpposeeChoisie(x) => format!("École opposée : {x}"),
             EvenementFiche::PacteMagiqueChoisi(x) => format!("Pacte magique : {x}"),
             EvenementFiche::FamilierChoisi(x) => format!("Familier : {x}"),
@@ -806,6 +809,7 @@ impl Journal {
                     fiche.formes_de_representation.push(x.clone());
                 }
                 EvenementFiche::EcoleOpposeeChoisie(x) => fiche.ecoles_opposees.push(x.clone()),
+                EvenementFiche::SortAjouteAuGrimoire(x) => fiche.grimoire.push(x.clone()),
                 EvenementFiche::EcoleChoisie(x) => {
                     definitif(&mut fiche.ecole, x, "l'école de magie", i)?;
                 }

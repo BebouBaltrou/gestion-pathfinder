@@ -820,6 +820,7 @@ pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32, r: &Referentiel) -> Result
         pacte_magique: None,
         familier: None,
         objet_fetiche: None,
+        grimoire: vec![],
         pouvoirs_rage: vec![],
         en_rage: false,
         rounds_de_rage: 0,
