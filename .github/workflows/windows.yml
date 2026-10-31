@@ -31,6 +31,8 @@ jobs:
   bureau-windows:
     name: Nouvelle application — Windows
     runs-on: windows-latest
+    permissions:
+      contents: write
     defaults:
       run:
         shell: bash
@@ -67,6 +69,12 @@ jobs:
           name: gestion-pathfinder-bureau-windows
           path: desktop/src-tauri/target/release/gestion-pathfinder.exe
           if-no-files-found: error
+      # Lors d'un envoi de version (étiquette v*) : publie l'exécutable sur la page « Releases ».
+      - name: Publication de la version
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: desktop/src-tauri/target/release/gestion-pathfinder.exe
 
   # Linux : mis en pause le 23/10/2026 (Windows d'abord ; portage quand l'application sera
   # stable et terminée). Remplacer « false » par « true » pour le réactiver.
