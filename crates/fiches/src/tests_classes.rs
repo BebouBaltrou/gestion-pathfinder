@@ -2393,13 +2393,13 @@ fn la_liste_de_convocation_d_allies_naturels_est_saisie_avec_ses_fiches() {
         .flat_map(|n| n["creatures"].as_array().unwrap())
         .collect();
     assert!(creatures.len() > 100);
-    // Seule la punaise de feu géante n'a pas de page sur le wiki.
-    let sans: Vec<&str> = creatures
+    // Toutes les créatures ont une fiche (la punaise de feu géante, sans page, est ignorée).
+    assert!(creatures.iter().all(|c| c.get("introuvable").is_none()));
+    let ogre = creatures
         .iter()
-        .filter(|c| c.get("introuvable").is_some())
-        .map(|c| c["nom"].as_str().unwrap())
-        .collect();
-    assert_eq!(sans, vec!["Punaise de feu géante"]);
+        .find(|c| c["nom"] == "Araignée ogre")
+        .unwrap();
+    assert_eq!(ogre["fp"], "5");
     let rat = creatures
         .iter()
         .find(|c| c["nom"] == "Rat sanguinaire")

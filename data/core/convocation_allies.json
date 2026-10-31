@@ -1016,6 +1016,96 @@
    "niveau": 2,
    "creatures": [
     {
+     "nom": "Araignée géante",
+     "page_wiki": "Araignée géante",
+     "titre_wiki": "Araignée géante",
+     "fp": "1",
+     "source": "Bestiaire p.20",
+     "sections": [
+      {
+       "titre": "",
+       "lignes": [
+        {
+         "label": "PX",
+         "valeur": "400"
+        },
+        {
+         "label": "",
+         "valeur": "Vermine de taille M, N"
+        },
+        {
+         "label": "Init",
+         "valeur": "+3 ; Sens perception des vibrations 18 m (12 c), vision dans le noir 18 m (12 c) ; Perception +4"
+        }
+       ]
+      },
+      {
+       "titre": "Défense",
+       "lignes": [
+        {
+         "label": "CA",
+         "valeur": "14, contact 13, pris au dépourvu 11 (Dex +3, naturelle +1)"
+        },
+        {
+         "label": "pv",
+         "valeur": "16 (3d8+3)"
+        },
+        {
+         "label": "Réf",
+         "valeur": "+4, Vig +4, Vol +1"
+        },
+        {
+         "label": "Immunités",
+         "valeur": "effets mentaux"
+        }
+       ]
+      },
+      {
+       "titre": "Attaque",
+       "lignes": [
+        {
+         "label": "VD",
+         "valeur": "9 m (6 c), escalade 9 m (6 c)"
+        },
+        {
+         "label": "Corps à corps",
+         "valeur": "morsure, +2 (1d6 et poison)"
+        },
+        {
+         "label": "Attaques spéciales",
+         "valeur": "toile (+5 à distance, DD 12, 2 pv)"
+        }
+       ]
+      },
+      {
+       "titre": "Caractéristiques",
+       "lignes": [
+        {
+         "label": "For",
+         "valeur": "11, Dex 17, Con 12, Int -, Sag 10, Cha 2"
+        },
+        {
+         "label": "BBA",
+         "valeur": "+2, BMO +2, DMD 15 (27 contre le croc-en-jambe)"
+        },
+        {
+         "label": "Compétences",
+         "valeur": "Discrétion +7 (+11 sur une toile), Escalade +16, Perception +4 (+8 sur une toile) ; Modificateurs raciaux Discrétion +4 (+8 sur une toile), Escalade +16, Perception +4 (+8 sur une toile)"
+        }
+       ]
+      },
+      {
+       "titre": "Particularités",
+       "lignes": [
+        {
+         "label": "Venin (Ext)",
+         "valeur": "Morsure - blessure ; JS Vigueur DD 14 ; fréquence 1/round pendant 4 rounds ; effet affaiblissement temporaire 1d2 For ; guérison 1 réussite."
+        }
+       ]
+      }
+     ]
+    },
+    {
      "nom": "Calmar",
      "page_wiki": "Calmar",
      "titre_wiki": "Calmar",
@@ -4825,10 +4915,6 @@
      "note": "Ptéranodon (dinosaure) dans la liste du livre"
     },
     {
-     "nom": "Punaise de feu géante",
-     "introuvable": "page absente du wiki"
-    },
-    {
      "nom": "Rhinocéros",
      "page_wiki": "Rhinocéros",
      "titre_wiki": "Rhinocéros",
@@ -5368,26 +5454,26 @@
      "note": "Ankylosaure (dinosaure) dans la liste du livre"
     },
     {
-     "nom": "Araignée géante",
-     "page_wiki": "Araignée géante",
-     "titre_wiki": "Araignée géante",
-     "fp": "1",
-     "source": "Bestiaire p.20",
+     "nom": "Araignée ogre",
+     "page_wiki": "Araignée ogre",
+     "titre_wiki": "Araignée ogre",
+     "fp": "5",
+     "source": "Bestiaire 3 page 14",
      "sections": [
       {
        "titre": "",
        "lignes": [
         {
          "label": "PX",
-         "valeur": "400"
+         "valeur": "1 600"
         },
         {
          "label": "",
-         "valeur": "Vermine de taille M, N"
+         "valeur": "Vermine de taille TG, N"
         },
         {
          "label": "Init",
-         "valeur": "+3 ; Sens perception des vibrations 18 m (12 c), vision dans le noir 18 m (12 c) ; Perception +4"
+         "valeur": "+2 ; Sens vision dans le noir à 12 cases, perception des vibrations à 12 cases ; Perception +5"
         }
        ]
       },
@@ -5396,18 +5482,18 @@
        "lignes": [
         {
          "label": "CA",
-         "valeur": "14, contact 13, pris au dépourvu 11 (Dex +3, naturelle +1)"
+         "valeur": "18, contact 10, pris au dépourvu 16 (Dex +2, naturelle +8, taille -2)"
         },
         {
          "label": "pv",
-         "valeur": "16 (3d8+3)"
+         "valeur": "52 (7d8+21)"
         },
         {
          "label": "Réf",
-         "valeur": "+4, Vig +4, Vol +1"
+         "valeur": "+4, Vig +8, Vol +3"
         },
         {
-         "label": "Immunités",
+         "label": "Immunité",
          "valeur": "effets mentaux"
         }
        ]
@@ -5417,15 +5503,19 @@
        "lignes": [
         {
          "label": "VD",
-         "valeur": "9 m (6 c), escalade 9 m (6 c)"
+         "valeur": "12 m (8 c), escalade 12 m (8 c)"
         },
         {
          "label": "Corps à corps",
-         "valeur": "morsure, +2 (1d6 et poison)"
+         "valeur": "morsure, +8 (2d8+7 plus poison)"
         },
         {
-         "label": "Attaques spéciales",
-         "valeur": "toile (+5 à distance, DD 12, 2 pv)"
+         "label": "Espace occupé",
+         "valeur": "4,50 m (3 c) ; Allonge 4,50 m (3 c)"
+        },
+        {
+         "label": "Attaque spéciale",
+         "valeur": "toile (à distance +5, DD 16, pv 7)"
         }
        ]
       },
@@ -5434,29 +5524,36 @@
        "lignes": [
         {
          "label": "For",
-         "valeur": "11, Dex 17, Con 12, Int -, Sag 10, Cha 2"
+         "valeur": "21, Dex 15, Con 16, Int —, Sag 12, Cha 2"
         },
         {
          "label": "BBA",
-         "valeur": "+2, BMO +2, DMD 15 (27 contre le croc-en-jambe)"
+         "valeur": "+5, BMO +12, DMD 24 (36 contre le croc-en-jambe)"
         },
         {
          "label": "Compétences",
-         "valeur": "Discrétion +7 (+11 sur une toile), Escalade +16, Perception +4 (+8 sur une toile) ; Modificateurs raciaux Discrétion +4 (+8 sur une toile), Escalade +16, Perception +4 (+8 sur une toile)"
+         "valeur": "Discrétion -2, Escalade +29, Perception +5"
+        },
+        {
+         "label": "Modificateurs raciaux",
+         "valeur": "+16 en Escalade, +4 en Perception, +4 en Discrétion"
+        },
+        {
+         "label": "Part",
+         "valeur": "compression"
         }
        ]
       },
       {
-       "titre": "Particularités",
+       "titre": "Pouvoirs spéciaux",
        "lignes": [
         {
-         "label": "Venin (Ext)",
-         "valeur": "Morsure - blessure ; JS Vigueur DD 14 ; fréquence 1/round pendant 4 rounds ; effet affaiblissement temporaire 1d2 For ; guérison 1 réussite."
+         "label": "Poison (Ext).",
+         "valeur": "Morsure — blessure ; JdS Vigueur DD 18 (incluant un bonus racial de +2) ; fréquence 1/round pendant 6 rounds ; effet affaiblissement temporaire de 1d4 For et de 1d4 Dex ; guérison 1 réussite."
         }
        ]
       }
-     ],
-     "note": "À confirmer : la fiche du wiki (FP 1) est celle de l’araignée géante de taille M ; le wiki classe cette créature au niveau 2, la liste du livre au niveau 5"
+     ]
     },
     {
      "nom": "Cyclope",
@@ -10007,7 +10104,8 @@
    ]
   }
  ],
- "introuvables": [
-  "4 Punaise de feu géante : page absente du wiki"
+ "introuvables": [],
+ "ignorees": [
+  "Punaise de feu géante (niveau 4) : absente du wiki, ignorée à la demande de l’utilisateur"
  ]
 }
