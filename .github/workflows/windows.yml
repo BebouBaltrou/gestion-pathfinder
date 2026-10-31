@@ -33,6 +33,9 @@ jobs:
     runs-on: windows-latest
     permissions:
       contents: write
+    env:
+      # Jeton de lecture seule pour la vérification des mises à jour (dépôt privé).
+      VITE_MAJ_TOKEN: ${{ secrets.MAJ_TOKEN }}
     defaults:
       run:
         shell: bash

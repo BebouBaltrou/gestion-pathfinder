@@ -40,8 +40,13 @@ export function plusRecente(a: string, b: string): boolean {
 /** Interroge GitHub. Renvoie la version plus récente, ou null si à jour ou injoignable. */
 export async function chercherMiseAJour(): Promise<Nouvelle | null> {
   try {
+    // Jeton de lecture seule injecté à la compilation (secret MAJ_TOKEN), pour un dépôt privé.
+    const jeton = import.meta.env.VITE_MAJ_TOKEN;
     const r = await fetch(`https://api.github.com/repos/${DEPOT}/releases/latest`, {
-      headers: { Accept: "application/vnd.github+json" },
+      headers: {
+        Accept: "application/vnd.github+json",
+        ...(jeton ? { Authorization: `Bearer ${jeton}` } : {}),
+      },
     });
     if (!r.ok) return null;
     const j = (await r.json()) as { tag_name?: string; html_url?: string };
