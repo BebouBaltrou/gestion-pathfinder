@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 
-export const VERSION = "1.2.1";
+export const VERSION = "1.2.11";
 declare const __MAJ_TOKEN__: string;
 const DEPOT = "BebouBaltrou/gestion-pathfinder";
 const CLE = "gestion-pathfinder.maj-auto";
