@@ -5,7 +5,7 @@ import { useState } from "react";
 import { check } from "@tauri-apps/plugin-updater";
 import { relaunch } from "@tauri-apps/plugin-process";
 
-export const VERSION = "1.2.24";
+export const VERSION = "1.2.25";
 const CLE = "gestion-pathfinder.maj-auto";
 
 export type Nouvelle = { version: string; installer: () => Promise<void> };
@@ -56,9 +56,24 @@ export function MiseAJour() {
 
   const verifier = async () => {
     setEtat("Recherche…");
-    const n = await chercherMiseAJour();
-    setNouvelle(n);
-    setEtat(n ? `Version ${n.version} disponible.` : `Version ${VERSION} : à jour (ou vérification impossible sans connexion).`);
+    try {
+      const maj = await check();
+      setNouvelle(
+        maj
+          ? {
+              version: maj.version,
+              installer: async () => {
+                await maj.downloadAndInstall();
+                await relaunch();
+              },
+            }
+          : null,
+      );
+      setEtat(maj ? `Version ${maj.version} disponible.` : `Version ${VERSION} : à jour.`);
+    } catch (erreur) {
+      setNouvelle(null);
+      setEtat(`Erreur de vérification : ${String(erreur)}`);
+    }
   };
 
   return (

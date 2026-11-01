@@ -1,7 +1,7 @@
 [package]
 name = "gestion-pathfinder"
 description = "Gestion d'intermède Pathfinder 1 (Guide de campagne) — application de bureau (Windows, Linux)"
-version = "1.2.24"
+version = "1.2.25"
 edition = "2021"
 license = "MIT"
 
