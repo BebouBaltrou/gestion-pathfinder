@@ -33,15 +33,27 @@ export function appliquerEchelle(id: string) {
   document.documentElement.style.zoom = String(facteurEchelle(id));
 }
 
+function echelleEnregistree(): string {
+  try {
+    return window.localStorage.getItem(CLE_ECHELLE) ?? "auto";
+  } catch {
+    return "auto";
+  }
+}
+
 export function appliquerThemeEnregistre() {
   try {
     const t = window.localStorage.getItem(CLE) ?? "";
     if (t) document.documentElement.dataset.theme = t;
-    appliquerEchelle(window.localStorage.getItem(CLE_ECHELLE) ?? "auto");
   } catch {
-    /* pas de stockage : thème et taille par défaut */
-    appliquerEchelle("auto");
+    /* pas de stockage : thème par défaut */
   }
+  // La fenêtre n'a pas encore sa taille définitive au lancement : on recalcule l'échelle une fois chargée
+  // et à chaque changement de taille, pour que « Automatique » reste juste sans passer par le réglage.
+  const relancer = () => appliquerEchelle(echelleEnregistree());
+  relancer();
+  window.addEventListener("load", relancer);
+  window.addEventListener("resize", relancer);
 }
 
 export function Apparence() {

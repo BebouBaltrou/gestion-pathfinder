@@ -1,10 +1,20 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import type { Outils } from "../App";
 import { api } from "../api";
 import { Apparence } from "../composants/Apparence";
 import { MiseAJour } from "../composants/MiseAJour";
 import type { RegleInfo } from "../fiche-types";
 import { ParametresIntermede } from "./ParametresIntermede";
+
+/** Menu repliable d'une catégorie de paramètres. */
+function Categorie({ titre, children, ouverte = false }: { titre: string; children: ReactNode; ouverte?: boolean }) {
+  return (
+    <details className="categorie" open={ouverte}>
+      <summary>{titre}</summary>
+      <div className="categorie-corps">{children}</div>
+    </details>
+  );
+}
 
 /** Registre des règles optionnelles de la campagne : description, impact, valeur par défaut. */
 export function Parametres({ outils }: { outils: Outils }) {
@@ -31,11 +41,14 @@ export function Parametres({ outils }: { outils: Outils }) {
           personnages sont enregistrés dans l'historique et peuvent être annulés.
         </p>
       </div>
-      <Apparence />
-      <MiseAJour />
+      <Categorie titre="Apparence" ouverte>
+        <Apparence />
+      </Categorie>
+      <Categorie titre="Mise à jour">
+        <MiseAJour />
+      </Categorie>
       {groupes.map(([titre, liste]) => (
-        <section className="section" key={titre}>
-          <h2>{titre}</h2>
+        <Categorie titre={titre} key={titre}>
           <div className="liste-regles">
             {liste.map((r) => (
               <div className="carte regle" key={r.id}>
@@ -74,9 +87,11 @@ export function Parametres({ outils }: { outils: Outils }) {
               </div>
             ))}
           </div>
-        </section>
+        </Categorie>
       ))}
-      <ParametresIntermede outils={outils} />
+      <Categorie titre="Intermède (réglages)">
+        <ParametresIntermede outils={outils} />
+      </Categorie>
     </div>
   );
 }

@@ -215,6 +215,15 @@ p { margin: 0; }
 .liste-travaux { padding: 4px 18px; }
 .travail { padding: 18px 0; display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid var(--bord); }
 .travail:last-child { border-bottom: none; }
+/* Catégories repliables des paramètres. */
+.categorie { background: var(--carte); border: 1px solid var(--bord); border-radius: var(--rayon); }
+.categorie > summary { list-style: none; cursor: pointer; padding: 18px 26px; font-size: 19px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+.categorie > summary::-webkit-details-marker { display: none; }
+.categorie > summary::before { content: "▸"; color: var(--texte-doux); }
+.categorie[open] > summary::before { content: "▾"; }
+.categorie[open] > summary { border-bottom: 1px solid var(--bord); }
+.categorie-corps { padding: 22px 26px 26px; display: flex; flex-direction: column; gap: 18px; }
+
 /* Emplacement de portrait : initiale en attendant une image de personnage. */
 .portrait {
   width: 52px; height: 52px; border-radius: 50%; flex: none; display: grid; place-items: center; overflow: hidden; padding: 0;
