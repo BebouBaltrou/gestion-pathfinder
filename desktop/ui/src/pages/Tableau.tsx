@@ -128,6 +128,10 @@ export function Tableau({ outils }: { outils: Outils }) {
                 </ul>
               )}
               <div className="puces">
+                <button className="bouton discret" onClick={() => outils.aller("batiments")}>+ Bâtiment</button>
+                <button className="bouton discret" onClick={() => outils.aller("organisations")}>+ Organisation</button>
+              </div>
+              <div className="puces">
                 {l.batiments > 0 && <span className="puce">{pluriel(l.batiments, "bâtiment", "bâtiments")}</span>}
                 {l.organisations > 0 && <span className="puce">{pluriel(l.organisations, "organisation", "organisations")}</span>}
                 {l.employes > 0 && <span className="puce">{pluriel(l.employes, "employé", "employés")}</span>}
