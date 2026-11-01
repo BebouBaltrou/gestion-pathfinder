@@ -5,7 +5,7 @@ import { useState } from "react";
 import { check } from "@tauri-apps/plugin-updater";
 import { relaunch } from "@tauri-apps/plugin-process";
 
-export const VERSION = "1.2.25";
+export const VERSION = "1.2.26";
 const CLE = "gestion-pathfinder.maj-auto";
 
 export type Nouvelle = { version: string; installer: () => Promise<void> };

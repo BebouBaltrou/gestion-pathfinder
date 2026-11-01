@@ -689,6 +689,8 @@ fn autotest_fin(app: tauri::AppHandle, rapport: String) {
 
 fn main() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_updater::Builder::new().build())
+        .plugin(tauri_plugin_process::init())
         .manage(Etat(Mutex::new(Session::demarrer())))
         .invoke_handler(tauri::generate_handler![
             etat_app,
