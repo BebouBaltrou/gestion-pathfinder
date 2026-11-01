@@ -677,6 +677,7 @@ export const api = {
 
   pagePersonnages: () => appeler<PagePersonnages | null>("page_personnages"),
   organigramme: () => appeler<Organigramme | null>("organigramme"),
+  basculerPleinEcran: () => appeler<boolean>("basculer_plein_ecran"),
   modifierPersonnage: (id: number, nom: string, prestige: string) =>
     appeler<Retour>("modifier_personnage", { id, nom, prestige }),
   deplacerPersonnage: (id: number, vers: number | null) => appeler<Retour>("deplacer_personnage", { id, vers }),

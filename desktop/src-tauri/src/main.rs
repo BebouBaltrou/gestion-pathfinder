@@ -273,6 +273,14 @@ fn ajuster_compte(s: S, pj: u32, delta: String, motif: String) -> Retour {
 
 // ---------------------------------------------------------------- bâtiments
 
+/// Passe la fenêtre en plein écran ou en fenêtre ; renvoie le nouvel état.
+#[tauri::command]
+fn basculer_plein_ecran(fenetre: tauri::Window) -> Result<bool, String> {
+    let actif = !fenetre.is_fullscreen().map_err(|e| e.to_string())?;
+    fenetre.set_fullscreen(actif).map_err(|e| e.to_string())?;
+    Ok(actif)
+}
+
 #[tauri::command]
 fn organigramme(s: S) -> Option<vues::organigramme::Organigramme> {
     let mut x = session(&s);
@@ -711,6 +719,7 @@ fn main() {
             ajuster_compte,
             page_batiments,
             organigramme,
+            basculer_plein_ecran,
             apercu_creation_batiment,
             creer_batiment,
             fiche_batiment,

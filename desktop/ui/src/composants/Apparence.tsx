@@ -1,6 +1,7 @@
 // Choix de l'apparence : le thème est un simple jeu de valeurs (jetons de couleur) mémorisé sur cet ordinateur.
 
 import { useState } from "react";
+import { api } from "../api";
 
 export const THEMES: { id: string; nom: string; sous: string; couleurs: string[] }[] = [
   { id: "", nom: "Sombre actuel", sous: "L'apparence validée le 23/10/2026", couleurs: ["#0f1115", "#171a20", "#e9c46a", "#7fd1a8"] },
@@ -106,6 +107,11 @@ export function Apparence() {
       </div>
       <h2>Taille de l'affichage</h2>
       <p className="doux">Adapte la taille des textes et des cartes à votre écran. « Automatique » convient à la plupart des cas.</p>
+      <div className="ligne" style={{ gap: 12, marginBottom: 14 }}>
+        <button type="button" className="bouton" onClick={() => api.basculerPleinEcran()}>
+          Basculer en plein écran (F11)
+        </button>
+      </div>
       <div className="segments" role="radiogroup" aria-label="Taille de l'affichage">
         {ECHELLES.map((e) => (
           <button key={e.id} role="radio" aria-checked={echelle === e.id} className={echelle === e.id ? "actif" : ""} onClick={() => choisirEchelle(e.id)}>
