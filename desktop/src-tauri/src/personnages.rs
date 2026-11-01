@@ -1,7 +1,7 @@
 //! Commandes des personnages et des règles de campagne : ce fichier ne fait que relier
 //! l'interface au cœur (`fiches`, `campagne::personnages`, `vues::personnage`).
 
-use crate::session::Retour;
+use crate::session::{Retour, Session};
 use crate::{session, S};
 use campagne::evenements::Evenement;
 use campagne::modele::IdPersonnage;
@@ -35,6 +35,11 @@ pub fn catalogue_creation() -> vp::CatalogueCreation {
 }
 
 /// Valeurs et problèmes d'une fiche en cours de saisie (rien n'est enregistré).
+/// Identifiant du prochain personnage : le plus grand de l'état + 1.
+fn prochain_id_personnage(x: &mut Session) -> Option<IdPersonnage> {
+    x.avec_etat(|e| IdPersonnage(e.personnages.keys().map(|k| k.0).max().unwrap_or(0) + 1))
+}
+
 #[tauri::command]
 pub fn apercu_fiche(fiche: Fiche) -> Result<vp::FicheVue, String> {
     vp::apercu_fiche(&fiche)
@@ -43,9 +48,7 @@ pub fn apercu_fiche(fiche: Fiche) -> Result<vp::FicheVue, String> {
 #[tauri::command]
 pub fn creer_personnage(s: S, nom: String, po: i64) -> Retour {
     let mut x = session(&s);
-    let Some(id) =
-        x.avec_etat(|e| IdPersonnage(e.personnages.keys().map(|k| k.0).max().unwrap_or(0) + 1))
-    else {
+    let Some(id) = prochain_id_personnage(&mut x) else {
         return Retour::erreur("Aucune campagne ouverte");
     };
     let nom = nom.trim().to_string();
@@ -188,9 +191,7 @@ pub fn prestige_evenement(s: S, evenement: Evenement) -> Retour {
 #[tauri::command]
 pub fn recruter_acolyte(s: S, maitre: u32, nom: String) -> Retour {
     let mut x = session(&s);
-    let Some(id) =
-        x.avec_etat(|e| IdPersonnage(e.personnages.keys().map(|k| k.0).max().unwrap_or(0) + 1))
-    else {
+    let Some(id) = prochain_id_personnage(&mut x) else {
         return Retour::erreur("Aucune campagne ouverte");
     };
     let nom = nom.trim().to_string();
