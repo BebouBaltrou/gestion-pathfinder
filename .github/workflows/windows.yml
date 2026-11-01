@@ -36,6 +36,9 @@ jobs:
     env:
       # Jeton de lecture seule pour la vérification des mises à jour (dépôt privé).
       VITE_MAJ_TOKEN: ${{ secrets.MAJ_TOKEN }}
+      # Signature des mises à jour (clé privée, jamais dans le dépôt).
+      TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+      TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
     defaults:
       run:
         shell: bash
@@ -57,8 +60,13 @@ jobs:
         run: npm run build
       - name: Icônes
         run: npx tauri icon src-tauri/icone-source.png
-      - name: Compilation
-        run: ../outils/ci/annoter.sh npx tauri build --no-bundle
+      - name: Accès au dépôt privé pour la mise à jour (jeton écrit dans la configuration du build, non commité)
+        env:
+          MAJ_TOKEN: ${{ secrets.MAJ_TOKEN }}
+        run: |
+          node -e 'const fs=require("fs");const f="src-tauri/tauri.conf.json";const c=JSON.parse(fs.readFileSync(f,"utf8"));c.plugins.updater.headers={Authorization:"token "+process.env.MAJ_TOKEN,Accept:"application/octet-stream"};fs.writeFileSync(f,JSON.stringify(c,null,2))'
+      - name: Compilation (installeur signé)
+        run: ../outils/ci/annoter.sh npx tauri build --bundles nsis
       - name: Essai de bout en bout
         run: |
           export GESTION_PATHFINDER_DOSSIER="$RUNNER_TEMP/campagnes"
@@ -73,11 +81,34 @@ jobs:
           path: desktop/src-tauri/target/release/gestion-pathfinder.exe
           if-no-files-found: error
       # Lors d'un envoi de version (étiquette v*) : publie l'exécutable sur la page « Releases ».
+      - name: Installeur sous un nom stable
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: cp desktop/src-tauri/target/release/bundle/nsis/*-setup.exe desktop/src-tauri/target/release/bundle/nsis/gestion-pathfinder-setup.exe
       - name: Publication de la version
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: desktop/src-tauri/target/release/gestion-pathfinder.exe
+          files: |
+            desktop/src-tauri/target/release/gestion-pathfinder.exe
+            desktop/src-tauri/target/release/bundle/nsis/gestion-pathfinder-setup.exe
+      # latest.json : indique à l'application la version, la signature et l'adresse de l'installeur.
+      # Commité sur la branche de publication, à l'adresse lue par l'application.
+      - name: Fichier latest.json (mise à jour automatique)
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          SIG=$(cat desktop/src-tauri/target/release/bundle/nsis/*-setup.exe.sig)
+          URL=$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$GITHUB_REF_NAME" --jq '.assets[] | select(.name=="gestion-pathfinder-setup.exe") | .url')
+          mkdir -p updates
+          node -e 'const [v,s,u]=process.argv.slice(1);process.stdout.write(JSON.stringify({version:v,notes:"",pub_date:new Date().toISOString(),platforms:{"windows-x86_64":{signature:s,url:u}}},null,2)+"
+")' "$VERSION" "$SIG" "$URL" > updates/latest.json
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add updates/latest.json
+          git commit -m "Mise à jour $VERSION : latest.json"
+          git push origin HEAD:refs/heads/claude/v1.2
 
   # Linux : mis en pause le 23/10/2026 (Windows d'abord ; portage quand l'application sera
   # stable et terminée). Remplacer « false » par « true » pour le réactiver.

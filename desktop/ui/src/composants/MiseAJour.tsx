@@ -1,14 +1,14 @@
-// Vérification de nouvelle version (GitHub). Ne télécharge rien : elle indique seulement qu'une version plus récente existe.
+// Mises à jour : vérifie la dernière version publiée puis l'installe (module de mise à jour de Tauri).
 // Désactivable dans les Paramètres ; le choix est mémorisé sur cet ordinateur.
 
 import { useState } from "react";
+import { check } from "@tauri-apps/plugin-updater";
+import { relaunch } from "@tauri-apps/plugin-process";
 
-export const VERSION = "1.2.11";
-declare const __MAJ_TOKEN__: string;
-const DEPOT = "BebouBaltrou/gestion-pathfinder";
+export const VERSION = "1.2.12";
 const CLE = "gestion-pathfinder.maj-auto";
 
-export type Nouvelle = { version: string; page: string };
+export type Nouvelle = { version: string; installer: () => Promise<void> };
 
 export function miseAJourActive(): boolean {
   try {
@@ -26,42 +26,27 @@ function enregistrerMiseAJour(active: boolean) {
   }
 }
 
-/** Compare deux numéros « 1.2.0 » ; renvoie vrai si `a` est plus récent que `b`. */
-export function plusRecente(a: string, b: string): boolean {
-  const pa = a.split(".").map((n) => parseInt(n, 10) || 0);
-  const pb = b.split(".").map((n) => parseInt(n, 10) || 0);
-  for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
-    const x = pa[i] ?? 0;
-    const y = pb[i] ?? 0;
-    if (x !== y) return x > y;
-  }
-  return false;
-}
-
-/** Interroge GitHub. Renvoie la version plus récente, ou null si à jour ou injoignable. */
+/** Interroge le dépôt de publication. Renvoie la version plus récente, ou null si à jour ou injoignable. */
 export async function chercherMiseAJour(): Promise<Nouvelle | null> {
   try {
-    // Jeton de lecture seule injecté à la compilation (secret MAJ_TOKEN), pour un dépôt privé.
-    const jeton = __MAJ_TOKEN__;
-    const r = await fetch(`https://api.github.com/repos/${DEPOT}/releases/latest`, {
-      headers: {
-        Accept: "application/vnd.github+json",
-        ...(jeton ? { Authorization: `Bearer ${jeton}` } : {}),
+    const maj = await check();
+    if (!maj) return null;
+    return {
+      version: maj.version,
+      installer: async () => {
+        await maj.downloadAndInstall();
+        await relaunch();
       },
-    });
-    if (!r.ok) return null;
-    const j = (await r.json()) as { tag_name?: string; html_url?: string };
-    const version = (j.tag_name ?? "").replace(/^v/, "");
-    if (!version || !plusRecente(version, VERSION)) return null;
-    return { version, page: j.html_url ?? `https://github.com/${DEPOT}/releases` };
+    };
   } catch {
     return null;
   }
 }
 
-/** Section des Paramètres : interrupteur et vérification manuelle. */
+/** Section des Paramètres : interrupteur, vérification et installation. */
 export function MiseAJour() {
   const [active, setActive] = useState(miseAJourActive);
+  const [nouvelle, setNouvelle] = useState<Nouvelle | null>(null);
   const [etat, setEtat] = useState("");
 
   const basculer = (v: boolean) => {
@@ -72,22 +57,28 @@ export function MiseAJour() {
   const verifier = async () => {
     setEtat("Recherche…");
     const n = await chercherMiseAJour();
-    setEtat(n ? `Version ${n.version} disponible : ${n.page}` : `Version ${VERSION} : à jour (ou vérification impossible sans connexion).`);
+    setNouvelle(n);
+    setEtat(n ? `Version ${n.version} disponible.` : `Version ${VERSION} : à jour (ou vérification impossible sans connexion).`);
   };
 
   return (
     <section className="section">
       <h2>Mises à jour</h2>
       <p className="doux">
-        Version installée : {VERSION}. Au lancement, l'application regarde seulement si une version plus récente existe sur GitHub
-        et l'indique ; rien n'est téléchargé ni installé.
+        Version installée : {VERSION}. Au lancement, l'application regarde si une version plus récente existe. Elle ne l'installe
+        que si tu cliques sur « Mettre à jour ».
       </p>
       <label className="doux">
         <input type="checkbox" checked={active} onChange={(e) => basculer(e.target.checked)} /> Vérifier les mises à jour automatiquement
       </label>{" "}
       <button className="bouton discret" onClick={verifier}>
         Vérifier maintenant
-      </button>
+      </button>{" "}
+      {nouvelle && (
+        <button className="bouton principal" onClick={() => nouvelle.installer()}>
+          Mettre à jour
+        </button>
+      )}
       {etat && <p className="doux">{etat}</p>}
     </section>
   );

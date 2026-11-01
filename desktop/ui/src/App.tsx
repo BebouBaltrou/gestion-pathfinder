@@ -246,9 +246,7 @@ export function App() {
         {maj && (
           <div className="doux" role="status" style={{ padding: "6px 12px" }}>
             Version {maj.version} disponible.{" "}
-            <a href={maj.page} target="_blank" rel="noreferrer">
-              Voir la nouveauté
-            </a>{" "}
+            <button className="bouton principal" onClick={() => maj.installer()}>Mettre à jour</button>{" "}
             <button className="bouton discret" onClick={() => setMaj(null)}>
               Masquer
             </button>
