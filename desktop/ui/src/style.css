@@ -23,7 +23,7 @@
   --rouge: #f07a6e;
   --orange: #e8a15a;
   --vert: #7fd1a8;
-  --rayon: 16px;
+  --rayon: 14px;
   --rayon-petit: 12px;
   --transition: 160ms cubic-bezier(0.2, 0.7, 0.2, 1);
   color-scheme: dark;
@@ -52,7 +52,7 @@ a:hover { color: var(--or-clair); }
 
 h1, h2, h3 { margin: 0; letter-spacing: -0.01em; }
 h1 { font-size: 30px; font-weight: 700; letter-spacing: -0.02em; }
-h2 { font-size: 17px; font-weight: 600; }
+h2 { font-size: 19px; font-weight: 600; }
 p { margin: 0; }
 
 /* ---------------------------------------------------------------- coquille */
@@ -163,10 +163,10 @@ p { margin: 0; }
   background: var(--carte); border: 1px solid var(--bord); border-radius: var(--rayon);
   padding: 20px 22px;
 }
-.grille-chiffres { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+.grille-chiffres { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; }
 .chiffre { display: flex; flex-direction: column; gap: 4px; padding: 18px 20px; }
 .chiffre .etiquette { font-size: 14px; color: var(--texte-doux); }
-.chiffre .valeur { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; color: var(--texte-fort); }
+.chiffre .valeur { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; color: var(--texte-fort); }
 .chiffre .detail { font-size: 13px; color: var(--texte-doux); }
 
 .deux-colonnes { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
@@ -225,7 +225,7 @@ p { margin: 0; }
 .barre { height: 6px; border-radius: 3px; background: #2a2f38; overflow: hidden; }
 .barre > div { height: 100%; border-radius: 3px; background: var(--travail); transition: width 400ms ease; }
 
-.prestige { border-color: #4a3c1a; display: flex; flex-direction: column; gap: 10px; }
+.prestige { border-color: var(--bord-fort); display: flex; flex-direction: column; gap: 10px; }
 .prestige strong { color: #f0cd78; }
 
 .vide { text-align: center; padding: 40px 24px; display: flex; flex-direction: column; gap: 14px; align-items: center; }
