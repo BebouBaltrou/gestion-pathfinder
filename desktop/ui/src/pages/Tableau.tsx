@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Outils, Page } from "../App";
 import { api, Capitaux, formaterPo, TableauDeBord } from "../api";
+import { Portrait } from "../composants/Portrait";
 
 const CAPITAUX: [keyof Capitaux, string, string][] = [
   ["marchandises", "Marchandises", "var(--marchandises)"],
@@ -179,7 +180,7 @@ export function Tableau({ outils }: { outils: Outils }) {
                 {t.personnages.map((p) => (
                   <div className="travail" key={p.id}>
                     <div className="tete">
-                      <span className="portrait" aria-hidden="true">{p.nom.charAt(0).toUpperCase()}</span>
+                      <Portrait id={p.id} nom={p.nom} />
                       <span style={{ flex: 1, fontWeight: 500 }}>{p.nom}</span>
                       <span style={{ color: "var(--po)", fontWeight: 600 }}>{formaterPo(p.compte.pc)}</span>
                     </div>
