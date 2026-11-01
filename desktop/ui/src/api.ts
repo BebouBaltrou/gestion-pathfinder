@@ -74,6 +74,8 @@ export type CarteLocalite = {
   employes: number;
   presents: string[];
   enRoute: string[];
+  batimentsAffiches: { nom: string; favori: boolean; valeur: Somme }[];
+  batimentsMasques: number;
 };
 
 export type Alerte = { texte: string; grave: boolean; page: string };
@@ -842,12 +844,19 @@ function simule(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
             tresorerie: { pc: 105230, texte: "1052 po 3 pa" }, salairesJour: { pc: 200, texte: "2 po" },
             capitaux: cap(12, 6, 9, 2), recettesEnAttente: jourSimule - 15, absence: null,
             batiments: 2, organisations: 1, employes: 18, presents: ["Seoni", "Valeros", "Kyra"], enRoute: [],
+            batimentsAffiches: [
+              { nom: "Temple d'Abadar", favori: true, valeur: { pc: 4200, texte: "42 po" } },
+              { nom: "Auberge du Lac", favori: false, valeur: { pc: 3100, texte: "31 po" } },
+            ],
+            batimentsMasques: 0,
           },
           {
             id: 2, nom: "Magnimar", genre: "cité", categorie: "Grande cité · limite 60/jour",
             tresorerie: { pc: 23200, texte: "232 po" }, salairesJour: null,
             capitaux: cap(4, 3, 5, 0), recettesEnAttente: 0, absence: "Aucun PJ depuis 12 j — prochaine usure dans 2 j",
             batiments: 1, organisations: 0, employes: 5, presents: [], enRoute: ["3 Marchandises arrive le jour 27"],
+            batimentsAffiches: [{ nom: "Entrepôt", favori: false, valeur: { pc: 1800, texte: "18 po" } }],
+            batimentsMasques: 0,
           },
         ],
         alertes: [

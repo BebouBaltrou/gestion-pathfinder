@@ -116,6 +116,17 @@ export function Tableau({ outils }: { outils: Outils }) {
                 </div>
                 <BlocCapitaux c={l.capitaux} />
               </div>
+              {l.batimentsAffiches.length > 0 && (
+                <ul className="liste-batiments">
+                  {l.batimentsAffiches.map((b) => (
+                    <li key={b.nom}>
+                      <span>{b.favori ? "★ " : ""}{b.nom}</span>
+                      <span className="doux">{formaterPo(b.valeur.pc)}</span>
+                    </li>
+                  ))}
+                  {l.batimentsMasques > 0 && <li className="doux">+ {l.batimentsMasques} autre(s)</li>}
+                </ul>
+              )}
               <div className="puces">
                 {l.batiments > 0 && <span className="puce">{pluriel(l.batiments, "bâtiment", "bâtiments")}</span>}
                 {l.organisations > 0 && <span className="puce">{pluriel(l.organisations, "organisation", "organisations")}</span>}

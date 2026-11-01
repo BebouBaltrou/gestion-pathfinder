@@ -215,6 +215,10 @@ p { margin: 0; }
 .liste-travaux { padding: 4px 18px; }
 .travail { padding: 18px 0; display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid var(--bord); }
 .travail:last-child { border-bottom: none; }
+/* Bâtiments listés sur une carte localité. */
+.liste-batiments { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.liste-batiments li { display: flex; justify-content: space-between; gap: 12px; }
+
 /* Personnages du tableau de bord : une carte par PJ, et une carte pointillée pour en créer un. */
 .grille-personnages { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
 .grille-personnages.colonne { grid-template-columns: 1fr; }

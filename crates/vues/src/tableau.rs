@@ -45,6 +45,19 @@ pub struct CarteLocalite {
     pub employes: u32,
     pub presents: Vec<String>,
     pub en_route: Vec<String>,
+    /// Trois bâtiments au plus : favoris d'abord, puis les plus chers.
+    pub batiments_affiches: Vec<LigneBatiment>,
+    /// Nombre de bâtiments non affichés.
+    pub batiments_masques: u32,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize))]
+#[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
+pub struct LigneBatiment {
+    pub nom: String,
+    pub favori: bool,
+    pub valeur: Somme,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -208,7 +221,21 @@ fn carte_localite(etat: &Etat, l: &Localite, r: &Referentiel) -> CarteLocalite {
         format!("Aucun PJ depuis {absence_j} j — {usure}")
     });
     let (employes, _) = etat.effectif(etat.equipes.values().filter(|e| e.localite == l.id), r);
+    // Favoris d'abord, puis les plus chers ; au-delà de trois bâtiments, seuls les trois premiers sont affichés.
+    let mut lignes: Vec<LigneBatiment> = etat
+        .batiments_localite(l.id)
+        .map(|b| LigneBatiment {
+            nom: b.nom.clone(),
+            favori: etat.batiments_favoris.contains(&b.id),
+            valeur: etat.valeur_actif(Actif::Batiment(b.id), r).0.into(),
+        })
+        .collect();
+    lignes.sort_by(|a, b| b.favori.cmp(&a.favori).then(b.valeur.pc.cmp(&a.valeur.pc)));
+    let batiments_masques = lignes.len().saturating_sub(3) as u32;
+    lignes.truncate(3);
     CarteLocalite {
+        batiments_affiches: lignes,
+        batiments_masques,
         id: l.id.0,
         nom: l.nom.clone(),
         genre: l.genre.clone(),
