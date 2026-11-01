@@ -1,3 +1,4 @@
+import { sansAccents } from "./texte";
 // Uniquement pour l'aperçu sans Tauri (MOCK=1) : des notes d'exemple qui réagissent aux commandes.
 // Retiré de la version de l'application.
 
@@ -17,7 +18,6 @@ const RUBRIQUES = [
 ];
 const NOMS_GENRES: Record<GenreNote, string> = { session: "Feuille de session", journal: "Journal de campagne", mj: "Notes de MJ" };
 
-const simple = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
 let prochain = 1;
 let notes: NoteVue[] = [];
 let pret = false;
@@ -72,14 +72,14 @@ export function simulerNotes(cmd: string, args?: Record<string, unknown>): Promi
     }
     case "liste_notes": {
       const c = (args?.critere ?? {}) as CritereNotes;
-      const mots = simple(c.texte ?? "").split(/\s+/).filter(Boolean);
+      const mots = sansAccents(c.texte ?? "").split(/\s+/).filter(Boolean);
       const liste = notes.filter(
         (n) =>
           (!c.genre || n.genre === c.genre) &&
           (!c.rubrique || n.rubrique === c.rubrique) &&
           (!c.epinglesSeulement || n.epingle) &&
-          (!c.etiquette || n.etiquettes.some((e) => simple(e) === simple(c.etiquette!))) &&
-          mots.every((m) => simple(`${n.titre} ${n.texte} ${n.etiquettes.join(" ")}`).includes(m)),
+          (!c.etiquette || n.etiquettes.some((e) => sansAccents(e) === sansAccents(c.etiquette!))) &&
+          mots.every((m) => sansAccents(`${n.titre} ${n.texte} ${n.etiquettes.join(" ")}`).includes(m)),
       );
       return Promise.resolve(trier(liste));
     }
@@ -99,11 +99,11 @@ export function simulerNotes(cmd: string, args?: Record<string, unknown>): Promi
         { source: "inventaire", sourceNom: "Inventaire", jour: 14, date: "jour 14", heure: null, texte: "Épée longue équipée", note: null },
         { source: "aventure", sourceNom: "Aventure", jour: 14, date: "jour 14", heure: "16:05", texte: "Entrée dans la crypte", note: null },
       ];
-      const mots = simple(f.texte ?? "").split(/\s+/).filter(Boolean);
+      const mots = sansAccents(f.texte ?? "").split(/\s+/).filter(Boolean);
       return Promise.resolve(
         lignes
           .filter((l) => !f.sources.length || f.sources.includes(l.source))
-          .filter((l) => mots.every((m) => simple(l.texte).includes(m)))
+          .filter((l) => mots.every((m) => sansAccents(l.texte).includes(m)))
           .sort((a, b) => b.jour - a.jour),
       );
     }

@@ -1,3 +1,4 @@
+import { sansAccents } from "./texte";
 // Uniquement pour l'aperçu sans Tauri (MOCK=1) : un inventaire d'exemple qui réagit aux commandes,
 // avec plusieurs centaines d'objets pour juger de la fluidité. Retiré de la version de l'application.
 
@@ -308,7 +309,6 @@ function modeles(): ModeleObjetVue[] {
   }));
 }
 
-const simple = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
 
 /** Réponses aux commandes de l'inventaire ; `undefined` : ce n'est pas une commande d'inventaire. */
 export function simulerInventaire(cmd: string, args?: Record<string, unknown>): Promise<unknown> | undefined {
@@ -322,10 +322,10 @@ export function simulerInventaire(cmd: string, args?: Record<string, unknown>): 
       return Promise.resolve(structuredClone(page));
     }
     case "catalogue_objets": {
-      const mots = simple(String(args?.requete ?? "")).split(/\s+/).filter(Boolean);
+      const mots = sansAccents(String(args?.requete ?? "")).split(/\s+/).filter(Boolean);
       const type = (args?.typeObjet as string | null) ?? null;
       return Promise.resolve(
-        modeles().filter((m) => (!type || m.typeObjet === type) && mots.every((w) => simple(m.nom).includes(w))),
+        modeles().filter((m) => (!type || m.typeObjet === type) && mots.every((w) => sansAccents(m.nom).includes(w))),
       );
     }
     case "types_objets":

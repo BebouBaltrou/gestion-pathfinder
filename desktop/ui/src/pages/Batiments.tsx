@@ -18,6 +18,7 @@ import {
   SaisieBatiment,
 } from "../api";
 import { icones } from "../icones";
+import { texteCapitaux } from "../texte";
 import { ChampMontant } from "./Localites";
 import { BlocCapitaux } from "./Tableau";
 
@@ -56,16 +57,6 @@ const ACQUISITIONS: [Acquisition, string][] = [
   ["acheterBatiment", "Acheter le bâtiment terminé (prix en po, sans durée)"],
 ];
 
-const texteCapitaux = (c: Capitaux) =>
-  [
-    ["Marchandises", c.marchandises],
-    ["Influence", c.influence],
-    ["Travail", c.travail],
-    ["Magie", c.magie],
-  ]
-    .filter(([, n]) => (n as number) > 0)
-    .map(([nom, n]) => `${n} ${nom}`)
-    .join(", ") || "rien";
 
 /** Accélération ×1 à ×4 (GC p. 95, arrondi au jour supérieur, PC-10). */
 export function ChoixFacteur(props: { id: string; valeur: number; changer: (f: number) => void; capital?: string }) {

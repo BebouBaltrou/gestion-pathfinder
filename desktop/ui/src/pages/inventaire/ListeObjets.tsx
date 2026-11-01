@@ -1,3 +1,4 @@
+import { sansAccents } from "../../texte";
 import { useMemo, useState } from "react";
 import { estMagique, nomDuType, type ObjetVue } from "../../inventaire-types";
 import { ListeVirtuelle } from "./ListeVirtuelle";
@@ -6,7 +7,6 @@ type Ligne = { entete: string } | { objet: ObjetVue };
 type Tri = "nom" | "poids" | "valeur";
 type Groupe = "aucun" | "type" | "conteneur";
 
-const simple = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
 
 /** Liste filtrable et triable des objets d'un inventaire, en liste ou en grille, à fenêtrage. */
 export function ListeObjets(props: {
@@ -30,14 +30,14 @@ export function ListeObjets(props: {
   const nomsConteneurs = useMemo(() => new Map(objets.filter((o) => o.estConteneur).map((o) => [o.id, o.nom])), [objets]);
 
   const lignes = useMemo<Ligne[]>(() => {
-    const mots = simple(recherche).split(/\s+/).filter(Boolean);
+    const mots = sansAccents(recherche).split(/\s+/).filter(Boolean);
     const filtres = objets.filter(
       (o) =>
         (conteneur === null || o.parent === conteneur) &&
         (!type || o.typeObjet === type) &&
         (equipe === "" || (equipe === "oui") === (o.equipe.length > 0)) &&
         (magique === "" || (magique === "oui") === estMagique(o.typeObjet)) &&
-        mots.every((m) => simple(o.nom).includes(m)),
+        mots.every((m) => sansAccents(o.nom).includes(m)),
     );
     const cle = (o: ObjetVue) =>
       tri === "poids" ? -o.poids.grammes : tri === "valeur" ? -(o.valeurUnite?.pc ?? 0) * o.quantite : 0;

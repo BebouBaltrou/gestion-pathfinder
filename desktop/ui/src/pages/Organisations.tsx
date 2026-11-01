@@ -12,6 +12,7 @@ import {
   SaisieBatiment,
 } from "../api";
 import { icones } from "../icones";
+import { texteCapitaux } from "../texte";
 import { BlocVente, ChoixFacteur, ChoixPayeur, COULEUR_RESSOURCE, NOM_RESSOURCE } from "./Batiments";
 import { ChampMontant } from "./Localites";
 import { BlocCapitaux } from "./Tableau";
@@ -36,16 +37,6 @@ const ACQUISITIONS: [Acquisition, string][] = [
   ["acheterBatiment", "Acheter l'organisation constituée (prix en po, sans durée)"],
 ];
 
-const texteCapitaux = (c: { marchandises: number; influence: number; travail: number; magie: number }) =>
-  [
-    ["Marchandises", c.marchandises],
-    ["Influence", c.influence],
-    ["Travail", c.travail],
-    ["Magie", c.magie],
-  ]
-    .filter(([, n]) => (n as number) > 0)
-    .map(([nom, n]) => `${n} ${nom}`)
-    .join(", ") || "rien";
 
 export function Organisations({ outils }: { outils: Outils }) {
   const [p, setP] = useState<PageOrganisations | null>(null);
