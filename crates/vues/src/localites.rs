@@ -434,6 +434,21 @@ pub fn avertissement_suppression(c: &mut campagne::Campagne, r: &Referentiel, id
     t
 }
 
+/// Campagne de test avec une seule localité, « Sandpoint ». Renvoie aussi son identifiant.
+#[cfg(test)]
+pub(crate) fn campagne_sandpoint(r: &Referentiel) -> (campagne::Campagne, IdLocalite) {
+    let mut c = campagne::Campagne::nouvelle("Test");
+    let l = c.nouvel_id_localite();
+    let s = SaisieLocalite {
+        nom: "Sandpoint".into(),
+        officielle: false,
+        categorie_perso_limite: "10".into(),
+        ..Default::default()
+    };
+    c.executer(s.creation(l, r).unwrap(), r).unwrap();
+    (c, l)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

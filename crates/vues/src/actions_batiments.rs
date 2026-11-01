@@ -460,16 +460,7 @@ mod tests {
     use campagne::Campagne;
 
     fn campagne_de_base(r: &Referentiel) -> Campagne {
-        let mut c = Campagne::nouvelle("Test");
-        let l = c.nouvel_id_localite();
-        let s = crate::localites::SaisieLocalite {
-            nom: "Sandpoint".into(),
-            officielle: false,
-            categorie_perso_limite: "10".into(),
-            ..Default::default()
-        };
-        c.executer(s.creation(l, r).unwrap(), r).unwrap();
-        c
+        crate::localites::campagne_sandpoint(r).0
     }
 
     #[test]

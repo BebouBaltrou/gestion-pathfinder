@@ -348,15 +348,7 @@ mod tests {
     #[test]
     fn embauche_affectation_et_salaires() {
         let r = regles::referentiel_officiel();
-        let mut c = Campagne::nouvelle("Test");
-        let l = c.nouvel_id_localite();
-        let s = crate::localites::SaisieLocalite {
-            nom: "Sandpoint".into(),
-            officielle: false,
-            categorie_perso_limite: "10".into(),
-            ..Default::default()
-        };
-        c.executer(s.creation(l, &r).unwrap(), &r).unwrap();
+        let (mut c, l) = crate::localites::campagne_sandpoint(&r);
         let o = c.nouvel_id_organisation();
         c.executer(
             Evenement::OrganisationCreee {

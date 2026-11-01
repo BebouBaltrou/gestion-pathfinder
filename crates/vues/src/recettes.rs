@@ -625,15 +625,7 @@ mod tests {
     /// Une localité, un PJ présent, un bâtiment vide avec une salle construite qui génère
     /// une ressource : la page propose un bilan et l'encaissement le crédite.
     fn campagne_productive(r: &Referentiel) -> Campagne {
-        let mut c = Campagne::nouvelle("Test");
-        let l = c.nouvel_id_localite();
-        let s = crate::localites::SaisieLocalite {
-            nom: "Sandpoint".into(),
-            officielle: false,
-            categorie_perso_limite: "10".into(),
-            ..Default::default()
-        };
-        c.executer(s.creation(l, r).unwrap(), r).unwrap();
+        let (mut c, l) = crate::localites::campagne_sandpoint(r);
         let pj = c.nouvel_id_personnage();
         c.executer(
             crate::personnages::creation(pj, "Seoni", "", "").unwrap(),
