@@ -119,7 +119,7 @@ export function Tableau({ outils }: { outils: Outils }) {
                 <BlocCapitaux c={l.capitaux} />
               </div>
               <p className="doux">
-                Gestionnaire en tête : {l.gestionnairesTete.length > 0 ? l.gestionnairesTete.join(", ") : "aucun"}
+                Gestionnaire en tête : {l.gestionnaireTete ?? "aucun"}
               </p>
               <div className="mini-cartes">
                 {l.batimentsAffiches.map((b) => (

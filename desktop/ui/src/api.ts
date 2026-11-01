@@ -77,7 +77,7 @@ export type CarteLocalite = {
   batimentsAffiches: { nom: string; favori: boolean; valeur: Somme }[];
   batimentsMasques: number;
   organisationsAffiches: string[];
-  gestionnairesTete: string[];
+  gestionnaireTete: string | null;
 };
 
 export type Alerte = { texte: string; grave: boolean; page: string };
@@ -856,7 +856,7 @@ function simule(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
             ],
             batimentsMasques: 0,
             organisationsAffiches: [],
-            gestionnairesTete: [],
+            gestionnaireTete: null,
           },
           {
             id: 2, nom: "Magnimar", genre: "cité", categorie: "Grande cité · limite 60/jour",
@@ -866,7 +866,7 @@ function simule(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
             batimentsAffiches: [{ nom: "Entrepôt", favori: false, valeur: { pc: 1800, texte: "18 po" } }],
             batimentsMasques: 0,
             organisationsAffiches: [],
-            gestionnairesTete: [],
+            gestionnaireTete: null,
           },
         ],
         alertes: [

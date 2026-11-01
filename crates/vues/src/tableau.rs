@@ -50,8 +50,9 @@ pub struct CarteLocalite {
     /// Nombre de bâtiments non affichés.
     pub batiments_masques: u32,
     pub organisations_affiches: Vec<String>,
-    /// Gestionnaires de la localité qui ne sont rattachés à aucun autre gestionnaire.
-    pub gestionnaires_tete: Vec<String>,
+    /// Gestionnaire le plus haut de la localité : rattaché à personne, puis départagé par salaire
+    /// (le plus élevé), ancienneté (le plus ancien), valeur gérée (la plus élevée).
+    pub gestionnaire_tete: Option<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -243,7 +244,7 @@ fn carte_localite(etat: &Etat, l: &Localite, r: &Referentiel) -> CarteLocalite {
             .organisations_localite(l.id)
             .map(|o| o.nom.clone())
             .collect(),
-        gestionnaires_tete: etat
+        gestionnaire_tete: etat
             .gestionnaires
             .values()
             .filter(|g| {
@@ -253,8 +254,21 @@ fn carte_localite(etat: &Etat, l: &Localite, r: &Referentiel) -> CarteLocalite {
                         .iter()
                         .any(|a| matches!(a, Affectation::Gestionnaire(_)))
             })
-            .map(|g| g.nom.clone())
-            .collect(),
+            .max_by_key(|g| {
+                let salaire: Somme = etat.salaire_quotidien(g).into();
+                let valeur: i64 = g
+                    .affectations
+                    .iter()
+                    .map(|a| match a {
+                        Affectation::Batiment(b) => Somme::from(etat.valeur_actif(Actif::Batiment(*b), r).0).pc,
+                        Affectation::Organisation(o) => Somme::from(etat.valeur_actif(Actif::Organisation(*o), r).0).pc,
+                        Affectation::Gestionnaire(_) => 0,
+                    })
+                    .sum();
+                // Ancienneté : le plus petit numéro est le plus ancien.
+                (salaire.pc, std::cmp::Reverse(g.id), valeur)
+            })
+            .map(|g| g.nom.clone()),
         id: l.id.0,
         nom: l.nom.clone(),
         genre: l.genre.clone(),
