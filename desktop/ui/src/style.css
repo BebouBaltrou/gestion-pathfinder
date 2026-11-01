@@ -72,8 +72,7 @@ p { margin: 0; }
 
 .marque { display: flex; align-items: center; gap: 12px; padding: 0 10px; }
 .marque-logo {
-  width: 56px; height: 56px; border-radius: 12px;
-  background: #2a2416; border: 1px solid #5c4a22;
+  width: 52px; height: 52px; flex: none;
   display: grid; place-items: center; color: var(--or);
 }
 .marque-nom { font-family: Georgia, "Times New Roman", serif; font-weight: 700; font-size: 20px; }
