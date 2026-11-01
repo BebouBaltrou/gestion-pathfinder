@@ -215,6 +215,12 @@ p { margin: 0; }
 .liste-travaux { padding: 4px 18px; }
 .travail { padding: 18px 0; display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid var(--bord); }
 .travail:last-child { border-bottom: none; }
+/* Page Organigramme : racine centrée, une colonne par localité. */
+.racine-orga { max-width: 320px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 4px; border-color: var(--or); text-align: center; }
+.grille-orga { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+.colonne-orga { display: flex; flex-direction: column; gap: 14px; }
+.colonne-orga h2 { color: var(--texte-fort); }
+
 /* Organigramme : arbre indenté, le joueur en tête. */
 .arbre, .arbre ul { list-style: none; margin: 0; padding: 0; }
 .arbre ul { padding-left: 22px; border-left: 1px solid var(--bord); margin-left: 8px; }
