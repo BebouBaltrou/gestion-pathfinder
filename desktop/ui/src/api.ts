@@ -262,13 +262,11 @@ export type FicheExtension = {
 
 export type ExtensionPossible = { id: string; nom: string; aide: string; saisieRequise: boolean; detail: string };
 
-export type FicheSalle = {
+/** Champs communs à une salle et à une équipe (même rendu, même achat). */
+type FicheCommune = {
   id: number;
   nom: string;
-  typeSalle: string | null;
-  statut: "a_construire" | "en_travaux" | "construite";
   statutTexte: string;
-  brisee: boolean;
   source: string;
   infos: string;
   pointAConfirmer: string | null;
@@ -280,6 +278,12 @@ export type FicheSalle = {
   prixAchatPo: number | null;
   ameliorations: { id: string; nom: string; detail: string | null }[];
   vente: EtatVente | null;
+};
+
+export type FicheSalle = FicheCommune & {
+  typeSalle: string | null;
+  statut: "a_construire" | "en_travaux" | "construite";
+  brisee: boolean;
   reparation: [string, string | null] | null;
   extensions: FicheExtension[];
   extensionsPossibles: ExtensionPossible[];
@@ -356,29 +360,15 @@ export type PageOrganisations = {
   payeurs: Choix[];
 };
 
-export type FicheEquipe = {
-  id: number;
-  nom: string;
+export type FicheEquipe = FicheCommune & {
   typeEquipe: string | null;
   statut: "a_recruter" | "en_recrutement" | "recrutee" | "en_delocalisation";
-  statutTexte: string;
   ailleurs: string | null;
   effectif: number;
-  source: string;
-  infos: string;
-  pointAConfirmer: string | null;
   organisation: number;
   lieu: number | null;
   lieux: Choix[];
   moitieSansBatiment: boolean;
-  admises: RessourceId[];
-  ressource: RessourceId | null;
-  revenusActifs: boolean;
-  chantier: Avancement | null;
-  constructible: boolean;
-  prixAchatPo: number | null;
-  ameliorations: { id: string; nom: string; detail: string | null }[];
-  vente: EtatVente | null;
   delocalisable: boolean;
   prixDeloc: string;
 };
