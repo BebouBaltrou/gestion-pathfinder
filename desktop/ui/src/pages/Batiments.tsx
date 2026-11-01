@@ -37,7 +37,7 @@ export const NOM_RESSOURCE: Record<RessourceId, string> = {
   magie: "Magie",
 };
 
-const SAISIE_VIDE: SaisieBatiment = {
+export const SAISIE_VIDE: SaisieBatiment = {
   localite: null,
   modele: null,
   nom: "",

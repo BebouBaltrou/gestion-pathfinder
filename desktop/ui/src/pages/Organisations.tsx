@@ -13,21 +13,10 @@ import {
 } from "../api";
 import { icones } from "../icones";
 import { texteCapitaux } from "../texte";
-import { BlocVente, ChoixFacteur, ChoixPayeur, COULEUR_RESSOURCE, NOM_RESSOURCE } from "./Batiments";
+import { BlocVente, ChoixFacteur, ChoixPayeur, COULEUR_RESSOURCE, NOM_RESSOURCE, SAISIE_VIDE } from "./Batiments";
 import { ChampMontant } from "./Localites";
 import { BlocCapitaux } from "./Tableau";
 
-const SAISIE_VIDE: SaisieBatiment = {
-  localite: null,
-  modele: null,
-  nom: "",
-  classement: "",
-  acquisition: "plan",
-  facteur: 1,
-  seulementManquants: false,
-  prix: "",
-  payeur: null,
-};
 
 const ACQUISITIONS: [Acquisition, string][] = [
   ["plan", "Seulement la liste (équipes à recruter, rien n'est lancé)"],
