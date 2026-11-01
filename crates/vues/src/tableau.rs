@@ -50,7 +50,7 @@ pub struct CarteLocalite {
     /// Nombre de bâtiments non affichés.
     pub batiments_masques: u32,
     pub organisations_affiches: Vec<String>,
-    /// Gestionnaire le plus haut de la localité : rattaché à personne, puis départagé par salaire
+    /// Gestionnaire le plus haut de la localité : celui qui gère le plus de bâtiments et d'organisations, puis départagé par salaire
     /// (le plus élevé), ancienneté (le plus ancien), valeur gérée (la plus élevée).
     pub gestionnaire_tete: Option<String>,
 }
@@ -247,14 +247,14 @@ fn carte_localite(etat: &Etat, l: &Localite, r: &Referentiel) -> CarteLocalite {
         gestionnaire_tete: etat
             .gestionnaires
             .values()
-            .filter(|g| {
-                g.localite == l.id
-                    && !g
-                        .affectations
-                        .iter()
-                        .any(|a| matches!(a, Affectation::Gestionnaire(_)))
-            })
+            .filter(|g| g.localite == l.id)
             .max_by_key(|g| {
+                // Le gestionnaire est au-dessus de ce qu'il gère : le plus haut gère le plus de bâtiments et d'organisations.
+                let gere = g
+                    .affectations
+                    .iter()
+                    .filter(|a| matches!(a, Affectation::Batiment(_) | Affectation::Organisation(_)))
+                    .count();
                 let salaire: Somme = etat.salaire_quotidien(g).into();
                 let valeur: i64 = g
                     .affectations
@@ -265,8 +265,8 @@ fn carte_localite(etat: &Etat, l: &Localite, r: &Referentiel) -> CarteLocalite {
                         Affectation::Gestionnaire(_) => 0,
                     })
                     .sum();
-                // Ancienneté : le plus petit numéro est le plus ancien.
-                (salaire.pc, std::cmp::Reverse(g.id), valeur)
+                // Égalités : salaire le plus élevé, puis le plus ancien (plus petit numéro), puis valeur gérée.
+                (gere, salaire.pc, std::cmp::Reverse(g.id), valeur)
             })
             .map(|g| g.nom.clone()),
         id: l.id.0,
