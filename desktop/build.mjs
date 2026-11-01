@@ -24,6 +24,7 @@ await build({
   define: {
     "process.env.NODE_ENV": mock ? '"development"' : '"production"',
     __MOCK__: mock ? "true" : "false",
+    __MAJ_TOKEN__: JSON.stringify(process.env.VITE_MAJ_TOKEN || ""),
   },
   loader: { ".woff2": "file", ".woff": "file" },
   assetNames: "polices/[name]-[hash]",
