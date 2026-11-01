@@ -289,7 +289,6 @@ impl Traductions {
             })
             .collect()
     }
-
 }
 
 #[derive(Debug, Clone, Copy)]

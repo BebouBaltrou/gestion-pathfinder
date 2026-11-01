@@ -219,7 +219,9 @@ pub fn page_gestionnaires(c: &mut campagne::Campagne, r: &Referentiel) -> PageGe
                     .collect(),
                 possibles: tous
                     .iter()
-                    .filter(|a| !g.affectations.contains(a) && **a != Affectation::Gestionnaire(g.id))
+                    .filter(|a| {
+                        !g.affectations.contains(a) && **a != Affectation::Gestionnaire(g.id)
+                    })
                     .map(|a| ChoixAffectation {
                         cible: (*a).into(),
                         libelle: libelle_affectation(a, &etat),

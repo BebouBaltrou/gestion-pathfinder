@@ -134,7 +134,10 @@ fn carte_personnage(etat: &Etat, p: &Personnage) -> CartePersonnage {
             .and_then(|id| etat.localites.get(&id))
             .map(|l| l.nom.clone()),
         race: resume.as_ref().map(|x| x.race.clone()).unwrap_or_default(),
-        classes: resume.as_ref().map(|x| x.classes.clone()).unwrap_or_default(),
+        classes: resume
+            .as_ref()
+            .map(|x| x.classes.clone())
+            .unwrap_or_default(),
         niveau: resume.as_ref().map(|x| x.niveau),
         meilleure_caracteristique,
         meilleure_competence,
@@ -253,15 +256,21 @@ fn carte_localite(etat: &Etat, l: &Localite, r: &Referentiel) -> CarteLocalite {
                 let gere = g
                     .affectations
                     .iter()
-                    .filter(|a| matches!(a, Affectation::Batiment(_) | Affectation::Organisation(_)))
+                    .filter(|a| {
+                        matches!(a, Affectation::Batiment(_) | Affectation::Organisation(_))
+                    })
                     .count();
                 let salaire: Somme = etat.salaire_quotidien(g).into();
                 let valeur: i64 = g
                     .affectations
                     .iter()
                     .map(|a| match a {
-                        Affectation::Batiment(b) => Somme::from(etat.valeur_actif(Actif::Batiment(*b), r).0).pc,
-                        Affectation::Organisation(o) => Somme::from(etat.valeur_actif(Actif::Organisation(*o), r).0).pc,
+                        Affectation::Batiment(b) => {
+                            Somme::from(etat.valeur_actif(Actif::Batiment(*b), r).0).pc
+                        }
+                        Affectation::Organisation(o) => {
+                            Somme::from(etat.valeur_actif(Actif::Organisation(*o), r).0).pc
+                        }
                         Affectation::Gestionnaire(_) => 0,
                     })
                     .sum();

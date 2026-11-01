@@ -37,16 +37,28 @@ fn noeud(genre: &str, id: u32, nom: &str, enfants: Vec<NoeudOrga>) -> NoeudOrga 
 
 /// Un gestionnaire, au-dessus de ce qui lui est affecté. Un autre gestionnaire affecté à lui
 /// est dessous, et ainsi de suite. `vus` évite de boucler si deux gestionnaires se gèrent mutuellement.
-fn gestionnaire_noeud(etat: &Etat, g: &GestionnaireEmploye, vus: &mut BTreeSet<IdGestionnaire>) -> NoeudOrga {
+fn gestionnaire_noeud(
+    etat: &Etat,
+    g: &GestionnaireEmploye,
+    vus: &mut BTreeSet<IdGestionnaire>,
+) -> NoeudOrga {
     let mut enfants = Vec::new();
     for a in &g.affectations {
         match a {
             Affectation::Batiment(b) => {
-                let nom = etat.batiments.get(b).map(|x| x.nom.clone()).unwrap_or_default();
+                let nom = etat
+                    .batiments
+                    .get(b)
+                    .map(|x| x.nom.clone())
+                    .unwrap_or_default();
                 enfants.push(noeud("batiment", b.0, &nom, Vec::new()));
             }
             Affectation::Organisation(o) => {
-                let nom = etat.organisations.get(o).map(|x| x.nom.clone()).unwrap_or_default();
+                let nom = etat
+                    .organisations
+                    .get(o)
+                    .map(|x| x.nom.clone())
+                    .unwrap_or_default();
                 enfants.push(noeud("organisation", o.0, &nom, Vec::new()));
             }
             Affectation::Gestionnaire(s) => {
@@ -80,7 +92,11 @@ fn organigramme_localite(etat: &Etat, l: &Localite) -> NoeudOrga {
         }
     }
     // Bâtiments et organisations que personne ne gère, directement sous la localité.
-    let gere = |a: Affectation| etat.gestionnaires.values().any(|g| g.affectations.contains(&a));
+    let gere = |a: Affectation| {
+        etat.gestionnaires
+            .values()
+            .any(|g| g.affectations.contains(&a))
+    };
     for b in etat.batiments_localite(l.id) {
         if !gere(Affectation::Batiment(b.id)) {
             enfants.push(noeud("batiment", b.id.0, &b.nom, Vec::new()));

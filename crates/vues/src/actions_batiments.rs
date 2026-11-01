@@ -133,7 +133,12 @@ pub fn action(
                     id: IdBatiment(batiment),
                     favori: actif,
                 },
-                if actif { "Ajouté aux favoris" } else { "Retiré des favoris" }.into(),
+                if actif {
+                    "Ajouté aux favoris"
+                } else {
+                    "Retiré des favoris"
+                }
+                .into(),
             )
         }
         A::EtagesSuccessifs { batiment, actif } => {

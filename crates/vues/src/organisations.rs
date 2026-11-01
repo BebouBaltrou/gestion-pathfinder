@@ -2,8 +2,9 @@
 //! amélioration, délocalisation, vente (Guide de campagne p. 92-95).
 
 use crate::batiments::{
-    avancement_chantier, id_ressource, payeurs, prix_achat_saisi, ressource, source_modele, tresorerie_localite, Acquisition,
-    Amelioration, ApercuCreation, Avancement, Bonus, ChoixModele, ChoixSalle, SaisieBatiment,
+    avancement_chantier, id_ressource, payeurs, prix_achat_saisi, ressource, source_modele,
+    tresorerie_localite, Acquisition, Amelioration, ApercuCreation, Avancement, Bonus, ChoixModele,
+    ChoixSalle, SaisieBatiment,
 };
 use crate::localites::Choix;
 use crate::ventes::{etat_vente, EtatVente};
