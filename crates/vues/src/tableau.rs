@@ -80,11 +80,48 @@ pub struct TestPrestige {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize))]
+#[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
 pub struct CartePersonnage {
     pub id: u32,
     pub nom: String,
     pub compte: Somme,
     pub lieu: Option<String>,
+    pub race: String,
+    pub classes: String,
+    pub niveau: Option<u32>,
+    /// Meilleure caractéristique (modificateur), ex. « Force +4 ».
+    pub meilleure_caracteristique: Option<String>,
+    /// Meilleure compétence (bonus total), ex. « Perception +9 ».
+    pub meilleure_competence: Option<String>,
+}
+
+fn carte_personnage(etat: &Etat, p: &Personnage) -> CartePersonnage {
+    let resume = etat
+        .fiche_de(p.id)
+        .and_then(|e| crate::personnage::resume(fiches::Referentiel::partage(), &e));
+    let fiche = crate::personnage::fiche_du_pj(etat, p.id).and_then(Result::ok);
+    let meilleure_caracteristique = fiche
+        .as_ref()
+        .and_then(|f| f.caracteristiques.iter().max_by_key(|c| c.modificateur))
+        .map(|c| format!("{} {:+}", c.nom, c.modificateur));
+    let meilleure_competence = fiche
+        .as_ref()
+        .and_then(|f| f.competences.iter().max_by_key(|c| c.valeur.total))
+        .map(|c| format!("{} {:+}", c.nom, c.valeur.total));
+    CartePersonnage {
+        id: p.id.0,
+        nom: p.nom.clone(),
+        compte: p.compte.into(),
+        lieu: p
+            .localite
+            .and_then(|id| etat.localites.get(&id))
+            .map(|l| l.nom.clone()),
+        race: resume.as_ref().map(|x| x.race.clone()).unwrap_or_default(),
+        classes: resume.as_ref().map(|x| x.classes.clone()).unwrap_or_default(),
+        niveau: resume.as_ref().map(|x| x.niveau),
+        meilleure_caracteristique,
+        meilleure_competence,
+    }
 }
 
 pub fn libelle_categorie(c: &CategorieLocalite, r: &Referentiel) -> String {
@@ -150,15 +187,7 @@ pub fn tableau_de_bord(c: &mut campagne::Campagne, r: &Referentiel) -> TableauDe
         personnages: etat
             .personnages
             .values()
-            .map(|p| CartePersonnage {
-                id: p.id.0,
-                nom: p.nom.clone(),
-                compte: p.compte.into(),
-                lieu: p
-                    .localite
-                    .and_then(|id| etat.localites.get(&id))
-                    .map(|l| l.nom.clone()),
-            })
+            .map(|p| carte_personnage(&etat, p))
             .collect(),
     }
 }

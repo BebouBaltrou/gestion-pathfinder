@@ -98,7 +98,7 @@ fn classes_texte(r: &Referentiel, f: &Fiche) -> String {
         .join(" / ")
 }
 
-fn resume(r: &Referentiel, e: &EtatPersonnage) -> Option<ResumeFiche> {
+pub fn resume(r: &Referentiel, e: &EtatPersonnage) -> Option<ResumeFiche> {
     let v = e.fiche.calculer(r).ok()?;
     Some(ResumeFiche {
         race: r

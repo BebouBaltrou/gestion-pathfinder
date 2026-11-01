@@ -181,8 +181,18 @@ export function Tableau({ outils }: { outils: Outils }) {
                   <div className="travail" key={p.id}>
                     <div className="tete">
                       <Portrait id={p.id} nom={p.nom} />
-                      <span style={{ flex: 1, fontWeight: 500 }}>{p.nom}</span>
+                      <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}>
+                        <span style={{ fontWeight: 600 }}>{p.nom}</span>
+                        <span className="doux">
+                          {[p.race, p.classes].filter(Boolean).join(" · ") || "fiche non créée"}
+                        </span>
+                      </div>
                       <span style={{ color: "var(--po)", fontWeight: 600 }}>{formaterPo(p.compte.pc)}</span>
+                    </div>
+                    <div className="puces">
+                      {p.niveau !== null && <span className="puce">Niveau {p.niveau}</span>}
+                      {p.meilleureCaracteristique && <span className="puce">{p.meilleureCaracteristique}</span>}
+                      {p.meilleureCompetence && <span className="puce">{p.meilleureCompetence}</span>}
                     </div>
                     <span className="doux">{p.lieu ?? "en voyage / hors localité"}</span>
                   </div>

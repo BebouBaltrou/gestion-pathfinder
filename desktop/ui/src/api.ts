@@ -88,7 +88,17 @@ export type Travail = {
 };
 
 export type TestPrestige = { localite: number; nom: string; dd: number };
-export type CartePersonnage = { id: number; nom: string; compte: Somme; lieu: string | null };
+export type CartePersonnage = {
+  id: number;
+  nom: string;
+  compte: Somme;
+  lieu: string | null;
+  race: string;
+  classes: string;
+  niveau: number | null;
+  meilleureCaracteristique: string | null;
+  meilleureCompetence: string | null;
+};
 
 export type TableauDeBord = {
   date: string;
@@ -851,9 +861,9 @@ function simule(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
         ],
         prestige: [],
         personnages: [
-          { id: 1, nom: "Seoni", compte: { pc: 14500, texte: "145 po" }, lieu: "Sandpoint" },
-          { id: 2, nom: "Valeros", compte: { pc: 8700, texte: "87 po" }, lieu: "Sandpoint" },
-          { id: 3, nom: "Kyra", compte: { pc: 8000, texte: "80 po" }, lieu: "Sandpoint" },
+          { id: 1, nom: "Seoni", compte: { pc: 14500, texte: "145 po" }, lieu: "Sandpoint", race: "Humaine", classes: "Magicienne 5", niveau: 5, meilleureCaracteristique: "Intelligence +4", meilleureCompetence: "Connaissances (arcanes) +9" },
+          { id: 2, nom: "Valeros", compte: { pc: 8700, texte: "87 po" }, lieu: "Sandpoint", race: "Humain", classes: "Guerrier 5", niveau: 5, meilleureCaracteristique: "Force +4", meilleureCompetence: "Perception +8" },
+          { id: 3, nom: "Kyra", compte: { pc: 8000, texte: "80 po" }, lieu: "Sandpoint", race: "Humaine", classes: "Prêtresse 5", niveau: 5, meilleureCaracteristique: "Sagesse +4", meilleureCompetence: "Premiers secours +9" },
         ],
       };
       return Promise.resolve(t);
