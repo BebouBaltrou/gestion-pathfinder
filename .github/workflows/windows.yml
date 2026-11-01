@@ -110,7 +110,7 @@ jobs:
           git commit -m "Mise à jour $VERSION : latest.json"
           # Une autre publication peut avoir avancé la branche : on se place dessus avant de pousser.
           git fetch origin claude/v1.2
-          git rebase origin/claude/v1.2
+          git rebase --autostash origin/claude/v1.2
           git push origin HEAD:refs/heads/claude/v1.2
 
   # Linux : mis en pause le 23/10/2026 (Windows d'abord ; portage quand l'application sera
