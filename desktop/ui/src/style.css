@@ -215,6 +215,22 @@ p { margin: 0; }
 .liste-travaux { padding: 4px 18px; }
 .travail { padding: 18px 0; display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid var(--bord); }
 .travail:last-child { border-bottom: none; }
+/* Personnages du tableau de bord : une carte par PJ, et une carte pointillée pour en créer un. */
+.grille-personnages { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.carte-perso { display: flex; flex-direction: column; gap: 14px; }
+.perso-tete { display: flex; align-items: center; gap: 16px; }
+.perso-infos { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.perso-nom { font-size: 19px; font-weight: 600; }
+.perso-pied { border-top: 1px solid var(--bord); padding-top: 12px; }
+.tag-carac { background: #1b2636; border-color: #2c3d56; color: var(--travail); }
+.tag-comp { background: #17302c; border-color: #25483f; color: var(--magie); }
+.carte-perso.ajout {
+  border-style: dashed; align-items: center; justify-content: center; text-align: center;
+  background: transparent; font: inherit; color: var(--texte); cursor: pointer;
+}
+.carte-perso.ajout:hover { border-color: var(--or); }
+.ajout-plus { font-size: 36px; line-height: 1; color: var(--texte-doux); }
+
 /* Catégories repliables des paramètres. */
 .categorie { background: var(--carte); border: 1px solid var(--bord); border-radius: var(--rayon); }
 .categorie > summary { list-style: none; cursor: pointer; padding: 18px 26px; font-size: 19px; font-weight: 600; display: flex; align-items: center; gap: 10px; }

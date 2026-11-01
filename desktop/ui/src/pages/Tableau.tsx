@@ -89,6 +89,40 @@ export function Tableau({ outils }: { outils: Outils }) {
         </div>
       ))}
 
+      <section className="section" aria-label="Personnages de la campagne">
+        <div className="section-tete">
+          <h2>Personnages de la campagne</h2>
+          <span className="espace" />
+          <button className="bouton discret" onClick={() => outils.aller("personnages")}>Voir tous les personnages →</button>
+        </div>
+        <div className="grille-personnages">
+          {t.personnages.map((p) => (
+            <article className="carte carte-perso" key={p.id}>
+              <div className="perso-tete">
+                <Portrait id={p.id} nom={p.nom} />
+                <div className="perso-infos">
+                  <span className="perso-nom">{p.nom}</span>
+                  <span className="doux">{[p.race, p.classes].filter(Boolean).join(" – ") || "fiche non créée"}</span>
+                  {p.niveau !== null && <span className="doux">Niveau {p.niveau}</span>}
+                </div>
+              </div>
+              <div className="puces">
+                {p.meilleureCaracteristique && <span className="puce tag-carac">{p.meilleureCaracteristique}</span>}
+                {p.meilleureCompetence && <span className="puce tag-comp">{p.meilleureCompetence}</span>}
+              </div>
+              <div className="perso-pied doux">
+                {p.lieu ?? "en voyage / hors localité"} · {formaterPo(p.compte.pc)}
+              </div>
+            </article>
+          ))}
+          <button className="carte carte-perso ajout" onClick={() => outils.aller("personnages")}>
+            <span className="ajout-plus" aria-hidden="true">+</span>
+            <strong>Ajouter un personnage</strong>
+            <span className="doux">Créez un nouveau personnage pour cette campagne.</span>
+          </button>
+        </div>
+      </section>
+
       <div className="deux-colonnes">
         <section className="colonne-large">
           <h2>Localités</h2>
@@ -173,33 +207,6 @@ export function Tableau({ outils }: { outils: Outils }) {
             )}
           </section>
 
-          {t.personnages.length > 0 && (
-            <section className="section">
-              <h2>Personnages</h2>
-              <div className="carte liste-travaux">
-                {t.personnages.map((p) => (
-                  <div className="travail" key={p.id}>
-                    <div className="tete">
-                      <Portrait id={p.id} nom={p.nom} />
-                      <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}>
-                        <span style={{ fontWeight: 600 }}>{p.nom}</span>
-                        <span className="doux">
-                          {[p.race, p.classes].filter(Boolean).join(" · ") || "fiche non créée"}
-                        </span>
-                      </div>
-                      <span style={{ color: "var(--po)", fontWeight: 600 }}>{formaterPo(p.compte.pc)}</span>
-                    </div>
-                    <div className="puces">
-                      {p.niveau !== null && <span className="puce">Niveau {p.niveau}</span>}
-                      {p.meilleureCaracteristique && <span className="puce">{p.meilleureCaracteristique}</span>}
-                      {p.meilleureCompetence && <span className="puce">{p.meilleureCompetence}</span>}
-                    </div>
-                    <span className="doux">{p.lieu ?? "en voyage / hors localité"}</span>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
         </aside>
       </div>
     </div>
