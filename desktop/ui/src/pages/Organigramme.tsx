@@ -16,8 +16,10 @@ const LIBELLES: Record<string, string> = {
 function Ligne({ n }: { n: NoeudOrga }) {
   return (
     <li className={"orga-" + n.genre}>
-      <span className="doux">{LIBELLES[n.genre] ?? n.genre}</span>
-      <strong>{n.nom}</strong>
+      <div className="noeud">
+        <span className="doux">{LIBELLES[n.genre] ?? n.genre}</span>
+        <strong>{n.nom}</strong>
+      </div>
       {n.enfants.length > 0 && (
         <ul>
           {n.enfants.map((e) => (

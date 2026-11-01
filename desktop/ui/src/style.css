@@ -228,8 +228,25 @@ p { margin: 0; }
 
 /* Organigramme : arbre indenté, le joueur en tête. */
 .arbre, .arbre ul { list-style: none; margin: 0; padding: 0; }
-.arbre ul { padding-left: 22px; border-left: 1px solid var(--bord); margin-left: 8px; }
-.arbre li { padding: 5px 0; }
+/* Arborescence : un connecteur vertical par niveau, et un trait horizontal vers chaque nœud. */
+.arbre ul { position: relative; padding-left: 26px; margin-top: 8px; }
+.arbre li { position: relative; padding: 4px 0; }
+.arbre li::before {
+  content: ""; position: absolute; left: -14px; top: 0; bottom: 0; border-left: 1px solid var(--bord-fort);
+}
+.arbre li:last-child::before { bottom: 50%; }
+.arbre li::after {
+  content: ""; position: absolute; left: -14px; top: 50%; width: 14px; border-top: 1px solid var(--bord-fort);
+}
+.arbre > li::before, .arbre > li::after { display: none; }
+/* Un nœud est une petite case ; la couleur de sa bordure rappelle sa nature. */
+.noeud {
+  display: inline-flex; flex-direction: column; gap: 2px; padding: 8px 12px; min-width: 150px;
+  background: var(--carte-2); border: 1px solid var(--bord); border-left: 3px solid var(--bord-fort); border-radius: 10px;
+}
+.orga-joueur > .noeud, .orga-localite > .noeud { border-left-color: var(--or); }
+.orga-batiment > .noeud, .orga-organisation > .noeud { border-left-color: var(--travail); }
+.orga-gestionnaire > .noeud { border-left-color: var(--magie); }
 .orga-joueur { font-weight: 700; color: var(--or); }
 .orga-localite { font-weight: 600; color: var(--texte-fort); }
 .orga-batiment, .orga-organisation { color: var(--texte-moyen); }
