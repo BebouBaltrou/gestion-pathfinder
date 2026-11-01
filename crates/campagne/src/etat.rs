@@ -207,6 +207,8 @@ pub struct Etat {
     // ---- présence, usure, recettes ----
     /// Localités où un PJ s'est déjà trouvé (l'entretien ne s'applique qu'à elles, GC p. 82).
     pub frequentees: std::collections::BTreeSet<IdLocalite>,
+    /// Bâtiments mis en favori (recalculés à partir du journal).
+    pub batiments_favoris: std::collections::BTreeSet<IdBatiment>,
     /// Jours consécutifs sans PJ présent, par localité.
     pub absence: BTreeMap<IdLocalite, u32>,
     /// Jours (numéros) sans PJ présent, par localité, pour la réduction des recettes (GC p. 84).
@@ -688,6 +690,14 @@ impl Etat {
             Groupe { evenements, .. } => {
                 for e in evenements {
                     out.extend(self.appliquer_sur_place(e, r)?);
+                }
+            }
+            BatimentFavori { id, favori } => {
+                self.batiment(*id)?;
+                if *favori {
+                    self.batiments_favoris.insert(*id);
+                } else {
+                    self.batiments_favoris.remove(id);
                 }
             }
             BatimentCree { .. }

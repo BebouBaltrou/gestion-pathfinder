@@ -17,6 +17,8 @@ pub enum ActionBatiment {
     #[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
     EtagesSuccessifs { batiment: u32, actif: bool },
     #[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
+    Favori { batiment: u32, actif: bool },
+    #[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
     ModeEtage {
         batiment: u32,
         etage: u32,
@@ -123,6 +125,17 @@ pub fn action(
     let nom_salle = |sb: &SalleBatie| etat.nom_salle(sb, r);
     let facteur = |f: u32| f.clamp(1, 4);
     Ok(match a {
+        A::Favori { batiment, actif } => {
+            etat.batiment(IdBatiment(batiment))
+                .map_err(|e| e.to_string())?;
+            (
+                Evenement::BatimentFavori {
+                    id: IdBatiment(batiment),
+                    favori: actif,
+                },
+                if actif { "Ajouté aux favoris" } else { "Retiré des favoris" }.into(),
+            )
+        }
         A::EtagesSuccessifs { batiment, actif } => {
             let b = etat
                 .batiments

@@ -464,6 +464,8 @@ pub struct FicheBatiment {
     pub nom: String,
     pub classement: String,
     pub notes: String,
+    /// Mis en favori : il passe en tête sur la liste de sa localité.
+    pub favori: bool,
     pub modele: Option<String>,
     pub localite: u32,
     /// « Sandpoint — limite des dépenses : 15 unités/jour (une par localité) »
@@ -632,6 +634,7 @@ pub fn fiche_batiment(
         nom: b.nom.clone(),
         classement: b.classement.clone(),
         notes: b.notes.clone(),
+        favori: etat.batiments_favoris.contains(&b.id),
         modele: b
             .modele
             .as_ref()

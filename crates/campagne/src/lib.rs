@@ -390,6 +390,11 @@ impl Campagne {
                 format!("Création du bâtiment {nom} à {}{m}", lo(localite))
             }
             BatimentModifie { nom, .. } => format!("Modification du bâtiment {nom}"),
+            BatimentFavori { id, favori } => format!(
+                "{} {}",
+                if *favori { "Favori :" } else { "Retrait des favoris :" },
+                bat(id)
+            ),
             EtageAjoute { batiment, nom, .. } => {
                 format!("Étage « {nom} » ajouté à {}", bat(batiment))
             }

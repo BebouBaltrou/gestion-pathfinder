@@ -301,6 +301,7 @@ export type FicheBatiment = {
   equipes: string;
   gestionnaires: string;
   etagesSuccessifs: boolean;
+  favori: boolean;
   vente: EtatVente;
   etages: FicheEtage[];
   tresorerie: string;
@@ -310,6 +311,7 @@ export type FicheBatiment = {
 /** Action sur un bâtiment, une salle ou une extension (le cœur la traduit en événement). */
 export type ActionBatiment =
   | { type: "etagesSuccessifs"; batiment: number; actif: boolean }
+  | { type: "favori"; batiment: number; actif: boolean }
   | { type: "modeEtage"; batiment: number; etage: number; sequentiel: boolean }
   | { type: "ajouterEtage"; batiment: number; nom: string }
   | { type: "ajouterSalle"; batiment: number; etage: number; reference: string; deja: boolean }

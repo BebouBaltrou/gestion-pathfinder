@@ -129,6 +129,11 @@ pub enum Evenement {
         notes: String,
         etages_successifs: bool,
     },
+    /// Met un bâtiment en favori, ou le retire des favoris (il passe alors en tête sur sa localité).
+    BatimentFavori {
+        id: IdBatiment,
+        favori: bool,
+    },
     EtageAjoute {
         batiment: IdBatiment,
         id: IdEtage,
