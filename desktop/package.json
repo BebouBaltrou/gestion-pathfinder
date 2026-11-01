@@ -1,7 +1,7 @@
 {
   "name": "gestion-pathfinder-bureau",
   "private": true,
-  "version": "1.2.13",
+  "version": "1.2.14",
   "description": "Interface de l'application de bureau (Tauri)",
   "type": "module",
   "scripts": {
