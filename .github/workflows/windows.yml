@@ -83,7 +83,7 @@ jobs:
       # Lors d'un envoi de version (étiquette v*) : publie l'exécutable sur la page « Releases ».
       - name: Installeur sous un nom stable
         if: startsWith(github.ref, 'refs/tags/v')
-        run: cp desktop/src-tauri/target/release/bundle/nsis/*-setup.exe desktop/src-tauri/target/release/bundle/nsis/gestion-pathfinder-setup.exe
+        run: cp src-tauri/target/release/bundle/nsis/*-setup.exe src-tauri/target/release/bundle/nsis/gestion-pathfinder-setup.exe
       - name: Publication de la version
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
@@ -99,13 +99,13 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           VERSION=${GITHUB_REF_NAME#v}
-          SIG=$(cat desktop/src-tauri/target/release/bundle/nsis/*-setup.exe.sig)
+          SIG=$(cat src-tauri/target/release/bundle/nsis/*-setup.exe.sig)
           URL=$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$GITHUB_REF_NAME" --jq '.assets[] | select(.name=="gestion-pathfinder-setup.exe") | .url')
-          mkdir -p updates
-          node -e 'const [v,s,u]=process.argv.slice(1);process.stdout.write(JSON.stringify({version:v,notes:"",pub_date:new Date().toISOString(),platforms:{"windows-x86_64":{signature:s,url:u}}},null,2)+String.fromCharCode(10))' "$VERSION" "$SIG" "$URL" > updates/latest.json
+          mkdir -p ../updates
+          node -e 'const [v,s,u]=process.argv.slice(1);process.stdout.write(JSON.stringify({version:v,notes:"",pub_date:new Date().toISOString(),platforms:{"windows-x86_64":{signature:s,url:u}}},null,2)+String.fromCharCode(10))' "$VERSION" "$SIG" "$URL" > ../updates/latest.json
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git add updates/latest.json
+          git add ../updates/latest.json
           git commit -m "Mise à jour $VERSION : latest.json"
           git push origin HEAD:refs/heads/claude/v1.2
 
