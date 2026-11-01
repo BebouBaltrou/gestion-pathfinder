@@ -215,6 +215,15 @@ p { margin: 0; }
 .liste-travaux { padding: 4px 18px; }
 .travail { padding: 18px 0; display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid var(--bord); }
 .travail:last-child { border-bottom: none; }
+/* Organigramme : arbre indenté, le joueur en tête. */
+.arbre, .arbre ul { list-style: none; margin: 0; padding: 0; }
+.arbre ul { padding-left: 22px; border-left: 1px solid var(--bord); margin-left: 8px; }
+.arbre li { padding: 5px 0; }
+.orga-joueur { font-weight: 700; color: var(--or); }
+.orga-localite { font-weight: 600; color: var(--texte-fort); }
+.orga-batiment, .orga-organisation { color: var(--texte-moyen); }
+.orga-gestionnaire { color: var(--texte-doux); }
+
 /* Bâtiments listés sur une carte localité. */
 .liste-batiments { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
 .liste-batiments li { display: flex; justify-content: space-between; gap: 12px; }

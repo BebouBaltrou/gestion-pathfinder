@@ -186,6 +186,9 @@ export type FichePersonnage = {
 
 export type PagePersonnages = { personnages: FichePersonnage[]; localites: Choix[] };
 
+export type NoeudOrga = { genre: string; id: number; nom: string; enfants: NoeudOrga[] };
+export type Organigramme = { global: NoeudOrga; localites: NoeudOrga[] };
+
 // ------------------------------------------------------------------ bâtiments
 
 export type RessourceId = "po" | "marchandises" | "influence" | "travail" | "magie";
@@ -671,6 +674,7 @@ export const api = {
 
 
   pagePersonnages: () => appeler<PagePersonnages | null>("page_personnages"),
+  organigramme: () => appeler<Organigramme | null>("organigramme"),
   modifierPersonnage: (id: number, nom: string, prestige: string) =>
     appeler<Retour>("modifier_personnage", { id, nom, prestige }),
   deplacerPersonnage: (id: number, vers: number | null) => appeler<Retour>("deplacer_personnage", { id, vers }),

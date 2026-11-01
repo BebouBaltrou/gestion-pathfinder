@@ -267,6 +267,11 @@ pub fn html(c: &mut Campagne, r: &Referentiel) -> String {
                     .get(b)
                     .map(|x| x.nom.clone())
                     .unwrap_or_default(),
+                Affectation::Gestionnaire(g) => etat
+                    .gestionnaires
+                    .get(g)
+                    .map(|x| x.nom.clone())
+                    .unwrap_or_default(),
                 Affectation::Organisation(o) => etat
                     .organisations
                     .get(o)

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Outils, Page } from "../App";
-import { api, Capitaux, formaterPo, TableauDeBord } from "../api";
+import { api, Capitaux, formaterPo, NoeudOrga, Organigramme, TableauDeBord } from "../api";
 import { Portrait } from "../composants/Portrait";
 
 const CAPITAUX: [keyof Capitaux, string, string][] = [
@@ -31,9 +31,11 @@ const pluriel = (n: number, un: string, plusieurs: string) => `${n.toLocaleStrin
 
 export function Tableau({ outils }: { outils: Outils }) {
   const [t, setT] = useState<TableauDeBord | null>(null);
+  const [orga, setOrga] = useState<Organigramme | null>(null);
 
   useEffect(() => {
     api.tableauDeBord().then(setT);
+    api.organigramme().then(setOrga);
   }, [outils.version]);
 
   if (!t) return null;
@@ -224,6 +226,41 @@ export function Tableau({ outils }: { outils: Outils }) {
 
         </aside>
       </div>
+
+      {orga?.global && (
+        <section className="section" aria-label="Organigramme">
+          <h2>Organigramme</h2>
+          <details className="categorie" open>
+            <summary>Global</summary>
+            <ul className="arbre">
+              <Noeud n={orga.global} />
+            </ul>
+          </details>
+          {orga.localites.map((l) => (
+            <details className="categorie" key={l.id}>
+              <summary>{l.nom}</summary>
+              <ul className="arbre">
+                <Noeud n={l} />
+              </ul>
+            </details>
+          ))}
+        </section>
+      )}
     </div>
+  );
+}
+
+function Noeud({ n }: { n: NoeudOrga }) {
+  return (
+    <li>
+      <span className={"orga-" + n.genre}>{n.nom}</span>
+      {n.enfants.length > 0 && (
+        <ul>
+          {n.enfants.map((e) => (
+            <Noeud key={e.genre + e.id} n={e} />
+          ))}
+        </ul>
+      )}
+    </li>
   );
 }

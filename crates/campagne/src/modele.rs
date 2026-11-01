@@ -311,12 +311,14 @@ pub struct Equipe {
     pub revenus_actifs: bool,
 }
 
-/// Ce dont un gestionnaire s'occupe.
+/// Ce dont un gestionnaire s'occupe : un bâtiment, une organisation, ou un autre gestionnaire
+/// (qui devient son supérieur dans l'organigramme).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum Affectation {
     Batiment(IdBatiment),
     Organisation(IdOrganisation),
+    Gestionnaire(IdGestionnaire),
 }
 
 /// Gestionnaire employé (GC p. 89) : payé chaque jour en po par la trésorerie de sa localité.

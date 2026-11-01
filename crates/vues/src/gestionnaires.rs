@@ -58,6 +58,7 @@ pub struct CibleAffectation {
 pub enum GenreAffectation {
     Batiment,
     Organisation,
+    Gestionnaire,
 }
 
 impl From<Affectation> for CibleAffectation {
@@ -71,6 +72,10 @@ impl From<Affectation> for CibleAffectation {
                 genre: GenreAffectation::Organisation,
                 id: o.0,
             },
+            Affectation::Gestionnaire(g) => CibleAffectation {
+                genre: GenreAffectation::Gestionnaire,
+                id: g.0,
+            },
         }
     }
 }
@@ -80,6 +85,7 @@ impl From<&CibleAffectation> for Affectation {
         match c.genre {
             GenreAffectation::Batiment => Affectation::Batiment(IdBatiment(c.id)),
             GenreAffectation::Organisation => Affectation::Organisation(IdOrganisation(c.id)),
+            GenreAffectation::Gestionnaire => Affectation::Gestionnaire(IdGestionnaire(c.id)),
         }
     }
 }
@@ -119,6 +125,11 @@ fn libelle_affectation(a: &Affectation, etat: &Etat) -> String {
             .get(o)
             .map(|x| format!("Organisation : {}", x.nom))
             .unwrap_or(o.to_string()),
+        Affectation::Gestionnaire(g) => etat
+            .gestionnaires
+            .get(g)
+            .map(|x| format!("Gestionnaire : {}", x.nom))
+            .unwrap_or(g.to_string()),
     }
 }
 
@@ -138,6 +149,11 @@ pub fn page_gestionnaires(c: &mut campagne::Campagne, r: &Referentiel) -> PageGe
             etat.organisations
                 .values()
                 .map(|o| Affectation::Organisation(o.id)),
+        )
+        .chain(
+            etat.gestionnaires
+                .values()
+                .map(|x| Affectation::Gestionnaire(x.id)),
         )
         .collect();
     PageGestionnaires {
@@ -203,7 +219,7 @@ pub fn page_gestionnaires(c: &mut campagne::Campagne, r: &Referentiel) -> PageGe
                     .collect(),
                 possibles: tous
                     .iter()
-                    .filter(|a| !g.affectations.contains(a))
+                    .filter(|a| !g.affectations.contains(a) && **a != Affectation::Gestionnaire(g.id))
                     .map(|a| ChoixAffectation {
                         cible: (*a).into(),
                         libelle: libelle_affectation(a, &etat),

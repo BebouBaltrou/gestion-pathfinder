@@ -191,6 +191,9 @@ impl Etat {
                 Affectation::Organisation(o) => {
                     self.organisation(*o)?;
                 }
+                Affectation::Gestionnaire(g) => {
+                    self.gestionnaire(*g)?;
+                }
             }
         }
         Ok(())

@@ -274,6 +274,15 @@ fn ajuster_compte(s: S, pj: u32, delta: String, motif: String) -> Retour {
 // ---------------------------------------------------------------- bâtiments
 
 #[tauri::command]
+fn organigramme(s: S) -> Option<vues::organigramme::Organigramme> {
+    let mut x = session(&s);
+    let r = x.r.clone();
+    x.campagne
+        .as_mut()
+        .map(|c| vues::organigramme::organigramme(c.etat(&r), "Votre personnage"))
+}
+
+#[tauri::command]
 fn page_batiments(s: S) -> Option<vues::batiments::PageBatiments> {
     let mut x = session(&s);
     let (r, m) = (x.r.clone(), x.modeles.clone());
@@ -701,6 +710,7 @@ fn main() {
             deplacer_personnage,
             ajuster_compte,
             page_batiments,
+            organigramme,
             apercu_creation_batiment,
             creer_batiment,
             fiche_batiment,

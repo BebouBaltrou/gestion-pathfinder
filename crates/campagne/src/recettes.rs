@@ -84,6 +84,9 @@ impl Etat {
                     Affectation::Organisation(o) => {
                         self.organisations.get(o).is_some_and(|o| o.localite == l)
                     }
+                    Affectation::Gestionnaire(s) => {
+                        self.gestionnaires.get(s).is_some_and(|s| s.localite == l)
+                    }
                 });
             paye && concerne
         })

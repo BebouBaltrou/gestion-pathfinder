@@ -11,6 +11,7 @@ pub mod localites;
 pub mod localites_modeles;
 pub mod modeles;
 pub mod notes;
+pub mod organigramme;
 pub mod organisations;
 pub mod parametres;
 pub mod personnage;
