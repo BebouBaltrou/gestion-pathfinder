@@ -2,8 +2,8 @@
 //! amélioration, délocalisation, vente (Guide de campagne p. 92-95).
 
 use crate::batiments::{
-    id_ressource, payeurs, ressource, Acquisition, Amelioration, ApercuCreation, Avancement, Bonus,
-    ChoixModele, ChoixSalle, SaisieBatiment,
+    avancement_chantier, id_ressource, payeurs, prix_achat_saisi, ressource, Acquisition,
+    Amelioration, ApercuCreation, Avancement, Bonus, ChoixModele, ChoixSalle, SaisieBatiment,
 };
 use crate::localites::Choix;
 use crate::ventes::{etat_vente, EtatVente};
@@ -249,13 +249,7 @@ pub fn creation(
                         }
                     }
                     if s.acquisition == Acquisition::AcheterBatiment {
-                        let montant = if s.prix.trim().is_empty() {
-                            Montant::po(m.prix_po as i64)
-                        } else {
-                            Montant::depuis_texte(&s.prix)
-                                .filter(|x| !x.est_negatif())
-                                .ok_or("Prix illisible : écrivez par exemple 1200 ou 4 po 7 pa")?
-                        };
+                        let montant = prix_achat_saisi(&s.prix, m.prix_po)?;
                         if montant.pc > 0 {
                             evs.push(Evenement::Paiement {
                                 payeur,
@@ -520,22 +514,7 @@ fn fiche_equipe(
     let u = r.equipe(&e.reference)?;
     let (statut, statut_texte) = statut_equipe(&e.statut, etat);
     let chantier = match &e.statut {
-        StatutEquipe::EnRecrutement(ch) => {
-            let j = ch.jours_restants_estimes(limite);
-            let reste = ch.reste();
-            Some(Avancement {
-                capitaux_faits: ch.depense.unites(),
-                capitaux_total: ch.cout.unites(),
-                jours: ch.jours_ecoules,
-                duree: ch.duree,
-                estimation: if j == u32::MAX {
-                    "bloqué : limite de dépense nulle".into()
-                } else {
-                    format!("≈ {j} j restants")
-                },
-                manque: (reste.unites() > 0).then(|| format!("manque : {reste}")),
-            })
-        }
+        StatutEquipe::EnRecrutement(ch) => Some(avancement_chantier(ch, limite)),
         _ => None,
     };
     Some(FicheEquipe {

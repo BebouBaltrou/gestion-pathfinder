@@ -359,13 +359,7 @@ pub fn creation(
                         }
                     }
                     if s.acquisition == Acquisition::AcheterBatiment {
-                        let montant = if s.prix.trim().is_empty() {
-                            Montant::po(m.prix_po as i64)
-                        } else {
-                            Montant::depuis_texte(&s.prix)
-                                .filter(|x| !x.est_negatif())
-                                .ok_or("Prix illisible : écrivez par exemple 1200 ou 4 po 7 pa")?
-                        };
+                        let montant = prix_achat_saisi(&s.prix, m.prix_po)?;
                         if montant.pc > 0 {
                             evs.push(Evenement::Paiement {
                                 payeur,
@@ -541,6 +535,35 @@ pub struct Avancement {
     pub manque: Option<String>,
 }
 
+/// Avancement d'un chantier (salle ou équipe) pour l'affichage.
+pub(crate) fn avancement_chantier(ch: &Chantier, limite: u32) -> Avancement {
+    let j = ch.jours_restants_estimes(limite);
+    let reste = ch.reste();
+    Avancement {
+        capitaux_faits: ch.depense.unites(),
+        capitaux_total: ch.cout.unites(),
+        jours: ch.jours_ecoules,
+        duree: ch.duree,
+        estimation: if j == u32::MAX {
+            "bloqué : limite de dépense nulle".into()
+        } else {
+            format!("≈ {j} j restants")
+        },
+        manque: (reste.unites() > 0).then(|| format!("manque : {reste}")),
+    }
+}
+
+/// Prix d'achat saisi (« 1200 », « 4 po 7 pa »), ou le prix du livre si la saisie est vide.
+pub(crate) fn prix_achat_saisi(saisi: &str, prix_livre_po: u32) -> Result<Montant, &'static str> {
+    if saisi.trim().is_empty() {
+        Ok(Montant::po(prix_livre_po as i64))
+    } else {
+        Montant::depuis_texte(saisi)
+            .filter(|x| !x.est_negatif())
+            .ok_or("Prix illisible : écrivez par exemple 1200 ou 4 po 7 pa")
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize))]
 pub struct Amelioration {
@@ -698,22 +721,7 @@ fn fiche_salle(etat: &Etat, r: &Referentiel, sb: &SalleBatie, limite: u32) -> Op
     let u = r.salle(&sb.reference)?;
     let (statut, statut_texte) = statut_salle(&sb.statut);
     let chantier = match &sb.statut {
-        StatutSalle::EnTravaux(ch) => {
-            let j = ch.jours_restants_estimes(limite);
-            let reste = ch.reste();
-            Some(Avancement {
-                capitaux_faits: ch.depense.unites(),
-                capitaux_total: ch.cout.unites(),
-                jours: ch.jours_ecoules,
-                duree: ch.duree,
-                estimation: if j == u32::MAX {
-                    "bloqué : limite de dépense nulle".into()
-                } else {
-                    format!("≈ {j} j restants")
-                },
-                manque: (reste.unites() > 0).then(|| format!("manque : {reste}")),
-            })
-        }
+        StatutSalle::EnTravaux(ch) => Some(avancement_chantier(ch, limite)),
         _ => None,
     };
     let ameliorations = if sb.statut == StatutSalle::Construite {
