@@ -505,6 +505,23 @@ function DialogueAgir({ pj, agir, onFermer }: { pj: PjCombat; agir: (a: ActionCo
 
 // ------------------------------------------------------------------ sorts
 
+/** Joueurs qui reçoivent l'effet, cochés un à un. */
+function SelectionCibles({ pjs, cibles, setCibles }: { pjs: PjCombat[]; cibles: number[]; setCibles: (c: number[]) => void }) {
+  return (
+    <>
+      <h3>Qui reçoit l'effet</h3>
+      <div className="rangee-boutons">
+        {pjs.map((p) => (
+          <label key={p.id} className="interrupteur">
+            <input type="checkbox" checked={cibles.includes(p.id)} onChange={(e) => setCibles(e.target.checked ? [...cibles, p.id] : cibles.filter((x) => x !== p.id))} />
+            {p.nom}
+          </label>
+        ))}
+      </div>
+    </>
+  );
+}
+
 function DialogueSort({
   pj,
   pjs,
@@ -673,15 +690,7 @@ function DialogueSort({
           )}
           {apercu.effetAutomatique && (
             <div className="bloc">
-              <h3>Qui reçoit l'effet</h3>
-              <div className="rangee-boutons">
-                {pjs.map((p) => (
-                  <label key={p.id} className="interrupteur">
-                    <input type="checkbox" checked={cibles.includes(p.id)} onChange={(e) => setCibles(e.target.checked ? [...cibles, p.id] : cibles.filter((x) => x !== p.id))} />
-                    {p.nom}
-                  </label>
-                ))}
-              </div>
+              <SelectionCibles pjs={pjs} cibles={cibles} setCibles={setCibles} />
               <ChoixDuree
                 genre={genreDuree}
                 nombre={nDuree}
@@ -839,15 +848,7 @@ function DialogueUtiliserObjet({
           )}
           {objet.sort && objet.genreCode !== "potion" && (
             <div className="bloc">
-              <h3>Qui reçoit l'effet</h3>
-              <div className="rangee-boutons">
-                {pjs.map((p) => (
-                  <label key={p.id} className="interrupteur">
-                    <input type="checkbox" checked={cibles.includes(p.id)} onChange={(e) => setCibles(e.target.checked ? [...cibles, p.id] : cibles.filter((x) => x !== p.id))} />
-                    {p.nom}
-                  </label>
-                ))}
-              </div>
+              <SelectionCibles pjs={pjs} cibles={cibles} setCibles={setCibles} />
             </div>
           )}
           {objet.sort && (
