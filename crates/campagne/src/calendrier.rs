@@ -94,10 +94,6 @@ impl Calendrier {
         }
     }
 
-    pub fn date_valide(&self, d: DateGolarion) -> bool {
-        (1..=12).contains(&d.mois) && d.jour >= 1 && d.jour <= self.jours_du_mois(d.annee, d.mois)
-    }
-
     /// Date de Golarion du jour `n` de la campagne (n ≥ 1).
     pub fn date(&self, n: u32) -> DateGolarion {
         let mut d = self.origine;

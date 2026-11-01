@@ -717,21 +717,6 @@ pub fn combat(etat: &Etat, c: &Combat) -> CombatVue {
     }
 }
 
-/// Personnages de la campagne (avec fiche) que l'on peut engager dans un combat.
-pub fn personnages_de_l_aventure(etat: &Etat) -> Vec<(IdPersonnage, String)> {
-    let Some(a) = &etat.aventure else {
-        return Vec::new();
-    };
-    a.pjs
-        .keys()
-        .filter_map(|id| {
-            etat.personnages
-                .get(&IdPersonnage(*id))
-                .map(|p| (IdPersonnage(*id), p.nom.clone()))
-        })
-        .collect()
-}
-
 // ------------------------------------------------- aperçus (avant de confirmer)
 
 /// Une ligne de dégâts ou de soins du sort, calculée au niveau de lanceur.

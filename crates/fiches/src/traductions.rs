@@ -236,11 +236,6 @@ impl Traductions {
         self.sorts.get(nom_en)
     }
 
-    /// Nombre de sorts traduits.
-    pub fn nombre_de_sorts(&self) -> usize {
-        self.sorts.len()
-    }
-
     /// Nom et texte français d'un trait racial, d'après son nom anglais.
     pub fn trait_racial(&self, race: &str, nom_en: &str) -> Option<(&str, &str)> {
         let t = &self.races["races"][race]["traits"][nom_en];
@@ -295,10 +290,6 @@ impl Traductions {
             .collect()
     }
 
-    /// Texte d'une règle de classe (« Spells », « Swap », « Bloodline »…).
-    pub fn texte_de_classe(&self, cle: &str) -> Option<&str> {
-        self.ensorceleur["classe"]["textes"][cle].as_str()
-    }
 }
 
 #[derive(Debug, Clone, Copy)]

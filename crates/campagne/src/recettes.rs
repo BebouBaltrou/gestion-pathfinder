@@ -242,18 +242,6 @@ impl Etat {
         })
     }
 
-    /// Bonus effectif d'une unité avec les règles données.
-    pub fn bonus_unite(
-        &self,
-        cle: CleUnite,
-        l: IdLocalite,
-        r: &Referentiel,
-        regles: &ReglesTest,
-    ) -> Option<u32> {
-        let c = self.contribution(cle, l, r, regles).ok()?;
-        Some(regles::repartition::bonus_effectif(&c, &regles.options()))
-    }
-
     /// Types de revenu cochés pour l'unité (pages Bâtiments et Organisations).
     pub fn ressources_cochees(&self, cle: CleUnite) -> Vec<Ressource> {
         match cle {
