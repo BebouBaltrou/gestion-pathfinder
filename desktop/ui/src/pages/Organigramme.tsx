@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { api, NoeudOrga, Organigramme as OrganigrammeDonnees } from "../api";
+import { api, CartePersonnage, formaterPo, NoeudOrga, Organigramme as OrganigrammeDonnees } from "../api";
+import { Portrait } from "../composants/Portrait";
 
 const CLE = "gestion-pathfinder.personnage-joueur";
 
@@ -28,6 +29,29 @@ function Ligne({ n }: { n: NoeudOrga }) {
   );
 }
 
+/** Même encart que sur le tableau de bord, pour le personnage choisi à la racine. */
+function Encart({ p }: { p: CartePersonnage }) {
+  return (
+    <div className="carte carte-perso">
+      <div className="perso-tete">
+        <Portrait id={p.id} nom={p.nom} />
+        <div className="perso-infos">
+          <span className="perso-nom">{p.nom}</span>
+          <span className="doux">{[p.race, p.classes].filter(Boolean).join(" – ") || "fiche non créée"}</span>
+          {p.niveau !== null && <span className="doux">Niveau {p.niveau}</span>}
+        </div>
+      </div>
+      <div className="puces">
+        {p.meilleureCaracteristique && <span className="puce tag-carac">{p.meilleureCaracteristique}</span>}
+        {p.meilleureCompetence && <span className="puce tag-comp">{p.meilleureCompetence}</span>}
+      </div>
+      <div className="perso-pied doux">
+        {p.lieu ?? "en voyage / hors localité"} · {formaterPo(p.compte.pc)}
+      </div>
+    </div>
+  );
+}
+
 function personnageEnregistre(): number | null {
   try {
     const v = window.localStorage.getItem(CLE);
@@ -39,26 +63,27 @@ function personnageEnregistre(): number | null {
 
 export function Organigramme() {
   const [donnees, setDonnees] = useState<OrganigrammeDonnees | null>(null);
-  const [personnages, setPersonnages] = useState<{ id: number; nom: string }[]>([]);
+  const [personnages, setPersonnages] = useState<CartePersonnage[]>([]);
   const [joueur, setJoueur] = useState<number | null>(personnageEnregistre);
+  const [choix, setChoix] = useState(false);
 
   useEffect(() => {
     api.organigramme().then(setDonnees);
-    api.pagePersonnages().then((p) => setPersonnages(p?.personnages ?? []));
+    api.tableauDeBord().then((t) => setPersonnages(t?.personnages ?? []));
   }, []);
 
-  const choisir = (id: number | null) => {
+  const choisir = (id: number) => {
     setJoueur(id);
+    setChoix(false);
     try {
-      if (id === null) window.localStorage.removeItem(CLE);
-      else window.localStorage.setItem(CLE, String(id));
+      window.localStorage.setItem(CLE, String(id));
     } catch {
       /* sans stockage, le choix ne dure que jusqu'à la fermeture */
     }
   };
 
   if (!donnees?.global) return null;
-  const nomJoueur = personnages.find((p) => p.id === joueur)?.nom ?? "Choisissez votre personnage";
+  const choisi = personnages.find((p) => p.id === joueur);
 
   return (
     <div className="page">
@@ -67,22 +92,30 @@ export function Organigramme() {
         <p>Qui gère quoi, localité par localité. Votre personnage est au sommet.</p>
       </div>
 
-      <div className="carte racine-orga">
-        <span className="doux">Racine</span>
-        <strong>{nomJoueur}</strong>
-        <select
-          className="champ"
-          aria-label="Votre personnage"
-          value={joueur ?? ""}
-          onChange={(e) => choisir(e.target.value === "" ? null : Number(e.target.value))}
-        >
-          <option value="">— aucun —</option>
-          {personnages.map((p) => (
-            <option key={p.id} value={p.id}>
-              {p.nom}
-            </option>
-          ))}
-        </select>
+      <div className="racine-orga">
+        {choisi && !choix ? (
+          <>
+            <Encart p={choisi} />
+            <button type="button" className="bouton discret" onClick={() => setChoix(true)}>
+              Changer de personnage
+            </button>
+          </>
+        ) : (
+          <div className="carte racine-vide">
+            <span className="doux">Racine</span>
+            <strong>Sélectionnez votre personnage</strong>
+            {personnages.length === 0 && <p className="doux">Aucun personnage pour l'instant.</p>}
+          </div>
+        )}
+        {(!choisi || choix) && personnages.length > 0 && (
+          <div className="choix-personnages">
+            {personnages.map((p) => (
+              <button key={p.id} type="button" className="choix-perso" onClick={() => choisir(p.id)}>
+                <Encart p={p} />
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="grille-orga">
