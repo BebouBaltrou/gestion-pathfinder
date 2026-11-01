@@ -93,6 +93,26 @@ impl Etat {
         self.salles.get_mut(&id).ok_or(Erreur::SalleInconnue(id))
     }
 
+    /// Extension d'une salle, si elle est encore à construire (sinon erreur).
+    fn extension_a_construire(
+        s: &SalleBatie,
+        reference: &str,
+        nom: &str,
+    ) -> Result<ExtensionSalle, Erreur> {
+        let x = s
+            .extensions
+            .iter()
+            .find(|e| e.reference == reference)
+            .cloned()
+            .ok_or_else(|| Erreur::Extension(format!("{nom} n'a pas cette extension")))?;
+        if x.statut != StatutExtension::AConstruire {
+            return Err(Erreur::Extension(format!(
+                "l'extension de {nom} n'est plus à construire"
+            )));
+        }
+        Ok(x)
+    }
+
     /// Salles d'un étage, dans l'ordre.
     pub fn salles_etage(&self, etage: IdEtage) -> impl Iterator<Item = &SalleBatie> {
         self.salles.values().filter(move |s| s.etage == etage)
@@ -503,17 +523,7 @@ impl Etat {
                         "{nom} doit être construite ou en construction avant son extension"
                     )));
                 }
-                let x = s
-                    .extensions
-                    .iter()
-                    .find(|e| e.reference == *reference)
-                    .cloned()
-                    .ok_or_else(|| Erreur::Extension(format!("{nom} n'a pas cette extension")))?;
-                if x.statut != StatutExtension::AConstruire {
-                    return Err(Erreur::Extension(format!(
-                        "l'extension de {nom} n'est plus à construire"
-                    )));
-                }
+                let x = Self::extension_a_construire(&s, reference, &nom)?;
                 let loc = self.batiment(s.batiment)?.localite;
                 if !self.pj_present(loc) {
                     return Err(Erreur::AucunPjPresent(self.localite(loc)?.nom.clone()));
@@ -540,17 +550,7 @@ impl Etat {
             } => {
                 let s = self.salle(*salle)?.clone();
                 let nom = self.nom_salle(&s, r);
-                let x = s
-                    .extensions
-                    .iter()
-                    .find(|e| e.reference == *reference)
-                    .cloned()
-                    .ok_or_else(|| Erreur::Extension(format!("{nom} n'a pas cette extension")))?;
-                if x.statut != StatutExtension::AConstruire {
-                    return Err(Erreur::Extension(format!(
-                        "l'extension de {nom} n'est plus à construire"
-                    )));
-                }
+                let x = Self::extension_a_construire(&s, reference, &nom)?;
                 let prix = prix.unwrap_or(Montant::po(x.prix_po as i64));
                 if prix.est_negatif() {
                     return Err(Erreur::MontantNonPositif);
