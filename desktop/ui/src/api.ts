@@ -76,6 +76,8 @@ export type CarteLocalite = {
   enRoute: string[];
   batimentsAffiches: { nom: string; favori: boolean; valeur: Somme }[];
   batimentsMasques: number;
+  organisationsAffiches: string[];
+  gestionnairesTete: string[];
 };
 
 export type Alerte = { texte: string; grave: boolean; page: string };
@@ -853,6 +855,8 @@ function simule(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
               { nom: "Auberge du Lac", favori: false, valeur: { pc: 3100, texte: "31 po" } },
             ],
             batimentsMasques: 0,
+            organisationsAffiches: [],
+            gestionnairesTete: [],
           },
           {
             id: 2, nom: "Magnimar", genre: "cité", categorie: "Grande cité · limite 60/jour",
@@ -861,6 +865,8 @@ function simule(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
             batiments: 1, organisations: 0, employes: 5, presents: [], enRoute: ["3 Marchandises arrive le jour 27"],
             batimentsAffiches: [{ nom: "Entrepôt", favori: false, valeur: { pc: 1800, texte: "18 po" } }],
             batimentsMasques: 0,
+            organisationsAffiches: [],
+            gestionnairesTete: [],
           },
         ],
         alertes: [

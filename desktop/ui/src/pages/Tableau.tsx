@@ -118,17 +118,24 @@ export function Tableau({ outils }: { outils: Outils }) {
                 </div>
                 <BlocCapitaux c={l.capitaux} />
               </div>
-              {l.batimentsAffiches.length > 0 && (
-                <ul className="liste-batiments">
-                  {l.batimentsAffiches.map((b) => (
-                    <li key={b.nom}>
-                      <span>{b.favori ? "★ " : ""}{b.nom}</span>
-                      <span className="doux">{formaterPo(b.valeur.pc)}</span>
-                    </li>
-                  ))}
-                  {l.batimentsMasques > 0 && <li className="doux">+ {l.batimentsMasques} autre(s)</li>}
-                </ul>
-              )}
+              <p className="doux">
+                Gestionnaire en tête : {l.gestionnairesTete.length > 0 ? l.gestionnairesTete.join(", ") : "aucun"}
+              </p>
+              <div className="mini-cartes">
+                {l.batimentsAffiches.map((b) => (
+                  <div className="carte mini-carte" key={"b" + b.nom}>
+                    <span className="mini-nom">{b.favori ? "★ " : ""}{b.nom}</span>
+                    <span className="doux">Bâtiment · {formaterPo(b.valeur.pc)}</span>
+                  </div>
+                ))}
+                {l.organisationsAffiches.map((o) => (
+                  <div className="carte mini-carte" key={"o" + o}>
+                    <span className="mini-nom">{o}</span>
+                    <span className="doux">Organisation</span>
+                  </div>
+                ))}
+                {l.batimentsMasques > 0 && <span className="doux">+ {l.batimentsMasques} autre(s) bâtiment(s)</span>}
+              </div>
               <div className="puces">
                 <button className="bouton discret" onClick={() => outils.aller("batiments")}>+ Bâtiment</button>
                 <button className="bouton discret" onClick={() => outils.aller("organisations")}>+ Organisation</button>

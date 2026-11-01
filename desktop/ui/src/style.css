@@ -225,8 +225,9 @@ p { margin: 0; }
 .orga-gestionnaire { color: var(--texte-doux); }
 
 /* Bâtiments listés sur une carte localité. */
-.liste-batiments { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
-.liste-batiments li { display: flex; justify-content: space-between; gap: 12px; }
+.mini-cartes { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+.mini-carte { padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; border-radius: var(--rayon-petit); }
+.mini-nom { font-weight: 600; }
 
 /* Personnages du tableau de bord : une carte par PJ, et une carte pointillée pour en créer un. */
 .grille-personnages { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }

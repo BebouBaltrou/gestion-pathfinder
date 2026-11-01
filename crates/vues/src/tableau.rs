@@ -49,6 +49,9 @@ pub struct CarteLocalite {
     pub batiments_affiches: Vec<LigneBatiment>,
     /// Nombre de bâtiments non affichés.
     pub batiments_masques: u32,
+    pub organisations_affiches: Vec<String>,
+    /// Gestionnaires de la localité qui ne sont rattachés à aucun autre gestionnaire.
+    pub gestionnaires_tete: Vec<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -236,6 +239,22 @@ fn carte_localite(etat: &Etat, l: &Localite, r: &Referentiel) -> CarteLocalite {
     CarteLocalite {
         batiments_affiches: lignes,
         batiments_masques,
+        organisations_affiches: etat
+            .organisations_localite(l.id)
+            .map(|o| o.nom.clone())
+            .collect(),
+        gestionnaires_tete: etat
+            .gestionnaires
+            .values()
+            .filter(|g| {
+                g.localite == l.id
+                    && !g
+                        .affectations
+                        .iter()
+                        .any(|a| matches!(a, Affectation::Gestionnaire(_)))
+            })
+            .map(|g| g.nom.clone())
+            .collect(),
         id: l.id.0,
         nom: l.nom.clone(),
         genre: l.genre.clone(),
