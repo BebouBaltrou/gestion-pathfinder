@@ -36,8 +36,7 @@ une exigence ne change que sur décision explicite de l'utilisateur (datée ici)
 - **Effets 3D à venir** : la technologie d'interface doit les permettre.
 - Technologie retenue le 23/10/2026 : **Tauri** (fenêtre native Windows, Linux plus tard, interface
   web React, three.js pour la 3D), le moteur de règles Rust restant inchangé. Migration page
-  par page dans `desktop/`, l'application egui actuelle (`app/`) restant disponible jusqu'à
-  parité ; les deux travaillent sur les mêmes fichiers de campagne.
+  par page dans `desktop/`, l'application egui (`app/`) a été retirée ; les fichiers de campagne restent les mêmes.
 
 ## Fiches de personnage (décisions du 23/10/2026)
 

@@ -15,8 +15,7 @@ délocalisation, gestionnaires et salaires, recettes (tests de capitaux), absenc
 test de prestige, vente / abandon / réparation, simulation, export HTML/CSV, modèles
 personnels. Les décisions et lectures de règles sont dans `docs/A_TRAITER.md`.
 
-**Ancienne application (`app/`, egui)** — toutes les pages fonctionnent ; c'est encore celle
-que l'utilisateur utilise. Compilée par le job « Application Windows ».
+**Ancienne application (`app/`, egui)** — retirée le 25/10/2026 (validée par l'utilisateur).
 
 **Nouvelle application (`desktop/`, Tauri 2 + React)** — commencée le 23/10/2026 :
 - `crates/vues` : modèles d'affichage (en-tête, tableau de bord, résumé des conséquences).
@@ -43,10 +42,9 @@ que l'utilisateur utilise. Compilée par le job « Application Windows ».
 
 Ordre convenu : Localités, Personnages, Bâtiments (salles, extensions, vente, réparation),
 Recettes, Organisations, Gestionnaires, Historique, Paramètres, Référentiel, Points à
-confirmer, import/export, modèles personnels. Puis retrait de `app/` (avec l'accord de
-l'utilisateur).
+confirmer, import/export, modèles personnels. Ancienne application (`app/`) retirée.
 
-Méthode pour chaque page : lire `app/src/pages/<page>.rs` (comportement de référence), mettre
+Méthode pour chaque page : lire l'historique git de `app/src/pages/<page>.rs` (comportement de référence), mettre
 les calculs dans `crates/vues` (avec tests), ajouter les commandes Tauri, faire l'interface
 React au style de la maquette, vérifier dans la vraie fenêtre, puis faire tester l'utilisateur.
 Les maquettes validées (tableau de bord, fiche de bâtiment, recettes) sont dans l'artefact

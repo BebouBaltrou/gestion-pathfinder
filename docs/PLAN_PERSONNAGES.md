@@ -32,7 +32,7 @@ Aucun code n'est écrit tant que ce plan et les questions du bas ne sont pas val
    alimente les jets de recettes ; le Prestige se calcule (niveau + mod. CHA ou don) au lieu
    d'être saisi ; or, XP, objets et jours dépensés sont répercutés sur la fiche par des
    événements du journal. Cela réalise `docs/FICHES_PERSONNAGE.md`.
-5. **Interface** : uniquement dans la nouvelle application (`desktop/`), pas dans `app/` (egui).
+5. **Interface** : uniquement dans la nouvelle application (`desktop/`), (l'ancienne application egui a été retirée).
 
 ## Phases (validation par vous à chaque fin de phase, tests verts à chaque étape)
 

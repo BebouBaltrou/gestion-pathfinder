@@ -15,8 +15,7 @@ export/import, localités, personnages, bâtiments, recettes, organisations, ges
 historique, paramètres, référentiel, points à confirmer, modèles personnels) ; compilation
 Windows (.exe) avec essai de bout en bout (Linux en pause jusqu'à ce que l'application soit
 stable et terminée).
-Reste : essai à la main de chaque page par l'utilisateur, puis retrait de l'ancienne application
-(`app/`) avec son accord.
+Ancienne application (`app/`) retirée le 25/10/2026.
 
 ## Décisions du 23/10/2026
 
