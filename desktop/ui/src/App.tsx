@@ -136,7 +136,7 @@ export function App() {
       <nav className="navigation" aria-label="Navigation principale">
         <div className="marque">
           <div className="marque-logo">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M12 2l2.2 8.8L12 22l-2.2-11.2z" fill="currentColor" />
               <path d="M2 12l8.8-2.2L22 12l-11.2 2.2z" fill="currentColor" opacity="0.55" />
               <circle cx="12" cy="12" r="1.6" fill="var(--panneau)" />
