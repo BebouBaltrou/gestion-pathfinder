@@ -2,7 +2,7 @@
 //! amélioration, délocalisation, vente (Guide de campagne p. 92-95).
 
 use crate::batiments::{
-    avancement_chantier, id_ressource, payeurs, prix_achat_saisi, ressource, Acquisition,
+    avancement_chantier, id_ressource, payeurs, prix_achat_saisi, ressource, source_modele, tresorerie_localite, Acquisition,
     Amelioration, ApercuCreation, Avancement, Bonus, ChoixModele, ChoixSalle, SaisieBatiment,
 };
 use crate::localites::Choix;
@@ -177,20 +177,12 @@ pub fn apercu_creation(
     Some(ApercuCreation {
         composition: m.composition_imprimee.clone(),
         personnel,
-        source: if personnel {
-            "Modèle personnel".into()
-        } else {
-            r.reference(&m.source)
-        },
+        source: source_modele(personnel, r, &m.source),
         besoin: besoin.into(),
         a_acheter: a_acheter.into(),
         prix_capitaux_po: regles::calculs::valeur_achat(r, &a_acheter),
         prix_livre_po: m.prix_po,
-        tresorerie: etat
-            .localites
-            .get(&l)
-            .map(|x| format!("Trésorerie de {} ({})", x.nom, x.tresorerie))
-            .unwrap_or_default(),
+        tresorerie: tresorerie_localite(&etat, l),
     })
 }
 

@@ -9,7 +9,7 @@ use campagne::etat::Etat;
 use campagne::evenements::Evenement;
 use campagne::modele::*;
 use campagne::modeles_perso::{ModelesPerso, PREFIXE};
-use domaine::{CoutCapitaux, Montant, Ressource, TypeCapital};
+use domaine::{CoutCapitaux, Montant, Ressource, Source, TypeCapital};
 use regles::Referentiel;
 
 // ------------------------------------------------------------------ ressources
@@ -284,20 +284,12 @@ pub fn apercu_creation(
     Some(ApercuCreation {
         composition: m.composition_imprimee.clone(),
         personnel,
-        source: if personnel {
-            "Modèle personnel".into()
-        } else {
-            r.reference(&m.source)
-        },
+        source: source_modele(personnel, r, &m.source),
         besoin: besoin.into(),
         a_acheter: a_acheter.into(),
         prix_capitaux_po: regles::calculs::valeur_achat(r, &a_acheter),
         prix_livre_po: m.prix_po,
-        tresorerie: etat
-            .localites
-            .get(&l)
-            .map(|x| format!("Trésorerie de {} ({})", x.nom, x.tresorerie))
-            .unwrap_or_default(),
+        tresorerie: tresorerie_localite(&etat, l),
     })
 }
 
@@ -562,6 +554,23 @@ pub(crate) fn prix_achat_saisi(saisi: &str, prix_livre_po: u32) -> Result<Montan
             .filter(|x| !x.est_negatif())
             .ok_or("Prix illisible : écrivez par exemple 1200 ou 4 po 7 pa")
     }
+}
+
+/// Source d'un modèle : « Modèle personnel » ou la référence du livre.
+pub(crate) fn source_modele(personnel: bool, r: &Referentiel, source: &Source) -> String {
+    if personnel {
+        "Modèle personnel".into()
+    } else {
+        r.reference(source)
+    }
+}
+
+/// Trésorerie de la localité, pour l'affichage d'un achat.
+pub(crate) fn tresorerie_localite(etat: &Etat, l: IdLocalite) -> String {
+    etat.localites
+        .get(&l)
+        .map(|x| format!("Trésorerie de {} ({})", x.nom, x.tresorerie))
+        .unwrap_or_default()
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
