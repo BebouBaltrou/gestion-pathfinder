@@ -278,8 +278,6 @@ fn ajuster_compte(s: S, pj: u32, delta: String, motif: String) -> Retour {
 fn basculer_plein_ecran(fenetre: tauri::Window) -> Result<bool, String> {
     let actif = !fenetre.is_fullscreen().map_err(|e| e.to_string())?;
     fenetre.set_fullscreen(actif).map_err(|e| e.to_string())?;
-    // Essai : redonner le focus à la fenêtre, pour que le curseur réagisse à nouveau.
-    fenetre.set_focus().map_err(|e| e.to_string())?;
     Ok(actif)
 }
 

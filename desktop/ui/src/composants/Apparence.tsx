@@ -107,11 +107,6 @@ export function Apparence() {
       </div>
       <h2>Taille de l'affichage</h2>
       <p className="doux">Adapte la taille des textes et des cartes à votre écran. « Automatique » convient à la plupart des cas.</p>
-      <div className="ligne" style={{ gap: 12, marginBottom: 14 }}>
-        <button type="button" className="bouton" onClick={() => api.basculerPleinEcran()}>
-          Basculer en plein écran (F11)
-        </button>
-      </div>
       <div className="segments" role="radiogroup" aria-label="Taille de l'affichage">
         {ECHELLES.map((e) => (
           <button key={e.id} role="radio" aria-checked={echelle === e.id} className={echelle === e.id ? "actif" : ""} onClick={() => choisirEchelle(e.id)}>
