@@ -4,7 +4,6 @@ import { App } from "./App";
 import { autotest } from "./autotest";
 import "./style.css";
 import { appliquerThemeEnregistre } from "./composants/Apparence";
-import { api } from "./api";
 
 appliquerThemeEnregistre();
 
