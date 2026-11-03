@@ -276,9 +276,8 @@ fn ajuster_compte(s: S, pj: u32, delta: String, motif: String) -> Retour {
 /// Passe la fenêtre en plein écran ou en fenêtre ; renvoie le nouvel état.
 #[tauri::command]
 fn basculer_plein_ecran(fenetre: tauri::Window) -> Result<bool, String> {
-    // Plein écran sans bordure (pas le plein écran natif) : la fenêtre reste une fenêtre Windows.
+    // Fenêtre maximisée avec barre de titre : la barre des tâches reste visible.
     let actif = !fenetre.is_maximized().map_err(|e| e.to_string())?;
-    fenetre.set_decorations(!actif).map_err(|e| e.to_string())?;
     if actif {
         fenetre.maximize().map_err(|e| e.to_string())?;
     } else {
