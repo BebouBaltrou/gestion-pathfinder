@@ -281,6 +281,8 @@ fn basculer_plein_ecran(fenetre: tauri::Window) -> Result<bool, String> {
     // Sous Windows, le curseur peut rester figé au passage en plein écran : on le libère.
     fenetre.set_cursor_grab(false).map_err(|e| e.to_string())?;
     fenetre.set_cursor_visible(true).map_err(|e| e.to_string())?;
+    fenetre.set_cursor_icon(tauri::CursorIcon::Default).map_err(|e| e.to_string())?;
+    fenetre.set_focus().map_err(|e| e.to_string())?;
     Ok(actif)
 }
 
