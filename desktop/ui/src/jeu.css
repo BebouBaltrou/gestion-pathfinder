@@ -145,8 +145,8 @@ select.champ-jeu { padding-right: 8px; }
 .de-touche.choisie { background: var(--or); color: var(--or-sombre); border-color: var(--or); }
 
 /* ----------------------------------------------------------------- dialogues */
-.voile { position: fixed; inset: 0; background: rgba(5, 7, 10, 0.62); display: grid; place-items: center; z-index: 50; padding: 20px; }
-.dialogue { width: min(560px, 100%); max-height: calc(100vh - 40px); display: flex; flex-direction: column; background: var(--carte); border: 1px solid var(--bord-fort); border-radius: var(--rayon); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5); }
+.voile { position: fixed; inset: 0; background: rgba(5, 7, 10, 0.62); display: grid; place-items: center; z-index: 50; padding: 20px 20px 72px; }
+.dialogue { width: min(560px, 100%); max-height: calc(100vh - 112px); display: flex; flex-direction: column; background: var(--carte); border: 1px solid var(--bord-fort); border-radius: var(--rayon); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5); }
 .dialogue.large { width: min(860px, 100%); }
 .dialogue header { display: flex; align-items: center; justify-content: space-between; padding: 16px 22px 8px; }
 .dialogue-corps { padding: 8px 22px 14px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
