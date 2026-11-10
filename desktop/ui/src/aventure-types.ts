@@ -114,7 +114,40 @@ export type PjCombat = PjAventure & {
   sortsLances: number;
 };
 
+/** Créature invoquée en combat : fiche complète. */
+export type InvocationVue = {
+  id: number;
+  nom: string;
+  lanceur: number;
+  niveauSort: number;
+  fp: string;
+  pv: number;
+  ca: number;
+  init: number;
+  sauvegardes: [string, number][];
+  caracteristiques: [string, number][];
+  vitesse: string;
+  attaques: string;
+  lignes: [string, string][];
+};
+
+/** Créature qu'un sort de convocation peut appeler. */
+export type OptionCreature = {
+  nom: string;
+  fp: string;
+  niveau: number;
+  pv: number;
+  ca: number;
+  init: number;
+  nombreMin: number;
+  nombreMax: number;
+};
+
+/** Forme qu'un sort de forme permet de prendre. */
+export type FormeOption = { id: string; nom: string; texte: string };
+
 export type CombatVue = {
+  invocations: InvocationVue[];
   phase: "initiative" | "enCours";
   round: number;
   surprise: boolean;

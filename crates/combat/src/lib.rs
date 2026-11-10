@@ -8,6 +8,7 @@ pub mod catalogue;
 pub mod combat;
 pub mod economie;
 pub mod etat;
+pub mod invocations;
 pub mod objets;
 pub mod regles;
 pub mod sorts;
@@ -26,6 +27,8 @@ pub use sorts::{ApercuSort, Distraction, ParamsLancer};
 mod tests;
 #[cfg(test)]
 mod tests_actions;
+#[cfg(test)]
+mod tests_invocations;
 #[cfg(test)]
 mod tests_objets;
 #[cfg(test)]

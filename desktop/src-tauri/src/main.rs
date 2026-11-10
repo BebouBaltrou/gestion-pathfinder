@@ -763,6 +763,8 @@ fn main() {
             aventure::combat_retablir,
             aventure::combat_apercu_sort,
             aventure::combat_apercu_fin,
+            aventure::combat_convocations,
+            aventure::combat_formes,
             aventure::combat_terminer,
             aventure::catalogue_actions,
             aventure::catalogue_fp,

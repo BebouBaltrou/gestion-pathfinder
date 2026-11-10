@@ -54,6 +54,20 @@ pub enum ActionCombat {
     },
     /// Lancement d'un sort (voir `EtatCombat::apercu_sort` pour ce qu'il faut lancer avant).
     Lancer(ParamsLancer),
+    /// Forme animale ou élémentaire (sort de forme) : effets chiffrés appliqués au personnage.
+    Forme {
+        pj: IdPj,
+        sort: String,
+        forme: String,
+    },
+    /// Convocation d'alliés naturels : créatures invoquées qui agissent pendant le combat.
+    Convoquer {
+        lanceur: IdPj,
+        sort: String,
+        creature: String,
+        nombre: u32,
+        d20: i32,
+    },
     /// Attaque (action simple, action complexe, ou ce que l'attaque coûte). Une attaque qui tire des
     /// munitions les décompte automatiquement (`tirs` par attaque) et **est refusée** si le
     /// personnage n'a pas assez de munitions dans son inventaire (décision du 24/10/2026).
@@ -204,6 +218,10 @@ pub struct EtatCombat {
     pub minuits: i64,
     /// Rounds entièrement joués.
     pub rounds_joues: u32,
+    /// Créatures invoquées pendant le combat (absentes de la campagne).
+    pub invocations: BTreeMap<IdPj, crate::invocations::Invocation>,
+    /// Prochain identifiant de créature invoquée.
+    pub prochain_invocation: IdPj,
 }
 
 impl EtatCombat {
@@ -237,6 +255,8 @@ impl EtatCombat {
             fiche: Vec::new(),
             minuits: 0,
             rounds_joues: 0,
+            invocations: BTreeMap::new(),
+            prochain_invocation: crate::invocations::BASE_INVOCATIONS,
         })
     }
 
@@ -264,7 +284,7 @@ impl EtatCombat {
         (i.total, i.modificateur, i.departage.unwrap_or(i32::MIN))
     }
 
-    fn trier(&mut self) {
+    pub(crate) fn trier(&mut self) {
         let mut ordre: Vec<IdPj> = self.initiatives.keys().copied().collect();
         ordre.sort_by(|a, b| self.cle(*b).cmp(&self.cle(*a)).then(a.cmp(b)));
         self.ordre = ordre;
@@ -327,6 +347,8 @@ impl EtatCombat {
 
     /// Ce que le moteur demande au joueur à ce moment (dé physique à saisir).
     pub fn demandes(&self, ctx: &dyn Fn(IdPj) -> Option<ContextePj>) -> Vec<Demande> {
+        let ctx = self.avec_invocations(ctx);
+        let ctx = &ctx;
         let mut v = Vec::new();
         if let (Phase::EnCours, Some(pj)) = (self.phase, self.actif) {
             if let (Some(c), Some(s)) = (ctx(pj), self.aventure.pjs.get(&pj)) {
@@ -351,6 +373,8 @@ impl EtatCombat {
     /// Le personnage est-il limité à une seule action simple ou de mouvement (round de
     /// surprise, chancelant, hors de combat) ?
     pub fn limite(&self, pj: IdPj, ctx: &dyn Fn(IdPj) -> Option<ContextePj>) -> bool {
+        let ctx = self.avec_invocations(ctx);
+        let ctx = &ctx;
         self.round == 0
             || match (ctx(pj), self.aventure.pjs.get(&pj)) {
                 (Some(c), Some(s)) => matches!(
@@ -368,7 +392,14 @@ impl EtatCombat {
         ctx: &dyn Fn(IdPj) -> Option<ContextePj>,
     ) -> Result<(), ErreurCombat> {
         let sauvegarde = self.clone();
-        let r = self.appliquer_interne(a, ctx);
+        let invoques = self.invocations.clone();
+        let ext = |id: IdPj| {
+            invoques
+                .get(&id)
+                .map(crate::invocations::Invocation::contexte)
+                .or_else(|| ctx(id))
+        };
+        let r = self.appliquer_interne(a, &ext);
         if r.is_err() {
             *self = sauvegarde;
         }
@@ -608,6 +639,14 @@ impl EtatCombat {
                 }
             }
             ActionCombat::Lancer(params) => self.lancer(params, ctx)?,
+            ActionCombat::Forme { pj, sort, forme } => self.prendre_forme(*pj, sort, forme, ctx)?,
+            ActionCombat::Convoquer {
+                lanceur,
+                sort,
+                creature,
+                nombre,
+                d20,
+            } => self.convoquer(*lanceur, sort, creature, *nombre, *d20, ctx)?,
             ActionCombat::UtiliserObjet(params) => self.utiliser_objet(params, ctx)?,
             ActionCombat::Attaquer {
                 pj,

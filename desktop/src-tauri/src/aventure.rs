@@ -508,3 +508,66 @@ pub fn catalogue_etats() -> Vec<(String, String)> {
 pub fn catalogue_regles() -> Vec<combat::regles::RegleOptionnelle> {
     combat::regles::catalogue().to_vec()
 }
+
+// ------------------------------------------------------- convocations et formes
+
+/// Créature qui peut être convoquée par un sort de convocation donné.
+#[derive(serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct OptionCreature {
+    pub nom: String,
+    pub fp: String,
+    pub niveau: u32,
+    pub pv: i32,
+    pub ca: i32,
+    pub init: i32,
+    /// Nombre de créatures possibles (plage du dé comprise).
+    pub nombre_min: u32,
+    pub nombre_max: u32,
+}
+
+#[tauri::command]
+pub fn combat_convocations(niveau: u32) -> Vec<OptionCreature> {
+    let r = fiches::Referentiel::partage();
+    r.convocations
+        .options_pour(niveau)
+        .into_iter()
+        .map(|o| {
+            let c = &r.convocations.creatures[o.creature];
+            let (nombre_min, nombre_max) = o.nombre.intervalle();
+            OptionCreature {
+                nom: c.nom.clone(),
+                fp: c.fp.clone(),
+                niveau: c.niveau,
+                pv: c.pv,
+                ca: c.ca,
+                init: c.init,
+                nombre_min,
+                nombre_max,
+            }
+        })
+        .collect()
+}
+
+/// Forme qu'un sort de forme permet de prendre.
+#[derive(serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct FormeOption {
+    pub id: String,
+    pub nom: String,
+    pub texte: String,
+}
+
+#[tauri::command]
+pub fn combat_formes(sort: String) -> Vec<FormeOption> {
+    fiches::Referentiel::partage()
+        .formes
+        .iter()
+        .filter(|f| f.sort_en.eq_ignore_ascii_case(&sort))
+        .map(|f| FormeOption {
+            id: f.id.clone(),
+            nom: f.nom.clone(),
+            texte: f.texte.clone(),
+        })
+        .collect()
+}
