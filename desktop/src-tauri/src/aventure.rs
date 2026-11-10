@@ -180,7 +180,7 @@ pub fn aventure_actualiser_ressources(s: S, pj: u32) -> Retour {
                         unite: aventure::UniteRessource::Utilisations,
                         max,
                         utilisees: 0,
-                        source: format!("pouvoir de classe : {}", p.nom),
+                        source: format!("{}{}", aventure::POUVOIR_DE_CLASSE, p.nom),
                     },
                 ));
             }

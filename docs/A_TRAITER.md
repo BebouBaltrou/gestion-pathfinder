@@ -176,3 +176,11 @@ sort inconnu, sort hors liste de la classe, trop de sorts d'un niveau). Points �
 - Point à valider : un sort préparé lancé hors combat est retiré des sorts disponibles pour la
   journée, comme en combat.
 - Hors périmètre : les effets d'objets sans sort (ex. objets à effet fixe) restent à appliquer à la main.
+
+## Pouvoirs de classe par jour : suivi dans la fiche (claude/v1.2)
+
+- Fait : utiliser « Forme animale » (ou un autre pouvoir de classe par jour) dans l'aventure
+  inscrit une utilisation dans le journal de la fiche ; la fiche refuse si elle n'a plus d'utilisation.
+- Fait : un repos d'une nuit complète (aventure) remet à zéro les pouvoirs de la fiche, comme le repos de la fiche.
+- Point à confirmer : rendre une utilisation dans l'aventure (« récupérer ») ne modifie pas la fiche :
+  la fiche n'a pas de mécanisme de retour partiel. Lecture à valider.

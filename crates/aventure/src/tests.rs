@@ -398,3 +398,89 @@ fn evenements_et_etat_serialisables() {
     let relu: EtatAventure = serde_json::from_str(&serde_json::to_string(&e).unwrap()).unwrap();
     assert_eq!(e, relu);
 }
+
+// ---- pouvoirs de classe par jour : le journal de la fiche suit l'aventure
+
+#[test]
+fn utiliser_un_pouvoir_de_classe_inscrit_la_fiche() {
+    let mut e = EtatAventure::nouveau(Instant::depuis(1, 8, 0).unwrap(), false);
+    e.appliquer(&EvenementAventure::Entree { pj: 1 }, &ctx)
+        .unwrap();
+    e.appliquer(
+        &EvenementAventure::RessourcesDefinies {
+            pj: 1,
+            ressources: vec![(
+                "forme_animale".into(),
+                Ressource {
+                    unite: UniteRessource::Utilisations,
+                    max: 3,
+                    utilisees: 0,
+                    source: format!("{}Forme animale", POUVOIR_DE_CLASSE),
+                },
+            )],
+        },
+        &ctx,
+    )
+    .unwrap();
+    let s = e
+        .appliquer(
+            &EvenementAventure::RessourceUtilisee {
+                pj: 1,
+                nom: "forme_animale".into(),
+                quantite: 2,
+            },
+            &ctx,
+        )
+        .unwrap();
+    assert_eq!(
+        s.fiche,
+        vec![
+            (
+                1,
+                EvenementFiche::PouvoirUtilise {
+                    cle: "forme_animale".into()
+                }
+            ),
+            (
+                1,
+                EvenementFiche::PouvoirUtilise {
+                    cle: "forme_animale".into()
+                }
+            ),
+        ]
+    );
+}
+
+#[test]
+fn ressource_de_lignage_n_inscrit_pas_la_fiche() {
+    let mut e = EtatAventure::nouveau(Instant::depuis(1, 8, 0).unwrap(), false);
+    e.appliquer(&EvenementAventure::Entree { pj: 1 }, &ctx)
+        .unwrap();
+    e.appliquer(
+        &EvenementAventure::RessourcesDefinies {
+            pj: 1,
+            ressources: vec![(
+                "Wings".into(),
+                Ressource {
+                    unite: UniteRessource::Utilisations,
+                    max: 3,
+                    utilisees: 0,
+                    source: "lignage celestial, Wings (niveau 1)".into(),
+                },
+            )],
+        },
+        &ctx,
+    )
+    .unwrap();
+    let s = e
+        .appliquer(
+            &EvenementAventure::RessourceUtilisee {
+                pj: 1,
+                nom: "Wings".into(),
+                quantite: 1,
+            },
+            &ctx,
+        )
+        .unwrap();
+    assert!(s.fiche.is_empty());
+}

@@ -242,7 +242,7 @@ fn nom_sort_fr(nom_en: &str) -> String {
 
 /// Nom français d'un pouvoir de lignage (la source indique le lignage : « lignage aberrant, … »).
 fn nom_pouvoir_fr(source: &str, nom_en: &str) -> String {
-    if let Some(nom) = source.strip_prefix("pouvoir de classe : ") {
+    if let Some(nom) = source.strip_prefix(aventure::POUVOIR_DE_CLASSE) {
         return nom.to_string();
     }
     source

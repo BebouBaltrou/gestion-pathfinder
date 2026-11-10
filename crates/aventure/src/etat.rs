@@ -20,6 +20,9 @@ use temps::{
 };
 
 /// Identifiant d'un personnage (celui de la campagne).
+/// Origine des ressources qui sont des pouvoirs de classe de la fiche (forme animale…).
+pub const POUVOIR_DE_CLASSE: &str = "pouvoir de classe : ";
+
 pub type IdPj = u32;
 
 /// Valeurs de la fiche dont le mode aventure a besoin, fournies par la campagne au moment de
@@ -1285,6 +1288,13 @@ impl EtatAventure {
                 }
                 r.utilisees += quantite;
                 let reste = r.restantes();
+                // pouvoir de classe (forme animale…) : l'utilisation s'inscrit aussi dans le journal de la fiche
+                if r.source.starts_with(POUVOIR_DE_CLASSE) {
+                    for _ in 0..*quantite {
+                        s.fiche
+                            .push((*pj, EvenementFiche::PouvoirUtilise { cle: nom.clone() }));
+                    }
+                }
                 self.noter(format!(
                     "{} utilise {nom} ({reste} restant(s) aujourd'hui).",
                     c.nom

@@ -10,6 +10,7 @@ pub mod ressources;
 pub mod survie;
 pub mod vital;
 
+pub use etat::POUVOIR_DE_CLASSE;
 pub use etat::{
     nom_dans_la_fiche, Contenu, Contexte, ContextePj, EmplacementPj, Entree, ErreurAventure,
     EtatAventure, EvenementAventure, IdPj, IncantationPj, Protection, Sortie, SuiviPj,
