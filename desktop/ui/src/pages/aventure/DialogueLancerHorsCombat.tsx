@@ -42,13 +42,16 @@ export function DialogueLancerHorsCombat({
       {pj.sortsConnus.length === 0 ? (
         <p className="aide">Aucun sort connu ou préparé pour ce personnage.</p>
       ) : (
-        <div className="rangee-boutons">
-          {pj.sortsConnus.map((s) => (
-            <button key={s.nomEn} className={"bouton" + (s.nomEn === sort ? " principal" : "")} onClick={() => setSort(s.nomEn)}>
-              {s.nom} (niveau {s.niveau})
-            </button>
-          ))}
-        </div>
+        <label>
+          Sort (préparés ou disponibles)
+          <select className="champ-jeu" value={sort ?? ""} onChange={(e) => setSort(e.target.value)}>
+            {pj.sortsConnus.map((s) => (
+              <option key={`${s.niveau}-${s.nomEn}`} value={s.nomEn}>
+                {s.nom} (niveau {s.niveau})
+              </option>
+            ))}
+          </select>
+        </label>
       )}
       <label>
         Total des dés (soins ou dégâts, facultatif)

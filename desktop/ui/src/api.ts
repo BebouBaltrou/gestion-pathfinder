@@ -762,6 +762,8 @@ export const api = {
 
 /** « 1 052 po 3 pa 4 pc » (montant en pièces de cuivre), séparateur de milliers. */
 export function formaterPo(pc: number): string {
+  // une valeur absente ne doit jamais s'afficher « NaN po NaN pa »
+  if (typeof pc !== "number" || !Number.isFinite(pc)) return "montant indisponible";
   const signe = pc < 0 ? "−" : "";
   const abs = Math.abs(pc);
   const po = Math.trunc(abs / 100);
