@@ -71,6 +71,7 @@ pub(crate) fn ctx_avec(
             taille: "M".into(),
             niveau_druide: if id == 1 { niveau_de_lanceur } else { 0 },
             scores: Vec::new(),
+            bba: 0,
             con_score: 12,
             con_mod: 1,
             vigueur: 4,

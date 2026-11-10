@@ -12,6 +12,7 @@ fn ctx(id: IdPj) -> Option<ContextePj> {
         taille: "M".into(),
         niveau_druide: 0,
         scores: Vec::new(),
+        bba: 0,
         con_score: 12,
         con_mod: 1,
         vigueur: 4,

@@ -142,6 +142,8 @@ pub struct PjAventure {
     pub vigueur: i32,
     /// Modificateurs des six caractéristiques (abrégé, modificateur), du score de la fiche.
     pub caracteristiques: Vec<(String, i32)>,
+    /// Attaques de la créature prise en forme, recalculées avec les stats courantes du lanceur.
+    pub attaques_forme: Vec<AttaqueVue>,
     pub reflexes: i32,
     pub volonte: i32,
     pub ca: i32,
@@ -434,8 +436,12 @@ fn pj_vue(
         caracteristiques: c
             .scores
             .iter()
-            .map(|(k, s)| (k.clone(), (s - 10).div_euclid(2)))
+            .map(|(k, s)| {
+                let eff = defense_corrigee(*s, &format!("carac.{}", k.to_lowercase()), &effets_pj);
+                (k.clone(), (eff - 10).div_euclid(2))
+            })
             .collect(),
+        attaques_forme: attaques_de_forme(c, a, id, &effets_pj),
         vigueur: defense_corrigee(c.vigueur, "jds.vig", &effets_pj),
         reflexes: defense_corrigee(c.reflexes, "jds.ref", &effets_pj),
         volonte: defense_corrigee(c.volonte, "jds.vol", &effets_pj),
@@ -457,6 +463,117 @@ fn effets_actifs_du_pj(a: &EtatAventure, id: u32) -> Vec<Effet> {
 }
 
 /// Défense de la fiche corrigée par les effets actifs, avec le non-cumul par type de bonus du cœur.
+/// Attaque de la forme : toucher et dégâts (dés de la créature, sans son modificateur de Force).
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize))]
+#[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
+pub struct AttaqueVue {
+    pub nom: String,
+    pub toucher: i32,
+    pub degats: String,
+}
+
+/// Attaques de la créature prise en forme, depuis la fiche du Bestiaire : (nom, dés, texte de l'attaque).
+pub fn attaques_creature(texte: &str) -> Vec<(String, String, String)> {
+    let corps = texte.split_once(':').map_or(texte, |(_, r)| r);
+    let morceaux: Vec<&str> = corps.split(", ").collect();
+    let mut v = Vec::new();
+    for (i, m) in morceaux.iter().enumerate() {
+        let m = m.trim();
+        let Some(debut) = m.find('(') else { continue };
+        if !m.starts_with(['+', '-']) {
+            continue;
+        }
+        let fin = m[debut..].find(')').map_or(m.len(), |k| debut + k);
+        let dés = m[debut + 1..fin]
+            .split('+')
+            .next()
+            .unwrap_or("")
+            .to_string();
+        let nom = if i > 0 {
+            morceaux[i - 1].trim().to_string()
+        } else {
+            String::new()
+        };
+        v.push((nom.clone(), dés, format!("{nom} {m}")));
+    }
+    v
+}
+
+/// Dés de dégâts sans le modificateur de la créature, puis le modificateur du lanceur (×1 ou ×½).
+pub fn degats_de_forme(des: &str, bonus: i32) -> String {
+    match bonus {
+        0 => des.to_string(),
+        b => format!("{des}{b:+}"),
+    }
+}
+
+fn attaques_de_forme(
+    c: &ContextePj,
+    a: &EtatAventure,
+    id: u32,
+    effets: &[Effet],
+) -> Vec<AttaqueVue> {
+    use fiches::formes::{Attaque, PREFIXE_FORME};
+    let proprio = id.to_string();
+    let Some(t) = a
+        .effets
+        .actifs
+        .iter()
+        .find(|t| t.proprietaire == proprio && t.nom.starts_with(PREFIXE_FORME))
+    else {
+        return Vec::new();
+    };
+    let referentiel = fiches::Referentiel::partage();
+    let Some(f) = referentiel
+        .formes
+        .iter()
+        .find(|f| t.nom.starts_with(&f.nom_effet()))
+    else {
+        return Vec::new();
+    };
+    let creature_nom = t
+        .source
+        .rsplit_once('(')
+        .and_then(|(_, r)| r.strip_suffix(')'))
+        .unwrap_or("")
+        .to_string();
+    let Some(cr) = referentiel
+        .convocations
+        .creatures
+        .iter()
+        .find(|x| x.nom == creature_nom)
+    else {
+        return Vec::new();
+    };
+    let bba = defense_corrigee(c.bba, "bba", effets);
+    let score_for = c
+        .scores
+        .iter()
+        .find(|(k, _)| k.eq_ignore_ascii_case("for"))
+        .map_or(10, |(_, s)| *s);
+    let force = defense_corrigee(score_for, "carac.for", effets);
+    let mod_force = fiches::caracteristiques::modificateur(force);
+    let ecart_taille =
+        fiches::compagnon::modificateur_de_taille(&combat::invocations::taille_de_forme(f))
+            - fiches::compagnon::modificateur_de_taille(&c.taille);
+    attaques_creature(&cr.attaques)
+        .into_iter()
+        .map(|(nom, des, texte)| {
+            let genre = fiches::formes::genre_selon_fiche(&texte);
+            let bonus = match genre {
+                Attaque::Principale => mod_force,
+                Attaque::Secondaire => mod_force.div_euclid(2),
+            };
+            AttaqueVue {
+                nom,
+                toucher: bba + ecart_taille + mod_force,
+                degats: degats_de_forme(&des, bonus),
+            }
+        })
+        .collect()
+}
+
 fn defense_corrigee(base: i32, cible: &str, effets: &[Effet]) -> i32 {
     fiches::calculer(&[("fiche", base)], effets, &fiches::Cible::new(cible)).total
 }
@@ -1358,5 +1475,26 @@ mod tests_defenses {
         assert_eq!(defense_corrigee(15, "ca", &effets), 21);
         assert_eq!(defense_corrigee(3, "jds.vol", &effets), 4);
         assert_eq!(defense_corrigee(3, "jds.ref", &effets), 3);
+    }
+}
+
+#[cfg(test)]
+mod tests_attaques_forme {
+    use super::*;
+
+    #[test]
+    fn les_attaques_de_l_elephant_sont_lues_depuis_la_fiche() {
+        let v = attaques_creature("Corps à corps : défenses, +16 (2d8+10), coup, +16 (2d6+10)");
+        assert_eq!(v.len(), 2);
+        assert_eq!(v[0].0, "défenses");
+        assert_eq!(v[0].1, "2d8");
+        assert_eq!(v[1].1, "2d6");
+    }
+
+    #[test]
+    fn les_degats_suivent_les_stats_du_lanceur() {
+        assert_eq!(degats_de_forme("2d8", 3), "2d8+3");
+        assert_eq!(degats_de_forme("2d8", -1), "2d8-1");
+        assert_eq!(degats_de_forme("2d8", 0), "2d8");
     }
 }

@@ -42,9 +42,12 @@ export type EtatVue = { id: string; nom: string };
 
 export type SanteCode = "conscient" | "chancelant" | "hors_de_combat" | "inconscient" | "mourant" | "stable" | "mort";
 
+export type AttaqueForme = { nom: string; toucher: number; degats: string };
+
 export type PjAventure = {
   id: number;
   caracteristiques: [string, number][];
+  attaquesForme: AttaqueForme[];
   nom: string;
   niveau: number;
   pv: number;

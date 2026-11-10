@@ -38,6 +38,8 @@ pub struct ContextePj {
     pub niveau_druide: u32,
     /// Scores de caractéristique de la fiche (nom abrégé, score) : affichage des modificateurs.
     pub scores: Vec<(String, i32)>,
+    /// BBA de la fiche (inclut le bonus de taille de la race).
+    pub bba: i32,
     pub con_score: i32,
     pub con_mod: i32,
     /// Jets de défense et classe d'armure, calculés par la fiche (réflexes, volonté, CA, CA contact, CA pris au dépourvu).

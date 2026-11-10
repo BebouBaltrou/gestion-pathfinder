@@ -153,6 +153,7 @@ impl Etat {
             pv_max: v.pv_max.total,
             taille: taille_de_race(r, &fiche.race),
             niveau_druide: fiche.niveau_de_classe("druide"),
+            bba: v.bba.total,
             scores: Carac::TOUTES
                 .into_iter()
                 .filter_map(|c| v.scores.get(&c).map(|d| (c.abrege().to_string(), d.total)))

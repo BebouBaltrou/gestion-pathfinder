@@ -45,6 +45,7 @@ impl Invocation {
             pv_max: self.creature.pv,
             taille: "M".into(),
             niveau_druide: 0,
+            bba: 0,
             scores: self
                 .creature
                 .caracteristiques

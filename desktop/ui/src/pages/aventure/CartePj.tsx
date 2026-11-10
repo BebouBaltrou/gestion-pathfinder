@@ -158,6 +158,9 @@ function BandeauDefenses({ pj }: { pj: PjAventure }) {
       <span title="Jet de Vigueur">Vig. <strong>{signe(pj.vigueur)}</strong></span>
       <span title="Jet de Réflexes">Réf. <strong>{signe(pj.reflexes)}</strong></span>
       <span title="Jet de Volonté">Vol. <strong>{signe(pj.volonte)}</strong></span>
+      {pj.attaquesForme.map((a) => (
+        <span key={a.nom} title="Attaque de la forme (recalculée avec vos stats)">{a.nom} <strong>{signe(a.toucher)}</strong> ({a.degats})</span>
+      ))}
       {pj.caracteristiques.map(([k, m]) => (
         <span key={k} title={`Modificateur de ${k}`}>{k} <strong>{signe(m)}</strong></span>
       ))}
