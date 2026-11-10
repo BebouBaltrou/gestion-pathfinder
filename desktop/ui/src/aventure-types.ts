@@ -48,6 +48,7 @@ export type PjAventure = {
   id: number;
   caracteristiques: [string, number][];
   attaquesForme: AttaqueForme[];
+  capacitesForme: [string, string][];
   nom: string;
   niveau: number;
   pv: number;

@@ -146,6 +146,8 @@ pub struct PjAventure {
     pub caracteristiques: Vec<(String, i32)>,
     /// Attaques de la créature prise en forme, recalculées avec les stats courantes du lanceur.
     pub attaques_forme: Vec<AttaqueVue>,
+    /// Capacités de la créature prise en forme (piétinement, etc.) : libellé et texte.
+    pub capacites_forme: Vec<(String, String)>,
     pub reflexes: i32,
     pub volonte: i32,
     pub ca: i32,
@@ -445,6 +447,7 @@ fn pj_vue(
             })
             .collect(),
         attaques_forme: attaques_de_forme(c, a, id, &effets_pj),
+        capacites_forme: capacites_de_forme(a, id),
         vigueur: defense_corrigee(c.vigueur, "jds.vig", &effets_pj),
         reflexes: defense_corrigee(c.reflexes, "jds.ref", &effets_pj),
         volonte: defense_corrigee(c.volonte, "jds.vol", &effets_pj),
@@ -508,6 +511,57 @@ pub fn degats_de_forme(des: &str, bonus: i32) -> String {
     match bonus {
         0 => des.to_string(),
         b => format!("{des}{b:+}"),
+    }
+}
+
+/// Capacités de la créature de la forme active : toutes les lignes sauf les attaques (déjà recalculées).
+pub fn capacites_de_forme(a: &EtatAventure, id: u32) -> Vec<(String, String)> {
+    let proprio = id.to_string();
+    let Some(t) =
+        a.effets.actifs.iter().find(|t| {
+            t.proprietaire == proprio && t.nom.starts_with(fiches::formes::PREFIXE_FORME)
+        })
+    else {
+        return Vec::new();
+    };
+    let creature_nom = t
+        .source
+        .rsplit_once('(')
+        .and_then(|(_, r)| r.strip_suffix(')'))
+        .unwrap_or("");
+    capacites_de_creature(creature_nom)
+}
+
+/// Lignes de la fiche d'une créature hors attaques (corps à corps et distance), recalculées ailleurs.
+pub fn capacites_de_creature(nom: &str) -> Vec<(String, String)> {
+    fiches::Referentiel::partage()
+        .convocations
+        .creatures
+        .iter()
+        .find(|x| x.nom == nom)
+        .map(|cr| {
+            cr.lignes
+                .iter()
+                .filter(|l| {
+                    !l.libelle.starts_with("Corps à corps") && !l.libelle.starts_with("Distance")
+                })
+                .map(|l| (l.libelle.clone(), l.valeur.clone()))
+                .collect()
+        })
+        .unwrap_or_default()
+}
+
+#[cfg(test)]
+mod tests_capacites {
+    use super::*;
+
+    #[test]
+    fn l_elephant_garde_son_piétinement() {
+        let c = capacites_de_creature("Éléphant");
+        assert!(c
+            .iter()
+            .any(|(l, v)| l == "Attaques spéciales" && v.contains("piétinement (2d8+15")));
+        assert!(!c.iter().any(|(l, _)| l.starts_with("Corps à corps")));
     }
 }
 

@@ -161,6 +161,13 @@ function BandeauDefenses({ pj }: { pj: PjAventure }) {
       {pj.attaquesForme.map((a) => (
         <span key={a.nom} title="Attaque de la forme (recalculée avec vos stats)">{a.nom} <strong>{signe(a.toucher)}</strong> ({a.degats})</span>
       ))}
+      {pj.capacitesForme.length > 0 && (
+        <div className="doux defenses-effets" aria-label={`Capacités de la forme de ${pj.nom}`}>
+          {pj.capacitesForme.map(([l, v], n) => (
+            <div key={n}>{l ? `${l} : ${v}` : v}</div>
+          ))}
+        </div>
+      )}
       {pj.caracteristiques.map(([k, m]) => (
         <span key={k} title={`Modificateur de ${k}`}>{k} <strong>{signe(m)}</strong></span>
       ))}
