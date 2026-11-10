@@ -160,19 +160,37 @@ pub fn aventure_actualiser_ressources(s: S, pj: u32) -> Retour {
     let Some(ressources) = x.avec_etat(|e| {
         let etat = e.fiche_de(IdPersonnage(pj))?;
         let v = etat.fiche.calculer(fiches::Referentiel::partage()).ok()?;
-        let lignage = etat.fiche.lignage.clone()?;
-        let niveau = etat.fiche.niveau_de_classe("ensorceleur");
-        let cha = v
-            .modificateurs
-            .get(&fiches::Carac::Cha)
-            .copied()
-            .unwrap_or(0);
-        Some(aventure::ressources_de_lignage(&lignage, niveau, cha))
+        let mut liste = Vec::new();
+        // pouvoirs de lignage (ensorceleur)
+        if let Some(lignage) = etat.fiche.lignage.clone() {
+            let niveau = etat.fiche.niveau_de_classe("ensorceleur");
+            let cha = v
+                .modificateurs
+                .get(&fiches::Carac::Cha)
+                .copied()
+                .unwrap_or(0);
+            liste.extend(aventure::ressources_de_lignage(&lignage, niveau, cha));
+        }
+        // pouvoirs de classe limités par jour (forme animale du druide, canalisation…)
+        for p in &v.pouvoirs {
+            if let Some(max) = p.max.and_then(|m| u32::try_from(m).ok()).filter(|m| *m > 0) {
+                liste.push((
+                    p.cle.clone(),
+                    aventure::Ressource {
+                        unite: aventure::UniteRessource::Utilisations,
+                        max,
+                        utilisees: 0,
+                        source: format!("pouvoir de classe : {}", p.nom),
+                    },
+                ));
+            }
+        }
+        Some(liste)
     }) else {
         return Retour::erreur("Aucune campagne ouverte");
     };
     let Some(ressources) = ressources else {
-        return Retour::erreur("Ce personnage n'a pas de pouvoir de lignage à suivre");
+        return Retour::erreur("Fiche de personnage introuvable ou illisible");
     };
     if ressources.is_empty() {
         return Retour::erreur("Aucun pouvoir à utilisations quotidiennes à ce niveau");

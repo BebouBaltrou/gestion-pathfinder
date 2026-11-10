@@ -242,6 +242,9 @@ fn nom_sort_fr(nom_en: &str) -> String {
 
 /// Nom français d'un pouvoir de lignage (la source indique le lignage : « lignage aberrant, … »).
 fn nom_pouvoir_fr(source: &str, nom_en: &str) -> String {
+    if let Some(nom) = source.strip_prefix("pouvoir de classe : ") {
+        return nom.to_string();
+    }
     source
         .strip_prefix("lignage ")
         .and_then(|s| s.split(',').next())
@@ -1235,4 +1238,17 @@ pub fn exporter_actions(etat: &Etat, numero: u32) -> Option<String> {
         .iter()
         .find(|c| c.numero == numero)
         .map(|c| c.actions.clone())
+}
+
+#[cfg(test)]
+mod tests_pouvoirs_de_classe {
+    use super::nom_pouvoir_fr;
+
+    #[test]
+    fn le_pouvoir_de_classe_garde_son_nom() {
+        assert_eq!(
+            nom_pouvoir_fr("pouvoir de classe : Forme animale", "forme_animale"),
+            "Forme animale"
+        );
+    }
 }
