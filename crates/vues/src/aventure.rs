@@ -514,7 +514,7 @@ fn attaques_de_forme(
     id: u32,
     effets: &[Effet],
 ) -> Vec<AttaqueVue> {
-    use fiches::formes::{Attaque, PREFIXE_FORME};
+    use fiches::formes::PREFIXE_FORME;
     let proprio = id.to_string();
     let Some(t) = a
         .effets
@@ -557,11 +557,10 @@ fn attaques_de_forme(
     attaques_creature(&cr.attaques)
         .into_iter()
         .map(|(nom, des, texte)| {
-            let genre = fiches::formes::genre_selon_fiche(&texte);
-            let bonus = match genre {
-                Attaque::Principale => mod_force,
-                Attaque::Secondaire => mod_force.div_euclid(2),
-            };
+            // ×1 pour toutes les attaques : la règle du ½ (secondaire) n'est pas confirmée par le livre.
+            // Le mécanisme reste dans fiches::formes::genre_selon_fiche, à réactiver si besoin.
+            let _ = &texte;
+            let bonus = mod_force;
             AttaqueVue {
                 nom,
                 toucher: bba + mod_force,
