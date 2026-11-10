@@ -758,6 +758,7 @@ fn main() {
             aventure::aventure_evenement,
             aventure::aventure_utiliser_objet,
             aventure::aventure_lancer_sort,
+            aventure::catalogue_sorts,
             aventure::aventure_actualiser_ressources,
             aventure::aventure_apercu_recul,
             aventure::combat_vue,

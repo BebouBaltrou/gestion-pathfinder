@@ -541,6 +541,10 @@ export function DialogueObjet({
   const [genre, setGenre] = useState<Consommable["genre"]>("potion");
   const [nom, setNom] = useState("");
   const [sort, setSort] = useState("");
+  const [catalogueSorts, setCatalogueSorts] = useState<{ nomEn: string; nom: string; niveauMin: number }[]>([]);
+  useEffect(() => {
+    api.catalogueSorts().then(setCatalogueSorts).catch(() => setCatalogueSorts([]));
+  }, []);
   const [niveauSort, setNiveauSort] = useState<number | null>(1);
   const [cl, setCl] = useState<number | null>(1);
   const [arcanique, setArcanique] = useState(true);
@@ -611,8 +615,25 @@ export function DialogueObjet({
       {avecSort && (
         <div className="champs">
           <label className="champ-g">
-            <span>Sort contenu (nom anglais du catalogue : Cure Light Wounds…)</span>
-            <input className="champ-jeu" value={sort} onChange={(e) => setSort(e.target.value)} />
+            <span>Sort contenu</span>
+            <select
+              className="champ-jeu"
+              value={sort}
+              onChange={(e) => {
+                const choisi = catalogueSorts.find((s) => s.nomEn === e.target.value);
+                setSort(e.target.value);
+                if (choisi) setNiveauSort(choisi.niveauMin);
+              }}
+            >
+              <option value="">— choisir un sort —</option>
+              {catalogueSorts
+                .filter((s) => s.niveauMin <= (genre === "potion" ? 3 : genre === "baguette" ? 4 : 9))
+                .map((s) => (
+                  <option key={s.nomEn} value={s.nomEn}>
+                    {s.nom} (niveau {s.niveauMin})
+                  </option>
+                ))}
+            </select>
           </label>
           <SaisieNombre etiquette="Niveau du sort" min={0} max={9} valeur={niveauSort} onChange={setNiveauSort} rappel={genre === "potion" ? "3 au plus (potion)" : genre === "baguette" ? "4 au plus (baguette)" : undefined} />
           <SaisieNombre etiquette="Niveau de lanceur de l'objet" min={1} max={20} valeur={cl} onChange={setCl} rappel={genre === "baton" ? "8 au moins (bâton)" : undefined} />

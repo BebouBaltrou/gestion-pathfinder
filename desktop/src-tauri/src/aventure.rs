@@ -636,3 +636,35 @@ pub fn aventure_lancer_sort(s: S, lancement: LancementHorsCombat) -> Retour {
         &message,
     )
 }
+
+/// Un sort du catalogue pour la liste déroulante d'un objet magique.
+#[derive(serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SortCatalogueVue {
+    pub nom_en: String,
+    pub nom: String,
+    /// Niveau de sort le plus bas parmi les classes qui le lancent.
+    pub niveau_min: u32,
+}
+
+/// Catalogue des sorts (noms anglais, noms français, niveau minimum), trié par nom français.
+#[tauri::command]
+pub fn catalogue_sorts() -> Vec<SortCatalogueVue> {
+    let traductions = fiches::traductions::Traductions::partage();
+    let mut sorts: Vec<SortCatalogueVue> = fiches::Referentiel::partage()
+        .tous_les_sorts()
+        .iter()
+        .filter_map(|s| {
+            let niveau_min = s.niveaux.values().copied().min()?;
+            Some(SortCatalogueVue {
+                nom: traductions
+                    .sort(&s.nom_en)
+                    .map_or_else(|| s.nom_en.clone(), |f| f.nom.clone()),
+                nom_en: s.nom_en.clone(),
+                niveau_min,
+            })
+        })
+        .collect();
+    sorts.sort_by(|a, b| a.nom.cmp(&b.nom));
+    sorts
+}

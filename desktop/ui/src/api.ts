@@ -619,6 +619,7 @@ export const api = {
   noterObjet: (id: number, note: string) => appeler<Retour>("noter_objet", { id, note }),
   exporterNotes: (critere: CritereNotes) => appeler<Retour>("exporter_notes", { critere }),
   pageInventaire: () => appeler<PageInventaire | null>("page_inventaire"),
+  catalogueSorts: () => appeler<{ nomEn: string; nom: string; niveauMin: number }[]>("catalogue_sorts"),
   catalogueObjets: (requete: string, typeObjet: string | null, limite = 60) =>
     appeler<ModeleObjetVue[]>("catalogue_objets", { requete, typeObjet, limite }),
   typesObjets: () => appeler<string[]>("types_objets"),
