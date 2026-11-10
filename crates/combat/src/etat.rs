@@ -54,6 +54,11 @@ pub enum ActionCombat {
     },
     /// Lancement d'un sort (voir `EtatCombat::apercu_sort` pour ce qu'il faut lancer avant).
     Lancer(ParamsLancer),
+    /// Pouvoir de forme animale du druide (bouton « Utiliser »), sans sort ni emplacement.
+    FormeAnimale {
+        pj: IdPj,
+        forme: String,
+    },
     /// Forme animale ou élémentaire (sort de forme) : effets chiffrés appliqués au personnage.
     Forme {
         pj: IdPj,
@@ -639,6 +644,9 @@ impl EtatCombat {
                 }
             }
             ActionCombat::Lancer(params) => self.lancer(params, ctx)?,
+            ActionCombat::FormeAnimale { pj, forme } => {
+                self.prendre_forme_animale(*pj, forme, ctx)?
+            }
             ActionCombat::Forme { pj, sort, forme } => self.prendre_forme(*pj, sort, forme, ctx)?,
             ActionCombat::Convoquer {
                 lanceur,

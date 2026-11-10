@@ -571,3 +571,31 @@ pub fn combat_formes(sort: String) -> Vec<FormeOption> {
         })
         .collect()
 }
+
+/// Forme que le pouvoir de forme animale du druide permet de prendre (toutes les formes du livre).
+#[derive(serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct FormePouvoir {
+    pub id: String,
+    pub nom: String,
+    pub sort: String,
+    pub taille: Option<String>,
+    pub niveau_druide: u32,
+    pub texte: String,
+}
+
+#[tauri::command]
+pub fn combat_formes_animales() -> Vec<FormePouvoir> {
+    fiches::Referentiel::partage()
+        .formes
+        .iter()
+        .map(|f| FormePouvoir {
+            id: f.id.clone(),
+            nom: f.nom.clone(),
+            sort: f.sort_en.clone(),
+            taille: f.taille.clone(),
+            niveau_druide: f.niveau_druide,
+            texte: f.texte.clone(),
+        })
+        .collect()
+}

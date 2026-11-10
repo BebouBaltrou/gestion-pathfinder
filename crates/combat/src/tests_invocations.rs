@@ -217,3 +217,107 @@ fn le_contexte_du_combat_connait_les_invoques_et_les_personnages() {
     assert_eq!(etendu(1).unwrap().nom, "Mialee");
     assert!(etendu(42).is_none());
 }
+
+/// Combat avec le pouvoir de forme animale de Mialee (pj 1) : 2 utilisations par jour.
+fn combat_avec_pouvoir(ctx: &dyn Fn(IdPj) -> Option<aventure::ContextePj>) -> Combat {
+    let mut e = EtatAventure::nouveau(Instant::depuis(1, 8, 0).unwrap(), false);
+    for pj in [1, 2] {
+        e.appliquer(&EvenementAventure::Entree { pj }, ctx).unwrap();
+    }
+    let mut ressources = std::collections::BTreeMap::new();
+    ressources.insert(
+        "forme_animale".to_string(),
+        aventure::Ressource {
+            unite: aventure::UniteRessource::Utilisations,
+            max: 2,
+            utilisees: 0,
+            source: "pouvoir de druide".into(),
+        },
+    );
+    e.appliquer(
+        &EvenementAventure::RessourcesDefinies {
+            pj: 1,
+            ressources: ressources.into_iter().collect(),
+        },
+        ctx,
+    )
+    .unwrap();
+    let mut c = Combat::nouveau(&e, vec![1, 2], ctx).unwrap();
+    c.appliquer(ActionCombat::Initiative { pj: 1, d20: 10 }, ctx)
+        .unwrap();
+    c.appliquer(ActionCombat::Initiative { pj: 2, d20: 5 }, ctx)
+        .unwrap();
+    c.appliquer(ActionCombat::Demarrer { surprise: None }, ctx)
+        .unwrap();
+    c
+}
+
+/// Forme animale par son identifiant, avec sa taille (pour tester le bonus de taille).
+fn forme_par_taille(taille: &str) -> fiches::formes::FormeAnimale {
+    fiches::Referentiel::partage()
+        .formes
+        .iter()
+        .find(|f| f.categorie == "animal" && f.taille.as_deref() == Some(taille))
+        .unwrap()
+        .clone()
+}
+
+#[test]
+fn le_pouvoir_de_forme_consomme_une_utilisation_et_applique_la_forme() {
+    let ctx = ctx_avec(11, 0);
+    let mut c = combat_avec_pouvoir(&ctx);
+    let f = forme_par_taille("M");
+    c.appliquer(
+        ActionCombat::FormeAnimale {
+            pj: 1,
+            forme: f.id.clone(),
+        },
+        &ctx,
+    )
+    .unwrap();
+    let e = c.etat();
+    assert_eq!(e.aventure.pjs[&1].ressources["forme_animale"].utilisees, 1);
+    assert_eq!(
+        e.aventure
+            .effets
+            .actifs
+            .iter()
+            .filter(|t| t.proprietaire == "1")
+            .count(),
+        1
+    );
+}
+
+#[test]
+fn la_taille_change_ca_et_attaque() {
+    // Taille P : +1 à la CA et à l'attaque par rapport à M (référence du druide)
+    let p = forme_par_taille("P");
+    let effets = crate::invocations::effets_de_forme(&p);
+    assert!(effets.iter().any(|e| e.cible.0 == "ca"
+        && e.type_bonus == fiches::effet::TypeBonus::Taille
+        && e.valeur == 1));
+    assert!(effets.iter().any(|e| e.cible.0 == "bba" && e.valeur == 1));
+    // Taille M : aucun bonus de taille ajouté (seulement les effets du livre)
+    let m = forme_par_taille("M");
+    let em = crate::invocations::effets_de_forme(&m);
+    assert!(!em.iter().any(|e| e.cible.0 == "bba"));
+}
+
+#[test]
+fn le_pouvoir_s_arrete_quand_les_utilisations_sont_epuisees() {
+    let ctx = ctx_avec(11, 0);
+    let mut c = combat_avec_pouvoir(&ctx);
+    let f = forme_par_taille("M");
+    c.appliquer(
+        ActionCombat::FormeAnimale {
+            pj: 1,
+            forme: f.id.clone(),
+        },
+        &ctx,
+    )
+    .unwrap();
+    // une seule forme à la fois : refusé même s'il reste des utilisations
+    assert!(c
+        .appliquer(ActionCombat::FormeAnimale { pj: 1, forme: f.id }, &ctx)
+        .is_err());
+}

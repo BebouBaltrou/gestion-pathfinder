@@ -23,7 +23,7 @@ import { Alertes, Dialogue, Gemmes, SaisieDe, SaisieNombre } from "../../composa
 import { act, ev } from "../../evenements-jeu";
 import { Demandes } from "../Aventure";
 import { CartePj } from "./CartePj";
-import { BlocInvocations, DialogueConvocation, DialogueForme } from "./Invocations";
+import { BlocInvocations, DialogueConvocation, DialogueForme, DialogueFormeAnimale } from "./Invocations";
 import { BlocRecompenses, EtatRecompenses, recompensesVides, versRecompenses } from "./Recompenses";
 import { ChoixDuree, DialogueEffet, DialogueObjet, DialogueSante, dureeDe, Envoyer } from "./dialogues";
 
@@ -40,6 +40,7 @@ type Ouvert =
   | { g: "infliges"; pj: number }
   | { g: "convoquer"; pj: number }
   | { g: "forme"; pj: number }
+  | { g: "formeAnimale"; pj: number }
   | { g: "fin" }
   | { g: "maintenir"; id: number; nom: string; pj: string }
   | null;
@@ -145,7 +146,9 @@ export function Combat({ outils, vue }: { outils: Outils; vue: CombatVue }) {
                 onEffet={() => setOuvert({ g: "effet", pj: pj.id })}
                 onObjet={() => setOuvert({ g: "objetAjout", pj: pj.id })}
                 onRetirerEffet={(e) => envoyer(ev.effetRetire(e.id))}
-                onUtiliserRessource={(r) => envoyer(ev.ressourceUtilisee(pj.id, r.cle, 1))}
+                onUtiliserRessource={(r) =>
+                  r.cle === "forme_animale" ? setOuvert({ g: "formeAnimale", pj: pj.id }) : envoyer(ev.ressourceUtilisee(pj.id, r.cle, 1))
+                }
                 pied={enCours && <EconomieAffichee pj={pj} />}
               />
             </motion.div>
@@ -182,6 +185,7 @@ export function Combat({ outils, vue }: { outils: Outils; vue: CombatVue }) {
         {ouvert?.g === "infliges" && <DialogueInfliges pj={pjs.find((p) => p.id === ouvert.pj)!} agir={agir} onFermer={() => setOuvert(null)} />}
         {ouvert?.g === "preparer" &&<DialoguePreparer pj={pjs.find((p) => p.id === ouvert.pj)!} agir={agir} onFermer={() => setOuvert(null)} />}
         {ouvert?.g === "convoquer" && <DialogueConvocation pj={pjs.find((p) => p.id === ouvert.pj)!} agir={agir} onFermer={() => setOuvert(null)} />}
+        {ouvert?.g === "formeAnimale" && <DialogueFormeAnimale pj={pjs.find((p) => p.id === ouvert.pj)!} agir={agir} onFermer={() => setOuvert(null)} />}
         {ouvert?.g === "forme" && <DialogueForme pj={pjs.find((p) => p.id === ouvert.pj)!} agir={agir} onFermer={() => setOuvert(null)} />}
         {ouvert?.g === "fin" && <DialogueFin vue={vue} outils={outils} onFermer={() => setOuvert(null)} />}
         {ouvert?.g === "maintenir" && <DialogueMaintenirCombat id={ouvert.id} nom={ouvert.nom} pj={ouvert.pj} envoyer={envoyer} onFermer={() => setOuvert(null)} />}

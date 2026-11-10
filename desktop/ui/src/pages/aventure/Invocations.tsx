@@ -1,7 +1,7 @@
 // Convocation d'alliés naturels et formes (sorts de forme) en combat.
 import { useEffect, useState } from "react";
 import { api, Retour } from "../../api";
-import type { ActionCombat, FormeOption, InvocationVue, OptionCreature, PjCombat } from "../../aventure-types";
+import type { ActionCombat, FormeOption, FormePouvoir, InvocationVue, OptionCreature, PjCombat } from "../../aventure-types";
 import { Dialogue, SaisieNombre } from "../../composants/jeu";
 
 /** Sorts de forme proposés, dans l'ordre du livre (nom anglais du catalogue). */
@@ -186,5 +186,65 @@ export function BlocInvocations({ invocations }: { invocations: InvocationVue[] 
         </details>
       ))}
     </div>
+  );
+}
+
+/** Pouvoir de forme animale du druide en combat : on choisit la forme, puis ses effets sont appliqués. */
+export function DialogueFormeAnimale({
+  pj,
+  agir,
+  onFermer,
+}: {
+  pj: PjCombat;
+  agir: (a: ActionCombat) => Promise<Retour | null>;
+  onFermer: () => void;
+}) {
+  const [formes, setFormes] = useState<FormePouvoir[]>([]);
+  const [forme, setForme] = useState("");
+
+  useEffect(() => {
+    api.combatFormesAnimales().then((f) => {
+      setFormes(f);
+      setForme(f[0]?.id ?? "");
+    });
+  }, []);
+
+  const choisie = formes.find((f) => f.id === forme) ?? null;
+
+  const prendre = async () => {
+    if (!choisie) return;
+    const r = await agir({ FormeAnimale: { pj: pj.id, forme: choisie.id } });
+    if (r?.ok) onFermer();
+  };
+
+  return (
+    <Dialogue
+      large
+      titre={`Forme animale — ${pj.nom}`}
+      onFermer={onFermer}
+      actions={
+        <>
+          <button className="bouton" onClick={onFermer}>Fermer</button>
+          <button className="bouton principal" disabled={!choisie} onClick={prendre}>Prendre la forme</button>
+        </>
+      }
+    >
+      <div className="bloc">
+        <label>
+          Forme{" "}
+          <select value={forme} onChange={(e) => setForme(e.target.value)}>
+            {formes.map((f) => (
+              <option key={f.id} value={f.id}>{`${f.nom} (druide niveau ${f.niveauDruide})`}</option>
+            ))}
+          </select>
+        </label>
+        {choisie && (
+          <p className="doux">
+            Taille : {choisie.taille ?? "non précisée"} · Pendant une heure par niveau de druide · consomme une utilisation du jour
+          </p>
+        )}
+        {choisie && <p className="doux">{choisie.texte}</p>}
+      </div>
+    </Dialogue>
   );
 }

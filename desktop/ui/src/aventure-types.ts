@@ -143,6 +143,9 @@ export type OptionCreature = {
   nombreMax: number;
 };
 
+/** Forme du pouvoir de forme animale du druide. */
+export type FormePouvoir = { id: string; nom: string; sort: string; taille: string | null; niveauDruide: number; texte: string };
+
 /** Forme qu'un sort de forme permet de prendre. */
 export type FormeOption = { id: string; nom: string; texte: string };
 

@@ -765,6 +765,7 @@ fn main() {
             aventure::combat_apercu_fin,
             aventure::combat_convocations,
             aventure::combat_formes,
+            aventure::combat_formes_animales,
             aventure::combat_terminer,
             aventure::catalogue_actions,
             aventure::catalogue_fp,

@@ -53,6 +53,26 @@ impl Invocation {
     }
 }
 
+/// Effets d'une forme : les effets chiffrés du livre, plus le bonus ou malus de taille à la CA et à
+/// l'attaque (taille de référence : M, celle du druide ; point à confirmer si le druide n'est pas M).
+pub fn effets_de_forme(f: &fiches::formes::FormeAnimale) -> Vec<fiches::effet::Effet> {
+    let mut v = f.effets_chiffres();
+    let ecart = fiches::compagnon::modificateur_de_taille(f.taille.as_deref().unwrap_or("M"))
+        - fiches::compagnon::modificateur_de_taille("M");
+    if ecart != 0 {
+        let source = f.nom_effet();
+        for cible in ["ca", "bba"] {
+            v.push(fiches::effet::Effet::new(
+                cible,
+                fiches::effet::TypeBonus::Taille,
+                ecart,
+                &source,
+            ));
+        }
+    }
+    v
+}
+
 fn erreur<T>(m: impl Into<String>) -> Result<T, ErreurCombat> {
     Err(ErreurCombat::Invalide(m.into()))
 }
@@ -310,7 +330,78 @@ impl EtatCombat {
             nom: f.nom_effet(),
             source: format!("sort {}, forme {}", sort, f.nom),
             duree,
-            effets: f.effets_chiffres(),
+            effets: effets_de_forme(f),
+            etats: Vec::new(),
+            soin_par_round: 0,
+            protections: Vec::new(),
+        };
+        let s = self.aventure.appliquer(&ev, ctx)?;
+        self.fusionner(s);
+        self.noter(format!("{} prend la forme {}.", c.nom, f.nom));
+        Ok(())
+    }
+}
+
+impl EtatCombat {
+    /// Pouvoir de forme animale du druide (bouton « Utiliser » du pouvoir) : consomme une
+    /// utilisation quotidienne et applique la forme pendant 1 heure par niveau de druide.
+    pub(crate) fn prendre_forme_animale(
+        &mut self,
+        pj: IdPj,
+        forme: &str,
+        ctx: &dyn Fn(IdPj) -> Option<ContextePj>,
+    ) -> Result<(), ErreurCombat> {
+        if self.phase != Phase::EnCours {
+            return erreur("le combat n'est pas commencé");
+        }
+        self.verifier_engage(pj)?;
+        let c = ctx(pj).ok_or(ErreurAventure::PjInconnu(pj))?;
+        let f = referentiel()
+            .formes
+            .iter()
+            .find(|f| f.id == forme)
+            .ok_or_else(|| ErreurCombat::Invalide(format!("forme inconnue : {forme}")))?;
+        // niveau de druide : celui de la fiche (point à confirmer si le personnage est multiclassé)
+        let nc = c.niveau;
+        if nc < f.niveau_druide {
+            return erreur(format!(
+                "{} demande le niveau {} de druide",
+                f.nom, f.niveau_druide
+            ));
+        }
+        let prefixe = fiches::formes::PREFIXE_FORME;
+        if self
+            .aventure
+            .effets
+            .actifs
+            .iter()
+            .any(|t| t.proprietaire == pj.to_string() && t.nom.starts_with(prefixe))
+        {
+            return erreur(format!("{} est déjà sous une forme", c.nom));
+        }
+        // action simple ; l'utilisation quotidienne est contrôlée par le mode aventure
+        self.appliquer_interne(
+            &ActionCombat::Agir {
+                pj,
+                type_action: TypeAction::Simple,
+                libelle: format!("Prendre la forme {}", f.nom),
+                deplacement: false,
+            },
+            ctx,
+        )?;
+        let utilisation = aventure::EvenementAventure::RessourceUtilisee {
+            pj,
+            nom: "forme_animale".into(),
+            quantite: 1,
+        };
+        let s = self.aventure.appliquer(&utilisation, ctx)?;
+        self.fusionner(s);
+        let ev = aventure::EvenementAventure::EffetAjoute {
+            pj,
+            nom: f.nom_effet(),
+            source: format!("pouvoir forme animale, {}", f.nom),
+            duree: temps::Duree::Heures(nc),
+            effets: effets_de_forme(f),
             etats: Vec::new(),
             soin_par_round: 0,
             protections: Vec::new(),
