@@ -140,6 +140,8 @@ pub struct PjAventure {
     pub echec_arcanique_pct: u32,
     /// Défenses de la fiche, affichées en combat : vigueur, réflexes, volonté, CA, CA contact, CA pris au dépourvu.
     pub vigueur: i32,
+    /// Modificateurs des six caractéristiques (abrégé, modificateur), du score de la fiche.
+    pub caracteristiques: Vec<(String, i32)>,
     pub reflexes: i32,
     pub volonte: i32,
     pub ca: i32,
@@ -429,6 +431,11 @@ fn pj_vue(
         caster: c.incantation.is_some(),
         niveau_de_lanceur: c.incantation.as_ref().map_or(0, |i| i.niveau_de_lanceur),
         echec_arcanique_pct: c.incantation.as_ref().map_or(0, |i| i.echec_arcanique_pct),
+        caracteristiques: c
+            .scores
+            .iter()
+            .map(|(k, s)| (k.clone(), (s - 10).div_euclid(2)))
+            .collect(),
         vigueur: defense_corrigee(c.vigueur, "jds.vig", &effets_pj),
         reflexes: defense_corrigee(c.reflexes, "jds.ref", &effets_pj),
         volonte: defense_corrigee(c.volonte, "jds.vol", &effets_pj),

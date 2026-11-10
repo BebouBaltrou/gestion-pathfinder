@@ -44,6 +44,7 @@ export type SanteCode = "conscient" | "chancelant" | "hors_de_combat" | "inconsc
 
 export type PjAventure = {
   id: number;
+  caracteristiques: [string, number][];
   nom: string;
   niveau: number;
   pv: number;

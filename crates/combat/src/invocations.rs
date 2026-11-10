@@ -45,6 +45,12 @@ impl Invocation {
             pv_max: self.creature.pv,
             taille: "M".into(),
             niveau_druide: 0,
+            scores: self
+                .creature
+                .caracteristiques
+                .iter()
+                .map(|(k, v)| (k.clone(), *v))
+                .collect(),
             reflexes: self.creature.sauvegardes.get("Réf").copied().unwrap_or(0),
             volonte: self.creature.sauvegardes.get("Vol").copied().unwrap_or(0),
             ca: self.creature.ca,
