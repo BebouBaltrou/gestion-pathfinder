@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { api, EtatApp, Retour } from "./api";
 import { chercherMiseAJour, miseAJourActive, Nouvelle } from "./composants/MiseAJour";
 import { icones } from "./icones";
+import { LimiteErreur } from "./composants/LimiteErreur";
 import { Campagnes } from "./pages/Campagnes";
 import { EnAttente } from "./pages/EnAttente";
 import { Localites } from "./pages/Localites";
@@ -259,6 +260,7 @@ export function App() {
           </div>
         )}
         <main className="contenu">
+          <LimiteErreur cle={pageActive}>
           {pageActive === "tableau" && <Tableau outils={outils} />}
           {pageActive === "organigramme" && <Organigramme />}
           {pageActive === "aventure" && <Aventure outils={outils} />}
@@ -277,6 +279,7 @@ export function App() {
           {pageActive === "modeles" && <Modeles outils={outils} />}
           {pageActive === "recettes" && <Recettes outils={outils} />}
           {!["tableau", "aventure", "campagnes", "localites", "organigramme", "personnages", "inventaire", "notes", "batiments", "recettes", "organisations", "gestionnaires", "historique", "points", "parametres", "referentiel", "modeles"].includes(pageActive) && <EnAttente nom={NOMS_PAGES[pageActive]} />}
+          </LimiteErreur>
         </main>
       </div>
 
