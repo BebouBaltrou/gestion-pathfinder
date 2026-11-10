@@ -65,9 +65,9 @@ export const pjMialee = (pv = 23): PjAventure => ({
   sortsConnus,
   ressources: [{ cle: "Acidic Ray", nom: "Rayon acide", unite: "utilisations", restantes: 4, max: 6, source: "lignage aberrant, Acidic Ray (niveau 1)" }],
   inventaire: [
-    { id: 1, nom: "Potion de soins légers", genre: "potion", genreCode: "potion", sort: "Soins légers", quantite: 2, charges: null, parJour: null, niveauDeLanceur: 1, niveauDuSort: 1, arcanique: true, notes: "", sortEn: "Cure Light Wounds" },
-    { id: 2, nom: "Baguette de projectile magique", genre: "baguette", genreCode: "baguette", sort: "Projectile magique", quantite: 1, charges: [34, 50], parJour: null, niveauDeLanceur: 3, niveauDuSort: 1, arcanique: true, notes: "", sortEn: "Magic Missile" },
-    { id: 3, nom: "Flèches", genre: "munition", genreCode: "munition", sort: null, quantite: 17, charges: null, parJour: null, niveauDeLanceur: 0, niveauDuSort: 0, arcanique: false, notes: "", sortEn: null },
+    { id: 1, nom: "Potion de soins légers", genre: "potion", genreCode: "potion", sort: "Soins légers", quantite: 2, charges: null, parJour: null, niveauDeLanceur: 1 },
+    { id: 2, nom: "Baguette de projectile magique", genre: "baguette", genreCode: "baguette", sort: "Projectile magique", quantite: 1, charges: [34, 50], parJour: null, niveauDeLanceur: 3 },
+    { id: 3, nom: "Flèches", genre: "munition", genreCode: "munition", sort: null, quantite: 17, charges: null, parJour: null, niveauDeLanceur: 0 },
   ],
   degatsContinus: false,
   initiative: 2,

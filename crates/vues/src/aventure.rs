@@ -91,11 +91,6 @@ pub struct ObjetVue {
     pub charges: Option<(u32, u32)>,
     pub par_jour: Option<(u32, u32)>,
     pub niveau_de_lanceur: u32,
-    pub niveau_du_sort: u32,
-    pub arcanique: bool,
-    pub notes: String,
-    /// Nom anglais du sort du catalogue (pour la modification de l'objet).
-    pub sort_en: Option<String>,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -416,10 +411,6 @@ fn pj_vue(
                 charges: o.charges.map(|c| (c.restantes, c.max)),
                 par_jour: o.par_jour.map(|c| (c.restantes, c.max)),
                 niveau_de_lanceur: o.niveau_de_lanceur,
-                niveau_du_sort: o.niveau_du_sort,
-                arcanique: o.arcanique,
-                notes: o.notes.clone(),
-                sort_en: o.sort.clone(),
             })
             .collect(),
         degats_continus: suivi.vital.continu,

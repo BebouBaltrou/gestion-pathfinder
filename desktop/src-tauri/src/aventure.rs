@@ -145,62 +145,6 @@ pub fn aventure_evenement(s: S, evenement: EvenementAventure) -> Retour {
     x.executer(Evenement::Aventure(evenement), &message)
 }
 
-/// Transforme le plan d'une action hors combat en un seul événement de campagne (appliqué d'un bloc).
-fn plan_vers_evenement(plan: combat::Plan) -> Evenement {
-    let mut evenements: Vec<Evenement> = plan
-        .evenements
-        .into_iter()
-        .map(Evenement::Aventure)
-        .collect();
-    evenements.extend(plan.fiche.into_iter().map(|(pj, evenement)| Evenement::Fiche {
-        pj: IdPersonnage(pj),
-        evenement,
-    }));
-    Evenement::Groupe {
-        libelle: "Action hors combat".into(),
-        evenements,
-    }
-}
-
-/// Lance un sort hors combat : emplacement décompté, effets automatiques ajoutés à l'aventure
-/// (ils restent pendant un combat commencé ensuite).
-#[tauri::command]
-pub fn aventure_lancer_sort(s: S, params: combat::ParamsLancer) -> Retour {
-    let mut x = session(&s);
-    if x.combat.is_some() {
-        return Retour::erreur("Un combat est en cours : l'aventure reprend à sa fin");
-    }
-    let contextes = x.contextes();
-    let ctx = |id: IdPj| contextes.get(&id).cloned();
-    let plan = match combat::lancer_hors_combat(&params, &ctx) {
-        Ok(p) => p,
-        Err(e) => return Retour::erreur(e.to_string()),
-    };
-    x.executer(plan_vers_evenement(plan), "Sort lancé")
-}
-
-/// Utilise une potion, un parchemin, une baguette, un bâton ou un objet à charges hors combat.
-#[tauri::command]
-pub fn aventure_utiliser_objet(s: S, params: combat::ParamsObjet) -> Retour {
-    let mut x = session(&s);
-    if x.combat.is_some() {
-        return Retour::erreur("Un combat est en cours : l'aventure reprend à sa fin");
-    }
-    let contextes = x.contextes();
-    let ctx = |id: IdPj| contextes.get(&id).cloned();
-    let resultat = x.avec_etat(|e| {
-        e.aventure
-            .as_ref()
-            .map(|a| combat::utiliser_objet_hors_combat(a, &params, &ctx))
-    });
-    let plan = match resultat.flatten() {
-        None => return Retour::erreur("L'aventure n'est pas commencée"),
-        Some(Ok(p)) => p,
-        Some(Err(e)) => return Retour::erreur(e.to_string()),
-    };
-    x.executer(plan_vers_evenement(plan), "Objet utilisé")
-}
-
 /// Ce qu'un recul de l'horloge toucherait (rien n'est modifié).
 #[tauri::command]
 pub fn aventure_apercu_recul(s: S, instant: i64) -> Option<va::ReculVue> {

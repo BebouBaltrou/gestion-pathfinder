@@ -11,8 +11,6 @@ export function CartePj({
   grandeJauge = false,
   onRetirerEffet,
   onUtiliserObjet,
-  onModifierObjet,
-  onLancerSort,
   onUtiliserRessource,
   onRendreRessource,
   onSante,
@@ -27,8 +25,6 @@ export function CartePj({
   grandeJauge?: boolean;
   onRetirerEffet?: (e: EffetVue) => void;
   onUtiliserObjet?: (o: ObjetVue) => void;
-  onModifierObjet?: (o: ObjetVue) => void;
-  onLancerSort?: () => void;
   onUtiliserRessource?: (r: RessourceVue) => void;
   onRendreRessource?: (r: RessourceVue) => void;
   onSante?: (mode: "degats" | "soin" | "temp" | "continu") => void;
@@ -74,11 +70,6 @@ export function CartePj({
           {pj.emplacements.map((e) => (
             <Gemmes key={e.niveau} niveau={e.niveau} restants={e.restants} total={e.total} dd={e.dd} />
           ))}
-          {onLancerSort && pj.sortsConnus.length > 0 && (
-            <div className="rangee-boutons">
-              <button className="bouton mini" onClick={onLancerSort}>Lancer un sort</button>
-            </div>
-          )}
         </div>
       )}
       {(pj.ressources.length > 0 || onActualiserRessources) && (
@@ -130,9 +121,6 @@ export function CartePj({
                 <button className="bouton mini" onClick={() => onUtiliserObjet(o)}>
                   {o.genreCode === "munition" ? "Tirer 1" : "Utiliser"}
                 </button>
-              )}
-              {onModifierObjet && (
-                <button className="bouton mini discret" onClick={() => onModifierObjet(o)}>Modifier</button>
               )}
             </div>
           ))}
