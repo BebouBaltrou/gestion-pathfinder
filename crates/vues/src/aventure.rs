@@ -8,7 +8,7 @@ use campagne::etat::Etat;
 use campagne::modele::IdPersonnage;
 use combat::{Combat, Demande, EtatCombat, Phase};
 use fiches::traductions::Traductions;
-use fiches::Referentiel;
+use fiches::{Effet, Referentiel};
 use temps::{texte_rounds, Echeance, Instant};
 
 #[derive(Debug, Clone, PartialEq)]
@@ -340,6 +340,7 @@ fn pj_vue(
 ) -> PjAventure {
     let sante = suivi.vital.sante(c.pv_max, c.con_score);
     let maintenant = a.horloge.maintenant;
+    let effets_pj = effets_actifs_du_pj(a, id);
     let (emplacements, sorts_connus) = match &c.incantation {
         Some(inc) => {
             let r = Referentiel::partage();
@@ -428,13 +429,29 @@ fn pj_vue(
         caster: c.incantation.is_some(),
         niveau_de_lanceur: c.incantation.as_ref().map_or(0, |i| i.niveau_de_lanceur),
         echec_arcanique_pct: c.incantation.as_ref().map_or(0, |i| i.echec_arcanique_pct),
-        vigueur: c.vigueur,
-        reflexes: c.reflexes,
-        volonte: c.volonte,
-        ca: c.ca,
+        vigueur: defense_corrigee(c.vigueur, "jds.vig", &effets_pj),
+        reflexes: defense_corrigee(c.reflexes, "jds.ref", &effets_pj),
+        volonte: defense_corrigee(c.volonte, "jds.vol", &effets_pj),
+        ca: defense_corrigee(c.ca, "ca", &effets_pj),
         ca_contact: c.ca_contact,
         ca_depourvu: c.ca_depourvu,
     }
+}
+
+/// Effets actifs qui visent ce personnage.
+fn effets_actifs_du_pj(a: &EtatAventure, id: u32) -> Vec<Effet> {
+    let proprio = id.to_string();
+    a.effets
+        .actifs
+        .iter()
+        .filter(|e| e.proprietaire == proprio)
+        .flat_map(|e| e.contenu.effets.iter().cloned())
+        .collect()
+}
+
+/// Défense de la fiche corrigée par les effets actifs, avec le non-cumul par type de bonus du cœur.
+fn defense_corrigee(base: i32, cible: &str, effets: &[Effet]) -> i32 {
+    fiches::calculer(&[("fiche", base)], effets, &fiches::Cible::new(cible)).total
 }
 
 fn alertes(a: &EtatAventure, nom_de: &dyn Fn(u32) -> String) -> Vec<AlerteVue> {
@@ -1250,5 +1267,25 @@ mod tests_pouvoirs_de_classe {
             nom_pouvoir_fr("pouvoir de classe : Forme animale", "forme_animale"),
             "Forme animale"
         );
+    }
+}
+
+#[cfg(test)]
+mod tests_defenses {
+    use super::defense_corrigee;
+    use fiches::{Effet, TypeBonus};
+
+    #[test]
+    fn les_effets_actifs_corrigent_la_ca_sans_cumuler_deux_armures() {
+        let effets = vec![
+            Effet::new("ca", TypeBonus::Armure, 4, "Cotte de mailles"),
+            Effet::new("ca", TypeBonus::Armure, 2, "Armure de mage"),
+            Effet::new("ca", TypeBonus::Naturel, 2, "Peau d'écorce"),
+            Effet::new("jds.vol", TypeBonus::Resistance, 1, "Bénédiction"),
+        ];
+        // Armure : le meilleur bonus seulement (+4) ; naturel cumulable (+2).
+        assert_eq!(defense_corrigee(15, "ca", &effets), 21);
+        assert_eq!(defense_corrigee(3, "jds.vol", &effets), 4);
+        assert_eq!(defense_corrigee(3, "jds.ref", &effets), 3);
     }
 }

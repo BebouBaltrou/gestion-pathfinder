@@ -153,6 +153,11 @@ function BandeauDefenses({ pj }: { pj: PjAventure }) {
       <span title="Jet de Vigueur">Vig. <strong>{signe(pj.vigueur)}</strong></span>
       <span title="Jet de Réflexes">Réf. <strong>{signe(pj.reflexes)}</strong></span>
       <span title="Jet de Volonté">Vol. <strong>{signe(pj.volonte)}</strong></span>
+      <span title="Résistance à la magie : la fiche ne la calcule pas encore">RM <em className="doux">point à confirmer</em></span>
+      <span title="Manœuvre de combat : la fiche ne la calcule pas encore (il manque le BBA)">CMD <em className="doux">point à confirmer</em></span>
+      <div className="doux defenses-effets">
+        Effets : {pj.effets.length > 0 ? pj.effets.map((e) => e.nom).join(", ") : "aucun"} · États : {pj.etats.length > 0 ? pj.etats.map((e) => e.nom).join(", ") : "aucun"}
+      </div>
     </div>
   );
 }

@@ -191,4 +191,5 @@ select.champ-jeu { padding-right: 8px; }
 
 /* défenses affichées sous la barre de vie en combat */
 .defenses { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 6px 0; font-size: 0.85rem; opacity: 0.9; }
+.defenses-effets { width: 100%; font-size: 0.8rem; }
 .defenses strong { font-variant-numeric: tabular-nums; }
