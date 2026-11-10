@@ -12,6 +12,8 @@ pub mod catalogue;
 pub mod choix_classe;
 pub mod compagnon;
 #[cfg(feature = "serde")]
+pub mod convocation;
+#[cfg(feature = "serde")]
 pub mod divin;
 #[cfg(feature = "serde")]
 pub mod donnees;
