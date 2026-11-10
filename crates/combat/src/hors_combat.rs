@@ -38,15 +38,8 @@ pub fn lancer_hors_combat(
         return invalide("le lancement défensif se joue en combat");
     }
     // les emplacements restants viennent de la fiche : aucune dépense en cours à déduire
-    let p = EtatCombat::preparer_sort(
-        a.pj,
-        &a.sort,
-        &a.metamagies,
-        a.niveau_heighten,
-        ctx,
-        &|_| 0,
-        &|_, _| 0,
-    )?;
+    let p =
+        EtatCombat::preparer_sort(a.pj, &a.sort, &a.metamagies, a.niveau_heighten, ctx, &|_| 0)?;
     let c = ctx(a.pj).ok_or(ErreurAventure::PjInconnu(a.pj))?;
     if p.restants == 0 {
         return invalide(format!(

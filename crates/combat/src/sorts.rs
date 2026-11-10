@@ -363,21 +363,6 @@ pub(crate) struct EffetsSort {
 impl EtatCombat {
     /// `depenses(niveau)` : emplacements de ce niveau déjà dépensés depuis le début du combat
     /// (0 hors combat : la fiche donne déjà les restants).
-    /// Lancers déjà faits dans ce combat d'un sort préparé (même nom, même niveau de sort).
-    fn lances_prepares(&self, pj: IdPj, nom_en: &str, niveau: u32) -> usize {
-        self.fiche
-            .iter()
-            .filter(|(p, e)| {
-                *p == pj
-                    && matches!(
-                        e,
-                        fiches::journal::EvenementFiche::SortLance { niveau_de_sort, sort: s, .. }
-                            if *niveau_de_sort == niveau && s.eq_ignore_ascii_case(nom_en)
-                    )
-            })
-            .count()
-    }
-
     pub(crate) fn preparer_sort(
         pj: IdPj,
         nom_sort: &str,
@@ -385,7 +370,6 @@ impl EtatCombat {
         heighten: Option<u32>,
         ctx: &dyn Fn(IdPj) -> Option<ContextePj>,
         depenses: &dyn Fn(u32) -> u32,
-        lances: &dyn Fn(&str, u32) -> usize,
     ) -> Result<Preparation, ErreurCombat> {
         let c = ctx(pj).ok_or(ErreurAventure::PjInconnu(pj))?;
         let Some(inc) = c.incantation else {
@@ -420,7 +404,18 @@ impl EtatCombat {
                 .iter()
                 .filter(|(n, s)| *n == niveau_du_sort && s.eq_ignore_ascii_case(&sort.nom_en))
                 .count();
-            let lances = lances(&sort.nom_en, niveau_du_sort);
+            let lances = self
+                .fiche
+                .iter()
+                .filter(|(p, e)| {
+                    *p == pj
+                        && matches!(
+                            e,
+                            fiches::journal::EvenementFiche::SortLance { niveau_de_sort, sort: s, .. }
+                                if *niveau_de_sort == niveau_du_sort && s.eq_ignore_ascii_case(&sort.nom_en)
+                        )
+                })
+                .count();
             if prepares <= lances {
                 return invalide(format!(
                     "{} n'a pas {} préparé au niveau {niveau_du_sort} (ou il est déjà lancé)",
@@ -539,20 +534,12 @@ impl EtatCombat {
         niveau_heighten: Option<u32>,
         ctx: &dyn Fn(IdPj) -> Option<ContextePj>,
     ) -> Result<ApercuSort, ErreurCombat> {
-        let p = Self::preparer_sort(
-            pj,
-            sort,
-            metamagies,
-            niveau_heighten,
-            ctx,
-            &|n| {
-                self.emplacements_depenses
-                    .get(&(pj, n))
-                    .copied()
-                    .unwrap_or(0)
-            },
-            &|nom, n| self.lances_prepares(pj, nom, n),
-        )?;
+        let p = Self::preparer_sort(pj, sort, metamagies, niveau_heighten, ctx, &|n| {
+            self.emplacements_depenses
+                .get(&(pj, n))
+                .copied()
+                .unwrap_or(0)
+        })?;
         let effet = effet_du_sort(&p.sort.nom_en);
         let cl = p.inc.niveau_de_lanceur;
         let mut suggeree = p
@@ -602,20 +589,12 @@ impl EtatCombat {
             return invalide("le combat n'est pas commencé");
         }
         self.verifier_engage(a.pj)?;
-        let p = Self::preparer_sort(
-            a.pj,
-            &a.sort,
-            &a.metamagies,
-            a.niveau_heighten,
-            ctx,
-            &|n| {
-                self.emplacements_depenses
-                    .get(&(a.pj, n))
-                    .copied()
-                    .unwrap_or(0)
-            },
-            &|nom, n| self.lances_prepares(a.pj, nom, n),
-        )?;
+        let p = Self::preparer_sort(a.pj, &a.sort, &a.metamagies, a.niveau_heighten, ctx, &|n| {
+            self.emplacements_depenses
+                .get(&(a.pj, n))
+                .copied()
+                .unwrap_or(0)
+        })?;
         let c = ctx(a.pj).ok_or(ErreurAventure::PjInconnu(a.pj))?;
         if p.restants == 0 {
             return invalide(format!(
