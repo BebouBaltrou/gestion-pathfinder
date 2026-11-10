@@ -278,7 +278,9 @@ export function DialogueFormeAnimale({
                 .join(" · ")}
             </p>
             <p>{fiche.sauvegardes.map(([k, v]) => `${k} ${v >= 0 ? "+" : ""}${v}`).join(", ")}</p>
-            {fiche.attaques && <p>{fiche.attaques}</p>}
+            {fiche.lignes.map(([l, v], n) => (
+              <p key={n}>{l ? `${l} : ${v}` : v}</p>
+            ))}
             <p className="doux">Attaques adaptées à la forme et au sort : texte du livre à fournir (point à confirmer).</p>
           </div>
         )}

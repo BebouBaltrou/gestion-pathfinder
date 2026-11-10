@@ -218,9 +218,8 @@ fn creature_depuis(c: &Value, niveau: u32) -> Creature {
                 "Corps à corps" | "Distance" => attaques.push(format!("{libelle} : {valeur}")),
                 _ => {}
             }
-            if !libelle.is_empty() {
-                lignes.push(Ligne { libelle, valeur });
-            }
+            // toutes les lignes, y compris celles sans libellé (taille, suites de capacités)
+            lignes.push(Ligne { libelle, valeur });
         }
     }
     let complete = pv.is_some()
@@ -359,5 +358,18 @@ mod tests {
         let o3 = c.options_pour(3);
         assert!(o3.iter().any(|x| x.nombre == Nombre::D4Plus1));
         assert!(o3.iter().any(|x| x.nombre == Nombre::D3));
+    }
+
+    #[test]
+    fn toutes_les_capacites_de_l_elephant_sont_gardees() {
+        let c = Convocations::depuis_json(JSON).unwrap();
+        let e = c.creatures.iter().find(|x| x.nom == "Éléphant").unwrap();
+        assert!(
+            e.lignes
+                .iter()
+                .any(|l| l.libelle == "Attaques spéciales"
+                    && l.valeur.contains("piétinement (2d8+15"))
+        );
+        assert!(e.lignes.iter().any(|l| l.valeur.contains("TG")));
     }
 }
