@@ -615,6 +615,8 @@ pub struct InvocationVue {
     pub init: i32,
     pub sauvegardes: Vec<(String, i32)>,
     pub caracteristiques: Vec<(String, i32)>,
+    /// Modificateurs de ces caractéristiques (score − 10, arrondi vers le bas, divisé par 2).
+    pub modificateurs: Vec<(String, i32)>,
     pub vitesse: String,
     pub attaques: String,
     /// Toutes les lignes saisies (libellé, valeur), pour la fiche complète.
@@ -757,6 +759,12 @@ pub fn combat(etat: &Etat, c: &Combat) -> CombatVue {
                 .caracteristiques
                 .iter()
                 .map(|(k, v)| (k.clone(), *v))
+                .collect(),
+            modificateurs: i
+                .creature
+                .caracteristiques
+                .iter()
+                .map(|(k, v)| (k.clone(), (v - 10).div_euclid(2)))
                 .collect(),
             vitesse: i.creature.vitesse.clone(),
             attaques: i.creature.attaques.clone(),

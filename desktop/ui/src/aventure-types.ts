@@ -132,6 +132,7 @@ export type InvocationVue = {
   init: number;
   sauvegardes: [string, number][];
   caracteristiques: [string, number][];
+  modificateurs: [string, number][];
   vitesse: string;
   attaques: string;
   lignes: [string, string][];

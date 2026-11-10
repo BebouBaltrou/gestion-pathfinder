@@ -781,3 +781,31 @@ pub fn catalogue_sorts() -> Vec<SortCatalogueVue> {
     sorts.sort_by(|a, b| a.nom.cmp(&b.nom));
     sorts
 }
+
+/// Forme animale du druide prise hors combat (pouvoir « Utiliser », pas de combat en cours).
+#[tauri::command]
+pub fn aventure_prendre_forme(s: S, pj: u32, forme: String) -> Retour {
+    let mut x = session(&s);
+    if x.combat.is_some() {
+        return Retour::erreur(
+            "Un combat est en cours : prendre la forme depuis le combat",
+        );
+    }
+    let Some(etat) = x.avec_etat(|e| e.aventure.clone()).flatten() else {
+        return Retour::erreur("Aucune aventure en cours");
+    };
+    let contextes = x.contextes();
+    let evenements = match combat::hors_combat::evenements_forme_animale(&etat, pj, &forme, &|id| {
+        contextes.get(&id).cloned()
+    }) {
+        Ok(e) => e,
+        Err(e) => return Retour::erreur(e),
+    };
+    x.executer(
+        Evenement::Groupe {
+            libelle: "Forme animale (hors combat)".into(),
+            evenements: evenements.into_iter().map(Evenement::Aventure).collect(),
+        },
+        "Forme animale prise",
+    )
+}

@@ -180,6 +180,9 @@ export function BlocInvocations({ invocations }: { invocations: InvocationVue[] 
           </summary>
           <p className="doux">{i.lignes.map(([l, v]) => `${l ? l + " : " : ""}${v}`).join(" · ")}</p>
           <p>
+            {i.caracteristiques.map(([k, v], n) => `${k} ${v} (${i.modificateurs[n][1] >= 0 ? "+" : ""}${i.modificateurs[n][1]})`).join(" · ")}
+          </p>
+          <p>
             {i.sauvegardes.map(([k, v]) => `${k} ${v >= 0 ? "+" : ""}${v}`).join(", ")}
           </p>
           {i.attaques && <p>{i.attaques}</p>}
@@ -192,11 +195,11 @@ export function BlocInvocations({ invocations }: { invocations: InvocationVue[] 
 /** Pouvoir de forme animale du druide en combat : on choisit la forme, puis ses effets sont appliqués. */
 export function DialogueFormeAnimale({
   pj,
-  agir,
+  choisir,
   onFermer,
 }: {
-  pj: PjCombat;
-  agir: (a: ActionCombat) => Promise<Retour | null>;
+  pj: { id: number; nom: string };
+  choisir: (forme: string) => Promise<Retour | null>;
   onFermer: () => void;
 }) {
   const [formes, setFormes] = useState<FormePouvoir[]>([]);
@@ -213,7 +216,7 @@ export function DialogueFormeAnimale({
 
   const prendre = async () => {
     if (!choisie) return;
-    const r = await agir({ FormeAnimale: { pj: pj.id, forme: choisie.id } });
+    const r = await choisir(choisie.id);
     if (r?.ok) onFermer();
   };
 

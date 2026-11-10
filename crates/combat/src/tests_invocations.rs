@@ -367,3 +367,30 @@ fn le_niveau_de_druide_donne_la_duree_et_les_formes() {
         )
         .is_err());
 }
+
+#[test]
+fn la_forme_hors_combat_donne_une_utilisation_et_les_effets() {
+    let ctx = ctx_avec(11, 0);
+    let mut e = EtatAventure::nouveau(Instant::depuis(1, 8, 0).unwrap(), false);
+    e.appliquer(&EvenementAventure::Entree { pj: 1 }, &ctx)
+        .unwrap();
+    let f = forme_par_taille("M");
+    let evs = crate::hors_combat::evenements_forme_animale(&e, 1, &f.id, &ctx).unwrap();
+    assert_eq!(evs.len(), 2);
+    assert!(
+        matches!(&evs[0], EvenementAventure::RessourceUtilisee { pj: 1, nom, quantite: 1 } if nom == "forme_animale")
+    );
+    assert!(matches!(
+        &evs[1],
+        EvenementAventure::EffetAjoute { pj: 1, .. }
+    ));
+    // niveau de druide insuffisant : refusé
+    let haute = fiches::Referentiel::partage()
+        .formes
+        .iter()
+        .find(|f| f.niveau_druide == 12)
+        .unwrap()
+        .id
+        .clone();
+    assert!(crate::hors_combat::evenements_forme_animale(&e, 1, &haute, &ctx).is_err());
+}

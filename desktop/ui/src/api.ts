@@ -753,6 +753,7 @@ export const api = {
   combatApercuFin: () => appeler<ApercuFin>("combat_apercu_fin"),
   combatConvocations: (niveau: number) => appeler<OptionCreature[]>("combat_convocations", { niveau }),
   combatFormes: (sort: string) => appeler<FormeOption[]>("combat_formes", { sort }),
+  aventurePrendreForme: (pj: number, forme: string) => appeler<Retour>("aventure_prendre_forme", { pj, forme }),
   combatFormesAnimales: (pj: number) => appeler<FormePouvoir[]>("combat_formes_animales", { pj }),
   combatTerminer: (validation: Validation, contestations: [number, Duree][], recompenses: Recompenses | null = null) =>
     appeler<Retour>("combat_terminer", { validation, contestations, recompenses }),

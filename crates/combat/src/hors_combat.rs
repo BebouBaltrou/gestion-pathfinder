@@ -476,6 +476,54 @@ pub fn lancer_hors_combat(
     Ok(sortie)
 }
 
+/// Pouvoir de forme animale hors combat : une utilisation quotidienne, puis les effets de la forme
+/// (taille de la race comprise) pendant 1 heure par niveau de druide. Rien n'est écrit ici.
+pub fn evenements_forme_animale(
+    etat: &EtatAventure,
+    pj: IdPj,
+    forme: &str,
+    ctx: &dyn Fn(IdPj) -> Option<ContextePj>,
+) -> Result<Vec<EvenementAventure>, String> {
+    let c = ctx(pj).ok_or_else(|| format!("personnage {pj} inconnu"))?;
+    let f = referentiel()
+        .formes
+        .iter()
+        .find(|f| f.id == forme)
+        .ok_or_else(|| format!("forme inconnue : {forme}"))?;
+    if c.niveau_druide < f.niveau_druide {
+        return Err(format!(
+            "{} demande le niveau {} de druide",
+            f.nom, f.niveau_druide
+        ));
+    }
+    let prefixe = fiches::formes::PREFIXE_FORME;
+    if etat
+        .effets
+        .actifs
+        .iter()
+        .any(|t| t.proprietaire == pj.to_string() && t.nom.starts_with(prefixe))
+    {
+        return Err(format!("{} est déjà sous une forme", c.nom));
+    }
+    Ok(vec![
+        EvenementAventure::RessourceUtilisee {
+            pj,
+            nom: "forme_animale".into(),
+            quantite: 1,
+        },
+        EvenementAventure::EffetAjoute {
+            pj,
+            nom: f.nom_effet(),
+            source: format!("pouvoir forme animale, {}", f.nom),
+            duree: Duree::Heures(c.niveau_druide),
+            effets: crate::invocations::effets_de_forme(f, &c.taille),
+            etats: Vec::new(),
+            soin_par_round: 0,
+            protections: Vec::new(),
+        },
+    ])
+}
+
 #[cfg(test)]
 mod tests {
     use super::formule_simple;
