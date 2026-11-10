@@ -248,7 +248,7 @@ export function DialogueFormeAnimale({
           Forme{" "}
           <select value={forme} onChange={(e) => setForme(e.target.value)}>
             {formes.map((f) => (
-              <option key={f.id} value={f.id}>{`${f.nom} (druide niveau ${f.niveauDruide})`}</option>
+              <option key={f.id} value={f.id}>{`${f.nom} (niveau de druide requis : ${f.niveauDruide})`}</option>
             ))}
           </select>
         </label>
