@@ -2719,3 +2719,11 @@ fn le_grimoire_du_magicien_se_compte_et_commande_la_preparation() {
         .is_some_and(|x| x.ecole == "enchantment" || x.ecole == "illusion")));
     assert!(tours.contains(&"Light"));
 }
+
+#[test]
+fn bba_du_druide_niveau_9_sert_a_l_attaque_de_forme() {
+    let r = Referentiel::partage();
+    let f = druide(9);
+    let v = f.calculer(r).unwrap();
+    assert_eq!(v.bba.total, 6);
+}

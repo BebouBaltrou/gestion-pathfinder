@@ -525,7 +525,7 @@ fn attaques_de_forme(
         return Vec::new();
     };
     let referentiel = fiches::Referentiel::partage();
-    let Some(f) = referentiel
+    let Some(_f) = referentiel
         .formes
         .iter()
         .find(|f| t.nom.starts_with(&f.nom_effet()))
@@ -554,9 +554,6 @@ fn attaques_de_forme(
         .map_or(10, |(_, s)| *s);
     let force = defense_corrigee(score_for, "carac.for", effets);
     let mod_force = fiches::caracteristiques::modificateur(force);
-    let ecart_taille =
-        fiches::compagnon::modificateur_de_taille(&combat::invocations::taille_de_forme(f))
-            - fiches::compagnon::modificateur_de_taille(&c.taille);
     attaques_creature(&cr.attaques)
         .into_iter()
         .map(|(nom, des, texte)| {
@@ -567,7 +564,7 @@ fn attaques_de_forme(
             };
             AttaqueVue {
                 nom,
-                toucher: bba + ecart_taille + mod_force,
+                toucher: bba + mod_force,
                 degats: degats_de_forme(&des, bonus),
             }
         })

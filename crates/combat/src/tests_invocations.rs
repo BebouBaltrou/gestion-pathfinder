@@ -339,7 +339,8 @@ fn la_taille_vient_de_la_race_et_la_forme_s_y_ajoute() {
     assert!(e.iter().any(|x| x.cible.0 == "ca"
         && x.type_bonus == fiches::effet::TypeBonus::Taille
         && x.valeur == -1));
-    assert!(e.iter().any(|x| x.cible.0 == "bba" && x.valeur == -1));
+    // BBA : forme M = 0, rien ajouté
+    assert!(!e.iter().any(|x| x.cible.0 == "bba"));
     // forme G prise par un druide M : mod G (−1) − mod M (0) = −1
     let g = forme_par_taille("G");
     let eg = crate::invocations::effets_de_forme(&g, "M");

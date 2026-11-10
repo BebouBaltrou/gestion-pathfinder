@@ -122,18 +122,26 @@ pub fn effets_de_forme(
     taille_race: &str,
 ) -> Vec<fiches::effet::Effet> {
     let mut v = f.effets_chiffres();
-    let ecart = fiches::compagnon::modificateur_de_taille(&taille_de_forme(f))
-        - fiches::compagnon::modificateur_de_taille(taille_race);
+    let mod_forme = fiches::compagnon::modificateur_de_taille(&taille_de_forme(f));
+    let ecart = mod_forme - fiches::compagnon::modificateur_de_taille(taille_race);
+    let source = f.nom_effet();
+    // La CA contient le bonus de taille de la race : on remplace par l'écart.
     if ecart != 0 {
-        let source = f.nom_effet();
-        for cible in ["ca", "bba"] {
-            v.push(fiches::effet::Effet::new(
-                cible,
-                fiches::effet::TypeBonus::Taille,
-                ecart,
-                &source,
-            ));
-        }
+        v.push(fiches::effet::Effet::new(
+            "ca",
+            fiches::effet::TypeBonus::Taille,
+            ecart,
+            &source,
+        ));
+    }
+    // Le BBA ne contient pas le bonus de taille de la race : on ajoute le modificateur de la forme.
+    if mod_forme != 0 {
+        v.push(fiches::effet::Effet::new(
+            "bba",
+            fiches::effet::TypeBonus::Taille,
+            mod_forme,
+            &source,
+        ));
     }
     v
 }
