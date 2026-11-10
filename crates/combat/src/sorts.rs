@@ -334,18 +334,18 @@ impl Distraction {
 }
 
 pub(crate) struct Preparation {
-    sort: &'static Sort,
-    inc: IncantationPj,
-    niveau_du_sort: u32,
-    niveau_effectif: u32,
-    niveau_emplacement: u32,
-    metas: Vec<&'static Metamagie>,
-    restants: u32,
-    dd: i32,
-    type_action: TypeAction,
-    verbal: bool,
-    gestuel: bool,
-    echec_pct: u32,
+    pub(crate) sort: &'static Sort,
+    pub(crate) inc: IncantationPj,
+    pub(crate) niveau_du_sort: u32,
+    pub(crate) niveau_effectif: u32,
+    pub(crate) niveau_emplacement: u32,
+    pub(crate) metas: Vec<&'static Metamagie>,
+    pub(crate) restants: u32,
+    pub(crate) dd: i32,
+    pub(crate) type_action: TypeAction,
+    pub(crate) verbal: bool,
+    pub(crate) gestuel: bool,
+    pub(crate) echec_pct: u32,
 }
 
 fn invalide<T>(m: impl Into<String>) -> Result<T, ErreurCombat> {

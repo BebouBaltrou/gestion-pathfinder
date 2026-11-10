@@ -6,6 +6,7 @@
 
 use crate::etat::ErreurCombat;
 use crate::objets::ParamsObjet;
+use crate::sorts::ParamsLancer;
 use crate::sorts::{composantes, duree_suggeree, effet_du_sort, nom_fr, referentiel};
 use crate::stats_sorts::statistiques;
 use aventure::{
@@ -378,6 +379,101 @@ fn formule_simple(f: &str) -> Option<(u32, u32, i32)> {
         None => (reste, 0),
     };
     Some((n, faces.trim().parse().ok()?, bonus))
+}
+
+/// Lancer de sort hors combat : événements d'aventure, plus l'événement du journal de fiche
+/// (emplacement dépensé, sort préparé marqué lancé). Tout s'enregistre d'un bloc.
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct SortieLancer {
+    pub evenements: Vec<EvenementAventure>,
+    pub fiche: Option<fiches::journal::EvenementFiche>,
+    pub notes: Vec<String>,
+}
+
+/// Sort hors combat. Les emplacements et les sorts préparés restants viennent de la fiche
+/// (contexte), donc rien n'est retranché deux fois : pas de dépense propre au combat.
+pub fn lancer_hors_combat(
+    a: &ParamsLancer,
+    ctx: &dyn Fn(IdPj) -> Option<ContextePj>,
+) -> Result<SortieLancer, ErreurCombat> {
+    let c = ctx(a.pj).ok_or(ErreurAventure::PjInconnu(a.pj))?;
+    let p = crate::etat::EtatCombat::preparer_sort(
+        a.pj,
+        &a.sort,
+        &a.metamagies,
+        a.niveau_heighten,
+        ctx,
+        &|_| 0,
+        &|_, _| 0,
+    )?;
+    if p.restants == 0 {
+        return invalide(format!(
+            "plus d'emplacement de sort de niveau {} pour {}",
+            p.niveau_emplacement, c.nom
+        ));
+    }
+    if p.echec_pct > 0 && a.echec_arcanique_d100.is_none() {
+        return invalide(format!(
+            "échec des sorts profanes : saisir le d100 (échec à {} % ou moins)",
+            p.echec_pct
+        ));
+    }
+    if let Some(d) = a.echec_arcanique_d100 {
+        if !(1..=100).contains(&d) {
+            return invalide("d100 : de 1 à 100");
+        }
+    }
+    let mut sortie = SortieLancer::default();
+    if p.niveau_emplacement > 0 {
+        sortie.fiche = Some(fiches::journal::EvenementFiche::SortLance {
+            classe: p.inc.classe.clone(),
+            niveau_de_sort: p.niveau_emplacement,
+            sort: p.sort.nom_en.clone(),
+        });
+    }
+    let cl = p.inc.niveau_de_lanceur;
+    sortie.notes.push(format!(
+        "{} lance {} : emplacement de niveau {}, DD {}, niveau de lanceur {cl}.",
+        c.nom,
+        nom_fr(&p.sort.nom_en),
+        p.niveau_emplacement,
+        p.dd
+    ));
+    // le sort est dépensé même s'il échoue
+    if p.echec_pct > 0 {
+        let d100 = a.echec_arcanique_d100.unwrap_or(0) as u32;
+        if d100 <= p.echec_pct {
+            sortie.notes.push(format!(
+                "{} : échec des sorts profanes ({d100} sur {} %) : le sort est perdu.",
+                c.nom, p.echec_pct
+            ));
+            return Ok(sortie);
+        }
+        sortie.notes.push(format!(
+            "{} : échec des sorts profanes évité ({d100} sur {} %).",
+            c.nom, p.echec_pct
+        ));
+    }
+    let cibles: Vec<IdPj> = a.cibles.clone();
+    if !cibles.is_empty() {
+        sortie.evenements.extend(soins_ou_degats(
+            p.sort,
+            cl,
+            &cibles,
+            a.resultat_de,
+            &mut sortie.notes,
+        )?);
+        sortie.evenements.extend(effets_du_sort(
+            p.sort,
+            cl,
+            &c.nom,
+            &cibles,
+            a.duree.clone(),
+            a.choix_energie.as_deref(),
+            &mut sortie.notes,
+        )?);
+    }
+    Ok(sortie)
 }
 
 #[cfg(test)]

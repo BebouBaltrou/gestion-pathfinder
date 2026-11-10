@@ -570,3 +570,69 @@ pub fn aventure_utiliser_objet(s: S, utilisation: UtilisationHorsCombat) -> Reto
         &message,
     )
 }
+
+/// Sort lancé hors combat, tel que saisi par l'interface (noms en camelCase).
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct LancementHorsCombat {
+    pub pj: IdPj,
+    /// Nom anglais du catalogue.
+    pub sort: String,
+    #[serde(default)]
+    pub cibles: Vec<IdPj>,
+    #[serde(default)]
+    pub resultat_de: Option<i32>,
+    #[serde(default)]
+    pub echec_arcanique_d100: Option<i32>,
+    #[serde(default)]
+    pub duree: Option<Duree>,
+    #[serde(default)]
+    pub choix_energie: Option<String>,
+}
+
+/// Sort lancé hors combat (lanceurs qui préparent ou spontanés) : emplacement dépensé dans la
+/// fiche, soins ou dégâts d'après les dés saisis, effets ajoutés à l'aventure. Un seul groupe.
+#[tauri::command]
+pub fn aventure_lancer_sort(s: S, lancement: LancementHorsCombat) -> Retour {
+    let mut x = session(&s);
+    if x.combat.is_some() {
+        return Retour::erreur(
+            "Un combat est en cours : l'aventure reprend à sa fin (validation ou abandon)",
+        );
+    }
+    let contextes = x.contextes();
+    let params = combat::ParamsLancer {
+        pj: lancement.pj,
+        sort: lancement.sort,
+        cibles: if lancement.cibles.is_empty() {
+            vec![lancement.pj]
+        } else {
+            lancement.cibles
+        },
+        resultat_de: lancement.resultat_de,
+        echec_arcanique_d100: lancement.echec_arcanique_d100,
+        duree: lancement.duree,
+        choix_energie: lancement.choix_energie,
+        ..Default::default()
+    };
+    let sortie = match combat::lancer_hors_combat(&params, &|id| contextes.get(&id).cloned()) {
+        Ok(s) => s,
+        Err(e) => return Retour::erreur(e.to_string()),
+    };
+    let message = sortie.notes.join(" ");
+    let mut evenements: Vec<Evenement> = Vec::new();
+    if let Some(fiche) = sortie.fiche {
+        evenements.push(Evenement::Fiche {
+            pj: IdPersonnage(lancement.pj),
+            evenement: fiche,
+        });
+    }
+    evenements.extend(sortie.evenements.into_iter().map(Evenement::Aventure));
+    x.executer(
+        Evenement::Groupe {
+            libelle: "Lancer un sort (hors combat)".into(),
+            evenements,
+        },
+        &message,
+    )
+}

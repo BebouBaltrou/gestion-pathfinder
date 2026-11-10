@@ -16,6 +16,7 @@ export function CartePj({
   onSante,
   onEffet,
   onObjet,
+  onLancerSort,
   onActualiserRessources,
   entete,
   pied,
@@ -30,6 +31,7 @@ export function CartePj({
   onSante?: (mode: "degats" | "soin" | "temp" | "continu") => void;
   onEffet?: () => void;
   onObjet?: () => void;
+  onLancerSort?: () => void;
   onActualiserRessources?: () => void;
   entete?: ReactNode;
   pied?: ReactNode;
@@ -128,6 +130,7 @@ export function CartePj({
         {onObjet && (
           <div className="rangee-boutons">
             <button className="bouton mini" onClick={onObjet}>+ Ajouter un objet</button>
+            {onLancerSort && pj.caster && <button className="bouton mini" onClick={onLancerSort}>Lancer un sort…</button>}
           </div>
         )}
       </div>

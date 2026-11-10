@@ -168,7 +168,11 @@ sort inconnu, sort hors liste de la classe, trop de sorts d'un niveau). Points �
   échec des sorts profanes (p. 490) ; bâton : niveau du porteur s'il est plus haut (p. 491).
 - Point à confirmer : durée d'un effet hors combat quand la formule n'est pas simple (la durée
   est alors à saisir ; aucune durée n'est supposée).
-- Non fait : choix des charges à la création d'un objet (par défaut le maximum) ; lancer de
-  sorts préparés hors combat (druide, clerc, magicien) : emplacements à décompter hors combat,
-  à traiter dans une étape suivante.
+- Fait : lancer de sorts hors combat (lanceurs qui préparent et spontanés) : emplacement et sort
+  préparé contrôlés par la fiche, entrée « Sort lancé » ajoutée à la fiche, soins ou dégâts aux
+  dés saisis, effets ajoutés à l'aventure (`lancer_hors_combat`, commande `aventure_lancer_sort`,
+  bouton « Lancer un sort… »). Les effets hors combat restent actifs si un combat commence ensuite.
+- Fait : charges restantes choisies à l'ajout d'un objet (maximum par défaut).
+- Point à valider : un sort préparé lancé hors combat est retiré des sorts disponibles pour la
+  journée, comme en combat.
 - Hors périmètre : les effets d'objets sans sort (ex. objets à effet fixe) restent à appliquer à la main.
