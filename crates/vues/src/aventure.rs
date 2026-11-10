@@ -567,6 +567,27 @@ pub struct EconomieVue {
     pub limite: bool,
 }
 
+/// Fiche d'une créature invoquée : ce qu'il faut pour la jouer.
+#[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize))]
+#[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
+pub struct InvocationVue {
+    pub id: u32,
+    pub nom: String,
+    pub lanceur: u32,
+    pub niveau_sort: u32,
+    pub fp: String,
+    pub pv: i32,
+    pub ca: i32,
+    pub init: i32,
+    pub sauvegardes: Vec<(String, i32)>,
+    pub caracteristiques: Vec<(String, i32)>,
+    pub vitesse: String,
+    pub attaques: String,
+    /// Toutes les lignes saisies (libellé, valeur), pour la fiche complète.
+    pub lignes: Vec<(String, String)>,
+}
+
 #[derive(Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize))]
 #[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
@@ -583,6 +604,8 @@ pub struct PjCombat {
 #[cfg_attr(feature = "serde", derive(serde::Serialize))]
 #[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
 pub struct CombatVue {
+    /// Créatures invoquées pendant le combat (fiche complète, pour l'affichage).
+    pub invocations: Vec<InvocationVue>,
     /// `initiative` (on saisit les initiatives) ou `enCours`.
     pub phase: String,
     pub round: u32,
@@ -606,12 +629,10 @@ pub struct CombatVue {
 pub fn combat(etat: &Etat, c: &Combat) -> CombatVue {
     let e: &EtatCombat = c.etat();
     let contextes = etat.contextes_aventure();
-    let ctx = |id: IdPj| contextes.get(&id).cloned();
-    let nom_de = |id: u32| {
-        contextes
-            .get(&id)
-            .map_or_else(|| format!("PJ {id}"), |c| c.nom.clone())
-    };
+    let base = |id: IdPj| contextes.get(&id).cloned();
+    // les créatures invoquées ont leur fiche dans le combat, pas dans la campagne
+    let ctx = e.avec_invocations(&base);
+    let nom_de = |id: u32| ctx(id).map_or_else(|| format!("PJ {id}"), |c| c.nom);
     let ordre_round = e.ordre_du_round();
     let initiatives: Vec<InitiativeVue> = e
         .ordre
@@ -635,12 +656,12 @@ pub fn combat(etat: &Etat, c: &Combat) -> CombatVue {
         .iter()
         .filter_map(|id| {
             let s = e.aventure.pjs.get(id)?;
-            let cx = contextes.get(id)?;
+            let cx = ctx(*id)?;
             let eco = e.economie.get(id).copied().unwrap_or_default();
             let limite = e.limite(*id, &ctx);
             let r = eco.reste(limite);
             let stats = e.stats.get(id).cloned().unwrap_or_default();
-            let pj = pj_vue(*id, s, cx, &e.aventure, &|n| {
+            let pj = pj_vue(*id, s, &cx, &e.aventure, &|n| {
                 e.emplacements_depenses.get(&(*id, n)).copied().unwrap_or(0)
             });
             Some(PjCombat {
@@ -680,7 +701,42 @@ pub fn combat(etat: &Etat, c: &Combat) -> CombatVue {
         })
         .collect();
     demandes.sort_by_key(|d| d.pj);
+    let invocations = e
+        .invocations
+        .values()
+        .map(|i| InvocationVue {
+            id: i.id,
+            nom: i.creature.nom.clone(),
+            lanceur: i.lanceur,
+            niveau_sort: i.niveau_sort,
+            fp: i.creature.fp.clone(),
+            pv: i.creature.pv,
+            ca: i.creature.ca,
+            init: i.creature.init,
+            sauvegardes: i
+                .creature
+                .sauvegardes
+                .iter()
+                .map(|(k, v)| (k.clone(), *v))
+                .collect(),
+            caracteristiques: i
+                .creature
+                .caracteristiques
+                .iter()
+                .map(|(k, v)| (k.clone(), *v))
+                .collect(),
+            vitesse: i.creature.vitesse.clone(),
+            attaques: i.creature.attaques.clone(),
+            lignes: i
+                .creature
+                .lignes
+                .iter()
+                .map(|l| (l.libelle.clone(), l.valeur.clone()))
+                .collect(),
+        })
+        .collect();
     CombatVue {
+        invocations,
         phase: match e.phase {
             Phase::Initiative => "initiative".into(),
             Phase::EnCours => "enCours".into(),

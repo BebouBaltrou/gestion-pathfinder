@@ -23,6 +23,7 @@ import { Alertes, Dialogue, Gemmes, SaisieDe, SaisieNombre } from "../../composa
 import { act, ev } from "../../evenements-jeu";
 import { Demandes } from "../Aventure";
 import { CartePj } from "./CartePj";
+import { BlocInvocations, DialogueConvocation, DialogueForme } from "./Invocations";
 import { BlocRecompenses, EtatRecompenses, recompensesVides, versRecompenses } from "./Recompenses";
 import { ChoixDuree, DialogueEffet, DialogueObjet, DialogueSante, dureeDe, Envoyer } from "./dialogues";
 
@@ -37,6 +38,8 @@ type Ouvert =
   | { g: "concentration"; pj: number }
   | { g: "preparer"; pj: number }
   | { g: "infliges"; pj: number }
+  | { g: "convoquer"; pj: number }
+  | { g: "forme"; pj: number }
   | { g: "fin" }
   | { g: "maintenir"; id: number; nom: string; pj: string }
   | null;
@@ -112,6 +115,7 @@ export function Combat({ outils, vue }: { outils: Outils; vue: CombatVue }) {
             />
           )}
           {vue.demandes.length > 0 && <Demandes demandes={vue.demandes} envoyer={envoyer} />}
+          <BlocInvocations invocations={vue.invocations} />
           {actif && (
             <PanneauActif
               pj={actif}
@@ -122,6 +126,8 @@ export function Combat({ outils, vue }: { outils: Outils; vue: CombatVue }) {
               onConcentration={() => setOuvert({ g: "concentration", pj: actif.id })}
               onRetarder={() => setOuvert({ g: "initiative", pj: actif.id })}
               onInfliges={() => setOuvert({ g: "infliges", pj: actif.id })}
+              onConvoquer={() => setOuvert({ g: "convoquer", pj: actif.id })}
+              onForme={() => setOuvert({ g: "forme", pj: actif.id })}
             />
           )}
         </>
@@ -175,6 +181,8 @@ export function Combat({ outils, vue }: { outils: Outils; vue: CombatVue }) {
         {ouvert?.g === "concentration" && <DialogueConcentration pj={pjs.find((p) => p.id === ouvert.pj)!} agir={agir} onFermer={() => setOuvert(null)} />}
         {ouvert?.g === "infliges" && <DialogueInfliges pj={pjs.find((p) => p.id === ouvert.pj)!} agir={agir} onFermer={() => setOuvert(null)} />}
         {ouvert?.g === "preparer" &&<DialoguePreparer pj={pjs.find((p) => p.id === ouvert.pj)!} agir={agir} onFermer={() => setOuvert(null)} />}
+        {ouvert?.g === "convoquer" && <DialogueConvocation pj={pjs.find((p) => p.id === ouvert.pj)!} agir={agir} onFermer={() => setOuvert(null)} />}
+        {ouvert?.g === "forme" && <DialogueForme pj={pjs.find((p) => p.id === ouvert.pj)!} agir={agir} onFermer={() => setOuvert(null)} />}
         {ouvert?.g === "fin" && <DialogueFin vue={vue} outils={outils} onFermer={() => setOuvert(null)} />}
         {ouvert?.g === "maintenir" && <DialogueMaintenirCombat id={ouvert.id} nom={ouvert.nom} pj={ouvert.pj} envoyer={envoyer} onFermer={() => setOuvert(null)} />}
       </AnimatePresence>
@@ -330,8 +338,12 @@ function PanneauActif({
   onConcentration,
   onRetarder,
   onInfliges,
+  onConvoquer,
+  onForme,
 }: {
   pj: PjCombat;
+  onConvoquer: () => void;
+  onForme: () => void;
   onAgir: () => void;
   onSort: () => void;
   onObjet: () => void;
@@ -358,6 +370,8 @@ function PanneauActif({
           <button className="bouton" onClick={onRetarder}>Retarder…</button>
           <button className="bouton" onClick={onInfliges} title="Statistiques : aucun ennemi n'est modélisé, vous notez les dégâts à la main">Noter des dégâts infligés…</button>
           {pj.caster && <button className="bouton" onClick={onConcentration}>Test de concentration…</button>}
+          {pj.caster && <button className="bouton" onClick={onConvoquer}>Convoquer des alliés…</button>}
+          {pj.caster && <button className="bouton" onClick={onForme}>Prendre une forme…</button>}
         </div>
       )}
     </div>

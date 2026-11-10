@@ -7,6 +7,8 @@ import type {
   ApercuSort,
   AventureVue,
   CombatVue,
+  FormeOption,
+  OptionCreature,
   Duree,
   EvenementAventure,
   HistoriqueVue,
@@ -743,6 +745,8 @@ export const api = {
   combatApercuSort: (pj: number, sort: string, metamagies: string[] = [], niveauHeighten: number | null = null) =>
     appeler<ApercuSort>("combat_apercu_sort", { pj, sort, metamagies, niveauHeighten }),
   combatApercuFin: () => appeler<ApercuFin>("combat_apercu_fin"),
+  combatConvocations: (niveau: number) => appeler<OptionCreature[]>("combat_convocations", { niveau }),
+  combatFormes: (sort: string) => appeler<FormeOption[]>("combat_formes", { sort }),
   combatTerminer: (validation: Validation, contestations: [number, Duree][], recompenses: Recompenses | null = null) =>
     appeler<Retour>("combat_terminer", { validation, contestations, recompenses }),
   combatXp: (fps: string[], personnages: number) => appeler<XpVue>("combat_xp", { fps, personnages }),
@@ -977,6 +981,12 @@ function simule(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
       return Promise.resolve(ok("Action du combat"));
     case "combat_apercu_sort":
       return Promise.resolve(apercuSortExemple(String(args?.sort)));
+    case "combat_convocations":
+      return Promise.resolve([
+        { nom: "Aigle", fp: "1/2", niveau: 1, pv: 5, ca: 14, init: 2, nombreMin: 1, nombreMax: 1 },
+      ]);
+    case "combat_formes":
+      return Promise.resolve([{ id: "exemple", nom: "Animal de taille M (exemple)", texte: "Exemple de forme." }]);
     case "combat_apercu_fin":
       return Promise.resolve(apercuFinExemple());
     case "combat_terminer":

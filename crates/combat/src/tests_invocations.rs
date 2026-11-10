@@ -203,3 +203,17 @@ fn une_forme_doit_appartenir_au_sort() {
     assert!(r.is_err());
     assert!(c.etat().aventure.effets.actifs.is_empty());
 }
+
+#[test]
+fn le_contexte_du_combat_connait_les_invoques_et_les_personnages() {
+    let ctx = ctx_avec(11, 0);
+    let mut c = combat(&ctx);
+    c.appliquer(convoquer("Summon Nature's Ally 1", "Aigle", 1), &ctx)
+        .unwrap();
+    let e = c.etat();
+    let etendu = e.avec_invocations(&ctx);
+    // la créature a sa fiche ; le personnage garde la sienne
+    assert_eq!(etendu(BASE_INVOCATIONS).unwrap().nom, "Aigle");
+    assert_eq!(etendu(1).unwrap().nom, "Mialee");
+    assert!(etendu(42).is_none());
+}

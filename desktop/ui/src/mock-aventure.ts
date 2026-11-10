@@ -154,6 +154,7 @@ export const combatExemple = (): CombatVue => {
   const valeros: PjCombat = { ...pjValeros(), economie: economie(false, false), degatsSubis: 14, soinsRecus: 0, sortsLances: 0 };
   const kyra: PjCombat = { ...pjKyra(), economie: economie(false, false), degatsSubis: 37, soinsRecus: 0, sortsLances: 0 };
   return {
+    invocations: [],
     phase: "enCours",
     round: 3,
     surprise: false,
