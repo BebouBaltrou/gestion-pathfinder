@@ -134,6 +134,8 @@ pub struct PjAventure {
     /// Initiative de la fiche (modificateur).
     pub initiative: i32,
     pub caster: bool,
+    /// Druide niveau 4 ou plus : a le pouvoir de forme animale.
+    pub druide: bool,
     /// Niveau de lanceur (0 si le personnage ne lance pas de sorts).
     pub niveau_de_lanceur: u32,
     /// Chance d'échec des sorts profanes due à l'armure (%).
@@ -431,6 +433,7 @@ fn pj_vue(
         degats_continus: suivi.vital.continu,
         initiative: c.initiative,
         caster: c.incantation.is_some(),
+        druide: c.niveau_druide >= 4,
         niveau_de_lanceur: c.incantation.as_ref().map_or(0, |i| i.niveau_de_lanceur),
         echec_arcanique_pct: c.incantation.as_ref().map_or(0, |i| i.echec_arcanique_pct),
         caracteristiques: c

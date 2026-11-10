@@ -51,7 +51,7 @@ export function CartePj({
       </div>
       <JaugePv pj={pj} grande={grandeJauge} />
       {defenses && <BandeauDefenses pj={pj} />}
-      {onFormeAnimale && pj.caster && (
+      {onFormeAnimale && pj.druide && (
         <button className="bouton mini" onClick={onFormeAnimale}>Forme animale…</button>
       )}
       {onSante && (

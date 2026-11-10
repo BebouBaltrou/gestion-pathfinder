@@ -65,6 +65,7 @@ export type PjAventure = {
   degatsContinus: boolean;
   initiative: number;
   caster: boolean;
+  druide: boolean;
   niveauDeLanceur: number;
   echecArcaniquePct: number;
   vigueur: number;
