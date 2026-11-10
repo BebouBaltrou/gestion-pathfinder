@@ -147,6 +147,7 @@ export function Combat({ outils, vue }: { outils: Outils; vue: CombatVue }) {
                 onEffet={() => setOuvert({ g: "effet", pj: pj.id })}
                 onObjet={() => setOuvert({ g: "objetAjout", pj: pj.id })}
                 onRetirerEffet={(e) => envoyer(ev.effetRetire(e.id))}
+                onUtiliserObjet={() => setOuvert({ g: "objet", pj: pj.id })}
                 onUtiliserRessource={(r) =>
                   r.cle === "forme_animale" ? setOuvert({ g: "formeAnimale", pj: pj.id }) : envoyer(ev.ressourceUtilisee(pj.id, r.cle, 1))
                 }
