@@ -43,6 +43,8 @@ impl Invocation {
             nom: self.creature.nom.clone(),
             niveau: self.creature.niveau,
             pv_max: self.creature.pv,
+            taille: "M".into(),
+            niveau_druide: 0,
             con_score,
             con_mod: fiches::caracteristiques::modificateur(con_score),
             vigueur: self.creature.sauvegardes.get("Vig").copied().unwrap_or(0),
@@ -53,12 +55,32 @@ impl Invocation {
     }
 }
 
+/// Taille d'une forme. Les élémentaires n'ont pas de taille dans les données : celle du sort (livre :
+/// corps élémentaire I = P, II = M, III = G, IV = TG).
+pub fn taille_de_forme(f: &fiches::formes::FormeAnimale) -> String {
+    if let Some(t) = &f.taille {
+        return t.clone();
+    }
+    match f.sort_en.as_str() {
+        "Elemental Body I" => "P",
+        "Elemental Body II" => "M",
+        "Elemental Body III" => "G",
+        "Elemental Body IV" => "TG",
+        _ => "M",
+    }
+    .into()
+}
+
 /// Effets d'une forme : les effets chiffrés du livre, plus le bonus ou malus de taille à la CA et à
-/// l'attaque (taille de référence : M, celle du druide ; point à confirmer si le druide n'est pas M).
-pub fn effets_de_forme(f: &fiches::formes::FormeAnimale) -> Vec<fiches::effet::Effet> {
+/// l'attaque. Bonus = modificateur de taille de la forme − modificateur de taille de la race du
+/// personnage (le druide n'a pas de taille propre). Point à confirmer.
+pub fn effets_de_forme(
+    f: &fiches::formes::FormeAnimale,
+    taille_race: &str,
+) -> Vec<fiches::effet::Effet> {
     let mut v = f.effets_chiffres();
-    let ecart = fiches::compagnon::modificateur_de_taille(f.taille.as_deref().unwrap_or("M"))
-        - fiches::compagnon::modificateur_de_taille("M");
+    let ecart = fiches::compagnon::modificateur_de_taille(&taille_de_forme(f))
+        - fiches::compagnon::modificateur_de_taille(taille_race);
     if ecart != 0 {
         let source = f.nom_effet();
         for cible in ["ca", "bba"] {
@@ -330,7 +352,7 @@ impl EtatCombat {
             nom: f.nom_effet(),
             source: format!("sort {}, forme {}", sort, f.nom),
             duree,
-            effets: effets_de_forme(f),
+            effets: effets_de_forme(f, &c.taille),
             etats: Vec::new(),
             soin_par_round: 0,
             protections: Vec::new(),
@@ -361,8 +383,8 @@ impl EtatCombat {
             .iter()
             .find(|f| f.id == forme)
             .ok_or_else(|| ErreurCombat::Invalide(format!("forme inconnue : {forme}")))?;
-        // niveau de druide : celui de la fiche (point à confirmer si le personnage est multiclassé)
-        let nc = c.niveau;
+        // niveau de druide (classe), pas le niveau du personnage
+        let nc = c.niveau_druide;
         if nc < f.niveau_druide {
             return erreur(format!(
                 "{} demande le niveau {} de druide",
@@ -401,7 +423,7 @@ impl EtatCombat {
             nom: f.nom_effet(),
             source: format!("pouvoir forme animale, {}", f.nom),
             duree: temps::Duree::Heures(nc),
-            effets: effets_de_forme(f),
+            effets: effets_de_forme(f, &c.taille),
             etats: Vec::new(),
             soin_par_round: 0,
             protections: Vec::new(),

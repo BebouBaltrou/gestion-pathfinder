@@ -203,11 +203,11 @@ export function DialogueFormeAnimale({
   const [forme, setForme] = useState("");
 
   useEffect(() => {
-    api.combatFormesAnimales().then((f) => {
+    api.combatFormesAnimales(pj.id).then((f) => {
       setFormes(f);
       setForme(f[0]?.id ?? "");
     });
-  }, []);
+  }, [pj.id]);
 
   const choisie = formes.find((f) => f.id === forme) ?? null;
 

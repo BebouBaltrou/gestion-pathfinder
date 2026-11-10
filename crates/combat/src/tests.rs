@@ -17,6 +17,8 @@ fn ctx(id: IdPj) -> Option<ContextePj> {
         nom: nom.into(),
         niveau,
         pv_max,
+        taille: "M".into(),
+        niveau_druide: 0,
         con_score: 12,
         con_mod: 1,
         vigueur: 4,

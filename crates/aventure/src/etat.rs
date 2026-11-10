@@ -29,6 +29,10 @@ pub struct ContextePj {
     pub nom: String,
     pub niveau: u32,
     pub pv_max: i32,
+    /// Taille de la race (`P`, `M`, `G`) : base des bonus et malus de taille des formes.
+    pub taille: String,
+    /// Niveau de druide (0 sans druide) : durée de la forme et formes permises.
+    pub niveau_druide: u32,
     pub con_score: i32,
     pub con_mod: i32,
     /// Bonus de base au jet de Vigueur (fiche).

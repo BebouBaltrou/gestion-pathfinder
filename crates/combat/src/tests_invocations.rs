@@ -292,14 +292,14 @@ fn le_pouvoir_de_forme_consomme_une_utilisation_et_applique_la_forme() {
 fn la_taille_change_ca_et_attaque() {
     // Taille P : +1 à la CA et à l'attaque par rapport à M (référence du druide)
     let p = forme_par_taille("P");
-    let effets = crate::invocations::effets_de_forme(&p);
+    let effets = crate::invocations::effets_de_forme(&p, "M");
     assert!(effets.iter().any(|e| e.cible.0 == "ca"
         && e.type_bonus == fiches::effet::TypeBonus::Taille
         && e.valeur == 1));
     assert!(effets.iter().any(|e| e.cible.0 == "bba" && e.valeur == 1));
     // Taille M : aucun bonus de taille ajouté (seulement les effets du livre)
     let m = forme_par_taille("M");
-    let em = crate::invocations::effets_de_forme(&m);
+    let em = crate::invocations::effets_de_forme(&m, "M");
     assert!(!em.iter().any(|e| e.cible.0 == "bba"));
 }
 
@@ -319,5 +319,51 @@ fn le_pouvoir_s_arrete_quand_les_utilisations_sont_epuisees() {
     // une seule forme à la fois : refusé même s'il reste des utilisations
     assert!(c
         .appliquer(ActionCombat::FormeAnimale { pj: 1, forme: f.id }, &ctx)
+        .is_err());
+}
+
+#[test]
+fn la_taille_vient_de_la_race_et_la_forme_s_y_ajoute() {
+    // druide halfelin (taille P) prenant une forme M : mod M (0) − mod P (+1) = −1
+    let forme = forme_par_taille("M");
+    let e = crate::invocations::effets_de_forme(&forme, "P");
+    assert!(e.iter().any(|x| x.cible.0 == "ca"
+        && x.type_bonus == fiches::effet::TypeBonus::Taille
+        && x.valeur == -1));
+    assert!(e.iter().any(|x| x.cible.0 == "bba" && x.valeur == -1));
+    // forme G prise par un druide M : mod G (−1) − mod M (0) = −1
+    let g = forme_par_taille("G");
+    let eg = crate::invocations::effets_de_forme(&g, "M");
+    assert!(eg.iter().any(|x| x.cible.0 == "bba" && x.valeur == -1));
+    // élémentaire sans taille dans les données : taille du sort (corps élémentaire I = P)
+    let elem = fiches::Referentiel::partage()
+        .formes
+        .iter()
+        .find(|f| f.sort_en == "Elemental Body I")
+        .unwrap()
+        .clone();
+    assert_eq!(crate::invocations::taille_de_forme(&elem), "P");
+}
+
+#[test]
+fn le_niveau_de_druide_donne_la_duree_et_les_formes() {
+    let ctx = ctx_avec(11, 0);
+    let mut c = combat_avec_pouvoir(&ctx);
+    // druide de niveau 11 (fixture) : une forme de niveau 12 est refusée
+    let trop_haut = fiches::Referentiel::partage()
+        .formes
+        .iter()
+        .find(|f| f.niveau_druide == 12)
+        .unwrap()
+        .id
+        .clone();
+    assert!(c
+        .appliquer(
+            ActionCombat::FormeAnimale {
+                pj: 1,
+                forme: trop_haut
+            },
+            &ctx
+        )
         .is_err());
 }

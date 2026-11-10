@@ -33,6 +33,16 @@ pub struct CombatPasse {
     pub actions: String,
 }
 
+/// Taille de la race en code de forme : « petite » → P, « grande » → G, sinon M.
+fn taille_de_race(r: &ReferentielFiches, race: &str) -> String {
+    match r.race(race).map(|x| x.taille.as_str()) {
+        Some("petite") => "P",
+        Some("grande") => "G",
+        _ => "M",
+    }
+    .into()
+}
+
 fn erreur(m: impl Into<String>) -> Erreur {
     Erreur::Aventure(m.into())
 }
@@ -114,6 +124,8 @@ impl Etat {
             nom: fiche.nom.clone(),
             niveau: v.niveau_de_personnage,
             pv_max: v.pv_max.total,
+            taille: taille_de_race(r, &fiche.race),
+            niveau_druide: fiche.niveau_de_classe("druide"),
             con_score: score_de(Carac::Con),
             con_mod: mod_de(Carac::Con),
             vigueur: v.vigueur.total,

@@ -584,11 +584,15 @@ pub struct FormePouvoir {
     pub texte: String,
 }
 
+/// Formes permises au personnage `pj` : celles dont le niveau de druide est atteint.
 #[tauri::command]
-pub fn combat_formes_animales() -> Vec<FormePouvoir> {
+pub fn combat_formes_animales(s: S, pj: u32) -> Vec<FormePouvoir> {
+    let mut x = session(&s);
+    let nc = x.contextes().get(&pj).map_or(0, |c| c.niveau_druide);
     fiches::Referentiel::partage()
         .formes
         .iter()
+        .filter(|f| f.niveau_druide <= nc)
         .map(|f| FormePouvoir {
             id: f.id.clone(),
             nom: f.nom.clone(),
