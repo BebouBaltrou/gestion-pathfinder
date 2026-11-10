@@ -292,3 +292,126 @@ fn objet_modifie_garde_l_identifiant_et_respecte_les_regles() {
         )
         .is_err());
 }
+
+#[test]
+fn potion_de_soins_calcule_les_pv_d_apres_le_de_saisi() {
+    let ctx = ctx_avec(5, 0);
+    let mut e = aventure(&ctx);
+    let id = ajouter(
+        &mut e,
+        objet(
+            "Potion de soins légers",
+            GenreObjet::Potion,
+            "Cure Light Wounds",
+            1,
+            3,
+        ),
+        &ctx,
+    );
+    // 1d8 + 3 (niveau de lanceur 3) : un 5 au dé donne 8 PV
+    let plan = utiliser_objet_hors_combat(
+        &e,
+        &ParamsObjet {
+            pj: 1,
+            objet: id,
+            resultat_de: Some(5),
+            ..Default::default()
+        },
+        &ctx,
+    )
+    .unwrap();
+    assert!(plan
+        .evenements
+        .iter()
+        .any(|ev| matches!(ev, EvenementAventure::Soin { pj: 1, nombre: 8 })));
+}
+
+#[test]
+fn soins_sans_de_saisi_ne_s_appliquent_pas() {
+    let ctx = ctx_avec(5, 0);
+    let mut e = aventure(&ctx);
+    let id = ajouter(
+        &mut e,
+        objet(
+            "Potion de soins légers",
+            GenreObjet::Potion,
+            "Cure Light Wounds",
+            1,
+            3,
+        ),
+        &ctx,
+    );
+    let plan = utiliser_objet_hors_combat(
+        &e,
+        &ParamsObjet {
+            pj: 1,
+            objet: id,
+            ..Default::default()
+        },
+        &ctx,
+    )
+    .unwrap();
+    assert!(!plan
+        .evenements
+        .iter()
+        .any(|ev| matches!(ev, EvenementAventure::Soin { .. })));
+    // la potion est tout de même consommée
+    assert!(plan
+        .evenements
+        .iter()
+        .any(|ev| matches!(ev, EvenementAventure::ObjetUtilise { .. })));
+}
+
+#[test]
+fn total_de_des_hors_limites_refuse() {
+    let ctx = ctx_avec(5, 0);
+    let mut e = aventure(&ctx);
+    let id = ajouter(
+        &mut e,
+        objet(
+            "Potion de soins légers",
+            GenreObjet::Potion,
+            "Cure Light Wounds",
+            1,
+            3,
+        ),
+        &ctx,
+    );
+    // 1d8 : de 1 à 8 seulement
+    let r = utiliser_objet_hors_combat(
+        &e,
+        &ParamsObjet {
+            pj: 1,
+            objet: id,
+            resultat_de: Some(9),
+            ..Default::default()
+        },
+        &ctx,
+    );
+    assert!(r.is_err());
+}
+
+#[test]
+fn sort_de_degats_hors_combat_applique_le_total_saisi() {
+    let ctx = ctx_avec(5, 0);
+    let mut e = aventure(&ctx);
+    let plan = lancer_hors_combat(
+        &ParamsLancer {
+            cibles: vec![2],
+            resultat_de: Some(15),
+            ..lancer("Fireball")
+        },
+        &ctx,
+    )
+    .unwrap();
+    // 5d6 : 15 points de dégâts (somme saisie)
+    assert!(plan.evenements.iter().any(|ev| matches!(
+        ev,
+        EvenementAventure::Degats {
+            pj: 2,
+            nombre: 15,
+            ..
+        }
+    )));
+    appliquer(&mut e, &plan.evenements, &ctx);
+}

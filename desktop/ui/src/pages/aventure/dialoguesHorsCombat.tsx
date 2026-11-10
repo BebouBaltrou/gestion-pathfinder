@@ -76,7 +76,7 @@ export function DialogueLancerSort({ pjs, pjId, agir, onFermer }: { pjs: PjAvent
       <Cibles pjs={pjs} valeur={cibles} onChange={setCibles} />
       <div className="champs">
         <SaisieNombre etiquette="d100 d'échec des sorts profanes (si besoin)" min={1} max={100} valeur={d100} onChange={setD100} />
-        <SaisieNombre etiquette="Résultat du dé du sort (noté)" min={1} max={100} valeur={resultat} onChange={setResultat} />
+        <SaisieNombre etiquette="Total des dés du sort (soins ou dégâts)" min={1} max={100} valeur={resultat} onChange={setResultat} />
       </div>
     </Dialogue>
   );
@@ -148,7 +148,7 @@ export function DialogueUtiliserObjet({
         )}
         {objet.sort && <SaisieNombre etiquette="d100 d'échec des sorts profanes (si besoin)" min={1} max={100} valeur={d100} onChange={setD100} />}
         {estBaton && <SaisieNombre etiquette="Charges dépensées" min={1} max={objet.charges?.[0] ?? 1} valeur={charges} onChange={setCharges} />}
-        <SaisieNombre etiquette="Résultat du dé du sort (noté)" min={1} max={100} valeur={resultat} onChange={setResultat} />
+        <SaisieNombre etiquette="Total des dés du sort (soins ou dégâts)" min={1} max={100} valeur={resultat} onChange={setResultat} />
       </div>
     </Dialogue>
   );

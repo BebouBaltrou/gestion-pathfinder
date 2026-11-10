@@ -738,6 +738,7 @@ impl EtatCombat {
             a.duree.clone(),
             a.choix_energie.as_deref(),
             p.metas.iter().any(|m| m.double_duree),
+            a.resultat_de,
             ctx,
         )?;
         Ok(())
@@ -851,9 +852,10 @@ impl EtatCombat {
         duree: Option<Duree>,
         choix_energie: Option<&str>,
         doubler_duree: bool,
+        de: Option<i32>,
         ctx: &dyn Fn(IdPj) -> Option<ContextePj>,
     ) -> Result<(), ErreurCombat> {
-        let sortie = Self::evenements_de_sort(
+        let sortie = tout_de_sort(
             nom_sort,
             cl,
             lanceur,
@@ -861,6 +863,7 @@ impl EtatCombat {
             duree,
             choix_energie,
             doubler_duree,
+            de,
         )?;
         for cible in cibles {
             self.verifier_engage(*cible)?;
@@ -917,6 +920,124 @@ impl EtatCombat {
         }
         Ok(())
     }
+}
+
+/// Soins ou dégâts d'un sort, d'après le total des dés saisi à la main par le joueur. Sans
+/// formule simple, sans total de dés, ou pour un sort à projectiles : rien n'est appliqué, une
+/// note le dit.
+pub(crate) fn soins_ou_degats(
+    nom_sort: &str,
+    cl: u32,
+    cibles: &[IdPj],
+    de: Option<i32>,
+) -> Result<EffetsSort, ErreurCombat> {
+    let mut sortie = EffetsSort::default();
+    if cibles.is_empty() {
+        return Ok(sortie);
+    }
+    let Some(sort) = referentiel().sort(nom_sort) else {
+        return Ok(sortie);
+    };
+    let st = crate::stats_sorts::statistiques(sort, cl);
+    let Some(ligne) = st.degats.first() else {
+        return Ok(sortie);
+    };
+    let nom = nom_fr(nom_sort);
+    if st.nombre.is_some() {
+        sortie.notes.push(format!(
+            "{nom} : plusieurs projectiles ou rayons : dégâts à appliquer à la main."
+        ));
+        return Ok(sortie);
+    }
+    let Some((n, faces, bonus)) = formule_simple(&ligne.formule) else {
+        sortie.notes.push(format!(
+            "{nom} : formule « {} » non reconnue : à appliquer à la main.",
+            ligne.formule
+        ));
+        return Ok(sortie);
+    };
+    let Some(total) = de else {
+        sortie.notes.push(format!(
+            "{nom} : {} ({}) : saisir le total des dés pour l'appliquer.",
+            ligne.libelle, ligne.formule
+        ));
+        return Ok(sortie);
+    };
+    if total < n as i32 || total > (n * faces) as i32 {
+        return invalide(format!(
+            "{nom} : total des dés de {n} à {} (formule {})",
+            n * faces,
+            ligne.formule
+        ));
+    }
+    let montant = total + bonus;
+    let soin = ligne.libelle == "Soins";
+    for cible in cibles {
+        sortie.evenements.push(if soin {
+            EvenementAventure::Soin {
+                pj: *cible,
+                nombre: montant,
+            }
+        } else {
+            EvenementAventure::Degats {
+                pj: *cible,
+                nombre: montant,
+                letaux: true,
+            }
+        });
+    }
+    let effet = if soin {
+        format!("{montant} PV soignés")
+    } else {
+        format!("{montant} dégât(s), type « {} »", ligne.libelle)
+    };
+    let a_valider = if ligne.a_confirmer {
+        " (lecture à valider)"
+    } else {
+        ""
+    };
+    sortie.notes.push(format!(
+        "{nom} : dés {total} + {bonus} = {effet}{a_valider}."
+    ));
+    Ok(sortie)
+}
+
+/// « 3d4+1 » -> (3, 4, 1) ; « 5d6 » -> (5, 6, 0).
+fn formule_simple(f: &str) -> Option<(u32, u32, i32)> {
+    let (n, reste) = f.trim().split_once('d')?;
+    let n: u32 = n.trim().parse().ok()?;
+    let (faces, bonus) = match reste.find(['+', '-']) {
+        Some(i) => (&reste[..i], reste[i..].trim().parse::<i32>().ok()?),
+        None => (reste, 0),
+    };
+    Some((n, faces.trim().parse().ok()?, bonus))
+}
+
+/// Tout ce qu'un sort fait hors ou dans un combat : effets automatiques, puis soins ou dégâts.
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn tout_de_sort(
+    nom_sort: &str,
+    cl: u32,
+    lanceur: &str,
+    cibles: &[IdPj],
+    duree: Option<Duree>,
+    choix_energie: Option<&str>,
+    doubler_duree: bool,
+    de: Option<i32>,
+) -> Result<EffetsSort, ErreurCombat> {
+    let mut sortie = EtatCombat::evenements_de_sort(
+        nom_sort,
+        cl,
+        lanceur,
+        cibles,
+        duree,
+        choix_energie,
+        doubler_duree,
+    )?;
+    let degats = soins_ou_degats(nom_sort, cl, cibles, de)?;
+    sortie.evenements.extend(degats.evenements);
+    sortie.notes.extend(degats.notes);
+    Ok(sortie)
 }
 
 /// Nom français d'un sort (traduction non officielle), à défaut le nom anglais.
