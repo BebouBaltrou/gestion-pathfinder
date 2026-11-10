@@ -214,3 +214,110 @@ impl EtatCombat {
         Ok(())
     }
 }
+
+impl EtatCombat {
+    /// Prend une forme animale ou élémentaire (sorts forme bestiale, corps élémentaire, forme
+    /// végétale) : les effets chiffrés du livre s'appliquent au personnage pour la durée du sort.
+    pub(crate) fn prendre_forme(
+        &mut self,
+        pj: IdPj,
+        sort: &str,
+        forme: &str,
+        ctx: &dyn Fn(IdPj) -> Option<ContextePj>,
+    ) -> Result<(), ErreurCombat> {
+        if self.phase != Phase::EnCours {
+            return erreur("le combat n'est pas commencé");
+        }
+        self.verifier_engage(pj)?;
+        let c = ctx(pj).ok_or(ErreurAventure::PjInconnu(pj))?;
+        let inc = c
+            .incantation
+            .clone()
+            .ok_or_else(|| ErreurCombat::Invalide(format!("{} ne lance pas de sorts", c.nom)))?;
+        let f = referentiel()
+            .formes
+            .iter()
+            .find(|f| f.id == forme && f.sort_en.eq_ignore_ascii_case(sort))
+            .ok_or_else(|| {
+                ErreurCombat::Invalide(format!("{forme} n'est pas une forme de {sort}"))
+            })?;
+        let fiche_sort = referentiel()
+            .sort(sort)
+            .ok_or_else(|| ErreurCombat::Invalide(format!("sort inconnu : {sort}")))?;
+        let niveau = fiche_sort.niveau_pour(&inc.classe_en).ok_or_else(|| {
+            ErreurCombat::Invalide(format!("{sort} n'est pas un sort de {}", inc.classe_en))
+        })?;
+        // une seule forme à la fois
+        let prefixe = fiches::formes::PREFIXE_FORME;
+        if self
+            .aventure
+            .effets
+            .actifs
+            .iter()
+            .any(|t| t.proprietaire == pj.to_string() && t.nom.starts_with(prefixe))
+        {
+            return erreur(format!("{} est déjà sous une forme", c.nom));
+        }
+        let emplacement = inc
+            .emplacements
+            .iter()
+            .find(|e| e.niveau_de_sort == niveau)
+            .ok_or_else(|| {
+                ErreurCombat::Invalide(format!(
+                    "{} n'a pas d'emplacement de niveau {niveau}",
+                    c.nom
+                ))
+            })?;
+        let depenses = self
+            .emplacements_depenses
+            .get(&(pj, niveau))
+            .copied()
+            .unwrap_or(0);
+        if emplacement.restants <= depenses {
+            return erreur(format!(
+                "plus d'emplacement de sort de niveau {niveau} pour {}",
+                c.nom
+            ));
+        }
+        let duree = crate::sorts::duree_suggeree(
+            fiche_sort.duree_en.as_deref().unwrap_or(""),
+            inc.niveau_de_lanceur,
+        )
+        .ok_or_else(|| {
+            ErreurCombat::Invalide(format!("durée de {sort} : à saisir (point à confirmer)"))
+        })?;
+        // action simple (sorts de forme : 1 action simple)
+        self.appliquer_interne(
+            &ActionCombat::Agir {
+                pj,
+                type_action: TypeAction::Simple,
+                libelle: format!("Prendre la forme {}", f.nom),
+                deplacement: false,
+            },
+            ctx,
+        )?;
+        *self.emplacements_depenses.entry((pj, niveau)).or_default() += 1;
+        self.fiche.push((
+            pj,
+            EvenementFiche::SortLance {
+                classe: inc.classe.clone(),
+                niveau_de_sort: niveau,
+                sort: sort.to_string(),
+            },
+        ));
+        let ev = aventure::EvenementAventure::EffetAjoute {
+            pj,
+            nom: f.nom_effet(),
+            source: format!("sort {}, forme {}", sort, f.nom),
+            duree,
+            effets: f.effets_chiffres(),
+            etats: Vec::new(),
+            soin_par_round: 0,
+            protections: Vec::new(),
+        };
+        let s = self.aventure.appliquer(&ev, ctx)?;
+        self.fusionner(s);
+        self.noter(format!("{} prend la forme {}.", c.nom, f.nom));
+        Ok(())
+    }
+}

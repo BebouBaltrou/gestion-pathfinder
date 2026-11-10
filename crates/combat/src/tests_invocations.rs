@@ -138,3 +138,68 @@ fn la_validation_ne_recopie_pas_les_creatures() {
     // le personnage lanceur reste, lui
     assert!(r.aventure.pjs.contains_key(&1));
 }
+
+/// Première forme du sort donné (les données changent : on ne code pas un identifiant).
+fn forme_de(sort: &str) -> String {
+    fiches::Referentiel::partage()
+        .formes
+        .iter()
+        .find(|f| f.sort_en == sort)
+        .unwrap()
+        .id
+        .clone()
+}
+
+#[test]
+fn une_forme_applique_ses_effets_au_personnage() {
+    let ctx = ctx_avec(11, 0);
+    let mut c = combat(&ctx);
+    let forme = forme_de("Beast Shape II");
+    c.appliquer(
+        ActionCombat::Forme {
+            pj: 1,
+            sort: "Beast Shape II".into(),
+            forme: forme.clone(),
+        },
+        &ctx,
+    )
+    .unwrap();
+    let e = c.etat();
+    assert_eq!(
+        e.aventure
+            .effets
+            .actifs
+            .iter()
+            .filter(|t| t.proprietaire == "1")
+            .count(),
+        1
+    );
+    assert_eq!(e.emplacements_depenses[&(1, 4)], 1);
+    // une seule forme à la fois
+    let deux = c.appliquer(
+        ActionCombat::Forme {
+            pj: 1,
+            sort: "Beast Shape II".into(),
+            forme,
+        },
+        &ctx,
+    );
+    assert!(deux.is_err());
+}
+
+#[test]
+fn une_forme_doit_appartenir_au_sort() {
+    let ctx = ctx_avec(11, 0);
+    let mut c = combat(&ctx);
+    let mauvaise = forme_de("Elemental Body I");
+    let r = c.appliquer(
+        ActionCombat::Forme {
+            pj: 1,
+            sort: "Beast Shape II".into(),
+            forme: mauvaise,
+        },
+        &ctx,
+    );
+    assert!(r.is_err());
+    assert!(c.etat().aventure.effets.actifs.is_empty());
+}

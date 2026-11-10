@@ -54,6 +54,12 @@ pub enum ActionCombat {
     },
     /// Lancement d'un sort (voir `EtatCombat::apercu_sort` pour ce qu'il faut lancer avant).
     Lancer(ParamsLancer),
+    /// Forme animale ou élémentaire (sort de forme) : effets chiffrés appliqués au personnage.
+    Forme {
+        pj: IdPj,
+        sort: String,
+        forme: String,
+    },
     /// Convocation d'alliés naturels : créatures invoquées qui agissent pendant le combat.
     Convoquer {
         lanceur: IdPj,
@@ -633,6 +639,7 @@ impl EtatCombat {
                 }
             }
             ActionCombat::Lancer(params) => self.lancer(params, ctx)?,
+            ActionCombat::Forme { pj, sort, forme } => self.prendre_forme(*pj, sort, forme, ctx)?,
             ActionCombat::Convoquer {
                 lanceur,
                 sort,
