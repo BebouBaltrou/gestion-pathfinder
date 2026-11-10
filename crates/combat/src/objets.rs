@@ -338,7 +338,6 @@ impl EtatCombat {
                 a.duree.clone(),
                 a.choix_energie.as_deref(),
                 false,
-                a.resultat_de,
                 ctx,
             )?;
         }

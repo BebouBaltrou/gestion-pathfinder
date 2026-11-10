@@ -116,7 +116,7 @@ pub fn lancer_hors_combat(
             return Ok(plan);
         }
     }
-    let effets = crate::sorts::tout_de_sort(
+    let effets = EtatCombat::evenements_de_sort(
         &p.sort.nom_en,
         cl,
         &c.nom,
@@ -124,7 +124,6 @@ pub fn lancer_hors_combat(
         a.duree.clone(),
         a.choix_energie.as_deref(),
         p.metas.iter().any(|m| m.double_duree),
-        a.resultat_de,
     )?;
     plan.evenements.extend(effets.evenements);
     for n in effets.notes {
@@ -183,7 +182,7 @@ pub fn utiliser_objet_hors_combat(
         }
     }
     if let Some(nom_sort) = &objet.sort {
-        let effets = crate::sorts::tout_de_sort(
+        let effets = EtatCombat::evenements_de_sort(
             nom_sort,
             l.cl,
             &c.nom,
@@ -191,7 +190,6 @@ pub fn utiliser_objet_hors_combat(
             a.duree.clone(),
             a.choix_energie.as_deref(),
             false,
-            a.resultat_de,
         )?;
         plan.evenements.extend(effets.evenements);
         for n in effets.notes {
