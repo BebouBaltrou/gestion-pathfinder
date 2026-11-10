@@ -756,6 +756,7 @@ fn main() {
             aventure::aventure_demarrer,
             aventure::aventure_terminer,
             aventure::aventure_evenement,
+            aventure::aventure_utiliser_objet,
             aventure::aventure_actualiser_ressources,
             aventure::aventure_apercu_recul,
             aventure::combat_vue,

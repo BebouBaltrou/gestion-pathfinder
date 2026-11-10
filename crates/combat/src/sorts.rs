@@ -107,7 +107,7 @@ pub fn effets_des_sorts() -> &'static [EffetSort] {
     })
 }
 
-fn effet_du_sort(nom_en: &str) -> Option<&'static EffetSort> {
+pub(crate) fn effet_du_sort(nom_en: &str) -> Option<&'static EffetSort> {
     effets_des_sorts()
         .iter()
         .find(|e| e.nom_en.eq_ignore_ascii_case(nom_en))
@@ -333,7 +333,7 @@ impl Distraction {
     }
 }
 
-struct Preparation {
+pub(crate) struct Preparation {
     sort: &'static Sort,
     inc: IncantationPj,
     niveau_du_sort: u32,

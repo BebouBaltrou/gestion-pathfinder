@@ -508,3 +508,65 @@ pub fn catalogue_etats() -> Vec<(String, String)> {
 pub fn catalogue_regles() -> Vec<combat::regles::RegleOptionnelle> {
     combat::regles::catalogue().to_vec()
 }
+
+/// Utilisation d'un objet hors combat, telle que saisie par l'interface (noms en camelCase).
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct UtilisationHorsCombat {
+    pub pj: IdPj,
+    pub objet: u64,
+    #[serde(default)]
+    pub resultat_de: Option<i32>,
+    #[serde(default)]
+    pub niveau_de_lanceur: Option<u32>,
+    #[serde(default)]
+    pub charges: u32,
+}
+
+/// Potion, parchemin, baguette ou bâton utilisé hors combat : soins ou dégâts d'après les dés
+/// saisis, effets (bonus, états) et dépense, enregistrés d'un bloc.
+#[tauri::command]
+pub fn aventure_utiliser_objet(s: S, utilisation: UtilisationHorsCombat) -> Retour {
+    let mut x = session(&s);
+    if x.combat.is_some() {
+        return Retour::erreur(
+            "Un combat est en cours : l'aventure reprend à sa fin (validation ou abandon)",
+        );
+    }
+    let Some(etat) = x.avec_etat(|e| e.aventure.clone()).flatten() else {
+        return Retour::erreur("Aucune aventure en cours");
+    };
+    let contextes = x.contextes();
+    let params = combat::ParamsObjet {
+        pj: utilisation.pj,
+        objet: utilisation.objet,
+        resultat_de: utilisation.resultat_de,
+        niveau_de_lanceur: utilisation.niveau_de_lanceur,
+        charges: utilisation.charges,
+        cibles: vec![utilisation.pj],
+        ..Default::default()
+    };
+    let sortie = match combat::evenements_objet_hors_combat(&etat, &params, &|id| {
+        contextes.get(&id).cloned()
+    }) {
+        Ok(s) => s,
+        Err(e) => return Retour::erreur(e.to_string()),
+    };
+    let message = if sortie.notes.is_empty() {
+        "Objet utilisé".to_string()
+    } else {
+        sortie.notes.join(" ")
+    };
+    let evenements = sortie
+        .evenements
+        .into_iter()
+        .map(Evenement::Aventure)
+        .collect();
+    x.executer(
+        Evenement::Groupe {
+            libelle: "Utiliser un objet (hors combat)".into(),
+            evenements,
+        },
+        &message,
+    )
+}

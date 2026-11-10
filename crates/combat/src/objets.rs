@@ -38,6 +38,9 @@ pub struct ParamsObjet {
     pub type_action: Option<TypeAction>,
     #[cfg_attr(feature = "serde", serde(default))]
     pub resultat_de: Option<i32>,
+    /// Niveau de lanceur modifié pour cette utilisation (hors combat) ; sinon celui de l'objet.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub niveau_de_lanceur: Option<u32>,
 }
 
 fn invalide<T>(m: impl Into<String>) -> Result<T, ErreurCombat> {

@@ -157,3 +157,18 @@ sort inconnu, sort hors liste de la classe, trop de sorts d'un niveau). Points �
 - **Prérequis d'un don** : non bloquant ; un prérequis manquant reste signalé sur la fiche (comme après une montée).
 - **Sorts connus** : la liste complète est refaite, sans garder le niveau où chaque sort a été appris.
 - **Lignage** : la liste proposée n'est pas encore filtrée sur le lignage ; le cœur refuse le mauvais choix.
+
+## Objets magiques hors combat (branche claude/v1.2)
+
+- Fait : potion, parchemin, baguette, bâton et objet à charges utilisables hors combat
+  (`crates/combat/src/hors_combat.rs`). Soins et dégâts d'après le total des dés saisi ; effets
+  (bonus, états) ajoutés à l'aventure ; charges décomptées ; niveau de lanceur modifiable.
+  Commande `aventure_utiliser_objet`, bouton « Utiliser » sur la carte du personnage.
+- Repris des règles du combat, à valider : test de niveau de lanceur et accident du parchemin,
+  échec des sorts profanes (p. 490) ; bâton : niveau du porteur s'il est plus haut (p. 491).
+- Point à confirmer : durée d'un effet hors combat quand la formule n'est pas simple (la durée
+  est alors à saisir ; aucune durée n'est supposée).
+- Non fait : choix des charges à la création d'un objet (par défaut le maximum) ; lancer de
+  sorts préparés hors combat (druide, clerc, magicien) : emplacements à décompter hors combat,
+  à traiter dans une étape suivante.
+- Hors périmètre : les effets d'objets sans sort (ex. objets à effet fixe) restent à appliquer à la main.

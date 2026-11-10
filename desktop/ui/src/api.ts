@@ -732,6 +732,8 @@ export const api = {
     appeler<Retour>("aventure_demarrer", { heure, minute, survie, degatsMassifs }),
   aventureTerminer: () => appeler<Retour>("aventure_terminer"),
   aventureEvenement: (evenement: EvenementAventure) => appeler<Retour>("aventure_evenement", { evenement }),
+  aventureUtiliserObjet: (utilisation: { pj: number; objet: number; resultatDe: number | null; niveauDeLanceur: number | null; charges: number }) =>
+    appeler<Retour>("aventure_utiliser_objet", { utilisation }),
   aventureApercuRecul: (instant: number) => appeler<ReculVue | null>("aventure_apercu_recul", { instant }),
   aventureActualiserRessources: (pj: number) => appeler<Retour>("aventure_actualiser_ressources", { pj }),
   // ---- combat
