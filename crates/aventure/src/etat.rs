@@ -31,6 +31,12 @@ pub struct ContextePj {
     pub pv_max: i32,
     pub con_score: i32,
     pub con_mod: i32,
+    /// Jets de défense et classe d'armure, calculés par la fiche (réflexes, volonté, CA, CA contact, CA pris au dépourvu).
+    pub reflexes: i32,
+    pub volonte: i32,
+    pub ca: i32,
+    pub ca_contact: i32,
+    pub ca_depourvu: i32,
     /// Bonus de base au jet de Vigueur (fiche).
     pub vigueur: i32,
     /// Modificateur d'initiative de la fiche.

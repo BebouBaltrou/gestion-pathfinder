@@ -17,6 +17,7 @@ export function CartePj({
   onEffet,
   onObjet,
   onLancerSort,
+  defenses = false,
   onActualiserRessources,
   entete,
   pied,
@@ -32,6 +33,7 @@ export function CartePj({
   onEffet?: () => void;
   onObjet?: () => void;
   onLancerSort?: () => void;
+  defenses?: boolean;
   onActualiserRessources?: () => void;
   entete?: ReactNode;
   pied?: ReactNode;
@@ -46,6 +48,7 @@ export function CartePj({
         {entete}
       </div>
       <JaugePv pj={pj} grande={grandeJauge} />
+      {defenses && <BandeauDefenses pj={pj} />}
       {onSante && (
         <div className="rangee-boutons">
           <button className="bouton mini" onClick={() => onSante("degats")}>Prendre des dégâts</button>
@@ -136,5 +139,20 @@ export function CartePj({
       </div>
       {pied}
     </article>
+  );
+}
+
+// Défenses utiles en combat, lues sur la fiche (calculées par le cœur).
+function BandeauDefenses({ pj }: { pj: PjAventure }) {
+  const signe = (n: number) => (n >= 0 ? `+${n}` : `${n}`);
+  return (
+    <div className="defenses" aria-label={`Défenses de ${pj.nom}`}>
+      <span title="Classe d'armure">CA <strong>{pj.ca}</strong></span>
+      <span title="CA contre contact">contact <strong>{pj.caContact}</strong></span>
+      <span title="CA pris au dépourvu">dépourvu <strong>{pj.caDepourvu}</strong></span>
+      <span title="Jet de Vigueur">Vig. <strong>{signe(pj.vigueur)}</strong></span>
+      <span title="Jet de Réflexes">Réf. <strong>{signe(pj.reflexes)}</strong></span>
+      <span title="Jet de Volonté">Vol. <strong>{signe(pj.volonte)}</strong></span>
+    </div>
   );
 }

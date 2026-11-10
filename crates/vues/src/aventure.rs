@@ -138,6 +138,13 @@ pub struct PjAventure {
     pub niveau_de_lanceur: u32,
     /// Chance d'échec des sorts profanes due à l'armure (%).
     pub echec_arcanique_pct: u32,
+    /// Défenses de la fiche, affichées en combat : vigueur, réflexes, volonté, CA, CA contact, CA pris au dépourvu.
+    pub vigueur: i32,
+    pub reflexes: i32,
+    pub volonte: i32,
+    pub ca: i32,
+    pub ca_contact: i32,
+    pub ca_depourvu: i32,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -418,6 +425,12 @@ fn pj_vue(
         caster: c.incantation.is_some(),
         niveau_de_lanceur: c.incantation.as_ref().map_or(0, |i| i.niveau_de_lanceur),
         echec_arcanique_pct: c.incantation.as_ref().map_or(0, |i| i.echec_arcanique_pct),
+        vigueur: c.vigueur,
+        reflexes: c.reflexes,
+        volonte: c.volonte,
+        ca: c.ca,
+        ca_contact: c.ca_contact,
+        ca_depourvu: c.ca_depourvu,
     }
 }
 

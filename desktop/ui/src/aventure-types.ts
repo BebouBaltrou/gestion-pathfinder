@@ -63,6 +63,12 @@ export type PjAventure = {
   caster: boolean;
   niveauDeLanceur: number;
   echecArcaniquePct: number;
+  vigueur: number;
+  reflexes: number;
+  volonte: number;
+  ca: number;
+  caContact: number;
+  caDepourvu: number;
 };
 
 export type DemandeVue = {

@@ -74,6 +74,7 @@ export const pjMialee = (pv = 23): PjAventure => ({
   caster: true,
   niveauDeLanceur: 5,
   echecArcaniquePct: 20,
+  vigueur: 4, reflexes: 2, volonte: 2, ca: 16, caContact: 12, caDepourvu: 12,
 });
 
 const pjValeros = (): PjAventure => ({
@@ -97,6 +98,7 @@ const pjValeros = (): PjAventure => ({
   caster: false,
   niveauDeLanceur: 0,
   echecArcaniquePct: 0,
+  vigueur: 4, reflexes: 2, volonte: 2, ca: 16, caContact: 12, caDepourvu: 12,
 });
 
 const pjKyra = (): PjAventure => ({

@@ -188,3 +188,7 @@ select.champ-jeu { padding-right: 8px; }
   --or: #7aa2ff; --or-clair: #a3bfff; --or-sombre: #07102b; --vert: #4be0a0; --rouge: #ff5d7a; --orange: #ffb15e;
   --travail: #5ec8ff; --magie: #5ee6d3; --influence: #c08cff; --rayon: 18px; --rayon-petit: 12px;
 }
+
+/* défenses affichées sous la barre de vie en combat */
+.defenses { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 6px 0; font-size: 0.85rem; opacity: 0.9; }
+.defenses strong { font-variant-numeric: tabular-nums; }
