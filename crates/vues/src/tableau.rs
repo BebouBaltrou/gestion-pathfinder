@@ -662,6 +662,14 @@ mod tests {
         assert_eq!(t.comptes_personnages.texte, "50 po");
         assert_eq!(t.localites.len(), 1);
         assert_eq!(t.localites[0].presents, vec!["Seoni".to_string()]);
+        #[cfg(feature = "serde")]
+        {
+            // les sommes arrivent à l'interface avec un champ pc numérique (sinon « NaN po »)
+            let v = serde_json::to_value(&t).unwrap();
+            assert!(v["tresorerieLocalites"]["pc"].is_i64());
+            assert!(v["comptesPersonnages"]["pc"].is_i64());
+            assert!(v["localites"][0]["tresorerie"]["pc"].is_i64());
+        }
         assert!(t.localites[0].categorie.contains("limite"));
         assert_eq!(t.travaux.len(), 1);
         assert!(t.travaux[0].titre.contains("Bar"));

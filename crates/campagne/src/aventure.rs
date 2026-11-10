@@ -84,7 +84,33 @@ impl Etat {
                     dd: e.dd,
                 })
                 .collect();
-            let mut sorts_connus: Vec<String> = fiche.sorts_connus.clone();
+            // Lanceur qui prépare (druide, prêtre) : on lance les sorts préparés non encore lancés.
+            let mut prepares_disponibles: Vec<(u32, String)> = Vec::new();
+            if def.prepare() {
+                let utilises = etat.prepares_utilises.get(&inc.classe);
+                for (k, s) in etat
+                    .prepares
+                    .get(&inc.classe)
+                    .into_iter()
+                    .flatten()
+                    .enumerate()
+                {
+                    if !utilises.and_then(|u| u.get(k)).copied().unwrap_or(false) {
+                        prepares_disponibles.push((s.niveau, s.sort.clone()));
+                    }
+                }
+            }
+            let mut sorts_connus: Vec<String> = if def.prepare() {
+                let mut noms: Vec<String> = prepares_disponibles
+                    .iter()
+                    .map(|(_, n)| n.clone())
+                    .collect();
+                noms.sort();
+                noms.dedup();
+                noms
+            } else {
+                fiche.sorts_connus.clone()
+            };
             sorts_connus.extend(inc.sorts_de_lignage.iter().map(|(n, _)| n.clone()));
             let metamagies = fiche
                 .dons_choisis()
@@ -114,6 +140,7 @@ impl Etat {
                     .collect(),
                 emplacements,
                 sorts_connus,
+                prepares_disponibles,
                 metamagies,
                 echec_arcanique_pct: v.equipement.echec_sorts_pct,
                 // décision du 24/10/2026 : la métamagie sera intégrée plus tard
@@ -129,6 +156,11 @@ impl Etat {
             con_score: score_de(Carac::Con),
             con_mod: mod_de(Carac::Con),
             vigueur: v.vigueur.total,
+            reflexes: v.reflexes.total,
+            volonte: v.volonte.total,
+            ca: v.ca.total,
+            ca_contact: v.ca_contact.total,
+            ca_depourvu: v.ca_pris_au_depourvu.total,
             initiative: v.initiative.total,
             dommages,
             incantation,

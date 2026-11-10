@@ -20,6 +20,9 @@ use temps::{
 };
 
 /// Identifiant d'un personnage (celui de la campagne).
+/// Origine des ressources qui sont des pouvoirs de classe de la fiche (forme animale…).
+pub const POUVOIR_DE_CLASSE: &str = "pouvoir de classe : ";
+
 pub type IdPj = u32;
 
 /// Valeurs de la fiche dont le mode aventure a besoin, fournies par la campagne au moment de
@@ -35,6 +38,12 @@ pub struct ContextePj {
     pub niveau_druide: u32,
     pub con_score: i32,
     pub con_mod: i32,
+    /// Jets de défense et classe d'armure, calculés par la fiche (réflexes, volonté, CA, CA contact, CA pris au dépourvu).
+    pub reflexes: i32,
+    pub volonte: i32,
+    pub ca: i32,
+    pub ca_contact: i32,
+    pub ca_depourvu: i32,
     /// Bonus de base au jet de Vigueur (fiche).
     pub vigueur: i32,
     /// Modificateur d'initiative de la fiche.
@@ -79,6 +88,9 @@ pub struct IncantationPj {
     pub emplacements: Vec<EmplacementPj>,
     /// Noms anglais des sorts connus (sorts de lignage compris).
     pub sorts_connus: Vec<String>,
+    /// Lanceur qui prépare : sorts préparés du jour pas encore lancés (niveau, nom anglais).
+    /// Vide pour un lanceur spontané.
+    pub prepares_disponibles: Vec<(u32, String)>,
     /// Dons de métamagie connus (noms anglais).
     pub metamagies: Vec<String>,
     /// Chance d'échec des sorts profanes due à l'armure et au bouclier (%).
@@ -1280,6 +1292,13 @@ impl EtatAventure {
                 }
                 r.utilisees += quantite;
                 let reste = r.restantes();
+                // pouvoir de classe (forme animale…) : l'utilisation s'inscrit aussi dans le journal de la fiche
+                if r.source.starts_with(POUVOIR_DE_CLASSE) {
+                    for _ in 0..*quantite {
+                        s.fiche
+                            .push((*pj, EvenementFiche::PouvoirUtilise { cle: nom.clone() }));
+                    }
+                }
                 self.noter(format!(
                     "{} utilise {nom} ({reste} restant(s) aujourd'hui).",
                     c.nom

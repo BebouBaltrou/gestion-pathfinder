@@ -157,3 +157,30 @@ sort inconnu, sort hors liste de la classe, trop de sorts d'un niveau). Points �
 - **Prérequis d'un don** : non bloquant ; un prérequis manquant reste signalé sur la fiche (comme après une montée).
 - **Sorts connus** : la liste complète est refaite, sans garder le niveau où chaque sort a été appris.
 - **Lignage** : la liste proposée n'est pas encore filtrée sur le lignage ; le cœur refuse le mauvais choix.
+
+## Objets magiques hors combat (branche claude/v1.2)
+
+- Fait : potion, parchemin, baguette, bâton et objet à charges utilisables hors combat
+  (`crates/combat/src/hors_combat.rs`). Soins et dégâts d'après le total des dés saisi ; effets
+  (bonus, états) ajoutés à l'aventure ; charges décomptées ; niveau de lanceur modifiable.
+  Commande `aventure_utiliser_objet`, bouton « Utiliser » sur la carte du personnage.
+- Repris des règles du combat, à valider : test de niveau de lanceur et accident du parchemin,
+  échec des sorts profanes (p. 490) ; bâton : niveau du porteur s'il est plus haut (p. 491).
+- Point à confirmer : durée d'un effet hors combat quand la formule n'est pas simple (la durée
+  est alors à saisir ; aucune durée n'est supposée).
+- Fait : lancer de sorts hors combat (lanceurs qui préparent et spontanés) : emplacement et sort
+  préparé contrôlés par la fiche, entrée « Sort lancé » ajoutée à la fiche, soins ou dégâts aux
+  dés saisis, effets ajoutés à l'aventure (`lancer_hors_combat`, commande `aventure_lancer_sort`,
+  bouton « Lancer un sort… »). Les effets hors combat restent actifs si un combat commence ensuite.
+- Fait : charges restantes choisies à l'ajout d'un objet (maximum par défaut).
+- Point à valider : un sort préparé lancé hors combat est retiré des sorts disponibles pour la
+  journée, comme en combat.
+- Hors périmètre : les effets d'objets sans sort (ex. objets à effet fixe) restent à appliquer à la main.
+
+## Pouvoirs de classe par jour : suivi dans la fiche (claude/v1.2)
+
+- Fait : utiliser « Forme animale » (ou un autre pouvoir de classe par jour) dans l'aventure
+  inscrit une utilisation dans le journal de la fiche ; la fiche refuse si elle n'a plus d'utilisation.
+- Fait : un repos d'une nuit complète (aventure) remet à zéro les pouvoirs de la fiche, comme le repos de la fiche.
+- Point à confirmer : rendre une utilisation dans l'aventure (« récupérer ») ne modifie pas la fiche :
+  la fiche n'a pas de mécanisme de retour partiel. Lecture à valider.

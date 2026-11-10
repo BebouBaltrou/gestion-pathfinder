@@ -15,26 +15,27 @@ function lire(id: number): string | null {
 }
 
 // Recadre le centre de l'image en carré de TAILLE × TAILLE, au format JPEG (données compactes).
+// La lecture passe par une « data: URL » (et non une « blob: URL »), que la sécurité de l'application autorise.
 function reduire(fichier: File): Promise<string> {
   return new Promise((resoudre, rejeter) => {
-    const url = URL.createObjectURL(fichier);
-    const image = new Image();
-    image.onload = () => {
-      const cote = Math.min(image.naturalWidth, image.naturalHeight);
-      const x = (image.naturalWidth - cote) / 2;
-      const y = (image.naturalHeight - cote) / 2;
-      const canevas = document.createElement("canvas");
-      canevas.width = TAILLE;
-      canevas.height = TAILLE;
-      canevas.getContext("2d")?.drawImage(image, x, y, cote, cote, 0, 0, TAILLE, TAILLE);
-      URL.revokeObjectURL(url);
-      resoudre(canevas.toDataURL("image/jpeg", 0.85));
+    const lecteur = new FileReader();
+    lecteur.onload = () => {
+      const image = new Image();
+      image.onload = () => {
+        const cote = Math.min(image.naturalWidth, image.naturalHeight);
+        const x = (image.naturalWidth - cote) / 2;
+        const y = (image.naturalHeight - cote) / 2;
+        const canevas = document.createElement("canvas");
+        canevas.width = TAILLE;
+        canevas.height = TAILLE;
+        canevas.getContext("2d")?.drawImage(image, x, y, cote, cote, 0, 0, TAILLE, TAILLE);
+        resoudre(canevas.toDataURL("image/jpeg", 0.85));
+      };
+      image.onerror = () => rejeter(new Error("image illisible"));
+      image.src = String(lecteur.result);
     };
-    image.onerror = () => {
-      URL.revokeObjectURL(url);
-      rejeter(new Error("image illisible"));
-    };
-    image.src = url;
+    lecteur.onerror = () => rejeter(new Error("fichier illisible"));
+    lecteur.readAsDataURL(fichier);
   });
 }
 

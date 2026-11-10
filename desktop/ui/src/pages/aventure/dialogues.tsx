@@ -541,11 +541,16 @@ export function DialogueObjet({
   const [genre, setGenre] = useState<Consommable["genre"]>("potion");
   const [nom, setNom] = useState("");
   const [sort, setSort] = useState("");
+  const [catalogueSorts, setCatalogueSorts] = useState<{ nomEn: string; nom: string; niveauMin: number }[]>([]);
+  useEffect(() => {
+    api.catalogueSorts().then(setCatalogueSorts).catch(() => setCatalogueSorts([]));
+  }, []);
   const [niveauSort, setNiveauSort] = useState<number | null>(1);
   const [cl, setCl] = useState<number | null>(1);
   const [arcanique, setArcanique] = useState(true);
   const [quantite, setQuantite] = useState<number | null>(1);
   const [charges, setCharges] = useState<number | null>(50);
+  const [restantes, setRestantes] = useState<number | null>(null);
   const [parJour, setParJour] = useState<number | null>(null);
   const avecSort = ["potion", "parchemin", "baguette", "baton"].includes(genre);
   const aCharges = ["baguette", "baton", "charges"].includes(genre);
@@ -575,7 +580,7 @@ export function DialogueObjet({
                 niveau_de_lanceur: avecSort ? pl(cl) : 0,
                 arcanique,
                 quantite: genre === "baguette" || genre === "baton" ? 1 : pl(quantite),
-                charges: aCharges && charges ? { restantes: charges, max: charges } : null,
+                charges: aCharges && charges ? { restantes: Math.min(restantes ?? charges, charges), max: charges } : null,
                 par_jour: parJour ? { restantes: parJour, max: parJour } : null,
                 notes: "",
               };
@@ -610,8 +615,25 @@ export function DialogueObjet({
       {avecSort && (
         <div className="champs">
           <label className="champ-g">
-            <span>Sort contenu (nom anglais du catalogue : Cure Light Wounds…)</span>
-            <input className="champ-jeu" value={sort} onChange={(e) => setSort(e.target.value)} />
+            <span>Sort contenu</span>
+            <select
+              className="champ-jeu"
+              value={sort}
+              onChange={(e) => {
+                const choisi = catalogueSorts.find((s) => s.nomEn === e.target.value);
+                setSort(e.target.value);
+                if (choisi) setNiveauSort(choisi.niveauMin);
+              }}
+            >
+              <option value="">— choisir un sort —</option>
+              {catalogueSorts
+                .filter((s) => s.niveauMin <= (genre === "potion" ? 3 : genre === "baguette" ? 4 : 9))
+                .map((s) => (
+                  <option key={s.nomEn} value={s.nomEn}>
+                    {s.nom} (niveau {s.niveauMin})
+                  </option>
+                ))}
+            </select>
           </label>
           <SaisieNombre etiquette="Niveau du sort" min={0} max={9} valeur={niveauSort} onChange={setNiveauSort} rappel={genre === "potion" ? "3 au plus (potion)" : genre === "baguette" ? "4 au plus (baguette)" : undefined} />
           <SaisieNombre etiquette="Niveau de lanceur de l'objet" min={1} max={20} valeur={cl} onChange={setCl} rappel={genre === "baton" ? "8 au moins (bâton)" : undefined} />
@@ -635,6 +657,9 @@ export function DialogueObjet({
             rappel={genre === "baton" ? "10 au plus" : genre === "baguette" ? "50 au plus" : undefined}
           />
         )}
+        {aCharges && charges ? (
+          <SaisieNombre etiquette="Charges restantes (au maximum par défaut)" min={0} max={charges} valeur={restantes ?? charges} onChange={setRestantes} />
+        ) : null}
         {genre === "charges" && <SaisieNombre etiquette="Usages par jour (rendus au repos)" min={0} max={99} valeur={parJour} onChange={setParJour} />}
       </div>
     </Dialogue>

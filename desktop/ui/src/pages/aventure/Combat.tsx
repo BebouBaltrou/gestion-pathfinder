@@ -141,6 +141,7 @@ export function Combat({ outils, vue }: { outils: Outils; vue: CombatVue }) {
               <CartePj
                 pj={pj}
                 actif={enCours && pj.id === vue.actif}
+                defenses
                 grandeJauge={pj.id === vue.actif}
                 onSante={(mode) => setOuvert({ g: "sante", pj: pj.id, mode })}
                 onEffet={() => setOuvert({ g: "effet", pj: pj.id })}

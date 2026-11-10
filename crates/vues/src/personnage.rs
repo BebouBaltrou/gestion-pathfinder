@@ -2618,3 +2618,58 @@ mod export_apercu {
         }
     }
 }
+
+/// Régression de l'écran noir : tout ce que l'interface lit doit être en camelCase.
+/// Une clé en snake_case (ex. `grace_attendues`) fait planter l'affichage, car l'interface
+/// lit `gracesAttendues` et reçoit `undefined`.
+#[cfg(all(test, feature = "serde"))]
+mod tests_serialisation {
+    use super::*;
+
+    fn cles_avec_tiret_bas(v: &serde_json::Value, chemin: &str, sortie: &mut Vec<String>) {
+        match v {
+            serde_json::Value::Object(m) => {
+                for (k, enfant) in m {
+                    if k.contains('_') {
+                        sortie.push(format!("{chemin}.{k}"));
+                    }
+                    cles_avec_tiret_bas(enfant, &format!("{chemin}.{k}"), sortie);
+                }
+            }
+            serde_json::Value::Array(a) => {
+                for (i, enfant) in a.iter().enumerate() {
+                    cles_avec_tiret_bas(enfant, &format!("{chemin}[{i}]"), sortie);
+                }
+            }
+            _ => {}
+        }
+    }
+
+    #[test]
+    fn fiche_sans_cle_en_snake_case() {
+        let f = apercu_fiche(&fiches::exemple::elfe_ensorceleuse()).unwrap();
+        let json = serde_json::to_value(&f).unwrap();
+        let mut fautives = Vec::new();
+        cles_avec_tiret_bas(&json, "fiche", &mut fautives);
+        assert!(
+            fautives.is_empty(),
+            "clés en snake_case envoyées à l'interface : {fautives:?}"
+        );
+        assert!(json["choixClasses"]["gracesAttendues"].is_number());
+        assert!(json["choixClasses"]["ennemisAttendus"].is_number());
+    }
+
+    #[test]
+    fn choix_classes_par_defaut_en_camel_case() {
+        let v = serde_json::to_value(ChoixClassesVue::default()).unwrap();
+        for cle in [
+            "gracesAttendues",
+            "gracesDisponibles",
+            "gracesTextes",
+            "talentsTextes",
+            "rageChoisis",
+        ] {
+            assert!(v.get(cle).is_some(), "clé absente : {cle}");
+        }
+    }
+}

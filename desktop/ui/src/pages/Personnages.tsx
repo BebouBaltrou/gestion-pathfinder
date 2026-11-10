@@ -5,6 +5,7 @@ import type { FicheVue, LignePersonnage } from "../fiche-types";
 import { Creation } from "./fiche/Creation";
 import { FicheComplete } from "./fiche/FicheComplete";
 import { ImportPdf } from "./fiche/ImportPdf";
+import { LimiteErreur } from "../composants/LimiteErreur";
 import { SuiviPersonnage } from "./SuiviPersonnage";
 
 /** Liste des personnages joueurs et, pour celui choisi, sa fiche. */
@@ -132,7 +133,11 @@ export function Personnages({ outils }: { outils: Outils }) {
               }}
             />
           )}
-          {pj && fiche && <FicheComplete outils={outils} pj={pj} fiche={fiche} niveauVise={niveauVise} />}
+          {pj && fiche && (
+            <LimiteErreur cle={pj.id}>
+              <FicheComplete outils={outils} pj={pj} fiche={fiche} niveauVise={niveauVise} />
+            </LimiteErreur>
+          )}
           {pj && <SuiviPersonnage outils={outils} pj={pj} />}
         </div>
       </div>

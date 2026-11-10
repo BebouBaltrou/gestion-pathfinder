@@ -30,6 +30,9 @@ pub struct Creature {
     pub pv: i32,
     /// Classe d'armure (valeur normale).
     pub ca: i32,
+    /// CA contact et CA pris au dépourvu (saisies dans la ligne CA ; à défaut, la CA normale).
+    pub ca_contact: i32,
+    pub ca_depourvu: i32,
     /// Modificateur d'initiative (premier nombre de « Init »).
     pub init: i32,
     /// Jets de sauvegarde : « Réf », « Vig », « Vol ».
@@ -161,6 +164,12 @@ pub fn premier_entier(s: &str) -> Option<i32> {
     s[debut..fin].trim_start_matches('+').parse().ok()
 }
 
+/// Premier entier qui suit `mot` dans `s` (« contact 13 » → 13).
+fn nombre_apres(s: &str, mot: &str) -> Option<i32> {
+    s.find(mot)
+        .and_then(|i| premier_entier(&s[i + mot.len()..]))
+}
+
 /// Paires « nom valeur » d'une ligne (« Réf +4, Vig +3, Vol +2 » ; « 10, Dex 15 » avec `libelle`
 /// pour la première valeur nue).
 fn paires(libelle: &str, valeur: &str) -> Vec<(String, i32)> {
@@ -180,6 +189,8 @@ fn creature_depuis(c: &Value, niveau: u32) -> Creature {
     let mut lignes = Vec::new();
     let mut pv = None;
     let mut ca = None;
+    let mut contact = None;
+    let mut depourvu = None;
     let mut init = None;
     let mut sauvegardes = BTreeMap::new();
     let mut caracteristiques = BTreeMap::new();
@@ -191,7 +202,11 @@ fn creature_depuis(c: &Value, niveau: u32) -> Creature {
             let valeur = texte(&l["valeur"]);
             match libelle.as_str() {
                 "pv" => pv = premier_entier(&valeur),
-                "CA" => ca = premier_entier(&valeur),
+                "CA" => {
+                    ca = premier_entier(&valeur);
+                    contact = nombre_apres(&valeur, "contact");
+                    depourvu = nombre_apres(&valeur, "dépourvu");
+                }
                 "Init" => init = premier_entier(&valeur),
                 "Réf" => sauvegardes.extend(paires("Réf", &valeur)),
                 "For" => caracteristiques.extend(paires("For", &valeur)),
@@ -217,6 +232,8 @@ fn creature_depuis(c: &Value, niveau: u32) -> Creature {
         source: texte(&c["source"]),
         pv: pv.unwrap_or(0),
         ca: ca.unwrap_or(0),
+        ca_contact: contact.or(ca).unwrap_or(0),
+        ca_depourvu: depourvu.or(ca).unwrap_or(0),
         init: init.unwrap_or(0),
         sauvegardes,
         caracteristiques,

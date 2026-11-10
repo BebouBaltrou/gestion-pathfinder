@@ -107,7 +107,7 @@ pub fn effets_des_sorts() -> &'static [EffetSort] {
     })
 }
 
-fn effet_du_sort(nom_en: &str) -> Option<&'static EffetSort> {
+pub(crate) fn effet_du_sort(nom_en: &str) -> Option<&'static EffetSort> {
     effets_des_sorts()
         .iter()
         .find(|e| e.nom_en.eq_ignore_ascii_case(nom_en))
@@ -333,19 +333,19 @@ impl Distraction {
     }
 }
 
-struct Preparation {
-    sort: &'static Sort,
-    inc: IncantationPj,
-    niveau_du_sort: u32,
-    niveau_effectif: u32,
-    niveau_emplacement: u32,
-    metas: Vec<&'static Metamagie>,
-    restants: u32,
-    dd: i32,
-    type_action: TypeAction,
-    verbal: bool,
-    gestuel: bool,
-    echec_pct: u32,
+pub(crate) struct Preparation {
+    pub(crate) sort: &'static Sort,
+    pub(crate) inc: IncantationPj,
+    pub(crate) niveau_du_sort: u32,
+    pub(crate) niveau_effectif: u32,
+    pub(crate) niveau_emplacement: u32,
+    pub(crate) metas: Vec<&'static Metamagie>,
+    pub(crate) restants: u32,
+    pub(crate) dd: i32,
+    pub(crate) type_action: TypeAction,
+    pub(crate) verbal: bool,
+    pub(crate) gestuel: bool,
+    pub(crate) echec_pct: u32,
 }
 
 fn invalide<T>(m: impl Into<String>) -> Result<T, ErreurCombat> {
@@ -353,21 +353,36 @@ fn invalide<T>(m: impl Into<String>) -> Result<T, ErreurCombat> {
 }
 
 impl EtatCombat {
-    fn preparer_sort(
-        &self,
+    /// `depenses(niveau)` : emplacements de ce niveau déjà dépensés depuis le début du combat
+    /// (0 hors combat : la fiche donne déjà les restants).
+    /// Lancers déjà faits dans ce combat d'un sort préparé (même nom, même niveau de sort).
+    fn lances_prepares(&self, pj: IdPj, nom_en: &str, niveau: u32) -> usize {
+        self.fiche
+            .iter()
+            .filter(|(p, e)| {
+                *p == pj
+                    && matches!(
+                        e,
+                        fiches::journal::EvenementFiche::SortLance { niveau_de_sort, sort: s, .. }
+                            if *niveau_de_sort == niveau && s.eq_ignore_ascii_case(nom_en)
+                    )
+            })
+            .count()
+    }
+
+    pub(crate) fn preparer_sort(
         pj: IdPj,
         nom_sort: &str,
         metamagies_choisies: &[String],
         heighten: Option<u32>,
         ctx: &dyn Fn(IdPj) -> Option<ContextePj>,
+        depenses: &dyn Fn(u32) -> u32,
+        lances: &dyn Fn(&str, u32) -> usize,
     ) -> Result<Preparation, ErreurCombat> {
         let c = ctx(pj).ok_or(ErreurAventure::PjInconnu(pj))?;
         let Some(inc) = c.incantation else {
             return invalide(format!("{} ne lance pas de sorts", c.nom));
         };
-        if !inc.spontane {
-            return invalide("lanceur à sorts préparés : non géré (seul le lanceur spontané l'est pour l'instant)");
-        }
         let sort = referentiel()
             .sort(nom_sort)
             .ok_or_else(|| ErreurCombat::Invalide(format!("sort inconnu : {nom_sort}")))?;
@@ -384,6 +399,27 @@ impl EtatCombat {
                 sort.nom_en, inc.classe_en
             ))
         })?;
+        if !inc.spontane {
+            // Lanceur qui prépare : le sort doit être préparé aujourd'hui et pas encore lancé
+            // (les lancers de ce combat comptent déjà).
+            if !metamagies_choisies.is_empty() || heighten.is_some() {
+                return invalide(
+                    "lanceur qui prépare : métamagie pas encore prise en charge en combat",
+                );
+            }
+            let prepares = inc
+                .prepares_disponibles
+                .iter()
+                .filter(|(n, s)| *n == niveau_du_sort && s.eq_ignore_ascii_case(&sort.nom_en))
+                .count();
+            let lances = lances(&sort.nom_en, niveau_du_sort);
+            if prepares <= lances {
+                return invalide(format!(
+                    "{} n'a pas {} préparé au niveau {niveau_du_sort} (ou il est déjà lancé)",
+                    c.nom, sort.nom_en
+                ));
+            }
+        }
         if !metamagies_choisies.is_empty() && !inc.metamagie_active {
             return invalide(
                 "la métamagie n'est pas encore intégrée (réglage de la fiche à activer)",
@@ -443,12 +479,7 @@ impl EtatCombat {
                         c.nom
                     ))
                 })?;
-            let depenses = self
-                .emplacements_depenses
-                .get(&(pj, niveau_emplacement))
-                .copied()
-                .unwrap_or(0);
-            e.restants.saturating_sub(depenses)
+            e.restants.saturating_sub(depenses(niveau_emplacement))
         };
         let dd = fiches::dd_sort(
             niveau_effectif,
@@ -500,7 +531,20 @@ impl EtatCombat {
         niveau_heighten: Option<u32>,
         ctx: &dyn Fn(IdPj) -> Option<ContextePj>,
     ) -> Result<ApercuSort, ErreurCombat> {
-        let p = self.preparer_sort(pj, sort, metamagies, niveau_heighten, ctx)?;
+        let p = Self::preparer_sort(
+            pj,
+            sort,
+            metamagies,
+            niveau_heighten,
+            ctx,
+            &|n| {
+                self.emplacements_depenses
+                    .get(&(pj, n))
+                    .copied()
+                    .unwrap_or(0)
+            },
+            &|nom, n| self.lances_prepares(pj, nom, n),
+        )?;
         let effet = effet_du_sort(&p.sort.nom_en);
         let cl = p.inc.niveau_de_lanceur;
         let mut suggeree = p
@@ -550,7 +594,20 @@ impl EtatCombat {
             return invalide("le combat n'est pas commencé");
         }
         self.verifier_engage(a.pj)?;
-        let p = self.preparer_sort(a.pj, &a.sort, &a.metamagies, a.niveau_heighten, ctx)?;
+        let p = Self::preparer_sort(
+            a.pj,
+            &a.sort,
+            &a.metamagies,
+            a.niveau_heighten,
+            ctx,
+            &|n| {
+                self.emplacements_depenses
+                    .get(&(a.pj, n))
+                    .copied()
+                    .unwrap_or(0)
+            },
+            &|nom, n| self.lances_prepares(a.pj, nom, n),
+        )?;
         let c = ctx(a.pj).ok_or(ErreurAventure::PjInconnu(a.pj))?;
         if p.restants == 0 {
             return invalide(format!(

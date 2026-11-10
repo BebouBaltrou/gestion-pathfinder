@@ -1,11 +1,11 @@
 {
-  "version": "1.2.23",
+  "version": "1.2.26",
   "notes": "",
-  "pub_date": "2026-11-01T11:21:09.435Z",
+  "pub_date": "2026-11-01T22:12:34.125Z",
   "platforms": {
     "windows-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSMWh2V0F6RlZDanV2ZHA5RjJTSHoycjM5bXhIK25OMUhBWDJEdXliYWZJZHlXeGFOd2xRTzlZTmQrd3V3YWVIRXVKcXpabktQZ1B1dFlONm5FTUhEejVMTFpPbUhoVXdNPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkzNTMyMDQ5CWZpbGU6R2VzdGlvbiBQYXRoZmluZGVyXzEuMi4yM194NjQtc2V0dXAuZXhlCXZlcnNpb246MS4yLjIzClRVZWp3dEM1cy9nVEljT3FBemFRblp3T20vYjA1T1lvQlVncUQ3WFY3UnI0bVVYK0h1a1ZBbGNnSlhIY0YvbFVZQ1VtVW9VejVwTitMOHBMaHUzSkNBPT0K",
-      "url": "https://api.github.com/repos/BebouBaltrou/gestion-pathfinder/releases/assets/698126415"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSMWh2V0F6RlZDam5vaUhHYkxoOURKRzBFUURUay9EVGJLbXVwdWhhc3orZWl4Smp3cWNrSzY2V2krTVVIb2hnSFhmbWVpRDNGaWdObkljZTVsSjIrc1FRbUtzeThJMEFzPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkzNTcxMTMzCWZpbGU6R2VzdGlvbiBQYXRoZmluZGVyXzEuMi4yNl94NjQtc2V0dXAuZXhlCXZlcnNpb246MS4yLjI2ClR2dlZYdW10THR3NXlXaUthem5uOWwxR2UzNUdJdFFzQ2hHcFBEa3RmL3hxSlRwbE1LUCs2eEtwY0lmYmU4ZnZLK3d0b3BsOWlOOTg0ZGtId1dsNEN3PT0K",
+      "url": "https://api.github.com/repos/BebouBaltrou/gestion-pathfinder/releases/assets/699675513"
     }
   }
 }

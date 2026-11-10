@@ -16,6 +16,8 @@ export function CartePj({
   onSante,
   onEffet,
   onObjet,
+  onLancerSort,
+  defenses = false,
   onActualiserRessources,
   entete,
   pied,
@@ -30,6 +32,8 @@ export function CartePj({
   onSante?: (mode: "degats" | "soin" | "temp" | "continu") => void;
   onEffet?: () => void;
   onObjet?: () => void;
+  onLancerSort?: () => void;
+  defenses?: boolean;
   onActualiserRessources?: () => void;
   entete?: ReactNode;
   pied?: ReactNode;
@@ -44,6 +48,7 @@ export function CartePj({
         {entete}
       </div>
       <JaugePv pj={pj} grande={grandeJauge} />
+      {defenses && <BandeauDefenses pj={pj} />}
       {onSante && (
         <div className="rangee-boutons">
           <button className="bouton mini" onClick={() => onSante("degats")}>Prendre des dégâts</button>
@@ -128,10 +133,31 @@ export function CartePj({
         {onObjet && (
           <div className="rangee-boutons">
             <button className="bouton mini" onClick={onObjet}>+ Ajouter un objet</button>
+            {onLancerSort && pj.caster && <button className="bouton mini" onClick={onLancerSort}>Lancer un sort…</button>}
           </div>
         )}
       </div>
       {pied}
     </article>
+  );
+}
+
+// Défenses utiles en combat, lues sur la fiche (calculées par le cœur).
+function BandeauDefenses({ pj }: { pj: PjAventure }) {
+  const signe = (n: number) => (n >= 0 ? `+${n}` : `${n}`);
+  return (
+    <div className="defenses" aria-label={`Défenses de ${pj.nom}`}>
+      <span title="Classe d'armure">CA <strong>{pj.ca}</strong></span>
+      <span title="CA contre contact">contact <strong>{pj.caContact}</strong></span>
+      <span title="CA pris au dépourvu">dépourvu <strong>{pj.caDepourvu}</strong></span>
+      <span title="Jet de Vigueur">Vig. <strong>{signe(pj.vigueur)}</strong></span>
+      <span title="Jet de Réflexes">Réf. <strong>{signe(pj.reflexes)}</strong></span>
+      <span title="Jet de Volonté">Vol. <strong>{signe(pj.volonte)}</strong></span>
+      <span title="Résistance à la magie : la fiche ne la calcule pas encore">RM <em className="doux">point à confirmer</em></span>
+      <span title="Manœuvre de combat : la fiche ne la calcule pas encore (il manque le BBA)">CMD <em className="doux">point à confirmer</em></span>
+      <div className="doux defenses-effets">
+        Effets : {pj.effets.length > 0 ? pj.effets.map((e) => e.nom).join(", ") : "aucun"} · États : {pj.etats.length > 0 ? pj.etats.map((e) => e.nom).join(", ") : "aucun"}
+      </div>
+    </div>
   );
 }

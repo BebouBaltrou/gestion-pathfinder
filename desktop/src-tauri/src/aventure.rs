@@ -160,19 +160,37 @@ pub fn aventure_actualiser_ressources(s: S, pj: u32) -> Retour {
     let Some(ressources) = x.avec_etat(|e| {
         let etat = e.fiche_de(IdPersonnage(pj))?;
         let v = etat.fiche.calculer(fiches::Referentiel::partage()).ok()?;
-        let lignage = etat.fiche.lignage.clone()?;
-        let niveau = etat.fiche.niveau_de_classe("ensorceleur");
-        let cha = v
-            .modificateurs
-            .get(&fiches::Carac::Cha)
-            .copied()
-            .unwrap_or(0);
-        Some(aventure::ressources_de_lignage(&lignage, niveau, cha))
+        let mut liste = Vec::new();
+        // pouvoirs de lignage (ensorceleur)
+        if let Some(lignage) = etat.fiche.lignage.clone() {
+            let niveau = etat.fiche.niveau_de_classe("ensorceleur");
+            let cha = v
+                .modificateurs
+                .get(&fiches::Carac::Cha)
+                .copied()
+                .unwrap_or(0);
+            liste.extend(aventure::ressources_de_lignage(&lignage, niveau, cha));
+        }
+        // pouvoirs de classe limités par jour (forme animale du druide, canalisation…)
+        for p in &v.pouvoirs {
+            if let Some(max) = p.max.and_then(|m| u32::try_from(m).ok()).filter(|m| *m > 0) {
+                liste.push((
+                    p.cle.clone(),
+                    aventure::Ressource {
+                        unite: aventure::UniteRessource::Utilisations,
+                        max,
+                        utilisees: 0,
+                        source: format!("{}{}", aventure::POUVOIR_DE_CLASSE, p.nom),
+                    },
+                ));
+            }
+        }
+        Some(liste)
     }) else {
         return Retour::erreur("Aucune campagne ouverte");
     };
     let Some(ressources) = ressources else {
-        return Retour::erreur("Ce personnage n'a pas de pouvoir de lignage à suivre");
+        return Retour::erreur("Fiche de personnage introuvable ou illisible");
     };
     if ressources.is_empty() {
         return Retour::erreur("Aucun pouvoir à utilisations quotidiennes à ce niveau");
@@ -602,4 +620,164 @@ pub fn combat_formes_animales(s: S, pj: u32) -> Vec<FormePouvoir> {
             texte: f.texte.clone(),
         })
         .collect()
+}
+
+/// Utilisation d'un objet hors combat, telle que saisie par l'interface (noms en camelCase).
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct UtilisationHorsCombat {
+    pub pj: IdPj,
+    pub objet: u64,
+    #[serde(default)]
+    pub resultat_de: Option<i32>,
+    #[serde(default)]
+    pub niveau_de_lanceur: Option<u32>,
+    #[serde(default)]
+    pub charges: u32,
+}
+
+/// Potion, parchemin, baguette ou bâton utilisé hors combat : soins ou dégâts d'après les dés
+/// saisis, effets (bonus, états) et dépense, enregistrés d'un bloc.
+#[tauri::command]
+pub fn aventure_utiliser_objet(s: S, utilisation: UtilisationHorsCombat) -> Retour {
+    let mut x = session(&s);
+    if x.combat.is_some() {
+        return Retour::erreur(
+            "Un combat est en cours : l'aventure reprend à sa fin (validation ou abandon)",
+        );
+    }
+    let Some(etat) = x.avec_etat(|e| e.aventure.clone()).flatten() else {
+        return Retour::erreur("Aucune aventure en cours");
+    };
+    let contextes = x.contextes();
+    let params = combat::ParamsObjet {
+        pj: utilisation.pj,
+        objet: utilisation.objet,
+        resultat_de: utilisation.resultat_de,
+        niveau_de_lanceur: utilisation.niveau_de_lanceur,
+        charges: utilisation.charges,
+        cibles: vec![utilisation.pj],
+        ..Default::default()
+    };
+    let sortie = match combat::evenements_objet_hors_combat(&etat, &params, &|id| {
+        contextes.get(&id).cloned()
+    }) {
+        Ok(s) => s,
+        Err(e) => return Retour::erreur(e.to_string()),
+    };
+    let message = if sortie.notes.is_empty() {
+        "Objet utilisé".to_string()
+    } else {
+        sortie.notes.join(" ")
+    };
+    let evenements = sortie
+        .evenements
+        .into_iter()
+        .map(Evenement::Aventure)
+        .collect();
+    x.executer(
+        Evenement::Groupe {
+            libelle: "Utiliser un objet (hors combat)".into(),
+            evenements,
+        },
+        &message,
+    )
+}
+
+/// Sort lancé hors combat, tel que saisi par l'interface (noms en camelCase).
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct LancementHorsCombat {
+    pub pj: IdPj,
+    /// Nom anglais du catalogue.
+    pub sort: String,
+    #[serde(default)]
+    pub cibles: Vec<IdPj>,
+    #[serde(default)]
+    pub resultat_de: Option<i32>,
+    #[serde(default)]
+    pub echec_arcanique_d100: Option<i32>,
+    #[serde(default)]
+    pub duree: Option<Duree>,
+    #[serde(default)]
+    pub choix_energie: Option<String>,
+}
+
+/// Sort lancé hors combat (lanceurs qui préparent ou spontanés) : emplacement dépensé dans la
+/// fiche, soins ou dégâts d'après les dés saisis, effets ajoutés à l'aventure. Un seul groupe.
+#[tauri::command]
+pub fn aventure_lancer_sort(s: S, lancement: LancementHorsCombat) -> Retour {
+    let mut x = session(&s);
+    if x.combat.is_some() {
+        return Retour::erreur(
+            "Un combat est en cours : l'aventure reprend à sa fin (validation ou abandon)",
+        );
+    }
+    let contextes = x.contextes();
+    let params = combat::ParamsLancer {
+        pj: lancement.pj,
+        sort: lancement.sort,
+        cibles: if lancement.cibles.is_empty() {
+            vec![lancement.pj]
+        } else {
+            lancement.cibles
+        },
+        resultat_de: lancement.resultat_de,
+        echec_arcanique_d100: lancement.echec_arcanique_d100,
+        duree: lancement.duree,
+        choix_energie: lancement.choix_energie,
+        ..Default::default()
+    };
+    let sortie = match combat::lancer_hors_combat(&params, &|id| contextes.get(&id).cloned()) {
+        Ok(s) => s,
+        Err(e) => return Retour::erreur(e.to_string()),
+    };
+    let message = sortie.notes.join(" ");
+    let mut evenements: Vec<Evenement> = Vec::new();
+    if let Some(fiche) = sortie.fiche {
+        evenements.push(Evenement::Fiche {
+            pj: IdPersonnage(lancement.pj),
+            evenement: fiche,
+        });
+    }
+    evenements.extend(sortie.evenements.into_iter().map(Evenement::Aventure));
+    x.executer(
+        Evenement::Groupe {
+            libelle: "Lancer un sort (hors combat)".into(),
+            evenements,
+        },
+        &message,
+    )
+}
+
+/// Un sort du catalogue pour la liste déroulante d'un objet magique.
+#[derive(serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SortCatalogueVue {
+    pub nom_en: String,
+    pub nom: String,
+    /// Niveau de sort le plus bas parmi les classes qui le lancent.
+    pub niveau_min: u32,
+}
+
+/// Catalogue des sorts (noms anglais, noms français, niveau minimum), trié par nom français.
+#[tauri::command]
+pub fn catalogue_sorts() -> Vec<SortCatalogueVue> {
+    let traductions = fiches::traductions::Traductions::partage();
+    let mut sorts: Vec<SortCatalogueVue> = fiches::Referentiel::partage()
+        .tous_les_sorts()
+        .iter()
+        .filter_map(|s| {
+            let niveau_min = s.niveaux.values().copied().min()?;
+            Some(SortCatalogueVue {
+                nom: traductions
+                    .sort(&s.nom_en)
+                    .map_or_else(|| s.nom_en.clone(), |f| f.nom.clone()),
+                nom_en: s.nom_en.clone(),
+                niveau_min,
+            })
+        })
+        .collect();
+    sorts.sort_by(|a, b| a.nom.cmp(&b.nom));
+    sorts
 }

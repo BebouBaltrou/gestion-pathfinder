@@ -535,6 +535,11 @@ impl Referentiel {
             .find(|s| forme_canonique(&s.nom_en) == cible)
     }
 
+    /// Tous les sorts du catalogue (noms anglais, niveaux par classe).
+    pub fn tous_les_sorts(&self) -> &[crate::catalogue::Sort] {
+        &self.sorts
+    }
+
     pub fn sort(&self, nom_en: &str) -> Option<&crate::catalogue::Sort> {
         self.sorts
             .iter()
@@ -598,5 +603,21 @@ mod tests {
         assert!(r.competences.iter().all(|x| x.source.page.is_some()));
         let e = r.classe("ensorceleur").unwrap();
         assert!(e.lignages.iter().all(|l| l.source.page.is_some()));
+    }
+}
+
+#[cfg(test)]
+mod tests_sorts_liste {
+    use super::*;
+
+    #[test]
+    fn la_liste_des_sorts_donne_les_niveaux_minimum() {
+        let sorts = Referentiel::partage().tous_les_sorts();
+        assert!(sorts.len() > 100);
+        let soins = sorts
+            .iter()
+            .find(|s| s.nom_en == "Cure Light Wounds")
+            .expect("Cure Light Wounds au catalogue");
+        assert_eq!(soins.niveaux.values().copied().min(), Some(1));
     }
 }

@@ -622,6 +622,7 @@ export const api = {
   noterObjet: (id: number, note: string) => appeler<Retour>("noter_objet", { id, note }),
   exporterNotes: (critere: CritereNotes) => appeler<Retour>("exporter_notes", { critere }),
   pageInventaire: () => appeler<PageInventaire | null>("page_inventaire"),
+  catalogueSorts: () => appeler<{ nomEn: string; nom: string; niveauMin: number }[]>("catalogue_sorts"),
   catalogueObjets: (requete: string, typeObjet: string | null, limite = 60) =>
     appeler<ModeleObjetVue[]>("catalogue_objets", { requete, typeObjet, limite }),
   typesObjets: () => appeler<string[]>("types_objets"),
@@ -735,6 +736,10 @@ export const api = {
     appeler<Retour>("aventure_demarrer", { heure, minute, survie, degatsMassifs }),
   aventureTerminer: () => appeler<Retour>("aventure_terminer"),
   aventureEvenement: (evenement: EvenementAventure) => appeler<Retour>("aventure_evenement", { evenement }),
+  aventureLancerSort: (lancement: { pj: number; sort: string; cibles: number[]; resultatDe: number | null; echecArcaniqueD100: number | null }) =>
+    appeler<Retour>("aventure_lancer_sort", { lancement }),
+  aventureUtiliserObjet: (utilisation: { pj: number; objet: number; resultatDe: number | null; niveauDeLanceur: number | null; charges: number }) =>
+    appeler<Retour>("aventure_utiliser_objet", { utilisation }),
   aventureApercuRecul: (instant: number) => appeler<ReculVue | null>("aventure_apercu_recul", { instant }),
   aventureActualiserRessources: (pj: number) => appeler<Retour>("aventure_actualiser_ressources", { pj }),
   // ---- combat
@@ -764,6 +769,8 @@ export const api = {
 
 /** « 1 052 po 3 pa 4 pc » (montant en pièces de cuivre), séparateur de milliers. */
 export function formaterPo(pc: number): string {
+  // une valeur absente ne doit jamais s'afficher « NaN po NaN pa »
+  if (typeof pc !== "number" || !Number.isFinite(pc)) return "montant indisponible";
   const signe = pc < 0 ? "−" : "";
   const abs = Math.abs(pc);
   const po = Math.trunc(abs / 100);

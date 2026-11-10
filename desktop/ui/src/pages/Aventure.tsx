@@ -4,13 +4,15 @@
 import { useCallback, useEffect, useState } from "react";
 import type { Outils } from "../App";
 import { api, Retour } from "../api";
-import type { AlerteVue, AventureVue, CombatVue, DemandeVue, EffetVue, EvenementAventure, ObjetVue, RegleOptionnelle, RessourceVue } from "../aventure-types";
+import type { AlerteVue, AventureVue, CombatVue, DemandeVue, EffetVue, EvenementAventure, ObjetVue, PjAventure, RegleOptionnelle, RessourceVue } from "../aventure-types";
 import { Alertes, Dialogue, SaisieDe } from "../composants/jeu";
 import { ev, PasHoraire } from "../evenements-jeu";
 import { CartePj } from "./aventure/CartePj";
 import { Combat } from "./aventure/Combat";
 import { Historique } from "./aventure/Historique";
 import { DialogueEffet, DialogueHeure, DialogueObjet, DialogueRepos, DialogueSante, ChoixDuree } from "./aventure/dialogues";
+import { DialogueObjetHorsCombat } from "./aventure/DialogueObjetHorsCombat";
+import { DialogueLancerHorsCombat } from "./aventure/DialogueLancerHorsCombat";
 import { SaisieNombre } from "../composants/jeu";
 
 type Ouvert =
@@ -27,6 +29,8 @@ export function Aventure({ outils }: { outils: Outils }) {
   const [vue, setVue] = useState<AventureVue | null>(null);
   const [combat, setCombat] = useState<CombatVue | null>(null);
   const [ouvert, setOuvert] = useState<Ouvert>(null);
+  const [objetHc, setObjetHc] = useState<{ pj: number; pjNom: string; objet: ObjetVue } | null>(null);
+  const [sortHc, setSortHc] = useState<PjAventure | null>(null);
 
   const charger = useCallback(async () => {
     const [v, c] = await Promise.all([api.aventureVue(), api.combatVue()]);
@@ -126,7 +130,8 @@ export function Aventure({ outils }: { outils: Outils }) {
             onEffet={() => setOuvert({ genre: "effet", pj: pj.id })}
             onObjet={() => setOuvert({ genre: "objet", pj: pj.id })}
             onRetirerEffet={(e: EffetVue) => envoyer(ev.effetRetire(e.id))}
-            onUtiliserObjet={(o: ObjetVue) => envoyer(ev.objetUtilise(pj.id, o.id, 1))}
+            onUtiliserObjet={(o: ObjetVue) => setObjetHc({ pj: pj.id, pjNom: pj.nom, objet: o })}
+            onLancerSort={() => setSortHc(pj)}
             onUtiliserRessource={(r: RessourceVue) => envoyer(ev.ressourceUtilisee(pj.id, r.cle, 1))}
             onRendreRessource={(r: RessourceVue) => envoyer(ev.ressourceRendue(pj.id, r.cle, 1))}
             onActualiserRessources={() => outils.agir(api.aventureActualiserRessources(pj.id))}
@@ -156,6 +161,8 @@ export function Aventure({ outils }: { outils: Outils }) {
         <DialogueSante pj={pjs.find((p) => p.id === ouvert.pj)!} mode={ouvert.mode} envoyer={envoyer} onFermer={() => setOuvert(null)} />
       )}
       {ouvert?.genre === "effet" && <DialogueEffet pjs={pjs} pjId={ouvert.pj} envoyer={envoyer} onFermer={() => setOuvert(null)} />}
+      {sortHc && <DialogueLancerHorsCombat pj={sortHc} agir={outils.agir} onFermer={() => setSortHc(null)} />}
+      {objetHc && <DialogueObjetHorsCombat pjId={objetHc.pj} pjNom={objetHc.pjNom} objet={objetHc.objet} agir={outils.agir} onFermer={() => setObjetHc(null)} />}
       {ouvert?.genre === "objet" && <DialogueObjet pjs={pjs} pjId={ouvert.pj} envoyer={envoyer} onFermer={() => setOuvert(null)} />}
       {ouvert?.genre === "repos" && <DialogueRepos pjs={pjs} envoyer={envoyer} onFermer={() => setOuvert(null)} />}
       {ouvert?.genre === "heure" && <DialogueHeure jour={h.jour} heure={h.heure} minute={h.minute} envoyer={envoyer} onFermer={() => setOuvert(null)} />}
