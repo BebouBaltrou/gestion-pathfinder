@@ -11,12 +11,16 @@ import { CartePj } from "./aventure/CartePj";
 import { Combat } from "./aventure/Combat";
 import { Historique } from "./aventure/Historique";
 import { DialogueEffet, DialogueHeure, DialogueObjet, DialogueRepos, DialogueSante, ChoixDuree } from "./aventure/dialogues";
+import { DialogueLancerSort, DialogueModifierObjet, DialogueUtiliserObjet } from "./aventure/dialoguesHorsCombat";
 import { SaisieNombre } from "../composants/jeu";
 
 type Ouvert =
   | { genre: "sante"; pj: number; mode: "degats" | "soin" | "temp" | "continu" }
   | { genre: "effet"; pj: number }
   | { genre: "objet"; pj: number }
+  | { genre: "sort"; pj: number }
+  | { genre: "utiliser"; pj: number; objet: ObjetVue }
+  | { genre: "modifier"; pj: number; objet: ObjetVue }
   | { genre: "repos" }
   | { genre: "heure" }
   | { genre: "combat" }
@@ -126,7 +130,9 @@ export function Aventure({ outils }: { outils: Outils }) {
             onEffet={() => setOuvert({ genre: "effet", pj: pj.id })}
             onObjet={() => setOuvert({ genre: "objet", pj: pj.id })}
             onRetirerEffet={(e: EffetVue) => envoyer(ev.effetRetire(e.id))}
-            onUtiliserObjet={(o: ObjetVue) => envoyer(ev.objetUtilise(pj.id, o.id, 1))}
+            onUtiliserObjet={(o: ObjetVue) => (o.genreCode === "munition" ? envoyer(ev.objetUtilise(pj.id, o.id, 1)) : setOuvert({ genre: "utiliser", pj: pj.id, objet: o }))}
+            onModifierObjet={(o: ObjetVue) => setOuvert({ genre: "modifier", pj: pj.id, objet: o })}
+            onLancerSort={() => setOuvert({ genre: "sort", pj: pj.id })}
             onUtiliserRessource={(r: RessourceVue) => envoyer(ev.ressourceUtilisee(pj.id, r.cle, 1))}
             onRendreRessource={(r: RessourceVue) => envoyer(ev.ressourceRendue(pj.id, r.cle, 1))}
             onActualiserRessources={() => outils.agir(api.aventureActualiserRessources(pj.id))}
@@ -157,6 +163,9 @@ export function Aventure({ outils }: { outils: Outils }) {
       )}
       {ouvert?.genre === "effet" && <DialogueEffet pjs={pjs} pjId={ouvert.pj} envoyer={envoyer} onFermer={() => setOuvert(null)} />}
       {ouvert?.genre === "objet" && <DialogueObjet pjs={pjs} pjId={ouvert.pj} envoyer={envoyer} onFermer={() => setOuvert(null)} />}
+      {ouvert?.genre === "sort" && <DialogueLancerSort pjs={pjs} pjId={ouvert.pj} agir={(p) => outils.agir(p as Promise<Retour>)} onFermer={() => setOuvert(null)} />}
+      {ouvert?.genre === "utiliser" && <DialogueUtiliserObjet pjs={pjs} pjId={ouvert.pj} objet={ouvert.objet} agir={(p) => outils.agir(p as Promise<Retour>)} onFermer={() => setOuvert(null)} />}
+      {ouvert?.genre === "modifier" && <DialogueModifierObjet pj={ouvert.pj} objet={ouvert.objet} envoyer={envoyer} onFermer={() => setOuvert(null)} />}
       {ouvert?.genre === "repos" && <DialogueRepos pjs={pjs} envoyer={envoyer} onFermer={() => setOuvert(null)} />}
       {ouvert?.genre === "heure" && <DialogueHeure jour={h.jour} heure={h.heure} minute={h.minute} envoyer={envoyer} onFermer={() => setOuvert(null)} />}
       {ouvert?.genre === "maintenir" && <DialogueMaintenir alerte={ouvert.alerte} envoyer={envoyer} onFermer={() => setOuvert(null)} />}

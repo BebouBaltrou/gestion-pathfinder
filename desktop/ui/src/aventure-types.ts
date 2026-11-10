@@ -36,6 +36,10 @@ export type ObjetVue = {
   charges: [number, number] | null;
   parJour: [number, number] | null;
   niveauDeLanceur: number;
+  niveauDuSort: number;
+  arcanique: boolean;
+  notes: string;
+  sortEn: string | null;
 };
 export type SortConnuVue = { nomEn: string; nom: string; niveau: number };
 export type EtatVue = { id: string; nom: string };

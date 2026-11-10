@@ -71,6 +71,7 @@ export const ev = {
   }),
   objetAjoute: (pj: number, objet: Consommable): EvenementAventure => ({ ObjetAjoute: { pj, objet } }),
   objetRetire: (pj: number, id: number): EvenementAventure => ({ ObjetRetire: { pj, id } }),
+  objetModifie: (pj: number, id: number, objet: Consommable): EvenementAventure => ({ ObjetModifie: { pj, id, objet } }),
   objetUtilise: (pj: number, id: number, charges = 1): EvenementAventure => ({ ObjetUtilise: { pj, id, charges } }),
   objetRecupere: (pj: number, id: number, nombre: number): EvenementAventure => ({ ObjetRecupere: { pj, id, nombre } }),
   ressourceUtilisee: (pj: number, nom: string, quantite = 1): EvenementAventure => ({ RessourceUtilisee: { pj, nom, quantite } }),

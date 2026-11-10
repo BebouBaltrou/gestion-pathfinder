@@ -8,6 +8,7 @@ pub mod catalogue;
 pub mod combat;
 pub mod economie;
 pub mod etat;
+pub mod hors_combat;
 pub mod objets;
 pub mod regles;
 pub mod sorts;
@@ -19,6 +20,7 @@ pub use combat::persistance;
 pub use combat::{ApercuFin, Combat, Ctx, RecapPj, Resultat, Validation, FORMAT_COMBAT};
 pub use economie::{Depense, EconomieTour, TypeAction};
 pub use etat::{ActionCombat, Demande, EntreeCombat, ErreurCombat, EtatCombat, Init, Phase, Stats};
+pub use hors_combat::{lancer_hors_combat, utiliser_objet_hors_combat, Plan};
 pub use objets::ParamsObjet;
 pub use sorts::{ApercuSort, Distraction, ParamsLancer};
 
@@ -26,6 +28,8 @@ pub use sorts::{ApercuSort, Distraction, ParamsLancer};
 mod tests;
 #[cfg(test)]
 mod tests_actions;
+#[cfg(test)]
+mod tests_hors_combat;
 #[cfg(test)]
 mod tests_objets;
 #[cfg(test)]

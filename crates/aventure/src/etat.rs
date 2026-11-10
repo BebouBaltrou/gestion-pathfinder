@@ -174,6 +174,17 @@ pub enum EvenementAventure {
         pj: IdPj,
         id: IdObjet,
     },
+    /// Modifie les statistiques d'un objet (nom, sort, niveaux, charges restantes et maximum,
+    /// quantité, notes) ; l'identifiant reste le même. Les règles de création s'appliquent.
+    ObjetModifie {
+        pj: IdPj,
+        id: IdObjet,
+        objet: Consommable,
+    },
+    /// Remarque du journal d'aventure (lancer hors combat : dés, accident, échec…), sans effet.
+    Remarque {
+        texte: String,
+    },
     /// Dépense d'un objet : un exemplaire, ou `charges` charges (bâton), et une utilisation
     /// quotidienne s'il en a. En combat, `UtiliserObjet` applique en plus les effets du sort.
     ObjetUtilise {
@@ -319,6 +330,8 @@ impl EvenementAventure {
             }
             ObjetAjoute { pj, objet } => format!("Aventure : PJ-{pj} reçoit {}", objet.nom),
             ObjetRetire { pj, id } => format!("Aventure : PJ-{pj} se défait de l'objet n° {id}"),
+            ObjetModifie { pj, id, .. } => format!("Aventure : PJ-{pj} modifie l'objet n° {id}"),
+            Remarque { texte } => format!("Aventure : {texte}"),
             ObjetUtilise { pj, id, .. } => format!("Aventure : PJ-{pj} utilise l'objet n° {id}"),
             ObjetRecupere { pj, id, nombre } => {
                 format!("Aventure : PJ-{pj} récupère {nombre} × objet n° {id}")
@@ -1217,6 +1230,17 @@ impl EtatAventure {
                     })?;
                 self.noter(format!("{} se défait de : {}.", c.nom, o.nom));
             }
+            EvenementAventure::ObjetModifie { pj, id, objet } => {
+                let c = Self::contexte(ctx, *pj)?;
+                objet.verifier()?;
+                let suivi = self.suivi(*pj)?;
+                if !suivi.inventaire.contains_key(id) {
+                    return Err(ErreurAventure::Invalide(format!("objet n° {id} inconnu")));
+                }
+                suivi.inventaire.insert(*id, objet.clone());
+                self.noter(format!("{} modifie : {}.", c.nom, objet.nom));
+            }
+            EvenementAventure::Remarque { texte } => self.noter(texte.clone()),
             EvenementAventure::ObjetUtilise { pj, id, charges } => {
                 let c = Self::contexte(ctx, *pj)?;
                 let o =

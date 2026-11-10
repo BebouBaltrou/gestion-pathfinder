@@ -333,33 +333,43 @@ impl Distraction {
     }
 }
 
-struct Preparation {
-    sort: &'static Sort,
-    inc: IncantationPj,
-    niveau_du_sort: u32,
-    niveau_effectif: u32,
-    niveau_emplacement: u32,
-    metas: Vec<&'static Metamagie>,
-    restants: u32,
-    dd: i32,
-    type_action: TypeAction,
-    verbal: bool,
-    gestuel: bool,
-    echec_pct: u32,
+pub(crate) struct Preparation {
+    pub(crate) sort: &'static Sort,
+    pub(crate) inc: IncantationPj,
+    pub(crate) niveau_du_sort: u32,
+    pub(crate) niveau_effectif: u32,
+    pub(crate) niveau_emplacement: u32,
+    pub(crate) metas: Vec<&'static Metamagie>,
+    pub(crate) restants: u32,
+    pub(crate) dd: i32,
+    pub(crate) type_action: TypeAction,
+    pub(crate) verbal: bool,
+    pub(crate) gestuel: bool,
+    pub(crate) echec_pct: u32,
 }
 
 fn invalide<T>(m: impl Into<String>) -> Result<T, ErreurCombat> {
     Err(ErreurCombat::Invalide(m.into()))
 }
 
+/// Événements d'un sort (effets automatiques) et remarques, sans rien appliquer : le combat et
+/// le mode aventure les appliquent chacun à leur façon.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub(crate) struct EffetsSort {
+    pub evenements: Vec<EvenementAventure>,
+    pub notes: Vec<String>,
+}
+
 impl EtatCombat {
-    fn preparer_sort(
-        &self,
+    /// `depenses(niveau)` : emplacements de ce niveau déjà dépensés depuis le début du combat
+    /// (0 hors combat : la fiche donne déjà les restants).
+    pub(crate) fn preparer_sort(
         pj: IdPj,
         nom_sort: &str,
         metamagies_choisies: &[String],
         heighten: Option<u32>,
         ctx: &dyn Fn(IdPj) -> Option<ContextePj>,
+        depenses: &dyn Fn(u32) -> u32,
     ) -> Result<Preparation, ErreurCombat> {
         let c = ctx(pj).ok_or(ErreurAventure::PjInconnu(pj))?;
         let Some(inc) = c.incantation else {
@@ -443,12 +453,7 @@ impl EtatCombat {
                         c.nom
                     ))
                 })?;
-            let depenses = self
-                .emplacements_depenses
-                .get(&(pj, niveau_emplacement))
-                .copied()
-                .unwrap_or(0);
-            e.restants.saturating_sub(depenses)
+            e.restants.saturating_sub(depenses(niveau_emplacement))
         };
         let dd = fiches::dd_sort(
             niveau_effectif,
@@ -500,7 +505,12 @@ impl EtatCombat {
         niveau_heighten: Option<u32>,
         ctx: &dyn Fn(IdPj) -> Option<ContextePj>,
     ) -> Result<ApercuSort, ErreurCombat> {
-        let p = self.preparer_sort(pj, sort, metamagies, niveau_heighten, ctx)?;
+        let p = Self::preparer_sort(pj, sort, metamagies, niveau_heighten, ctx, &|n| {
+            self.emplacements_depenses
+                .get(&(pj, n))
+                .copied()
+                .unwrap_or(0)
+        })?;
         let effet = effet_du_sort(&p.sort.nom_en);
         let cl = p.inc.niveau_de_lanceur;
         let mut suggeree = p
@@ -550,7 +560,12 @@ impl EtatCombat {
             return invalide("le combat n'est pas commencé");
         }
         self.verifier_engage(a.pj)?;
-        let p = self.preparer_sort(a.pj, &a.sort, &a.metamagies, a.niveau_heighten, ctx)?;
+        let p = Self::preparer_sort(a.pj, &a.sort, &a.metamagies, a.niveau_heighten, ctx, &|n| {
+            self.emplacements_depenses
+                .get(&(a.pj, n))
+                .copied()
+                .unwrap_or(0)
+        })?;
         let c = ctx(a.pj).ok_or(ErreurAventure::PjInconnu(a.pj))?;
         if p.restants == 0 {
             return invalide(format!(
@@ -682,8 +697,7 @@ impl EtatCombat {
     /// saisie, sinon proposée d'après le livre (doublée si `doubler_duree`) ; sinon le joueur
     /// doit la saisir. Un sort sans effet connu est seulement noté.
     #[allow(clippy::too_many_arguments)]
-    pub(crate) fn effet_de_sort(
-        &mut self,
+    pub(crate) fn evenements_de_sort(
         nom_sort: &str,
         cl: u32,
         lanceur: &str,
@@ -691,17 +705,17 @@ impl EtatCombat {
         duree: Option<Duree>,
         choix_energie: Option<&str>,
         doubler_duree: bool,
-        ctx: &dyn Fn(IdPj) -> Option<ContextePj>,
-    ) -> Result<(), ErreurCombat> {
+    ) -> Result<EffetsSort, ErreurCombat> {
+        let mut sortie = EffetsSort::default();
         if cibles.is_empty() {
-            return Ok(());
+            return Ok(sortie);
         }
         let Some(e) = effet_du_sort(nom_sort) else {
-            self.noter(format!(
+            sortie.notes.push(format!(
                 "{} n'a pas d'effet automatique : l'appliquer à la main (« appliquer un effet »).",
                 nom_fr(nom_sort)
             ));
-            return Ok(());
+            return Ok(sortie);
         };
         let texte_duree = referentiel()
             .sort(nom_sort)
@@ -759,8 +773,7 @@ impl EtatCombat {
             })
             .collect();
         for cible in cibles {
-            self.verifier_engage(*cible)?;
-            let ev = EvenementAventure::EffetAjoute {
+            sortie.evenements.push(EvenementAventure::EffetAjoute {
                 pj: *cible,
                 nom: nom_fr(nom_sort),
                 source: format!("sort {}, lancé par {lanceur}", nom_fr(nom_sort)),
@@ -769,12 +782,45 @@ impl EtatCombat {
                 etats: e.etats.clone(),
                 soin_par_round: 0,
                 protections: protections.clone(),
-            };
-            let s = self.aventure.appliquer(&ev, ctx)?;
-            self.fusionner(s);
+            });
         }
         if let Some(n) = &e.notes {
-            self.noter(format!("{} : {n}", nom_fr(nom_sort)));
+            sortie.notes.push(format!("{} : {n}", nom_fr(nom_sort)));
+        }
+        Ok(sortie)
+    }
+
+    /// Applique les effets automatiques d'un sort aux personnages joués visés, en combat.
+    #[allow(clippy::too_many_arguments)]
+    pub(crate) fn effet_de_sort(
+        &mut self,
+        nom_sort: &str,
+        cl: u32,
+        lanceur: &str,
+        cibles: &[IdPj],
+        duree: Option<Duree>,
+        choix_energie: Option<&str>,
+        doubler_duree: bool,
+        ctx: &dyn Fn(IdPj) -> Option<ContextePj>,
+    ) -> Result<(), ErreurCombat> {
+        let sortie = Self::evenements_de_sort(
+            nom_sort,
+            cl,
+            lanceur,
+            cibles,
+            duree,
+            choix_energie,
+            doubler_duree,
+        )?;
+        for cible in cibles {
+            self.verifier_engage(*cible)?;
+        }
+        for ev in &sortie.evenements {
+            let s = self.aventure.appliquer(ev, ctx)?;
+            self.fusionner(s);
+        }
+        for n in sortie.notes {
+            self.noter(n);
         }
         Ok(())
     }

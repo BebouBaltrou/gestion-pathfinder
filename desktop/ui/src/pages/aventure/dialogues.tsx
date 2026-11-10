@@ -546,6 +546,8 @@ export function DialogueObjet({
   const [arcanique, setArcanique] = useState(true);
   const [quantite, setQuantite] = useState<number | null>(1);
   const [charges, setCharges] = useState<number | null>(50);
+  // charges restantes à la création : par défaut le maximum
+  const [restantes, setRestantes] = useState<number | null>(50);
   const [parJour, setParJour] = useState<number | null>(null);
   const avecSort = ["potion", "parchemin", "baguette", "baton"].includes(genre);
   const aCharges = ["baguette", "baton", "charges"].includes(genre);
@@ -575,7 +577,7 @@ export function DialogueObjet({
                 niveau_de_lanceur: avecSort ? pl(cl) : 0,
                 arcanique,
                 quantite: genre === "baguette" || genre === "baton" ? 1 : pl(quantite),
-                charges: aCharges && charges ? { restantes: charges, max: charges } : null,
+                charges: aCharges && charges ? { restantes: Math.min(restantes ?? charges, charges), max: charges } : null,
                 par_jour: parJour ? { restantes: parJour, max: parJour } : null,
                 notes: "",
               };
@@ -631,9 +633,15 @@ export function DialogueObjet({
             min={0}
             max={genre === "baton" ? 10 : 50}
             valeur={charges}
-            onChange={setCharges}
+            onChange={(v) => {
+              setCharges(v);
+              setRestantes(v);
+            }}
             rappel={genre === "baton" ? "10 au plus" : genre === "baguette" ? "50 au plus" : undefined}
           />
+        )}
+        {aCharges && (
+          <SaisieNombre etiquette="Charges restantes" min={0} max={charges ?? 50} valeur={restantes} onChange={setRestantes} rappel="par défaut le maximum" />
         )}
         {genre === "charges" && <SaisieNombre etiquette="Usages par jour (rendus au repos)" min={0} max={99} valeur={parJour} onChange={setParJour} />}
       </div>
