@@ -209,6 +209,14 @@ export function EditeurPreparation({
                 />
               )}
             </div>
+            {[...du_niveau(c.niveau, false), ...du_niveau(c.niveau, true)].map((choisi, k) => {
+              const d = liste.find((x) => x.nomEn === choisi.sort);
+              return d?.resume ? (
+                <p key={k} className="doux">
+                  <strong>{d.nom}</strong> — {d.resume}
+                </p>
+              ) : null;
+            })}
           </div>
         );
       })}

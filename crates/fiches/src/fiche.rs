@@ -703,16 +703,42 @@ pub fn dd_sort(niveau_du_sort: u32, modificateur: i32, dons_ecole: u32) -> i32 {
 /// Nombre de dons École renforcée / École supérieure pris pour `ecole` (nom anglais en minuscules,
 /// comme dans le catalogue des sorts) parmi les dons choisis (« Spell Focus (evocation) »).
 pub fn dons_ecole_pour(dons: &[String], ecole: &str) -> u32 {
+    let ecole = cle_ecole(ecole);
     dons.iter()
         .filter(|d| {
             let d = d.to_lowercase();
             ["spell focus (", "greater spell focus ("].iter().any(|p| {
                 d.strip_prefix(p)
                     .and_then(|s| s.strip_suffix(')'))
-                    .is_some_and(|e| e.trim() == ecole)
+                    .is_some_and(|e| cle_ecole(e) == ecole)
             })
         })
         .count() as u32
+}
+
+/// Clé comparable d'une école de magie : minuscules, sans accent, nom anglais du catalogue des
+/// sorts. Accepte aussi le nom français saisi à la main (« Évocation », « Invocation »…).
+fn cle_ecole(nom: &str) -> String {
+    let s: String = nom
+        .trim()
+        .to_lowercase()
+        .chars()
+        .map(|c| match c {
+            'é' | 'è' | 'ê' | 'ë' => 'e',
+            'à' | 'â' => 'a',
+            'ô' => 'o',
+            'î' | 'ï' => 'i',
+            'ù' | 'û' => 'u',
+            c => c,
+        })
+        .collect();
+    match s.as_str() {
+        "invocation" => "conjuration".into(),
+        "enchantement" => "enchantment".into(),
+        "necromancie" => "necromancy".into(),
+        "universelle" => "universal".into(),
+        _ => s,
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -2465,6 +2491,23 @@ pub(crate) mod tests {
         assert_eq!(dons_ecole_pour(&dons, "illusion"), 1);
         assert_eq!(dons_ecole_pour(&dons, "necromancy"), 0);
         assert_eq!(dd_sort(3, 4, dons_ecole_pour(&dons, "evocation")), 19);
+    }
+
+    #[test]
+    fn dons_d_ecole_acceptent_le_nom_francais() {
+        // saisie à la main en français : accents, majuscules, nom français de l'école
+        let dons: Vec<String> = [
+            "Spell Focus (Évocation)",
+            "Greater Spell Focus (évocation)",
+            "Spell Focus (Invocation)",
+            "Spell Focus (nécromancie)",
+        ]
+        .map(String::from)
+        .to_vec();
+        assert_eq!(dons_ecole_pour(&dons, "evocation"), 2);
+        assert_eq!(dons_ecole_pour(&dons, "conjuration"), 1);
+        assert_eq!(dons_ecole_pour(&dons, "necromancy"), 1);
+        assert_eq!(dons_ecole_pour(&dons, "illusion"), 0);
     }
 
     /// Complète les sorts connus pour que la fiche soit valide à son niveau actuel.

@@ -38,6 +38,7 @@ fn incantation(niveau_de_lanceur: u32, echec_pct: u32) -> IncantationPj {
         ]
         .map(String::from)
         .to_vec(),
+        prepares_disponibles: vec![],
         metamagies: [
             "Empower Spell",
             "Quicken Spell",
@@ -552,4 +553,54 @@ fn la_metamagie_est_desactivee_tant_qu_elle_n_est_pas_integree() {
         .etat()
         .apercu_sort(1, "Magic Missile", &[], None, &ctx)
         .is_ok());
+}
+
+#[test]
+fn lanceur_qui_prepare_lance_ses_sorts_du_jour() {
+    // Druide : seuls les sorts préparés et non encore lancés se lancent ; les dons d'école
+    // comptent comme pour un spontané (École renforcée, nom français saisi à la main).
+    let base = ctx_avec(5, 0);
+    let ctx = move |id: IdPj| {
+        base(id).map(|mut c| {
+            if let Some(i) = c.incantation.as_mut() {
+                i.spontane = false;
+                i.classe_en = "druid".into();
+                i.classe = "druide".into();
+                i.sorts_connus = vec!["Faerie Fire".into(), "Call Lightning".into()];
+                i.prepares_disponibles =
+                    vec![(1, "Faerie Fire".into()), (3, "Call Lightning".into())];
+                i.dons_ecole = vec!["Spell Focus (Évocation)".into()];
+            }
+            c
+        })
+    };
+    let mut c = combat(&ctx);
+    // non préparé : refusé
+    assert!(c
+        .appliquer(ActionCombat::Lancer(lancer("Magic Missile")), &ctx)
+        .is_err());
+    // préparé : aperçu avec DD 10 + 3 (niveau) + 3 (mod.) + 1 (École renforcée)
+    let a = c
+        .etat()
+        .apercu_sort(1, "Call Lightning", &[], None, &ctx)
+        .unwrap();
+    assert_eq!((a.niveau_du_sort, a.niveau_emplacement, a.dd), (3, 3, 17));
+    c.appliquer(ActionCombat::Lancer(lancer("Faerie Fire")), &ctx)
+        .unwrap();
+    c.appliquer(ActionCombat::TourSuivant, &ctx).unwrap();
+    c.appliquer(ActionCombat::TourSuivant, &ctx).unwrap();
+    // déjà lancé dans ce combat : refusé
+    assert!(c
+        .appliquer(ActionCombat::Lancer(lancer("Faerie Fire")), &ctx)
+        .is_err());
+    c.appliquer(ActionCombat::Lancer(lancer("Call Lightning")), &ctx)
+        .unwrap();
+    assert!(c.etat().fiche.contains(&(
+        1,
+        EvenementFiche::SortLance {
+            classe: "druide".into(),
+            niveau_de_sort: 3,
+            sort: "Call Lightning".into()
+        }
+    )));
 }

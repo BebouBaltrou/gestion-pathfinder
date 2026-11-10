@@ -375,9 +375,6 @@ impl EtatCombat {
         let Some(inc) = c.incantation else {
             return invalide(format!("{} ne lance pas de sorts", c.nom));
         };
-        if !inc.spontane {
-            return invalide("lanceur à sorts préparés : non géré (seul le lanceur spontané l'est pour l'instant)");
-        }
         let sort = referentiel()
             .sort(nom_sort)
             .ok_or_else(|| ErreurCombat::Invalide(format!("sort inconnu : {nom_sort}")))?;
@@ -394,6 +391,38 @@ impl EtatCombat {
                 sort.nom_en, inc.classe_en
             ))
         })?;
+        if !inc.spontane {
+            // Lanceur qui prépare : le sort doit être préparé aujourd'hui et pas encore lancé
+            // (les lancers de ce combat comptent déjà).
+            if !metamagies_choisies.is_empty() || heighten.is_some() {
+                return invalide(
+                    "lanceur qui prépare : métamagie pas encore prise en charge en combat",
+                );
+            }
+            let prepares = inc
+                .prepares_disponibles
+                .iter()
+                .filter(|(n, s)| *n == niveau_du_sort && s.eq_ignore_ascii_case(&sort.nom_en))
+                .count();
+            let lances = self
+                .fiche
+                .iter()
+                .filter(|(p, e)| {
+                    *p == pj
+                        && matches!(
+                            e,
+                            fiches::journal::EvenementFiche::SortLance { niveau_de_sort, sort: s, .. }
+                                if *niveau_de_sort == niveau_du_sort && s.eq_ignore_ascii_case(&sort.nom_en)
+                        )
+                })
+                .count();
+            if prepares <= lances {
+                return invalide(format!(
+                    "{} n'a pas {} préparé au niveau {niveau_du_sort} (ou il est déjà lancé)",
+                    c.nom, sort.nom_en
+                ));
+            }
+        }
         if !metamagies_choisies.is_empty() && !inc.metamagie_active {
             return invalide(
                 "la métamagie n'est pas encore intégrée (réglage de la fiche à activer)",
