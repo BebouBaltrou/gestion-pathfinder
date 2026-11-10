@@ -151,6 +151,24 @@ export type OptionCreature = {
   nombreMax: number;
 };
 
+/** Créature du Bestiaire compatible avec une forme. */
+export type CreatureForme = {
+  nom: string;
+  fp: string;
+  niveau: number;
+  typeCreature: string;
+  taille: string;
+  pv: number;
+  ca: number;
+  init: number;
+  sauvegardes: [string, number][];
+  caracteristiques: [string, number][];
+  modificateurs: [string, number][];
+  vitesse: string;
+  attaques: string;
+  lignes: [string, string][];
+};
+
 /** Forme du pouvoir de forme animale du druide. */
 export type FormePouvoir = { id: string; nom: string; sort: string; taille: string | null; niveauDruide: number; texte: string };
 

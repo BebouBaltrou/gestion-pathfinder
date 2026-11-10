@@ -134,6 +134,8 @@ export function Aventure({ outils }: { outils: Outils }) {
             onRetirerEffet={(e: EffetVue) => envoyer(ev.effetRetire(e.id))}
             onUtiliserObjet={(o: ObjetVue) => setObjetHc({ pj: pj.id, pjNom: pj.nom, objet: o })}
             onLancerSort={() => setSortHc(pj)}
+            defenses
+            onFormeAnimale={() => setFormeAn(pj)}
             onUtiliserRessource={(r: RessourceVue) => (r.cle === "forme_animale" ? setFormeAn(pj) : envoyer(ev.ressourceUtilisee(pj.id, r.cle, 1)))}
             onRendreRessource={(r: RessourceVue) => envoyer(ev.ressourceRendue(pj.id, r.cle, 1))}
             onActualiserRessources={() => outils.agir(api.aventureActualiserRessources(pj.id))}
@@ -163,7 +165,7 @@ export function Aventure({ outils }: { outils: Outils }) {
         <DialogueSante pj={pjs.find((p) => p.id === ouvert.pj)!} mode={ouvert.mode} envoyer={envoyer} onFermer={() => setOuvert(null)} />
       )}
       {ouvert?.genre === "effet" && <DialogueEffet pjs={pjs} pjId={ouvert.pj} envoyer={envoyer} onFermer={() => setOuvert(null)} />}
-      {formeAn && <DialogueFormeAnimale pj={formeAn} choisir={(forme) => outils.agir(api.aventurePrendreForme(formeAn.id, forme))} onFermer={() => setFormeAn(null)} />}
+      {formeAn && <DialogueFormeAnimale pj={formeAn} choisir={(forme, creature) => outils.agir(api.aventurePrendreForme(formeAn.id, forme, creature))} onFermer={() => setFormeAn(null)} />}
       {sortHc && <DialogueLancerHorsCombat pj={sortHc} agir={outils.agir} onFermer={() => setSortHc(null)} />}
       {objetHc && <DialogueObjetHorsCombat pjId={objetHc.pj} pjNom={objetHc.pjNom} objet={objetHc.objet} agir={outils.agir} onFermer={() => setObjetHc(null)} />}
       {ouvert?.genre === "objet" && <DialogueObjet pjs={pjs} pjId={ouvert.pj} envoyer={envoyer} onFermer={() => setOuvert(null)} />}

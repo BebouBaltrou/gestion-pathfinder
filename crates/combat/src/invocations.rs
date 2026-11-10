@@ -82,6 +82,37 @@ pub fn taille_de_forme(f: &fiches::formes::FormeAnimale) -> String {
     .into()
 }
 
+/// Créatures du Bestiaire compatibles avec une forme : animal de même taille, ou élémentaire du
+/// même élément et de même taille. Aucune plante dans les données : liste vide (point à confirmer).
+pub fn creatures_pour_forme(
+    f: &fiches::formes::FormeAnimale,
+) -> Vec<&'static fiches::convocation::Creature> {
+    let taille = taille_de_forme(f);
+    let liste = &referentiel().convocations.creatures;
+    match f.categorie.as_str() {
+        "animal" => liste
+            .iter()
+            .filter(|c| c.complete && c.type_creature.starts_with("Animal") && c.taille == taille)
+            .collect(),
+        "élémentaire" => {
+            let nom = f.nom.to_lowercase();
+            let element = ["air", "eau", "feu", "terre"]
+                .into_iter()
+                .find(|e| nom.contains(e));
+            liste
+                .iter()
+                .filter(|c| {
+                    c.complete
+                        && c.type_creature.contains("élémentaire")
+                        && element.is_some_and(|e| c.type_creature.to_lowercase().contains(e))
+                        && c.taille == taille
+                })
+                .collect()
+        }
+        _ => Vec::new(),
+    }
+}
+
 /// Effets d'une forme : les effets chiffrés du livre, plus le bonus ou malus de taille à la CA et à
 /// l'attaque. Bonus = modificateur de taille de la forme − modificateur de taille de la race du
 /// personnage (le druide n'a pas de taille propre). Point à confirmer.
@@ -104,6 +135,22 @@ pub fn effets_de_forme(
         }
     }
     v
+}
+
+/// La créature choisie est-elle compatible avec la forme ? Renvoie sa fiche.
+pub fn creature_compatible(
+    f: &fiches::formes::FormeAnimale,
+    nom: &str,
+) -> Result<&'static fiches::convocation::Creature, ErreurCombat> {
+    creatures_pour_forme(f)
+        .into_iter()
+        .find(|c| c.nom == nom)
+        .ok_or_else(|| {
+            ErreurCombat::Invalide(format!(
+                "{nom} n'est pas une créature possible pour {}",
+                f.nom
+            ))
+        })
 }
 
 fn erreur<T>(m: impl Into<String>) -> Result<T, ErreurCombat> {
@@ -382,6 +429,7 @@ impl EtatCombat {
         &mut self,
         pj: IdPj,
         forme: &str,
+        creature: &str,
         ctx: &dyn Fn(IdPj) -> Option<ContextePj>,
     ) -> Result<(), ErreurCombat> {
         if self.phase != Phase::EnCours {
@@ -422,6 +470,7 @@ impl EtatCombat {
             },
             ctx,
         )?;
+        let choisie = creature_compatible(f, creature)?;
         let utilisation = aventure::EvenementAventure::RessourceUtilisee {
             pj,
             nom: "forme_animale".into(),
@@ -432,7 +481,7 @@ impl EtatCombat {
         let ev = aventure::EvenementAventure::EffetAjoute {
             pj,
             nom: f.nom_effet(),
-            source: format!("pouvoir forme animale, {}", f.nom),
+            source: format!("pouvoir forme animale, {} ({})", f.nom, choisie.nom),
             duree: temps::Duree::Heures(nc),
             effets: effets_de_forme(f, &c.taille),
             etats: Vec::new(),

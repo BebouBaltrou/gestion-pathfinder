@@ -482,6 +482,7 @@ pub fn evenements_forme_animale(
     etat: &EtatAventure,
     pj: IdPj,
     forme: &str,
+    creature: &str,
     ctx: &dyn Fn(IdPj) -> Option<ContextePj>,
 ) -> Result<Vec<EvenementAventure>, String> {
     let c = ctx(pj).ok_or_else(|| format!("personnage {pj} inconnu"))?;
@@ -505,6 +506,8 @@ pub fn evenements_forme_animale(
     {
         return Err(format!("{} est déjà sous une forme", c.nom));
     }
+    let choisie =
+        crate::invocations::creature_compatible(f, creature).map_err(|e| e.to_string())?;
     Ok(vec![
         EvenementAventure::RessourceUtilisee {
             pj,
@@ -514,7 +517,7 @@ pub fn evenements_forme_animale(
         EvenementAventure::EffetAjoute {
             pj,
             nom: f.nom_effet(),
-            source: format!("pouvoir forme animale, {}", f.nom),
+            source: format!("pouvoir forme animale, {} ({})", f.nom, choisie.nom),
             duree: Duree::Heures(c.niveau_druide),
             effets: crate::invocations::effets_de_forme(f, &c.taille),
             etats: Vec::new(),

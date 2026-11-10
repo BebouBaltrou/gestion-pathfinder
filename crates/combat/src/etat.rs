@@ -58,6 +58,7 @@ pub enum ActionCombat {
     FormeAnimale {
         pj: IdPj,
         forme: String,
+        creature: String,
     },
     /// Forme animale ou élémentaire (sort de forme) : effets chiffrés appliqués au personnage.
     Forme {
@@ -644,9 +645,11 @@ impl EtatCombat {
                 }
             }
             ActionCombat::Lancer(params) => self.lancer(params, ctx)?,
-            ActionCombat::FormeAnimale { pj, forme } => {
-                self.prendre_forme_animale(*pj, forme, ctx)?
-            }
+            ActionCombat::FormeAnimale {
+                pj,
+                forme,
+                creature,
+            } => self.prendre_forme_animale(*pj, forme, creature, ctx)?,
             ActionCombat::Forme { pj, sort, forme } => self.prendre_forme(*pj, sort, forme, ctx)?,
             ActionCombat::Convoquer {
                 lanceur,

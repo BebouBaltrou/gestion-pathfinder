@@ -1,7 +1,7 @@
 // Convocation d'alliés naturels et formes (sorts de forme) en combat.
 import { useEffect, useState } from "react";
 import { api, Retour } from "../../api";
-import type { ActionCombat, FormeOption, FormePouvoir, InvocationVue, OptionCreature, PjCombat } from "../../aventure-types";
+import type { ActionCombat, CreatureForme, FormeOption, FormePouvoir, InvocationVue, OptionCreature, PjCombat } from "../../aventure-types";
 import { Dialogue, SaisieNombre } from "../../composants/jeu";
 
 /** Sorts de forme proposés, dans l'ordre du livre (nom anglais du catalogue). */
@@ -192,18 +192,20 @@ export function BlocInvocations({ invocations }: { invocations: InvocationVue[] 
   );
 }
 
-/** Pouvoir de forme animale du druide en combat : on choisit la forme, puis ses effets sont appliqués. */
+/** Pouvoir de forme animale du druide : on choisit la forme, puis la créature qui la représente. */
 export function DialogueFormeAnimale({
   pj,
   choisir,
   onFermer,
 }: {
   pj: { id: number; nom: string };
-  choisir: (forme: string) => Promise<Retour | null>;
+  choisir: (forme: string, creature: string) => Promise<Retour | null>;
   onFermer: () => void;
 }) {
   const [formes, setFormes] = useState<FormePouvoir[]>([]);
   const [forme, setForme] = useState("");
+  const [creatures, setCreatures] = useState<CreatureForme[]>([]);
+  const [creature, setCreature] = useState("");
 
   useEffect(() => {
     api.combatFormesAnimales(pj.id).then((f) => {
@@ -212,11 +214,20 @@ export function DialogueFormeAnimale({
     });
   }, [pj.id]);
 
+  useEffect(() => {
+    if (!forme) return;
+    api.combatCreaturesForme(forme).then((c) => {
+      setCreatures(c);
+      setCreature(c[0]?.nom ?? "");
+    });
+  }, [forme]);
+
   const choisie = formes.find((f) => f.id === forme) ?? null;
+  const fiche = creatures.find((c) => c.nom === creature) ?? null;
 
   const prendre = async () => {
-    if (!choisie) return;
-    const r = await choisir(choisie.id);
+    if (!choisie || !fiche) return;
+    const r = await choisir(choisie.id, fiche.nom);
     if (r?.ok) onFermer();
   };
 
@@ -228,7 +239,7 @@ export function DialogueFormeAnimale({
       actions={
         <>
           <button className="bouton" onClick={onFermer}>Fermer</button>
-          <button className="bouton principal" disabled={!choisie} onClick={prendre}>Prendre la forme</button>
+          <button className="bouton principal" disabled={!fiche} onClick={prendre}>Prendre la forme</button>
         </>
       }
     >
@@ -247,6 +258,30 @@ export function DialogueFormeAnimale({
           </p>
         )}
         {choisie && <p className="doux">{choisie.texte}</p>}
+        <label>
+          Créature{" "}
+          <select value={creature} onChange={(e) => setCreature(e.target.value)} disabled={creatures.length === 0}>
+            {creatures.map((c) => (
+              <option key={c.nom} value={c.nom}>{`${c.nom} (FP ${c.fp}, ${c.typeCreature})`}</option>
+            ))}
+          </select>
+        </label>
+        {creatures.length === 0 && (
+          <p className="doux">Aucune créature compatible dans les données (point à confirmer : les plantes n'y figurent pas).</p>
+        )}
+        {fiche && (
+          <div className="bloc">
+            <p>PV {fiche.pv} · CA {fiche.ca} · Init {fiche.init >= 0 ? `+${fiche.init}` : fiche.init}</p>
+            <p>
+              {fiche.caracteristiques
+                .map(([k, v], n) => `${k} ${v} (${fiche.modificateurs[n][1] >= 0 ? "+" : ""}${fiche.modificateurs[n][1]})`)
+                .join(" · ")}
+            </p>
+            <p>{fiche.sauvegardes.map(([k, v]) => `${k} ${v >= 0 ? "+" : ""}${v}`).join(", ")}</p>
+            {fiche.attaques && <p>{fiche.attaques}</p>}
+            <p className="doux">Attaques adaptées à la forme et au sort : texte du livre à fournir (point à confirmer).</p>
+          </div>
+        )}
       </div>
     </Dialogue>
   );

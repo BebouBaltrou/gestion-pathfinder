@@ -784,7 +784,7 @@ pub fn catalogue_sorts() -> Vec<SortCatalogueVue> {
 
 /// Forme animale du druide prise hors combat (pouvoir « Utiliser », pas de combat en cours).
 #[tauri::command]
-pub fn aventure_prendre_forme(s: S, pj: u32, forme: String) -> Retour {
+pub fn aventure_prendre_forme(s: S, pj: u32, forme: String, creature: String) -> Retour {
     let mut x = session(&s);
     if x.combat.is_some() {
         return Retour::erreur(
@@ -795,7 +795,7 @@ pub fn aventure_prendre_forme(s: S, pj: u32, forme: String) -> Retour {
         return Retour::erreur("Aucune aventure en cours");
     };
     let contextes = x.contextes();
-    let evenements = match combat::hors_combat::evenements_forme_animale(&etat, pj, &forme, &|id| {
+    let evenements = match combat::hors_combat::evenements_forme_animale(&etat, pj, &forme, &creature, &|id| {
         contextes.get(&id).cloned()
     }) {
         Ok(e) => e,
@@ -808,4 +808,55 @@ pub fn aventure_prendre_forme(s: S, pj: u32, forme: String) -> Retour {
         },
         "Forme animale prise",
     )
+}
+
+/// Créature du Bestiaire compatible avec une forme (fiche pour le choix).
+#[derive(serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CreatureForme {
+    pub nom: String,
+    pub fp: String,
+    pub niveau: u32,
+    pub type_creature: String,
+    pub taille: String,
+    pub pv: i32,
+    pub ca: i32,
+    pub init: i32,
+    pub sauvegardes: Vec<(String, i32)>,
+    pub caracteristiques: Vec<(String, i32)>,
+    pub modificateurs: Vec<(String, i32)>,
+    pub vitesse: String,
+    pub attaques: String,
+    pub lignes: Vec<(String, String)>,
+}
+
+#[tauri::command]
+pub fn combat_creatures_forme(forme: String) -> Vec<CreatureForme> {
+    let r = fiches::Referentiel::partage();
+    let Some(f) = r.formes.iter().find(|f| f.id == forme) else {
+        return Vec::new();
+    };
+    combat::invocations::creatures_pour_forme(f)
+        .into_iter()
+        .map(|c| CreatureForme {
+            nom: c.nom.clone(),
+            fp: c.fp.clone(),
+            niveau: c.niveau,
+            type_creature: c.type_creature.clone(),
+            taille: c.taille.clone(),
+            pv: c.pv,
+            ca: c.ca,
+            init: c.init,
+            sauvegardes: c.sauvegardes.iter().map(|(k, v)| (k.clone(), *v)).collect(),
+            caracteristiques: c.caracteristiques.iter().map(|(k, v)| (k.clone(), *v)).collect(),
+            modificateurs: c
+                .caracteristiques
+                .iter()
+                .map(|(k, v)| (k.clone(), (v - 10).div_euclid(2)))
+                .collect(),
+            vitesse: c.vitesse.clone(),
+            attaques: c.attaques.clone(),
+            lignes: c.lignes.iter().map(|l| (l.libelle.clone(), l.valeur.clone())).collect(),
+        })
+        .collect()
 }

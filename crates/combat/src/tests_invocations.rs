@@ -271,6 +271,7 @@ fn le_pouvoir_de_forme_consomme_une_utilisation_et_applique_la_forme() {
         ActionCombat::FormeAnimale {
             pj: 1,
             forme: f.id.clone(),
+            creature: creature_pour(&f),
         },
         &ctx,
     )
@@ -312,13 +313,21 @@ fn le_pouvoir_s_arrete_quand_les_utilisations_sont_epuisees() {
         ActionCombat::FormeAnimale {
             pj: 1,
             forme: f.id.clone(),
+            creature: creature_pour(&f),
         },
         &ctx,
     )
     .unwrap();
     // une seule forme à la fois : refusé même s'il reste des utilisations
     assert!(c
-        .appliquer(ActionCombat::FormeAnimale { pj: 1, forme: f.id }, &ctx)
+        .appliquer(
+            ActionCombat::FormeAnimale {
+                pj: 1,
+                forme: f.id.clone(),
+                creature: creature_pour(&f)
+            },
+            &ctx
+        )
         .is_err());
 }
 
@@ -361,7 +370,8 @@ fn le_niveau_de_druide_donne_la_duree_et_les_formes() {
         .appliquer(
             ActionCombat::FormeAnimale {
                 pj: 1,
-                forme: trop_haut
+                forme: trop_haut,
+                creature: "Aigle".into(),
             },
             &ctx
         )
@@ -375,7 +385,8 @@ fn la_forme_hors_combat_donne_une_utilisation_et_les_effets() {
     e.appliquer(&EvenementAventure::Entree { pj: 1 }, &ctx)
         .unwrap();
     let f = forme_par_taille("M");
-    let evs = crate::hors_combat::evenements_forme_animale(&e, 1, &f.id, &ctx).unwrap();
+    let evs = crate::hors_combat::evenements_forme_animale(&e, 1, &f.id, &creature_pour(&f), &ctx)
+        .unwrap();
     assert_eq!(evs.len(), 2);
     assert!(
         matches!(&evs[0], EvenementAventure::RessourceUtilisee { pj: 1, nom, quantite: 1 } if nom == "forme_animale")
@@ -392,5 +403,42 @@ fn la_forme_hors_combat_donne_une_utilisation_et_les_effets() {
         .unwrap()
         .id
         .clone();
-    assert!(crate::hors_combat::evenements_forme_animale(&e, 1, &haute, &ctx).is_err());
+    assert!(crate::hors_combat::evenements_forme_animale(&e, 1, &haute, "Aigle", &ctx).is_err());
+}
+
+/// Première créature compatible avec la forme (les données changent : on ne code pas un nom).
+fn creature_pour(f: &fiches::formes::FormeAnimale) -> String {
+    crate::invocations::creatures_pour_forme(f)
+        .first()
+        .map(|c| c.nom.clone())
+        .unwrap_or_default()
+}
+
+#[test]
+fn la_creature_doit_etre_compatible_avec_la_forme() {
+    let ctx = ctx_avec(11, 0);
+    let mut c = combat_avec_pouvoir(&ctx);
+    let f = forme_par_taille("M");
+    // l'Aigle (P) n'est pas de taille M : refusé pour une forme M
+    let refus = c.appliquer(
+        ActionCombat::FormeAnimale {
+            pj: 1,
+            forme: f.id.clone(),
+            creature: "Aigle".into(),
+        },
+        &ctx,
+    );
+    assert!(refus.is_err());
+    let elem = fiches::Referentiel::partage()
+        .formes
+        .iter()
+        .find(|x| x.sort_en == "Elemental Body I")
+        .unwrap()
+        .clone();
+    assert!(crate::invocations::creatures_pour_forme(&elem)
+        .iter()
+        .all(|x| x.type_creature.contains("élémentaire")));
+    assert!(crate::invocations::creatures_pour_forme(&f)
+        .iter()
+        .all(|x| x.type_creature.starts_with("Animal") && x.taille == "M"));
 }

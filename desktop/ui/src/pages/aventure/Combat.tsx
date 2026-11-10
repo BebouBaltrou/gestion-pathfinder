@@ -186,7 +186,7 @@ export function Combat({ outils, vue }: { outils: Outils; vue: CombatVue }) {
         {ouvert?.g === "infliges" && <DialogueInfliges pj={pjs.find((p) => p.id === ouvert.pj)!} agir={agir} onFermer={() => setOuvert(null)} />}
         {ouvert?.g === "preparer" &&<DialoguePreparer pj={pjs.find((p) => p.id === ouvert.pj)!} agir={agir} onFermer={() => setOuvert(null)} />}
         {ouvert?.g === "convoquer" && <DialogueConvocation pj={pjs.find((p) => p.id === ouvert.pj)!} agir={agir} onFermer={() => setOuvert(null)} />}
-        {ouvert?.g === "formeAnimale" && <DialogueFormeAnimale pj={pjs.find((p) => p.id === ouvert.pj)!} choisir={(forme) => agir({ FormeAnimale: { pj: ouvert.pj, forme } })} onFermer={() => setOuvert(null)} />}
+        {ouvert?.g === "formeAnimale" && <DialogueFormeAnimale pj={pjs.find((p) => p.id === ouvert.pj)!} choisir={(forme, creature) => agir({ FormeAnimale: { pj: ouvert.pj, forme, creature } })} onFermer={() => setOuvert(null)} />}
         {ouvert?.g === "forme" && <DialogueForme pj={pjs.find((p) => p.id === ouvert.pj)!} agir={agir} onFermer={() => setOuvert(null)} />}
         {ouvert?.g === "fin" && <DialogueFin vue={vue} outils={outils} onFermer={() => setOuvert(null)} />}
         {ouvert?.g === "maintenir" && <DialogueMaintenirCombat id={ouvert.id} nom={ouvert.nom} pj={ouvert.pj} envoyer={envoyer} onFermer={() => setOuvert(null)} />}

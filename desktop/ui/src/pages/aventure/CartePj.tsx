@@ -18,6 +18,7 @@ export function CartePj({
   onObjet,
   onLancerSort,
   defenses = false,
+  onFormeAnimale,
   onActualiserRessources,
   entete,
   pied,
@@ -34,6 +35,7 @@ export function CartePj({
   onObjet?: () => void;
   onLancerSort?: () => void;
   defenses?: boolean;
+  onFormeAnimale?: () => void;
   onActualiserRessources?: () => void;
   entete?: ReactNode;
   pied?: ReactNode;
@@ -49,6 +51,9 @@ export function CartePj({
       </div>
       <JaugePv pj={pj} grande={grandeJauge} />
       {defenses && <BandeauDefenses pj={pj} />}
+      {onFormeAnimale && pj.caster && (
+        <button className="bouton mini" onClick={onFormeAnimale}>Forme animale…</button>
+      )}
       {onSante && (
         <div className="rangee-boutons">
           <button className="bouton mini" onClick={() => onSante("degats")}>Prendre des dégâts</button>

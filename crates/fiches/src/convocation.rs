@@ -24,6 +24,10 @@ pub struct Creature {
     pub fp: String,
     /// Niveau de créature (1 à 9) : la liste est rangée par ce niveau.
     pub niveau: u32,
+    /// Type de créature (« Animal », « Extérieur (Air, élémentaire…) »…), tel que saisi.
+    pub type_creature: String,
+    /// Taille (« P », « M », « G »…), lue dans la ligne de type ; vide si absente.
+    pub taille: String,
     /// Page du Bestiaire, telle que saisie.
     pub source: String,
     /// Points de vie moyens ou jetés, tels que saisis (premier nombre de « pv »).
@@ -225,7 +229,28 @@ fn creature_depuis(c: &Value, niveau: u32) -> Creature {
         && ["Réf", "Vig", "Vol"]
             .iter()
             .all(|k| sauvegardes.contains_key(*k));
+    let type_taille = c["sections"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .flat_map(|s| s["lignes"].as_array().into_iter().flatten())
+        .map(|l| texte(&l["valeur"]))
+        .find(|v| v.contains(" de taille "))
+        .unwrap_or_default();
+    let type_creature = type_taille
+        .split(" de taille ")
+        .next()
+        .unwrap_or("")
+        .to_string();
+    let taille = type_taille
+        .split(" de taille ")
+        .nth(1)
+        .and_then(|t| t.split(|ch: char| ch == ',' || ch.is_whitespace()).next())
+        .unwrap_or("")
+        .to_string();
     Creature {
+        type_creature,
+        taille,
         nom: texte(&c["nom"]),
         fp: texte(&c["fp"]),
         niveau,
@@ -309,6 +334,18 @@ mod tests {
         // Dix méphites n'ont que leur nom et leur FP dans les données : à compléter.
         assert_eq!(incompletes.len(), 10);
         assert!(incompletes.iter().all(|n| n.starts_with("Méphite")));
+    }
+
+    #[test]
+    fn le_type_et_la_taille_sont_lus() {
+        let c = Convocations::depuis_json(JSON).unwrap();
+        let aigle = c.creatures.iter().find(|c| c.nom == "Aigle").unwrap();
+        assert_eq!(aigle.type_creature, "Animal");
+        assert_eq!(aigle.taille, "P");
+        assert!(c
+            .creatures
+            .iter()
+            .any(|x| x.type_creature.starts_with("Extérieur (Air")));
     }
 
     #[test]
