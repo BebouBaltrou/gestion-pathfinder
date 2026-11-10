@@ -66,6 +66,17 @@ pub struct AttaqueForme {
     pub bonus_degats: i32,
 }
 
+/// Genre d'une attaque de la créature, d'après sa fiche : une attaque notée « secondaire » est à
+/// ½ Force, les autres à plein. La fiche du Bestiaire saisie ne marque pas toujours l'attaque :
+/// dans ce cas on lit « principale » (point à confirmer avec le livre).
+pub fn genre_selon_fiche(texte_attaque: &str) -> Attaque {
+    if texte_attaque.to_lowercase().contains("secondaire") {
+        Attaque::Secondaire
+    } else {
+        Attaque::Principale
+    }
+}
+
 /// Attaque de forme. `bba` : BBA de la fiche (inclut déjà le bonus de taille de la race).
 /// `taille_race` / `taille_forme` : codes P, M, G… ; la taille de la forme remplace celle de la race.
 /// `score` : caractéristique d'attaque courante (Force, ou Dextérité pour les attaques de finesse).
@@ -182,5 +193,17 @@ mod tests {
         // Forme M : +2 Force ; score 14 devient 16
         assert_eq!(score_courant(14, "for", &f), 16);
         assert_eq!(score_courant(14, "con", &f), 14);
+    }
+
+    #[test]
+    fn le_genre_suit_la_fiche_de_la_creature() {
+        assert_eq!(
+            genre_selon_fiche("coup +16 (2d6+10) secondaire"),
+            Attaque::Secondaire
+        );
+        assert_eq!(
+            genre_selon_fiche("défenses, +16 (2d8+10)"),
+            Attaque::Principale
+        );
     }
 }
