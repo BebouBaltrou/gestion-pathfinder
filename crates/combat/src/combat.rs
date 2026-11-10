@@ -137,6 +137,8 @@ impl Combat {
     /// Récapitulatif de fin : qui a perdu ou gagné des PV, quels effets seront dissipés.
     pub fn apercu_fin(&self, ctx: Ctx) -> Result<ApercuFin, ErreurCombat> {
         let e = self.etat();
+        let ext = e.avec_invocations(ctx);
+        let ctx: Ctx = &ext;
         let mut travail = e.aventure.clone();
         let (bilan, _) = travail.terminer_combat(&[], ctx)?;
         let par_pj = self
@@ -176,6 +178,8 @@ impl Combat {
         ctx: Ctx,
     ) -> Result<Resultat, ErreurCombat> {
         let e = self.etat();
+        let ext = e.avec_invocations(ctx);
+        let ctx: Ctx = &ext;
         if let Validation::Abandon = v {
             return Ok(Resultat {
                 aventure: self.base.clone(),
@@ -184,8 +188,18 @@ impl Combat {
         }
         let mut travail = e.aventure.clone();
         let (_, fin) = travail.terminer_combat(contestations, ctx)?;
+        // les créatures invoquées ne sont pas recopiées dans la campagne
+        travail
+            .pjs
+            .retain(|id, _| !crate::invocations::est_invocation(*id));
+        travail.effets.actifs.retain(|t| {
+            !t.proprietaire
+                .parse::<u32>()
+                .is_ok_and(crate::invocations::est_invocation)
+        });
         let mut fiche = e.fiche.clone();
         fiche.extend(fin.fiche);
+        fiche.retain(|(pj, _)| !crate::invocations::est_invocation(*pj));
         let sortie_commune = |fiche| Sortie {
             fiche,
             minuits: e.minuits,

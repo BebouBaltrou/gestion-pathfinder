@@ -366,7 +366,9 @@ impl Referentiel {
         })
         .and_then(|r| r.avec_compagnons(include_str!("../../../data/core/compagnons_animaux.json")))
         .and_then(|r| r.avec_formes(include_str!("../../../data/core/formes_animales.json")))
-        .and_then(|r| r.avec_convocations(include_str!("../../../data/core/convocation_allies.json")))
+        .and_then(|r| {
+            r.avec_convocations(include_str!("../../../data/core/convocation_allies.json"))
+        })
         .and_then(|r| r.avec_choix(include_str!("../../../data/core/choix_de_classe.json")))
         .and_then(|r| {
             r.avec_rage(
@@ -474,7 +476,8 @@ impl Referentiel {
 
     /// Ajoute la liste des créatures convocables par convocation d'alliés naturels.
     pub fn avec_convocations(mut self, json: &str) -> Result<Referentiel, serde_json::Error> {
-        self.convocations = crate::convocation::Convocations::depuis_json(json).map_err(serde::de::Error::custom)?;
+        self.convocations = crate::convocation::Convocations::depuis_json(json)
+            .map_err(serde::de::Error::custom)?;
         Ok(self)
     }
 

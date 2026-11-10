@@ -131,7 +131,10 @@ impl Convocations {
             .enumerate()
             .filter(|(_, c)| c.complete)
             .filter_map(|(i, c)| {
-                nombre_pour(niveau_sort, c.niveau).map(|nombre| OptionConvocation { creature: i, nombre })
+                nombre_pour(niveau_sort, c.niveau).map(|nombre| OptionConvocation {
+                    creature: i,
+                    nombre,
+                })
             })
             .collect()
     }
@@ -144,7 +147,9 @@ fn texte(v: &Value) -> String {
 /// Premier entier signé d'un texte (« +2 ; Sens… » donne 2 ; « 5 (1d8+1) » donne 5).
 pub fn premier_entier(s: &str) -> Option<i32> {
     let octets = s.as_bytes();
-    let debut = octets.iter().position(|b| b.is_ascii_digit() || *b == b'+' || *b == b'-')?;
+    let debut = octets
+        .iter()
+        .position(|b| b.is_ascii_digit() || *b == b'+' || *b == b'-')?;
     let signe = usize::from(octets[debut] == b'+' || octets[debut] == b'-');
     let fin = octets[debut + signe..]
         .iter()
@@ -202,7 +207,9 @@ fn creature_depuis(c: &Value, niveau: u32) -> Creature {
     let complete = pv.is_some()
         && ca.is_some()
         && init.is_some()
-        && ["Réf", "Vig", "Vol"].iter().all(|k| sauvegardes.contains_key(*k));
+        && ["Réf", "Vig", "Vol"]
+            .iter()
+            .all(|k| sauvegardes.contains_key(*k));
     Creature {
         nom: texte(&c["nom"]),
         fp: texte(&c["fp"]),
@@ -242,7 +249,9 @@ mod tests {
     fn le_jet_est_valide_dans_sa_plage() {
         assert!(Nombre::Une.valide(1) && !Nombre::Une.valide(2));
         assert!(Nombre::D3.valide(3) && !Nombre::D3.valide(4));
-        assert!(Nombre::D4Plus1.valide(2) && Nombre::D4Plus1.valide(5) && !Nombre::D4Plus1.valide(1));
+        assert!(
+            Nombre::D4Plus1.valide(2) && Nombre::D4Plus1.valide(5) && !Nombre::D4Plus1.valide(1)
+        );
     }
 
     #[test]
@@ -274,7 +283,12 @@ mod tests {
     fn toutes_les_creatures_ont_des_statistiques_de_base() {
         let c = Convocations::depuis_json(JSON).unwrap();
         assert!(c.creatures.len() > 100);
-        let incompletes: Vec<&str> = c.creatures.iter().filter(|c| !c.complete).map(|c| c.nom.as_str()).collect();
+        let incompletes: Vec<&str> = c
+            .creatures
+            .iter()
+            .filter(|c| !c.complete)
+            .map(|c| c.nom.as_str())
+            .collect();
         // Dix méphites n'ont que leur nom et leur FP dans les données : à compléter.
         assert_eq!(incompletes.len(), 10);
         assert!(incompletes.iter().all(|n| n.starts_with("Méphite")));
@@ -285,7 +299,9 @@ mod tests {
         let c = Convocations::depuis_json(JSON).unwrap();
         let o = c.options_pour(1);
         assert!(!o.is_empty());
-        assert!(o.iter().all(|x| c.creatures[x.creature].niveau == 1 && x.nombre == Nombre::Une));
+        assert!(o
+            .iter()
+            .all(|x| c.creatures[x.creature].niveau == 1 && x.nombre == Nombre::Une));
         let o3 = c.options_pour(3);
         assert!(o3.iter().any(|x| x.nombre == Nombre::D4Plus1));
         assert!(o3.iter().any(|x| x.nombre == Nombre::D3));
