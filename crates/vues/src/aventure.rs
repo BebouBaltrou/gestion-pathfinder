@@ -529,11 +529,39 @@ pub fn capacites_de_forme(a: &EtatAventure, id: u32) -> Vec<(String, String)> {
         .rsplit_once('(')
         .and_then(|(_, r)| r.strip_suffix(')'))
         .unwrap_or("");
-    capacites_de_creature(creature_nom)
+    let animal = fiches::Referentiel::partage()
+        .convocations
+        .creatures
+        .iter()
+        .any(|x| x.nom == creature_nom && x.type_creature.starts_with("Animal"));
+    capacites_de_creature(creature_nom, animal)
 }
 
-/// Lignes de la fiche d'une créature hors attaques (corps à corps et distance), recalculées ailleurs.
-pub fn capacites_de_creature(nom: &str) -> Vec<(String, String)> {
+/// Aptitudes listées dans le texte de forme bestiale (sorts de forme animale).
+const APTITUDES_FORME: &[&str] = &[
+    "creusement",
+    "escalade",
+    "nage",
+    "vol ",
+    "bond",
+    "constriction",
+    "croc-en-jambe",
+    "étreinte",
+    "férocité",
+    "pattes arrière",
+    "odorat",
+    "perception aveugle",
+    "piétinement",
+    "poison",
+    "propulsion",
+    "toile",
+    "vision dans le noir",
+    "vision nocturne",
+];
+
+/// Lignes de la fiche d'une créature hors attaques. `animal` : ne garder que les aptitudes listées
+/// dans le texte de forme bestiale (la règle du sort ; ligne Réf exclue : elle contient Vol).
+pub fn capacites_de_creature(nom: &str, animal: bool) -> Vec<(String, String)> {
     fiches::Referentiel::partage()
         .convocations
         .creatures
@@ -544,6 +572,14 @@ pub fn capacites_de_creature(nom: &str) -> Vec<(String, String)> {
                 .iter()
                 .filter(|l| {
                     !l.libelle.starts_with("Corps à corps") && !l.libelle.starts_with("Distance")
+                })
+                .filter(|l| {
+                    !animal
+                        || (l.libelle != "Réf"
+                            && APTITUDES_FORME.iter().any(|k| {
+                                let t = format!("{} {}", l.libelle, l.valeur).to_lowercase();
+                                t.contains(k)
+                            }))
                 })
                 .map(|l| (l.libelle.clone(), l.valeur.clone()))
                 .collect()
@@ -557,11 +593,19 @@ mod tests_capacites {
 
     #[test]
     fn l_elephant_garde_son_piétinement() {
-        let c = capacites_de_creature("Éléphant");
+        let c = capacites_de_creature("Éléphant", true);
         assert!(c
             .iter()
             .any(|(l, v)| l == "Attaques spéciales" && v.contains("piétinement (2d8+15")));
         assert!(!c.iter().any(|(l, _)| l.starts_with("Corps à corps")));
+    }
+
+    #[test]
+    fn l_aigle_garde_son_vol_et_seulement_les_aptitudes_listees() {
+        let c = capacites_de_creature("Aigle", true);
+        assert!(c.iter().any(|(l, v)| l == "VD" && v.contains("vol 24 m")));
+        assert!(!c.iter().any(|(l, _)| l == "Réf"));
+        assert!(!c.iter().any(|(l, _)| l == "Caractéristiques"));
     }
 }
 
