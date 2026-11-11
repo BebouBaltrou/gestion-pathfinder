@@ -754,6 +754,42 @@ mod tests {
     }
 
     #[test]
+    fn multiclassage_ajoute_un_niveau_de_nouvelle_classe() {
+        let r = Referentiel::core();
+        let regles = ReglesFiche {
+            multiclassage: true,
+            ..ReglesFiche::default()
+        };
+        let f = base();
+        // le don supplémentaire du guerrier (niveau 1 de sa classe) doit être un don de combat
+        let combat = r
+            .dons
+            .iter()
+            .find(|d| {
+                d.prerequis.is_empty()
+                    && !d.repetable()
+                    && !d.a_un_choix()
+                    && d.types_en.iter().any(|t| t == "Combat")
+            })
+            .unwrap()
+            .nom_en
+            .clone();
+        let mut m = montee_auto(&r, &f, "guerrier", 6);
+        m.dons = vec![combat];
+        let f2 = appliquer(&r, &regles, &f, &m, 20).expect("montée multiclassée refusée");
+        assert_eq!(f2.niveau_de_personnage(), f.niveau_de_personnage() + 1);
+        assert_eq!(f2.niveau_de_classe("guerrier"), 1);
+        assert_eq!(
+            f2.niveau_de_classe("ensorceleur"),
+            f.niveau_de_classe("ensorceleur")
+        );
+        // BBA : le niveau 1 de guerrier (+1) s'ajoute au BBA déjà acquis
+        let avant = f.calculer(&r).unwrap().bba.total;
+        let apres = f2.calculer(&r).unwrap().bba.total;
+        assert_eq!(apres - avant, 1);
+    }
+
+    #[test]
     fn predilection_obligatoire_dans_la_classe_de_predilection() {
         let r = Referentiel::core();
         let f = base();
