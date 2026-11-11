@@ -231,7 +231,10 @@ fn druide(
                 i.classe_en = "druid".into();
                 i.classe = "druide".into();
                 i.sorts_connus = prepares.iter().map(|(_, n)| n.clone()).collect();
-                i.prepares_disponibles = prepares.clone();
+                i.prepares_disponibles = prepares
+                    .iter()
+                    .map(|(n, s)| (*n, s.clone(), Vec::new(), None))
+                    .collect();
                 if let Some(e) = i.emplacements.iter_mut().find(|e| e.niveau_de_sort == 1) {
                     e.restants = restants_niv1;
                 }

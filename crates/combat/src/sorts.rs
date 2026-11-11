@@ -175,6 +175,15 @@ pub(crate) fn composantes(texte: Option<&str>) -> (bool, bool) {
     (jetons.contains(&"V"), jetons.contains(&"S"))
 }
 
+/// Mêmes métamagies, sans tenir compte de l'ordre ni de la casse.
+fn meme_metamagies(a: &[String], b: &[String]) -> bool {
+    let mut a: Vec<String> = a.iter().map(|m| m.to_lowercase()).collect();
+    let mut b: Vec<String> = b.iter().map(|m| m.to_lowercase()).collect();
+    a.sort_unstable();
+    b.sort_unstable();
+    a == b
+}
+
 /// Type d'action pour lancer le sort d'après son temps d'incantation (livre p. 188, « Lancer un
 /// sort métamagique ») : un lanceur spontané qui applique de la métamagie lance en action complexe
 /// un sort qui prend une action simple ; le sort accéléré part en action rapide. Un sort d'une
@@ -401,22 +410,28 @@ impl EtatCombat {
             ))
         })?;
         if !inc.spontane {
-            // Lanceur qui prépare : le sort doit être préparé aujourd'hui et pas encore lancé
-            // (les lancers de ce combat comptent déjà).
-            if !metamagies_choisies.is_empty() || heighten.is_some() {
-                return invalide(
-                    "lanceur qui prépare : métamagie pas encore prise en charge en combat",
-                );
-            }
+            // Lanceur qui prépare : le sort doit être préparé aujourd'hui, avec les mêmes
+            // métamagies, et pas encore lancé (les lancers de ce combat comptent déjà).
+            let slot = fiches::preparation::niveau_emplacement(
+                niveau_du_sort,
+                metamagies_choisies,
+                heighten,
+            )
+            .map_err(ErreurCombat::Invalide)?;
             let prepares = inc
                 .prepares_disponibles
                 .iter()
-                .filter(|(n, s)| *n == niveau_du_sort && s.eq_ignore_ascii_case(&sort.nom_en))
+                .filter(|(n, s, metas, h)| {
+                    *n == slot
+                        && s.eq_ignore_ascii_case(&sort.nom_en)
+                        && *h == heighten
+                        && meme_metamagies(metas, metamagies_choisies)
+                })
                 .count();
-            let lances = lances(&sort.nom_en, niveau_du_sort);
+            let lances = lances(&sort.nom_en, slot);
             if prepares <= lances {
                 return invalide(format!(
-                    "{} n'a pas {} préparé au niveau {niveau_du_sort} (ou il est déjà lancé)",
+                    "{} n'a pas {} préparé au niveau {slot} avec ces métamagies (ou il est déjà lancé)",
                     c.nom, sort.nom_en
                 ));
             }

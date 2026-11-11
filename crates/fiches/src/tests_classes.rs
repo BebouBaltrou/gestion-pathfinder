@@ -376,6 +376,8 @@ fn prep(niveau: u32, sort: &str, domaine: bool) -> SortPrepare {
         niveau,
         sort: sort.into(),
         domaine,
+        metamagies: Vec::new(),
+        niveau_heighten: None,
     }
 }
 
@@ -2633,6 +2635,8 @@ fn le_grimoire_du_magicien_se_compte_et_commande_la_preparation() {
         niveau,
         sort: sort.into(),
         domaine,
+        metamagies: Vec::new(),
+        niveau_heighten: None,
     };
     // Niveau 1, Intelligence 14 (+2) : 3 + 2 = 5 sorts de niveau 1 attendus.
     let mut f = de_classe("magicien", 1);

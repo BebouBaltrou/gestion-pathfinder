@@ -85,7 +85,7 @@ impl Etat {
                 })
                 .collect();
             // Lanceur qui prépare (druide, prêtre) : on lance les sorts préparés non encore lancés.
-            let mut prepares_disponibles: Vec<(u32, String)> = Vec::new();
+            let mut prepares_disponibles: Vec<(u32, String, Vec<String>, Option<u32>)> = Vec::new();
             if def.prepare() {
                 let utilises = etat.prepares_utilises.get(&inc.classe);
                 for (k, s) in etat
@@ -96,14 +96,25 @@ impl Etat {
                     .enumerate()
                 {
                     if !utilises.and_then(|u| u.get(k)).copied().unwrap_or(false) {
-                        prepares_disponibles.push((s.niveau, s.sort.clone()));
+                        let slot = fiches::preparation::niveau_emplacement(
+                            s.niveau,
+                            &s.metamagies,
+                            s.niveau_heighten,
+                        )
+                        .unwrap_or(s.niveau);
+                        prepares_disponibles.push((
+                            slot,
+                            s.sort.clone(),
+                            s.metamagies.clone(),
+                            s.niveau_heighten,
+                        ));
                     }
                 }
             }
             let mut sorts_connus: Vec<String> = if def.prepare() {
                 let mut noms: Vec<String> = prepares_disponibles
                     .iter()
-                    .map(|(_, n)| n.clone())
+                    .map(|(_, n, _, _)| n.clone())
                     .collect();
                 noms.sort();
                 noms.dedup();

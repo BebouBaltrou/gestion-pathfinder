@@ -94,7 +94,8 @@ pub struct IncantationPj {
     pub sorts_connus: Vec<String>,
     /// Lanceur qui prépare : sorts préparés du jour pas encore lancés (niveau, nom anglais).
     /// Vide pour un lanceur spontané.
-    pub prepares_disponibles: Vec<(u32, String)>,
+    /// Sorts préparés non encore lancés : (niveau d'emplacement occupé, nom, métamagies, niveau visé).
+    pub prepares_disponibles: Vec<(u32, String, Vec<String>, Option<u32>)>,
     /// Dons de métamagie connus (noms anglais).
     pub metamagies: Vec<String>,
     /// Chance d'échec des sorts profanes due à l'armure et au bouclier (%).
