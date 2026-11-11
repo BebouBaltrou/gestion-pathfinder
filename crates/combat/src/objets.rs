@@ -79,6 +79,7 @@ impl EtatCombat {
         let mut type_action = a.type_action.unwrap_or(TypeAction::Simple);
         let mut cibles = a.cibles.clone();
         let mut gestuel = false;
+        let mut dd_baton: Option<i32> = None;
         match objet.genre {
             GenreObjet::Potion => {
                 type_action = TypeAction::Simple; // boire une potion : action simple (p. 477)
@@ -125,6 +126,12 @@ impl EtatCombat {
                     gestuel = composantes(s.composantes_en.as_deref()).1;
                     if objet.genre == GenreObjet::Baton {
                         cl = cl.max(inc.niveau_de_lanceur); // le porteur utilise son niveau s'il est plus haut (p. 491)
+                        // DD du sort du bâton : 10 + niveau du sort + modificateur du porteur (p. 491)
+                        dd_baton = Some(fiches::dd_sort(
+                            niveau_pour_lui,
+                            inc.mod_incantation,
+                            fiches::dons_ecole_pour(&inc.dons_ecole, &s.ecole),
+                        ));
                     }
                 }
             }
@@ -168,7 +175,10 @@ impl EtatCombat {
             &ActionCombat::Agir {
                 pj: a.pj,
                 type_action,
-                libelle: format!("Utiliser {}", objet.nom),
+                libelle: match dd_baton {
+                    Some(dd) => format!("Utiliser {} (DD du sort : {dd})", objet.nom),
+                    None => format!("Utiliser {}", objet.nom),
+                },
                 deplacement: false,
             },
             ctx,
