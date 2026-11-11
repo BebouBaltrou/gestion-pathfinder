@@ -316,6 +316,8 @@ pub struct Referentiel {
     pub compagnons: crate::compagnon::DonneesCompagnons,
     pub choix: crate::choix_classe::ChoixDeClasse,
     pub rage: crate::choix_classe::PouvoirsRage,
+    /// Classes de prestige et leurs conditions d'entrée (Manuel des joueurs, ch. 11).
+    pub classes_prestige: Vec<crate::classes_prestige::ClassePrestige>,
 }
 
 impl Referentiel {
@@ -370,6 +372,7 @@ impl Referentiel {
             r.avec_convocations(include_str!("../../../data/core/convocation_allies.json"))
         })
         .and_then(|r| r.avec_choix(include_str!("../../../data/core/choix_de_classe.json")))
+        .and_then(|r| r.avec_prestige(include_str!("../../../data/core/classes_prestige.json")))
         .and_then(|r| {
             r.avec_rage(
                 include_str!("../../../data/core/pouvoirs_rage.json"),
@@ -417,7 +420,18 @@ impl Referentiel {
             compagnons: Default::default(),
             choix: Default::default(),
             rage: Default::default(),
+            classes_prestige: Vec::new(),
         })
+    }
+
+    /// Ajoute les classes de prestige et leurs conditions d'entrée.
+    pub fn avec_prestige(mut self, json: &str) -> Result<Referentiel, serde_json::Error> {
+        self.classes_prestige = crate::classes_prestige::depuis_json(json)?;
+        Ok(self)
+    }
+
+    pub fn classe_prestige(&self, id: &str) -> Option<&crate::classes_prestige::ClassePrestige> {
+        self.classes_prestige.iter().find(|c| c.id == id)
     }
 
     /// Ajoute les pouvoirs de rage du barbare, leurs prérequis et leurs textes.

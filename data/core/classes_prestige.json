@@ -1,0 +1,128 @@
+{
+  "source": "Manuel des joueurs, chapitre 11 « Les classes de prestige » (Conditions de chaque classe)",
+  "classes": [
+    {
+      "id": "archer_mage",
+      "nom": "Archer-mage",
+      "conditions": [
+        { "genre": "bba", "min": 6 },
+        { "genre": "don", "nom_en": "Weapon Focus" },
+        { "genre": "don", "nom_en": "Point-Blank Shot" },
+        { "genre": "don", "nom_en": "Precise Shot" },
+        { "genre": "sorts_de_niveau", "niveau_de_sort": 1, "type": "arcane" }
+      ],
+      "conditions_speciales": [
+        "Arme de prédilection : arc court ou arc long (le choix de l'arme n'est pas vérifié)"
+      ]
+    },
+    {
+      "id": "assassin",
+      "nom": "Assassin",
+      "conditions": [
+        { "genre": "alignement", "codes": ["LM", "NM", "CM"] },
+        { "genre": "rangs", "competence": "disguise", "min": 2 },
+        { "genre": "rangs", "competence": "stealth", "min": 5 }
+      ],
+      "conditions_speciales": [
+        "Le personnage doit avoir tué quelqu'un, sans autre raison que de devenir assassin"
+      ]
+    },
+    {
+      "id": "champion_occultiste",
+      "nom": "Champion occultiste",
+      "conditions": [
+        { "genre": "texte", "texte_en": "Formé au maniement de toutes les armes de guerre" },
+        { "genre": "sorts_de_niveau", "niveau_de_sort": 3 }
+      ],
+      "conditions_speciales": []
+    },
+    {
+      "id": "chroniqueur",
+      "nom": "Chroniqueur",
+      "conditions": [
+        { "genre": "rangs", "competence": "linguistics", "min": 3 },
+        { "genre": "rangs", "competence": "perform", "min": 5 },
+        { "genre": "rangs", "competence": "profession", "min": 5 }
+      ],
+      "conditions_speciales": [
+        "Le personnage doit avoir écrit ou recopié un texte (hors parchemin magique ou objet) qu'un PNJ a payé au moins 50 po",
+        "Sous-types non vérifiés : Représentation (art oratoire) et Profession (scribe)"
+      ]
+    },
+    {
+      "id": "disciple_draconien",
+      "nom": "Disciple draconien",
+      "conditions": [
+        { "genre": "texte", "texte_en": "Race : non-dragon" },
+        { "genre": "rangs", "competence": "knowledge", "sous_type": "arcana", "min": 5 },
+        { "genre": "texte", "texte_en": "Doit parler le draconique" },
+        { "genre": "texte", "texte_en": "Lance des sorts profanes de 1er niveau sans préparation" },
+        { "genre": "texte", "texte_en": "Si le personnage a des niveaux d'ensorceleur : lignée draconique" }
+      ],
+      "conditions_speciales": []
+    },
+    {
+      "id": "duelliste",
+      "nom": "Duelliste",
+      "conditions": [
+        { "genre": "bba", "min": 6 },
+        { "genre": "rangs", "competence": "acrobatics", "min": 2 },
+        { "genre": "rangs", "competence": "perform", "min": 2 },
+        { "genre": "don", "nom_en": "Weapon Finesse" },
+        { "genre": "don", "nom_en": "Dodge" },
+        { "genre": "don", "nom_en": "Mobility" }
+      ],
+      "conditions_speciales": []
+    },
+    {
+      "id": "gardien_du_savoir",
+      "nom": "Gardien du savoir",
+      "conditions": [
+        { "genre": "texte", "texte_en": "Rang 7 dans deux compétences de Connaissances (spécialités au choix)" },
+        { "genre": "texte", "texte_en": "Trois dons de métamagie ou de création d'objet" },
+        { "genre": "don", "nom_en": "Skill Focus" },
+        { "genre": "texte", "texte_en": "Sept sorts de divination dont un de 3e niveau ou plus" }
+      ],
+      "conditions_speciales": [
+        "Talent (Connaissances) : le don Talent (Skill Focus) est attribué à une compétence de Connaissances"
+      ]
+    },
+    {
+      "id": "maitre_des_ombres",
+      "nom": "Maître des ombres",
+      "conditions": [
+        { "genre": "rangs", "competence": "stealth", "min": 5 },
+        { "genre": "rangs", "competence": "perform", "min": 2 },
+        { "genre": "don", "nom_en": "Combat Reflexes" },
+        { "genre": "don", "nom_en": "Dodge" },
+        { "genre": "don", "nom_en": "Mobility" }
+      ],
+      "conditions_speciales": []
+    },
+    {
+      "id": "mystificateur_profane",
+      "nom": "Mystificateur profane",
+      "conditions": [
+        { "genre": "alignement", "codes": ["NB", "N", "NM", "CB", "CN", "CM"] },
+        { "genre": "rangs", "competence": "disable_device", "min": 4 },
+        { "genre": "rangs", "competence": "escape_artist", "min": 4 },
+        { "genre": "rangs", "competence": "knowledge", "sous_type": "arcana", "min": 4 },
+        { "genre": "texte", "texte_en": "Sait lancer manipulation à distance" },
+        { "genre": "sorts_de_niveau", "niveau_de_sort": 2, "type": "arcane" },
+        { "genre": "texte", "texte_en": "Attaque sournoise +2d6 ou plus" }
+      ],
+      "conditions_speciales": []
+    },
+    {
+      "id": "theurge_mystique",
+      "nom": "Théurge mystique",
+      "conditions": [
+        { "genre": "rangs", "competence": "knowledge", "sous_type": "arcana", "min": 3 },
+        { "genre": "rangs", "competence": "knowledge", "sous_type": "religion", "min": 3 },
+        { "genre": "sorts_de_niveau", "niveau_de_sort": 2, "type": "arcane" },
+        { "genre": "sorts_de_niveau", "niveau_de_sort": 2, "type": "divine" }
+      ],
+      "conditions_speciales": []
+    }
+  ]
+}

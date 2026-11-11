@@ -217,7 +217,23 @@ fn evaluer(ctx: &Contexte, p: &Prerequis) -> (String, Statut) {
             }
         }
         Prerequis::Texte { texte_en } => (texte_en.clone(), Statut::AVerifier(texte_en.clone())),
+        Prerequis::Alignement { codes } => {
+            let t = format!("alignement : {}", codes.join(" ou "));
+            match ctx.fiche.alignement.as_deref() {
+                Some(a) if codes.iter().any(|c| c.eq_ignore_ascii_case(a)) => (t, Statut::Rempli),
+                Some(a) => (t, Statut::Manquant(format!("alignement actuel : {a}"))),
+                None => (
+                    t.clone(),
+                    Statut::Manquant(format!("{t} (alignement non renseigné)")),
+                ),
+            }
+        }
     }
+}
+
+/// Évalue un seul prérequis (utilisé par les classes de prestige).
+pub fn evaluer_un(ctx: &Contexte, p: &Prerequis) -> (String, Statut) {
+    evaluer(ctx, p)
 }
 
 /// Vérifie tous les prérequis d'un don.

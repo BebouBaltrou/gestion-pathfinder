@@ -46,6 +46,10 @@ pub enum Prerequis {
     Texte {
         texte_en: String,
     },
+    /// Alignement parmi ces codes (`LB`, `NM`…). Sert aux classes de prestige.
+    Alignement {
+        codes: Vec<String>,
+    },
 }
 
 #[derive(Debug, Clone, Deserialize)]

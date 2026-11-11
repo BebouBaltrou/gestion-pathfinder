@@ -10,6 +10,7 @@ pub mod caracteristiques;
 pub mod catalogue;
 #[cfg(feature = "serde")]
 pub mod choix_classe;
+pub mod classes_prestige;
 pub mod compagnon;
 #[cfg(feature = "serde")]
 pub mod convocation;

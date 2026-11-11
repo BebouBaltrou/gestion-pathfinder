@@ -2,8 +2,10 @@
 //! (Core Rulebook, tableau 3-1, p. 31, et « Advancing Your Character », p. 30).
 
 use crate::caracteristiques::Carac;
+use crate::classes_prestige;
 use crate::donnees::Referentiel;
 use crate::fiche::{BonusPredilection, Fiche, NiveauPris, Probleme};
+use crate::prerequis::Statut;
 use std::collections::BTreeMap;
 
 /// Vitesse de progression, choix de campagne (Core p. 30) ; `Jalons` : le MJ accorde les niveaux.
@@ -110,13 +112,33 @@ pub struct Montee {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ErreurMontee {
     EchangeImpossible(String),
-    NiveauPasEncoreAtteint { niveau: u32, atteignable: u32 },
+    NiveauPasEncoreAtteint {
+        niveau: u32,
+        atteignable: u32,
+    },
     NiveauMaximum,
     ClasseInconnue(String),
-    MulticlassageDesactive { classe: String },
+    MulticlassageDesactive {
+        classe: String,
+    },
+    /// Conditions d'entrée d'une classe de prestige non remplies (libellés des conditions manquantes).
+    ConditionsNonRemplies {
+        classe: String,
+        manquants: Vec<String>,
+    },
+    /// Conditions remplies, mais la progression de cette classe de prestige n'est pas encore saisie.
+    PrestigeProgressionAbsente {
+        classe: String,
+    },
     JetManquant,
-    JetHorsLimites { jet: u32, de: u32 },
-    DonsAttendus { attendus: u32, fournis: u32 },
+    JetHorsLimites {
+        jet: u32,
+        de: u32,
+    },
+    DonsAttendus {
+        attendus: u32,
+        fournis: u32,
+    },
     AugmentationAttendue,
     AugmentationInattendue,
     PredilectionAttendue,
@@ -139,6 +161,15 @@ impl std::fmt::Display for ErreurMontee {
             ErreurMontee::MulticlassageDesactive { classe } => write!(
                 f,
                 "multiclassage désactivé dans cette campagne ({classe} est une nouvelle classe)"
+            ),
+            ErreurMontee::ConditionsNonRemplies { classe, manquants } => write!(
+                f,
+                "conditions non remplies pour {classe} : {}",
+                manquants.join(" ; ")
+            ),
+            ErreurMontee::PrestigeProgressionAbsente { classe } => write!(
+                f,
+                "{classe} : progression de la classe de prestige pas encore saisie"
             ),
             ErreurMontee::JetManquant => write!(f, "saisir le résultat du dé de vie"),
             ErreurMontee::JetHorsLimites { jet, de } => {
@@ -275,6 +306,35 @@ pub fn apercu(r: &Referentiel, f: &Fiche, classe_id: &str) -> Option<ApercuMonte
     })
 }
 
+/// Classe absente du référentiel de classes : classe de prestige (conditions d'entrée vérifiées)
+/// ou classe inconnue.
+fn classe_inconnue_ou_prestige(r: &Referentiel, f: &Fiche, id: &str) -> ErreurMontee {
+    let Some(cp) = r.classe_prestige(id) else {
+        return ErreurMontee::ClasseInconnue(id.to_string());
+    };
+    let valeurs = match f.calculer(r) {
+        Ok(v) => v,
+        Err(p) => return ErreurMontee::Fiche(p),
+    };
+    let manquants: Vec<String> = classes_prestige::verifier(r, f, &valeurs, cp)
+        .into_iter()
+        .filter_map(|(texte, s)| match s {
+            Statut::Manquant(detail) => Some(format!("{texte} ({detail})")),
+            _ => None,
+        })
+        .collect();
+    if manquants.is_empty() {
+        ErreurMontee::PrestigeProgressionAbsente {
+            classe: cp.nom.clone(),
+        }
+    } else {
+        ErreurMontee::ConditionsNonRemplies {
+            classe: cp.nom.clone(),
+            manquants,
+        }
+    }
+}
+
 /// Applique un niveau : renvoie la nouvelle fiche, ou toutes les erreurs trouvées.
 /// `atteignable` est le niveau permis par les XP ou les jalons.
 pub fn appliquer(
@@ -295,7 +355,7 @@ pub fn appliquer(
         }]);
     }
     let Some(classe) = r.classe(&m.classe) else {
-        return Err(vec![ErreurMontee::ClasseInconnue(m.classe.clone())]);
+        return Err(vec![classe_inconnue_ou_prestige(r, f, &m.classe)]);
     };
     let mut e = Vec::new();
     if !regles.multiclassage && f.niveaux.iter().any(|n| n.classe != m.classe) {
