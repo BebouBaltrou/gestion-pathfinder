@@ -1,15 +1,151 @@
 {
-  "source": "Manuel des joueurs, chapitre 11 « Les classes de prestige » (Conditions de chaque classe)",
+  "source": "Manuel des joueurs, chapitre 11 « Les classes de prestige » (tables et conditions de chaque classe)",
   "classes": [
     {
       "id": "archer_mage",
       "nom": "Archer-mage",
+      "nom_en": "Archer Mage",
+      "source": {
+        "livre": "Manuel des joueurs, ch. 11"
+      },
+      "de_vie": 10,
+      "rangs_par_niveau": 4,
+      "caracteristique_rangs": "int",
+      "competences_de_classe_en": [],
+      "progression": [
+        {
+          "niveau": 1,
+          "bba": [
+            1
+          ],
+          "vigueur": 1,
+          "reflexes": 1,
+          "volonte": 0,
+          "special_en": "Flèche magique (magie)",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 2,
+          "bba": [
+            2
+          ],
+          "vigueur": 1,
+          "reflexes": 1,
+          "volonte": 1,
+          "special_en": "Flèche enchantée ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 3,
+          "bba": [
+            3
+          ],
+          "vigueur": 2,
+          "reflexes": 2,
+          "volonte": 1,
+          "special_en": "Flèche magique (élémentaire) ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 4,
+          "bba": [
+            4
+          ],
+          "vigueur": 2,
+          "reflexes": 2,
+          "volonte": 1,
+          "special_en": "Flèche à tête chercheuse ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 5,
+          "bba": [
+            5
+          ],
+          "vigueur": 3,
+          "reflexes": 3,
+          "volonte": 2,
+          "special_en": "Flèche magique (portée longue)",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 6,
+          "bba": [
+            6
+          ],
+          "vigueur": 3,
+          "reflexes": 3,
+          "volonte": 2,
+          "special_en": "Flèche de phase ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 7,
+          "bba": [
+            7
+          ],
+          "vigueur": 4,
+          "reflexes": 4,
+          "volonte": 2,
+          "special_en": "Flèche magique (rayonnement élémentaire) ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 8,
+          "bba": [
+            8
+          ],
+          "vigueur": 4,
+          "reflexes": 4,
+          "volonte": 3,
+          "special_en": "Pluie de flèches ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 9,
+          "bba": [
+            9
+          ],
+          "vigueur": 5,
+          "reflexes": 5,
+          "volonte": 3,
+          "special_en": "Flèche magique (alignement)",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 10,
+          "bba": [
+            10
+          ],
+          "vigueur": 5,
+          "reflexes": 5,
+          "volonte": 3,
+          "special_en": "Flèche de mort ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        }
+      ],
       "conditions": [
-        { "genre": "bba", "min": 6 },
-        { "genre": "don", "nom_en": "Weapon Focus" },
-        { "genre": "don", "nom_en": "Point-Blank Shot" },
-        { "genre": "don", "nom_en": "Precise Shot" },
-        { "genre": "sorts_de_niveau", "niveau_de_sort": 1, "type": "arcane" }
+        {
+          "genre": "bba",
+          "min": 6
+        },
+        {
+          "genre": "don",
+          "nom_en": "Weapon Focus"
+        },
+        {
+          "genre": "don",
+          "nom_en": "Point-Blank Shot"
+        },
+        {
+          "genre": "don",
+          "nom_en": "Precise Shot"
+        },
+        {
+          "genre": "sorts_de_niveau",
+          "niveau_de_sort": 1,
+          "type": "arcane"
+        }
       ],
       "conditions_speciales": [
         "Arme de prédilection : arc court ou arc long (le choix de l'arme n'est pas vérifié)"
@@ -18,10 +154,145 @@
     {
       "id": "assassin",
       "nom": "Assassin",
+      "nom_en": "Assassin",
+      "source": {
+        "livre": "Manuel des joueurs, ch. 11"
+      },
+      "de_vie": 8,
+      "rangs_par_niveau": 4,
+      "caracteristique_rangs": "int",
+      "competences_de_classe_en": [],
+      "progression": [
+        {
+          "niveau": 1,
+          "bba": [
+            0
+          ],
+          "vigueur": 0,
+          "reflexes": 1,
+          "volonte": 0,
+          "special_en": "Attaque sournoise +1d6, attaque mortelle, utilisation du poison",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 2,
+          "bba": [
+            1
+          ],
+          "vigueur": 1,
+          "reflexes": 1,
+          "volonte": 1,
+          "special_en": "Bonus aux JS contre les poisons (+1), esquive instinctive",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 3,
+          "bba": [
+            2
+          ],
+          "vigueur": 1,
+          "reflexes": 2,
+          "volonte": 1,
+          "special_en": "Attaque sournoise +2d6",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 4,
+          "bba": [
+            3
+          ],
+          "vigueur": 1,
+          "reflexes": 2,
+          "volonte": 1,
+          "special_en": "Bonus aux JS contre les poisons (+2), armes dissimulées, vraie mort",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 5,
+          "bba": [
+            3
+          ],
+          "vigueur": 2,
+          "reflexes": 3,
+          "volonte": 2,
+          "special_en": "Esquive instinctive supérieure, attaque sournoise +3d6",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 6,
+          "bba": [
+            4
+          ],
+          "vigueur": 2,
+          "reflexes": 3,
+          "volonte": 2,
+          "special_en": "Bonus aux JS contre les poisons (+3), mort silencieuse",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 7,
+          "bba": [
+            5
+          ],
+          "vigueur": 2,
+          "reflexes": 4,
+          "volonte": 2,
+          "special_en": "Attaque sournoise +4d6",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 8,
+          "bba": [
+            6
+          ],
+          "vigueur": 3,
+          "reflexes": 4,
+          "volonte": 3,
+          "special_en": "Bonus aux JS contre les poisons (+4), discrétion totale",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 9,
+          "bba": [
+            6
+          ],
+          "vigueur": 3,
+          "reflexes": 5,
+          "volonte": 3,
+          "special_en": "Attaque sournoise +5d6, mort rapide",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 10,
+          "bba": [
+            7
+          ],
+          "vigueur": 3,
+          "reflexes": 5,
+          "volonte": 3,
+          "special_en": "Ange de la mort, bonus aux JS contre les poisons (+5)",
+          "sorts_par_jour": []
+        }
+      ],
       "conditions": [
-        { "genre": "alignement", "codes": ["LM", "NM", "CM"] },
-        { "genre": "rangs", "competence": "disguise", "min": 2 },
-        { "genre": "rangs", "competence": "stealth", "min": 5 }
+        {
+          "genre": "alignement",
+          "codes": [
+            "LM",
+            "NM",
+            "CM"
+          ]
+        },
+        {
+          "genre": "rangs",
+          "competence": "disguise",
+          "min": 2
+        },
+        {
+          "genre": "rangs",
+          "competence": "stealth",
+          "min": 5
+        }
       ],
       "conditions_speciales": [
         "Le personnage doit avoir tué quelqu'un, sans autre raison que de devenir assassin"
@@ -30,19 +301,277 @@
     {
       "id": "champion_occultiste",
       "nom": "Champion occultiste",
+      "nom_en": "Occult Champion",
+      "source": {
+        "livre": "Manuel des joueurs, ch. 11"
+      },
+      "de_vie": 10,
+      "rangs_par_niveau": 2,
+      "caracteristique_rangs": "int",
+      "competences_de_classe_en": [],
+      "progression": [
+        {
+          "niveau": 1,
+          "bba": [
+            1
+          ],
+          "vigueur": 1,
+          "reflexes": 0,
+          "volonte": 0,
+          "special_en": "Don supplémentaire (guerrier), entraînement diversifié ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 2,
+          "bba": [
+            2
+          ],
+          "vigueur": 1,
+          "reflexes": 1,
+          "volonte": 1,
+          "special_en": "+1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 3,
+          "bba": [
+            3
+          ],
+          "vigueur": 2,
+          "reflexes": 1,
+          "volonte": 1,
+          "special_en": "+1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 4,
+          "bba": [
+            4
+          ],
+          "vigueur": 2,
+          "reflexes": 1,
+          "volonte": 1,
+          "special_en": "+1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 5,
+          "bba": [
+            5
+          ],
+          "vigueur": 3,
+          "reflexes": 2,
+          "volonte": 2,
+          "special_en": "Don supplémentaire (guerrier) ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 6,
+          "bba": [
+            6
+          ],
+          "vigueur": 3,
+          "reflexes": 2,
+          "volonte": 2,
+          "special_en": "+1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 7,
+          "bba": [
+            7
+          ],
+          "vigueur": 4,
+          "reflexes": 2,
+          "volonte": 2,
+          "special_en": "+1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 8,
+          "bba": [
+            8
+          ],
+          "vigueur": 4,
+          "reflexes": 3,
+          "volonte": 3,
+          "special_en": "+1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 9,
+          "bba": [
+            9
+          ],
+          "vigueur": 5,
+          "reflexes": 3,
+          "volonte": 3,
+          "special_en": "Don supplémentaire (guerrier) ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 10,
+          "bba": [
+            10
+          ],
+          "vigueur": 5,
+          "reflexes": 3,
+          "volonte": 3,
+          "special_en": "Sortilège dévastateur ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        }
+      ],
       "conditions": [
-        { "genre": "texte", "texte_en": "Formé au maniement de toutes les armes de guerre" },
-        { "genre": "sorts_de_niveau", "niveau_de_sort": 3 }
+        {
+          "genre": "texte",
+          "texte_en": "Formé au maniement de toutes les armes de guerre"
+        },
+        {
+          "genre": "sorts_de_niveau",
+          "niveau_de_sort": 3
+        }
       ],
       "conditions_speciales": []
     },
     {
       "id": "chroniqueur",
       "nom": "Chroniqueur",
+      "nom_en": "Chronicler",
+      "source": {
+        "livre": "Manuel des joueurs, ch. 11"
+      },
+      "de_vie": 8,
+      "rangs_par_niveau": 8,
+      "caracteristique_rangs": "int",
+      "competences_de_classe_en": [],
+      "progression": [
+        {
+          "niveau": 1,
+          "bba": [
+            0
+          ],
+          "vigueur": 0,
+          "reflexes": 1,
+          "volonte": 1,
+          "special_en": "Savoir bardique, poches profondes, maître scribe",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 2,
+          "bba": [
+            1
+          ],
+          "vigueur": 1,
+          "reflexes": 1,
+          "volonte": 1,
+          "special_en": "Survivre pour raconter, découverte des sentiers",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 3,
+          "bba": [
+            2
+          ],
+          "vigueur": 1,
+          "reflexes": 2,
+          "volonte": 2,
+          "special_en": "Musique bardique, aide supérieure",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 4,
+          "bba": [
+            3
+          ],
+          "vigueur": 1,
+          "reflexes": 2,
+          "volonte": 2,
+          "special_en": "Sagas épiques",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 5,
+          "bba": [
+            3
+          ],
+          "vigueur": 2,
+          "reflexes": 3,
+          "volonte": 3,
+          "special_en": "Rumeurs",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 6,
+          "bba": [
+            4
+          ],
+          "vigueur": 2,
+          "reflexes": 3,
+          "volonte": 3,
+          "special_en": "Inspirer une action (mouvement)",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 7,
+          "bba": [
+            5
+          ],
+          "vigueur": 2,
+          "reflexes": 4,
+          "volonte": 4,
+          "special_en": "Invoquer les légendes",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 8,
+          "bba": [
+            6
+          ],
+          "vigueur": 3,
+          "reflexes": 4,
+          "volonte": 4,
+          "special_en": "Sagas épiques légendaires",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 9,
+          "bba": [
+            6
+          ],
+          "vigueur": 3,
+          "reflexes": 5,
+          "volonte": 5,
+          "special_en": "Inspirer une action (simple)",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 10,
+          "bba": [
+            7
+          ],
+          "vigueur": 3,
+          "reflexes": 5,
+          "volonte": 5,
+          "special_en": "Lai des morts honorés",
+          "sorts_par_jour": []
+        }
+      ],
       "conditions": [
-        { "genre": "rangs", "competence": "linguistics", "min": 3 },
-        { "genre": "rangs", "competence": "perform", "min": 5 },
-        { "genre": "rangs", "competence": "profession", "min": 5 }
+        {
+          "genre": "rangs",
+          "competence": "linguistics",
+          "min": 3
+        },
+        {
+          "genre": "rangs",
+          "competence": "perform",
+          "min": 5
+        },
+        {
+          "genre": "rangs",
+          "competence": "profession",
+          "min": 5
+        }
       ],
       "conditions_speciales": [
         "Le personnage doit avoir écrit ou recopié un texte (hors parchemin magique ou objet) qu'un PNJ a payé au moins 50 po",
@@ -52,36 +581,445 @@
     {
       "id": "disciple_draconien",
       "nom": "Disciple draconien",
+      "nom_en": "Dragon Disciple",
+      "source": {
+        "livre": "Manuel des joueurs, ch. 11"
+      },
+      "de_vie": 12,
+      "rangs_par_niveau": 2,
+      "caracteristique_rangs": "int",
+      "competences_de_classe_en": [],
+      "progression": [
+        {
+          "niveau": 1,
+          "bba": [
+            0
+          ],
+          "vigueur": 1,
+          "reflexes": 0,
+          "volonte": 1,
+          "special_en": "Sang des dragons, augmentation naturelle d'armure (+1)",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 2,
+          "bba": [
+            1
+          ],
+          "vigueur": 1,
+          "reflexes": 1,
+          "volonte": 1,
+          "special_en": "Augmentation de caractéristique (For +2), +1 niveau de lanceur de sorts, don de lignage, morsure",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 3,
+          "bba": [
+            2
+          ],
+          "vigueur": 2,
+          "reflexes": 1,
+          "volonte": 2,
+          "special_en": "Attaque de souffle, +1 niveau de lanceur de sorts",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 4,
+          "bba": [
+            3
+          ],
+          "vigueur": 2,
+          "reflexes": 1,
+          "volonte": 2,
+          "special_en": "Augmentation de caractéristique (For +2), +1 niveau de lanceur de sorts, augmentation d'armure naturelle (+1)",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 5,
+          "bba": [
+            3
+          ],
+          "vigueur": 3,
+          "reflexes": 2,
+          "volonte": 3,
+          "special_en": "Perception aveugle (10 m), don de lignage",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 6,
+          "bba": [
+            4
+          ],
+          "vigueur": 3,
+          "reflexes": 2,
+          "volonte": 3,
+          "special_en": "Augmentation de caractéristique (Con +2), +1 niveau de lanceur de sorts",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 7,
+          "bba": [
+            5
+          ],
+          "vigueur": 4,
+          "reflexes": 2,
+          "volonte": 4,
+          "special_en": "Forme draconienne (1/jour), +1 niveau de lanceur de sorts, augmentation d'armure naturelle (+1)",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 8,
+          "bba": [
+            6
+          ],
+          "vigueur": 4,
+          "reflexes": 3,
+          "volonte": 4,
+          "special_en": "Augmentation de caractéristique (Int +2), don de lignage, +1 niveau de lanceur de sorts",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 9,
+          "bba": [
+            6
+          ],
+          "vigueur": 5,
+          "reflexes": 3,
+          "volonte": 5,
+          "special_en": "Ailes",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 10,
+          "bba": [
+            7
+          ],
+          "vigueur": 5,
+          "reflexes": 3,
+          "volonte": 5,
+          "special_en": "Perception aveugle (20 m), forme draconienne (2/jour), +1 niveau de lanceur de sorts",
+          "sorts_par_jour": []
+        }
+      ],
       "conditions": [
-        { "genre": "texte", "texte_en": "Race : non-dragon" },
-        { "genre": "rangs", "competence": "knowledge", "sous_type": "arcana", "min": 5 },
-        { "genre": "texte", "texte_en": "Doit parler le draconique" },
-        { "genre": "texte", "texte_en": "Lance des sorts profanes de 1er niveau sans préparation" },
-        { "genre": "texte", "texte_en": "Si le personnage a des niveaux d'ensorceleur : lignée draconique" }
+        {
+          "genre": "texte",
+          "texte_en": "Race : non-dragon"
+        },
+        {
+          "genre": "rangs",
+          "competence": "knowledge",
+          "sous_type": "arcana",
+          "min": 5
+        },
+        {
+          "genre": "texte",
+          "texte_en": "Doit parler le draconique"
+        },
+        {
+          "genre": "texte",
+          "texte_en": "Lance des sorts profanes de 1er niveau sans préparation"
+        },
+        {
+          "genre": "texte",
+          "texte_en": "Si le personnage a des niveaux d'ensorceleur : lignée draconique"
+        }
       ],
       "conditions_speciales": []
     },
     {
       "id": "duelliste",
       "nom": "Duelliste",
+      "nom_en": "Duelist",
+      "source": {
+        "livre": "Manuel des joueurs, ch. 11"
+      },
+      "de_vie": 10,
+      "rangs_par_niveau": 4,
+      "caracteristique_rangs": "int",
+      "competences_de_classe_en": [],
+      "progression": [
+        {
+          "niveau": 1,
+          "bba": [
+            1
+          ],
+          "vigueur": 0,
+          "reflexes": 1,
+          "volonte": 0,
+          "special_en": "Défense astucieuse, attaque précise",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 2,
+          "bba": [
+            2
+          ],
+          "vigueur": 1,
+          "reflexes": 1,
+          "volonte": 1,
+          "special_en": "Réaction accrue +2, parade",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 3,
+          "bba": [
+            3
+          ],
+          "vigueur": 1,
+          "reflexes": 2,
+          "volonte": 1,
+          "special_en": "Grande souplesse",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 4,
+          "bba": [
+            4
+          ],
+          "vigueur": 1,
+          "reflexes": 2,
+          "volonte": 1,
+          "special_en": "Attaques réflexes, style",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 5,
+          "bba": [
+            5
+          ],
+          "vigueur": 2,
+          "reflexes": 3,
+          "volonte": 2,
+          "special_en": "Riposte",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 6,
+          "bba": [
+            6
+          ],
+          "vigueur": 2,
+          "reflexes": 3,
+          "volonte": 2,
+          "special_en": "Charge acrobatique",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 7,
+          "bba": [
+            7
+          ],
+          "vigueur": 2,
+          "reflexes": 4,
+          "volonte": 2,
+          "special_en": "Parade élaborée",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 8,
+          "bba": [
+            8
+          ],
+          "vigueur": 3,
+          "reflexes": 4,
+          "volonte": 3,
+          "special_en": "Réaction accrue +4",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 9,
+          "bba": [
+            9
+          ],
+          "vigueur": 3,
+          "reflexes": 5,
+          "volonte": 3,
+          "special_en": "Parade de projectiles, pas de retraite",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 10,
+          "bba": [
+            10
+          ],
+          "vigueur": 3,
+          "reflexes": 5,
+          "volonte": 3,
+          "special_en": "Mutilation",
+          "sorts_par_jour": []
+        }
+      ],
       "conditions": [
-        { "genre": "bba", "min": 6 },
-        { "genre": "rangs", "competence": "acrobatics", "min": 2 },
-        { "genre": "rangs", "competence": "perform", "min": 2 },
-        { "genre": "don", "nom_en": "Weapon Finesse" },
-        { "genre": "don", "nom_en": "Dodge" },
-        { "genre": "don", "nom_en": "Mobility" }
+        {
+          "genre": "bba",
+          "min": 6
+        },
+        {
+          "genre": "rangs",
+          "competence": "acrobatics",
+          "min": 2
+        },
+        {
+          "genre": "rangs",
+          "competence": "perform",
+          "min": 2
+        },
+        {
+          "genre": "don",
+          "nom_en": "Weapon Finesse"
+        },
+        {
+          "genre": "don",
+          "nom_en": "Dodge"
+        },
+        {
+          "genre": "don",
+          "nom_en": "Mobility"
+        }
       ],
       "conditions_speciales": []
     },
     {
       "id": "gardien_du_savoir",
       "nom": "Gardien du savoir",
+      "nom_en": "Loremaster",
+      "source": {
+        "livre": "Manuel des joueurs, ch. 11"
+      },
+      "de_vie": 6,
+      "rangs_par_niveau": 4,
+      "caracteristique_rangs": "int",
+      "competences_de_classe_en": [],
+      "progression": [
+        {
+          "niveau": 1,
+          "bba": [
+            0
+          ],
+          "vigueur": 0,
+          "reflexes": 0,
+          "volonte": 1,
+          "special_en": "Secret ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 2,
+          "bba": [
+            1
+          ],
+          "vigueur": 1,
+          "reflexes": 1,
+          "volonte": 1,
+          "special_en": "Savoir ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 3,
+          "bba": [
+            1
+          ],
+          "vigueur": 1,
+          "reflexes": 1,
+          "volonte": 2,
+          "special_en": "Secret ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 4,
+          "bba": [
+            2
+          ],
+          "vigueur": 1,
+          "reflexes": 1,
+          "volonte": 2,
+          "special_en": "Langage supplémentaire ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 5,
+          "bba": [
+            2
+          ],
+          "vigueur": 2,
+          "reflexes": 2,
+          "volonte": 3,
+          "special_en": "Secret ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 6,
+          "bba": [
+            3
+          ],
+          "vigueur": 2,
+          "reflexes": 2,
+          "volonte": 3,
+          "special_en": "Savoir supérieur ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 7,
+          "bba": [
+            3
+          ],
+          "vigueur": 2,
+          "reflexes": 2,
+          "volonte": 4,
+          "special_en": "Secret ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 8,
+          "bba": [
+            4
+          ],
+          "vigueur": 3,
+          "reflexes": 3,
+          "volonte": 4,
+          "special_en": "Langage supplémentaire ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 9,
+          "bba": [
+            4
+          ],
+          "vigueur": 3,
+          "reflexes": 3,
+          "volonte": 5,
+          "special_en": "Secret ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 10,
+          "bba": [
+            5
+          ],
+          "vigueur": 3,
+          "reflexes": 3,
+          "volonte": 5,
+          "special_en": "Savoir divin ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        }
+      ],
       "conditions": [
-        { "genre": "texte", "texte_en": "Rang 7 dans deux compétences de Connaissances (spécialités au choix)" },
-        { "genre": "texte", "texte_en": "Trois dons de métamagie ou de création d'objet" },
-        { "genre": "don", "nom_en": "Skill Focus" },
-        { "genre": "texte", "texte_en": "Sept sorts de divination dont un de 3e niveau ou plus" }
+        {
+          "genre": "texte",
+          "texte_en": "Rang 7 dans deux compétences de Connaissances (spécialités au choix)"
+        },
+        {
+          "genre": "texte",
+          "texte_en": "Trois dons de métamagie ou de création d'objet"
+        },
+        {
+          "genre": "don",
+          "nom_en": "Skill Focus"
+        },
+        {
+          "genre": "texte",
+          "texte_en": "Sept sorts de divination dont un de 3e niveau ou plus"
+        }
       ],
       "conditions_speciales": [
         "Talent (Connaissances) : le don Talent (Skill Focus) est attribué à une compétence de Connaissances"
@@ -90,37 +1028,465 @@
     {
       "id": "maitre_des_ombres",
       "nom": "Maître des ombres",
+      "nom_en": "Shadowdancer",
+      "source": {
+        "livre": "Manuel des joueurs, ch. 11"
+      },
+      "de_vie": 8,
+      "rangs_par_niveau": 6,
+      "caracteristique_rangs": "int",
+      "competences_de_classe_en": [],
+      "progression": [
+        {
+          "niveau": 1,
+          "bba": [
+            0
+          ],
+          "vigueur": 0,
+          "reflexes": 1,
+          "volonte": 0,
+          "special_en": "Discrétion totale",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 2,
+          "bba": [
+            1
+          ],
+          "vigueur": 1,
+          "reflexes": 1,
+          "volonte": 1,
+          "special_en": "Esquive totale, vision dans le noir, esquive instinctive",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 3,
+          "bba": [
+            2
+          ],
+          "vigueur": 1,
+          "reflexes": 2,
+          "volonte": 1,
+          "special_en": "Pouvoir spécial de roublard, ombres illusoires, convocation d'ombre",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 4,
+          "bba": [
+            3
+          ],
+          "vigueur": 1,
+          "reflexes": 2,
+          "volonte": 1,
+          "special_en": "Appel du compagnon d'ombre, téléportation par les ombres (12 m)",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 5,
+          "bba": [
+            3
+          ],
+          "vigueur": 2,
+          "reflexes": 3,
+          "volonte": 2,
+          "special_en": "Roulé-boulé, esquive instinctive supérieure",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 6,
+          "bba": [
+            4
+          ],
+          "vigueur": 2,
+          "reflexes": 3,
+          "volonte": 2,
+          "special_en": "Pouvoir spécial de roublard, téléportation par les ombres (24 m)",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 7,
+          "bba": [
+            5
+          ],
+          "vigueur": 2,
+          "reflexes": 4,
+          "volonte": 2,
+          "special_en": "Esprit fuyant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 8,
+          "bba": [
+            6
+          ],
+          "vigueur": 3,
+          "reflexes": 4,
+          "volonte": 3,
+          "special_en": "Téléportation par les ombres (48 m), pouvoir des ombres",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 9,
+          "bba": [
+            6
+          ],
+          "vigueur": 3,
+          "reflexes": 5,
+          "volonte": 3,
+          "special_en": "Pouvoir spécial de roublard",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 10,
+          "bba": [
+            7
+          ],
+          "vigueur": 3,
+          "reflexes": 5,
+          "volonte": 3,
+          "special_en": "Esquive extraordinaire, téléportation par les ombres (96 m), maître des ombres",
+          "sorts_par_jour": []
+        }
+      ],
       "conditions": [
-        { "genre": "rangs", "competence": "stealth", "min": 5 },
-        { "genre": "rangs", "competence": "perform", "min": 2 },
-        { "genre": "don", "nom_en": "Combat Reflexes" },
-        { "genre": "don", "nom_en": "Dodge" },
-        { "genre": "don", "nom_en": "Mobility" }
+        {
+          "genre": "rangs",
+          "competence": "stealth",
+          "min": 5
+        },
+        {
+          "genre": "rangs",
+          "competence": "perform",
+          "min": 2
+        },
+        {
+          "genre": "don",
+          "nom_en": "Combat Reflexes"
+        },
+        {
+          "genre": "don",
+          "nom_en": "Dodge"
+        },
+        {
+          "genre": "don",
+          "nom_en": "Mobility"
+        }
       ],
       "conditions_speciales": []
     },
     {
       "id": "mystificateur_profane",
       "nom": "Mystificateur profane",
+      "nom_en": "Arcane Trickster",
+      "source": {
+        "livre": "Manuel des joueurs, ch. 11"
+      },
+      "de_vie": 6,
+      "rangs_par_niveau": 4,
+      "caracteristique_rangs": "int",
+      "competences_de_classe_en": [],
+      "progression": [
+        {
+          "niveau": 1,
+          "bba": [
+            0
+          ],
+          "vigueur": 0,
+          "reflexes": 1,
+          "volonte": 1,
+          "special_en": "Prestidigitation à distance ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 2,
+          "bba": [
+            1
+          ],
+          "vigueur": 1,
+          "reflexes": 1,
+          "volonte": 1,
+          "special_en": "Attaque sournoise +1d6 ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 3,
+          "bba": [
+            1
+          ],
+          "vigueur": 1,
+          "reflexes": 2,
+          "volonte": 2,
+          "special_en": "Attaque imprévisible 1/jour ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 4,
+          "bba": [
+            2
+          ],
+          "vigueur": 1,
+          "reflexes": 2,
+          "volonte": 2,
+          "special_en": "Attaque sournoise +2d6 ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 5,
+          "bba": [
+            2
+          ],
+          "vigueur": 2,
+          "reflexes": 3,
+          "volonte": 3,
+          "special_en": "Sorts vicieux 3/jour ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 6,
+          "bba": [
+            3
+          ],
+          "vigueur": 2,
+          "reflexes": 3,
+          "volonte": 3,
+          "special_en": "Attaque sournoise +3d6 ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 7,
+          "bba": [
+            3
+          ],
+          "vigueur": 2,
+          "reflexes": 4,
+          "volonte": 4,
+          "special_en": "Attaque imprévisible 2/jour, sorts vicieux 4/jour ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 8,
+          "bba": [
+            4
+          ],
+          "vigueur": 3,
+          "reflexes": 4,
+          "volonte": 4,
+          "special_en": "Attaque sournoise +4d6 ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 9,
+          "bba": [
+            4
+          ],
+          "vigueur": 3,
+          "reflexes": 5,
+          "volonte": 5,
+          "special_en": "Voleur invisible, sorts vicieux 5/jour ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 10,
+          "bba": [
+            5
+          ],
+          "vigueur": 3,
+          "reflexes": 5,
+          "volonte": 5,
+          "special_en": "Attaque sournoise +5d6, sorts surprise ; +1 niveau de lanceur de sorts existant",
+          "sorts_par_jour": []
+        }
+      ],
       "conditions": [
-        { "genre": "alignement", "codes": ["NB", "N", "NM", "CB", "CN", "CM"] },
-        { "genre": "rangs", "competence": "disable_device", "min": 4 },
-        { "genre": "rangs", "competence": "escape_artist", "min": 4 },
-        { "genre": "rangs", "competence": "knowledge", "sous_type": "arcana", "min": 4 },
-        { "genre": "texte", "texte_en": "Sait lancer manipulation à distance" },
-        { "genre": "sorts_de_niveau", "niveau_de_sort": 2, "type": "arcane" },
-        { "genre": "texte", "texte_en": "Attaque sournoise +2d6 ou plus" }
+        {
+          "genre": "alignement",
+          "codes": [
+            "NB",
+            "N",
+            "NM",
+            "CB",
+            "CN",
+            "CM"
+          ]
+        },
+        {
+          "genre": "rangs",
+          "competence": "disable_device",
+          "min": 4
+        },
+        {
+          "genre": "rangs",
+          "competence": "escape_artist",
+          "min": 4
+        },
+        {
+          "genre": "rangs",
+          "competence": "knowledge",
+          "sous_type": "arcana",
+          "min": 4
+        },
+        {
+          "genre": "texte",
+          "texte_en": "Sait lancer manipulation à distance"
+        },
+        {
+          "genre": "sorts_de_niveau",
+          "niveau_de_sort": 2,
+          "type": "arcane"
+        },
+        {
+          "genre": "texte",
+          "texte_en": "Attaque sournoise +2d6 ou plus"
+        }
       ],
       "conditions_speciales": []
     },
     {
       "id": "theurge_mystique",
       "nom": "Théurge mystique",
+      "nom_en": "Mystic Theurge",
+      "source": {
+        "livre": "Manuel des joueurs, ch. 11"
+      },
+      "de_vie": 6,
+      "rangs_par_niveau": 2,
+      "caracteristique_rangs": "int",
+      "competences_de_classe_en": [],
+      "progression": [
+        {
+          "niveau": 1,
+          "bba": [
+            0
+          ],
+          "vigueur": 0,
+          "reflexes": 0,
+          "volonte": 1,
+          "special_en": "Sorts combinés (1er) ; +1 niveau dans les classes de lanceur de sorts profanes et divins existantes",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 2,
+          "bba": [
+            1
+          ],
+          "vigueur": 1,
+          "reflexes": 1,
+          "volonte": 1,
+          "special_en": "+1 niveau dans les classes de lanceur de sorts profanes et divins existantes",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 3,
+          "bba": [
+            1
+          ],
+          "vigueur": 1,
+          "reflexes": 1,
+          "volonte": 2,
+          "special_en": "Sorts combinés (2e) ; +1 niveau dans les classes de lanceur de sorts profanes et divins existantes",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 4,
+          "bba": [
+            2
+          ],
+          "vigueur": 1,
+          "reflexes": 1,
+          "volonte": 2,
+          "special_en": "+1 niveau dans les classes de lanceur de sorts profanes et divins existantes",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 5,
+          "bba": [
+            2
+          ],
+          "vigueur": 2,
+          "reflexes": 2,
+          "volonte": 3,
+          "special_en": "Sorts combinés (3e) ; +1 niveau dans les classes de lanceur de sorts profanes et divins existantes",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 6,
+          "bba": [
+            3
+          ],
+          "vigueur": 2,
+          "reflexes": 2,
+          "volonte": 3,
+          "special_en": "+1 niveau dans les classes de lanceur de sorts profanes et divins existantes",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 7,
+          "bba": [
+            3
+          ],
+          "vigueur": 2,
+          "reflexes": 2,
+          "volonte": 4,
+          "special_en": "Sorts combinés (4e) ; +1 niveau dans les classes de lanceur de sorts profanes et divins existantes",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 8,
+          "bba": [
+            4
+          ],
+          "vigueur": 3,
+          "reflexes": 3,
+          "volonte": 4,
+          "special_en": "+1 niveau dans les classes de lanceur de sorts profanes et divins existantes",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 9,
+          "bba": [
+            4
+          ],
+          "vigueur": 3,
+          "reflexes": 3,
+          "volonte": 5,
+          "special_en": "Sorts combinés (5e) ; +1 niveau dans les classes de lanceur de sorts profanes et divins existantes",
+          "sorts_par_jour": []
+        },
+        {
+          "niveau": 10,
+          "bba": [
+            5
+          ],
+          "vigueur": 3,
+          "reflexes": 3,
+          "volonte": 5,
+          "special_en": "Synthèse de sortilèges ; +1 niveau dans les classes de lanceur de sorts profanes et divins existantes",
+          "sorts_par_jour": []
+        }
+      ],
       "conditions": [
-        { "genre": "rangs", "competence": "knowledge", "sous_type": "arcana", "min": 3 },
-        { "genre": "rangs", "competence": "knowledge", "sous_type": "religion", "min": 3 },
-        { "genre": "sorts_de_niveau", "niveau_de_sort": 2, "type": "arcane" },
-        { "genre": "sorts_de_niveau", "niveau_de_sort": 2, "type": "divine" }
+        {
+          "genre": "rangs",
+          "competence": "knowledge",
+          "sous_type": "arcana",
+          "min": 3
+        },
+        {
+          "genre": "rangs",
+          "competence": "knowledge",
+          "sous_type": "religion",
+          "min": 3
+        },
+        {
+          "genre": "sorts_de_niveau",
+          "niveau_de_sort": 2,
+          "type": "arcane"
+        },
+        {
+          "genre": "sorts_de_niveau",
+          "niveau_de_sort": 2,
+          "type": "divine"
+        }
       ],
       "conditions_speciales": []
     }

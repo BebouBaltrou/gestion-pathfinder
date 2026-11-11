@@ -500,6 +500,21 @@ export type Montee = {
   echange: [string, string] | null;
 };
 
+/** Une condition d'entrée d'une classe de prestige : ok, manque ou verifier (à vérifier). */
+export type ConditionPrestige = {
+  texte: string;
+  statut: "ok" | "manque" | "verifier";
+  detail: string | null;
+};
+
+export type ClassePrestige = {
+  id: string;
+  nom: string;
+  conditions: ConditionPrestige[];
+  conditionsSpeciales: string[];
+  possible: boolean;
+};
+
 export type ApercuMontee = {
   niveauDePersonnage: number;
   classe: string;

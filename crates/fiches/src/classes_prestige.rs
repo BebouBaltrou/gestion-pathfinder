@@ -5,16 +5,17 @@
 //! condition qu'on ne sait pas vérifier (texte) est signalée « à vérifier ».
 
 use crate::catalogue::Prerequis;
-use crate::donnees::Referentiel;
+use crate::donnees::{Classe, Referentiel};
 use crate::fiche::{Fiche, Valeurs};
 use crate::prerequis::{evaluer_un, Contexte, Statut};
 use serde::Deserialize;
 
-/// Une classe de prestige et ses conditions d'entrée.
+/// Une classe de prestige (même forme que les autres classes, progression comprise) et ses
+/// conditions d'entrée.
 #[derive(Debug, Clone, Deserialize)]
 pub struct ClassePrestige {
-    pub id: String,
-    pub nom: String,
+    #[serde(flatten)]
+    pub classe: Classe,
     pub conditions: Vec<Prerequis>,
     /// Conditions du livre qu'on ne vérifie pas dans l'application (rappel seulement).
     #[serde(default)]
@@ -67,7 +68,11 @@ mod tests {
         let classes = depuis_json(json).expect("JSON valide");
         assert_eq!(classes.len(), 10);
         assert!(classes.iter().all(|c| !c.conditions.is_empty()));
-        let archer = classes.iter().find(|c| c.id == "archer_mage").unwrap();
+        assert!(classes.iter().all(|c| c.classe.progression.len() == 10));
+        let archer = classes
+            .iter()
+            .find(|c| c.classe.id == "archer_mage")
+            .unwrap();
         assert!(matches!(archer.conditions[0], Prerequis::Bba { min: 6 }));
     }
 

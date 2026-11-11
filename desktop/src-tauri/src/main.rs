@@ -813,6 +813,7 @@ fn main() {
             personnages::recruter_acolyte,
             personnages::evenement_fiche,
             personnages::apercu_montee,
+            personnages::classes_prestige,
             personnages::essai_montee,
             personnages::regles_campagne,
             personnages::changer_regle,

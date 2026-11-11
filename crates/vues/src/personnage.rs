@@ -2367,6 +2367,73 @@ fn dons_du_lignage(
         .collect()
 }
 
+vue! {
+    /// Une condition d'entrée d'une classe de prestige : `ok`, `manque` ou `verifier`.
+    pub struct ConditionVue {
+        pub texte: String,
+        pub statut: String,
+        pub detail: Option<String>,
+    }
+}
+
+vue! {
+    /// Une classe de prestige, avec ce que le personnage remplit déjà.
+    pub struct ClassePrestigeVue {
+        pub id: String,
+        pub nom: String,
+        pub conditions: Vec<ConditionVue>,
+        /// Rappel du livre, non vérifié par l'application.
+        pub conditions_speciales: Vec<String>,
+        /// Aucune condition évaluable n'est manquante.
+        pub possible: bool,
+    }
+}
+
+/// Classes de prestige du référentiel, avec l'état de chaque condition pour ce personnage.
+pub fn classes_prestige(etat: &Etat, pj: IdPersonnage) -> Vec<ClassePrestigeVue> {
+    let r = Referentiel::partage();
+    let Some(e) = etat.fiche_de(pj) else {
+        return Vec::new();
+    };
+    let Ok(v) = e.fiche.calculer(r) else {
+        return Vec::new();
+    };
+    r.classes_prestige
+        .iter()
+        .map(|cp| {
+            let conditions: Vec<ConditionVue> =
+                fiches::classes_prestige::verifier(r, &e.fiche, &v, cp)
+                    .into_iter()
+                    .map(|(texte, s)| match s {
+                        fiches::prerequis::Statut::Rempli => ConditionVue {
+                            texte,
+                            statut: "ok".into(),
+                            detail: None,
+                        },
+                        fiches::prerequis::Statut::Manquant(d) => ConditionVue {
+                            texte,
+                            statut: "manque".into(),
+                            detail: Some(d),
+                        },
+                        fiches::prerequis::Statut::AVerifier(_) => ConditionVue {
+                            texte,
+                            statut: "verifier".into(),
+                            detail: None,
+                        },
+                    })
+                    .collect();
+            let possible = !conditions.iter().any(|c| c.statut == "manque");
+            ClassePrestigeVue {
+                id: cp.classe.id.clone(),
+                nom: cp.classe.nom.clone(),
+                conditions,
+                conditions_speciales: cp.conditions_speciales.clone(),
+                possible,
+            }
+        })
+        .collect()
+}
+
 /// Ce que l'assistant de montée montre pour passer un niveau dans `classe`.
 pub fn apercu_montee(etat: &Etat, pj: IdPersonnage, classe: &str) -> Option<ApercuMonteeVue> {
     let r = Referentiel::partage();

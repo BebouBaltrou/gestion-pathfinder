@@ -4,6 +4,7 @@ import { api } from "../../api";
 import {
   ApercuMontee,
   CARACS,
+  ClassePrestige,
   EssaiMontee,
   FicheVue,
   LignePersonnage,
@@ -35,10 +36,18 @@ export function Montee({
   const [augmentation, setAugmentation] = useState<(typeof CARACS)[number] | "">("");
   const [sorts, setSorts] = useState<string[]>([]);
   const [essai, setEssai] = useState<EssaiMontee | null>(null);
+  const [prestige, setPrestige] = useState<ClassePrestige[]>([]);
 
   useEffect(() => {
     if (cat && !classe) setClasse(cat.classes[0]?.id ?? "");
   }, [cat, classe]);
+
+  useEffect(() => {
+    api.classesPrestige(pj.id).then((l) => setPrestige(l ?? []));
+  }, [pj.id]);
+
+  const prestigeChoisie = prestige.find((p) => p.id === classe);
+  const nomDeClasse = cat?.classes.find((c) => c.id === classe)?.nom ?? prestigeChoisie?.nom ?? "";
 
   useEffect(() => {
     if (classe) api.apercuMontee(pj.id, classe).then(setApercu);
@@ -78,14 +87,14 @@ export function Montee({
     const r = await outils.agir(api.evenementFiche(pj.id, { MonteeDeNiveau: m }));
     if (r?.ok) onFerme();
   };
-  const prete = essai !== null && essai.erreurs.length === 0;
+  const prete = essai !== null && essai.erreurs.length === 0 && (prestigeChoisie?.possible ?? true);
 
   return (
     <div className="fond-modal" role="dialog" aria-modal="true" aria-label="Montée de niveau">
       <div className="modal carte">
         <div className="section-tete">
           <h2>
-            Niveau {apercu.niveauDePersonnage} — {cat.classes.find((c) => c.id === classe)?.nom} {apercu.niveauDeClasse}
+            Niveau {apercu.niveauDePersonnage} — {nomDeClasse} {apercu.niveauDeClasse}
           </h2>
           <span className="espace" />
           <button className="bouton" onClick={onFerme}>Fermer</button>
@@ -95,10 +104,38 @@ export function Montee({
             Ce niveau n'est pas encore atteint (niveau permis : {apercu.niveauAtteignable}).
           </p>
         )}
-        {cat.classes.length > 1 && (
+        {(cat.classes.length > 1 || prestige.length > 0) && (
           <select className="champ choix" aria-label="Classe" value={classe} onChange={(e) => setClasse(e.target.value)}>
             {cat.classes.map((c) => <option key={c.id} value={c.id}>{c.nom}</option>)}
+            {prestige.length > 0 && (
+              <optgroup label="Classes de prestige">
+                {prestige.map((p) => (
+                  <option key={p.id} value={p.id}>{p.nom}{p.possible ? "" : " (conditions non remplies)"}</option>
+                ))}
+              </optgroup>
+            )}
           </select>
+        )}
+        {prestigeChoisie && (
+          <div className="carte">
+            <h3>Conditions d'entrée (Manuel des joueurs, ch. 11)</h3>
+            <ul>
+              {prestigeChoisie.conditions.map((c, i) => (
+                <li key={i}>
+                  {c.statut === "ok" ? "✓ " : c.statut === "manque" ? "✗ " : "? "}
+                  {c.texte}
+                  {c.statut === "manque" && c.detail ? ` — ${c.detail}` : ""}
+                  {c.statut === "verifier" ? " (à vérifier)" : ""}
+                </li>
+              ))}
+            </ul>
+            {prestigeChoisie.conditionsSpeciales.length > 0 && (
+              <>
+                <p>Rappels (non vérifiés par l'application) :</p>
+                <ul>{prestigeChoisie.conditionsSpeciales.map((t, i) => <li key={i}>{t}</li>)}</ul>
+              </>
+            )}
+          </div>
         )}
 
         <div className="grille-fiche">

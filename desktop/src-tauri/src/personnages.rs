@@ -111,6 +111,12 @@ pub fn evenement_fiche(s: S, pj: u32, evenement: EvenementFiche) -> Retour {
 }
 
 #[tauri::command]
+pub fn classes_prestige(s: S, pj: u32) -> Option<Vec<vp::ClassePrestigeVue>> {
+    session(&s)
+        .avec_etat(|e| vp::classes_prestige(e, IdPersonnage(pj)))
+}
+
+#[tauri::command]
 pub fn apercu_montee(s: S, pj: u32, classe: String) -> Option<vp::ApercuMonteeVue> {
     session(&s)
         .avec_etat(|e| vp::apercu_montee(e, IdPersonnage(pj), &classe))

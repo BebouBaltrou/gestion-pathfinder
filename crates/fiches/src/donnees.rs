@@ -431,7 +431,7 @@ impl Referentiel {
     }
 
     pub fn classe_prestige(&self, id: &str) -> Option<&crate::classes_prestige::ClassePrestige> {
-        self.classes_prestige.iter().find(|c| c.id == id)
+        self.classes_prestige.iter().find(|c| c.classe.id == id)
     }
 
     /// Ajoute les pouvoirs de rage du barbare, leurs prérequis et leurs textes.
@@ -569,7 +569,10 @@ impl Referentiel {
         self.races.iter().find(|r| r.id == id)
     }
     pub fn classe(&self, id: &str) -> Option<&Classe> {
-        self.classes.iter().find(|c| c.id == id)
+        self.classes
+            .iter()
+            .find(|c| c.id == id)
+            .or_else(|| self.classe_prestige(id).map(|p| &p.classe))
     }
     pub fn competence(&self, id: &str) -> Option<&Competence> {
         self.competences.iter().find(|c| c.id == id)

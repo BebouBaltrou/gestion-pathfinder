@@ -126,10 +126,6 @@ pub enum ErreurMontee {
         classe: String,
         manquants: Vec<String>,
     },
-    /// Conditions remplies, mais la progression de cette classe de prestige n'est pas encore saisie.
-    PrestigeProgressionAbsente {
-        classe: String,
-    },
     JetManquant,
     JetHorsLimites {
         jet: u32,
@@ -166,10 +162,6 @@ impl std::fmt::Display for ErreurMontee {
                 f,
                 "conditions non remplies pour {classe} : {}",
                 manquants.join(" ; ")
-            ),
-            ErreurMontee::PrestigeProgressionAbsente { classe } => write!(
-                f,
-                "{classe} : progression de la classe de prestige pas encore saisie"
             ),
             ErreurMontee::JetManquant => write!(f, "saisir le résultat du dé de vie"),
             ErreurMontee::JetHorsLimites { jet, de } => {
@@ -306,16 +298,14 @@ pub fn apercu(r: &Referentiel, f: &Fiche, classe_id: &str) -> Option<ApercuMonte
     })
 }
 
-/// Classe absente du référentiel de classes : classe de prestige (conditions d'entrée vérifiées)
-/// ou classe inconnue.
-fn classe_inconnue_ou_prestige(r: &Referentiel, f: &Fiche, id: &str) -> ErreurMontee {
-    let Some(cp) = r.classe_prestige(id) else {
-        return ErreurMontee::ClasseInconnue(id.to_string());
-    };
-    let valeurs = match f.calculer(r) {
-        Ok(v) => v,
-        Err(p) => return ErreurMontee::Fiche(p),
-    };
+/// Conditions d'entrée d'une classe de prestige : `Err` si une condition évaluable n'est pas
+/// remplie. Les conditions « à vérifier » ne bloquent pas.
+fn conditions_prestige(
+    r: &Referentiel,
+    f: &Fiche,
+    cp: &classes_prestige::ClassePrestige,
+) -> Result<(), ErreurMontee> {
+    let valeurs = f.calculer(r).map_err(ErreurMontee::Fiche)?;
     let manquants: Vec<String> = classes_prestige::verifier(r, f, &valeurs, cp)
         .into_iter()
         .filter_map(|(texte, s)| match s {
@@ -324,14 +314,12 @@ fn classe_inconnue_ou_prestige(r: &Referentiel, f: &Fiche, id: &str) -> ErreurMo
         })
         .collect();
     if manquants.is_empty() {
-        ErreurMontee::PrestigeProgressionAbsente {
-            classe: cp.nom.clone(),
-        }
+        Ok(())
     } else {
-        ErreurMontee::ConditionsNonRemplies {
-            classe: cp.nom.clone(),
+        Err(ErreurMontee::ConditionsNonRemplies {
+            classe: cp.classe.nom.clone(),
             manquants,
-        }
+        })
     }
 }
 
@@ -355,8 +343,13 @@ pub fn appliquer(
         }]);
     }
     let Some(classe) = r.classe(&m.classe) else {
-        return Err(vec![classe_inconnue_ou_prestige(r, f, &m.classe)]);
+        return Err(vec![ErreurMontee::ClasseInconnue(m.classe.clone())]);
     };
+    if let Some(cp) = r.classe_prestige(&m.classe) {
+        if let Err(e) = conditions_prestige(r, f, cp) {
+            return Err(vec![e]);
+        }
+    }
     let mut e = Vec::new();
     if !regles.multiclassage && f.niveaux.iter().any(|n| n.classe != m.classe) {
         e.push(ErreurMontee::MulticlassageDesactive {

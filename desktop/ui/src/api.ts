@@ -24,6 +24,7 @@ import type {
   ApercuImport,
   ApercuMontee,
   CatalogueCreation,
+  ClassePrestige,
   EssaiMontee,
   EvenementFiche,
   FicheDonnees,
@@ -729,6 +730,7 @@ export const api = {
     appeler<Retour>("evenement_fiche", { pj, evenement }),
   apercuMontee: (pj: number, classe: string) => appeler<ApercuMontee | null>("apercu_montee", { pj, classe }),
   essaiMontee: (pj: number, montee: Montee) => appeler<EssaiMontee | null>("essai_montee", { pj, montee }),
+  classesPrestige: (pj: number) => appeler<ClassePrestige[] | null>("classes_prestige", { pj }),
   reglesCampagne: () => appeler<RegleInfo[]>("regles_campagne"),
   changerRegle: (id: string, valeur: string) => appeler<Retour>("changer_regle", { id, valeur }),
   // ---- aventure
