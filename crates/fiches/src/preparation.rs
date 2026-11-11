@@ -17,6 +17,62 @@ pub struct SortPrepare {
     /// Préparé dans l'emplacement de domaine.
     #[serde(default)]
     pub domaine: bool,
+    /// Métamagies appliquées à la préparation (noms anglais) : le sort occupe un emplacement plus haut.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub metamagies: Vec<String>,
+    /// Niveau visé, quand « Heighten Spell » figure dans `metamagies`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub niveau_heighten: Option<u32>,
+}
+
+/// Augmentation du niveau d'emplacement par métamagie (livre, données de `data/combat/metamagie.json`,
+/// vérifiées par un test dans `combat`). « Heighten Spell » n'a pas d'augmentation fixe : c'est le
+/// niveau visé.
+pub const AUGMENTATION_METAMAGIE: &[(&str, u32)] = &[
+    ("Empower Spell", 2),
+    ("Enlarge Spell", 1),
+    ("Extend Spell", 1),
+    ("Maximize Spell", 3),
+    ("Quicken Spell", 4),
+    ("Silent Spell", 1),
+    ("Still Spell", 1),
+    ("Widen Spell", 3),
+];
+
+/// Niveau de l'emplacement occupé par un sort préparé avec ses métamagies. Erreur si une
+/// métamagie n'a pas de règle ici, si Heighten est mal renseigné ou si le niveau dépasse 9.
+pub fn niveau_emplacement(
+    niveau: u32,
+    metamagies: &[String],
+    niveau_heighten: Option<u32>,
+) -> Result<u32, String> {
+    let mut base = niveau;
+    let mut augmentation = 0;
+    let heighten = metamagies.iter().any(|m| m == "Heighten Spell");
+    for m in metamagies {
+        if m == "Heighten Spell" {
+            continue;
+        }
+        let (_, d) = AUGMENTATION_METAMAGIE
+            .iter()
+            .find(|(nom, _)| nom.eq_ignore_ascii_case(m))
+            .ok_or_else(|| format!("métamagie inconnue : {m}"))?;
+        augmentation += d;
+    }
+    if heighten {
+        let n = niveau_heighten.ok_or("Heighten Spell : préciser le niveau visé")?;
+        if n <= niveau || n > 9 {
+            return Err("Heighten Spell : un niveau plus haut que le sort, 9 au plus".into());
+        }
+        base = n;
+    } else if niveau_heighten.is_some() {
+        return Err("niveau visé sans Heighten Spell".into());
+    }
+    let total = base + augmentation;
+    if total > 9 {
+        return Err(format!("emplacement de niveau {total} : au plus 9"));
+    }
+    Ok(total)
 }
 
 /// Descripteurs d'alignement qu'un lanceur ne peut pas utiliser, d'après son alignement et celui
@@ -101,10 +157,15 @@ pub fn valider(
             1
         }
     };
+    // Emplacement occupé : le niveau du sort, ou plus haut avec ses métamagies (les erreurs sont
+    // signalées plus bas, sort par sort).
+    let slot = |s: &SortPrepare| {
+        niveau_emplacement(s.niveau, &s.metamagies, s.niveau_heighten).unwrap_or(s.niveau)
+    };
     for sn in 0..=9u32 {
         let normaux = sorts
             .iter()
-            .filter(|s| s.niveau == sn && !s.domaine)
+            .filter(|s| slot(s) == sn && !s.domaine)
             .map(double)
             .sum::<u32>();
         let de_domaine = sorts.iter().filter(|s| s.niveau == sn && s.domaine).count() as u32;
@@ -131,6 +192,29 @@ pub fn valider(
             .ok_or_else(|| format!("sort inconnu du catalogue : {}", s.sort))?;
         if s.niveau > 9 {
             return Err(format!("{} : niveau {} impossible", s.sort, s.niveau));
+        }
+        if !s.metamagies.is_empty() {
+            if s.domaine {
+                return Err(format!(
+                    "{} : la métamagie ne s'applique pas à un sort de domaine",
+                    s.sort
+                ));
+            }
+            for m in &s.metamagies {
+                let connue = fiche.dons_choisis().iter().any(|d| {
+                    crate::catalogue::nom_de_base(d).eq_ignore_ascii_case(m)
+                        && r.don(m)
+                            .is_some_and(|don| don.types_en.iter().any(|t| t == "Metamagic"))
+                });
+                if !connue {
+                    return Err(format!(
+                        "{} : le personnage ne connaît pas le don {m}",
+                        s.sort
+                    ));
+                }
+            }
+            niveau_emplacement(s.niveau, &s.metamagies, s.niveau_heighten)
+                .map_err(|e| format!("{} : {e}", s.sort))?;
         }
         if magicien {
             // Grimoire : tours de magie d'office (sauf école interdite), autres sorts s'ils y figurent.
@@ -201,4 +285,35 @@ pub fn valider(
 pub fn est_sort_de_conversion(nom_en: &str, positive: bool) -> bool {
     let debut = if positive { "Cure " } else { "Inflict " };
     nom_en.starts_with(debut)
+}
+
+#[cfg(test)]
+mod tests_metamagie {
+    use super::niveau_emplacement;
+
+    fn m(noms: &[&str]) -> Vec<String> {
+        noms.iter().map(|n| n.to_string()).collect()
+    }
+
+    #[test]
+    fn augmentation_et_heighten() {
+        // Empower (+2) sur un sort de niveau 1 : emplacement 3.
+        assert_eq!(niveau_emplacement(1, &m(&["Empower Spell"]), None), Ok(3));
+        // Heighten au niveau 4 puis Extend (+1) : emplacement 5.
+        assert_eq!(
+            niveau_emplacement(1, &m(&["Heighten Spell", "Extend Spell"]), Some(4)),
+            Ok(5)
+        );
+        // Sans métamagie : le niveau du sort.
+        assert_eq!(niveau_emplacement(2, &[], None), Ok(2));
+    }
+
+    #[test]
+    fn refus() {
+        assert!(niveau_emplacement(1, &m(&["Heighten Spell"]), None).is_err());
+        assert!(niveau_emplacement(3, &m(&["Heighten Spell"]), Some(3)).is_err());
+        assert!(niveau_emplacement(1, &m(&["Empower Spell"]), Some(3)).is_err());
+        assert!(niveau_emplacement(7, &m(&["Maximize Spell"]), None).is_err()); // 10 > 9
+        assert!(niveau_emplacement(1, &m(&["Inconnue"]), None).is_err());
+    }
 }

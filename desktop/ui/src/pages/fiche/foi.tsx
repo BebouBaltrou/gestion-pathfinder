@@ -172,6 +172,19 @@ export function EditeurPreparation({
     courants[i] = sort;
     onChange([...autres, ...courants.filter(Boolean).map((s) => ({ niveau, sort: s, domaine }))]);
   };
+  // Métamagies d'un sort préparé (emplacement normal) : le cœur vérifie le niveau occupé.
+  const changerMeta = (niveau: number, i: number, metas: string[], nh: number | null) => {
+    const autres = valeur.filter((s) => !(s.niveau === niveau && !s.domaine));
+    const courants = du_niveau(niveau, false);
+    const cible = courants[i];
+    if (!cible) return;
+    courants[i] = {
+      ...cible,
+      metamagies: metas,
+      niveau_heighten: metas.includes("Heighten Spell") ? nh : null,
+    };
+    onChange([...autres, ...courants.filter(Boolean)]);
+  };
   return (
     <div className="section">
       {prep.interdits.length > 0 && (
@@ -199,6 +212,44 @@ export function EditeurPreparation({
                   onChange={(v) => remplacer(c.niveau, false, i, v)}
                 />
               ))}
+              {Array.from({ length: c.normaux }, (_, i) => {
+                const choisi = du_niveau(c.niveau, false)[i];
+                if (!choisi || prep.metamagies.length === 0) return null;
+                const metas = choisi.metamagies ?? [];
+                return (
+                  <div key={`m${i}`} className="champs">
+                    <span className="doux">Sort {i + 1} avec métamagie :</span>
+                    {prep.metamagies.map((m) => (
+                      <label key={m.nomEn} className="interrupteur">
+                        <input
+                          type="checkbox"
+                          checked={metas.includes(m.nomEn)}
+                          onChange={(e) =>
+                            changerMeta(
+                              c.niveau,
+                              i,
+                              e.target.checked ? [...metas, m.nomEn] : metas.filter((x) => x !== m.nomEn),
+                              choisi.niveau_heighten ?? null,
+                            )
+                          }
+                        />
+                        {m.nom}
+                      </label>
+                    ))}
+                    {metas.includes("Heighten Spell") && (
+                      <select
+                        value={choisi.niveau_heighten ?? ""}
+                        onChange={(e) => changerMeta(c.niveau, i, metas, Number(e.target.value))}
+                      >
+                        <option value="">Niveau visé…</option>
+                        {Array.from({ length: Math.max(0, 9 - c.niveau) }, (_, k) => c.niveau + 1 + k).map((n) => (
+                          <option key={n} value={n}>{n}</option>
+                        ))}
+                      </select>
+                    )}
+                  </div>
+                );
+              })}
               {c.domaine > 0 && (
                 <Choix
                   etiquette={`Sort de domaine de niveau ${c.niveau}`}
@@ -355,7 +406,15 @@ export function PanneauPreparation({
         <button
           className="bouton"
           onClick={() => {
-            setBrouillon(prep.prepares.map((s) => ({ niveau: s.niveau, sort: s.nomEn, domaine: s.domaine })));
+            setBrouillon(
+              prep.prepares.map((s) => ({
+                niveau: s.niveau,
+                sort: s.nomEn,
+                domaine: s.domaine,
+                metamagies: s.metamagies,
+                niveau_heighten: s.niveauHeighten,
+              })),
+            );
             setEdition(true);
           }}
         >

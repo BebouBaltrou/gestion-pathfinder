@@ -175,9 +175,19 @@ pub(crate) fn composantes(texte: Option<&str>) -> (bool, bool) {
     (jetons.contains(&"V"), jetons.contains(&"S"))
 }
 
-/// Type d'action pour lancer le sort d'après son temps d'incantation. Un lanceur spontané qui
-/// applique de la métamagie lance en action complexe un sort qui prend une action simple,
-/// sauf pour le sort accéléré (lecture à valider, voir `docs/POINTS_A_CONFIRMER_SORTS.md`).
+/// Mêmes métamagies, sans tenir compte de l'ordre ni de la casse.
+fn meme_metamagies(a: &[String], b: &[String]) -> bool {
+    let mut a: Vec<String> = a.iter().map(|m| m.to_lowercase()).collect();
+    let mut b: Vec<String> = b.iter().map(|m| m.to_lowercase()).collect();
+    a.sort_unstable();
+    b.sort_unstable();
+    a == b
+}
+
+/// Type d'action pour lancer le sort d'après son temps d'incantation (livre p. 188, « Lancer un
+/// sort métamagique ») : un lanceur spontané qui applique de la métamagie lance en action complexe
+/// un sort qui prend une action simple ; le sort accéléré part en action rapide. Un sort d'une
+/// action complexe ou plus avec métamagie n'est pas géré en combat.
 pub fn type_d_action(
     temps: Option<&str>,
     spontane: bool,
@@ -400,25 +410,44 @@ impl EtatCombat {
             ))
         })?;
         if !inc.spontane {
-            // Lanceur qui prépare : le sort doit être préparé aujourd'hui et pas encore lancé
-            // (les lancers de ce combat comptent déjà).
-            if !metamagies_choisies.is_empty() || heighten.is_some() {
-                return invalide(
-                    "lanceur qui prépare : métamagie pas encore prise en charge en combat",
-                );
-            }
+            // Lanceur qui prépare : le sort doit être préparé aujourd'hui, avec les mêmes
+            // métamagies, et pas encore lancé (les lancers de ce combat comptent déjà).
+            let slot = fiches::preparation::niveau_emplacement(
+                niveau_du_sort,
+                metamagies_choisies,
+                heighten,
+            )
+            .map_err(ErreurCombat::Invalide)?;
             let prepares = inc
                 .prepares_disponibles
                 .iter()
-                .filter(|(n, s)| *n == niveau_du_sort && s.eq_ignore_ascii_case(&sort.nom_en))
+                .filter(|(n, s, metas, h)| {
+                    *n == slot
+                        && s.eq_ignore_ascii_case(&sort.nom_en)
+                        && *h == heighten
+                        && meme_metamagies(metas, metamagies_choisies)
+                })
                 .count();
-            let lances = lances(&sort.nom_en, niveau_du_sort);
+            let lances = lances(&sort.nom_en, slot);
             if prepares <= lances {
                 return invalide(format!(
-                    "{} n'a pas {} préparé au niveau {niveau_du_sort} (ou il est déjà lancé)",
+                    "{} n'a pas {} préparé au niveau {slot} avec ces métamagies (ou il est déjà lancé)",
                     c.nom, sort.nom_en
                 ));
             }
+        }
+        // Livre p. 188 : prêtres et druides lancent spontanément la métamagie seulement sur
+        // soins/blessure (prêtre) et convocation d'alliés naturels (druide).
+        let spontane_restreint = inc.spontane
+            && (inc.classe_en == "cleric" || inc.classe_en == "druid")
+            && !(sort.nom_en.starts_with("Cure ")
+                || sort.nom_en.starts_with("Inflict ")
+                || sort.nom_en.starts_with("Summon Nature's Ally"));
+        if !metamagies_choisies.is_empty() && spontane_restreint {
+            return invalide(format!(
+                "{} : la métamagie spontanée n'existe que pour soins, blessure et convocation d'alliés naturels",
+                sort.nom_en
+            ));
         }
         if !metamagies_choisies.is_empty() && !inc.metamagie_active {
             return invalide(
