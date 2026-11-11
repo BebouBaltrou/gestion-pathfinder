@@ -122,6 +122,7 @@ impl EtatCombat {
                     gestuel = composantes(s.composantes_en.as_deref()).1;
                 } else {
                     type_action = TypeAction::Simple; // déclenchement du sort : action simple
+                    gestuel = composantes(s.composantes_en.as_deref()).1;
                     if objet.genre == GenreObjet::Baton {
                         cl = cl.max(inc.niveau_de_lanceur); // le porteur utilise son niveau s'il est plus haut (p. 491)
                     }

@@ -109,8 +109,23 @@ pub fn evenements_objet_hors_combat(
                 }
                 gestuel = composantes(sort.composantes_en.as_deref()).1;
                 besoin_cl = i.niveau_de_lanceur < cl;
-            } else if objet.genre == GenreObjet::Baton {
-                cl = cl.max(i.niveau_de_lanceur); // le porteur utilise son niveau s'il est plus haut (p. 491)
+            } else {
+                // baguette ou bâton : déclenchement gestuel = échec des sorts profanes possible
+                gestuel = composantes(sort.composantes_en.as_deref()).1;
+                if objet.genre == GenreObjet::Baton {
+                    cl = cl.max(i.niveau_de_lanceur); // le porteur utilise son niveau s'il est plus haut (p. 491)
+                    // DD du sort du bâton : 10 + niveau du sort + modificateur du porteur (p. 491)
+                    sortie.notes.push(format!(
+                        "{} : DD du sort {} : {}.",
+                        objet.nom,
+                        nom_fr(&sort.nom_en),
+                        fiches::dd_sort(
+                            niveau_pour_lui,
+                            i.mod_incantation,
+                            fiches::dons_ecole_pour(&i.dons_ecole, &sort.ecole),
+                        )
+                    ));
+                }
             }
         }
         GenreObjet::Munition => {}
