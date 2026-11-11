@@ -576,8 +576,10 @@ fn lanceur_qui_prepare_lance_ses_sorts_du_jour() {
                 i.classe_en = "druid".into();
                 i.classe = "druide".into();
                 i.sorts_connus = vec!["Faerie Fire".into(), "Call Lightning".into()];
-                i.prepares_disponibles =
-                    vec![(1, "Faerie Fire".into()), (3, "Call Lightning".into())];
+                i.prepares_disponibles = vec![
+                    (1, "Faerie Fire".into(), Vec::new(), None),
+                    (3, "Call Lightning".into(), Vec::new(), None),
+                ];
                 i.dons_ecole = vec!["Spell Focus (Évocation)".into()];
             }
             c
@@ -612,4 +614,23 @@ fn lanceur_qui_prepare_lance_ses_sorts_du_jour() {
             sort: "Call Lightning".into()
         }
     )));
+}
+
+#[test]
+fn augmentations_de_la_preparation_suivent_le_fichier_des_metamagies() {
+    use fiches::preparation::AUGMENTATION_METAMAGIE;
+    for m in crate::sorts::metamagies() {
+        if let Some(d) = m.delta {
+            let (_, a) = AUGMENTATION_METAMAGIE
+                .iter()
+                .find(|(n, _)| *n == m.nom_en)
+                .unwrap_or_else(|| panic!("{} absent de la préparation", m.nom_en));
+            assert_eq!(*a, d, "{}", m.nom_en);
+        }
+    }
+    let attendues = crate::sorts::metamagies()
+        .iter()
+        .filter(|m| m.delta.is_some())
+        .count();
+    assert_eq!(AUGMENTATION_METAMAGIE.len(), attendues);
 }

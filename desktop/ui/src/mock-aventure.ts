@@ -67,6 +67,7 @@ export const pjMialee = (pv = 23): PjAventure => ({
     { niveau: 3, restants: 2, total: 4, dd: 16 },
   ],
   sortsConnus,
+  metamagies: [],
   ressources: [{ cle: "Acidic Ray", nom: "Rayon acide", unite: "utilisations", restantes: 4, max: 6, source: "lignage aberrant, Acidic Ray (niveau 1)" }],
   inventaire: [
     { id: 1, nom: "Potion de soins légers", genre: "potion", genreCode: "potion", sort: "Soins légers", quantite: 2, charges: null, parJour: null, niveauDeLanceur: 1 },
@@ -99,6 +100,7 @@ const pjValeros = (): PjAventure => ({
   effets: [],
   emplacements: [],
   sortsConnus: [],
+  metamagies: [],
   ressources: [],
   inventaire: [],
   degatsContinus: false,

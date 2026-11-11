@@ -102,6 +102,15 @@ pub struct SortConnuVue {
     pub niveau: u32,
 }
 
+/// Don de métamagie connu du personnage (nom anglais du catalogue et nom français).
+#[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize))]
+#[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
+pub struct MetamagieVue {
+    pub nom_en: String,
+    pub nom: String,
+}
+
 #[derive(Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize))]
 #[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
@@ -128,6 +137,7 @@ pub struct PjAventure {
     pub effets: Vec<EffetVue>,
     pub emplacements: Vec<EmplacementVue>,
     pub sorts_connus: Vec<SortConnuVue>,
+    pub metamagies: Vec<MetamagieVue>,
     pub ressources: Vec<RessourceVue>,
     pub inventaire: Vec<ObjetVue>,
     pub degats_continus: bool,
@@ -400,6 +410,21 @@ fn pj_vue(
         effets: effets_du_pj(a, id, maintenant),
         emplacements,
         sorts_connus,
+        metamagies: c
+            .incantation
+            .as_ref()
+            .map(|i| {
+                i.metamagies
+                    .iter()
+                    .map(|n| MetamagieVue {
+                        nom_en: n.clone(),
+                        nom: Traductions::partage()
+                            .don(n)
+                            .map_or_else(|| n.clone(), |d| d.nom.clone()),
+                    })
+                    .collect()
+            })
+            .unwrap_or_default(),
         ressources: suivi
             .ressources
             .iter()

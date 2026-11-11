@@ -564,22 +564,46 @@ function DialogueSort({
   const [nDuree, setNDuree] = useState<number | null>(null);
   const [energie, setEnergie] = useState("feu");
   const [resultat, setResultat] = useState<number | null>(null);
+  const [metas, setMetas] = useState<string[]>([]);
+  const [niveauH, setNiveauH] = useState<number | null>(null);
 
   const restants = (niveau: number) => (niveau === 0 ? 99 : pj.emplacements.find((e) => e.niveau === niveau)?.restants ?? 0);
   const niveaux = [...new Set(pj.sortsConnus.map((s) => s.niveau))].sort((a, b) => a - b);
 
-  const choisir = async (s: SortConnuVue) => {
-    setSort(s);
+  // Aperçu du sort avec les métamagies et le niveau visé (Heighten) choisis.
+  const charger = async (s: SortConnuVue, m: string[], nh: number | null) => {
     setApercu(null);
     setErreur(null);
+    if (m.includes("Heighten Spell") && nh === null) return;
     try {
-      const a = await api.combatApercuSort(pj.id, s.nomEn);
-      setApercu(a);
-      setGenreDuree("auto");
-      setNDuree(null);
+      setApercu(await api.combatApercuSort(pj.id, s.nomEn, m, nh));
     } catch (e) {
       setErreur(String(e));
     }
+  };
+
+  const choisir = async (s: SortConnuVue) => {
+    setSort(s);
+    setMetas([]);
+    setNiveauH(null);
+    setGenreDuree("auto");
+    setNDuree(null);
+    await charger(s, [], null);
+  };
+
+  const basculerMeta = async (nom: string) => {
+    if (!sort) return;
+    const m = metas.includes(nom) ? metas.filter((x) => x !== nom) : [...metas, nom];
+    const nh = m.includes("Heighten Spell") ? niveauH : null;
+    setMetas(m);
+    setNiveauH(nh);
+    await charger(sort, m, nh);
+  };
+
+  const changerNiveauH = async (n: number) => {
+    if (!sort) return;
+    setNiveauH(n);
+    await charger(sort, metas, n);
   };
 
   const duree: Duree | null = genreDuree === "auto" ? null : dureeDe(genreDuree, nDuree);
@@ -601,6 +625,8 @@ function DialogueSort({
         duree,
         choixEnergie: apercu.choixEnergie ? energie : null,
         resultatDe: resultat,
+        metamagies: metas,
+        niveauHeighten: niveauH,
       }),
     );
     if (r?.ok) onFermer();
@@ -649,6 +675,28 @@ function DialogueSort({
           </div>
         </div>
       ))}
+      {sort && pj.metamagies.length > 0 && (
+        <div className="bloc">
+          <h3>Métamagie</h3>
+          {pj.metamagies.map((m) => (
+            <label className="interrupteur" key={m.nomEn}>
+              <input type="checkbox" checked={metas.includes(m.nomEn)} onChange={() => basculerMeta(m.nomEn)} />
+              {m.nom}
+            </label>
+          ))}
+          {metas.includes("Heighten Spell") && (
+            <label className="champs">
+              Niveau visé :{" "}
+              <select value={niveauH ?? ""} onChange={(e) => changerNiveauH(Number(e.target.value))}>
+                <option value="">— choisir —</option>
+                {Array.from({ length: Math.max(0, 9 - sort.niveau) }, (_, i) => sort.niveau + 1 + i).map((n) => (
+                  <option key={n} value={n}>{n}</option>
+                ))}
+              </select>
+            </label>
+          )}
+        </div>
+      )}
       {erreur && <div className="avertissement">{erreur}</div>}
       {apercu && (
         <>
