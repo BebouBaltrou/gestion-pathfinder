@@ -11,7 +11,12 @@
       "de_vie": 10,
       "rangs_par_niveau": 4,
       "caracteristique_rangs": "int",
-      "competences_de_classe_en": [],
+      "competences_de_classe_en": [
+        "Stealth",
+        "Ride",
+        "Perception",
+        "Survival"
+      ],
       "progression": [
         {
           "niveau": 1,
@@ -33,7 +38,8 @@
           "reflexes": 1,
           "volonte": 1,
           "special_en": "Flèche enchantée ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         },
         {
           "niveau": 3,
@@ -44,7 +50,8 @@
           "reflexes": 2,
           "volonte": 1,
           "special_en": "Flèche magique (élémentaire) ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         },
         {
           "niveau": 4,
@@ -55,7 +62,8 @@
           "reflexes": 2,
           "volonte": 1,
           "special_en": "Flèche à tête chercheuse ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         },
         {
           "niveau": 5,
@@ -77,7 +85,8 @@
           "reflexes": 3,
           "volonte": 2,
           "special_en": "Flèche de phase ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         },
         {
           "niveau": 7,
@@ -88,7 +97,8 @@
           "reflexes": 4,
           "volonte": 2,
           "special_en": "Flèche magique (rayonnement élémentaire) ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         },
         {
           "niveau": 8,
@@ -99,7 +109,8 @@
           "reflexes": 4,
           "volonte": 3,
           "special_en": "Pluie de flèches ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         },
         {
           "niveau": 9,
@@ -121,7 +132,8 @@
           "reflexes": 5,
           "volonte": 3,
           "special_en": "Flèche de mort ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         }
       ],
       "conditions": [
@@ -161,7 +173,23 @@
       "de_vie": 8,
       "rangs_par_niveau": 4,
       "caracteristique_rangs": "int",
-      "competences_de_classe_en": [],
+      "competences_de_classe_en": [
+        "Acrobatics",
+        "Bluff",
+        "Disguise",
+        "Disable Device",
+        "Diplomacy",
+        "Stealth",
+        "Climb",
+        "Sleight of Hand",
+        "Escape Artist",
+        "Intimidate",
+        "Linguistics",
+        "Swim",
+        "Perception",
+        "Sense Motive",
+        "Use Magic Device"
+      ],
       "progression": [
         {
           "niveau": 1,
@@ -308,7 +336,15 @@
       "de_vie": 10,
       "rangs_par_niveau": 2,
       "caracteristique_rangs": "int",
-      "competences_de_classe_en": [],
+      "competences_de_classe_en": [
+        "Spellcraft",
+        "Knowledge",
+        "Ride",
+        "Climb",
+        "Linguistics",
+        "Swim",
+        "Sense Motive"
+      ],
       "progression": [
         {
           "niveau": 1,
@@ -318,7 +354,7 @@
           "vigueur": 1,
           "reflexes": 0,
           "volonte": 0,
-          "special_en": "Don supplémentaire (guerrier), entraînement diversifié ; +1 niveau de lanceur de sorts existant",
+          "special_en": "Don supplémentaire (guerrier), entraînement diversifié",
           "sorts_par_jour": []
         },
         {
@@ -330,7 +366,8 @@
           "reflexes": 1,
           "volonte": 1,
           "special_en": "+1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "profane"
         },
         {
           "niveau": 3,
@@ -341,7 +378,8 @@
           "reflexes": 1,
           "volonte": 1,
           "special_en": "+1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "profane"
         },
         {
           "niveau": 4,
@@ -352,7 +390,8 @@
           "reflexes": 1,
           "volonte": 1,
           "special_en": "+1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "profane"
         },
         {
           "niveau": 5,
@@ -363,7 +402,8 @@
           "reflexes": 2,
           "volonte": 2,
           "special_en": "Don supplémentaire (guerrier) ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "profane"
         },
         {
           "niveau": 6,
@@ -374,7 +414,8 @@
           "reflexes": 2,
           "volonte": 2,
           "special_en": "+1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "profane"
         },
         {
           "niveau": 7,
@@ -385,7 +426,8 @@
           "reflexes": 2,
           "volonte": 2,
           "special_en": "+1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "profane"
         },
         {
           "niveau": 8,
@@ -396,7 +438,8 @@
           "reflexes": 3,
           "volonte": 3,
           "special_en": "+1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "profane"
         },
         {
           "niveau": 9,
@@ -407,7 +450,8 @@
           "reflexes": 3,
           "volonte": 3,
           "special_en": "Don supplémentaire (guerrier) ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "profane"
         },
         {
           "niveau": 10,
@@ -418,7 +462,8 @@
           "reflexes": 3,
           "volonte": 3,
           "special_en": "Sortilège dévastateur ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "profane"
         }
       ],
       "conditions": [
@@ -443,7 +488,23 @@
       "de_vie": 8,
       "rangs_par_niveau": 8,
       "caracteristique_rangs": "int",
-      "competences_de_classe_en": [],
+      "competences_de_classe_en": [
+        "Bluff",
+        "Knowledge",
+        "Diplomacy",
+        "Disguise",
+        "Ride",
+        "Sleight of Hand",
+        "Appraise",
+        "Escape Artist",
+        "Intimidate",
+        "Linguistics",
+        "Perception",
+        "Sense Motive",
+        "Perform",
+        "Survival",
+        "Use Magic Device"
+      ],
       "progression": [
         {
           "niveau": 1,
@@ -588,7 +649,13 @@
       "de_vie": 12,
       "rangs_par_niveau": 2,
       "caracteristique_rangs": "int",
-      "competences_de_classe_en": [],
+      "competences_de_classe_en": [
+        "Knowledge",
+        "Diplomacy",
+        "Escape Artist",
+        "Perception",
+        "Fly"
+      ],
       "progression": [
         {
           "niveau": 1,
@@ -610,7 +677,8 @@
           "reflexes": 1,
           "volonte": 1,
           "special_en": "Augmentation de caractéristique (For +2), +1 niveau de lanceur de sorts, don de lignage, morsure",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "profane"
         },
         {
           "niveau": 3,
@@ -621,7 +689,8 @@
           "reflexes": 1,
           "volonte": 2,
           "special_en": "Attaque de souffle, +1 niveau de lanceur de sorts",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "profane"
         },
         {
           "niveau": 4,
@@ -632,7 +701,8 @@
           "reflexes": 1,
           "volonte": 2,
           "special_en": "Augmentation de caractéristique (For +2), +1 niveau de lanceur de sorts, augmentation d'armure naturelle (+1)",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "profane"
         },
         {
           "niveau": 5,
@@ -654,7 +724,8 @@
           "reflexes": 2,
           "volonte": 3,
           "special_en": "Augmentation de caractéristique (Con +2), +1 niveau de lanceur de sorts",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "profane"
         },
         {
           "niveau": 7,
@@ -665,7 +736,8 @@
           "reflexes": 2,
           "volonte": 4,
           "special_en": "Forme draconienne (1/jour), +1 niveau de lanceur de sorts, augmentation d'armure naturelle (+1)",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "profane"
         },
         {
           "niveau": 8,
@@ -676,7 +748,8 @@
           "reflexes": 3,
           "volonte": 4,
           "special_en": "Augmentation de caractéristique (Int +2), don de lignage, +1 niveau de lanceur de sorts",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "profane"
         },
         {
           "niveau": 9,
@@ -698,7 +771,8 @@
           "reflexes": 3,
           "volonte": 5,
           "special_en": "Perception aveugle (20 m), forme draconienne (2/jour), +1 niveau de lanceur de sorts",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "profane"
         }
       ],
       "conditions": [
@@ -737,7 +811,14 @@
       "de_vie": 10,
       "rangs_par_niveau": 4,
       "caracteristique_rangs": "int",
-      "competences_de_classe_en": [],
+      "competences_de_classe_en": [
+        "Acrobatics",
+        "Bluff",
+        "Escape Artist",
+        "Perception",
+        "Sense Motive",
+        "Perform"
+      ],
       "progression": [
         {
           "niveau": 1,
@@ -890,7 +971,17 @@
       "de_vie": 6,
       "rangs_par_niveau": 4,
       "caracteristique_rangs": "int",
-      "competences_de_classe_en": [],
+      "competences_de_classe_en": [
+        "Spellcraft",
+        "Knowledge",
+        "Diplomacy",
+        "Handle Animal",
+        "Appraise",
+        "Linguistics",
+        "Heal",
+        "Perform",
+        "Use Magic Device"
+      ],
       "progression": [
         {
           "niveau": 1,
@@ -901,7 +992,8 @@
           "reflexes": 0,
           "volonte": 1,
           "special_en": "Secret ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         },
         {
           "niveau": 2,
@@ -912,7 +1004,8 @@
           "reflexes": 1,
           "volonte": 1,
           "special_en": "Savoir ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         },
         {
           "niveau": 3,
@@ -923,7 +1016,8 @@
           "reflexes": 1,
           "volonte": 2,
           "special_en": "Secret ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         },
         {
           "niveau": 4,
@@ -934,7 +1028,8 @@
           "reflexes": 1,
           "volonte": 2,
           "special_en": "Langage supplémentaire ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         },
         {
           "niveau": 5,
@@ -945,7 +1040,8 @@
           "reflexes": 2,
           "volonte": 3,
           "special_en": "Secret ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         },
         {
           "niveau": 6,
@@ -956,7 +1052,8 @@
           "reflexes": 2,
           "volonte": 3,
           "special_en": "Savoir supérieur ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         },
         {
           "niveau": 7,
@@ -967,7 +1064,8 @@
           "reflexes": 2,
           "volonte": 4,
           "special_en": "Secret ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         },
         {
           "niveau": 8,
@@ -978,7 +1076,8 @@
           "reflexes": 3,
           "volonte": 4,
           "special_en": "Langage supplémentaire ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         },
         {
           "niveau": 9,
@@ -989,7 +1088,8 @@
           "reflexes": 3,
           "volonte": 5,
           "special_en": "Secret ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         },
         {
           "niveau": 10,
@@ -1000,7 +1100,8 @@
           "reflexes": 3,
           "volonte": 5,
           "special_en": "Savoir divin ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         }
       ],
       "conditions": [
@@ -1035,7 +1136,17 @@
       "de_vie": 8,
       "rangs_par_niveau": 6,
       "caracteristique_rangs": "int",
-      "competences_de_classe_en": [],
+      "competences_de_classe_en": [
+        "Acrobatics",
+        "Bluff",
+        "Disguise",
+        "Diplomacy",
+        "Stealth",
+        "Sleight of Hand",
+        "Escape Artist",
+        "Perception",
+        "Perform"
+      ],
       "progression": [
         {
           "niveau": 1,
@@ -1184,7 +1295,23 @@
       "de_vie": 6,
       "rangs_par_niveau": 4,
       "caracteristique_rangs": "int",
-      "competences_de_classe_en": [],
+      "competences_de_classe_en": [
+        "Acrobatics",
+        "Spellcraft",
+        "Bluff",
+        "Knowledge",
+        "Disguise",
+        "Disable Device",
+        "Diplomacy",
+        "Stealth",
+        "Climb",
+        "Sleight of Hand",
+        "Appraise",
+        "Escape Artist",
+        "Swim",
+        "Perception",
+        "Sense Motive"
+      ],
       "progression": [
         {
           "niveau": 1,
@@ -1195,7 +1322,8 @@
           "reflexes": 1,
           "volonte": 1,
           "special_en": "Prestidigitation à distance ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         },
         {
           "niveau": 2,
@@ -1206,7 +1334,8 @@
           "reflexes": 1,
           "volonte": 1,
           "special_en": "Attaque sournoise +1d6 ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         },
         {
           "niveau": 3,
@@ -1217,7 +1346,8 @@
           "reflexes": 2,
           "volonte": 2,
           "special_en": "Attaque imprévisible 1/jour ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         },
         {
           "niveau": 4,
@@ -1228,7 +1358,8 @@
           "reflexes": 2,
           "volonte": 2,
           "special_en": "Attaque sournoise +2d6 ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         },
         {
           "niveau": 5,
@@ -1239,7 +1370,8 @@
           "reflexes": 3,
           "volonte": 3,
           "special_en": "Sorts vicieux 3/jour ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         },
         {
           "niveau": 6,
@@ -1250,7 +1382,8 @@
           "reflexes": 3,
           "volonte": 3,
           "special_en": "Attaque sournoise +3d6 ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         },
         {
           "niveau": 7,
@@ -1261,7 +1394,8 @@
           "reflexes": 4,
           "volonte": 4,
           "special_en": "Attaque imprévisible 2/jour, sorts vicieux 4/jour ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         },
         {
           "niveau": 8,
@@ -1272,7 +1406,8 @@
           "reflexes": 4,
           "volonte": 4,
           "special_en": "Attaque sournoise +4d6 ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         },
         {
           "niveau": 9,
@@ -1283,7 +1418,8 @@
           "reflexes": 5,
           "volonte": 5,
           "special_en": "Voleur invisible, sorts vicieux 5/jour ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         },
         {
           "niveau": 10,
@@ -1294,7 +1430,8 @@
           "reflexes": 5,
           "volonte": 5,
           "special_en": "Attaque sournoise +5d6, sorts surprise ; +1 niveau de lanceur de sorts existant",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "tous"
         }
       ],
       "conditions": [
@@ -1351,7 +1488,11 @@
       "de_vie": 6,
       "rangs_par_niveau": 2,
       "caracteristique_rangs": "int",
-      "competences_de_classe_en": [],
+      "competences_de_classe_en": [
+        "Spellcraft",
+        "Knowledge",
+        "Sense Motive"
+      ],
       "progression": [
         {
           "niveau": 1,
@@ -1362,7 +1503,8 @@
           "reflexes": 0,
           "volonte": 1,
           "special_en": "Sorts combinés (1er) ; +1 niveau dans les classes de lanceur de sorts profanes et divins existantes",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "profane_et_divin"
         },
         {
           "niveau": 2,
@@ -1373,7 +1515,8 @@
           "reflexes": 1,
           "volonte": 1,
           "special_en": "+1 niveau dans les classes de lanceur de sorts profanes et divins existantes",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "profane_et_divin"
         },
         {
           "niveau": 3,
@@ -1384,7 +1527,8 @@
           "reflexes": 1,
           "volonte": 2,
           "special_en": "Sorts combinés (2e) ; +1 niveau dans les classes de lanceur de sorts profanes et divins existantes",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "profane_et_divin"
         },
         {
           "niveau": 4,
@@ -1395,7 +1539,8 @@
           "reflexes": 1,
           "volonte": 2,
           "special_en": "+1 niveau dans les classes de lanceur de sorts profanes et divins existantes",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "profane_et_divin"
         },
         {
           "niveau": 5,
@@ -1406,7 +1551,8 @@
           "reflexes": 2,
           "volonte": 3,
           "special_en": "Sorts combinés (3e) ; +1 niveau dans les classes de lanceur de sorts profanes et divins existantes",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "profane_et_divin"
         },
         {
           "niveau": 6,
@@ -1417,7 +1563,8 @@
           "reflexes": 2,
           "volonte": 3,
           "special_en": "+1 niveau dans les classes de lanceur de sorts profanes et divins existantes",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "profane_et_divin"
         },
         {
           "niveau": 7,
@@ -1428,7 +1575,8 @@
           "reflexes": 2,
           "volonte": 4,
           "special_en": "Sorts combinés (4e) ; +1 niveau dans les classes de lanceur de sorts profanes et divins existantes",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "profane_et_divin"
         },
         {
           "niveau": 8,
@@ -1439,7 +1587,8 @@
           "reflexes": 3,
           "volonte": 4,
           "special_en": "+1 niveau dans les classes de lanceur de sorts profanes et divins existantes",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "profane_et_divin"
         },
         {
           "niveau": 9,
@@ -1450,7 +1599,8 @@
           "reflexes": 3,
           "volonte": 5,
           "special_en": "Sorts combinés (5e) ; +1 niveau dans les classes de lanceur de sorts profanes et divins existantes",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "profane_et_divin"
         },
         {
           "niveau": 10,
@@ -1461,7 +1611,8 @@
           "reflexes": 3,
           "volonte": 5,
           "special_en": "Synthèse de sortilèges ; +1 niveau dans les classes de lanceur de sorts profanes et divins existantes",
-          "sorts_par_jour": []
+          "sorts_par_jour": [],
+          "lanceur": "profane_et_divin"
         }
       ],
       "conditions": [

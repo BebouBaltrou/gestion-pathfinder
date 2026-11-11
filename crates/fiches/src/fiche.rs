@@ -941,6 +941,55 @@ impl Fiche {
         self.niveaux.iter().filter(|n| n.classe == classe).count() as u32
     }
 
+    /// Niveaux de lanceur de sorts ajoutés à chaque classe lanceuse par les classes de prestige.
+    /// Attribution : la première classe lanceuse compatible, dans l'ordre où le personnage l'a prise.
+    /// Point à confirmer : le choix de la classe lanceuse quand il y en a plusieurs.
+    pub(crate) fn niveaux_lanceur_prestige(&self, r: &Referentiel) -> BTreeMap<String, u32> {
+        let mut lanceuses: Vec<(String, String)> = Vec::new();
+        for n in &self.niveaux {
+            if lanceuses.iter().any(|(id, _)| *id == n.classe) {
+                continue;
+            }
+            if let Some(inc) = r.classe(&n.classe).and_then(|c| c.incantation.as_ref()) {
+                lanceuses.push((n.classe.clone(), inc.genre.clone()));
+            }
+        }
+        let premier = |genre: Option<&str>| {
+            lanceuses
+                .iter()
+                .find(|(_, g)| genre.is_none_or(|x| x == g))
+                .map(|(id, _)| id.clone())
+        };
+        let mut bonus: BTreeMap<String, u32> = BTreeMap::new();
+        let mut vues: Vec<&str> = Vec::new();
+        for n in &self.niveaux {
+            if vues.contains(&n.classe.as_str()) {
+                continue;
+            }
+            vues.push(&n.classe);
+            let Some(cp) = r.classe_prestige(&n.classe) else {
+                continue;
+            };
+            let nc_prestige = self.niveau_de_classe(&n.classe) as usize;
+            for ligne in cp.classe.progression.iter().take(nc_prestige) {
+                let cibles: Vec<String> = match ligne.lanceur.as_deref() {
+                    Some("profane") => premier(Some("profane")).into_iter().collect(),
+                    Some("divin") => premier(Some("divin")).into_iter().collect(),
+                    Some("profane_et_divin") => premier(Some("profane"))
+                        .into_iter()
+                        .chain(premier(Some("divin")))
+                        .collect(),
+                    Some("tous") => premier(None).into_iter().collect(),
+                    _ => Vec::new(),
+                };
+                for c in cibles {
+                    *bonus.entry(c).or_default() += 1;
+                }
+            }
+        }
+        bonus
+    }
+
     /// Effets issus de la race, des augmentations de niveau et des ajouts manuels.
     fn tous_les_effets(&self, r: &Referentiel) -> Result<Vec<Effet>, Probleme> {
         let race = r
@@ -2075,6 +2124,7 @@ impl Fiche {
             .collect();
 
         // Incantation.
+        let niveaux_prestige = self.niveaux_lanceur_prestige(r);
         let mut incantateurs = Vec::new();
         let mut vues: Vec<String> = Vec::new();
         for n in &self.niveaux {
@@ -2089,7 +2139,9 @@ impl Fiche {
                 continue;
             };
             let car = carac_depuis_id(&inc.caracteristique).unwrap_or(Carac::Cha);
-            let nc = self.niveau_de_classe(&n.classe);
+            let nc_classe = self.niveau_de_classe(&n.classe);
+            let nc = (nc_classe + niveaux_prestige.get(&n.classe).copied().unwrap_or(0))
+                .min(classe.progression.len() as u32);
             let ligne = &classe.progression[nc as usize - 1];
             let score = scores[&car].total;
             let mut emplacements = Vec::new();
@@ -2141,7 +2193,7 @@ impl Fiche {
                 .map(|l| {
                     l.sorts_bonus
                         .iter()
-                        .filter(|s| s.niveau_classe <= nc)
+                        .filter(|s| s.niveau_classe <= nc_classe)
                         .map(|s| (s.nom_en.clone(), s.niveau_classe))
                         .collect()
                 })

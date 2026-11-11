@@ -92,6 +92,10 @@ pub struct ProgressionNiveau {
     /// Un emplacement de sort de domaine en plus pour chaque niveau de sort accessible (1 à 9).
     #[serde(default)]
     pub domaine: bool,
+    /// Classes de prestige : ce niveau ajoute un niveau de lanceur de sorts à une classe lanceuse
+    /// existante. `profane`, `divin`, `tous` (première classe lanceuse) ou `profane_et_divin`.
+    #[serde(default)]
+    pub lanceur: Option<String>,
 }
 
 #[derive(Debug, Clone, Deserialize)]

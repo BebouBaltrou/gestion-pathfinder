@@ -78,12 +78,14 @@ pub fn recharge_baton(
             c.nom
         ))
     })?;
-    let mut sortie = SortieObjet::default();
-    sortie.fiche = Some(fiches::journal::EvenementFiche::SortLance {
-        classe: inc.classe.clone(),
-        niveau_de_sort: niveau,
-        sort: sort.nom_en.clone(),
-    });
+    let mut sortie = SortieObjet {
+        fiche: Some(fiches::journal::EvenementFiche::SortLance {
+            classe: inc.classe.clone(),
+            niveau_de_sort: niveau,
+            sort: sort.nom_en.clone(),
+        }),
+        ..Default::default()
+    };
     sortie.evenements.push(EvenementAventure::BatonRecharge {
         pj: a.pj,
         id: a.objet,
