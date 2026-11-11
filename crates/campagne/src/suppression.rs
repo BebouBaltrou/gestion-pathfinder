@@ -354,6 +354,7 @@ mod tests {
                 etats_fiche: Default::default(),
                 inventaire: Default::default(),
                 ressources: Default::default(),
+                baton_recharge: None,
             },
         );
         assert!(matches!(
