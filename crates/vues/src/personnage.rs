@@ -394,6 +394,8 @@ vue! {
         pub nom: String,
         pub domaine: bool,
         pub utilise: bool,
+        pub metamagies: Vec<String>,
+        pub niveau_heighten: Option<u32>,
     }
 }
 vue! {
@@ -419,6 +421,15 @@ vue! {
         pub interdits: Vec<String>,
         /// Conversion spontanée possible : Some(true) en soins, Some(false) en blessures.
         pub conversion: Option<bool>,
+        /// Dons de métamagie connus : à appliquer à la préparation d'un sort.
+        pub metamagies: Vec<DonMetamagieVue>,
+    }
+}
+vue! {
+    /// Don de métamagie connu (nom anglais du catalogue et nom français).
+    pub struct DonMetamagieVue {
+        pub nom_en: String,
+        pub nom: String,
     }
 }
 vue! {
@@ -1344,6 +1355,8 @@ pub fn fiche_complete(
                         nom_en: s.sort.clone(),
                         domaine: s.domaine,
                         utilise: utilises.and_then(|u| u.get(k)).copied().unwrap_or(false),
+                        metamagies: s.metamagies.clone(),
+                        niveau_heighten: s.niveau_heighten,
                     })
                     .collect(),
                 sorts_de_domaine: v
@@ -1364,6 +1377,23 @@ pub fn fiche_complete(
                     .map(String::from)
                     .collect(),
                 conversion: v.canalisation.as_ref().and_then(|c| c.positive),
+                metamagies: f
+                    .dons_choisis()
+                    .into_iter()
+                    .filter_map(|d| {
+                        let nom_en = fiches::catalogue::nom_de_base(&d).to_string();
+                        let don = r.don(&nom_en)?;
+                        don.types_en
+                            .iter()
+                            .any(|t| t == "Metamagic")
+                            .then(|| DonMetamagieVue {
+                                nom: fiches::traductions::Traductions::partage()
+                                    .don(&nom_en)
+                                    .map_or_else(|| nom_en.clone(), |x| x.nom.clone()),
+                                nom_en,
+                            })
+                    })
+                    .collect(),
             })
         });
 

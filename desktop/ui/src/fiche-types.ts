@@ -113,7 +113,16 @@ export type DivinVue = {
   canalisation: CanalisationVue | null;
   energieAChoisir: boolean;
 };
-export type SortPrepareVue = { niveau: number; nomEn: string; nom: string; domaine: boolean; utilise: boolean };
+export type SortPrepareVue = {
+  niveau: number;
+  nomEn: string;
+  nom: string;
+  domaine: boolean;
+  utilise: boolean;
+  metamagies: string[];
+  niveauHeighten: number | null;
+};
+export type DonMetamagieVue = { nomEn: string; nom: string };
 export type CapacitePreparation = { niveau: number; normaux: number; domaine: number; restants: number | null };
 export type PreparationVue = {
   classeId: string;
@@ -123,9 +132,16 @@ export type PreparationVue = {
   sortsDeDomaine: SortDomaineVue[];
   interdits: string[];
   conversion: boolean | null;
+  metamagies: DonMetamagieVue[];
 };
-/** Un emplacement de sort préparé, tel que le journal du cœur le reçoit. */
-export type SortPrepare = { niveau: number; sort: string; domaine: boolean };
+/** Un emplacement de sort préparé, tel que le journal du cœur le reçoit (noms en snake_case). */
+export type SortPrepare = {
+  niveau: number;
+  sort: string;
+  domaine: boolean;
+  metamagies?: string[];
+  niveau_heighten?: number | null;
+};
 export type StatsSortFiche = {
   niveauDeLanceur: number;
   tempsDIncantation: string | null;
