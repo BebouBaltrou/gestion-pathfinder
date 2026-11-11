@@ -757,6 +757,7 @@ fn main() {
             aventure::aventure_terminer,
             aventure::aventure_evenement,
             aventure::aventure_utiliser_objet,
+            aventure::aventure_recharger_baton,
             aventure::aventure_lancer_sort,
             aventure::catalogue_sorts,
             aventure::aventure_actualiser_ressources,

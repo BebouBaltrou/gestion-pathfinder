@@ -12,6 +12,7 @@ import { Combat } from "./aventure/Combat";
 import { Historique } from "./aventure/Historique";
 import { DialogueEffet, DialogueHeure, DialogueObjet, DialogueRepos, DialogueSante, ChoixDuree } from "./aventure/dialogues";
 import { DialogueObjetHorsCombat } from "./aventure/DialogueObjetHorsCombat";
+import { DialogueRechargeBaton } from "./aventure/DialogueRechargeBaton";
 import { DialogueLancerHorsCombat } from "./aventure/DialogueLancerHorsCombat";
 import { DialogueFormeAnimale } from "./aventure/Invocations";
 import { SaisieNombre } from "../composants/jeu";
@@ -31,6 +32,7 @@ export function Aventure({ outils }: { outils: Outils }) {
   const [combat, setCombat] = useState<CombatVue | null>(null);
   const [ouvert, setOuvert] = useState<Ouvert>(null);
   const [objetHc, setObjetHc] = useState<{ pj: number; pjNom: string; objet: ObjetVue } | null>(null);
+  const [recharge, setRecharge] = useState<{ pj: number; pjNom: string; batons: ObjetVue[] } | null>(null);
   const [sortHc, setSortHc] = useState<PjAventure | null>(null);
   const [formeAn, setFormeAn] = useState<PjAventure | null>(null);
 
@@ -133,6 +135,7 @@ export function Aventure({ outils }: { outils: Outils }) {
             onObjet={() => setOuvert({ genre: "objet", pj: pj.id })}
             onRetirerEffet={(e: EffetVue) => envoyer(ev.effetRetire(e.id))}
             onUtiliserObjet={(o: ObjetVue) => setObjetHc({ pj: pj.id, pjNom: pj.nom, objet: o })}
+            onRechargerBaton={() => setRecharge({ pj: pj.id, pjNom: pj.nom, batons: pj.inventaire.filter((o) => o.genreCode === "baton" && o.charges && o.charges[0] < o.charges[1]) })}
             onLancerSort={() => setSortHc(pj)}
             defenses
             onFormeAnimale={() => setFormeAn(pj)}
@@ -167,6 +170,7 @@ export function Aventure({ outils }: { outils: Outils }) {
       {ouvert?.genre === "effet" && <DialogueEffet pjs={pjs} pjId={ouvert.pj} envoyer={envoyer} onFermer={() => setOuvert(null)} />}
       {formeAn && <DialogueFormeAnimale pj={formeAn} choisir={(forme, creature) => outils.agir(api.aventurePrendreForme(formeAn.id, forme, creature))} onFermer={() => setFormeAn(null)} />}
       {sortHc && <DialogueLancerHorsCombat pj={sortHc} agir={outils.agir} onFermer={() => setSortHc(null)} />}
+      {recharge && <DialogueRechargeBaton pjId={recharge.pj} pjNom={recharge.pjNom} batons={recharge.batons} agir={outils.agir} onFermer={() => setRecharge(null)} />}
       {objetHc && <DialogueObjetHorsCombat pjId={objetHc.pj} pjNom={objetHc.pjNom} objet={objetHc.objet} agir={outils.agir} onFermer={() => setObjetHc(null)} />}
       {ouvert?.genre === "objet" && <DialogueObjet pjs={pjs} pjId={ouvert.pj} envoyer={envoyer} onFermer={() => setOuvert(null)} />}
       {ouvert?.genre === "repos" && <DialogueRepos pjs={pjs} envoyer={envoyer} onFermer={() => setOuvert(null)} />}

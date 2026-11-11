@@ -684,6 +684,53 @@ pub fn aventure_utiliser_objet(s: S, utilisation: UtilisationHorsCombat) -> Reto
     )
 }
 
+/// Recharge d'un bâton hors combat (Core p. 491). Le coût (emplacement du niveau du sort) est
+/// calculé par le cœur ; rien n'est saisi.
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct RechargeBaton {
+    pub pj: IdPj,
+    pub objet: u64,
+}
+
+#[tauri::command]
+pub fn aventure_recharger_baton(s: S, recharge: RechargeBaton) -> Retour {
+    let mut x = session(&s);
+    if x.combat.is_some() {
+        return Retour::erreur(
+            "Un combat est en cours : l'aventure reprend à sa fin (validation ou abandon)",
+        );
+    }
+    let Some(etat) = x.avec_etat(|e| e.aventure.clone()).flatten() else {
+        return Retour::erreur("Aucune aventure en cours");
+    };
+    let contextes = x.contextes();
+    let params = combat::ParamsRecharge {
+        pj: recharge.pj,
+        objet: recharge.objet,
+    };
+    let sortie = match combat::recharge_baton(&etat, &params, &|id| contextes.get(&id).cloned()) {
+        Ok(s) => s,
+        Err(e) => return Retour::erreur(e.to_string()),
+    };
+    let message = sortie.notes.join(" ");
+    let mut evenements: Vec<Evenement> = Vec::new();
+    if let Some(fiche) = sortie.fiche {
+        evenements.push(Evenement::Fiche {
+            pj: IdPersonnage(recharge.pj),
+            evenement: fiche,
+        });
+    }
+    evenements.extend(sortie.evenements.into_iter().map(Evenement::Aventure));
+    x.executer(
+        Evenement::Groupe {
+            libelle: "Recharger un bâton".into(),
+            evenements,
+        },
+        &message,
+    )
+}
+
 /// Sort lancé hors combat, tel que saisi par l'interface (noms en camelCase).
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]

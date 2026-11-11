@@ -741,6 +741,8 @@ export const api = {
     appeler<Retour>("aventure_lancer_sort", { lancement }),
   aventureUtiliserObjet: (utilisation: { pj: number; objet: number; resultatDe: number | null; niveauDeLanceur: number | null; charges: number }) =>
     appeler<Retour>("aventure_utiliser_objet", { utilisation }),
+  aventureRechargerBaton: (recharge: { pj: number; objet: number }) =>
+    appeler<Retour>("aventure_recharger_baton", { recharge }),
   aventureApercuRecul: (instant: number) => appeler<ReculVue | null>("aventure_apercu_recul", { instant }),
   aventureActualiserRessources: (pj: number) => appeler<Retour>("aventure_actualiser_ressources", { pj }),
   // ---- combat

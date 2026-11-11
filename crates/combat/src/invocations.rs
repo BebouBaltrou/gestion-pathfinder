@@ -293,6 +293,7 @@ impl EtatCombat {
                     etats_fiche: BTreeSet::new(),
                     inventaire: BTreeMap::new(),
                     ressources: BTreeMap::new(),
+                    baton_recharge: None,
                 },
             );
             self.engages.push(id);

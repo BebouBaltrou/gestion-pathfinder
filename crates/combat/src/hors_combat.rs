@@ -20,7 +20,79 @@ use temps::Duree;
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct SortieObjet {
     pub evenements: Vec<EvenementAventure>,
+    /// Emplacement de sort dépensé par la recharge d'un bâton (événement de fiche).
+    pub fiche: Option<fiches::journal::EvenementFiche>,
     pub notes: Vec<String>,
+}
+
+/// Recharge d'un bâton (Core p. 491) : +1 charge, une fois par jour, en renonçant à un
+/// emplacement du niveau du sort le plus haut du bâton. L'app calcule ce coût elle-même.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct ParamsRecharge {
+    pub pj: IdPj,
+    pub objet: aventure::IdObjet,
+}
+
+pub fn recharge_baton(
+    etat: &EtatAventure,
+    a: &ParamsRecharge,
+    ctx: &dyn Fn(IdPj) -> Option<ContextePj>,
+) -> Result<SortieObjet, ErreurCombat> {
+    let c = ctx(a.pj).ok_or(ErreurAventure::PjInconnu(a.pj))?;
+    let suivi = etat.pjs.get(&a.pj).ok_or(ErreurAventure::PjInconnu(a.pj))?;
+    let objet = suivi
+        .inventaire
+        .get(&a.objet)
+        .cloned()
+        .ok_or_else(|| ErreurCombat::Invalide(format!("objet n° {} inconnu", a.objet)))?;
+    if objet.genre != GenreObjet::Baton {
+        return invalide(format!(
+            "seul un bâton se recharge ({} n'en est pas un)",
+            objet.nom
+        ));
+    }
+    let Some(ch) = objet.charges else {
+        return invalide(format!("{} n'a pas de charges", objet.nom));
+    };
+    if ch.restantes >= ch.max {
+        return invalide(format!("{} est déjà plein", objet.nom));
+    }
+    if suivi.baton_recharge.is_some() {
+        return invalide(format!(
+            "{} : un bâton a déjà été rechargé aujourd'hui (Core p. 491)",
+            c.nom
+        ));
+    }
+    let nom_sort = objet
+        .sort
+        .clone()
+        .ok_or_else(|| ErreurCombat::Invalide(format!("{} ne contient pas de sort", objet.nom)))?;
+    let sort = referentiel_sort(&nom_sort)?;
+    let inc = c
+        .incantation
+        .clone()
+        .ok_or_else(|| ErreurCombat::Invalide(format!("{} ne lance pas de sorts", c.nom)))?;
+    let niveau = sort.niveau_pour(&inc.classe_en).ok_or_else(|| {
+        ErreurCombat::Invalide(format!(
+            "{} ne peut lancer aucun sort du bâton (Core p. 491)",
+            c.nom
+        ))
+    })?;
+    let mut sortie = SortieObjet::default();
+    sortie.fiche = Some(fiches::journal::EvenementFiche::SortLance {
+        classe: inc.classe.clone(),
+        niveau_de_sort: niveau,
+        sort: sort.nom_en.clone(),
+    });
+    sortie.evenements.push(EvenementAventure::BatonRecharge {
+        pj: a.pj,
+        id: a.objet,
+    });
+    sortie.notes.push(format!(
+        "{} recharge {} : +1 charge, emplacement de niveau {niveau} dépensé.",
+        c.nom, objet.nom
+    ));
+    Ok(sortie)
 }
 
 fn invalide<T>(m: impl Into<String>) -> Result<T, ErreurCombat> {
@@ -109,8 +181,23 @@ pub fn evenements_objet_hors_combat(
                 }
                 gestuel = composantes(sort.composantes_en.as_deref()).1;
                 besoin_cl = i.niveau_de_lanceur < cl;
-            } else if objet.genre == GenreObjet::Baton {
-                cl = cl.max(i.niveau_de_lanceur); // le porteur utilise son niveau s'il est plus haut (p. 491)
+            } else {
+                // baguette ou bâton : déclenchement gestuel = échec des sorts profanes possible
+                gestuel = composantes(sort.composantes_en.as_deref()).1;
+                if objet.genre == GenreObjet::Baton {
+                    cl = cl.max(i.niveau_de_lanceur); // le porteur utilise son niveau s'il est plus haut (p. 491)
+                                                      // DD du sort du bâton : 10 + niveau du sort + modificateur du porteur (p. 491)
+                    sortie.notes.push(format!(
+                        "{} : DD du sort {} : {}.",
+                        objet.nom,
+                        nom_fr(&sort.nom_en),
+                        fiches::dd_sort(
+                            niveau_pour_lui,
+                            i.mod_incantation,
+                            fiches::dons_ecole_pour(&i.dons_ecole, &sort.ecole),
+                        )
+                    ));
+                }
             }
         }
         GenreObjet::Munition => {}
