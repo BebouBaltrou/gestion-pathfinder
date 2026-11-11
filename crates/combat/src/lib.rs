@@ -22,7 +22,8 @@ pub use combat::{ApercuFin, Combat, Ctx, RecapPj, Resultat, Validation, FORMAT_C
 pub use economie::{Depense, EconomieTour, TypeAction};
 pub use etat::{ActionCombat, Demande, EntreeCombat, ErreurCombat, EtatCombat, Init, Phase, Stats};
 pub use hors_combat::{
-    evenements_objet_hors_combat, lancer_hors_combat, SortieLancer, SortieObjet,
+    evenements_objet_hors_combat, lancer_hors_combat, recharge_baton, ParamsRecharge, SortieLancer,
+    SortieObjet,
 };
 pub use objets::ParamsObjet;
 pub use sorts::{ApercuSort, Distraction, ParamsLancer};

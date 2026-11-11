@@ -11,6 +11,7 @@ export function CartePj({
   grandeJauge = false,
   onRetirerEffet,
   onUtiliserObjet,
+  onRechargerBaton,
   onUtiliserRessource,
   onRendreRessource,
   onSante,
@@ -28,6 +29,7 @@ export function CartePj({
   grandeJauge?: boolean;
   onRetirerEffet?: (e: EffetVue) => void;
   onUtiliserObjet?: (o: ObjetVue) => void;
+  onRechargerBaton?: () => void;
   onUtiliserRessource?: (r: RessourceVue) => void;
   onRendreRessource?: (r: RessourceVue) => void;
   onSante?: (mode: "degats" | "soin" | "temp" | "continu") => void;
@@ -117,6 +119,9 @@ export function CartePj({
         <h3>Objets</h3>
         <div className="liste-compacte">
           {pj.inventaire.length === 0 && <span className="doux">Aucun consommable.</span>}
+          {onRechargerBaton && pj.inventaire.some((o) => o.genreCode === "baton" && o.charges && o.charges[0] < o.charges[1]) && (
+            <button className="bouton mini" onClick={onRechargerBaton}>Recharger un bâton…</button>
+          )}
           {pj.inventaire.map((o) => (
             <div className="ligne-objet" key={o.id}>
               <span className="nom">

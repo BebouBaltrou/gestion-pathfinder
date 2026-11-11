@@ -202,6 +202,12 @@ pub enum EvenementAventure {
         id: IdObjet,
         charges: u32,
     },
+    /// Recharge d'un bâton (Core p. 491) : +1 charge, une fois par jour et par personnage.
+    /// L'emplacement de sort dépensé est un événement de fiche à part.
+    BatonRecharge {
+        pj: IdPj,
+        id: IdObjet,
+    },
     /// Munitions récupérées après le combat ou charges rendues (jamais au-delà du maximum).
     ObjetRecupere {
         pj: IdPj,
@@ -341,6 +347,7 @@ impl EvenementAventure {
             ObjetAjoute { pj, objet } => format!("Aventure : PJ-{pj} reçoit {}", objet.nom),
             ObjetRetire { pj, id } => format!("Aventure : PJ-{pj} se défait de l'objet n° {id}"),
             ObjetUtilise { pj, id, .. } => format!("Aventure : PJ-{pj} utilise l'objet n° {id}"),
+            BatonRecharge { pj, id } => format!("Aventure : PJ-{pj} recharge le bâton n° {id}"),
             ObjetRecupere { pj, id, nombre } => {
                 format!("Aventure : PJ-{pj} récupère {nombre} × objet n° {id}")
             }
@@ -420,6 +427,9 @@ pub struct SuiviPj {
     /// Ressources à usages quotidiens (pouvoirs de lignage…), par nom.
     #[cfg_attr(feature = "serde", serde(default))]
     pub ressources: BTreeMap<String, Ressource>,
+    /// Bâton rechargé depuis la dernière nuit de repos (une recharge par jour).
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub baton_recharge: Option<IdObjet>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -810,6 +820,7 @@ impl EtatAventure {
                     etats_fiche: BTreeSet::new(),
                     inventaire: BTreeMap::new(),
                     ressources: BTreeMap::new(),
+                    baton_recharge: None,
                 });
                 self.noter(format!("{} rejoint l'aventure.", c.nom));
             }
@@ -1110,6 +1121,7 @@ impl EtatAventure {
                     for r in suivi.ressources.values_mut() {
                         r.utilisees = 0;
                     }
+                    suivi.baton_recharge = None;
                     for o in suivi.inventaire.values_mut() {
                         if let Some(j) = o.par_jour.as_mut() {
                             j.restantes = j.max;
@@ -1237,6 +1249,34 @@ impl EtatAventure {
                         ErreurAventure::Invalide(format!("objet n° {id} inconnu"))
                     })?;
                 self.noter(format!("{} se défait de : {}.", c.nom, o.nom));
+            }
+            EvenementAventure::BatonRecharge { pj, id } => {
+                let c = Self::contexte(ctx, *pj)?;
+                let suivi = self.suivi(*pj)?;
+                if suivi.baton_recharge.is_some() {
+                    return Err(ErreurAventure::Invalide(format!(
+                        "{} : un bâton a déjà été rechargé aujourd'hui (Core p. 491)",
+                        c.nom
+                    )));
+                }
+                let o = suivi
+                    .inventaire
+                    .get_mut(id)
+                    .ok_or_else(|| ErreurAventure::Invalide(format!("objet n° {id} inconnu")))?;
+                let nom = o.nom.clone();
+                match o.charges.as_mut() {
+                    Some(ch) if ch.restantes < ch.max => ch.restantes += 1,
+                    Some(_) => {
+                        return Err(ErreurAventure::Invalide(format!("{nom} est déjà plein")))
+                    }
+                    None => {
+                        return Err(ErreurAventure::Invalide(format!(
+                            "{nom} n'a pas de charges"
+                        )))
+                    }
+                }
+                suivi.baton_recharge = Some(*id);
+                self.noter(format!("{} recharge : {nom} (+1 charge).", c.nom));
             }
             EvenementAventure::ObjetUtilise { pj, id, charges } => {
                 let c = Self::contexte(ctx, *pj)?;

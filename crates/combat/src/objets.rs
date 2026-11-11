@@ -126,7 +126,7 @@ impl EtatCombat {
                     gestuel = composantes(s.composantes_en.as_deref()).1;
                     if objet.genre == GenreObjet::Baton {
                         cl = cl.max(inc.niveau_de_lanceur); // le porteur utilise son niveau s'il est plus haut (p. 491)
-                        // DD du sort du bâton : 10 + niveau du sort + modificateur du porteur (p. 491)
+                                                            // DD du sort du bâton : 10 + niveau du sort + modificateur du porteur (p. 491)
                         dd_baton = Some(fiches::dd_sort(
                             niveau_pour_lui,
                             inc.mod_incantation,
