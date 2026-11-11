@@ -61,6 +61,7 @@ export type PjAventure = {
   effets: EffetVue[];
   emplacements: EmplacementVue[];
   sortsConnus: SortConnuVue[];
+  metamagies: { nomEn: string; nom: string }[];
   ressources: RessourceVue[];
   inventaire: ObjetVue[];
   degatsContinus: boolean;

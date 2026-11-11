@@ -112,7 +112,7 @@ impl Etat {
                 fiche.sorts_connus.clone()
             };
             sorts_connus.extend(inc.sorts_de_lignage.iter().map(|(n, _)| n.clone()));
-            let metamagies = fiche
+            let metamagies_connues: Vec<String> = fiche
                 .dons_choisis()
                 .into_iter()
                 .filter(|d| {
@@ -141,10 +141,10 @@ impl Etat {
                 emplacements,
                 sorts_connus,
                 prepares_disponibles,
-                metamagies,
+                metamagies: metamagies_connues.clone(),
                 echec_arcanique_pct: v.equipement.echec_sorts_pct,
-                // décision du 24/10/2026 : la métamagie sera intégrée plus tard
-                metamagie_active: false,
+                // la métamagie s'utilise dès que le personnage connaît un don de métamagie
+                metamagie_active: !metamagies_connues.is_empty(),
             })
         });
         Some(ContextePj {

@@ -175,9 +175,10 @@ pub(crate) fn composantes(texte: Option<&str>) -> (bool, bool) {
     (jetons.contains(&"V"), jetons.contains(&"S"))
 }
 
-/// Type d'action pour lancer le sort d'après son temps d'incantation. Un lanceur spontané qui
-/// applique de la métamagie lance en action complexe un sort qui prend une action simple,
-/// sauf pour le sort accéléré (lecture à valider, voir `docs/POINTS_A_CONFIRMER_SORTS.md`).
+/// Type d'action pour lancer le sort d'après son temps d'incantation (livre p. 188, « Lancer un
+/// sort métamagique ») : un lanceur spontané qui applique de la métamagie lance en action complexe
+/// un sort qui prend une action simple ; le sort accéléré part en action rapide. Un sort d'une
+/// action complexe ou plus avec métamagie n'est pas géré en combat.
 pub fn type_d_action(
     temps: Option<&str>,
     spontane: bool,
