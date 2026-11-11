@@ -421,6 +421,19 @@ impl EtatCombat {
                 ));
             }
         }
+        // Livre p. 188 : prêtres et druides lancent spontanément la métamagie seulement sur
+        // soins/blessure (prêtre) et convocation d'alliés naturels (druide).
+        let spontane_restreint = inc.spontane
+            && (inc.classe_en == "cleric" || inc.classe_en == "druid")
+            && !(sort.nom_en.starts_with("Cure ")
+                || sort.nom_en.starts_with("Inflict ")
+                || sort.nom_en.starts_with("Summon Nature's Ally"));
+        if !metamagies_choisies.is_empty() && spontane_restreint {
+            return invalide(format!(
+                "{} : la métamagie spontanée n'existe que pour soins, blessure et convocation d'alliés naturels",
+                sort.nom_en
+            ));
+        }
         if !metamagies_choisies.is_empty() && !inc.metamagie_active {
             return invalide(
                 "la métamagie n'est pas encore intégrée (réglage de la fiche à activer)",
