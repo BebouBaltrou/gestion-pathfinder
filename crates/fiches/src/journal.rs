@@ -102,6 +102,7 @@ pub enum EvenementFiche {
     PacteMagiqueChoisi(String),
     /// Familier du magicien, choix définitif.
     FamilierChoisi(String),
+    FamilierSuperieurChoisi(String),
     /// Objet fétiche du magicien, choix définitif.
     ObjetFetichChoisi(String),
     /// Pouvoir de rage du barbare choisi.
@@ -240,6 +241,7 @@ impl EvenementFiche {
             EvenementFiche::EcoleOpposeeChoisie(x) => format!("École opposée : {x}"),
             EvenementFiche::PacteMagiqueChoisi(x) => format!("Pacte magique : {x}"),
             EvenementFiche::FamilierChoisi(x) => format!("Familier : {x}"),
+            EvenementFiche::FamilierSuperieurChoisi(x) => format!("Familier supérieur : {x}"),
             EvenementFiche::ObjetFetichChoisi(x) => format!("Objet fétiche : {x}"),
             EvenementFiche::PouvoirRageChoisi(p) => format!("Pouvoir de rage : {p}"),
             EvenementFiche::RageCommencee => "Entrée en rage".to_string(),
@@ -818,6 +820,16 @@ impl Journal {
                 }
                 EvenementFiche::FamilierChoisi(x) => {
                     definitif(&mut fiche.familier, x, "le familier", i)?;
+                }
+                EvenementFiche::FamilierSuperieurChoisi(x) => {
+                    if !fiche.niveaux.iter().any(|n| n.dons.iter().any(|d| d == "Improved Familiar")) {
+                        return Err(ErreurJournal::Choix {
+                            evenement: i,
+                            raison: "le familier supérieur exige le don Familier supérieur"
+                                .to_string(),
+                        });
+                    }
+                    definitif(&mut fiche.familier_superieur, x, "le familier supérieur", i)?;
                 }
                 EvenementFiche::ObjetFetichChoisi(x) => {
                     definitif(&mut fiche.objet_fetiche, x, "l'objet fétiche", i)?;

@@ -148,10 +148,10 @@ export function Montee({
 
         <div className="grille-fiche">
           {[
-            ["Bonus de base à l'attaque", apercu.bba],
-            ["Vigueur", apercu.vigueur],
-            ["Réflexes", apercu.reflexes],
-            ["Volonté", apercu.volonte],
+            ["Bonus de base à l'attaque (total)", apercu.bbaTotal],
+            ["Vigueur (total)", apercu.vigueurTotal],
+            ["Réflexes (total)", apercu.reflexesTotal],
+            ["Volonté (total)", apercu.volonteTotal],
           ].map(([nom, v]) => (
             <div className="carte chiffre-fiche" key={String(nom)}>
               <span className="etiquette">{String(nom)}</span>

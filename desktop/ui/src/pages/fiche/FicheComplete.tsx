@@ -583,6 +583,15 @@ function ChoixClasses({ f, agir }: { f: FicheVue; agir: (e: EvenementFiche) => v
               ))}
             </div>
           )}
+          {c.aLeDonFamilierSuperieur && !c.familierSuperieur && (
+            <div className="grille-boutons">
+              <p>Familier supérieur (facultatif) :</p>
+              {c.familiersSuperieurs.map(([nom, detail]) => (
+                <button key={nom} className="bouton" title={detail} onClick={() => agir({ FamilierSuperieurChoisi: nom })}>{nom}</button>
+              ))}
+            </div>
+          )}
+          {c.familierSuperieur && <p>Familier supérieur : {c.familierSuperieur}</p>}
           {c.pacteMagique && c.pacteMagique !== "familier" && !c.objetFetiche && (
             <div className="grille-boutons">
               {c.objetsFetiches.map((o) => (

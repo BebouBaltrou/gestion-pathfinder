@@ -61,6 +61,7 @@ fn pretre(niveau: u32, sagesse: i32) -> Fiche {
         ecoles_opposees: vec![],
         pacte_magique: None,
         familier: None,
+        familier_superieur: None,
         objet_fetiche: None,
         grimoire: vec![],
         pouvoirs_rage: vec![],
@@ -921,6 +922,7 @@ fn barbare(niveau: u32, constitution: i32) -> Fiche {
         ecoles_opposees: vec![],
         pacte_magique: None,
         familier: None,
+        familier_superieur: None,
         objet_fetiche: None,
         grimoire: vec![],
         pouvoirs_rage: vec![],
@@ -2730,4 +2732,39 @@ fn bba_du_druide_niveau_9_sert_a_l_attaque_de_forme() {
     let f = druide(9);
     let v = f.calculer(r).unwrap();
     assert_eq!(v.bba.total, 6);
+}
+
+#[test]
+fn familier_superieur_exige_le_don_familier_superieur() {
+    let r = Referentiel::core();
+    let liste = &r.choix.pacte_magique_magicien.familiers_superieurs;
+    assert_eq!(liste.len(), 13);
+    assert!(liste
+        .iter()
+        .any(|x| x.nom == "Aigle céleste" && x.niveau_lanceur_min == 3));
+    let regles = ReglesFiche::default();
+    // Sans le don Familier supérieur : refusé.
+    let mut j = Journal::nouveau(de_classe("magicien", 1));
+    assert!(j
+        .ajouter(
+            EvenementFiche::FamilierSuperieurChoisi("Strige".into()),
+            &r,
+            &regles
+        )
+        .is_err());
+}
+
+#[test]
+fn profil_du_familier_moitie_des_pv_et_bonus_d_attaque() {
+    let r = Referentiel::core();
+    let mut f = de_classe("magicien", 1);
+    f.pacte_magique = Some("familier".into());
+    f.familier = Some("Chat".into());
+    let lignes = crate::choix_classe::profil_familier(&f, &r);
+    assert!(lignes.iter().any(|l| l.contains("points de vie")), "{lignes:?}");
+    // Chat : 2 griffes (dégâts 1d2-4), bonus = BBA du maître (0) + meilleur modificateur (Dex +2).
+    assert!(
+        lignes.iter().any(|l| l.contains("griffes +2 (1d2-4)")),
+        "{lignes:?}"
+    );
 }

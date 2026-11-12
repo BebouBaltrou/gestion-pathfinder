@@ -819,6 +819,7 @@ pub fn fiche_depuis_feuille(f: &Feuille, niveau: u32, r: &Referentiel) -> Result
         ecoles_opposees: vec![],
         pacte_magique: None,
         familier: None,
+        familier_superieur: None,
         objet_fetiche: None,
         grimoire: vec![],
         pouvoirs_rage: vec![],

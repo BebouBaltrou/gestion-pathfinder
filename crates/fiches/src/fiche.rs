@@ -137,6 +137,9 @@ pub struct Fiche {
     pub pacte_magique: Option<String>,
     #[cfg_attr(feature = "serde", serde(default))]
     pub familier: Option<String>,
+    /// Familier supérieur (don Familier supérieur) : optionnel, choisi après le don.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub familier_superieur: Option<String>,
     #[cfg_attr(feature = "serde", serde(default))]
     pub objet_fetiche: Option<String>,
     /// Sorts de niveau 1 et plus du grimoire du magicien (noms anglais du catalogue) ; les tours de
@@ -867,6 +870,10 @@ pub struct Valeurs {
     pub vigueur: Detail,
     pub reflexes: Detail,
     pub volonte: Detail,
+    /// Bonus de base aux jets de sauvegarde (toutes classes), avant modificateurs.
+    pub base_vigueur: i32,
+    pub base_reflexes: i32,
+    pub base_volonte: i32,
     pub initiative: Detail,
     pub ca: Detail,
     pub ca_contact: Detail,
@@ -2488,6 +2495,9 @@ impl Fiche {
             pv_max,
             bba,
             bba_iteratif: iteratif,
+            base_vigueur: vig,
+            base_reflexes: refl,
+            base_volonte: vol,
             vigueur,
             reflexes,
             volonte,

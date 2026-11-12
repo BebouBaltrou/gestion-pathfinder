@@ -1059,6 +1059,21 @@
         }
       }
     ],
+    "familiers_superieurs": [
+      { "nom": "Aigle céleste", "alignement": "Neutre Bon", "niveau_lanceur_min": 3, "note": "ou l'équivalent céleste d'une créature de la liste ordinaire" },
+      { "nom": "Rat sanguinaire", "alignement": "Neutre", "niveau_lanceur_min": 3, "note": "" },
+      { "nom": "Vipère fiélone", "alignement": "Neutre Mauvais", "niveau_lanceur_min": 3, "note": "ou l'équivalent fiélon d'une créature de la liste ordinaire" },
+      { "nom": "Élémentaire (air)", "alignement": "Neutre", "niveau_lanceur_min": 5, "note": "au choix : élémentaire, type au choix du joueur" },
+      { "nom": "Élémentaire (terre)", "alignement": "Neutre", "niveau_lanceur_min": 5, "note": "au choix : élémentaire, type au choix du joueur" },
+      { "nom": "Élémentaire (feu)", "alignement": "Neutre", "niveau_lanceur_min": 5, "note": "au choix : élémentaire, type au choix du joueur" },
+      { "nom": "Élémentaire (eau)", "alignement": "Neutre", "niveau_lanceur_min": 5, "note": "au choix : élémentaire, type au choix du joueur" },
+      { "nom": "Strige", "alignement": "Neutre", "niveau_lanceur_min": 5, "note": "" },
+      { "nom": "Homoncule", "alignement": "N'importe", "niveau_lanceur_min": 7, "note": "le maître doit d'abord le fabriquer" },
+      { "nom": "Diablotin", "alignement": "Loyal Mauvais", "niveau_lanceur_min": 7, "note": "" },
+      { "nom": "Méphite (n'importe quel type)", "alignement": "Neutre", "niveau_lanceur_min": 7, "note": "" },
+      { "nom": "Pseudodragon", "alignement": "Neutre Bon", "niveau_lanceur_min": 7, "note": "" },
+      { "nom": "Quasit", "alignement": "Chaotique Mauvais", "niveau_lanceur_min": 7, "note": "" }
+    ],
     "table_familier": [
       {
         "niveaux": [

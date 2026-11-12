@@ -628,6 +628,10 @@ pub struct ChoixClassesVue {
     pub pacte_magique: Option<String>,
     pub familiers: Vec<(String, String)>,
     pub familier: Option<String>,
+    /// Familiers supérieurs (nom, alignement et niveau de lanceur minimum), don Familier supérieur.
+    pub familiers_superieurs: Vec<(String, String)>,
+    pub familier_superieur: Option<String>,
+    pub a_le_don_familier_superieur: bool,
     pub objets_fetiches: Vec<String>,
     pub objet_fetiche: Option<String>,
     /// Grimoire : sorts de niveau 1 et plus (nom anglais, nom, niveau), nombre attendu, sorts ajoutables.
@@ -805,6 +809,14 @@ fn choix_classes(r: &Referentiel, f: &Fiche) -> ChoixClassesVue {
             .map(|x| (x.nom.clone(), x.capacite.clone()))
             .collect(),
         familier: f.familier.clone(),
+        familiers_superieurs: c
+            .pacte_magique_magicien
+            .familiers_superieurs
+            .iter()
+            .map(|x| (x.nom.clone(), format!("{} · lanceur niveau {}+", x.alignement, x.niveau_lanceur_min)))
+            .collect(),
+        familier_superieur: f.familier_superieur.clone(),
+        a_le_don_familier_superieur: f.niveaux.iter().any(|n| n.dons.iter().any(|d| d == "Improved Familiar")),
         objets_fetiches: c.pacte_magique_magicien.objets_fetiches.clone(),
         objet_fetiche: f.objet_fetiche.clone(),
         grimoire: f
@@ -2316,6 +2328,11 @@ vue! {
         pub vigueur: (i32, i32),
         pub reflexes: (i32, i32),
         pub volonte: (i32, i32),
+        /// Totaux du personnage (toutes classes) : avant, après.
+        pub bba_total: (i32, i32),
+        pub vigueur_total: (i32, i32),
+        pub reflexes_total: (i32, i32),
+        pub volonte_total: (i32, i32),
         pub dons_a_choisir: u32,
         /// Parmi ces dons, nombre à prendre dans la liste du lignage.
         pub dons_de_lignage: u32,
@@ -2458,6 +2475,10 @@ pub fn apercu_montee(etat: &Etat, pj: IdPersonnage, classe: &str) -> Option<Aper
         vigueur: a.vigueur,
         reflexes: a.reflexes,
         volonte: a.volonte,
+        bba_total: a.bba_total,
+        vigueur_total: a.vigueur_total,
+        reflexes_total: a.reflexes_total,
+        volonte_total: a.volonte_total,
         dons_a_choisir: a.dons_a_choisir,
         dons_de_lignage: a.dons_de_lignage,
         dons_de_lignage_possibles: if a.dons_de_lignage > 0 {
@@ -2565,6 +2586,7 @@ mod tests_pretre {
             ecoles_opposees: vec![],
             pacte_magique: None,
             familier: None,
+            familier_superieur: None,
             objet_fetiche: None,
             grimoire: vec![],
             pouvoirs_rage: vec![],
