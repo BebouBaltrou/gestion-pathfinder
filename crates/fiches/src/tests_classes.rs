@@ -2738,7 +2738,7 @@ fn bba_du_druide_niveau_9_sert_a_l_attaque_de_forme() {
 fn familier_superieur_exige_le_don_familier_superieur() {
     let r = Referentiel::core();
     let liste = &r.choix.pacte_magique_magicien.familiers_superieurs;
-    assert_eq!(liste.len(), 10);
+    assert_eq!(liste.len(), 13);
     assert!(liste
         .iter()
         .any(|x| x.nom == "Aigle céleste" && x.niveau_lanceur_min == 3));
