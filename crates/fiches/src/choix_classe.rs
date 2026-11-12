@@ -1723,6 +1723,12 @@ pub fn profil_familier(fiche: &Fiche, r: &Referentiel) -> Vec<String> {
         })
         .collect();
     l.push(format!("Familier ({nom}) : {} points de vie", pv));
+    let ref_t = v.base_reflexes.max(2) + c.dexterite;
+    let vig_b = v.base_vigueur.max(2);
+    let vol_b = v.base_volonte.max(0);
+    l.push(format!(
+        "Familier ({nom}) : Réflexes {ref_t:+}, Vigueur base {vig_b:+} (+ Constitution du familier, à compléter), Volonté base {vol_b:+} (+ Sagesse du familier, à compléter)"
+    ));
     if attaques.is_empty() {
         l.push(format!("Familier ({nom}) : aucune attaque"));
     } else {
