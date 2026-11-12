@@ -282,6 +282,7 @@ pub fn lignes_du_magicien(fiche: &Fiche, r: &Referentiel) -> Vec<String> {
     } else if let Some(objet) = fiche.objet_fetiche.as_deref() {
         l.push(format!("Objet fétiche ({objet}) : un sort du grimoire par jour sans préparation, hors écoles opposées"));
     }
+    l.extend(profil_familier(fiche, r));
     l
 }
 
@@ -1649,4 +1650,89 @@ pub fn tours_de_magie_du_grimoire<'a>(fiche: &Fiche, r: &'a Referentiel) -> Vec<
         .filter(|x| !interdites.contains(&x.ecole.as_str()))
         .map(|x| x.nom_en.as_str())
         .collect()
+}
+
+/// Fiche de créature de familier (données du Bestiaire, voir `data/core/familiers_creatures.json`).
+#[cfg_attr(feature = "serde", derive(serde::Deserialize))]
+#[derive(Debug, Clone, Default)]
+pub struct CreatureFamilier {
+    pub nom: String,
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub taille: String,
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub force: i32,
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub dexterite: i32,
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub armure_naturelle: i32,
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub attaques: String,
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub statut: String,
+}
+
+#[cfg_attr(feature = "serde", derive(serde::Deserialize))]
+#[derive(Debug, Clone, Default)]
+pub struct FichierCreaturesFamiliers {
+    pub creatures: Vec<CreatureFamilier>,
+    pub superieurs: Vec<CreatureFamilier>,
+}
+
+fn creatures_familiers() -> FichierCreaturesFamiliers {
+    serde_json::from_str(include_str!("../../../data/core/familiers_creatures.json"))
+        .unwrap_or_default()
+}
+
+/// Profil du familier (ou du familier supérieur) : points de vie, attaques et leur bonus.
+/// Règle : PV = moitié de ceux du maître ; bonus d'attaque = bonus de base du maître + le
+/// meilleur modificateur de Force ou de Dextérité du familier.
+pub fn profil_familier(fiche: &Fiche, r: &Referentiel) -> Vec<String> {
+    let mut l = Vec::new();
+    let Some(nom) = fiche
+        .familier_superieur
+        .as_deref()
+        .or(fiche.familier.as_deref())
+    else {
+        return l;
+    };
+    let Ok(v) = fiche.calculer(r) else {
+        return l;
+    };
+    let bdd = creatures_familiers();
+    let Some(c) = bdd
+        .creatures
+        .iter()
+        .chain(bdd.superieurs.iter())
+        .find(|c| c.nom == nom || c.nom.starts_with(nom))
+    else {
+        l.push(format!("Familier ({nom}) : statistiques non disponibles"));
+        return l;
+    };
+    let pv = v.pv_max.total / 2;
+    let bonus = v.bba.total + c.force.max(c.dexterite);
+    let attaques: Vec<String> = c
+        .attaques
+        .split(", ")
+        .filter(|a| *a != "aucune")
+        .map(|a| match a.split_once(" (") {
+            Some((gauche, degats)) => match gauche.rsplit_once(' ') {
+                Some((nom_att, _)) => format!("{nom_att} +{bonus} ({degats}"),
+                None => a.to_string(),
+            },
+            None => a.to_string(),
+        })
+        .collect();
+    l.push(format!("Familier ({nom}) : {} points de vie", pv));
+    if attaques.is_empty() {
+        l.push(format!("Familier ({nom}) : aucune attaque"));
+    } else {
+        l.push(format!(
+            "Familier ({nom}) : attaques {} (bonus {bonus})",
+            attaques.join(", ")
+        ));
+    }
+    if c.statut == "a_verifier" {
+        l.push(format!("Familier ({nom}) : statistiques à vérifier"));
+    }
+    l
 }

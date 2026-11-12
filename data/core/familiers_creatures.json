@@ -24,5 +24,20 @@
     { "nom": "Panda roux", "source": "B5", "taille": "Minuscule", "int": 2, "force": -1, "dexterite": 3, "armure_naturelle": 1, "attaques": "morsure +5 (1d3-1)" },
     { "nom": "Phoque", "source": "B5", "taille": "Petite", "int": 2, "force": 0, "dexterite": 1, "armure_naturelle": 1, "attaques": "morsure +1 (1d4)" },
     { "nom": "Trilobite", "source": "B5", "taille": "Minuscule", "int": null, "force": -2, "dexterite": 2, "armure_naturelle": 1, "attaques": "morsure +4 (1d3-2)", "type": "vermine (aquatique)" }
+  ],
+  "superieurs": [
+    { "nom": "Aigle céleste", "source": "base : Aigle (B3/B1), à vérifier", "statut": "a_verifier", "taille": "Petite", "int": 2, "force": 0, "dexterite": 2, "armure_naturelle": 1, "attaques": "2 serres +3 (1d4), morsure +3 (1d4)" },
+    { "nom": "Rat sanguinaire", "source": "Rat sanguinaire (Bestiaire)", "statut": "verifie", "taille": "Petite", "int": 2, "force": 0, "dexterite": 3, "armure_naturelle": 0, "attaques": "morsure +1 (1d4 + maladie)" },
+    { "nom": "Vipère fiélone", "source": "base : Serpent venimeux (Bestiaire), à vérifier", "statut": "a_verifier", "taille": "Moyenne", "int": 1, "force": -1, "dexterite": 1, "armure_naturelle": 3, "attaques": "morsure +2 (1d4-1 + poison)" },
+    { "nom": "Élémentaire (air)", "source": "Élémentaire Petit air (Bestiaire)", "statut": "verifie", "taille": "Petite", "int": 4, "force": 1, "dexterite": 3, "armure_naturelle": 3, "attaques": "frappe +6 (1d4+1)" },
+    { "nom": "Élémentaire (terre)", "source": "Élémentaire Petit terre (Bestiaire)", "statut": "verifie", "taille": "Petite", "int": 4, "force": 3, "dexterite": -1, "armure_naturelle": 7, "attaques": "frappe +6 (1d6+4)" },
+    { "nom": "Élémentaire (feu)", "source": "Élémentaire Petit feu (Bestiaire)", "statut": "verifie", "taille": "Petite", "int": 4, "force": 0, "dexterite": 1, "armure_naturelle": 3, "attaques": "frappe +4 (1d4 + brûlure)" },
+    { "nom": "Élémentaire (eau)", "source": "Élémentaire Petit eau (Bestiaire)", "statut": "a_verifier", "taille": "Petite", "int": 4, "force": 2, "dexterite": 0, "armure_naturelle": 6, "attaques": "frappe +5 (1d6+3)" },
+    { "nom": "Strige", "source": "Strige (Bestiaire)", "statut": "verifie", "taille": "Minuscule", "int": 1, "force": -4, "dexterite": 4, "armure_naturelle": 0, "attaques": "toucher +7 (accrochage, drain de sang, pas de dégâts)" },
+    { "nom": "Homoncule", "source": "Homoncule (Bestiaire)", "statut": "verifie", "taille": "Minuscule", "int": 10, "force": -1, "dexterite": 2, "armure_naturelle": 0, "attaques": "morsure +3 (1d4-1 + poison)" },
+    { "nom": "Diablotin", "source": "Diablotin (Bestiaire), résumé généré, à vérifier", "statut": "a_verifier", "taille": "Minuscule", "int": 13, "force": 0, "dexterite": 3, "armure_naturelle": 1, "attaques": "dard +8 (1d4 + poison)" },
+    { "nom": "Méphite (n'importe quel type)", "source": "Méphite (Bestiaire), même bloc pour chaque type", "statut": "verifie", "taille": "Petite", "int": 6, "force": 1, "dexterite": 2, "armure_naturelle": 3, "attaques": "2 griffes +5 (1d3+1)" },
+    { "nom": "Pseudodragon", "source": "Pseudodragon (Bestiaire)", "statut": "verifie", "taille": "Minuscule", "int": 10, "force": -2, "dexterite": 2, "armure_naturelle": 2, "attaques": "dard +6 (1d3-2 + poison), morsure +6 (1d2-2)" },
+    { "nom": "Quasit", "source": "Quasit (Bestiaire), résumé généré, à vérifier", "statut": "a_verifier", "taille": "Minuscule", "int": 11, "force": -1, "dexterite": 2, "armure_naturelle": 2, "attaques": "2 griffes +7 (1d3-1 + poison), morsure +7 (1d4-1)" }
   ]
 }
