@@ -37,13 +37,20 @@ export function Montee({
   const [sorts, setSorts] = useState<string[]>([]);
   const [essai, setEssai] = useState<EssaiMontee | null>(null);
   const [prestige, setPrestige] = useState<ClassePrestige[]>([]);
+  const [erreurPrestige, setErreurPrestige] = useState("");
 
   useEffect(() => {
     if (cat && !classe) setClasse(cat.classes[0]?.id ?? "");
   }, [cat, classe]);
 
   useEffect(() => {
-    api.classesPrestige(pj.id).then((l) => setPrestige(l ?? []));
+    api
+      .classesPrestige(pj.id)
+      .then((l) => {
+        setPrestige(l ?? []);
+        setErreurPrestige(l === null ? "Aucune réponse du cœur pour les classes de prestige." : "");
+      })
+      .catch((e) => setErreurPrestige(`Classes de prestige indisponibles : ${String(e)}`));
   }, [pj.id]);
 
   const prestigeChoisie = prestige.find((p) => p.id === classe);
@@ -116,6 +123,7 @@ export function Montee({
             )}
           </select>
         )}
+        {erreurPrestige && <p className="alerte-texte">{erreurPrestige}</p>}
         {prestigeChoisie && (
           <div className="carte">
             <h3>Conditions d'entrée (Manuel des joueurs, ch. 11)</h3>
