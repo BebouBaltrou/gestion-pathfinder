@@ -61,6 +61,7 @@ fn pretre(niveau: u32, sagesse: i32) -> Fiche {
         ecoles_opposees: vec![],
         pacte_magique: None,
         familier: None,
+        familier_superieur: None,
         objet_fetiche: None,
         grimoire: vec![],
         pouvoirs_rage: vec![],
@@ -921,6 +922,7 @@ fn barbare(niveau: u32, constitution: i32) -> Fiche {
         ecoles_opposees: vec![],
         pacte_magique: None,
         familier: None,
+        familier_superieur: None,
         objet_fetiche: None,
         grimoire: vec![],
         pouvoirs_rage: vec![],
@@ -2730,4 +2732,24 @@ fn bba_du_druide_niveau_9_sert_a_l_attaque_de_forme() {
     let f = druide(9);
     let v = f.calculer(r).unwrap();
     assert_eq!(v.bba.total, 6);
+}
+
+#[test]
+fn familier_superieur_exige_le_don_familier_superieur() {
+    let r = Referentiel::core();
+    let liste = &r.choix.pacte_magique_magicien.familiers_superieurs;
+    assert_eq!(liste.len(), 10);
+    assert!(liste
+        .iter()
+        .any(|x| x.nom == "Aigle céleste" && x.niveau_lanceur_min == 3));
+    let regles = ReglesFiche::default();
+    // Sans le don Familier supérieur : refusé.
+    let mut j = Journal::nouveau(de_classe("magicien", 1));
+    assert!(j
+        .ajouter(
+            EvenementFiche::FamilierSuperieurChoisi("Strige".into()),
+            &r,
+            &regles
+        )
+        .is_err());
 }

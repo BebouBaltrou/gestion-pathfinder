@@ -263,6 +263,9 @@ export type ChoixClassesVue = {
   pacteMagique: string | null;
   familiers: [string, string][];
   familier: string | null;
+  familiersSuperieurs: [string, string][];
+  familierSuperieur: string | null;
+  aLeDonFamilierSuperieur: boolean;
   objetsFetiches: string[];
   objetFetiche: string | null;
   /** Grimoire : sorts de niveau 1 et plus (nom anglais, nom, niveau), nombre attendu, sorts ajoutables. */
@@ -587,6 +590,7 @@ export type EvenementFiche =
   | { EcoleOpposeeChoisie: string }
   | { PacteMagiqueChoisi: string }
   | { FamilierChoisi: string }
+  | { FamilierSuperieurChoisi: string }
   | { ObjetFetichChoisi: string }
   | { PouvoirRageChoisi: string }
   | "RageCommencee"

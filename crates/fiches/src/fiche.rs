@@ -137,6 +137,9 @@ pub struct Fiche {
     pub pacte_magique: Option<String>,
     #[cfg_attr(feature = "serde", serde(default))]
     pub familier: Option<String>,
+    /// Familier supérieur (don Familier supérieur) : optionnel, choisi après le don.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub familier_superieur: Option<String>,
     #[cfg_attr(feature = "serde", serde(default))]
     pub objet_fetiche: Option<String>,
     /// Sorts de niveau 1 et plus du grimoire du magicien (noms anglais du catalogue) ; les tours de

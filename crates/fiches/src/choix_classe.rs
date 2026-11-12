@@ -56,6 +56,18 @@ pub struct PacteMagique {
     pub formes: Vec<String>,
     pub objets_fetiches: Vec<String>,
     pub familiers: Vec<Familier>,
+    /// Familiers supérieurs (don Familier supérieur), choisis à la place d'un familier ordinaire.
+    #[serde(default)]
+    pub familiers_superieurs: Vec<FamilierSuperieur>,
+}
+
+#[derive(Debug, Clone, Default, Deserialize)]
+pub struct FamilierSuperieur {
+    pub nom: String,
+    pub alignement: String,
+    pub niveau_lanceur_min: u32,
+    #[serde(default)]
+    pub note: String,
 }
 
 #[derive(Debug, Clone, Default, Deserialize)]
