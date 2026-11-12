@@ -525,6 +525,10 @@ export type ApercuMontee = {
   vigueur: [number, number];
   reflexes: [number, number];
   volonte: [number, number];
+  bbaTotal: [number, number];
+  vigueurTotal: [number, number];
+  reflexesTotal: [number, number];
+  volonteTotal: [number, number];
   donsAChoisir: number;
   /** Parmi ces dons, nombre à prendre dans la liste du lignage. */
   donsDeLignage: number;

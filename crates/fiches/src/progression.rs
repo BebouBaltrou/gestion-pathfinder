@@ -200,6 +200,11 @@ pub struct ApercuMontee {
     pub vigueur: (i32, i32),
     pub reflexes: (i32, i32),
     pub volonte: (i32, i32),
+    /// Totaux du personnage (toutes classes, bonus compris) : avant, après.
+    pub bba_total: (i32, i32),
+    pub vigueur_total: (i32, i32),
+    pub reflexes_total: (i32, i32),
+    pub volonte_total: (i32, i32),
     pub dons_a_choisir: u32,
     /// Parmi ces dons, nombre à prendre dans la liste du lignage.
     pub dons_de_lignage: u32,
@@ -279,7 +284,22 @@ pub fn apercu(r: &Referentiel, f: &Fiche, classe_id: &str) -> Option<ApercuMonte
                 (Some(min), Some(pas)) if pas > 0 => nc >= min && (nc - min).is_multiple_of(pas),
                 _ => false,
             });
+    // Totaux du personnage : le gain de cette classe (après moins avant) s'ajoute aux totaux actuels.
+    let (tb, tv, tr, tw) = match f.calculer(r) {
+        Ok(v) => (
+            v.bba.total,
+            v.vigueur.total,
+            v.reflexes.total,
+            v.volonte.total,
+        ),
+        Err(_) => (0, 0, 0, 0),
+    };
+    let total = |t: i32, avant: i32, apres_v: i32| (t, t + apres_v - avant);
     Some(ApercuMontee {
+        bba_total: total(tb, b0, apres.bba[0]),
+        vigueur_total: total(tv, v0, apres.vigueur),
+        reflexes_total: total(tr, r0, apres.reflexes),
+        volonte_total: total(tw, w0, apres.volonte),
         niveau_de_personnage: niveau,
         classe: classe_id.to_string(),
         niveau_de_classe: nc,
@@ -787,6 +807,9 @@ mod tests {
         let avant = f.calculer(&r).unwrap().bba.total;
         let apres = f2.calculer(&r).unwrap().bba.total;
         assert_eq!(apres - avant, 1);
+        // l'aperçu montre les totaux du personnage avant/après
+        let a = apercu(&r, &f, "guerrier").unwrap();
+        assert_eq!(a.bba_total, (avant, apres));
     }
 
     #[test]

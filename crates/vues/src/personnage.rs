@@ -2316,6 +2316,11 @@ vue! {
         pub vigueur: (i32, i32),
         pub reflexes: (i32, i32),
         pub volonte: (i32, i32),
+        /// Totaux du personnage (toutes classes) : avant, après.
+        pub bba_total: (i32, i32),
+        pub vigueur_total: (i32, i32),
+        pub reflexes_total: (i32, i32),
+        pub volonte_total: (i32, i32),
         pub dons_a_choisir: u32,
         /// Parmi ces dons, nombre à prendre dans la liste du lignage.
         pub dons_de_lignage: u32,
@@ -2458,6 +2463,10 @@ pub fn apercu_montee(etat: &Etat, pj: IdPersonnage, classe: &str) -> Option<Aper
         vigueur: a.vigueur,
         reflexes: a.reflexes,
         volonte: a.volonte,
+        bba_total: a.bba_total,
+        vigueur_total: a.vigueur_total,
+        reflexes_total: a.reflexes_total,
+        volonte_total: a.volonte_total,
         dons_a_choisir: a.dons_a_choisir,
         dons_de_lignage: a.dons_de_lignage,
         dons_de_lignage_possibles: if a.dons_de_lignage > 0 {
