@@ -44,18 +44,10 @@ export function Tableau({ outils }: { outils: Outils }) {
 
   return (
     <div className="page">
-      {outils.etat.entete ? (
-        <div className="almanach">
-          <span className="jour-grand" aria-hidden="true">{outils.etat.entete.date.match(/\d+/)?.[0] ?? outils.etat.entete.jour}</span>
-          <h1>{outils.etat.entete.date}</h1>
-          <p>Jour {outils.etat.entete.jour} de la campagne : ce qui demande votre attention aujourd'hui.</p>
-        </div>
-      ) : (
-        <div className="titre-page">
-          <h1>Tableau de bord</h1>
-          <p>Ce qui demande votre attention aujourd'hui</p>
-        </div>
-      )}
+      <div className="titre-page">
+        <h1>Tableau de bord</h1>
+        <p>Ce qui demande votre attention aujourd'hui</p>
+      </div>
 
       <section className="grille-chiffres" aria-label="Chiffres clés">
         <div className="carte chiffre">

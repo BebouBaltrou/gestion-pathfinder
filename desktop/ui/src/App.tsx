@@ -229,8 +229,8 @@ export function App() {
         </header>
 
         {etat.combatEnCours && (
-          <div className="bandeau-simulation combat" role="status">
-            <strong>Combat en cours</strong>
+          <div className="bandeau-simulation" role="status">
+            <strong>COMBAT EN COURS</strong>
             <span>Le reste de la campagne est verrouillé jusqu'à la fin du combat (validation ou abandon).</span>
             <span className="espace" />
             <button className="bouton principal" onClick={() => setPage("aventure")}>Retourner au combat</button>
@@ -239,7 +239,7 @@ export function App() {
 
         {etat.simulation && (
           <div className="bandeau-simulation" role="status">
-            <strong>Mode simulation</strong>
+            <strong>MODE SIMULATION</strong>
             <span>
               Rien n'est enregistré. {etat.simulation[0]} action(s) et {etat.simulation[1]} jour(s) d'avance sur la
               campagne réelle.

@@ -1,9 +1,2 @@
-/* Polices (licence SIL OFL), embarquées dans l'application : aucune connexion nécessaire. */
+/* Inter (licence SIL OFL), embarquée dans l'application : aucune connexion nécessaire. */
 @import "@fontsource-variable/inter/index.css";
-/* Alegreya SC : titres ; Alegreya Sans : texte courant (refonte « registre de l'intendant »). */
-@import "@fontsource/alegreya-sc/latin-500.css";
-@import "@fontsource/alegreya-sc/latin-700.css";
-@import "@fontsource/alegreya-sans/latin-400.css";
-@import "@fontsource/alegreya-sans/latin-500.css";
-@import "@fontsource/alegreya-sans/latin-700.css";
-@import "@fontsource/alegreya-sans/latin-400-italic.css";
