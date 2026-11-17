@@ -35,11 +35,6 @@ html, body {
   margin: 0;
   height: 100%;
   background: var(--fond);
-  /* Fond texturé discret : halo doré et lignes de relief façon carte (motif SVG intégré, hors ligne). */
-  background-image:
-    radial-gradient(1100px 560px at 75% -10%, rgba(233, 196, 106, 0.07), transparent 62%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='480' viewBox='0 0 480 480'%3E%3Cg fill='none' stroke='%23e9c46a' stroke-opacity='0.035'%3E%3Cpath d='M-20 70 C90 30 170 120 280 85 S430 30 500 60'/%3E%3Cpath d='M-20 120 C100 80 180 170 290 135 S440 80 500 110'/%3E%3Cpath d='M-20 185 C80 150 190 230 300 195 S430 140 500 175'/%3E%3Cpath d='M-20 260 C110 225 180 310 300 275 S420 215 500 250'/%3E%3Cpath d='M-20 340 C90 305 200 385 310 350 S440 290 500 320'/%3E%3Cpath d='M-20 410 C100 380 190 450 320 420 S440 370 500 400'/%3E%3Cellipse cx='360' cy='60' rx='34' ry='22'/%3E%3Cellipse cx='360' cy='60' rx='58' ry='38'/%3E%3Cellipse cx='110' cy='330' rx='40' ry='26'/%3E%3C/g%3E%3C/svg%3E");
-  background-attachment: fixed;
   color: var(--texte);
   font-family: "Inter Variable", Inter, "Segoe UI", system-ui, sans-serif;
   font-size: 16px;
