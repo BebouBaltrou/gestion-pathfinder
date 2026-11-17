@@ -1,22 +1,25 @@
 /* Thème sombre « lisible, fluide » — refonte visuelle (direction A, affinée). Couleurs de capitaux inchangées. */
 :root {
-  --fond: #0c0e12;
-  --fond-barre: rgba(16, 19, 25, 0.86);
-  --panneau: #111419;
-  --carte: #161a21;
-  --carte-2: #1c2129;
-  --carte-survol: #1a1f27;
-  --bord: #242a34;
-  --bord-fort: #303744;
+  /* Refonte « registre de l'intendant » : bleu d'encre, accent bronze (couleurs de capitaux inchangées). */
+  --fond: #141a24;
+  --fond-barre: rgba(20, 26, 36, 0.88);
+  --panneau: #10151e;
+  --carte: rgba(26, 34, 48, 0.86);
+  --carte-2: #222c3d;
+  --carte-survol: #253044;
+  --bord: #2e3a4f;
+  --bord-fort: #3d4a62;
+  --titre: "Alegreya SC", Georgia, serif;
+  --corps: "Alegreya Sans", "Inter Variable", Inter, "Segoe UI", system-ui, sans-serif;
   --ombre: 0 1px 0 rgba(255, 255, 255, 0.025) inset, 0 10px 28px rgba(0, 0, 0, 0.28);
-  --anneau: 0 0 0 3px rgba(233, 196, 106, 0.28);
-  --texte: #e8e6e1;
-  --texte-fort: #f4f1ea;
-  --texte-doux: #b7bcc6;
-  --texte-moyen: #c9cdd4;
-  --or: #e9c46a;
-  --or-clair: #f4d58d;
-  --or-sombre: #1b1608;
+  --anneau: 0 0 0 3px rgba(236, 201, 119, 0.32);
+  --texte: #ece4d2;
+  --texte-fort: #f6efde;
+  --texte-doux: #a9b0bd;
+  --texte-moyen: #c8ccd4;
+  --or: #d2a84e;
+  --or-clair: #ecc977;
+  --or-sombre: #1d1608;
   --po: #e9c46a;
   --marchandises: #e8a15a;
   --influence: #b79cf0;
@@ -37,12 +40,16 @@ html, body {
   margin: 0;
   height: 100%;
   background: var(--fond);
-  background-image: radial-gradient(1200px 600px at 80% -10%, rgba(233, 196, 106, 0.05), transparent 60%);
+  /* Halo bronze et relief de carte (motif SVG intégré, hors ligne). */
+  background-image:
+    radial-gradient(1000px 520px at 70% -8%, rgba(210, 168, 78, 0.12), transparent 62%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='480' viewBox='0 0 480 480'%3E%3Cg fill='none' stroke='%23d2a84e' stroke-opacity='0.06'%3E%3Cpath d='M-20 70 C90 30 170 120 280 85 S430 30 500 60'/%3E%3Cpath d='M-20 120 C100 80 180 170 290 135 S440 80 500 110'/%3E%3Cpath d='M-20 185 C80 150 190 230 300 195 S430 140 500 175'/%3E%3Cpath d='M-20 260 C110 225 180 310 300 275 S420 215 500 250'/%3E%3Cpath d='M-20 340 C90 305 200 385 310 350 S440 290 500 320'/%3E%3Cpath d='M-20 410 C100 380 190 450 320 420 S440 370 500 400'/%3E%3Cellipse cx='360' cy='60' rx='34' ry='22'/%3E%3Cellipse cx='360' cy='60' rx='58' ry='38'/%3E%3Cellipse cx='110' cy='330' rx='40' ry='26'/%3E%3C/g%3E%3C/svg%3E");
+  background-attachment: fixed;
   color: var(--texte);
-  font-family: "Inter Variable", Inter, "Segoe UI", system-ui, sans-serif;
-  font-size: 16px;
-  line-height: 1.55;
-  font-variant-numeric: tabular-nums;
+  font-family: var(--corps);
+  font-size: 17px;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums lining-nums;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -533,3 +540,60 @@ button.ligne-ref:hover { background: var(--carte-survol); }
 .sort-choix small { margin-left: auto; }
 .fond-modal { position: fixed; inset: 0; background: rgba(5, 7, 10, 0.7); z-index: 20; display: grid; place-items: start center; overflow-y: auto; padding: 30px 16px; }
 .modal { width: min(860px, 100%); display: flex; flex-direction: column; gap: 16px; }
+
+/* ================================================================ refonte « registre de l'intendant »
+   Couche finale : titres en Alegreya SC, panneaux bleu d'encre, accent bronze. Aucune règle de jeu ici. */
+h1, h2, h3, .marque-nom, .categorie > summary { font-family: var(--titre); letter-spacing: 0.01em; }
+h1 { font-size: 38px; font-weight: 700; line-height: 1.1; text-wrap: balance; }
+h2 { font-size: 23px; font-weight: 700; }
+h3 { font-size: 19px; font-weight: 700; }
+.marque-nom { font-size: 21px; }
+
+.navigation { background: rgba(16, 21, 30, 0.94); }
+.groupe-nav-titre { font: 500 15px var(--titre); letter-spacing: 0.02em; text-transform: none; color: var(--texte-doux); }
+.lien-nav { font-size: 17px; }
+.lien-nav.actif { background: rgba(210, 168, 78, 0.15); color: var(--or-clair); box-shadow: inset 2px 0 0 var(--or); }
+.pastille { background: rgba(210, 168, 78, 0.16); color: var(--or-clair); }
+
+.barre-haut .campagne small { display: none; }
+.barre-haut .campagne strong { font: 700 21px var(--titre); }
+.date { background: var(--carte); border-color: var(--bord); }
+.date strong { font-family: var(--titre); font-size: 17px; }
+
+.bouton { background: #1a2230; border-color: var(--bord); font-size: 16px; }
+.bouton:hover:not(:disabled) { background: var(--carte-2); border-color: var(--bord-fort); }
+.bouton.principal { background: var(--or); border-color: var(--or); color: var(--or-sombre); font-weight: 700; }
+.bouton.discret { background: transparent; border-color: transparent; color: var(--or-clair); }
+
+.carte, .categorie, .ligne-campagne, .element-liste, .alerte { background: var(--carte); border-color: var(--bord); }
+.carte { box-shadow: 0 12px 30px rgba(4, 8, 14, 0.35); backdrop-filter: blur(4px); }
+.element-liste.actif { background: rgba(210, 168, 78, 0.12); border-color: rgba(210, 168, 78, 0.5); }
+.champ { background: #1a2230; }
+
+/* Bandeaux : combat en rouge sang, simulation en bleu. */
+.bandeau-simulation strong { font: 700 18px var(--titre); letter-spacing: 0.01em; }
+.bandeau-simulation.combat { background: rgba(184, 68, 59, 0.2); border-bottom-color: rgba(184, 68, 59, 0.55); color: #f3d6d1; }
+.bandeau-simulation.combat strong { color: #ffb2a8; }
+
+/* Tableau de bord : l'almanach (date de Golarion) en tête, puis les faits du jour en bande. */
+.almanach { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 26px; align-items: end; }
+.almanach .jour-grand { grid-row: span 2; font: 700 clamp(72px, 8vw, 108px)/0.85 var(--titre); color: var(--or); }
+.almanach p { color: var(--texte-doux); font-size: 18px; }
+.grille-chiffres { gap: 0; border-top: 1px solid var(--bord); border-bottom: 1px solid var(--bord); }
+.grille-chiffres .carte.chiffre { background: none; border: none; border-radius: 0; box-shadow: none; backdrop-filter: none; padding: 16px 22px; }
+.grille-chiffres .carte.chiffre + .carte.chiffre { border-left: 1px solid var(--bord); }
+.chiffre .valeur { font: 700 32px/1.2 var(--titre); }
+.chiffre .etiquette { font-size: 16px; color: var(--texte-doux); }
+.carte-localite .nom, .fiche-localite .nom, .perso-nom, .nom-fiche { font-family: var(--titre); font-weight: 700; }
+.carte-localite .nom { font-size: 23px; }
+.portrait { border-color: var(--or); box-shadow: 0 0 0 3px var(--panneau), 0 0 0 4px rgba(210, 168, 78, 0.35); }
+
+@media (max-width: 760px) {
+  .almanach { grid-template-columns: 1fr; }
+  .almanach .jour-grand { grid-row: auto; }
+  .grille-chiffres .carte.chiffre + .carte.chiffre { border-left: none; border-top: 1px solid var(--bord); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .almanach .jour-grand { animation: leve 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  @keyframes leve { from { opacity: 0.2; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+}
