@@ -1,0 +1,124 @@
+{
+  "source": "Manuel des joueurs (VF), chapitre 6 : moyens de transport (p. 163) et table 7-9 Montures et véhicules (p. 173-174, à vérifier). Les prix sont à vérifier : la table 6-9 du PDF est décalée, ils sont laissés vides.",
+  "hors_manuel": "Les valeurs marquées « hors Manuel » viennent du wiki (Ultimate Equipment). Le Manuel prime en cas de conflit.",
+  "vehicules": [
+    {
+      "id": "carrosse",
+      "nom": "Carrosse",
+      "terrestre": true,
+      "equipage": "2 conducteurs",
+      "passagers": 4,
+      "cargaison_t": null,
+      "tracte_par": "2 chevaux (ou autres bêtes de somme)",
+      "vitesse_km_h": null,
+      "prix_po": null
+    },
+    {
+      "id": "chariot",
+      "nom": "Chariot",
+      "terrestre": true,
+      "equipage": null,
+      "passagers": null,
+      "cargaison_t": null,
+      "tracte_par": "2 chevaux (ou autres bêtes de somme)",
+      "vitesse_km_h": 3,
+      "vitesse_km_jour": 24,
+      "prix_po": null
+    },
+    {
+      "id": "charrette",
+      "nom": "Charrette",
+      "terrestre": true,
+      "equipage": null,
+      "passagers": null,
+      "cargaison_t": null,
+      "tracte_par": "1 cheval (ou autre bête de somme)",
+      "vitesse_km_h": 3,
+      "vitesse_km_jour": 24,
+      "prix_po": null
+    },
+    {
+      "id": "traineau",
+      "nom": "Traîneau",
+      "terrestre": true,
+      "equipage": null,
+      "passagers": null,
+      "cargaison_t": null,
+      "tracte_par": "2 chevaux (ou autres bêtes de somme)",
+      "vitesse_km_h": null,
+      "prix_po": null
+    },
+    {
+      "id": "barque",
+      "nom": "Barque",
+      "terrestre": false,
+      "equipage": null,
+      "passagers": "2 à 3 de taille M",
+      "cargaison_t": null,
+      "tracte_par": null,
+      "vitesse_km_h": 2.25,
+      "vitesse_km_jour": 22.5,
+      "prix_po": null
+    },
+    {
+      "id": "bateau_fond_plat",
+      "nom": "Bateau à fond plat",
+      "terrestre": false,
+      "equipage": "8 à 15 marins",
+      "passagers": null,
+      "cargaison_t": "40 à 50 (ou 100 soldats)",
+      "tracte_par": null,
+      "vitesse_km_h": 1.5,
+      "vitesse_km_jour": 15,
+      "prix_po": null
+    },
+    {
+      "id": "drakkar",
+      "nom": "Drakkar",
+      "terrestre": false,
+      "equipage": "50 marins",
+      "passagers": null,
+      "cargaison_t": "50 (ou 120 soldats)",
+      "tracte_par": null,
+      "vitesse_km_h": 4.5,
+      "vitesse_km_jour": 108,
+      "prix_po": null
+    },
+    {
+      "id": "navire_haute_mer",
+      "nom": "Navire de haute mer",
+      "terrestre": false,
+      "equipage": "20 marins",
+      "passagers": null,
+      "cargaison_t": 15,
+      "tracte_par": null,
+      "vitesse_km_h": 3,
+      "vitesse_km_jour": 72,
+      "prix_po": null
+    },
+    {
+      "id": "trireme",
+      "nom": "Trirème",
+      "terrestre": false,
+      "equipage": "200 marins",
+      "passagers": null,
+      "cargaison_t": "150 (ou 250 soldats)",
+      "tracte_par": null,
+      "vitesse_km_h": 6,
+      "vitesse_km_jour": 144,
+      "prix_po": null
+    },
+    {
+      "id": "vaisseau_de_guerre",
+      "nom": "Vaisseau de guerre",
+      "terrestre": false,
+      "equipage": "60 à 80 rameurs",
+      "passagers": "160 soldats",
+      "cargaison_t": 0,
+      "tracte_par": null,
+      "vitesse_km_h": 3.75,
+      "vitesse_km_jour": 90,
+      "prix_po": null
+    }
+  ]
+}
