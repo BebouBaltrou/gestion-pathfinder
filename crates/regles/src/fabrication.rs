@@ -13,8 +13,9 @@ pub const MAGIE_PO: i64 = 100;
 pub const MARCHANDISES_PO: i64 = 20;
 
 /// DD du test de fin de fabrication : 5 + niveau de lanceur de sorts de l'objet,
-/// + 5 par condition de création non remplie (MJ p. 554). Le don Création d'objet est
-/// obligatoire et ne compte pas ici.
+/// + 5 par condition de création non remplie (MJ p. 554).
+///
+/// Le don Création d'objet est obligatoire et ne compte pas ici.
 pub fn dd(niveau_lanceur: u32, conditions_non_remplies: u32) -> i32 {
     5 + niveau_lanceur as i32 + 5 * conditions_non_remplies as i32
 }
