@@ -1,0 +1,65 @@
+/* Thèmes choisis le 18/11/2026 : « Carnet de voyage » (par défaut) et « Néon nocturne ».
+   Chaque thème ne fait que redéfinir les jetons de style.css, plus un fond et une animation d'arrivée. */
+
+/* ------------------------------------------------------------ Carnet de voyage (clair) */
+:root[data-theme="carnet"] {
+  --fond: #f3ead6; --fond-barre: #efe3c8; --panneau: #ead9b6; --carte: #faf3e2; --carte-2: #f1e5c9; --carte-survol: #f6ecd4;
+  --bord: #d6c19a; --bord-fort: #b89a6a; --texte: #2b1d12; --texte-fort: #1a0f07; --texte-doux: #7a5a3a; --texte-moyen: #4e3a26;
+  --or: #8c2f1f; --or-clair: #a8432f; --or-sombre: #fbf5e6;
+  --po: #9a6b12; --marchandises: #b0601c; --influence: #6b3fa0; --travail: #2c5d8f; --magie: #1f7a70;
+  --rouge: #a33222; --orange: #b0601c; --vert: #3d7a3a;
+  --rayon: 4px; --rayon-petit: 3px;
+  --police: "Crimson Pro", Georgia, serif;
+  --police-titre: "Fraunces Variable", Fraunces, Georgia, serif;
+  --police-marque: "Fraunces Variable", Fraunces, Georgia, serif;
+  color-scheme: light;
+}
+:root[data-theme="carnet"] body {
+  font-size: 17px;
+  background:
+    radial-gradient(circle at 18% 8%, rgba(255, 250, 235, 0.9) 0, transparent 42%),
+    radial-gradient(circle at 92% 95%, rgba(196, 160, 100, 0.35) 0, transparent 45%),
+    repeating-linear-gradient(0deg, transparent 0 31px, rgba(122, 82, 48, 0.05) 31px 32px),
+    var(--fond);
+}
+:root[data-theme="carnet"] .navigation { background: linear-gradient(180deg, #ead9b6, #e2cc9f); border-right: 2px double var(--bord-fort); }
+:root[data-theme="carnet"] h1 { font-weight: 700; letter-spacing: -0.01em; border-bottom: 2px double var(--bord-fort); padding-bottom: 6px; }
+:root[data-theme="carnet"] .carte { box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7) inset, 0 2px 6px rgba(80, 50, 20, 0.08); }
+
+/* ------------------------------------------------------------ Néon nocturne (sombre) */
+:root[data-theme="neon"] {
+  --fond: #07080d; --fond-barre: #090b12; --panneau: #0b0d16; --carte: #0e111c; --carte-2: #141826; --carte-survol: #181d2e;
+  --bord: #1f2538; --bord-fort: #2c3550; --texte: #e8ecf7; --texte-fort: #ffffff; --texte-doux: #8d96b3; --texte-moyen: #c3c9de;
+  --or: #2ee6d6; --or-clair: #7af2e7; --or-sombre: #03201d;
+  --po: #f5c542; --marchandises: #ff9f1c; --influence: #a66bff; --travail: #4ea8ff; --magie: #2ee6d6;
+  --rouge: #ff4d6d; --orange: #ff9f1c; --vert: #3dffa0;
+  --rayon: 2px; --rayon-petit: 2px;
+  --police: "Chakra Petch", "Segoe UI", sans-serif;
+  --police-titre: "Chakra Petch", "Segoe UI", sans-serif;
+  --police-marque: "Chakra Petch", "Segoe UI", sans-serif;
+  color-scheme: dark;
+}
+:root[data-theme="neon"] body {
+  background:
+    radial-gradient(ellipse at 50% -10%, rgba(46, 230, 214, 0.16), transparent 55%),
+    radial-gradient(ellipse at 100% 100%, rgba(166, 107, 255, 0.13), transparent 50%),
+    linear-gradient(#141a2a 1px, transparent 1px) 0 0 / 44px 44px,
+    linear-gradient(90deg, #141a2a 1px, transparent 1px) 0 0 / 44px 44px,
+    var(--fond);
+}
+:root[data-theme="neon"] h1 { text-transform: uppercase; letter-spacing: 0.08em; text-shadow: 0 0 18px rgba(46, 230, 214, 0.55); }
+:root[data-theme="neon"] .carte { background: rgba(14, 17, 28, 0.85); }
+:root[data-theme="neon"] .carte:hover { box-shadow: 0 0 22px -8px var(--or); }
+:root[data-theme="neon"] .lien-nav.actif { text-shadow: 0 0 10px var(--or); }
+
+/* ------------------------------------------------------------ arrivée d'une page : apparition en cascade */
+:root[data-theme="carnet"] .page > *, :root[data-theme="neon"] .page > * { animation: theme-arrivee 0.55s both; }
+:root[data-theme="neon"] .page > * { animation-name: theme-scintille; }
+.page > *:nth-child(2) { animation-delay: 0.07s; }
+.page > *:nth-child(3) { animation-delay: 0.14s; }
+.page > *:nth-child(4) { animation-delay: 0.21s; }
+.page > *:nth-child(5) { animation-delay: 0.28s; }
+.page > *:nth-child(n + 6) { animation-delay: 0.35s; }
+@keyframes theme-arrivee { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes theme-scintille { 0% { opacity: 0; } 30% { opacity: 0.5; } 45% { opacity: 0.15; } 100% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .page > * { animation: none !important; } }

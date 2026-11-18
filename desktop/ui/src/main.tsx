@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { App } from "./App";
 import { autotest } from "./autotest";
 import "./style.css";
+import "./themes.css";
 import { appliquerThemeEnregistre } from "./composants/Apparence";
 import { api } from "./api";
 

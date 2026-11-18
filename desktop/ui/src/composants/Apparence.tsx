@@ -4,12 +4,15 @@ import { useState } from "react";
 import { api } from "../api";
 
 export const THEMES: { id: string; nom: string; sous: string; couleurs: string[] }[] = [
-  { id: "", nom: "Sombre actuel", sous: "L'apparence validée le 23/10/2026", couleurs: ["#0f1115", "#171a20", "#e9c46a", "#7fd1a8"] },
-  { id: "parchemin", nom: "A · Parchemin arcanique", sous: "Sombre chaud, brun et ambre, esprit grimoire", couleurs: ["#1a1410", "#271e17", "#e0a84a", "#8fbf6a"] },
-  { id: "nuit", nom: "B · Nuit de Golarion", sous: "Sombre froid, bleu nuit, esprit jeu vidéo", couleurs: ["#0a0d1a", "#121830", "#7aa2ff", "#4be0a0"] },
+  { id: "carnet", nom: "Carnet de voyage", sous: "Clair, papier et encre sépia (par défaut)", couleurs: ["#f3ead6", "#faf3e2", "#8c2f1f", "#9a6b12"] },
+  { id: "neon", nom: "Néon nocturne", sous: "Sombre, quadrillage et lueurs par capital", couleurs: ["#07080d", "#0e111c", "#2ee6d6", "#a66bff"] },
+  { id: "", nom: "Sombre d'origine", sous: "L'apparence validée le 23/10/2026", couleurs: ["#0f1115", "#171a20", "#e9c46a", "#7fd1a8"] },
 ];
 
-const CLE = "gestion-pathfinder.theme";
+const THEME_PAR_DEFAUT = "carnet";
+
+// Nouvelle clé (18/11/2026) : tout le monde repart sur le thème par défaut « Carnet de voyage ».
+const CLE = "gestion-pathfinder.theme.v2";
 
 // Taille de l'affichage : « auto » suit la taille de la fenêtre (référence 1920 × 1080) ; les autres valeurs
 // fixent un facteur d'agrandissement, utile sur un écran 1280 × 720 ou 2560 × 1440.
@@ -44,10 +47,10 @@ function echelleEnregistree(): string {
 
 export function appliquerThemeEnregistre() {
   try {
-    const t = window.localStorage.getItem(CLE) ?? "";
+    const t = window.localStorage.getItem(CLE) ?? THEME_PAR_DEFAUT;
     if (t) document.documentElement.dataset.theme = t;
   } catch {
-    /* pas de stockage : thème par défaut */
+    document.documentElement.dataset.theme = THEME_PAR_DEFAUT;
   }
   // La fenêtre n'a pas encore sa taille définitive au lancement : on recalcule l'échelle une fois chargée
   // et à chaque changement de taille, pour que « Automatique » reste juste sans passer par le réglage.

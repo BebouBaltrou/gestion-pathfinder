@@ -105,7 +105,7 @@
 /* ----------------------------------------------------------------- initiative et combat */
 .barre-initiative { display: flex; gap: 10px; overflow-x: auto; padding: 6px 4px 10px; align-items: stretch; }
 .jeton-init { min-width: 132px; background: var(--carte-2); border: 2px solid var(--bord-fort); border-radius: 14px; padding: 10px 14px; display: flex; flex-direction: column; gap: 2px; cursor: pointer; text-align: left; color: inherit; position: relative; }
-.jeton-init:hover { border-color: #3a414d; }
+.jeton-init:hover { border-color: var(--bord-fort); }
 .jeton-init .total { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
 .jeton-init .nom { font-weight: 600; }
 .jeton-init .calcul { font-size: 12px; color: var(--texte-doux); }

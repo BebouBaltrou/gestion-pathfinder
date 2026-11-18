@@ -1,2 +1,13 @@
 /* Inter (licence SIL OFL), embarquée dans l'application : aucune connexion nécessaire. */
 @import "@fontsource-variable/inter/index.css";
+/* Thème « Carnet de voyage » : Fraunces (titres) et Crimson Pro (texte), licence SIL OFL. */
+@import "@fontsource-variable/fraunces/index.css";
+@import "@fontsource/crimson-pro/400.css";
+@import "@fontsource/crimson-pro/400-italic.css";
+@import "@fontsource/crimson-pro/600.css";
+@import "@fontsource/crimson-pro/700.css";
+/* Thème « Néon nocturne » : Chakra Petch (texte) et JetBrains Mono (chiffres), licence SIL OFL. */
+@import "@fontsource/chakra-petch/400.css";
+@import "@fontsource/chakra-petch/600.css";
+@import "@fontsource/chakra-petch/700.css";
+@import "@fontsource-variable/jetbrains-mono/index.css";
