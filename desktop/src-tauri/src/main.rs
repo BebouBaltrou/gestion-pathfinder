@@ -5,6 +5,7 @@
 
 mod aventure;
 mod export;
+mod fabrication;
 mod import_fiche;
 mod inventaire;
 mod notes;
@@ -795,6 +796,7 @@ fn main() {
             inventaire::catalogue_objets,
             inventaire::types_objets,
             inventaire::inventaire_commande,
+            fabrication::fabrication_calculer,
             inventaire::creer_inventaire_personnage,
             inventaire::ajouter_objet_catalogue,
             inventaire::ajouter_conteneur,
