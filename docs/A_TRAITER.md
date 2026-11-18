@@ -82,9 +82,11 @@ Ancienne application (`app/`) retirée le 25/10/2026.
 Fait : liste des PJ, création de fiche pas à pas, fiche complète (chiffres détaillés au clic,
 compétences, dons, sorts et repos, équipement, états et effets temporaires, XP, historique),
 montée de niveau, page Paramètres (registre des règles optionnelles de la campagne).
-Reste : équipement de départ dans l'assistant de création, multiclassage (une seule classe
-existe pour l'instant), tirage de dés intégré pour les caractéristiques et les dés de vie,
-familiers, lien de la fiche avec le déplacement du PJ dans une localité, impression de la fiche.
+Fait depuis (vérifié dans le code, 18/11/2026) : multiclassage, classes de prestige, familiers
+et familiers supérieurs.
+Reste : équipement de départ dans l'assistant de création, tirage de dés intégré pour les
+caractéristiques et les dés de vie, lien de la fiche avec le déplacement du PJ dans une localité,
+impression de la fiche.
 
 ## À élucider plus tard (décision du 23/10/2026)
 
@@ -96,10 +98,10 @@ fiches, compatibilité des sauvegardes.
 
 ## Prêtre et Druide : ce qui reste à faire plus tard (24/10/2026)
 
-- **Combat** : les lanceurs qui préparent leurs sorts (Prêtre, Druide) sont encore refusés par le combat (garde-fou existant).
-- **Forme animale du Druide** : vitesses, attaques naturelles et aptitudes de chaque forme restent en texte (suivre le sort forme bestiale, corps élémentaire ou forme végétale) ; seuls les bonus chiffrés sont calculés.
-- **Compagnon animal** : compétences, dons et tours ne sont que des nombres, sans choix ; PV en moyenne arrondie (4,5 par d8, à confirmer).
-- **Druide** : conversion spontanée des sorts en « convocation d'alliés naturels » (celle du Prêtre est faite).
+- ~~Combat des lanceurs qui préparent~~ : **fait** (sorts préparés lancés en combat et hors combat).
+- ~~Forme animale chiffrée~~ : **fait** (choix de la créature, attaques, taille, aptitudes listées dans le sort).
+- **Compagnon animal** : choix du joueur fait (nom, développement, augmentations) ; PV en moyenne arrondie (4,5 par d8, à confirmer).
+- **Druide** (non trouvé dans le code au 18/11/2026) : conversion spontanée des sorts en « convocation d'alliés naturels » (celle du Prêtre est faite).
 - **Domaines** : résistances (Air, Eau, Feu, Terre) en texte seulement ; domaines de Calistria (table et pages du livre ne concordent pas), sorts de domaine non résolus (Obscurité 8e, Runes 6e) : points à confirmer.
 - **Armes et objets** : « mains nues » et « masse » à confirmer ; Bottes elfiques = Acrobaties dans le livre français à confirmer ; type du bonus de forme bestiale (taille) à confirmer.
 - **Importation PDF** : domaines, divinité, alignement et pacte de nature ne sont pas lus (fonctionnalité en développement).

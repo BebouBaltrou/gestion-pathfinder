@@ -5,16 +5,14 @@ Le plan et l'état d'avancement sont dans `docs/PLAN_AVENTURE_COMBAT.md`.
 
 ## Hors périmètre v1
 
-- **Convocations détaillées** : sorts de convocation avec les créatures officielles du Bestiaire (fiches importées
-  depuis Archives of Nethys). En v1 : un gabarit minimal saisi à la main (nom, PV, CA, attaques, notes, durée liée au
-  sort) — pas encore dans l'interface.
+- ~~Convocations détaillées~~ : **fait** (convocation d'alliés naturels, 116 fiches, créatures jouables en combat).
 - **Ennemis modélisés** : fiches, PV, CA, actions des adversaires (aujourd'hui : théâtre de l'esprit).
 - **Grille et carte**, mesure des distances.
 - **Sons** : un bus d'événements applicatifs est prévu pour les brancher plus tard.
 - **Actions rapides et raccourcis clavier personnalisables** : les actions sont modélisées (catalogue
   `data/combat/actions.json`) pour pouvoir être épinglées plus tard.
-- **Mode daltonisme et thèmes supplémentaires** : l'architecture de thèmes par jetons de couleur est en place
-  (trois thèmes aujourd'hui) ; l'icône et le texte accompagnent déjà chaque état, jamais la couleur seule.
+- ~~Mode daltonisme et thèmes supplémentaires~~ : **fait** (option « Vision des couleurs », thèmes « Carnet de
+  voyage » et « Néon nocturne », 18/11/2026).
 - **Personnalisation poussée de l'affichage** au-delà de la disposition des panneaux (dispositions enregistrées,
   glisser-déposer des panneaux : prototypés dans `prototypes/`, à intégrer).
 - **Mode aventure étendu** : carte de voyage, rencontres aléatoires.
@@ -22,9 +20,8 @@ Le plan et l'état d'avancement sont dans `docs/PLAN_AVENTURE_COMBAT.md`.
 ## Reporté par décision d'Antoine
 
 - **Faim et soif** : le moteur existe (désactivé par défaut) ; à reprendre plus tard.
-- **Métamagie** : les données et le calcul existent (désactivés) ; à intégrer plus tard, avec la règle de l'action
-  complexe du lanceur spontané à confirmer.
-- **Bâtons** (recharge, charges par sort) et **échec des sorts profanes des baguettes et bâtons**.
+- ~~Métamagie~~ : **fait** (en combat, spontanée et à la préparation).
+- ~~Bâtons et échec des sorts profanes des baguettes et bâtons~~ : **fait** (recharge, Core p. 491).
 
 ## Non modélisé pour l'instant (à demander ou à décider)
 
