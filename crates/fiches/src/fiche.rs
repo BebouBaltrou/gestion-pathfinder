@@ -2581,8 +2581,8 @@ pub(crate) mod tests {
             .lignage_de(classe)
             .map(|l| l.sorts_bonus.iter().map(|s| s.nom_en.clone()).collect())
             .unwrap_or_default();
-        for sn in 0..=9usize {
-            let n = ligne.sorts_connus[sn].unwrap_or(0) as usize;
+        for (sn, connus) in ligne.sorts_connus.iter().enumerate().take(10) {
+            let n = connus.unwrap_or(0) as usize;
             choisis.extend(
                 r.sorts
                     .iter()
