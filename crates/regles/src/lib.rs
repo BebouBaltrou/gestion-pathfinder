@@ -8,6 +8,7 @@
 //! - [`controles`] : contrôles de cohérence du référentiel (avertissements)
 
 pub mod calculs;
+pub mod fabrication;
 pub mod controles;
 mod donnees_officielles;
 pub mod niveaux_equipes;
