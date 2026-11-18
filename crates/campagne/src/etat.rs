@@ -189,6 +189,18 @@ impl std::fmt::Display for Erreur {
     }
 }
 
+/// Fabrication d'un objet magique suivie jour par jour (MJ ch. 15 ; GC p. 85).
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Fabrication {
+    pub nom: String,
+    pub localite: IdLocalite,
+    pub prix_po: i64,
+    pub dd: i32,
+    pub heures_requises: u32,
+    pub heures_faites: u32,
+    pub issue: Option<String>,
+}
+
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct Etat {
     /// Jour de campagne courant (commence à 1).
@@ -224,6 +236,8 @@ pub struct Etat {
     pub sans_usure_avec_gestionnaire: bool,
     /// Tests de prestige à faire (retour après 30 jours ou plus) : DD par localité (GC p. 82).
     pub prestige_en_attente: BTreeMap<IdLocalite, u32>,
+    /// Fabrications d'objets magiques en cours ou terminées, par clé.
+    pub fabrications: BTreeMap<String, Fabrication>,
     /// Ventes en attente d'un acheteur.
     pub ventes: Vec<Vente>,
     /// Limite des dépenses par PJ présent plutôt que par localité (PC-14, option).
@@ -691,6 +705,29 @@ impl Etat {
                 for e in evenements {
                     out.extend(self.appliquer_sur_place(e, r)?);
                 }
+            }
+            FabricationAvancee {
+                cle,
+                nom,
+                localite,
+                prix_po,
+                dd,
+                heures_requises,
+                heures_faites,
+                issue,
+            } => {
+                self.fabrications.insert(
+                    cle.clone(),
+                    Fabrication {
+                        nom: nom.clone(),
+                        localite: *localite,
+                        prix_po: *prix_po,
+                        dd: *dd,
+                        heures_requises: *heures_requises,
+                        heures_faites: *heures_faites,
+                        issue: issue.clone(),
+                    },
+                );
             }
             BatimentFavori { id, favori } => {
                 self.batiment(*id)?;

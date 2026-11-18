@@ -112,6 +112,19 @@ pub enum Evenement {
     JoursAvances {
         nombre: u32,
     },
+    /// Une journée de fabrication d'objet magique (calcul dans `regles::fabrication`). Les po,
+    /// Marchandises, Magie et jours sont décomptés par les événements du groupe.
+    FabricationAvancee {
+        cle: String,
+        nom: String,
+        localite: IdLocalite,
+        prix_po: i64,
+        dd: i32,
+        heures_requises: u32,
+        heures_faites: u32,
+        /// « reussi », « echec » ou « maudit », quand le test final est saisi.
+        issue: Option<String>,
+    },
     // ---- bâtiments ----
     BatimentCree {
         id: IdBatiment,

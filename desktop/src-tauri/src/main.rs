@@ -797,6 +797,8 @@ fn main() {
             inventaire::types_objets,
             inventaire::inventaire_commande,
             fabrication::fabrication_calculer,
+            fabrication::fabrication_avancer,
+            fabrication::fabrications_liste,
             inventaire::creer_inventaire_personnage,
             inventaire::ajouter_objet_catalogue,
             inventaire::ajouter_conteneur,

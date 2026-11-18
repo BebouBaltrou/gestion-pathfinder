@@ -376,6 +376,12 @@ impl Campagne {
                 )
             }
             JoursAvances { nombre } => format!("{nombre} jour(s) écoulé(s)"),
+            FabricationAvancee {
+                nom,
+                heures_faites,
+                heures_requises,
+                ..
+            } => format!("Fabrication {nom} : {heures_faites}/{heures_requises} h"),
             BatimentCree {
                 nom,
                 localite,
