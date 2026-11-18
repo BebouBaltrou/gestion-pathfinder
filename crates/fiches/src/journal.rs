@@ -583,25 +583,16 @@ impl Journal {
                     let def = r
                         .sort(sort)
                         .ok_or_else(|| erreur(format!("sort inconnu : {sort}")))?;
-                    let valeurs = fiche.calculer(r).map_err(|p| erreur(p.to_string()))?;
-                    let positive = valeurs
-                        .canalisation
-                        .as_ref()
-                        .ok_or_else(|| erreur("cette classe ne convertit pas ses sorts".into()))?
-                        .positive
-                        .ok_or_else(|| {
-                            erreur("choisir d'abord l'énergie (positive ou négative)".into())
-                        })?;
-                    if !crate::preparation::est_sort_de_conversion(sort, positive) {
-                        return Err(erreur(format!(
-                            "{sort} n'est pas un sort de {}",
-                            if positive { "soins" } else { "blessure" }
-                        )));
-                    }
                     let cle = r
                         .classe(classe)
                         .map(|c| c.nom_en.to_lowercase())
                         .ok_or_else(|| erreur(format!("classe inconnue : {classe}")))?;
+                    let valeurs = fiche.calculer(r).map_err(|p| erreur(p.to_string()))?;
+                    let (prefixe, genre) =
+                        crate::preparation::conversion_de_classe(&cle, &valeurs).map_err(erreur)?;
+                    if !sort.starts_with(prefixe) {
+                        return Err(erreur(format!("{sort} n'est pas un sort de {genre}")));
+                    }
                     match def.niveau_pour(&cle) {
                         Some(n) if n >= 1 && n <= *niveau_sacrifie => {}
                         _ => {

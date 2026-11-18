@@ -132,6 +132,8 @@ export type PreparationVue = {
   sortsDeDomaine: SortDomaineVue[];
   interdits: string[];
   conversion: boolean | null;
+  /** Sorts permis par la conversion spontanée (prêtre : soins/blessure ; druide : alliés naturels). */
+  conversionSorts: { debut: string; libelle: string } | null;
   metamagies: DonMetamagieVue[];
 };
 /** Un emplacement de sort préparé, tel que le journal du cœur le reçoit (noms en snake_case). */

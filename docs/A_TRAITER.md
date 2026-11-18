@@ -101,7 +101,7 @@ fiches, compatibilité des sauvegardes.
 - ~~Combat des lanceurs qui préparent~~ : **fait** (sorts préparés lancés en combat et hors combat).
 - ~~Forme animale chiffrée~~ : **fait** (choix de la créature, attaques, taille, aptitudes listées dans le sort).
 - **Compagnon animal** : choix du joueur fait (nom, développement, augmentations) ; PV en moyenne arrondie (4,5 par d8, à confirmer).
-- **Druide** (non trouvé dans le code au 18/11/2026) : conversion spontanée des sorts en « convocation d'alliés naturels » (celle du Prêtre est faite).
+- ~~Druide : conversion spontanée~~ : **fait** (18/11/2026) : un sort préparé (hors domaine) est sacrifié pour une convocation d'alliés naturels de même niveau ou moins. Lecture à valider : l'emplacement de domaine du druide ne se convertit pas, comme celui du prêtre.
 - **Domaines** : résistances (Air, Eau, Feu, Terre) en texte seulement ; domaines de Calistria (table et pages du livre ne concordent pas), sorts de domaine non résolus (Obscurité 8e, Runes 6e) : points à confirmer.
 - **Armes et objets** : « mains nues » et « masse » à confirmer ; Bottes elfiques = Acrobaties dans le livre français à confirmer ; type du bonus de forme bestiale (taille) à confirmer.
 - **Importation PDF** : domaines, divinité, alignement et pacte de nature ne sont pas lus (fonctionnalité en développement).

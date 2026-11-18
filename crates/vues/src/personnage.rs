@@ -421,8 +421,18 @@ vue! {
         pub interdits: Vec<String>,
         /// Conversion spontanée possible : Some(true) en soins, Some(false) en blessures.
         pub conversion: Option<bool>,
+        /// Sorts permis par la conversion spontanée (prêtre : soins ou blessure ; druide :
+        /// convocation d'alliés naturels), s'il y en a une.
+        pub conversion_sorts: Option<ConversionVue>,
         /// Dons de métamagie connus : à appliquer à la préparation d'un sort.
         pub metamagies: Vec<DonMetamagieVue>,
+    }
+}
+vue! {
+    /// Conversion spontanée : début du nom anglais des sorts permis et libellé (« soins »…).
+    pub struct ConversionVue {
+        pub debut: String,
+        pub libelle: String,
     }
 }
 vue! {
@@ -1400,6 +1410,15 @@ pub fn fiche_complete(
                     .map(String::from)
                     .collect(),
                 conversion: v.canalisation.as_ref().and_then(|c| c.positive),
+                conversion_sorts: fiches::preparation::conversion_de_classe(
+                    &classe.nom_en.to_lowercase(),
+                    &v,
+                )
+                .ok()
+                .map(|(p, g)| ConversionVue {
+                    debut: p.to_string(),
+                    libelle: g.to_string(),
+                }),
                 metamagies: f
                     .dons_choisis()
                     .into_iter()

@@ -454,6 +454,40 @@ fn preparer_lancer_et_se_reposer() {
 }
 
 #[test]
+fn le_druide_convertit_en_convocation_d_allies_naturels() {
+    let r = Referentiel::core();
+    let regles = ReglesFiche::default();
+    let mut j = Journal::nouveau(druide(3));
+    let ajouter = |j: &mut Journal, e| j.ajouter(e, &r, &regles);
+    let sort1: Vec<String> = r
+        .sorts
+        .iter()
+        .filter(|s| s.niveau_pour("druid") == Some(1))
+        .filter(|s| !s.nom_en.starts_with("Summon Nature's Ally"))
+        .take(2)
+        .map(|s| s.nom_en.clone())
+        .collect();
+    let sorts = sort1.iter().map(|s| prep(1, s, false)).collect();
+    ajouter(
+        &mut j,
+        EvenementFiche::Preparation {
+            classe: "druide".into(),
+            sorts,
+        },
+    )
+    .unwrap();
+    let convertir = |niveau: u32, sort: &str| EvenementFiche::SortConverti {
+        classe: "druide".into(),
+        niveau_sacrifie: niveau,
+        sort: sort.into(),
+    };
+    // Pas de soins pour le druide ; pas d'allié de niveau 2 sur un emplacement de niveau 1.
+    assert!(ajouter(&mut j, convertir(1, "Cure Light Wounds")).is_err());
+    assert!(ajouter(&mut j, convertir(1, "Summon Nature's Ally 2")).is_err());
+    ajouter(&mut j, convertir(1, "Summon Nature's Ally 1")).expect("conversion permise");
+}
+
+#[test]
 fn conversion_spontanee_en_soins() {
     let r = Referentiel::core();
     let regles = ReglesFiche::default();

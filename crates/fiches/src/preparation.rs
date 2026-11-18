@@ -280,11 +280,27 @@ pub fn valider(
     Ok(())
 }
 
-/// Un sort de soins (énergie positive) ou de blessure (énergie négative), pour la conversion
-/// spontanée d'un sort préparé.
-pub fn est_sort_de_conversion(nom_en: &str, positive: bool) -> bool {
-    let debut = if positive { "Cure " } else { "Inflict " };
-    nom_en.starts_with(debut)
+/// Conversion spontanée d'un sort préparé, selon la classe (nom anglais en minuscules) :
+/// début du nom anglais des sorts permis et libellé. Prêtre : soins ou blessure selon
+/// l'énergie canalisée. Druide : convocation d'alliés naturels (« Conversion spontanée » du druide).
+pub fn conversion_de_classe(
+    cle_classe: &str,
+    valeurs: &crate::fiche::Valeurs,
+) -> Result<(&'static str, &'static str), String> {
+    if cle_classe == "druid" {
+        return Ok(("Summon Nature's Ally", "convocation d'alliés naturels"));
+    }
+    let positive = valeurs
+        .canalisation
+        .as_ref()
+        .ok_or_else(|| "cette classe ne convertit pas ses sorts".to_string())?
+        .positive
+        .ok_or_else(|| "choisir d'abord l'énergie (positive ou négative)".to_string())?;
+    Ok(if positive {
+        ("Cure ", "soins")
+    } else {
+        ("Inflict ", "blessure")
+    })
 }
 
 #[cfg(test)]

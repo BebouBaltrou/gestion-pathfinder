@@ -372,7 +372,8 @@ export function PanneauPreparation({
   if (!prep) return null;
   const liste = cat?.sortsParClasse[prep.classeId] ?? [];
   const restants = (n: number) => prep.capacites.find((c) => c.niveau === n)?.restants ?? null;
-  const debut = prep.conversion === false ? "Inflict " : "Cure ";
+  const conv = prep.conversionSorts;
+  const debut = conv?.debut ?? "";
   const sortsDeConversion = (niveau: number) =>
     liste.filter((s) => s.nomEn.startsWith(debut) && s.niveau >= 1 && s.niveau <= niveau);
   const niveaux = [...new Set(prep.prepares.map((s) => s.niveau))].sort((a, b) => a - b);
@@ -461,9 +462,9 @@ export function PanneauPreparation({
                         Lancer
                       </button>
                     )}
-                    {n > 0 && !s.utilise && !s.domaine && prep.conversion !== null && (
+                    {n > 0 && !s.utilise && !s.domaine && conv && (
                       <button className="bouton discret" onClick={() => setConversion({ niveau: n })}>
-                        {prep.conversion ? "Convertir en soins" : "Convertir en blessures"}
+                        {`Convertir en ${conv.libelle}`}
                       </button>
                     )}
                   </td>
@@ -475,7 +476,7 @@ export function PanneauPreparation({
       {conversion && (
         <div className="carte">
           <h3>
-            Sacrifier un sort de niveau {conversion.niveau} pour lancer {prep.conversion ? "un sort de soins" : "un sort de blessure"}
+            Sacrifier un sort de niveau {conversion.niveau} pour lancer un sort de {conv?.libelle}
           </h3>
           <div className="ligne">
             <Choix
