@@ -566,7 +566,7 @@ export type EvenementFiche =
   | { FormeAdoptee: { forme: string } }
   | "FormeQuittee"
   | { CompagnonModifie: Compagnon }
-  | { SortConverti: { classe: string; niveau_sacrifie: number; sort: string } }
+  | { SortConverti: { classe: string; niveau_sacrifie: number; sort: string; sacrifie?: string | null } }
   | { Equiper: { emplacement: "armure" | "bouclier"; objet: string | null } }
   | { ArmeAjoutee: string }
   | { ArmeRetiree: string }

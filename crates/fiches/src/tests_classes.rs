@@ -480,11 +480,21 @@ fn le_druide_convertit_en_convocation_d_allies_naturels() {
         classe: "druide".into(),
         niveau_sacrifie: niveau,
         sort: sort.into(),
+        sacrifie: None,
     };
     // Pas de soins pour le druide ; pas d'allié de niveau 2 sur un emplacement de niveau 1.
     assert!(ajouter(&mut j, convertir(1, "Cure Light Wounds")).is_err());
     assert!(ajouter(&mut j, convertir(1, "Summon Nature's Ally 2")).is_err());
-    ajouter(&mut j, convertir(1, "Summon Nature's Ally 1")).expect("conversion permise");
+    // Le joueur choisit le sort sacrifié : ici le second ; il ne peut plus l'être ensuite.
+    let sacrifier = |nom: &str| EvenementFiche::SortConverti {
+        classe: "druide".into(),
+        niveau_sacrifie: 1,
+        sort: "Summon Nature's Ally 1".into(),
+        sacrifie: Some(nom.into()),
+    };
+    ajouter(&mut j, sacrifier(&sort1[1])).expect("conversion permise");
+    assert!(ajouter(&mut j, sacrifier(&sort1[1])).is_err());
+    ajouter(&mut j, sacrifier(&sort1[0])).expect("le premier sort reste disponible");
 }
 
 #[test]
@@ -510,6 +520,7 @@ fn conversion_spontanee_en_soins() {
         classe: "pretre".into(),
         niveau_sacrifie: niveau,
         sort: sort.into(),
+        sacrifie: None,
     };
     // Soins sur un emplacement de niveau 2 : modérés (niveau 2) ou légers (niveau 1) ; pas graves (niveau 3).
     assert!(ajouter(&mut j, convertir(2, "Cure Serious Wounds")).is_err());
@@ -552,6 +563,7 @@ fn le_mauvais_pretre_convertit_en_blessures() {
         classe: "pretre".into(),
         niveau_sacrifie: 2,
         sort: sort.into(),
+        sacrifie: None,
     };
     assert!(ajouter(&mut j, convertir("Cure Light Wounds")).is_err());
     ajouter(&mut j, convertir("Inflict Light Wounds")).expect("blessures");

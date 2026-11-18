@@ -367,7 +367,7 @@ export function PanneauPreparation({
   const prep = f.preparation;
   const [edition, setEdition] = useState(false);
   const [brouillon, setBrouillon] = useState<SortPrepare[]>([]);
-  const [conversion, setConversion] = useState<{ niveau: number } | null>(null);
+  const [conversion, setConversion] = useState<{ niveau: number; sacrifie: string; nom: string } | null>(null);
   const [soin, setSoin] = useState("");
   if (!prep) return null;
   const liste = cat?.sortsParClasse[prep.classeId] ?? [];
@@ -463,7 +463,7 @@ export function PanneauPreparation({
                       </button>
                     )}
                     {n > 0 && !s.utilise && !s.domaine && conv && (
-                      <button className="bouton discret" onClick={() => setConversion({ niveau: n })}>
+                      <button className="bouton discret" onClick={() => setConversion({ niveau: n, sacrifie: s.nomEn, nom: s.nom })}>
                         {`Convertir en ${conv.libelle}`}
                       </button>
                     )}
@@ -476,7 +476,7 @@ export function PanneauPreparation({
       {conversion && (
         <div className="carte">
           <h3>
-            Sacrifier un sort de niveau {conversion.niveau} pour lancer un sort de {conv?.libelle}
+            Sacrifier « {conversion.nom} » (niveau {conversion.niveau}) pour lancer un sort de {conv?.libelle}
           </h3>
           <div className="ligne">
             <Choix
@@ -490,7 +490,7 @@ export function PanneauPreparation({
               className="bouton principal"
               disabled={!soin || restants(conversion.niveau) === 0}
               onClick={() => {
-                agir({ SortConverti: { classe: prep.classeId, niveau_sacrifie: conversion.niveau, sort: soin } });
+                agir({ SortConverti: { classe: prep.classeId, niveau_sacrifie: conversion.niveau, sort: soin, sacrifie: conversion.sacrifie } });
                 setConversion(null);
                 setSoin("");
               }}

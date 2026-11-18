@@ -145,12 +145,16 @@ pub enum EvenementFiche {
     /// Choix du compagnon animal (nom, développement, augmentations de caractéristique) : remplace
     /// le précédent.
     CompagnonModifie(crate::compagnon::Compagnon),
-    /// Un prêtre sacrifie un sort préparé (ni oraison ni sort de domaine) pour lancer
-    /// spontanément un sort de soins ou de blessure de niveau égal ou inférieur.
+    /// Un prêtre ou un druide sacrifie un sort préparé (ni oraison ni sort de domaine) pour
+    /// lancer spontanément un sort de conversion de niveau égal ou inférieur.
     SortConverti {
         classe: String,
         niveau_sacrifie: u32,
         sort: String,
+        /// Nom anglais du sort préparé sacrifié ; absent (anciennes campagnes) : le premier
+        /// sort disponible du niveau.
+        #[cfg_attr(feature = "serde", serde(default))]
+        sacrifie: Option<String>,
     },
     /// Les rangs de compétence d'un niveau (1 = premier niveau du personnage) sont replacés.
     RangsReattribues {
@@ -575,6 +579,7 @@ impl Journal {
                     classe,
                     niveau_sacrifie,
                     sort,
+                    sacrifie,
                 } => {
                     let erreur = |raison: String| ErreurJournal::SortLanceImpossible {
                         evenement: i,
@@ -606,6 +611,7 @@ impl Journal {
                     let Some(idx) = liste.iter().enumerate().position(|(k, s)| {
                         s.niveau == *niveau_sacrifie
                             && !s.domaine
+                            && sacrifie.as_ref().is_none_or(|n| *n == s.sort)
                             && !utilises.get(k).copied().unwrap_or(true)
                     }) else {
                         return Err(erreur(format!(
