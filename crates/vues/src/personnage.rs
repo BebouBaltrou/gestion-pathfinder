@@ -813,10 +813,21 @@ fn choix_classes(r: &Referentiel, f: &Fiche) -> ChoixClassesVue {
             .pacte_magique_magicien
             .familiers_superieurs
             .iter()
-            .map(|x| (x.nom.clone(), format!("{} · lanceur niveau {}+", x.alignement, x.niveau_lanceur_min)))
+            .map(|x| {
+                (
+                    x.nom.clone(),
+                    format!(
+                        "{} · lanceur niveau {}+",
+                        x.alignement, x.niveau_lanceur_min
+                    ),
+                )
+            })
             .collect(),
         familier_superieur: f.familier_superieur.clone(),
-        a_le_don_familier_superieur: f.niveaux.iter().any(|n| n.dons.iter().any(|d| d == "Improved Familiar")),
+        a_le_don_familier_superieur: f
+            .niveaux
+            .iter()
+            .any(|n| n.dons.iter().any(|d| d == "Improved Familiar")),
         objets_fetiches: c.pacte_magique_magicien.objets_fetiches.clone(),
         objet_fetiche: f.objet_fetiche.clone(),
         grimoire: f

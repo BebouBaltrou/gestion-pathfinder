@@ -2761,7 +2761,10 @@ fn profil_du_familier_moitie_des_pv_et_bonus_d_attaque() {
     f.pacte_magique = Some("familier".into());
     f.familier = Some("Chat".into());
     let lignes = crate::choix_classe::profil_familier(&f, &r);
-    assert!(lignes.iter().any(|l| l.contains("points de vie")), "{lignes:?}");
+    assert!(
+        lignes.iter().any(|l| l.contains("points de vie")),
+        "{lignes:?}"
+    );
     // Chat : 2 griffes (dégâts 1d2-4), bonus = BBA du maître (0) + meilleur modificateur (Dex +2).
     assert!(
         lignes.iter().any(|l| l.contains("griffes +2 (1d2-4)")),

@@ -822,7 +822,11 @@ impl Journal {
                     definitif(&mut fiche.familier, x, "le familier", i)?;
                 }
                 EvenementFiche::FamilierSuperieurChoisi(x) => {
-                    if !fiche.niveaux.iter().any(|n| n.dons.iter().any(|d| d == "Improved Familiar")) {
+                    if !fiche
+                        .niveaux
+                        .iter()
+                        .any(|n| n.dons.iter().any(|d| d == "Improved Familiar"))
+                    {
                         return Err(ErreurJournal::Choix {
                             evenement: i,
                             raison: "le familier supérieur exige le don Familier supérieur"
