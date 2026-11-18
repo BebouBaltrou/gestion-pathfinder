@@ -25,6 +25,22 @@ export const ECHELLES: { id: string; nom: string; facteur: number | null }[] = [
 
 const CLE_ECHELLE = "gestion-pathfinder.echelle";
 
+// Vision des couleurs : remplace les couleurs des capitaux et des états (voir themes.css), dans chaque thème.
+export const VISIONS: { id: string; nom: string; sous: string }[] = [
+  { id: "", nom: "Normale", sous: "Couleurs d'origine du thème" },
+  { id: "protanopie", nom: "Protanopie", sous: "Rouge peu ou pas perçu (environ 1 % des hommes) ; vaut aussi pour la protanomalie" },
+  { id: "deuteranopie", nom: "Deutéranopie", sous: "Vert peu ou pas perçu (la forme la plus courante, environ 6 % des hommes avec la deutéranomalie)" },
+  { id: "tritanopie", nom: "Tritanopie", sous: "Bleu peu ou pas perçu, bleu/vert et jaune/violet confondus (rare)" },
+  { id: "achromatopsie", nom: "Achromatopsie", sous: "Aucune couleur perçue, seulement des gris (très rare)" },
+];
+
+const CLE_VISION = "gestion-pathfinder.daltonisme";
+
+function appliquerVision(id: string) {
+  if (id) document.documentElement.dataset.daltonisme = id;
+  else delete document.documentElement.dataset.daltonisme;
+}
+
 function facteurEchelle(id: string): number {
   const choix = ECHELLES.find((e) => e.id === id);
   if (!choix || choix.facteur === null) {
@@ -49,6 +65,7 @@ export function appliquerThemeEnregistre() {
   try {
     const t = window.localStorage.getItem(CLE) ?? THEME_PAR_DEFAUT;
     if (t) document.documentElement.dataset.theme = t;
+    appliquerVision(window.localStorage.getItem(CLE_VISION) ?? "");
   } catch {
     document.documentElement.dataset.theme = THEME_PAR_DEFAUT;
   }
@@ -69,6 +86,16 @@ export function Apparence() {
       return "auto";
     }
   });
+  const [vision, setVision] = useState(() => document.documentElement.dataset.daltonisme ?? "");
+  const choisirVision = (id: string) => {
+    setVision(id);
+    appliquerVision(id);
+    try {
+      window.localStorage.setItem(CLE_VISION, id);
+    } catch {
+      /* sans stockage, le choix ne dure que jusqu'à la fermeture */
+    }
+  };
   const choisirEchelle = (id: string) => {
     setEchelle(id);
     appliquerEchelle(id);
@@ -105,6 +132,16 @@ export function Apparence() {
             </span>
             <strong>{t.nom}</strong>
             <span className="doux">{t.sous}</span>
+          </button>
+        ))}
+      </div>
+      <h2>Vision des couleurs</h2>
+      <p className="doux">Adapte les couleurs des capitaux et des états à un daltonisme, dans les trois thèmes.</p>
+      <div className="apparence" role="radiogroup" aria-label="Vision des couleurs">
+        {VISIONS.map((v) => (
+          <button key={v.id || "normale"} role="radio" aria-checked={vision === v.id} className={"pastille-theme" + (vision === v.id ? " choisi" : "")} onClick={() => choisirVision(v.id)}>
+            <strong>{v.nom}</strong>
+            <span className="doux">{v.sous}</span>
           </button>
         ))}
       </div>

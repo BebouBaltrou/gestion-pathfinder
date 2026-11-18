@@ -63,3 +63,42 @@
 @keyframes theme-arrivee { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 @keyframes theme-scintille { 0% { opacity: 0; } 30% { opacity: 0.5; } 45% { opacity: 0.15; } 100% { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .page > * { animation: none !important; } }
+
+/* ------------------------------------------------------------ vision des couleurs (daltonisme) — 18/11/2026
+   Seuls les jetons de couleur des capitaux et des états changent ; chaque thème garde son ambiance.
+   - Protanopie / protanomalie (rouge peu ou pas perçu) et deutéranopie / deutéranomalie (vert peu ou pas perçu) :
+     rouge et vert se confondent ; on passe sur l'axe bleu / orange / jaune (palette d'Okabe et Ito).
+     En protanopie le rouge paraît aussi plus sombre : on évite les rouges foncés.
+   - Tritanopie / tritanomalie (bleu peu ou pas perçu) : bleu et vert, jaune et violet se confondent ;
+     on passe sur l'axe rouge / cyan / magenta.
+   - Achromatopsie (aucune couleur perçue) : seules comptent les différences de clarté ; paliers de gris bien espacés. */
+
+/* thèmes sombres (Néon nocturne, Sombre d'origine) */
+:root:not([data-theme="carnet"])[data-daltonisme="protanopie"],
+:root:not([data-theme="carnet"])[data-daltonisme="deuteranopie"] {
+  --po: #f0e442; --marchandises: #e69f00; --influence: #cc79a7; --travail: #56b4e9; --magie: #d9d9d9;
+  --vert: #3fa9f5; --rouge: #ff7b2e; --orange: #f0e442;
+}
+:root:not([data-theme="carnet"])[data-daltonisme="tritanopie"] {
+  --po: #f2f2f2; --marchandises: #ff5a5f; --influence: #ff9ecf; --travail: #00c2d1; --magie: #a77bff;
+  --vert: #00c2d1; --rouge: #ff4d5e; --orange: #ff9ecf;
+}
+:root:not([data-theme="carnet"])[data-daltonisme="achromatopsie"] {
+  --po: #ffffff; --marchandises: #d0d0d0; --influence: #a8a8a8; --travail: #858585; --magie: #646464;
+  --vert: #9a9a9a; --rouge: #ffffff; --orange: #c8c8c8; --or: #f0f0f0; --or-clair: #ffffff; --or-sombre: #111111;
+}
+
+/* thème clair (Carnet de voyage) : mêmes principes, teintes plus foncées pour rester lisibles sur le papier */
+:root[data-theme="carnet"][data-daltonisme="protanopie"],
+:root[data-theme="carnet"][data-daltonisme="deuteranopie"] {
+  --po: #8c6a00; --marchandises: #c05a00; --influence: #a0457a; --travail: #0060a8; --magie: #3a3a3a;
+  --vert: #0060a8; --rouge: #c04a00; --orange: #8c6a00;
+}
+:root[data-theme="carnet"][data-daltonisme="tritanopie"] {
+  --po: #7a1f2e; --marchandises: #d1293d; --influence: #c2378a; --travail: #007c89; --magie: #6a3fc0;
+  --vert: #007c89; --rouge: #d1293d; --orange: #c2378a;
+}
+:root[data-theme="carnet"][data-daltonisme="achromatopsie"] {
+  --po: #1a1a1a; --marchandises: #3d3d3d; --influence: #5e5e5e; --travail: #767676; --magie: #8a8a8a;
+  --vert: #6a6a6a; --rouge: #000000; --orange: #444444; --or: #2b2b2b; --or-clair: #444444; --or-sombre: #f3ead6;
+}
