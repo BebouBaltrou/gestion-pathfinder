@@ -253,7 +253,7 @@ export function App() {
         {maj && (
           <div className="doux" role="status" style={{ padding: "6px 12px" }}>
             Version {maj.version} disponible.{" "}
-            <button className="bouton principal" onClick={() => maj.installer()}>Mettre à jour</button>{" "}
+            <button className="bouton principal" onClick={() => maj.installer().catch((erreur) => window.alert(`Échec de la mise à jour : ${String(erreur)}`))}>Mettre à jour</button>{" "}
             <button className="bouton discret" onClick={() => setMaj(null)}>
               Masquer
             </button>

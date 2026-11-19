@@ -90,7 +90,12 @@ export function MiseAJour() {
         Vérifier maintenant
       </button>{" "}
       {nouvelle && (
-        <button className="bouton principal" onClick={() => nouvelle.installer()}>
+        <button
+        className="bouton principal"
+        onClick={() =>
+          nouvelle.installer().catch((erreur) => setEtat(`Échec de la mise à jour : ${String(erreur)}`))
+        }
+      >
           Mettre à jour
         </button>
       )}
