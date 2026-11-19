@@ -4,6 +4,12 @@
 import { useState } from "react";
 import { check } from "@tauri-apps/plugin-updater";
 import { relaunch } from "@tauri-apps/plugin-process";
+import { openUrl } from "@tauri-apps/plugin-opener";
+
+declare const __BUILD_ANDROID__: number;
+/** Numéro de la version Android installée (0 sur ordinateur). */
+export const BUILD_ANDROID = __BUILD_ANDROID__;
+const DEPOT = "BebouBaltrou/gestion-pathfinder";
 
 export const VERSION = "1.2.30";
 const CLE = "gestion-pathfinder.maj-auto";
@@ -26,8 +32,30 @@ function enregistrerMiseAJour(active: boolean) {
   }
 }
 
+/**
+ * Android : les versions sont publiées sur GitHub sous l'étiquette « android-N ».
+ * « Mettre à jour » ouvre le téléchargement de l'APK dans le navigateur ; Android propose
+ * ensuite de l'installer par-dessus (les campagnes sont conservées).
+ */
+async function chercherAndroid(): Promise<Nouvelle | null> {
+  const r = await fetch(`https://api.github.com/repos/${DEPOT}/releases?per_page=30`);
+  if (!r.ok) throw new Error(`GitHub a répondu ${r.status}`);
+  const liste = (await r.json()) as { tag_name: string; assets: { name: string; browser_download_url: string }[] }[];
+  let meilleure: Nouvelle | null = null;
+  let max = BUILD_ANDROID;
+  for (const rel of liste) {
+    const m = /^android-(\d+)$/.exec(rel.tag_name);
+    const apk = rel.assets.find((a) => a.name.endsWith(".apk"));
+    if (!m || !apk || Number(m[1]) <= max) continue;
+    max = Number(m[1]);
+    meilleure = { version: `Android n°${max}`, installer: () => openUrl(apk.browser_download_url) };
+  }
+  return meilleure;
+}
+
 /** Interroge le dépôt de publication. Renvoie la version plus récente, ou null si à jour ou injoignable. */
 export async function chercherMiseAJour(): Promise<Nouvelle | null> {
+  if (BUILD_ANDROID > 0) return chercherAndroid().catch(() => null);
   try {
     const maj = await check();
     if (!maj) return null;
@@ -56,6 +84,17 @@ export function MiseAJour() {
 
   const verifier = async () => {
     setEtat("Recherche…");
+    if (BUILD_ANDROID > 0) {
+      try {
+        const n = await chercherAndroid();
+        setNouvelle(n);
+        setEtat(n ? `${n.version} disponible.` : `Android n°${BUILD_ANDROID} : à jour.`);
+      } catch (erreur) {
+        setNouvelle(null);
+        setEtat(`Erreur de vérification : ${String(erreur)}`);
+      }
+      return;
+    }
     try {
       const maj = await check();
       setNouvelle(
@@ -80,7 +119,8 @@ export function MiseAJour() {
     <section className="section">
       <h2>Mises à jour</h2>
       <p className="doux">
-        Version installée : {VERSION}. Au lancement, l'application regarde si une version plus récente existe. Elle ne l'installe
+        Version installée : {VERSION}
+        {BUILD_ANDROID > 0 && ` (Android n°${BUILD_ANDROID} : la mise à jour se télécharge, puis Android propose de l'installer)`}. Au lancement, l'application regarde si une version plus récente existe. Elle ne l'installe
         que si tu cliques sur « Mettre à jour ».
       </p>
       <label className="doux">

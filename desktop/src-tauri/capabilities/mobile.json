@@ -10,6 +10,7 @@
     "main"
   ],
   "permissions": [
-    "core:default"
+    "core:default",
+    "opener:default"
   ]
 }

@@ -697,7 +697,7 @@ fn autotest_fin(app: tauri::AppHandle, rapport: String) {
 /// Point d'entrée commun : `main.rs` sur ordinateur, l'application Android sur mobile.
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    let builder = tauri::Builder::default();
+    let builder = tauri::Builder::default().plugin(tauri_plugin_opener::init());
     // mise à jour automatique : seulement sur ordinateur (sur Android, on installe le nouvel APK)
     #[cfg(desktop)]
     let builder = builder

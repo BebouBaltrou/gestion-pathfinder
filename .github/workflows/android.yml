@@ -12,6 +12,11 @@ jobs:
   apk:
     name: APK Android (version d'essai)
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      # numéro de version Android : augmente à chaque compilation (mises à jour depuis l'application)
+      BUILD_ANDROID: ${{ github.run_number }}
     defaults:
       run:
         shell: bash
@@ -40,6 +45,13 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Interface (dist)
         run: npm run build
+      - name: Clé de signature fixe (sinon Android refuse d'installer la mise à jour par-dessus)
+        run: |
+          mkdir -p ~/.android
+          cp src-tauri/android/debug.keystore ~/.android/debug.keystore
+      - name: Numéro de version Android
+        run: |
+          node -e 'const fs=require("fs");const f="src-tauri/tauri.android.conf.json";const c=JSON.parse(fs.readFileSync(f,"utf8"));c.bundle.android={versionCode:2000000+Number(process.env.BUILD_ANDROID)};fs.writeFileSync(f,JSON.stringify(c,null,2))'
       - name: Projet Android
         run: npx tauri android init --ci
       - name: Icônes
@@ -56,3 +68,12 @@ jobs:
         with:
           name: gestion-pathfinder-android
           path: apk/gestion-pathfinder-android.apk
+      - name: Publication (mise à jour depuis l'application)
+        if: github.ref == 'refs/heads/claude/android'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "android-$BUILD_ANDROID" ../apk/gestion-pathfinder-android.apk \
+            --prerelease --target "$GITHUB_SHA" \
+            --title "Android — essai n°$BUILD_ANDROID" \
+            --notes "Version Android d'essai n°$BUILD_ANDROID. Sur le téléphone : télécharger l'APK puis l'installer."

@@ -25,6 +25,8 @@ await build({
     "process.env.NODE_ENV": mock ? '"development"' : '"production"',
     __MOCK__: mock ? "true" : "false",
     __MAJ_TOKEN__: JSON.stringify(process.env.VITE_MAJ_TOKEN || ""),
+    // numéro de la version Android (0 sur ordinateur) : sert à chercher les mises à jour Android
+    __BUILD_ANDROID__: String(Number(process.env.BUILD_ANDROID || "0")),
   },
   loader: { ".woff2": "file", ".woff": "file" },
   assetNames: "polices/[name]-[hash]",
