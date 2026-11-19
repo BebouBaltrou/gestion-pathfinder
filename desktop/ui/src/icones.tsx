@@ -97,6 +97,12 @@ export const icones: Record<string, (p: P) => ReactElement> = {
       <path d="M4 19V5M9 7h6" />
     </Icone>
   ),
+  fabrication: (p) => (
+    <Icone {...p}>
+      <path d="M14.5 4.5l5 5-9.5 9.5H5v-5z" />
+      <path d="M12.5 6.5l5 5" />
+    </Icone>
+  ),
   points: (p) => (
     <Icone {...p}>
       <circle cx="12" cy="12" r="9" />
