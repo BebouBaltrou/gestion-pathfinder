@@ -25,11 +25,11 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-      - uses: android-actions/setup-android@v3
-      - name: NDK Android
+      - name: SDK et NDK Android (déjà installés sur la machine de GitHub)
         run: |
-          sdkmanager --install "ndk;27.0.12077973" "platforms;android-34" "build-tools;34.0.0" > /dev/null
-          echo "NDK_HOME=$ANDROID_SDK_ROOT/ndk/27.0.12077973" >> "$GITHUB_ENV"
+          echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> "$GITHUB_ENV"
+          echo "NDK_HOME=$ANDROID_NDK_LATEST_HOME" >> "$GITHUB_ENV"
+          echo "NDK : $ANDROID_NDK_LATEST_HOME"
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: aarch64-linux-android
