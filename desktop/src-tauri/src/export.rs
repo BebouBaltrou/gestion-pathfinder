@@ -87,7 +87,7 @@ pub fn exporter(x: &mut Session, quoi: Export) -> Retour {
             false,
         ),
     };
-    let Some(chemin) = rfd::FileDialog::new()
+    let Some(chemin) = crate::dialogue::FileDialog::new()
         .set_title(titre)
         .set_file_name(fichier)
         .add_filter(filtre, extensions)
@@ -109,7 +109,7 @@ pub fn exporter(x: &mut Session, quoi: Export) -> Retour {
 /// Ajoute une campagne exportée (.json) aux campagnes et l'ouvre ; un fichier existant n'est
 /// jamais écrasé (le nom reçoit un numéro).
 pub fn importer(x: &mut Session) -> Retour {
-    let Some(source) = rfd::FileDialog::new()
+    let Some(source) = crate::dialogue::FileDialog::new()
         .set_title("Importer une campagne")
         .add_filter("Campagne", &["json"])
         .pick_file()

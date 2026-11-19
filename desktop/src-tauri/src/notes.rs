@@ -142,7 +142,7 @@ pub fn exporter_notes(s: S, critere: Critere) -> Retour {
             }
         })
         .collect();
-    let Some(chemin) = rfd::FileDialog::new()
+    let Some(chemin) = crate::dialogue::FileDialog::new()
         .set_title("Exporter les notes")
         .set_file_name(format!("{} - notes.md", nom.trim()))
         .add_filter("Markdown", &["md"])

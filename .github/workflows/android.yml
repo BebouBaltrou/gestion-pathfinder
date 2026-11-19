@@ -1,0 +1,58 @@
+name: Android (essai)
+
+on:
+  push:
+    branches: [claude/android]
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: never
+
+jobs:
+  apk:
+    name: APK Android (version d'essai)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: desktop
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: android-actions/setup-android@v3
+      - name: NDK Android
+        run: |
+          sdkmanager --install "ndk;27.0.12077973" "platforms;android-34" "build-tools;34.0.0" > /dev/null
+          echo "NDK_HOME=$ANDROID_SDK_ROOT/ndk/27.0.12077973" >> "$GITHUB_ENV"
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: desktop/src-tauri -> target
+      - name: Dépendances de l'interface
+        run: npm install --no-audit --no-fund
+      - name: Interface (dist)
+        run: npm run build
+      - name: Projet Android
+        run: npx tauri android init --ci
+      - name: Icônes
+        run: npx tauri icon src-tauri/icone-source.png
+      - name: Compilation (APK d'essai, signé avec la clé de débogage)
+        run: npx tauri android build --debug --apk --target aarch64
+      - name: Rassembler l'APK
+        run: |
+          mkdir -p ../apk
+          find src-tauri/gen/android -name "*.apk" -exec cp {} ../apk/gestion-pathfinder-android.apk \;
+          ls -l ../apk
+      - name: APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: gestion-pathfinder-android
+          path: apk/gestion-pathfinder-android.apk

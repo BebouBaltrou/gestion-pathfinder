@@ -87,7 +87,7 @@ fn apercu(chemin: &str) -> Result<ApercuImport, String> {
 /// Boîte de dialogue du système, puis rapport de cohérence. `Ok(None)` : choix annulé.
 #[tauri::command]
 pub fn choisir_fiche_pdf() -> Result<Option<ApercuImport>, String> {
-    let Some(chemin) = rfd::FileDialog::new()
+    let Some(chemin) = crate::dialogue::FileDialog::new()
         .set_title("Choisir une fiche de personnage (PDF)")
         .add_filter("Fiche PDF", &["pdf"])
         .pick_file()
