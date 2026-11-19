@@ -532,3 +532,59 @@ button.ligne-ref:hover { background: var(--carte-survol); }
 .sort-choix small { margin-left: auto; }
 .fond-modal { position: fixed; inset: 0; background: rgba(5, 7, 10, 0.7); z-index: 20; display: grid; place-items: start center; overflow-y: auto; padding: 30px 16px; }
 .modal { width: min(860px, 100%); display: flex; flex-direction: column; gap: 16px; }
+
+/* ---------------------------------------------------------------- téléphone (Android) */
+.bouton-menu, .voile-menu { display: none; }
+
+@media (max-width: 700px) {
+  html, body { overflow-x: hidden; }
+  /* menu : tiroir qui glisse depuis la gauche */
+  .navigation {
+    position: fixed; top: 0; bottom: 0; left: 0; z-index: 30;
+    width: min(300px, 85vw); padding: 18px 12px calc(18px + env(safe-area-inset-bottom));
+    transform: translateX(-105%); transition: transform 200ms ease;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
+  }
+  .menu-ouvert .navigation { transform: none; }
+  .navigation .libelle, .navigation .groupe-nav-titre, .marque-texte, .navigation .pastille { display: revert; }
+  .navigation .lien-nav span.libelle { display: block; }
+  .lien-nav { justify-content: flex-start; padding: 0 12px; min-height: 48px; }
+  .menu-ouvert .voile-menu { display: block; position: fixed; inset: 0; z-index: 29; background: rgba(0, 0, 0, 0.45); }
+  .bouton-menu { display: inline-flex; }
+
+  /* toute la zone défile : la barre du haut et les bandeaux ne mangent pas l'écran */
+  .zone-principale { overflow-y: auto; }
+  .contenu { flex: none; overflow: visible; }
+
+  /* barre du haut : sur plusieurs lignes */
+  .barre-haut { flex-wrap: wrap; gap: 8px; padding: calc(10px + env(safe-area-inset-top)) 12px 10px; }
+  .barre-haut .campagne { min-width: 0; flex: 1 1 calc(100% - 60px); margin-right: 0; }
+  .barre-haut .date { padding: 6px 10px; font-size: 14px; }
+  .bandeau-simulation { flex-wrap: wrap; padding: 10px 12px; }
+
+  /* contenu : une seule colonne, marges réduites */
+  .page { padding: 16px 12px 48px; gap: 16px; }
+  .page h1 { font-size: 26px; }
+  .formulaire, .fiche-referentiel, .ligne-ref, .ligne-ref.g3, .ligne-ref.g4, .ligne-journal,
+  .grille-personnages, .grille-orga, .choix-personnages { grid-template-columns: minmax(0, 1fr); }
+  .capitaux { min-width: 0; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grille-chiffres { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .mini-cartes { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+  .entete-fiche .xp { min-width: 0; flex: 1 1 100%; }
+  table { display: block; overflow-x: auto; }
+  pre, code { white-space: pre-wrap; word-break: break-word; }
+
+  /* champs : 16 px pour éviter le zoom automatique, boutons faciles à toucher */
+  input, select, textarea, .champ { font-size: 16px; max-width: 100%; }
+  .bouton { min-height: 40px; }
+
+  /* pages en plusieurs colonnes (inventaire, notes, aventure) : une colonne */
+  .coquille .disposition-inventaire, .coquille .schema-et-reserve, .coquille .resume-equipement,
+  .coquille .grille-pj, .coquille .disposition-notes, .coquille .ligne-chrono { grid-template-columns: minmax(0, 1fr); }
+  .coquille .disposition-inventaire .fiche-objet { grid-column: auto; }
+  .coquille .resultats-catalogue li { grid-template-columns: minmax(0, 1fr) auto auto; }
+  .coquille .schema-corps { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; font-size: 12px; }
+  .coquille .autres-emplacements { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  .notifications { left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); max-width: none; }
+}

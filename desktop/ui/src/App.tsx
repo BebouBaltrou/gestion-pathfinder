@@ -54,7 +54,13 @@ export type Outils = {
 
 export function App() {
   const [etat, setEtat] = useState<EtatApp | null>(null);
-  const [page, setPage] = useState<Page>("tableau");
+  const [page, setPageBrut] = useState<Page>("tableau");
+  // téléphone : le menu de navigation est un tiroir, refermé à chaque changement de page
+  const [menuOuvert, setMenuOuvert] = useState(false);
+  const setPage = useCallback((p: Page) => {
+    setPageBrut(p);
+    setMenuOuvert(false);
+  }, []);
   const [version, setVersion] = useState(0);
   const [panneauNotes, setPanneauNotes] = useState(false);
   const [notifs, setNotifs] = useState<Notification[]>([]);
@@ -134,7 +140,8 @@ export function App() {
   const pageActive: Page = entete ? page : "campagnes";
 
   return (
-    <div className="coquille">
+    <div className={"coquille" + (menuOuvert ? " menu-ouvert" : "")}>
+      <div className="voile-menu" onClick={() => setMenuOuvert(false)} />
       <nav className="navigation" aria-label="Navigation principale">
         <div className="marque">
           <div className="marque-logo">
@@ -171,6 +178,11 @@ export function App() {
 
       <div className="zone-principale">
         <header className="barre-haut">
+          <button className="bouton icone bouton-menu" aria-label="Menu" onClick={() => setMenuOuvert(true)}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
           <div className="campagne">
             <small>Campagne</small>
             <strong>{entete?.campagne ?? "Aucune campagne ouverte"}</strong>
