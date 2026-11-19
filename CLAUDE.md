@@ -40,7 +40,7 @@ data/            referentiel_officiel.json (source de vérité des données du l
 ```
 
 - Toute règle vit dans le cœur (`crates/`), jamais dans l'interface : l'interface affiche
-  ce que `crates/vues` calcule et agit via les commandes de `desktop/src-tauri/src/main.rs`.
+  ce que `crates/vues` calcule et agit via les commandes de `desktop/src-tauri/src/lib.rs` (partagé ordinateur/Android).
 - Chaque action est un `Evenement` du journal ; un ensemble d'actions atomique est un
   `Evenement::Groupe`. Les identifiants nouveaux se calculent par `nouvel_id_*`.
 - Les montants sont en pièces de cuivre (`Montant`, i64 : 1 pa = 10 pc, 1 po = 100 pc, 1 pp = 1 000 pc). Le format de fichier est 3 ; l'ancien format en pa est converti à la lecture.

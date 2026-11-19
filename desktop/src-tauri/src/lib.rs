@@ -274,10 +274,18 @@ fn ajuster_compte(s: S, pj: u32, delta: String, motif: String) -> Retour {
 
 /// Passe la fenêtre en plein écran ou en fenêtre ; renvoie le nouvel état.
 #[tauri::command]
+#[cfg(desktop)]
 fn basculer_plein_ecran(fenetre: tauri::Window) -> Result<bool, String> {
     let actif = !fenetre.is_fullscreen().map_err(|e| e.to_string())?;
     fenetre.set_fullscreen(actif).map_err(|e| e.to_string())?;
     Ok(actif)
+}
+
+/// Sur Android, l'application occupe déjà tout l'écran.
+#[tauri::command]
+#[cfg(mobile)]
+fn basculer_plein_ecran() -> Result<bool, String> {
+    Ok(true)
 }
 
 #[tauri::command]
