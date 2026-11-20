@@ -20,6 +20,7 @@ pub mod points;
 pub mod prestige_don;
 pub mod recettes;
 pub mod referentiel;
+pub mod statistiques;
 pub mod tableau;
 pub mod ventes;
 

@@ -108,6 +108,15 @@ fn tableau_de_bord(s: S) -> Option<vues::tableau::TableauDeBord> {
         .map(|c| vues::tableau::tableau_de_bord(c, &r))
 }
 
+#[tauri::command]
+fn statistiques(s: S) -> Option<vues::statistiques::PageStatistiques> {
+    let mut x = session(&s);
+    let r = x.r.clone();
+    x.campagne
+        .as_mut()
+        .map(|c| vues::statistiques::page_statistiques(c.etat(&r), &r))
+}
+
 // ---------------------------------------------------------------- localités
 
 #[tauri::command]
@@ -703,6 +712,7 @@ fn main() {
             importer_campagne,
             ouvrir_dossier,
             tableau_de_bord,
+            statistiques,
             page_localites,
             categorie_suggeree,
             lire_montant,

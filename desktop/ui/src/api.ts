@@ -109,6 +109,22 @@ export type CartePersonnage = {
   meilleureCompetence: string | null;
 };
 
+export type StatPersonnage = { id: number; nom: string; compte: Somme; objets: Somme; total: Somme };
+export type StatLocalite = { id: number; nom: string; tresorerie: Somme; capitaux: Somme; total: Somme };
+export type StatOrganisation = { id: number; nom: string; localite: string; equipes: number; effectif: number; effectifAVenir: number; gestionnaires: number; masseSalarialeJour: Somme };
+export type PageStatistiques = {
+  patrimoineTotal: Somme;
+  personnages: StatPersonnage[];
+  totalPersonnages: Somme;
+  localites: StatLocalite[];
+  totalLocalites: Somme;
+  objetsAutres: Somme;
+  organisations: StatOrganisation[];
+  effectifTotal: number;
+  effectifAVenirTotal: number;
+  masseSalarialeJour: Somme;
+};
+
 export type TableauDeBord = {
   date: string;
   jour: number;
@@ -646,6 +662,7 @@ export const api = {
   importerCampagne: () => appeler<Retour>("importer_campagne"),
   ouvrirDossier: () => appeler<Retour>("ouvrir_dossier"),
   tableauDeBord: () => appeler<TableauDeBord | null>("tableau_de_bord"),
+  statistiques: () => appeler<PageStatistiques | null>("statistiques"),
   avancer: (jours: number) => appeler<Retour>("avancer", { jours }),
   annuler: () => appeler<Retour>("annuler"),
   retablir: () => appeler<Retour>("retablir"),
