@@ -99,7 +99,12 @@ impl Etat {
     }
 
     /// Nombre de personnes d'une équipe : la taille de son profil (GC p. 95 « Taille »).
+    /// Un membre de la suite (partisan du don Prestige) est une seule personne, quelle que soit la
+    /// taille de son équipe équivalente.
     pub fn effectif_equipe(&self, e: &Equipe, r: &Referentiel) -> u32 {
+        if self.suite_de(e.id).is_some() {
+            return 1;
+        }
         match r.equipe(&e.reference).and_then(|u| u.taille.as_ref()) {
             Some(domaine::fiches::Taille::Personnes { nombre }) => *nombre,
             _ => 0,

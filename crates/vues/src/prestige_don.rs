@@ -387,7 +387,8 @@ mod tests {
             });
         let stats = crate::statistiques::page_statistiques(&e, &r);
         assert_eq!(stats.effectif_total, 3);
-        assert_eq!(stats.effectif_suite_total, 5);
+        // un partisan est une seule personne, même avec une équipe de 5
+        assert_eq!(stats.effectif_suite_total, 1);
         // la valeur ne compte que les artisans
         let artisans = r.equipe("artisans").unwrap().prix_po.unwrap();
         assert_eq!(stats.valeur_equipes.pc, i64::from(artisans) * 100);

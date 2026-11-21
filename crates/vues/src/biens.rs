@@ -10,7 +10,6 @@ use campagne::biens::{
 use campagne::etat::Etat;
 use campagne::evenements::Evenement;
 use campagne::modele::*;
-use domaine::fiches::Taille;
 use domaine::Montant;
 use regles::montures::MONTURES;
 use regles::Referentiel;
@@ -261,11 +260,9 @@ fn choix_proprietaire(etat: &Etat, p: ProprietaireBien) -> ChoixCible {
     }
 }
 
-fn nombre_de_personnes(r: &Referentiel, e: &Equipe) -> u32 {
-    match r.equipe(&e.reference).and_then(|u| u.taille.clone()) {
-        Some(Taille::Personnes { nombre }) => nombre,
-        _ => 0,
-    }
+/// Personnes d'une équipe (un membre de la suite compte pour une seule).
+fn nombre_de_personnes(etat: &Etat, r: &Referentiel, e: &Equipe) -> u32 {
+    etat.effectif_equipe(e, r)
 }
 
 fn details_modele(m: &ModeleVehicule) -> Vec<String> {
@@ -299,8 +296,8 @@ fn jauge(
     let mut en_cours = 0;
     for e in equipes.iter().filter_map(|id| etat.equipes.get(id)) {
         match e.statut {
-            StatutEquipe::Recrutee => recrutes += nombre_de_personnes(r, e),
-            StatutEquipe::EnRecrutement(_) => en_cours += nombre_de_personnes(r, e),
+            StatutEquipe::Recrutee => recrutes += nombre_de_personnes(etat, r, e),
+            StatutEquipe::EnRecrutement(_) => en_cours += nombre_de_personnes(etat, r, e),
             _ => {}
         }
     }
