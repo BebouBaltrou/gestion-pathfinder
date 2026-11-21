@@ -1,0 +1,67 @@
+/* Refonte visuelle des onglets anciens : aspect seulement, aucune règle de calcul.
+   Plan : chaque page garde ses fonctions ; ici on ne change que les jetons de présentation.
+   Carnet = registre de campagne (filets doubles, chiffres en encre) ; Néon = tableau de bord nocturne
+   (filets lumineux, chiffres nets) ; Sombre d'origine = lecture calme (filets fins dorés). */
+
+/* ---------------------------------------------------------------- en-tête de page */
+.titre-page h1 {
+  font-size: 30px; font-weight: 700; letter-spacing: -0.015em; line-height: 1.15;
+  padding-bottom: 10px; margin-bottom: 2px;
+  border-bottom: 1px solid var(--bord);
+}
+.titre-page p { font-size: 16px; }
+:root[data-theme="carnet"] .titre-page h1 { border-bottom: 3px double var(--bord-fort); }
+:root[data-theme="neon"] .titre-page h1 {
+  border-bottom: 1px solid color-mix(in srgb, var(--or) 60%, transparent);
+  box-shadow: 0 10px 18px -14px var(--or);
+}
+
+/* ---------------------------------------------------------------- cartes et sections */
+.carte { padding: 22px 24px; }
+.section-tete { align-items: baseline; padding-bottom: 6px; border-bottom: 1px solid var(--bord); }
+.section-tete h2 { font-size: 19px; }
+:root[data-theme="carnet"] .carte { background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.35), transparent 40%); }
+
+/* ---------------------------------------------------------------- boutons */
+.bouton { height: 40px; border-radius: var(--rayon-petit); }
+.bouton.principal { box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25) inset, 0 4px 14px -8px var(--or); }
+:root[data-theme="neon"] .bouton.principal { box-shadow: 0 0 18px -6px var(--or); }
+.bouton.discret:hover:not(:disabled) { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---------------------------------------------------------------- champs */
+.champ { border-radius: var(--rayon-petit); }
+.champ:focus { border-color: var(--or); box-shadow: 0 0 0 3px color-mix(in srgb, var(--or) 22%, transparent); }
+
+/* ---------------------------------------------------------------- tableaux : registre */
+.tableau th { font-size: 13px; font-weight: 600; color: var(--texte-doux); padding: 8px 12px; border-bottom: 2px solid var(--bord-fort); }
+.tableau td { padding: 10px 12px; border-top: 1px solid var(--bord); }
+.tableau td.num { font-variant-numeric: tabular-nums; font-weight: 600; }
+.tableau tr.cliquable:hover td { background: color-mix(in srgb, var(--or) 7%, var(--carte)); }
+:root[data-theme="carnet"] .tableau tr:nth-child(even) td { background: color-mix(in srgb, var(--bord) 14%, transparent); }
+
+/* ---------------------------------------------------------------- onglets de page */
+.onglets { border-bottom: 1px solid var(--bord); gap: 6px; }
+.onglet { font-size: 15px; border-radius: var(--rayon-petit) var(--rayon-petit) 0 0; }
+.onglet.actif { background: color-mix(in srgb, var(--or) 10%, transparent); }
+
+/* ---------------------------------------------------------------- pastilles et badges */
+.badge, .pastille { border-radius: 999px; }
+:root[data-theme="neon"] .badge.confirmer, :root[data-theme="neon"] .pastille { box-shadow: 0 0 10px -3px var(--or); }
+
+/* ---------------------------------------------------------------- navigation */
+.lien-nav { border-radius: var(--rayon-petit); min-height: 42px; }
+.lien-nav.actif { background: color-mix(in srgb, var(--or) 16%, var(--carte)); }
+:root[data-theme="carnet"] .lien-nav.actif { box-shadow: inset 4px 0 0 var(--or); }
+
+/* ---------------------------------------------------------------- jauges */
+.jauge { height: 6px; }
+:root[data-theme="neon"] .jauge > div { box-shadow: 0 0 10px currentColor; }
+
+/* ---------------------------------------------------------------- arrivée sobre */
+@media (prefers-reduced-motion: no-preference) {
+  .page > .carte:first-child { animation: arrivee-page 360ms ease-out both; }
+}
+@keyframes arrivee-page {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
