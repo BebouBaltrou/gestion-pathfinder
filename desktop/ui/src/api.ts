@@ -111,7 +111,7 @@ export type CartePersonnage = {
 
 export type StatPersonnage = { id: number; nom: string; compte: Somme; objets: Somme; total: Somme };
 export type StatLocalite = { id: number; nom: string; tresorerie: Somme; capitaux: Somme; total: Somme };
-export type StatOrganisation = { id: number; nom: string; localite: string; equipes: number; effectif: number; effectifAVenir: number; gestionnaires: number; masseSalarialeJour: Somme };
+export type StatOrganisation = { id: number; nom: string; localite: string; equipes: number; effectif: number; effectifAVenir: number; gestionnaires: number; valeurEquipes: Somme };
 export type PageStatistiques = {
   patrimoineTotal: Somme;
   personnages: StatPersonnage[];
@@ -122,7 +122,7 @@ export type PageStatistiques = {
   organisations: StatOrganisation[];
   effectifTotal: number;
   effectifAVenirTotal: number;
-  masseSalarialeJour: Somme;
+  valeurEquipes: Somme;
 };
 
 export type TableauDeBord = {

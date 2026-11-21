@@ -1,5 +1,5 @@
 //! Statistiques : patrimoine des personnages et des localités, valeur des objets, effectif et
-//! masse salariale des organisations. Les valeurs de capitaux suivent la Table 2-1 (GC p. 78),
+//! valeur des équipes des organisations (prix imprimés, GC). Les valeurs de capitaux suivent la Table 2-1 (GC p. 78),
 //! en valeur d'achat.
 
 use crate::inventaire::page_inventaire;
@@ -26,7 +26,7 @@ pub struct PageStatistiques {
     pub organisations: Vec<StatOrganisation>,
     pub effectif_total: u32,
     pub effectif_a_venir_total: u32,
-    pub masse_salariale_jour: Somme,
+    pub valeur_equipes: Somme,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -65,8 +65,8 @@ pub struct StatOrganisation {
     /// Personnes à recruter ou en recrutement.
     pub effectif_a_venir: u32,
     pub gestionnaires: u32,
-    /// Salaires des gestionnaires actifs affectés à l'organisation.
-    pub masse_salariale_jour: Somme,
+    /// Somme des prix imprimés (`prix_po`, référentiel) des équipes de l'organisation.
+    pub valeur_equipes: Somme,
 }
 
 fn somme(pc: i64) -> Somme {
@@ -137,7 +137,14 @@ pub fn page_statistiques(etat: &Etat, r: &Referentiel) -> PageStatistiques {
                 .gestionnaires_de(Affectation::Organisation(o.id))
                 .filter(|g| g.actif)
                 .collect();
-            let masse: i64 = gestionnaires.iter().map(|g| g.salaire.pc).sum();
+            let valeur: i64 = equipes
+                .iter()
+                .map(|e| {
+                    r.equipe(&e.reference)
+                        .and_then(|u| u.prix_po)
+                        .map_or(0, |po| i64::from(po) * 100)
+                })
+                .sum();
             StatOrganisation {
                 id: o.id.0,
                 nom: o.nom.clone(),
@@ -150,15 +157,12 @@ pub fn page_statistiques(etat: &Etat, r: &Referentiel) -> PageStatistiques {
                 effectif,
                 effectif_a_venir,
                 gestionnaires: gestionnaires.len() as u32,
-                masse_salariale_jour: somme(masse),
+                valeur_equipes: somme(valeur),
             }
         })
         .collect();
 
-    let masse_totale: i64 = organisations
-        .iter()
-        .map(|o| o.masse_salariale_jour.pc)
-        .sum();
+    let valeur_totale: i64 = organisations.iter().map(|o| o.valeur_equipes.pc).sum();
 
     PageStatistiques {
         patrimoine_total: somme(total_personnages + total_localites + objets_autres),
@@ -170,7 +174,7 @@ pub fn page_statistiques(etat: &Etat, r: &Referentiel) -> PageStatistiques {
         effectif_total: organisations.iter().map(|o| o.effectif).sum(),
         effectif_a_venir_total: organisations.iter().map(|o| o.effectif_a_venir).sum(),
         organisations,
-        masse_salariale_jour: somme(masse_totale),
+        valeur_equipes: somme(valeur_totale),
     }
 }
 

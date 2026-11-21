@@ -66,9 +66,9 @@ export function Statistiques({ outils }: { outils: Outils }) {
           <span className="detail">{s.effectifAVenirTotal} à recruter ou en recrutement</span>
         </div>
         <div className="carte chiffre">
-          <span className="etiquette">Masse salariale</span>
-          <span className="valeur">{texte(s.masseSalarialeJour)}</span>
-          <span className="detail">Par jour, gestionnaires actifs</span>
+          <span className="etiquette">Valeur des équipes</span>
+          <span className="valeur">{texte(s.valeurEquipes)}</span>
+          <span className="detail">Prix imprimés d'achat des équipes</span>
         </div>
       </section>
 
@@ -113,17 +113,17 @@ export function Statistiques({ outils }: { outils: Outils }) {
         <h2>Organisations</h2>
         <table className="tableau">
           <thead>
-            <tr><th>Organisation</th><th>Localité</th><th>Équipes</th><th>Effectif</th><th>À venir</th><th>Gestionnaires</th><th>Salaires / jour</th></tr>
+            <tr><th>Organisation</th><th>Localité</th><th>Équipes</th><th>Effectif</th><th>À venir</th><th>Gestionnaires</th><th>Valeur des équipes</th></tr>
           </thead>
           <tbody>
             {s.organisations.map((o) => (
               <tr key={o.id}>
                 <td>{o.nom}</td><td>{o.localite}</td><td>{o.equipes}</td><td>{o.effectif}</td>
-                <td>{o.effectifAVenir}</td><td>{o.gestionnaires}</td><td>{texte(o.masseSalarialeJour)}</td>
+                <td>{o.effectifAVenir}</td><td>{o.gestionnaires}</td><td>{texte(o.valeurEquipes)}</td>
               </tr>
             ))}
             <tr className="total">
-              <td colSpan={3}>Total</td><td>{s.effectifTotal}</td><td>{s.effectifAVenirTotal}</td><td></td><td>{texte(s.masseSalarialeJour)}</td>
+              <td colSpan={3}>Total</td><td>{s.effectifTotal}</td><td>{s.effectifAVenirTotal}</td><td></td><td>{texte(s.valeurEquipes)}</td>
             </tr>
           </tbody>
         </table>
