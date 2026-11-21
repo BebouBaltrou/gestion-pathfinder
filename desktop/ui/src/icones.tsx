@@ -87,6 +87,14 @@ export const icones: Record<string, (p: P) => ReactElement> = {
       <path d="M12 8v4M6 16v-4h12v4" />
     </Icone>
   ),
+  biens: (p) => (
+    <Icone {...p}>
+      <path d="M3 7h12v8H3z" />
+      <path d="M15 10h3.5L21 13v2h-6" />
+      <circle cx="7" cy="18" r="2" />
+      <circle cx="17" cy="18" r="2" />
+    </Icone>
+  ),
   gestionnaires: (p) => (
     <Icone {...p}>
       <circle cx="8" cy="15" r="4" />
