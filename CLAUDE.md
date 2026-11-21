@@ -41,6 +41,10 @@ data/            referentiel_officiel.json (source de vérité des données du l
 
 - Toute règle vit dans le cœur (`crates/`), jamais dans l'interface : l'interface affiche
   ce que `crates/vues` calcule et agit via les commandes de `desktop/src-tauri/src/main.rs`.
+- **Statistiques** (`crates/vues/src/statistiques.rs`) : tout ce qui a une valeur en pc entre dans le
+  patrimoine par une *source* (`SOURCES`) et une catégorie (`CATEGORIES`). Toute nouvelle chose
+  qui a une valeur (montures, véhicules, familiers…) doit y ajouter une source : total, répartition,
+  personnages, villes, courbes dans le temps et graphiques la prennent alors en compte.
 - Chaque action est un `Evenement` du journal ; un ensemble d'actions atomique est un
   `Evenement::Groupe`. Les identifiants nouveaux se calculent par `nouvel_id_*`.
 - Les montants sont en pièces de cuivre (`Montant`, i64 : 1 pa = 10 pc, 1 po = 100 pc, 1 pp = 1 000 pc). Le format de fichier est 3 ; l'ancien format en pa est converti à la lecture.

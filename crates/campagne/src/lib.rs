@@ -395,6 +395,10 @@ impl Campagne {
                 if *favori { "Favori :" } else { "Retrait des favoris :" },
                 bat(id)
             ),
+            BatimentProprietaire { id, proprietaire } => match proprietaire {
+                Some(p) => format!("Propriétaire de {} : {p}", bat(id)),
+                None => format!("Plus de propriétaire pour {}", bat(id)),
+            },
             EtageAjoute { batiment, nom, .. } => {
                 format!("Étage « {nom} » ajouté à {}", bat(batiment))
             }
