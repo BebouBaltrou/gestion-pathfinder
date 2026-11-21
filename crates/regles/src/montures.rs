@@ -5,17 +5,42 @@
 //! lourde de la monture (confirmé par Antoine) : vitesse réduite dans la plage. Au-delà de la
 //! borne haute, la table ne dit rien : on renvoie `None`.
 
-/// Barde de monture (armure), table 6-8 du Manuel.
+/// Barde de monture qui ralentit (table 6-8 du Manuel). Une barde légère ne ralentit pas.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Barde {
     Intermediaire,
     Lourde,
 }
 
+/// Genre d'une barde : celui de l'armure dont elle est tirée (Manuel p. 162 : « il existe presque
+/// autant de bardes que d'armures », table 6-6).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum GenreBarde {
+    Legere,
+    Intermediaire,
+    Lourde,
+}
+
+impl GenreBarde {
+    /// La barde qui ralentit la monture, s'il y en a une.
+    pub fn ralentissante(self) -> Option<Barde> {
+        match self {
+            GenreBarde::Legere => None,
+            GenreBarde::Intermediaire => Some(Barde::Intermediaire),
+            GenreBarde::Lourde => Some(Barde::Lourde),
+        }
+    }
+}
+
 /// Monture de la table 7-9 : vitesse normale et vitesse réduite (par heure et par jour, km).
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Monture {
     pub nom: &'static str,
+    /// Créature de taille G (cheval) ou M (poney, chien de selle) : prix et poids de sa barde.
+    pub grande: bool,
+    /// Vitesse de base, en mètres par round : les colonnes 12, 15 et 18 m de la table 6-8
+    /// (lecture à valider : poney et chien, cheval lourd, cheval léger).
+    pub vitesse_base_m: u32,
     pub vitesse_km_h: f64,
     pub vitesse_km_jour: f64,
     /// Bornes (kg, incluses) des charges intermédiaire et lourde : vitesse réduite dans la plage.
@@ -35,6 +60,8 @@ pub struct VitesseMonture {
 pub const MONTURES: &[Monture] = &[
     Monture {
         nom: "Cheval léger",
+        grande: true,
+        vitesse_base_m: 18,
         vitesse_km_h: 7.5,
         vitesse_km_jour: 60.0,
         plage_reduite_kg: (87.5, 262.5),
@@ -43,6 +70,8 @@ pub const MONTURES: &[Monture] = &[
     },
     Monture {
         nom: "Cheval lourd",
+        grande: true,
+        vitesse_base_m: 15,
         vitesse_km_h: 7.5,
         vitesse_km_jour: 60.0,
         plage_reduite_kg: (114.5, 345.0),
@@ -51,6 +80,8 @@ pub const MONTURES: &[Monture] = &[
     },
     Monture {
         nom: "Poney",
+        grande: false,
+        vitesse_base_m: 12,
         vitesse_km_h: 6.0,
         vitesse_km_jour: 48.0,
         plage_reduite_kg: (75.5, 225.0),
@@ -59,6 +90,8 @@ pub const MONTURES: &[Monture] = &[
     },
     Monture {
         nom: "Chien de selle",
+        grande: false,
+        vitesse_base_m: 12,
         vitesse_km_h: 6.0,
         vitesse_km_jour: 48.0,
         plage_reduite_kg: (50.5, 150.0),
@@ -103,91 +136,37 @@ pub fn vitesse_avec_barde(vitesse_base_m: u32, barde: Option<Barde>) -> Option<f
     }
 }
 
-/// Seuils de charge (kg) par Force, table « Charge transportable » p. 171 du Manuel (VF).
-/// Entrée : (Force, charge légère max, charge intermédiaire max, charge lourde max).
-/// Pour une Force au-delà de 29 : on prend la Force moins 10 et on multiplie par 4, à chaque +10.
-/// Lecture à valider pour les montures : la table est celle des personnages ; le Manuel ne donne
-/// pas leur coefficient, et leur Force n'est pas encore connue (à renseigner).
-const SEUILS_CHARGE: &[(u8, f64, f64, f64)] = &[
-    (1, 1.5, 3.0, 5.0),
-    (2, 3.0, 6.5, 10.0),
-    (3, 5.0, 10.0, 15.0),
-    (4, 6.5, 13.0, 20.0),
-    (5, 8.0, 16.5, 25.0),
-    (6, 10.0, 20.0, 30.0),
-    (7, 11.5, 23.0, 35.0),
-    (8, 13.0, 26.5, 40.0),
-    (9, 15.0, 30.0, 45.0),
-    (10, 16.5, 33.0, 50.0),
-    (11, 19.0, 38.0, 57.5),
-    (12, 21.5, 43.0, 65.0),
-    (13, 25.0, 50.0, 75.0),
-    (14, 29.0, 58.0, 87.5),
-    (15, 33.0, 66.5, 100.0),
-    (16, 38.0, 76.5, 115.0),
-    (17, 43.0, 86.5, 130.0),
-    (18, 50.0, 100.0, 150.0),
-    (19, 58.0, 116.5, 175.0),
-    (20, 66.5, 133.0, 200.0),
-    (21, 76.5, 153.0, 230.0),
-    (22, 86.5, 173.0, 260.0),
-    (23, 100.0, 200.0, 300.0),
-    (24, 116.5, 233.0, 350.0),
-    (25, 133.0, 266.5, 400.0),
-    (26, 153.0, 306.5, 460.0),
-    (27, 173.0, 346.5, 520.0),
-    (28, 200.0, 400.0, 600.0),
-    (29, 233.0, 466.5, 700.0),
-];
-
-/// Catégorie de charge portée.
+/// Catégorie de charge portée par une monture.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum CategorieCharge {
     Legere,
     Intermediaire,
     Lourde,
-    /// Au-delà de la charge lourde : dépassement, seulement si la règle le permet (option).
+    /// Au-delà de la charge lourde : la table ne dit rien ; le dépassement reste permis.
     Depassement,
 }
 
-/// Seuils (légère, intermédiaire, lourde) pour une Force donnée. `None` si la Force est inconnue.
-pub fn seuils_charge(force: Option<u8>) -> Option<(f64, f64, f64)> {
-    let mut f = i32::from(force?);
-    if !(1..=60).contains(&f) {
-        return None;
-    }
-    let mut multiplicateur = 1.0;
-    while f > 29 {
-        f -= 10;
-        multiplicateur *= 4.0;
-    }
-    let ligne = SEUILS_CHARGE.iter().find(|(n, ..)| i32::from(*n) == f)?;
-    Some((
-        ligne.1 * multiplicateur,
-        ligne.2 * multiplicateur,
-        ligne.3 * multiplicateur,
-    ))
+/// Seuils de charge d'une monture, en kg : jusqu'à (légère, intermédiaire, lourde).
+///
+/// La table 7-9 donne le début de la charge intermédiaire (borne basse) et la fin de la charge
+/// lourde (borne haute) : c'est la charge des quadrupèdes. Lecture à valider : la limite entre
+/// intermédiaire et lourde suit les proportions de la table 7-4 (un tiers, deux tiers, tout).
+pub fn seuils_charge_monture(m: &Monture) -> (f64, f64, f64) {
+    let (basse, haute) = m.plage_reduite_kg;
+    (basse, haute * 2.0 / 3.0, haute)
 }
 
-/// Catégorie de la charge pour une Force et un poids (kg).
-/// Avec `depassement_autorise`, une charge au-delà de la lourde est affichée comme dépassement
-/// (sans bloquer). Sans l'option, la même charge renvoie `None`.
-pub fn categorie_charge(
-    force: Option<u8>,
-    charge_kg: f64,
-    depassement_autorise: bool,
-) -> Option<CategorieCharge> {
-    let (legere, inter, lourde) = seuils_charge(force)?;
+/// Catégorie de la charge (kg) portée par une monture.
+pub fn categorie_charge_monture(m: &Monture, charge_kg: f64) -> CategorieCharge {
+    let (legere, intermediaire, lourde) = seuils_charge_monture(m);
     if charge_kg <= legere {
-        Some(CategorieCharge::Legere)
-    } else if charge_kg <= inter {
-        Some(CategorieCharge::Intermediaire)
+        CategorieCharge::Legere
+    } else if charge_kg <= intermediaire {
+        CategorieCharge::Intermediaire
     } else if charge_kg <= lourde {
-        Some(CategorieCharge::Lourde)
-    } else if depassement_autorise {
-        Some(CategorieCharge::Depassement)
+        CategorieCharge::Lourde
     } else {
-        None
+        CategorieCharge::Depassement
     }
 }
 
@@ -240,41 +219,36 @@ mod tests_charge {
     use super::*;
 
     #[test]
-    fn seuils_force_1_et_20() {
-        assert_eq!(seuils_charge(Some(1)), Some((1.5, 3.0, 5.0)));
-        assert_eq!(seuils_charge(Some(20)), Some((66.5, 133.0, 200.0)));
+    fn seuils_du_cheval_leger_d_apres_la_table_7_9() {
+        let (legere, intermediaire, lourde) = seuils_charge_monture(&MONTURES[0]);
+        assert_eq!((legere, intermediaire, lourde), (87.5, 175.0, 262.5));
     }
 
     #[test]
-    fn force_au_dela_de_29_multiplie_par_4_par_10() {
-        // Force 30 = Force 20 × 4
-        assert_eq!(seuils_charge(Some(30)), Some((266.0, 532.0, 800.0)));
+    fn categories_et_depassement_sans_blocage() {
+        let cheval = &MONTURES[0];
+        assert_eq!(
+            categorie_charge_monture(cheval, 50.0),
+            CategorieCharge::Legere
+        );
+        assert_eq!(
+            categorie_charge_monture(cheval, 100.0),
+            CategorieCharge::Intermediaire
+        );
+        assert_eq!(
+            categorie_charge_monture(cheval, 200.0),
+            CategorieCharge::Lourde
+        );
+        assert_eq!(
+            categorie_charge_monture(cheval, 300.0),
+            CategorieCharge::Depassement
+        );
     }
 
     #[test]
-    fn force_inconnue_ou_hors_borne() {
-        assert_eq!(seuils_charge(None), None);
-        assert_eq!(seuils_charge(Some(0)), None);
-    }
-
-    #[test]
-    fn categories_et_depassement() {
-        assert_eq!(
-            categorie_charge(Some(20), 50.0, false),
-            Some(CategorieCharge::Legere)
-        );
-        assert_eq!(
-            categorie_charge(Some(20), 100.0, false),
-            Some(CategorieCharge::Intermediaire)
-        );
-        assert_eq!(
-            categorie_charge(Some(20), 150.0, false),
-            Some(CategorieCharge::Lourde)
-        );
-        assert_eq!(categorie_charge(Some(20), 250.0, false), None);
-        assert_eq!(
-            categorie_charge(Some(20), 250.0, true),
-            Some(CategorieCharge::Depassement)
-        );
+    fn la_vitesse_baisse_des_la_charge_intermediaire() {
+        let poney = &MONTURES[2];
+        assert!(!vitesse_monture(poney, 50.0).unwrap().reduite);
+        assert!(vitesse_monture(poney, 100.0).unwrap().reduite);
     }
 }

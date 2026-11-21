@@ -620,6 +620,22 @@ impl Campagne {
             }
             MontureModifiee { nom, .. } => format!("Monture {nom} modifiée"),
             MontureRetiree { id } => format!("Monture {id} retirée"),
+            VehiculeAmelioree {
+                id,
+                amelioration,
+                prix,
+                ..
+            } => format!("Véhicule {id} : amélioration « {amelioration} » installée ({prix})"),
+            VehiculeAmeliorationRetiree { id, .. } => {
+                format!("Véhicule {id} : amélioration retirée")
+            }
+            VehiculePassagers { id, nombre } => {
+                format!("Véhicule {id} : {nombre} passager(s) à bord")
+            }
+            MontureBardee { id, armure, prix, .. } => {
+                format!("Monture {id} : barde « {armure} » équipée ({prix})")
+            }
+            MontureDebardee { id } => format!("Monture {id} : barde retirée"),
             AbandonActif { cible } => format!("Abandon : {}", etat.libelle_actif(*cible, r)),
             VenteLancee {
                 cible,

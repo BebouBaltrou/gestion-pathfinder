@@ -372,6 +372,33 @@ pub enum Evenement {
     MontureRetiree {
         id: IdMonture,
     },
+    /// Installation d'une amélioration de bateau (données hors Manuel) ; `payeur` paie `prix`.
+    VehiculeAmelioree {
+        id: IdVehicule,
+        amelioration: String,
+        quantite: u32,
+        payeur: Payeur,
+        prix: Montant,
+    },
+    VehiculeAmeliorationRetiree {
+        id: IdVehicule,
+        index: usize,
+    },
+    /// Nombre de passagers à bord (suivi).
+    VehiculePassagers {
+        id: IdVehicule,
+        nombre: u32,
+    },
+    /// Équipement d'une barde (armure de monture) ; `armure` est le nom anglais du catalogue.
+    MontureBardee {
+        id: IdMonture,
+        armure: String,
+        payeur: Payeur,
+        prix: Montant,
+    },
+    MontureDebardee {
+        id: IdMonture,
+    },
     /// Réglage du salaire d'un gestionnaire affecté à plusieurs établissements :
     /// `false` = payé une fois par jour (défaut, PC-06), `true` = une fois par affectation.
     ReglageSalaireGestionnaire {

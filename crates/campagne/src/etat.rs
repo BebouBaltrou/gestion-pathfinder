@@ -800,7 +800,12 @@ impl Etat {
             | VehiculeRetire { .. }
             | MontureAchetee { .. }
             | MontureModifiee { .. }
-            | MontureRetiree { .. } => self.appliquer_biens(ev)?,
+            | MontureRetiree { .. }
+            | VehiculeAmelioree { .. }
+            | VehiculeAmeliorationRetiree { .. }
+            | VehiculePassagers { .. }
+            | MontureBardee { .. }
+            | MontureDebardee { .. } => self.appliquer_biens(ev)?,
             Note { .. } => {}
         }
         self.purger_biens();
