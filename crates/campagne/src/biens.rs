@@ -1,5 +1,5 @@
 //! Biens de campagne : véhicules (propriétaire : une localité, une organisation ou un PJ) et
-//! montures (détenues par un PJ, un PNJ du don Prestige ou une équipe).
+//! montures (propriétaire comme un véhicule ; confiées à un PJ, un PNJ du don Prestige ou une équipe).
 //!
 //! Les caractéristiques des modèles viennent du Manuel des joueurs (`data/core/vehicules_manuel.json`
 //! et `regles::montures`). Les attributions (équipes et gestionnaires d'un véhicule, détenteur
@@ -13,18 +13,20 @@ use domaine::Montant;
 /// À qui appartient un véhicule.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-pub enum ProprietaireVehicule {
+pub enum ProprietaireBien {
     Localite(IdLocalite),
     Organisation(IdOrganisation),
     Personnage(IdPersonnage),
 }
 
-/// Qui s'occupe d'une monture : un PJ, un PNJ (acolyte du don Prestige : un personnage lié) ou une équipe.
+/// À qui une monture est confiée, sans changer de propriétaire : un PJ, un acolyte du don Prestige
+/// (un personnage lié), une équipe, ou un partisan du don (rang dans la liste du maître).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum DetenteurMonture {
     Personnage(IdPersonnage),
     Equipe(IdEquipe),
+    Partisan { maitre: IdPersonnage, index: usize },
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -34,7 +36,7 @@ pub struct Vehicule {
     /// Identifiant du modèle (`vehicules_manuel.json` : « drakkar », « chariot »…).
     pub modele: String,
     pub nom: String,
-    pub proprietaire: ProprietaireVehicule,
+    pub proprietaire: ProprietaireBien,
     /// Prix d'achat, compté dans le patrimoine du propriétaire.
     pub prix: Montant,
     /// Équipes affectées à ce véhicule (l'équipage).
@@ -49,17 +51,19 @@ pub struct Monture {
     /// Nom du modèle (« Cheval léger », « Poney »…).
     pub modele: String,
     pub nom: String,
-    pub detenteur: DetenteurMonture,
-    /// Prix d'achat, compté dans le patrimoine du détenteur.
+    /// Compté dans son patrimoine (prix d'achat).
+    pub proprietaire: ProprietaireBien,
+    /// À qui la monture est confiée (`None` : à l'écurie du propriétaire).
+    pub detenteur: Option<DetenteurMonture>,
     pub prix: Montant,
 }
 
 impl Etat {
-    fn verifier_proprietaire(&self, p: &ProprietaireVehicule) -> Result<(), Erreur> {
+    fn verifier_proprietaire(&self, p: &ProprietaireBien) -> Result<(), Erreur> {
         match p {
-            ProprietaireVehicule::Localite(l) => self.localite(*l).map(|_| ()),
-            ProprietaireVehicule::Organisation(o) => self.organisation(*o).map(|_| ()),
-            ProprietaireVehicule::Personnage(pj) => self.pj(*pj).map(|_| ()),
+            ProprietaireBien::Localite(l) => self.localite(*l).map(|_| ()),
+            ProprietaireBien::Organisation(o) => self.organisation(*o).map(|_| ()),
+            ProprietaireBien::Personnage(pj) => self.pj(*pj).map(|_| ()),
         }
     }
 
@@ -67,6 +71,36 @@ impl Etat {
         match d {
             DetenteurMonture::Personnage(pj) => self.pj(*pj).map(|_| ()),
             DetenteurMonture::Equipe(e) => self.equipe(*e).map(|_| ()),
+            DetenteurMonture::Partisan { maitre, index } => self
+                .prestige_don
+                .get(maitre)
+                .filter(|d| *index < d.partisans.len())
+                .map(|_| ())
+                .ok_or_else(|| Erreur::Prestige("partisan inconnu".into())),
+        }
+    }
+
+    /// Propriétaire d'une monture : celui qui est donné, sinon (anciennes sauvegardes) celui qu'on
+    /// déduit de qui la détient.
+    fn proprietaire_monture(
+        &self,
+        donne: Option<ProprietaireBien>,
+        detenteur: Option<DetenteurMonture>,
+    ) -> Result<ProprietaireBien, Erreur> {
+        if let Some(p) = donne {
+            return Ok(p);
+        }
+        match detenteur {
+            Some(DetenteurMonture::Personnage(pj)) => Ok(ProprietaireBien::Personnage(pj)),
+            Some(DetenteurMonture::Partisan { maitre, .. }) => {
+                Ok(ProprietaireBien::Personnage(maitre))
+            }
+            Some(DetenteurMonture::Equipe(e)) => {
+                Ok(ProprietaireBien::Organisation(self.equipe(e)?.organisation))
+            }
+            None => Err(Erreur::Actif(
+                "une monture a besoin d'un propriétaire".into(),
+            )),
         }
     }
 
@@ -146,6 +180,7 @@ impl Etat {
                 id,
                 modele,
                 nom,
+                proprietaire,
                 detenteur,
                 payeur,
                 prix,
@@ -159,7 +194,11 @@ impl Etat {
                 if prix.est_negatif() {
                     return Err(Erreur::MontantNonPositif);
                 }
-                self.verifier_detenteur(detenteur)?;
+                let proprietaire = self.proprietaire_monture(*proprietaire, *detenteur)?;
+                self.verifier_proprietaire(&proprietaire)?;
+                if let Some(d) = detenteur {
+                    self.verifier_detenteur(d)?;
+                }
                 if prix.pc > 0 {
                     self.debiter(*payeur, *prix)?;
                 }
@@ -169,19 +208,34 @@ impl Etat {
                         id: *id,
                         modele: modele.clone(),
                         nom: nom.clone(),
+                        proprietaire,
                         detenteur: *detenteur,
                         prix: *prix,
                     },
                 );
             }
-            MontureModifiee { id, nom, detenteur } => {
+            MontureModifiee {
+                id,
+                nom,
+                proprietaire,
+                detenteur,
+            } => {
                 if nom.trim().is_empty() {
                     return Err(Erreur::NomVide);
                 }
-                self.montures.get(id).ok_or(Erreur::MontureInconnue(*id))?;
-                self.verifier_detenteur(detenteur)?;
+                let actuel = self
+                    .montures
+                    .get(id)
+                    .ok_or(Erreur::MontureInconnue(*id))?
+                    .proprietaire;
+                let proprietaire = proprietaire.unwrap_or(actuel);
+                self.verifier_proprietaire(&proprietaire)?;
+                if let Some(d) = detenteur {
+                    self.verifier_detenteur(d)?;
+                }
                 let m = self.montures.get_mut(id).expect("vérifié");
                 m.nom = nom.clone();
+                m.proprietaire = proprietaire;
                 m.detenteur = *detenteur;
             }
             MontureRetiree { id } => {
@@ -200,10 +254,10 @@ impl Etat {
         let equipes: std::collections::BTreeSet<IdEquipe> = self.equipes.keys().copied().collect();
         let gestionnaires: std::collections::BTreeSet<IdGestionnaire> =
             self.gestionnaires.keys().copied().collect();
-        let existe = |p: &ProprietaireVehicule| match p {
-            ProprietaireVehicule::Localite(l) => self.localites.contains_key(l),
-            ProprietaireVehicule::Organisation(o) => self.organisations.contains_key(o),
-            ProprietaireVehicule::Personnage(pj) => self.personnages.contains_key(pj),
+        let existe = |p: &ProprietaireBien| match p {
+            ProprietaireBien::Localite(l) => self.localites.contains_key(l),
+            ProprietaireBien::Organisation(o) => self.organisations.contains_key(o),
+            ProprietaireBien::Personnage(pj) => self.personnages.contains_key(pj),
         };
         let vivants: Vec<IdVehicule> = self
             .vehicules
@@ -216,11 +270,28 @@ impl Etat {
             v.equipes.retain(|e| equipes.contains(e));
             v.gestionnaires.retain(|g| gestionnaires.contains(g));
         }
-        let personnages = &self.personnages;
-        self.montures.retain(|_, m| match m.detenteur {
-            DetenteurMonture::Personnage(pj) => personnages.contains_key(&pj),
-            DetenteurMonture::Equipe(e) => equipes.contains(&e),
-        });
+        let vivantes: Vec<IdMonture> = self
+            .montures
+            .values()
+            .filter(|m| existe(&m.proprietaire))
+            .map(|m| m.id)
+            .collect();
+        self.montures.retain(|id, _| vivantes.contains(id));
+        // Un détenteur disparu : la monture revient à l'écurie de son propriétaire.
+        let valides: Vec<IdMonture> = self
+            .montures
+            .values()
+            .filter(|m| {
+                m.detenteur
+                    .is_none_or(|d| self.verifier_detenteur(&d).is_ok())
+            })
+            .map(|m| m.id)
+            .collect();
+        for m in self.montures.values_mut() {
+            if !valides.contains(&m.id) {
+                m.detenteur = None;
+            }
+        }
     }
 }
 
@@ -366,7 +437,7 @@ mod tests {
                 id,
                 modele: "barque".into(),
                 nom: "La Mouette".into(),
-                proprietaire: ProprietaireVehicule::Localite(l),
+                proprietaire: ProprietaireBien::Localite(l),
                 payeur: Payeur::Personnage(pj),
                 prix: Montant::po(prix),
             },
@@ -381,10 +452,7 @@ mod tests {
         let id = acheter(&mut c, &r, l, pj, 50).unwrap();
         let e = c.etat(&r);
         assert_eq!(e.personnages[&pj].compte, Montant::po(50));
-        assert_eq!(
-            e.vehicules[&id].proprietaire,
-            ProprietaireVehicule::Localite(l)
-        );
+        assert_eq!(e.vehicules[&id].proprietaire, ProprietaireBien::Localite(l));
         assert_eq!(e.vehicules[&id].prix, Montant::po(50));
     }
 
@@ -415,16 +483,22 @@ mod tests {
                 id,
                 modele: "Cheval léger".into(),
                 nom: "Éclair".into(),
-                detenteur: DetenteurMonture::Personnage(pj),
+                proprietaire: None,
+                detenteur: Some(DetenteurMonture::Personnage(pj)),
                 payeur: Payeur::Personnage(pj),
                 prix: Montant::po(75),
             },
             &r,
         )
         .unwrap();
+        // sans propriétaire donné (ancienne sauvegarde) : déduit de qui la détient
+        assert_eq!(
+            c.etat(&r).montures[&id].proprietaire,
+            ProprietaireBien::Personnage(pj)
+        );
         assert_eq!(
             c.etat(&r).montures[&id].detenteur,
-            DetenteurMonture::Personnage(pj)
+            Some(DetenteurMonture::Personnage(pj))
         );
         assert_eq!(c.etat(&r).personnages[&pj].compte, Montant::po(25));
         c.executer(Evenement::PersonnageSupprime { id: pj }, &r)
@@ -441,7 +515,7 @@ mod tests {
                 Evenement::VehiculeModifie {
                     id,
                     nom: "  ".into(),
-                    proprietaire: ProprietaireVehicule::Localite(l),
+                    proprietaire: ProprietaireBien::Localite(l),
                     equipes: vec![],
                     gestionnaires: vec![],
                 },
@@ -455,7 +529,8 @@ mod tests {
                     id: c.nouvel_id_monture(),
                     modele: "Poney".into(),
                     nom: "Pip".into(),
-                    detenteur: DetenteurMonture::Equipe(IdEquipe(99)),
+                    proprietaire: None,
+                    detenteur: Some(DetenteurMonture::Equipe(IdEquipe(99))),
                     payeur: Payeur::Personnage(pj),
                     prix: Montant::po(1),
                 },
@@ -463,5 +538,166 @@ mod tests {
             ),
             Err(Erreur::EquipeInconnue(_))
         ));
+    }
+
+    fn acheter_monture(
+        c: &mut Campagne,
+        r: &regles::Referentiel,
+        proprietaire: ProprietaireBien,
+        detenteur: Option<DetenteurMonture>,
+        pj: IdPersonnage,
+    ) -> IdMonture {
+        let id = c.nouvel_id_monture();
+        c.executer(
+            Evenement::MontureAchetee {
+                id,
+                modele: "Poney".into(),
+                nom: "Pip".into(),
+                proprietaire: Some(proprietaire),
+                detenteur,
+                payeur: Payeur::Personnage(pj),
+                prix: Montant::po(30),
+            },
+            r,
+        )
+        .unwrap();
+        id
+    }
+
+    #[test]
+    fn la_monture_confiee_garde_son_proprietaire() {
+        let (mut c, r, l, pj) = monde();
+        let id = acheter_monture(&mut c, &r, ProprietaireBien::Localite(l), None, pj);
+        assert_eq!(c.etat(&r).montures[&id].detenteur, None);
+        c.executer(
+            Evenement::MontureModifiee {
+                id,
+                nom: "Pip".into(),
+                proprietaire: None,
+                detenteur: Some(DetenteurMonture::Personnage(pj)),
+            },
+            &r,
+        )
+        .unwrap();
+        let m = &c.etat(&r).montures[&id];
+        assert_eq!(m.proprietaire, ProprietaireBien::Localite(l));
+        assert_eq!(m.detenteur, Some(DetenteurMonture::Personnage(pj)));
+    }
+
+    #[test]
+    fn le_detenteur_disparu_rend_la_monture_a_l_ecurie_du_proprietaire() {
+        let (mut c, r, l, pj) = monde();
+        let autre = c.nouvel_id_personnage();
+        c.executer(
+            Evenement::PersonnageCree {
+                id: autre,
+                nom: "Écuyer".into(),
+                compte_initial: Montant::po(0),
+                prestige: None,
+            },
+            &r,
+        )
+        .unwrap();
+        let id = acheter_monture(
+            &mut c,
+            &r,
+            ProprietaireBien::Localite(l),
+            Some(DetenteurMonture::Personnage(autre)),
+            pj,
+        );
+        c.executer(Evenement::PersonnageSupprime { id: autre }, &r)
+            .unwrap();
+        let m = &c.etat(&r).montures[&id];
+        assert_eq!(m.detenteur, None);
+        assert_eq!(m.proprietaire, ProprietaireBien::Localite(l));
+    }
+
+    #[test]
+    fn monture_confiee_a_un_partisan_du_don_prestige_suit_son_rang() {
+        use crate::etat::Etat;
+        use crate::prestige::Partisan;
+        let r = regles::referentiel_officiel();
+        let mut e = Etat::default();
+        let pj = IdPersonnage(1);
+        e.appliquer(
+            &Evenement::PersonnageCree {
+                id: pj,
+                nom: "Héros".into(),
+                compte_initial: Montant::po(100),
+                prestige: None,
+            },
+            &r,
+        )
+        .unwrap();
+        // trois partisans du don Prestige (l'état du don est posé directement)
+        let don = e.prestige_don.entry(pj).or_default();
+        for nom in ["Ada", "Bob", "Cléo"] {
+            don.partisans.push(Partisan {
+                niveau: 1,
+                nom: nom.into(),
+            });
+        }
+        let id = IdMonture(1);
+        e.appliquer(
+            &Evenement::MontureAchetee {
+                id,
+                modele: "Poney".into(),
+                nom: "Pip".into(),
+                proprietaire: Some(ProprietaireBien::Personnage(pj)),
+                detenteur: Some(DetenteurMonture::Partisan {
+                    maitre: pj,
+                    index: 2,
+                }),
+                payeur: Payeur::Personnage(pj),
+                prix: Montant::po(30),
+            },
+            &r,
+        )
+        .unwrap();
+        // Bob (rang 1) est retiré : Cléo passe au rang 1 et garde la monture
+        e.appliquer(
+            &Evenement::PartisanRetire {
+                maitre: pj,
+                index: 1,
+            },
+            &r,
+        )
+        .unwrap();
+        assert_eq!(
+            e.montures[&id].detenteur,
+            Some(DetenteurMonture::Partisan {
+                maitre: pj,
+                index: 1
+            })
+        );
+        // Cléo est retirée à son tour : la monture revient à l'écurie du propriétaire
+        e.appliquer(
+            &Evenement::PartisanRetire {
+                maitre: pj,
+                index: 1,
+            },
+            &r,
+        )
+        .unwrap();
+        assert_eq!(e.montures[&id].detenteur, None);
+        assert_eq!(
+            e.montures[&id].proprietaire,
+            ProprietaireBien::Personnage(pj)
+        );
+        // un partisan qui n'existe pas est refusé
+        assert!(e
+            .appliquer(
+                &Evenement::MontureModifiee {
+                    id,
+                    nom: "Pip".into(),
+                    proprietaire: None,
+                    detenteur: Some(DetenteurMonture::Partisan {
+                        maitre: pj,
+                        index: 5
+                    }),
+                },
+                &r
+            )
+            .is_err());
     }
 }

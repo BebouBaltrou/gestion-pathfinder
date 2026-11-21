@@ -324,7 +324,7 @@ pub enum Evenement {
         id: IdVehicule,
         modele: String,
         nom: String,
-        proprietaire: crate::biens::ProprietaireVehicule,
+        proprietaire: crate::biens::ProprietaireBien,
         payeur: Payeur,
         prix: Montant,
     },
@@ -332,7 +332,7 @@ pub enum Evenement {
     VehiculeModifie {
         id: IdVehicule,
         nom: String,
-        proprietaire: crate::biens::ProprietaireVehicule,
+        proprietaire: crate::biens::ProprietaireBien,
         equipes: Vec<IdEquipe>,
         gestionnaires: Vec<IdGestionnaire>,
     },
@@ -344,14 +344,20 @@ pub enum Evenement {
         id: IdMonture,
         modele: String,
         nom: String,
-        detenteur: crate::biens::DetenteurMonture,
+        /// Absent dans les anciennes sauvegardes : déduit de qui la détient.
+        #[cfg_attr(feature = "serde", serde(default))]
+        proprietaire: Option<crate::biens::ProprietaireBien>,
+        detenteur: Option<crate::biens::DetenteurMonture>,
         payeur: Payeur,
         prix: Montant,
     },
     MontureModifiee {
         id: IdMonture,
         nom: String,
-        detenteur: crate::biens::DetenteurMonture,
+        /// Absent : le propriétaire ne change pas.
+        #[cfg_attr(feature = "serde", serde(default))]
+        proprietaire: Option<crate::biens::ProprietaireBien>,
+        detenteur: Option<crate::biens::DetenteurMonture>,
     },
     MontureRetiree {
         id: IdMonture,

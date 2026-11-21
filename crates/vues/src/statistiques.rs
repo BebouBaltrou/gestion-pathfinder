@@ -240,16 +240,16 @@ fn source_capitaux(etat: &Etat, r: &Referentiel) -> Vec<ElementPatrimoine> {
 /// Véhicules, à leur prix d'achat : chez le PJ propriétaire, ou dans la ville de la localité
 /// ou du siège de l'organisation propriétaire.
 fn source_vehicules(etat: &Etat, _r: &Referentiel) -> Vec<ElementPatrimoine> {
-    use campagne::biens::ProprietaireVehicule;
+    use campagne::biens::ProprietaireBien;
     etat.vehicules
         .values()
         .map(|v| {
             let (proprietaire, localite) = match v.proprietaire {
-                ProprietaireVehicule::Localite(l) => (None, Some(l)),
-                ProprietaireVehicule::Organisation(o) => {
+                ProprietaireBien::Localite(l) => (None, Some(l)),
+                ProprietaireBien::Organisation(o) => {
                     (None, etat.organisations.get(&o).map(|o| o.localite))
                 }
-                ProprietaireVehicule::Personnage(p) => (Some(p), None),
+                ProprietaireBien::Personnage(p) => (Some(p), None),
             };
             ElementPatrimoine {
                 categorie: "vehicules",
@@ -261,15 +261,19 @@ fn source_vehicules(etat: &Etat, _r: &Referentiel) -> Vec<ElementPatrimoine> {
         .collect()
 }
 
-/// Montures, à leur prix d'achat : chez le PJ ou l'acolyte qui les a, ou dans la ville de l'équipe.
+/// Montures, à leur prix d'achat : chez leur propriétaire (PJ, ou ville de la localité ou du siège
+/// de l'organisation), même quand elles sont confiées à quelqu'un d'autre.
 fn source_montures(etat: &Etat, _r: &Referentiel) -> Vec<ElementPatrimoine> {
-    use campagne::biens::DetenteurMonture;
+    use campagne::biens::ProprietaireBien;
     etat.montures
         .values()
         .map(|m| {
-            let (proprietaire, localite) = match m.detenteur {
-                DetenteurMonture::Personnage(p) => (Some(p), None),
-                DetenteurMonture::Equipe(e) => (None, etat.equipes.get(&e).map(|e| e.localite)),
+            let (proprietaire, localite) = match m.proprietaire {
+                ProprietaireBien::Localite(l) => (None, Some(l)),
+                ProprietaireBien::Organisation(o) => {
+                    (None, etat.organisations.get(&o).map(|o| o.localite))
+                }
+                ProprietaireBien::Personnage(p) => (Some(p), None),
             };
             ElementPatrimoine {
                 categorie: "montures",

@@ -13,12 +13,15 @@ function FormulaireAchat(props: {
   libelleCible: string;
   cibles: ChoixCible[];
   payeurs: ChoixCible[];
-  acheter: (modele: string, nom: string, cible: CibleBien, payeur: CibleBien, prix: string | null) => Promise<Retour | null | undefined>;
+  /** Pour les montures : à qui elle peut être confiée tout de suite (facultatif). */
+  detenteurs?: ChoixCible[];
+  acheter: (modele: string, nom: string, cible: CibleBien, payeur: CibleBien, prix: string | null, detenteur: CibleBien | null) => Promise<Retour | null | undefined>;
 }) {
   const [modele, setModele] = useState("");
   const [nom, setNom] = useState("");
   const [cibleCle, setCibleCle] = useState("");
   const [payeurCle, setPayeurCle] = useState("");
+  const [detenteurCle, setDetenteurCle] = useState("");
   const [prix, setPrix] = useState("");
   const m = props.modeles.find((x) => x.id === (modele || props.modeles[0]?.id));
   const cible = trouver(props.cibles, cibleCle) ?? props.cibles[0]?.cible;
@@ -30,7 +33,7 @@ function FormulaireAchat(props: {
       onSubmit={async (e) => {
         e.preventDefault();
         if (!m || !cible || !payeur) return;
-        const r = await props.acheter(m.id, nom, cible, payeur, prix.trim() || null);
+        const r = await props.acheter(m.id, nom, cible, payeur, prix.trim() || null, (props.detenteurs && trouver(props.detenteurs, detenteurCle)) || null);
         if (r?.ok) {
           setNom("");
           setPrix("");
@@ -57,6 +60,17 @@ function FormulaireAchat(props: {
           <option key={cle(x.cible)} value={cle(x.cible)}>{x.libelle}</option>
         ))}
       </select>
+      {props.detenteurs && (
+        <>
+          <label htmlFor={`${props.id}-detenteur`}>Confiée à</label>
+          <select id={`${props.id}-detenteur`} className="champ" value={detenteurCle} onChange={(e) => setDetenteurCle(e.target.value)}>
+            <option value="">personne (à l'écurie du propriétaire)</option>
+            {props.detenteurs.map((x) => (
+              <option key={cle(x.cible)} value={cle(x.cible)}>{x.libelle}</option>
+            ))}
+          </select>
+        </>
+      )}
       <label htmlFor={`${props.id}-payeur`}>Payé par</label>
       <select id={`${props.id}-payeur`} className="champ" value={payeur ? cle(payeur) : ""} onChange={(e) => setPayeurCle(e.target.value)}>
         {props.payeurs.map((x) => (
@@ -230,10 +244,11 @@ export function Biens({ outils }: { outils: Outils }) {
         <FormulaireAchat
           id="mon"
           modeles={p.modelesMontures}
-          libelleCible="Confiée à"
-          cibles={p.detenteurs}
+          libelleCible="Propriétaire"
+          cibles={p.proprietaires}
+          detenteurs={p.detenteurs}
           payeurs={p.payeurs}
-          acheter={(modele, nom, cible, payeur, prix) => agir({ type: "acheterMonture", modele, nom, detenteur: cible, payeur, prix })}
+          acheter={(modele, nom, cible, payeur, prix, detenteur) => agir({ type: "acheterMonture", modele, nom, proprietaire: cible, detenteur, payeur, prix })}
         />
       </section>
 
@@ -245,8 +260,25 @@ export function Biens({ outils }: { outils: Outils }) {
             <div className="ligne" style={{ gap: 12 }}>
               <strong style={{ fontSize: 17, color: "var(--texte-fort)" }}>{m.nom}</strong>
               <span className="doux">{m.modele}</span>
-              <strong style={{ color: "var(--po)" }} title="Compté dans le patrimoine du détenteur">{formaterPo(m.prix.pc)}</strong>
+              <strong style={{ color: "var(--po)" }} title="Compté dans le patrimoine du propriétaire">{formaterPo(m.prix.pc)}</strong>
               <button className="bouton discret" onClick={() => agir({ type: "retirerMonture", id: m.id })}>Retirer</button>
+            </div>
+            <div className="ligne" style={{ gap: 10 }}>
+              <label className="doux" htmlFor={`mon-prop-${m.id}`}>Propriétaire</label>
+              <select
+                id={`mon-prop-${m.id}`}
+                className="champ"
+                style={{ maxWidth: 320 }}
+                value={cle(m.proprietaire.cible)}
+                onChange={(e) => {
+                  const c = trouver(p.proprietaires, e.target.value);
+                  if (c) agir({ type: "modifierMonture", id: m.id, nom: m.nom, proprietaire: c, detenteur: m.detenteur?.cible ?? null });
+                }}
+              >
+                {p.proprietaires.map((x) => (
+                  <option key={cle(x.cible)} value={cle(x.cible)}>{x.libelle}</option>
+                ))}
+              </select>
             </div>
             <div className="ligne" style={{ gap: 10 }}>
               <label className="doux" htmlFor={`mon-det-${m.id}`}>Confiée à</label>
@@ -254,12 +286,13 @@ export function Biens({ outils }: { outils: Outils }) {
                 id={`mon-det-${m.id}`}
                 className="champ"
                 style={{ maxWidth: 320 }}
-                value={cle(m.detenteur.cible)}
+                value={m.detenteur ? cle(m.detenteur.cible) : ""}
                 onChange={(e) => {
-                  const c = trouver(p.detenteurs, e.target.value);
-                  if (c) agir({ type: "modifierMonture", id: m.id, nom: m.nom, detenteur: c });
+                  const c = e.target.value ? trouver(p.detenteurs, e.target.value) ?? null : null;
+                  agir({ type: "modifierMonture", id: m.id, nom: m.nom, proprietaire: m.proprietaire.cible, detenteur: c });
                 }}
               >
+                <option value="">personne (à l'écurie du propriétaire)</option>
                 {p.detenteurs.map((x) => (
                   <option key={cle(x.cible)} value={cle(x.cible)}>{x.libelle}</option>
                 ))}

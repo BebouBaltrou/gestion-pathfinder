@@ -362,6 +362,22 @@ impl Etat {
                     .filter(|d| *index < d.partisans.len())
                     .ok_or_else(|| Erreur::Prestige("partisan inconnu".into()))?;
                 d.partisans.remove(*index);
+                // Le partisan retiré rend ses montures à l'écurie ; les suivants prennent un rang de moins.
+                for m in self.montures.values_mut() {
+                    if let Some(crate::biens::DetenteurMonture::Partisan {
+                        maitre: m_maitre,
+                        index: i,
+                    }) = &mut m.detenteur
+                    {
+                        if m_maitre == maitre {
+                            if *i == *index {
+                                m.detenteur = None;
+                            } else if *i > *index {
+                                *i -= 1;
+                            }
+                        }
+                    }
+                }
             }
             _ => {}
         }

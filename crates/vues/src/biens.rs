@@ -5,7 +5,7 @@
 use crate::localites::Choix;
 use crate::Somme;
 use campagne::biens::{
-    modeles_vehicules, prix_monture, DetenteurMonture, ModeleVehicule, ProprietaireVehicule,
+    modeles_vehicules, prix_monture, DetenteurMonture, ModeleVehicule, ProprietaireBien,
 };
 use campagne::etat::Etat;
 use campagne::evenements::Evenement;
@@ -24,6 +24,8 @@ pub enum GenreCible {
     Organisation,
     Personnage,
     Equipe,
+    /// Partisan du don Prestige : `id` = numéro du maître × 1000 + rang du partisan.
+    Partisan,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -40,18 +42,18 @@ pub struct ChoixCible {
     pub libelle: String,
 }
 
-impl From<ProprietaireVehicule> for Cible {
-    fn from(p: ProprietaireVehicule) -> Self {
+impl From<ProprietaireBien> for Cible {
+    fn from(p: ProprietaireBien) -> Self {
         match p {
-            ProprietaireVehicule::Localite(l) => Cible {
+            ProprietaireBien::Localite(l) => Cible {
                 genre: GenreCible::Localite,
                 id: l.0,
             },
-            ProprietaireVehicule::Organisation(o) => Cible {
+            ProprietaireBien::Organisation(o) => Cible {
                 genre: GenreCible::Organisation,
                 id: o.0,
             },
-            ProprietaireVehicule::Personnage(p) => Cible {
+            ProprietaireBien::Personnage(p) => Cible {
                 genre: GenreCible::Personnage,
                 id: p.0,
             },
@@ -70,17 +72,21 @@ impl From<DetenteurMonture> for Cible {
                 genre: GenreCible::Equipe,
                 id: e.0,
             },
+            DetenteurMonture::Partisan { maitre, index } => Cible {
+                genre: GenreCible::Partisan,
+                id: maitre.0 * 1000 + index as u32,
+            },
         }
     }
 }
 
-fn proprietaire(c: &Cible) -> Result<ProprietaireVehicule, String> {
+fn proprietaire(c: &Cible) -> Result<ProprietaireBien, String> {
     match c.genre {
-        GenreCible::Localite => Ok(ProprietaireVehicule::Localite(IdLocalite(c.id))),
-        GenreCible::Organisation => Ok(ProprietaireVehicule::Organisation(IdOrganisation(c.id))),
-        GenreCible::Personnage => Ok(ProprietaireVehicule::Personnage(IdPersonnage(c.id))),
-        GenreCible::Equipe => {
-            Err("Un véhicule appartient à une localité, une organisation ou un PJ".into())
+        GenreCible::Localite => Ok(ProprietaireBien::Localite(IdLocalite(c.id))),
+        GenreCible::Organisation => Ok(ProprietaireBien::Organisation(IdOrganisation(c.id))),
+        GenreCible::Personnage => Ok(ProprietaireBien::Personnage(IdPersonnage(c.id))),
+        GenreCible::Equipe | GenreCible::Partisan => {
+            Err("Un bien appartient à une localité, une organisation ou un PJ".into())
         }
     }
 }
@@ -89,7 +95,11 @@ fn detenteur(c: &Cible) -> Result<DetenteurMonture, String> {
     match c.genre {
         GenreCible::Personnage => Ok(DetenteurMonture::Personnage(IdPersonnage(c.id))),
         GenreCible::Equipe => Ok(DetenteurMonture::Equipe(IdEquipe(c.id))),
-        _ => Err("Une monture est confiée à un personnage ou à une équipe".into()),
+        GenreCible::Partisan => Ok(DetenteurMonture::Partisan {
+            maitre: IdPersonnage(c.id / 1000),
+            index: (c.id % 1000) as usize,
+        }),
+        _ => Err("Une monture est confiée à un personnage, une équipe ou un partisan".into()),
     }
 }
 
@@ -163,7 +173,9 @@ pub struct FicheMonture {
     pub id: u32,
     pub nom: String,
     pub modele: String,
-    pub detenteur: ChoixCible,
+    pub proprietaire: ChoixCible,
+    /// À qui elle est confiée ; `None` : à l'écurie du propriétaire.
+    pub detenteur: Option<ChoixCible>,
     pub prix: Somme,
     pub details: Vec<String>,
 }
@@ -187,6 +199,28 @@ fn choix_personnage(etat: &Etat, id: IdPersonnage) -> ChoixCible {
     }
 }
 
+fn choix_partisan(etat: &Etat, maitre: IdPersonnage, index: usize) -> ChoixCible {
+    let c: Cible = DetenteurMonture::Partisan { maitre, index }.into();
+    let nom_maitre = etat
+        .personnages
+        .get(&maitre)
+        .map_or_else(|| maitre.to_string(), |p| p.nom.clone());
+    let libelle = etat
+        .prestige_don
+        .get(&maitre)
+        .and_then(|d| d.partisans.get(index))
+        .map_or_else(
+            || "Partisan inconnu".to_string(),
+            |p| {
+                format!(
+                    "Partisan : {} (niveau {}, de {nom_maitre})",
+                    p.nom, p.niveau
+                )
+            },
+        );
+    ChoixCible { cible: c, libelle }
+}
+
 fn choix_equipe(etat: &Etat, r: &Referentiel, id: IdEquipe) -> ChoixCible {
     let libelle = etat.equipes.get(&id).map_or_else(
         || id.to_string(),
@@ -207,17 +241,17 @@ fn choix_equipe(etat: &Etat, r: &Referentiel, id: IdEquipe) -> ChoixCible {
     }
 }
 
-fn choix_proprietaire(etat: &Etat, p: ProprietaireVehicule) -> ChoixCible {
+fn choix_proprietaire(etat: &Etat, p: ProprietaireBien) -> ChoixCible {
     let libelle = match p {
-        ProprietaireVehicule::Localite(l) => etat
+        ProprietaireBien::Localite(l) => etat
             .localites
             .get(&l)
             .map_or(l.to_string(), |x| format!("Localité : {}", x.nom)),
-        ProprietaireVehicule::Organisation(o) => etat
+        ProprietaireBien::Organisation(o) => etat
             .organisations
             .get(&o)
             .map_or(o.to_string(), |x| format!("Organisation : {}", x.nom)),
-        ProprietaireVehicule::Personnage(pj) => {
+        ProprietaireBien::Personnage(pj) => {
             return choix_personnage(etat, pj);
         }
     };
@@ -284,16 +318,16 @@ pub fn page_biens(c: &mut campagne::Campagne, r: &Referentiel) -> PageBiens {
     let proprietaires: Vec<ChoixCible> = etat
         .localites
         .values()
-        .map(|l| ProprietaireVehicule::Localite(l.id))
+        .map(|l| ProprietaireBien::Localite(l.id))
         .chain(
             etat.organisations
                 .values()
-                .map(|o| ProprietaireVehicule::Organisation(o.id)),
+                .map(|o| ProprietaireBien::Organisation(o.id)),
         )
         .chain(
             etat.personnages
                 .values()
-                .map(|p| ProprietaireVehicule::Personnage(p.id)),
+                .map(|p| ProprietaireBien::Personnage(p.id)),
         )
         .map(|p| choix_proprietaire(&etat, p))
         .collect();
@@ -326,6 +360,9 @@ pub fn page_biens(c: &mut campagne::Campagne, r: &Referentiel) -> PageBiens {
             .values()
             .map(|p| choix_personnage(&etat, p.id))
             .chain(toutes_equipes.iter().map(|e| choix_equipe(&etat, r, *e)))
+            .chain(etat.prestige_don.iter().flat_map(|(maitre, d)| {
+                (0..d.partisans.len()).map(|i| choix_partisan(&etat, *maitre, i))
+            }))
             .collect(),
         payeurs: etat
             .localites
@@ -398,10 +435,14 @@ pub fn page_biens(c: &mut campagne::Campagne, r: &Referentiel) -> PageBiens {
                     id: m.id.0,
                     nom: m.nom.clone(),
                     modele: m.modele.clone(),
-                    detenteur: match m.detenteur {
+                    proprietaire: choix_proprietaire(&etat, m.proprietaire),
+                    detenteur: m.detenteur.map(|d| match d {
                         DetenteurMonture::Personnage(p) => choix_personnage(&etat, p),
                         DetenteurMonture::Equipe(e) => choix_equipe(&etat, r, e),
-                    },
+                        DetenteurMonture::Partisan { maitre, index } => {
+                            choix_partisan(&etat, maitre, index)
+                        }
+                    }),
                     prix: m.prix.into(),
                     details: modele
                         .map(|x| {
@@ -460,7 +501,8 @@ pub enum ActionBien {
     AcheterMonture {
         modele: String,
         nom: String,
-        detenteur: Cible,
+        proprietaire: Cible,
+        detenteur: Option<Cible>,
         payeur: Cible,
         prix: Option<String>,
     },
@@ -468,7 +510,8 @@ pub enum ActionBien {
     ModifierMonture {
         id: u32,
         nom: String,
-        detenteur: Cible,
+        proprietaire: Cible,
+        detenteur: Option<Cible>,
     },
     #[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
     RetirerMonture { id: u32 },
@@ -580,6 +623,7 @@ pub fn action(
         A::AcheterMonture {
             modele,
             nom,
+            proprietaire: p,
             detenteur: d,
             payeur: pay,
             prix,
@@ -598,7 +642,8 @@ pub fn action(
                     id: c.nouvel_id_monture(),
                     modele,
                     nom: nom.clone(),
-                    detenteur: detenteur(&d)?,
+                    proprietaire: Some(proprietaire(&p)?),
+                    detenteur: d.as_ref().map(detenteur).transpose()?,
                     payeur: payeur(&pay)?,
                     prix: prix_choisi(prix, prix_monture(m.nom))?,
                 },
@@ -608,6 +653,7 @@ pub fn action(
         A::ModifierMonture {
             id,
             nom,
+            proprietaire: p,
             detenteur: d,
         } => {
             let m = etat
@@ -621,7 +667,8 @@ pub fn action(
                 Evenement::MontureModifiee {
                     id: m.id,
                     nom: nom.trim().to_string(),
-                    detenteur: detenteur(&d)?,
+                    proprietaire: Some(proprietaire(&p)?),
+                    detenteur: d.as_ref().map(detenteur).transpose()?,
                 },
                 format!("{} modifié(e)", nom.trim()),
             )
@@ -712,10 +759,14 @@ mod tests {
         let a = ActionBien::AcheterMonture {
             modele: "Chien de selle".into(),
             nom: "Rex".into(),
-            detenteur: Cible {
+            proprietaire: Cible {
                 genre: GenreCible::Personnage,
                 id: pj.0,
             },
+            detenteur: Some(Cible {
+                genre: GenreCible::Personnage,
+                id: pj.0,
+            }),
             payeur: Cible {
                 genre: GenreCible::Personnage,
                 id: pj.0,
@@ -753,7 +804,12 @@ mod tests_patrimoine {
             ActionBien::AcheterMonture {
                 modele: "Poney".into(),
                 nom: String::new(),
-                detenteur: cible_pj.clone(),
+                // propriétaire : la localité ; confié à un PJ, sans changer de propriétaire
+                proprietaire: Cible {
+                    genre: GenreCible::Localite,
+                    id: l.0,
+                },
+                detenteur: Some(cible_pj.clone()),
                 payeur: cible_pj.clone(),
                 prix: None,
             },
@@ -774,16 +830,21 @@ mod tests_patrimoine {
         };
         assert_eq!(part("vehicules"), Montant::po(50).pc);
         assert_eq!(part("montures"), Montant::po(30).pc);
-        // la barque est dans la ville, le poney chez le PJ
+        // la barque et le poney appartiennent à la localité : le poney, confié au PJ,
+        // reste dans le patrimoine de la ville
         let ville = stats.localites.iter().find(|x| x.id == l.0).unwrap();
         assert!(ville
             .composantes
             .iter()
             .any(|p| p.cle == "vehicules" && p.valeur.pc == Montant::po(50).pc));
+        assert!(ville
+            .composantes
+            .iter()
+            .any(|p| p.cle == "montures" && p.valeur.pc == Montant::po(30).pc));
         let perso = stats.personnages.iter().find(|x| x.id == pj.0).unwrap();
         assert!(perso
             .composantes
             .iter()
-            .any(|p| p.cle == "montures" && p.valeur.pc == Montant::po(30).pc));
+            .all(|p| p.cle != "montures" || p.valeur.pc == 0));
     }
 }

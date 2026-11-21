@@ -481,7 +481,7 @@ export type ActionGestionnaire =
 
 // ------------------------------------------------------------------ biens (véhicules et montures)
 
-export type GenreCible = "localite" | "organisation" | "personnage" | "equipe";
+export type GenreCible = "localite" | "organisation" | "personnage" | "equipe" | "partisan";
 export type CibleBien = { genre: GenreCible; id: number };
 export type ChoixCible = { cible: CibleBien; libelle: string };
 export type ModeleBien = { id: string; nom: string; resume: string; prix: Somme | null };
@@ -505,7 +505,9 @@ export type FicheMonture = {
   id: number;
   nom: string;
   modele: string;
-  detenteur: ChoixCible;
+  proprietaire: ChoixCible;
+  /** À qui elle est confiée ; null : à l'écurie du propriétaire. */
+  detenteur: ChoixCible | null;
   prix: Somme;
   details: string[];
 };
@@ -528,8 +530,8 @@ export type ActionBien =
   | { type: "affecterGestionnaire"; id: number; gestionnaire: number }
   | { type: "retirerGestionnaire"; id: number; gestionnaire: number }
   | { type: "retirerVehicule"; id: number }
-  | { type: "acheterMonture"; modele: string; nom: string; detenteur: CibleBien; payeur: CibleBien; prix: string | null }
-  | { type: "modifierMonture"; id: number; nom: string; detenteur: CibleBien }
+  | { type: "acheterMonture"; modele: string; nom: string; proprietaire: CibleBien; detenteur: CibleBien | null; payeur: CibleBien; prix: string | null }
+  | { type: "modifierMonture"; id: number; nom: string; proprietaire: CibleBien; detenteur: CibleBien | null }
   | { type: "retirerMonture"; id: number };
 
 // ------------------------------------------------------------------ historique, points, paramètres
