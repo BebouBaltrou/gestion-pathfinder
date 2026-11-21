@@ -1,8 +1,9 @@
 //! Montures et barde, d'après le Manuel des joueurs (VF) :
 //! table 7-9 « Montures et véhicules » (p. 173-174) et table 6-8 « Barde » (p. 163).
 //!
-//! Lecture à valider : les plages de charge de la table 7-9 sont lues comme les bornes où la
-//! vitesse est réduite. Au-delà de la plage haute, la table ne dit rien : on renvoie `None`.
+//! Les plages entre parenthèses de la table 7-9 sont les bornes des charges intermédiaire et
+//! lourde de la monture (confirmé par Antoine) : vitesse réduite dans la plage. Au-delà de la
+//! borne haute, la table ne dit rien : on renvoie `None`.
 
 /// Barde de monture (armure), table 6-8 du Manuel.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -17,7 +18,7 @@ pub struct Monture {
     pub nom: &'static str,
     pub vitesse_km_h: f64,
     pub vitesse_km_jour: f64,
-    /// Plage de charge (kg, bornes incluses) où la vitesse est réduite. Lecture à valider.
+    /// Bornes (kg, incluses) des charges intermédiaire et lourde : vitesse réduite dans la plage.
     pub plage_reduite_kg: (f64, f64),
     pub vitesse_reduite_km_h: f64,
     pub vitesse_reduite_km_jour: f64,
