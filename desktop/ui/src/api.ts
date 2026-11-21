@@ -113,6 +113,7 @@ export type StatPersonnage = { id: number; nom: string; compte: Somme; objets: S
 export type StatLocalite = { id: number; nom: string; tresorerie: Somme; capitaux: Somme; batiments: Somme; total: Somme };
 export type StatOrganisation = { id: number; nom: string; localite: string; equipes: number; effectif: number; effectifAVenir: number; gestionnaires: number; valeurEquipes: Somme };
 export type PageStatistiques = {
+  repartition: { cle: string; nom: string; valeur: Somme }[];
   patrimoineTotal: Somme;
   personnages: StatPersonnage[];
   totalPersonnages: Somme;
@@ -837,6 +838,83 @@ let mockCombat: "non" | "initiative" | "encours" = "encours";
 let jourSimule = 24;
 let annulables = 3;
 
+/** Données d'exemple de l'onglet Statistiques (aperçu sans le cœur). */
+function statistiquesExemple(): { stats: PageStatistiques; courbes: CourbesPatrimoine } {
+  const N = 40;
+  const jours = Array.from({ length: N }, (_, i) => i + 1);
+  const pas = (base: number, evts: Record<number, number>) => {
+    let v = base;
+    return jours.map((j) => { if (evts[j]) v += evts[j]; return v * 100; });
+  };
+  const somme = (...a: number[][]) => a[0].map((_, i) => a.reduce((s, x) => s + x[i], 0));
+  const pj = {
+    seoni: { compte: pas(50, { 8: 12, 15: 20, 24: 18, 33: 30 }), objets: pas(20, { 6: 8, 13: 6, 22: 12, 31: 14 }), batiments: pas(0, { 25: 42 }) },
+    valeros: { compte: pas(30, { 10: 14, 19: 22, 28: 10, 36: 26 }), objets: pas(35, { 5: 15, 12: 10, 26: 9, 34: 18 }), batiments: pas(0, { 18: 31 }) },
+    kyra: { compte: pas(40, { 9: 10, 17: 16, 27: 14, 35: 22 }), objets: pas(16, { 7: 6, 16: 9, 29: 10 }), batiments: pas(0, {}) },
+  };
+  const ville = {
+    sandpoint: { tre: pas(380, { 12: 60, 22: 120, 30: -40, 39: 180 }), cap: pas(150, { 14: 30, 26: 20 }), bat: pas(0, { 18: 31, 25: 42 }) },
+    magnimar: { tre: pas(120, { 15: 30, 29: 40 }), cap: pas(60, { 20: 15 }), bat: pas(0, { 33: 18 }) },
+  };
+  const totPj = (p: { compte: number[]; objets: number[]; batiments: number[] }) => somme(p.compte, p.objets, p.batiments);
+  const totVille = (v: { tre: number[]; cap: number[]; bat: number[] }) => somme(v.tre, v.cap, v.bat);
+  const possedes = somme(pj.seoni.batiments, pj.valeros.batiments, pj.kyra.batiments);
+  const total = somme(totPj(pj.seoni), totPj(pj.valeros), totPj(pj.kyra), totVille(ville.sandpoint), totVille(ville.magnimar)).map((v, i) => v - possedes[i]);
+  const dates = jours.map((j) => `jour ${j}`);
+  const courbes: CourbesPatrimoine = {
+    jours,
+    dates,
+    series: [
+      { cle: "total", nom: "Patrimoine total", groupe: "Total", valeurs: total },
+      { cle: "batiments", nom: "Bâtiments", groupe: "Autres", valeurs: somme(ville.sandpoint.bat, ville.magnimar.bat) },
+      { cle: "pj-1", nom: "Seoni", groupe: "Personnages", valeurs: totPj(pj.seoni) },
+      { cle: "pj-2", nom: "Valeros", groupe: "Personnages", valeurs: totPj(pj.valeros) },
+      { cle: "pj-3", nom: "Kyra", groupe: "Personnages", valeurs: totPj(pj.kyra) },
+      { cle: "loc-1", nom: "Sandpoint", groupe: "Localités", valeurs: totVille(ville.sandpoint) },
+      { cle: "loc-2", nom: "Magnimar", groupe: "Localités", valeurs: totVille(ville.magnimar) },
+    ],
+    compositions: [
+      { id: 1, nom: "Seoni", ...pj.seoni },
+      { id: 2, nom: "Valeros", ...pj.valeros },
+      { id: 3, nom: "Kyra", ...pj.kyra },
+    ],
+  };
+  const L = N - 1;
+  const s = (pc: number): Somme => ({ pc, texte: formaterPo(pc) });
+  const perso = (id: number, nom: string, p: typeof pj.seoni) => ({ id, nom, compte: s(p.compte[L]), objets: s(p.objets[L]), batiments: s(p.batiments[L]), total: s(totPj(p)[L]) });
+  const loc = (id: number, nom: string, v: typeof ville.sandpoint) => ({ id, nom, tresorerie: s(v.tre[L]), capitaux: s(v.cap[L]), batiments: s(v.bat[L]), total: s(totVille(v)[L]) });
+  const sumL = (...a: number[][]) => a.reduce((x, y) => x + y[L], 0);
+  const stats: PageStatistiques = {
+    repartition: [
+      { cle: "comptes", nom: "Comptes des PJ", valeur: s(sumL(pj.seoni.compte, pj.valeros.compte, pj.kyra.compte)) },
+      { cle: "objets", nom: "Objets", valeur: s(sumL(pj.seoni.objets, pj.valeros.objets, pj.kyra.objets)) },
+      { cle: "batiments", nom: "Bâtiments", valeur: s(sumL(ville.sandpoint.bat, ville.magnimar.bat)) },
+      { cle: "tresoreries", nom: "Trésoreries", valeur: s(sumL(ville.sandpoint.tre, ville.magnimar.tre)) },
+      { cle: "capitaux", nom: "Capitaux", valeur: s(sumL(ville.sandpoint.cap, ville.magnimar.cap)) },
+    ],
+    patrimoineTotal: s(total[L]),
+    personnages: [perso(1, "Seoni", pj.seoni), perso(2, "Valeros", pj.valeros), perso(3, "Kyra", pj.kyra)],
+    totalPersonnages: s(totPj(pj.seoni)[L] + totPj(pj.valeros)[L] + totPj(pj.kyra)[L]),
+    localites: [loc(1, "Sandpoint", ville.sandpoint), loc(2, "Magnimar", ville.magnimar)],
+    totalLocalites: s(totVille(ville.sandpoint)[L] + totVille(ville.magnimar)[L]),
+    objetsAutres: s(0),
+    batiments: [
+      { id: 1, nom: "Temple d'Abadar", localite: "Sandpoint", proprietaire: "Seoni", salles: 3, valeur: s(4200) },
+      { id: 2, nom: "Auberge du Lac", localite: "Sandpoint", proprietaire: "Valeros", salles: 2, valeur: s(3100) },
+      { id: 3, nom: "Entrepôt", localite: "Magnimar", proprietaire: null, salles: 2, valeur: s(1800) },
+    ],
+    totalBatiments: s(9100),
+    organisations: [
+      { id: 1, nom: "Guilde des marchands", localite: "Sandpoint", equipes: 3, effectif: 12, effectifAVenir: 3, gestionnaires: 1, valeurEquipes: s(18000) },
+      { id: 2, nom: "Garde de Sandpoint", localite: "Sandpoint", equipes: 2, effectif: 8, effectifAVenir: 2, gestionnaires: 1, valeurEquipes: s(9000) },
+    ],
+    effectifTotal: 20,
+    effectifAVenirTotal: 5,
+    valeurEquipes: s(27000),
+  };
+  return { stats, courbes };
+}
+
 function simule(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
   const ok = (message: string): Retour => ({ ok: true, alerte: false, message });
   const notes = simulerNotes(cmd, args);
@@ -872,6 +950,10 @@ function simule(cmd: string, args?: Record<string, unknown>): Promise<unknown> {
       jourSimule -= 1;
       annulables -= 1;
       return Promise.resolve(ok("Annulé : 1 jour écoulé"));
+    case "statistiques":
+      return Promise.resolve(statistiquesExemple().stats);
+    case "courbes_patrimoine":
+      return Promise.resolve(statistiquesExemple().courbes);
     case "tableau_de_bord": {
       const cap = (marchandises: number, influence: number, travail: number, magie: number) => ({ marchandises, influence, travail, magie });
       const t: TableauDeBord = {

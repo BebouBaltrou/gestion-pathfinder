@@ -1,224 +1,246 @@
-import { useEffect, useState } from "react";
+import { CSSProperties, useEffect, useState } from "react";
 import type { Outils } from "../App";
 import { api, CourbesPatrimoine, PageStatistiques, Somme } from "../api";
-import { GraphiqueComposition, GraphiqueCourbes } from "../composants/CourbesPatrimoine";
+import { Anneau, Compteur, GraphiqueComposition, GraphiqueCourbes, PALETTE, Spark, fmt, useMonte } from "../composants/GraphiquesStats";
+import "../statistiques.css";
 
 const texte = (s: Somme) => s?.texte ?? "—";
+const css = (o: Record<string, string>) => o as unknown as CSSProperties;
+const po = (s: Somme) => (s?.pc ?? 0) / 100;
 
-type Serie = { nom: string; couleur: string; valeur: number };
-type Barre = { label: string; series: Serie[] };
+/** Variation d'une courbe sur les 30 derniers jours (ou depuis le début si la campagne est plus courte). */
+function variation(c: CourbesPatrimoine | null, cle: string): { pct: number; depuis: string } | null {
+  const s = c?.series.find((x) => x.cle === cle);
+  if (!c || !s || c.jours.length < 2) return null;
+  const fin = c.jours.length - 1;
+  const cible = c.jours[fin] - 30;
+  let base = 0;
+  c.jours.forEach((j, k) => { if (j <= cible) base = k; });
+  const avant = s.valeurs[base];
+  if (avant <= 0) return null;
+  return { pct: (s.valeurs[fin] / avant - 1) * 100, depuis: c.jours[0] > cible ? "depuis le début" : "sur 30 jours" };
+}
 
-/** Barres verticales empilées, avec axes : une colonne par élément, les séries empilées (sans chevauchement). */
-function GraphiqueEmpile({ titre, barres }: { titre: string; barres: Barre[] }) {
-  const W = 680, H = 280;
-  const M = { haut: 16, droite: 16, bas: 64, gauche: 72 };
-  const largeur = W - M.gauche - M.droite;
-  const hauteur = H - M.haut - M.bas;
-  const totaux = barres.map((b) => b.series.reduce((s, x) => s + Math.max(0, x.valeur), 0));
-  const max = Math.max(1, ...totaux);
-  const y = (v: number) => M.haut + hauteur - (v / max) * hauteur;
-  const graduations = [0, 0.25, 0.5, 0.75, 1].map((f) => f * max);
-  const slot = barres.length ? largeur / barres.length : largeur;
-  const largeurBarre = Math.min(56, slot * 0.6);
-  const legende = barres[0]?.series ?? [];
-
-  return (
-    <section className="carte">
-      <h2>{titre}</h2>
-      {barres.length === 0 ? (
-        <p className="detail">Aucune donnée.</p>
-      ) : (
-        <>
-          <svg viewBox={`0 0 ${W} ${H}`} width="100%" role="img" aria-label={titre}>
-            {graduations.map((g) => (
-              <g key={g}>
-                <line x1={M.gauche} x2={W - M.droite} y1={y(g)} y2={y(g)} stroke="var(--bord-fort)" strokeDasharray="3 3" />
-                <text x={M.gauche - 8} y={y(g) + 4} textAnchor="end" fontSize="11" fill="currentColor">
-                  {Math.round(g / 100).toLocaleString("fr-FR")} po
-                </text>
-              </g>
-            ))}
-            <line x1={M.gauche} x2={M.gauche} y1={M.haut} y2={M.haut + hauteur} stroke="currentColor" />
-            <line x1={M.gauche} x2={W - M.droite} y1={M.haut + hauteur} y2={M.haut + hauteur} stroke="currentColor" />
-            {barres.map((b, i) => {
-              const cx = M.gauche + slot * i + slot / 2;
-              let cumul = 0;
-              return (
-                <g key={b.label + i}>
-                  {b.series.map((s) => {
-                    const v = Math.max(0, s.valeur);
-                    const haut = y(cumul + v);
-                    const bas = y(cumul);
-                    cumul += v;
-                    return (
-                      <rect key={s.nom} x={cx - largeurBarre / 2} y={haut} width={largeurBarre} height={Math.max(0, bas - haut)} fill={s.couleur}>
-                        <title>{`${b.label} — ${s.nom} : ${Math.round(v / 100).toLocaleString("fr-FR")} po`}</title>
-                      </rect>
-                    );
-                  })}
-                  <text x={cx} y={M.haut + hauteur + 16} textAnchor="end" fontSize="11" fill="currentColor" transform={`rotate(-30 ${cx} ${M.haut + hauteur + 16})`}>
-                    {b.label.length > 14 ? `${b.label.slice(0, 13)}…` : b.label}
-                  </text>
-                </g>
-              );
-            })}
-          </svg>
-          <div className="legende-graphique" style={{ display: "flex", gap: 16, flexWrap: "wrap", fontSize: 13 }}>
-            {legende.map((s) => (
-              <span key={s.nom}>
-                <span style={{ display: "inline-block", width: 12, height: 12, background: s.couleur, marginRight: 6, borderRadius: 2 }} />
-                {s.nom}
-              </span>
-            ))}
-          </div>
-        </>
-      )}
-    </section>
-  );
+function sommeSeries(c: CourbesPatrimoine | null, groupe: string): number[] {
+  if (!c) return [];
+  const ss = c.series.filter((s) => s.groupe === groupe);
+  return c.jours.map((_, k) => ss.reduce((a, s) => a + s.valeurs[k], 0));
 }
 
 export function Statistiques({ outils }: { outils: Outils }) {
   const [s, setS] = useState<PageStatistiques | null>(null);
   const [courbes, setCourbes] = useState<CourbesPatrimoine | null>(null);
+  const monte = useMonte(150);
 
   useEffect(() => {
-    api.statistiques().then((r) => setS(r && Array.isArray(r.personnages) ? r : null));
+    api.statistiques().then((r) => setS(r && Array.isArray(r.personnages) && Array.isArray(r.repartition) ? r : null));
     api.courbesPatrimoine().then((r) => setCourbes(r && Array.isArray(r.series) && r.series.length > 0 ? r : null));
   }, [outils.version]);
 
   if (!s) return null;
 
+  const evol = variation(courbes, "total");
+  const maxBat = Math.max(1, ...s.batiments.map((b) => b.valeur.pc));
+  const maxOrg = Math.max(1, ...s.organisations.map((o) => o.valeurEquipes.pc));
+  const maxVille = Math.max(1, ...s.localites.map((l) => Math.max(0, l.tresorerie.pc) + Math.max(0, l.capitaux.pc) + Math.max(0, l.batiments.pc)));
+
+  // plus fortes hausses : personnages et villes, depuis 30 jours
+  const hausses = (() => {
+    if (!courbes || courbes.jours.length < 2) return [];
+    const fin = courbes.jours.length - 1;
+    const cible = courbes.jours[fin] - 30;
+    let base = 0;
+    courbes.jours.forEach((j, k) => { if (j <= cible) base = k; });
+    return courbes.series
+      .map((x, i) => ({ nom: x.nom, couleur: PALETTE[i % PALETTE.length], groupe: x.groupe, d: x.valeurs[fin] - x.valeurs[base], p: x.valeurs[base] > 0 ? (x.valeurs[fin] / x.valeurs[base] - 1) * 100 : null }))
+      .filter((x) => (x.groupe === "Personnages" || x.groupe === "Localités") && x.d > 0)
+      .sort((a, b) => b.d - a.d)
+      .slice(0, 4);
+  })();
+  const maxHausse = Math.max(1, ...hausses.map((h) => h.d));
+  const serieBat = courbes?.series.find((x) => x.cle === "batiments")?.valeurs ?? [];
+
   return (
     <div className="page">
       <div className="titre-page">
         <h1>Statistiques</h1>
-        <p>Patrimoine, objets, localités et organisations</p>
+        <p>Patrimoine, composition et évolution de la campagne</p>
       </div>
 
-      <section className="grille-chiffres" aria-label="Chiffres clés">
-        <div className="carte chiffre">
-          <span className="etiquette">Patrimoine total</span>
-          <span className="valeur" style={{ color: "var(--po)" }}>{texte(s.patrimoineTotal)}</span>
-          <span className="detail">Comptes, objets, trésoreries et capitaux</span>
+      <section className="carte st-carte st-hero" aria-label="Patrimoine total">
+        <div>
+          <div className="st-etq">Patrimoine total de la campagne</div>
+          <div className="st-gros"><Compteur valeur={po(s.patrimoineTotal)} /><small>po</small></div>
+          {evol && (
+            <span className={`st-delta ${evol.pct >= 0 ? "hausse" : "baisse"}`}>
+              {evol.pct >= 0 ? "▲ +" : "▼ "}{evol.pct.toFixed(1).replace(".", ",")} % {evol.depuis}
+            </span>
+          )}
+          <div className="st-spark">
+            <Spark valeurs={(courbes?.series.find((x) => x.cle === "total")?.valeurs ?? []).map((v) => v / 100)} couleur="var(--po)" />
+          </div>
         </div>
-        <div className="carte chiffre">
-          <span className="etiquette">Personnages</span>
-          <span className="valeur">{texte(s.totalPersonnages)}</span>
-          <span className="detail">Comptes, objets et bâtiments possédés</span>
+        <Anneau parts={s.repartition.map((p) => ({ cle: p.cle, nom: p.nom, pc: p.valeur.pc }))} centre={s.patrimoineTotal.pc} />
+      </section>
+
+      <section className="st-grille st-g4" aria-label="Chiffres clés">
+        <div className="carte st-kpi" style={css({ "--c": "var(--po)" })}>
+          <div className="st-etq">Personnages</div>
+          <div className="st-gros"><Compteur valeur={po(s.totalPersonnages)} suffixe=" po" /></div>
+          <div className="st-det">Comptes, objets et bâtiments possédés</div>
+          <div className="st-spark"><Spark valeurs={sommeSeries(courbes, "Personnages").map((v) => v / 100)} couleur="var(--po)" /></div>
         </div>
-        <div className="carte chiffre">
-          <span className="etiquette">Localités</span>
-          <span className="valeur">{texte(s.totalLocalites)}</span>
-          <span className="detail">Trésoreries, capitaux et bâtiments</span>
+        <div className="carte st-kpi" style={css({ "--c": "var(--travail)" })}>
+          <div className="st-etq">Localités</div>
+          <div className="st-gros"><Compteur valeur={po(s.totalLocalites)} suffixe=" po" /></div>
+          <div className="st-det">Trésoreries, capitaux et bâtiments</div>
+          <div className="st-spark"><Spark valeurs={sommeSeries(courbes, "Localités").map((v) => v / 100)} couleur="var(--travail)" /></div>
         </div>
-        <div className="carte chiffre">
-          <span className="etiquette">Bâtiments</span>
-          <span className="valeur">{texte(s.totalBatiments)}</span>
-          <span className="detail">Salles et extensions construites</span>
+        <div className="carte st-kpi" style={css({ "--c": "var(--marchandises)" })}>
+          <div className="st-etq">Bâtiments</div>
+          <div className="st-gros"><Compteur valeur={po(s.totalBatiments)} suffixe=" po" /></div>
+          <div className="st-det">{s.batiments.length} bâtiment{s.batiments.length > 1 ? "s" : ""} · {s.batiments.reduce((a, b) => a + b.salles, 0)} salle(s) construite(s)</div>
+          <div className="st-spark"><Spark valeurs={serieBat.map((v) => v / 100)} couleur="var(--marchandises)" /></div>
         </div>
-        <div className="carte chiffre">
-          <span className="etiquette">Objets hors PJ</span>
-          <span className="valeur">{texte(s.objetsAutres)}</span>
-          <span className="detail">Autres inventaires</span>
-        </div>
-        <div className="carte chiffre">
-          <span className="etiquette">Effectif des organisations</span>
-          <span className="valeur">{s.effectifTotal}</span>
-          <span className="detail">{s.effectifAVenirTotal} à recruter ou en recrutement</span>
-        </div>
-        <div className="carte chiffre">
-          <span className="etiquette">Valeur des équipes</span>
-          <span className="valeur">{texte(s.valeurEquipes)}</span>
-          <span className="detail">Prix imprimés d'achat des équipes</span>
+        <div className="carte st-kpi" style={css({ "--c": "var(--influence)" })}>
+          <div className="st-etq">Équipes</div>
+          <div className="st-gros"><Compteur valeur={s.effectifTotal} suffixe=" employés" /></div>
+          <div className="st-det">+{s.effectifAVenirTotal} à venir · valeur {texte(s.valeurEquipes)}</div>
         </div>
       </section>
 
-      {courbes && <GraphiqueCourbes key={courbes.series.length} courbes={courbes} />}
-      {courbes && <GraphiqueComposition courbes={courbes} />}
-      <GraphiqueEmpile
-        titre="Patrimoine par personnage (po)"
-        barres={s.personnages.map((p) => ({
-          label: p.nom,
-          series: [
-            { nom: "Compte", couleur: "var(--po)", valeur: p.compte.pc },
-            { nom: "Objets", couleur: "var(--influence)", valeur: p.objets.pc },
-            { nom: "Bâtiments", couleur: "var(--marchandises)", valeur: p.batiments.pc },
-          ],
-        }))}
-      />
-      <GraphiqueEmpile
-        titre="Patrimoine par localité (po)"
-        barres={s.localites.map((l) => ({
-          label: l.nom,
-          series: [
-            { nom: "Trésorerie", couleur: "var(--po)", valeur: l.tresorerie.pc },
-            { nom: "Capitaux", couleur: "var(--travail)", valeur: l.capitaux.pc },
-            { nom: "Bâtiments", couleur: "var(--marchandises)", valeur: l.batiments.pc },
-          ],
-        }))}
-      />
-      <GraphiqueEmpile
-        titre="Valeur des bâtiments (po)"
-        barres={s.batiments.map((b) => ({
-          label: b.nom,
-          series: [{ nom: "Salles et extensions", couleur: "var(--marchandises)", valeur: b.valeur.pc }],
-        }))}
-      />
-      <GraphiqueEmpile
-        titre="Valeur des équipes par organisation (po)"
-        barres={s.organisations.map((o) => ({
-          label: o.nom,
-          series: [{ nom: "Équipes", couleur: "var(--travail)", valeur: o.valeurEquipes.pc }],
-        }))}
-      />
+      {courbes && (
+        <div style={{ marginTop: 18 }}>
+          <GraphiqueCourbes key={courbes.series.length} courbes={courbes} />
+        </div>
+      )}
 
-      <section className="carte">
-        <h2>Détail des personnages</h2>
-        <table className="tableau">
-          <thead>
-            <tr><th>Nom</th><th>Compte</th><th>Objets</th><th>Bâtiments</th><th>Total</th></tr>
-          </thead>
+      <section className="st-grille st-g2">
+        {courbes && courbes.compositions.length > 0 ? <GraphiqueComposition courbes={courbes} /> : <div />}
+        <div className="carte st-carte">
+          <div className="st-entete">
+            <div>
+              <h2>Patrimoine par ville</h2>
+              <p>Trésorerie, capitaux, bâtiments</p>
+            </div>
+          </div>
+          {s.localites.length === 0 && <p className="st-vide">Aucune localité.</p>}
+          {s.localites.map((l) => {
+            const parts: [string, number][] = [["var(--po)", l.tresorerie.pc], ["var(--magie)", l.capitaux.pc], ["var(--marchandises)", l.batiments.pc]];
+            return (
+              <div className="st-ville" key={l.id}>
+                <div className="t"><b>{l.nom}</b><span>{texte(l.total)}</span></div>
+                <div className="st-pile">
+                  {parts.map(([c, v]) => (
+                    <span key={c} style={{ background: c, color: c, width: monte ? `${(Math.max(0, v) / maxVille) * 100}%` : "0%" }} title={`${fmt(v / 100)} po`} />
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+          <div className="st-mini">
+            <span><i style={{ background: "var(--po)" }} />Trésorerie</span>
+            <span><i style={{ background: "var(--magie)" }} />Capitaux</span>
+            <span><i style={{ background: "var(--marchandises)" }} />Bâtiments</span>
+          </div>
+          {hausses.length > 0 && (
+            <>
+              <h2 className="st-sous-titre">Plus fortes hausses {variation(courbes, "total")?.depuis ?? "sur 30 jours"}</h2>
+              <div style={{ display: "grid", gap: 14 }}>
+                {hausses.map((h) => (
+                  <div className="st-ligne-c" key={h.nom} style={css({ "--c": h.couleur })}>
+                    <div className="t"><span>{h.nom}</span><b>+{fmt(h.d / 100)} po{h.p !== null ? ` · +${h.p.toFixed(0)} %` : ""}</b></div>
+                    <div className="st-barre"><span style={{ width: monte ? `${(h.d / maxHausse) * 100}%` : "0%" }} /></div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      </section>
+
+      <section className="st-grille st-g2e">
+        <div className="carte st-carte">
+          <div className="st-entete">
+            <div>
+              <h2>Bâtiments</h2>
+              <p>Prix d'achat des salles et extensions construites</p>
+            </div>
+          </div>
+          {s.batiments.length === 0 ? <p className="st-vide">Aucun bâtiment.</p> : (
+            <table className="st-table">
+              <thead><tr><th>Bâtiment</th><th>Ville</th><th>Propriétaire</th><th className="n">Valeur</th></tr></thead>
+              <tbody>
+                {s.batiments.map((b) => (
+                  <tr key={b.id}>
+                    <td>{b.nom}</td>
+                    <td>{b.localite}</td>
+                    <td>{b.proprietaire ? <span className="st-pastille">{b.proprietaire}</span> : <span className="st-pastille aucun">Aucun</span>}</td>
+                    <td className="n">
+                      <div className="st-val">
+                        <span className="b"><i style={{ background: "var(--marchandises)", width: monte ? `${(b.valeur.pc / maxBat) * 100}%` : "0%" }} /></span>
+                        {texte(b.valeur)}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+        <div className="carte st-carte">
+          <div className="st-entete">
+            <div>
+              <h2>Organisations</h2>
+              <p>Effectif et valeur des équipes</p>
+            </div>
+          </div>
+          {s.organisations.length === 0 ? <p className="st-vide">Aucune organisation.</p> : (
+            <table className="st-table">
+              <thead><tr><th>Organisation</th><th className="n">Effectif</th><th className="n">À venir</th><th className="n">Valeur des équipes</th></tr></thead>
+              <tbody>
+                {s.organisations.map((o) => (
+                  <tr key={o.id}>
+                    <td>{o.nom}<div className="st-det" style={{ fontSize: 12, color: "var(--texte-doux)" }}>{o.localite}</div></td>
+                    <td className="n">{o.effectif}</td>
+                    <td className="n">{o.effectifAVenir}</td>
+                    <td className="n">
+                      <div className="st-val">
+                        <span className="b"><i style={{ background: "var(--travail)", width: monte ? `${(o.valeurEquipes.pc / maxOrg) * 100}%` : "0%" }} /></span>
+                        {texte(o.valeurEquipes)}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+                <tr className="total"><td>Total</td><td className="n">{s.effectifTotal}</td><td className="n">{s.effectifAVenirTotal}</td><td className="n">{texte(s.valeurEquipes)}</td></tr>
+              </tbody>
+            </table>
+          )}
+        </div>
+      </section>
+
+      <details className="carte st-carte st-details" style={{ marginTop: 18 }}>
+        <summary>Voir les chiffres détaillés</summary>
+        <table className="st-table">
+          <thead><tr><th>Personnage</th><th className="n">Compte</th><th className="n">Objets</th><th className="n">Bâtiments</th><th className="n">Total</th></tr></thead>
           <tbody>
             {s.personnages.map((p) => (
-              <tr key={p.id}><td>{p.nom}</td><td>{texte(p.compte)}</td><td>{texte(p.objets)}</td><td>{texte(p.batiments)}</td><td>{texte(p.total)}</td></tr>
+              <tr key={p.id}><td>{p.nom}</td><td className="n">{texte(p.compte)}</td><td className="n">{texte(p.objets)}</td><td className="n">{texte(p.batiments)}</td><td className="n">{texte(p.total)}</td></tr>
             ))}
           </tbody>
         </table>
-      </section>
-
-      <section className="carte">
-        <h2>Détail des localités</h2>
-        <table className="tableau">
-          <thead>
-            <tr><th>Nom</th><th>Trésorerie</th><th>Capitaux</th><th>Bâtiments</th><th>Total</th></tr>
-          </thead>
+        <table className="st-table" style={{ marginTop: 18 }}>
+          <thead><tr><th>Localité</th><th className="n">Trésorerie</th><th className="n">Capitaux</th><th className="n">Bâtiments</th><th className="n">Total</th></tr></thead>
           <tbody>
             {s.localites.map((l) => (
-              <tr key={l.id}><td>{l.nom}</td><td>{texte(l.tresorerie)}</td><td>{texte(l.capitaux)}</td><td>{texte(l.batiments)}</td><td>{texte(l.total)}</td></tr>
+              <tr key={l.id}><td>{l.nom}</td><td className="n">{texte(l.tresorerie)}</td><td className="n">{texte(l.capitaux)}</td><td className="n">{texte(l.batiments)}</td><td className="n">{texte(l.total)}</td></tr>
             ))}
           </tbody>
         </table>
-      </section>
-
-      <section className="carte">
-        <h2>Organisations</h2>
-        <table className="tableau">
-          <thead>
-            <tr><th>Organisation</th><th>Localité</th><th>Équipes</th><th>Effectif</th><th>À venir</th><th>Gestionnaires</th><th>Valeur des équipes</th></tr>
-          </thead>
-          <tbody>
-            {s.organisations.map((o) => (
-              <tr key={o.id}>
-                <td>{o.nom}</td><td>{o.localite}</td><td>{o.equipes}</td><td>{o.effectif}</td>
-                <td>{o.effectifAVenir}</td><td>{o.gestionnaires}</td><td>{texte(o.valeurEquipes)}</td>
-              </tr>
-            ))}
-            <tr className="total">
-              <td colSpan={3}>Total</td><td>{s.effectifTotal}</td><td>{s.effectifAVenirTotal}</td><td></td><td>{texte(s.valeurEquipes)}</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
+        <p className="st-det" style={{ marginTop: 12, fontSize: 12.5, color: "var(--texte-doux)" }}>
+          Objets hors personnages : {texte(s.objetsAutres)}. Un bâtiment possédé compte chez son propriétaire et dans sa ville, mais une seule fois dans le total.
+        </p>
+      </details>
     </div>
   );
 }

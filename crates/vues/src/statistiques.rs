@@ -15,6 +15,8 @@ use regles::Referentiel;
 #[cfg_attr(feature = "serde", derive(serde::Serialize))]
 #[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
 pub struct PageStatistiques {
+    /// Parts du patrimoine total : comptes, objets, bâtiments, trésoreries, capitaux.
+    pub repartition: Vec<PartPatrimoine>,
     /// Patrimoine total : comptes des PJ, objets des PJ, trésoreries et capitaux des localités,
     /// objets des autres inventaires.
     pub patrimoine_total: Somme,
@@ -29,6 +31,15 @@ pub struct PageStatistiques {
     pub effectif_total: u32,
     pub effectif_a_venir_total: u32,
     pub valeur_equipes: Somme,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize))]
+#[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
+pub struct PartPatrimoine {
+    pub cle: String,
+    pub nom: String,
+    pub valeur: Somme,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -249,7 +260,38 @@ pub fn page_statistiques(etat: &Etat, r: &Referentiel) -> PageStatistiques {
 
     let valeur_totale: i64 = organisations.iter().map(|o| o.valeur_equipes.pc).sum();
 
+    // Répartition du patrimoine total, sans double compte (la somme des parts vaut le total).
+    let part = |cle: &str, nom: &str, pc: i64| PartPatrimoine {
+        cle: cle.into(),
+        nom: nom.into(),
+        valeur: somme(pc),
+    };
+    let repartition = vec![
+        part(
+            "comptes",
+            "Comptes des PJ",
+            personnages.iter().map(|p| p.compte.pc).sum(),
+        ),
+        part(
+            "objets",
+            "Objets",
+            personnages.iter().map(|p| p.objets.pc).sum::<i64>() + objets_autres,
+        ),
+        part("batiments", "Bâtiments", total_batiments),
+        part(
+            "tresoreries",
+            "Trésoreries",
+            localites.iter().map(|l| l.tresorerie.pc).sum(),
+        ),
+        part(
+            "capitaux",
+            "Capitaux",
+            localites.iter().map(|l| l.capitaux.pc).sum(),
+        ),
+    ];
+
     PageStatistiques {
+        repartition,
         // Tous les bâtiments sont dans le total des localités ; ceux qui ont un propriétaire sont
         // aussi dans le total des personnages : on les retire une fois pour ne pas les compter deux fois.
         patrimoine_total: somme(
@@ -374,6 +416,10 @@ mod tests {
         assert_eq!(p.localites[0].batiments.pc, prix);
         // Le total ne compte le bâtiment qu'une fois.
         assert_eq!(p.patrimoine_total.pc, 5_000 + prix);
+        // La répartition recompose exactement le total.
+        let parts: i64 = p.repartition.iter().map(|x| x.valeur.pc).sum();
+        assert_eq!(parts, p.patrimoine_total.pc);
+        assert_eq!(p.repartition.len(), 5);
         assert_eq!(p.batiments[0].proprietaire.as_deref(), Some("Seoni"));
 
         // Un propriétaire inconnu est refusé.
