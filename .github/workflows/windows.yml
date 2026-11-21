@@ -66,7 +66,10 @@ jobs:
         run: |
           node -e 'const fs=require("fs");const f="src-tauri/tauri.conf.json";const c=JSON.parse(fs.readFileSync(f,"utf8"));c.plugins.updater.headers={Authorization:"token "+process.env.MAJ_TOKEN,Accept:"application/octet-stream"};fs.writeFileSync(f,JSON.stringify(c,null,2))'
       - name: Compilation (installeur signé)
-        run: ../outils/ci/annoter.sh npx tauri build --bundles nsis
+        run: |
+          # Vide les installeurs gardés en cache : sinon le fichier de signature lu plus bas peut être celui d'une ancienne version.
+          rm -rf src-tauri/target/release/bundle/nsis
+          ../outils/ci/annoter.sh npx tauri build --bundles nsis
       - name: Essai de bout en bout
         run: |
           export GESTION_PATHFINDER_DOSSIER="$RUNNER_TEMP/campagnes"
@@ -100,7 +103,10 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           VERSION=${GITHUB_REF_NAME#v}
-          SIG=$(cat src-tauri/target/release/bundle/nsis/*-setup.exe.sig)
+          # Fichier exact de cette version (et non un « *-setup.exe.sig » quelconque) : sinon la signature ne correspond pas à l'installeur.
+          SIG_FICHIER="src-tauri/target/release/bundle/nsis/Gestion Pathfinder_${VERSION}_x64-setup.exe.sig"
+          test -f "$SIG_FICHIER" || { echo "::error::Signature absente pour $VERSION"; exit 1; }
+          SIG=$(cat "$SIG_FICHIER")
           URL=$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$GITHUB_REF_NAME" --jq '.assets[] | select(.name=="gestion-pathfinder-setup.exe") | .url')
           mkdir -p ../updates
           node -e 'const [v,s,u]=process.argv.slice(1);process.stdout.write(JSON.stringify({version:v,notes:"",pub_date:new Date().toISOString(),platforms:{"windows-x86_64":{signature:s,url:u}}},null,2)+String.fromCharCode(10))' "$VERSION" "$SIG" "$URL" > ../updates/latest.json

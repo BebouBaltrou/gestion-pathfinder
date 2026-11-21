@@ -643,7 +643,7 @@ pub fn action(
 mod tests {
     use super::*;
 
-    fn monde() -> (campagne::Campagne, Referentiel, IdLocalite, IdPersonnage) {
+    pub(super) fn monde() -> (campagne::Campagne, Referentiel, IdLocalite, IdPersonnage) {
         let r = regles::referentiel_officiel();
         let mut c = campagne::Campagne::nouvelle("Test");
         let l = c.nouvel_id_localite();
@@ -723,5 +723,67 @@ mod tests {
             prix: None,
         };
         assert!(action(&mut c, &r, a).is_err());
+    }
+}
+
+#[cfg(test)]
+mod tests_patrimoine {
+    use super::tests::monde;
+    use super::*;
+    use crate::statistiques::page_statistiques;
+
+    #[test]
+    fn vehicules_et_montures_comptent_dans_le_patrimoine_au_prix_d_achat() {
+        let (mut c, r, l, pj) = monde();
+        let cible_pj = Cible {
+            genre: GenreCible::Personnage,
+            id: pj.0,
+        };
+        for a in [
+            ActionBien::AcheterVehicule {
+                modele: "barque".into(),
+                nom: String::new(),
+                proprietaire: Cible {
+                    genre: GenreCible::Localite,
+                    id: l.0,
+                },
+                payeur: cible_pj.clone(),
+                prix: Some("50".into()),
+            },
+            ActionBien::AcheterMonture {
+                modele: "Poney".into(),
+                nom: String::new(),
+                detenteur: cible_pj.clone(),
+                payeur: cible_pj.clone(),
+                prix: None,
+            },
+        ] {
+            let (ev, _) = action(&mut c, &r, a).unwrap();
+            c.executer(ev, &r).unwrap();
+        }
+        let etat = c.etat(&r).clone();
+        let stats = page_statistiques(&etat, &r);
+        let part = |cle: &str| {
+            stats
+                .repartition
+                .iter()
+                .find(|p| p.cle == cle)
+                .unwrap()
+                .valeur
+                .pc
+        };
+        assert_eq!(part("vehicules"), Montant::po(50).pc);
+        assert_eq!(part("montures"), Montant::po(30).pc);
+        // la barque est dans la ville, le poney chez le PJ
+        let ville = stats.localites.iter().find(|x| x.id == l.0).unwrap();
+        assert!(ville
+            .composantes
+            .iter()
+            .any(|p| p.cle == "vehicules" && p.valeur.pc == Montant::po(50).pc));
+        let perso = stats.personnages.iter().find(|x| x.id == pj.0).unwrap();
+        assert!(perso
+            .composantes
+            .iter()
+            .any(|p| p.cle == "montures" && p.valeur.pc == Montant::po(30).pc));
     }
 }

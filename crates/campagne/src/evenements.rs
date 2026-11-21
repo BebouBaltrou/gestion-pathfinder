@@ -134,6 +134,11 @@ pub enum Evenement {
         id: IdBatiment,
         favori: bool,
     },
+    /// Désigne le personnage propriétaire d'un bâtiment, ou l'enlève (`None`).
+    BatimentProprietaire {
+        id: IdBatiment,
+        proprietaire: Option<IdPersonnage>,
+    },
     EtageAjoute {
         batiment: IdBatiment,
         id: IdEtage,

@@ -452,6 +452,10 @@ pub struct FicheBatiment {
     pub notes: String,
     /// Mis en favori : il passe en tête sur la liste de sa localité.
     pub favori: bool,
+    /// Personnage propriétaire (compte dans son patrimoine).
+    pub proprietaire: Option<u32>,
+    /// Personnages qu'on peut désigner comme propriétaire.
+    pub personnages: Vec<Choix>,
     pub modele: Option<String>,
     pub localite: u32,
     /// « Sandpoint — limite des dépenses : 15 unités/jour (une par localité) »
@@ -667,6 +671,15 @@ pub fn fiche_batiment(
         classement: b.classement.clone(),
         notes: b.notes.clone(),
         favori: etat.batiments_favoris.contains(&b.id),
+        proprietaire: etat.proprietaires_batiments.get(&b.id).map(|p| p.0),
+        personnages: etat
+            .personnages
+            .values()
+            .map(|p| Choix {
+                id: p.id.0,
+                libelle: p.nom.clone(),
+            })
+            .collect(),
         modele: b
             .modele
             .as_ref()

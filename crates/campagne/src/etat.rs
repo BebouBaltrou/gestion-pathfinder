@@ -217,6 +217,8 @@ pub struct Etat {
     pub frequentees: std::collections::BTreeSet<IdLocalite>,
     /// Bâtiments mis en favori (recalculés à partir du journal).
     pub batiments_favoris: std::collections::BTreeSet<IdBatiment>,
+    /// Personnage propriétaire de chaque bâtiment qui en a un (recalculé à partir du journal).
+    pub proprietaires_batiments: BTreeMap<IdBatiment, IdPersonnage>,
     /// Jours consécutifs sans PJ présent, par localité.
     pub absence: BTreeMap<IdLocalite, u32>,
     /// Jours (numéros) sans PJ présent, par localité, pour la réduction des recettes (GC p. 84).
@@ -706,6 +708,20 @@ impl Etat {
                     self.batiments_favoris.insert(*id);
                 } else {
                     self.batiments_favoris.remove(id);
+                }
+            }
+            BatimentProprietaire { id, proprietaire } => {
+                self.batiment(*id)?;
+                match proprietaire {
+                    Some(p) => {
+                        if !self.personnages.contains_key(p) {
+                            return Err(Erreur::PersonnageInconnu(*p));
+                        }
+                        self.proprietaires_batiments.insert(*id, *p);
+                    }
+                    None => {
+                        self.proprietaires_batiments.remove(id);
+                    }
                 }
             }
             BatimentCree { .. }

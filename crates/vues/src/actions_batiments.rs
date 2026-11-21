@@ -19,6 +19,11 @@ pub enum ActionBatiment {
     #[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
     Favori { batiment: u32, actif: bool },
     #[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
+    Proprietaire {
+        batiment: u32,
+        personnage: Option<u32>,
+    },
+    #[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
     ModeEtage {
         batiment: u32,
         etage: u32,
@@ -137,6 +142,25 @@ pub fn action(
                     "Ajouté aux favoris"
                 } else {
                     "Retiré des favoris"
+                }
+                .into(),
+            )
+        }
+        A::Proprietaire {
+            batiment,
+            personnage,
+        } => {
+            etat.batiment(IdBatiment(batiment))
+                .map_err(|e| e.to_string())?;
+            (
+                Evenement::BatimentProprietaire {
+                    id: IdBatiment(batiment),
+                    proprietaire: personnage.map(IdPersonnage),
+                },
+                if personnage.is_some() {
+                    "Propriétaire désigné"
+                } else {
+                    "Propriétaire retiré"
                 }
                 .into(),
             )

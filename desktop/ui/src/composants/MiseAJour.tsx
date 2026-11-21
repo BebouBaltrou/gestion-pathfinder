@@ -5,7 +5,7 @@ import { useState } from "react";
 import { check } from "@tauri-apps/plugin-updater";
 import { relaunch } from "@tauri-apps/plugin-process";
 
-export const VERSION = "1.2.30";
+export const VERSION = "1.2.32";
 const CLE = "gestion-pathfinder.maj-auto";
 
 export type Nouvelle = { version: string; installer: () => Promise<void> };
@@ -90,7 +90,12 @@ export function MiseAJour() {
         Vérifier maintenant
       </button>{" "}
       {nouvelle && (
-        <button className="bouton principal" onClick={() => nouvelle.installer()}>
+        <button
+        className="bouton principal"
+        onClick={() =>
+          nouvelle.installer().catch((erreur) => setEtat(`Échec de la mise à jour : ${String(erreur)}`))
+        }
+      >
           Mettre à jour
         </button>
       )}

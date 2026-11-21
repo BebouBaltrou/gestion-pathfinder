@@ -5,6 +5,7 @@ pub mod actions_batiments;
 pub mod aventure;
 pub mod batiments;
 pub mod biens;
+pub mod courbes;
 pub mod gestionnaires;
 pub mod historique;
 pub mod inventaire;
@@ -21,6 +22,7 @@ pub mod points;
 pub mod prestige_don;
 pub mod recettes;
 pub mod referentiel;
+pub mod statistiques;
 pub mod tableau;
 pub mod ventes;
 

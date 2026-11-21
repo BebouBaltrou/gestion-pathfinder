@@ -23,15 +23,16 @@ import { Recettes } from "./pages/Recettes";
 import { Aventure } from "./pages/Aventure";
 import { Tableau } from "./pages/Tableau";
 import { Organigramme } from "./pages/Organigramme";
+import { Statistiques } from "./pages/Statistiques";
 
 export type Page =
-  | "tableau" | "aventure" | "recettes" | "historique" | "notes"
+  | "tableau" | "statistiques" | "aventure" | "recettes" | "historique" | "notes"
   | "localites" | "batiments" | "organisations" | "gestionnaires" | "biens" | "organigramme" | "personnages" | "inventaire"
   | "referentiel" | "points" | "parametres" | "campagnes" | "modeles";
 
 const NAVIGATION: { titre: string; pages: [Page, string][] }[] = [
   { titre: "Table de jeu", pages: [["aventure", "Aventure et combat"]] },
-  { titre: "Campagne", pages: [["tableau", "Tableau de bord"], ["recettes", "Recettes"], ["notes", "Notes"], ["historique", "Historique"]] },
+  { titre: "Campagne", pages: [["tableau", "Tableau de bord"], ["statistiques", "Statistiques"], ["recettes", "Recettes"], ["notes", "Notes"], ["historique", "Historique"]] },
   {
     titre: "Domaines",
     pages: [["localites", "Localités"], ["batiments", "Bâtiments"], ["organisations", "Organisations"], ["gestionnaires", "Gestionnaires"], ["biens", "Biens"], ["organigramme", "Organigramme"], ["personnages", "Personnages"], ["inventaire", "Inventaire"], ["modeles", "Modèles personnels"]],
@@ -254,7 +255,7 @@ export function App() {
         {maj && (
           <div className="doux" role="status" style={{ padding: "6px 12px" }}>
             Version {maj.version} disponible.{" "}
-            <button className="bouton principal" onClick={() => maj.installer()}>Mettre à jour</button>{" "}
+            <button className="bouton principal" onClick={() => maj.installer().catch((erreur) => window.alert(`Échec de la mise à jour : ${String(erreur)}`))}>Mettre à jour</button>{" "}
             <button className="bouton discret" onClick={() => setMaj(null)}>
               Masquer
             </button>
@@ -263,6 +264,7 @@ export function App() {
         <main className="contenu">
           <LimiteErreur cle={pageActive}>
           {pageActive === "tableau" && <Tableau outils={outils} />}
+          {pageActive === "statistiques" && <Statistiques outils={outils} />}
           {pageActive === "organigramme" && <Organigramme />}
           {pageActive === "aventure" && <Aventure outils={outils} />}
           {pageActive === "campagnes" && <Campagnes outils={outils} />}
@@ -280,7 +282,7 @@ export function App() {
           {pageActive === "parametres" && <Parametres outils={outils} />}
           {pageActive === "modeles" && <Modeles outils={outils} />}
           {pageActive === "recettes" && <Recettes outils={outils} />}
-          {!["tableau", "aventure", "campagnes", "localites", "organigramme", "personnages", "inventaire", "notes", "batiments", "recettes", "organisations", "gestionnaires", "biens", "historique", "points", "parametres", "referentiel", "modeles"].includes(pageActive) && <EnAttente nom={NOMS_PAGES[pageActive]} />}
+          {!["tableau", "statistiques", "aventure", "campagnes", "localites", "organigramme", "personnages", "inventaire", "notes", "batiments", "recettes", "organisations", "gestionnaires", "biens", "historique", "points", "parametres", "referentiel", "modeles"].includes(pageActive) && <EnAttente nom={NOMS_PAGES[pageActive]} />}
           </LimiteErreur>
         </main>
       </div>
