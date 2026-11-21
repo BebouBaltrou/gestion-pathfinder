@@ -128,7 +128,8 @@ export type PageStatistiques = {
 };
 
 export type SerieCourbe = { cle: string; nom: string; groupe: string; valeurs: number[] };
-export type CourbesPatrimoine = { jours: number[]; dates: string[]; series: SerieCourbe[] };
+export type CompositionPersonnage = { id: number; nom: string; compte: number[]; objets: number[]; batiments: number[] };
+export type CourbesPatrimoine = { jours: number[]; dates: string[]; series: SerieCourbe[]; compositions: CompositionPersonnage[] };
 
 export type TableauDeBord = {
   date: string;

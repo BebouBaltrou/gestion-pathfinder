@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Outils } from "../App";
 import { api, CourbesPatrimoine, PageStatistiques, Somme } from "../api";
-import { GraphiqueCourbes } from "../composants/CourbesPatrimoine";
+import { GraphiqueComposition, GraphiqueCourbes } from "../composants/CourbesPatrimoine";
 
 const texte = (s: Somme) => s?.texte ?? "—";
 
@@ -134,6 +134,7 @@ export function Statistiques({ outils }: { outils: Outils }) {
       </section>
 
       {courbes && <GraphiqueCourbes key={courbes.series.length} courbes={courbes} />}
+      {courbes && <GraphiqueComposition courbes={courbes} />}
       <GraphiqueEmpile
         titre="Patrimoine par personnage (po)"
         barres={s.personnages.map((p) => ({
