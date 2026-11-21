@@ -19,6 +19,10 @@ pub struct Combat {
     pub actions: Vec<ActionCombat>,
     /// Nombre d'actions appliquées ; les suivantes (s'il y en a) peuvent être rétablies.
     pub curseur: usize,
+    /// Familiers des personnages engagés (maître, fiche de combat) : ils jouent comme des
+    /// créatures convoquées, sans être recopiés dans la campagne à la validation.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub familiers: Vec<(IdPj, fiches::convocation::Creature)>,
     #[cfg_attr(feature = "serde", serde(skip))]
     courant: Option<EtatCombat>,
 }
@@ -64,22 +68,35 @@ impl Combat {
     pub fn nouveau(
         base: &EtatAventure,
         engages: Vec<IdPj>,
+        ctx: Ctx,
+    ) -> Result<Combat, ErreurCombat> {
+        Self::nouveau_avec_familiers(base, engages, Vec::new(), ctx)
+    }
+
+    /// Comme `nouveau`, avec les familiers (maître, fiche de combat) des personnages engagés :
+    /// ils entrent dans l'ordre d'initiative comme des créatures convoquées.
+    pub fn nouveau_avec_familiers(
+        base: &EtatAventure,
+        engages: Vec<IdPj>,
+        familiers: Vec<(IdPj, fiches::convocation::Creature)>,
         _ctx: Ctx,
     ) -> Result<Combat, ErreurCombat> {
-        let courant = EtatCombat::initial(base, engages.clone())?;
+        let courant = EtatCombat::initial_avec_familiers(base, engages.clone(), &familiers)?;
         Ok(Combat {
             format: FORMAT_COMBAT,
             base: base.clone(),
             engages,
             actions: Vec::new(),
             curseur: 0,
+            familiers,
             courant: Some(courant),
         })
     }
 
     /// Recalcule l'état courant en rejouant les actions (après chargement, annulation…).
     pub fn reconstruire(&mut self, ctx: Ctx) -> Result<(), ErreurCombat> {
-        let mut e = EtatCombat::initial(&self.base, self.engages.clone())?;
+        let mut e =
+            EtatCombat::initial_avec_familiers(&self.base, self.engages.clone(), &self.familiers)?;
         for a in &self.actions[..self.curseur] {
             e.appliquer(a, ctx)?;
         }

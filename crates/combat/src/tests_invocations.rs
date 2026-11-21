@@ -443,3 +443,46 @@ fn la_creature_doit_etre_compatible_avec_la_forme() {
         .iter()
         .all(|x| x.type_creature.starts_with("Animal") && x.taille == "M"));
 }
+
+#[test]
+fn un_familier_entre_dans_l_ordre_d_initiative() {
+    use std::collections::BTreeMap;
+    let ctx = ctx_avec(11, 0);
+    let mut e = EtatAventure::nouveau(Instant::depuis(1, 8, 0).unwrap(), false);
+    for pj in [1, 2] {
+        e.appliquer(&EvenementAventure::Entree { pj }, &ctx).unwrap();
+    }
+    let chat = fiches::convocation::Creature {
+        nom: "Chat (familier)".into(),
+        fp: "—".into(),
+        niveau: 1,
+        type_creature: "Créature magique (familier)".into(),
+        taille: "Très petite".into(),
+        source: "test".into(),
+        pv: 3,
+        ca: 15,
+        ca_contact: 14,
+        ca_depourvu: 13,
+        init: 2,
+        sauvegardes: BTreeMap::new(),
+        caracteristiques: BTreeMap::new(),
+        attaques: "griffes +2 (1d2-4)".into(),
+        vitesse: String::new(),
+        complete: true,
+        lignes: Vec::new(),
+    };
+    let mut c = Combat::nouveau_avec_familiers(&e, vec![1, 2], vec![(1, chat)], &ctx).unwrap();
+    // Le familier est engagé et attend son d20 d'initiative.
+    assert!(c.etat().engages.contains(&BASE_INVOCATIONS));
+    for (pj, d20) in [(1, 10), (2, 5), (BASE_INVOCATIONS, 12)] {
+        c.appliquer(ActionCombat::Initiative { pj, d20 }, &ctx)
+            .unwrap();
+    }
+    c.appliquer(ActionCombat::Demarrer { surprise: None }, &ctx)
+        .unwrap();
+    assert!(c.etat().ordre.contains(&BASE_INVOCATIONS));
+    assert!(est_invocation(BASE_INVOCATIONS));
+    // Annuler puis rétablir garde le familier (le combat se reconstruit avec ses familiers).
+    c.annuler(&ctx).unwrap();
+    assert!(c.etat().engages.contains(&BASE_INVOCATIONS));
+}

@@ -33,6 +33,14 @@ impl Session {
         }
     }
 
+    /// Familiers des PJ de la campagne (fiches de combat), pour le début d'un combat.
+    fn familiers(&mut self) -> Vec<(IdPj, fiches::convocation::Creature)> {
+        match self.campagne.as_mut() {
+            Some(c) => c.etat(&self.r).familiers_aventure(),
+            None => Vec::new(),
+        }
+    }
+
     /// Reprend un combat interrompu (fichier à côté de la campagne), s'il y en a un.
     pub fn recharger_combat(&mut self) -> Result<bool, String> {
         let Some(chemin) = self.chemin_combat() else {
@@ -221,7 +229,8 @@ pub fn combat_demarrer(s: S, engages: Vec<u32>) -> Retour {
     };
     let contextes = x.contextes();
     let ctx = |id: IdPj| contextes.get(&id).cloned();
-    match Combat::nouveau(&base, engages, &ctx) {
+    let familiers = x.familiers();
+    match Combat::nouveau_avec_familiers(&base, engages, familiers, &ctx) {
         Ok(c) => {
             x.combat = Some(c);
             match x.sauver_combat() {

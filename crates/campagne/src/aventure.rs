@@ -191,6 +191,18 @@ impl Etat {
             .collect()
     }
 
+    /// Fiches de combat des familiers des PJ qui en ont un, avec le numéro de leur maître.
+    pub fn familiers_aventure(&self) -> Vec<(IdPj, fiches::convocation::Creature)> {
+        let r = ReferentielFiches::partage();
+        self.personnages
+            .keys()
+            .filter_map(|id| {
+                let etat = self.fiche_de(*id)?;
+                fiches::choix_classe::creature_familier(&etat.fiche, r).map(|c| (id.0, c))
+            })
+            .collect()
+    }
+
     /// Répercute ce que l'aventure demande : événements de fiche, puis jours d'intermède.
     pub(crate) fn repercuter_sortie(
         &mut self,

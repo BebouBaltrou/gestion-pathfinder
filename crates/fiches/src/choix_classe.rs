@@ -1755,3 +1755,166 @@ pub fn profil_familier(fiche: &Fiche, r: &Referentiel) -> Vec<String> {
     }
     l
 }
+
+/// Ajustement d'armure naturelle et Intelligence du familier selon le niveau du maître
+/// (Core, table des familiers).
+fn ajustements_familier(niveau: u32) -> (i32, i32) {
+    match niveau {
+        0..=2 => (1, 6),
+        3..=4 => (2, 7),
+        5..=6 => (3, 8),
+        7..=8 => (4, 9),
+        9..=10 => (5, 10),
+        11..=12 => (6, 11),
+        13..=14 => (7, 12),
+        15..=16 => (8, 13),
+        17..=18 => (9, 14),
+        _ => (10, 15),
+    }
+}
+
+/// Pouvoirs spéciaux du familier, cumulatifs selon le niveau du maître.
+fn pouvoirs_du_familier(niveau: u32) -> Vec<String> {
+    let mut p: Vec<String> = [
+        "esquive extraordinaire",
+        "lien empathique",
+        "transfert de sorts",
+        "vigilance",
+    ]
+    .iter()
+    .map(ToString::to_string)
+    .collect();
+    if niveau >= 3 {
+        p.push("conduit".into());
+    }
+    if niveau >= 5 {
+        p.push("communication avec le maître".into());
+    }
+    if niveau >= 7 {
+        p.push("communication avec les animaux de la même espèce".into());
+    }
+    if niveau >= 11 {
+        p.push(format!("résistance à la magie {}", niveau + 5));
+    }
+    if niveau >= 13 {
+        p.push("scrutation sur le familier".into());
+    }
+    p
+}
+
+/// Fiche de combat du familier (ou du familier supérieur) du personnage, s'il en a un.
+/// Valeurs du Bestiaire et règles des familiers du Core : voir `profil_familier`.
+pub fn creature_familier(fiche: &Fiche, r: &Referentiel) -> Option<crate::convocation::Creature> {
+    use crate::convocation::{Creature, Ligne};
+    let nom = fiche
+        .familier_superieur
+        .as_deref()
+        .or(fiche.familier.as_deref())?;
+    let v = fiche.calculer(r).ok()?;
+    let bdd = creatures_familiers();
+    let c = bdd
+        .creatures
+        .iter()
+        .chain(bdd.superieurs.iter())
+        .find(|c| c.nom == nom)?;
+    let niveau = fiche.niveau_de_classe("magicien");
+    let (armure_table, int) = ajustements_familier(niveau);
+    let modif = |s: i32| (s - 10).div_euclid(2);
+    let con = c.con.unwrap_or(10);
+    let taille = match c.taille.as_str() {
+        "Minuscule" => 4,
+        "Très petite" => 2,
+        "Petite" => 1,
+        _ => 0,
+    };
+    let armure = c.armure_naturelle + armure_table;
+    let reflexes = v.base_reflexes.max(2) + c.dexterite;
+    let vigueur = v.base_vigueur.max(2) + modif(con);
+    let volonte = v.base_volonte.max(0) + modif(c.sag);
+    let bonus = v.bba.total + c.force.max(c.dexterite);
+    let attaques: Vec<String> = c
+        .attaques
+        .split(", ")
+        .filter(|a| *a != "aucune")
+        .map(|a| match a.split_once(" (") {
+            Some((gauche, degats)) => match gauche.rsplit_once(' ') {
+                Some((nom_att, _)) => format!("{nom_att} +{bonus} ({degats}"),
+                None => a.to_string(),
+            },
+            None => a.to_string(),
+        })
+        .collect();
+    let mut lignes = vec![
+        Ligne {
+            libelle: "Pouvoirs du familier".into(),
+            valeur: pouvoirs_du_familier(niveau).join(", "),
+        },
+        Ligne {
+            libelle: "Armure naturelle".into(),
+            valeur: format!("{} (créature) + {armure_table} (niveau du maître)", c.armure_naturelle),
+        },
+    ];
+    if let Some(f) = r
+        .choix
+        .pacte_magique_magicien
+        .familiers
+        .iter()
+        .find(|f| f.nom == nom)
+    {
+        lignes.push(Ligne {
+            libelle: "Capacité donnée au maître".into(),
+            valeur: f.capacite.clone(),
+        });
+    }
+    if !c.competences.is_empty() {
+        lignes.push(Ligne {
+            libelle: "Compétences".into(),
+            valeur: format!(
+                "{} (valeurs du Bestiaire ; le degré de maîtrise du maître s'applique s'il est plus élevé, à compléter)",
+                c.competences
+            ),
+        });
+    }
+    lignes.push(Ligne {
+        libelle: "À compléter".into(),
+        valeur: "Charisme du familier non renseigné (10 par défaut)".into(),
+    });
+    Some(Creature {
+        nom: format!("{nom} (familier)"),
+        fp: "—".into(),
+        niveau,
+        type_creature: "Créature magique (familier)".into(),
+        taille: c.taille.clone(),
+        source: "Bestiaire Pathfinder (wiki legacy.aonprd.com) et règles des familiers du Core".into(),
+        pv: v.pv_max.total / 2,
+        ca: 10 + taille + c.dexterite + armure,
+        ca_contact: 10 + taille + c.dexterite,
+        ca_depourvu: 10 + taille + armure + c.dexterite.min(0),
+        init: c.dexterite,
+        sauvegardes: [
+            ("Réf".to_string(), reflexes),
+            ("Vig".to_string(), vigueur),
+            ("Vol".to_string(), volonte),
+        ]
+        .into_iter()
+        .collect(),
+        caracteristiques: [
+            ("For".to_string(), 10 + 2 * c.force),
+            ("Dex".to_string(), 10 + 2 * c.dexterite),
+            ("Con".to_string(), con),
+            ("Int".to_string(), int),
+            ("Sag".to_string(), c.sag),
+            ("Cha".to_string(), 10),
+        ]
+        .into_iter()
+        .collect(),
+        attaques: if attaques.is_empty() {
+            "aucune".into()
+        } else {
+            attaques.join(", ")
+        },
+        vitesse: String::new(),
+        complete: true,
+        lignes,
+    })
+}

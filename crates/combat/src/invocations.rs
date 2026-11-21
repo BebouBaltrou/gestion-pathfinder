@@ -504,3 +504,48 @@ impl EtatCombat {
         Ok(())
     }
 }
+
+impl EtatCombat {
+    /// État initial du combat, avec les familiers des personnages engagés : chacun entre dans
+    /// la liste des engagés (son d20 d'initiative se saisit comme celui des autres) et se joue
+    /// comme une créature convoquée. Un familier dont le maître n'est pas engagé est ignoré.
+    pub fn initial_avec_familiers(
+        base: &aventure::EtatAventure,
+        engages: Vec<IdPj>,
+        familiers: &[(IdPj, Creature)],
+    ) -> Result<Self, ErreurCombat> {
+        let mut e = Self::initial(base, engages)?;
+        let maintenant = e.aventure.horloge.maintenant;
+        for (maitre, creature) in familiers {
+            if !e.engages.contains(maitre) {
+                continue;
+            }
+            let id = e.prochain_invocation;
+            e.prochain_invocation += 1;
+            e.aventure.pjs.insert(
+                id,
+                SuiviPj {
+                    vital: Vital::default(),
+                    survie: Survie::nouvelle(maintenant),
+                    fatigue_de_survie: false,
+                    massifs_en_attente: false,
+                    etats_fiche: BTreeSet::new(),
+                    inventaire: BTreeMap::new(),
+                    ressources: BTreeMap::new(),
+                    baton_recharge: None,
+                },
+            );
+            e.engages.push(id);
+            e.invocations.insert(
+                id,
+                Invocation {
+                    id,
+                    lanceur: *maitre,
+                    creature: creature.clone(),
+                    niveau_sort: 0,
+                },
+            );
+        }
+        Ok(e)
+    }
+}

@@ -10,14 +10,14 @@ use serde_json::Value;
 use std::collections::BTreeMap;
 
 /// Ligne « libellé : valeur » d'un bloc de statistiques, telle que saisie.
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub struct Ligne {
     pub libelle: String,
     pub valeur: String,
 }
 
 /// Une créature convocable, avec les nombres utiles à la feuille de combat.
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub struct Creature {
     pub nom: String,
     /// Facteur de puissance (« 1/2 », « 5 »…).
