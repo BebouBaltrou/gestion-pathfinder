@@ -130,7 +130,7 @@ export function ListeObjets(props: {
       <div className="compte-objets">{nombre} objet(s)</div>
       <ListeVirtuelle
         elements={lignes}
-        hauteurLigne={vue === "grille" ? 96 : 44}
+        hauteurLigne={vue === "grille" ? 132 : 44}
         largeurCase={vue === "grille" ? 190 : 0}
         cle={(l) => ("objet" in l ? l.objet.id : l.entete)}
         rendu={(l) => ("objet" in l ? carte(l.objet) : <div className="entete-groupe">{l.entete}</div>)}

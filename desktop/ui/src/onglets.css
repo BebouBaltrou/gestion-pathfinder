@@ -149,3 +149,65 @@
 :root[data-theme="neon"] .notification { box-shadow: 0 0 24px -10px var(--or); }
 .ligne-campagne { transition: border-color var(--transition), background var(--transition), transform var(--transition); }
 .ligne-campagne:hover { transform: translateX(3px); }
+
+/* ================================================================ inventaire : tuiles de la grille
+   Chaque tuile a quatre zones fixes (type, nom, pastilles, poids et valeur) : plus de chevauchement. */
+.liste-virtuelle { border-radius: var(--rayon); }
+.ligne-virtuelle.grille { gap: 10px; padding: 2px 8px; }
+.objet.tuile {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "type type" "nom nom" "pastilles pastilles" "poids valeur";
+  grid-template-rows: auto 1fr auto auto; align-content: stretch; gap: 3px 8px;
+  padding: 10px 12px 9px 15px; overflow: hidden; position: relative; border-radius: var(--rayon);
+  transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+}
+.objet.tuile:hover { transform: translateY(-2px); border-color: var(--bord-fort); }
+.objet.tuile::before { content: ""; position: absolute; left: 0; top: 10px; bottom: 10px; width: 3px; border-radius: 0 3px 3px 0; background: var(--bord-fort); }
+.objet.tuile:has(.mini.equipe)::before { background: var(--vert); }
+.objet.tuile:has(.mini.maudit)::before { background: var(--orange); }
+.objet.tuile.choisi { box-shadow: 0 0 0 1px var(--or); }
+.objet.tuile.choisi::before { background: var(--or); }
+.objet.tuile .type-objet { grid-area: type; }
+.objet.tuile .nom-objet {
+  grid-area: nom; white-space: normal; overflow: hidden; line-height: 1.25; font-weight: 600; font-family: var(--police-titre);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+}
+.objet.tuile .pastilles-objet { grid-area: pastilles; flex-wrap: wrap; gap: 4px; }
+.objet.tuile .pastilles-objet:empty { display: none; }
+.objet.tuile .poids-objet, .objet.tuile .valeur-objet { padding-top: 4px; border-top: 1px dashed var(--bord-fort); font-size: 12.5px; }
+.objet.tuile .poids-objet { grid-area: poids; text-align: left; }
+.objet.tuile .valeur-objet { grid-area: valeur; font-weight: 600; }
+:root[data-theme="neon"] .objet.tuile:hover { box-shadow: 0 0 20px -8px var(--or); }
+.mini { border-radius: 999px; padding: 0 9px; line-height: 18px; background: color-mix(in srgb, var(--bord) 40%, transparent); }
+.mini.equipe { background: color-mix(in srgb, var(--vert) 14%, transparent); border-color: color-mix(in srgb, var(--vert) 50%, var(--bord)); }
+.mini.maudit { background: color-mix(in srgb, var(--orange) 14%, transparent); border-color: color-mix(in srgb, var(--orange) 50%, var(--bord)); }
+
+/* ================================================================ équipement : mannequin et cases
+   Cases remplies = liseré doré et plaque de l'objet ; cases vides = cadre pointillé. */
+.schema-corps {
+  gap: 12px; grid-auto-rows: minmax(98px, auto); padding: 20px 16px; border: 1px solid var(--bord); border-radius: var(--rayon);
+  background: radial-gradient(ellipse at 50% 42%, color-mix(in srgb, var(--or) 9%, transparent), transparent 62%), var(--panneau);
+}
+.silhouette { opacity: 1; fill: color-mix(in srgb, var(--or) 14%, transparent); stroke: color-mix(in srgb, var(--or) 50%, transparent); stroke-width: 1.6; top: 2%; height: 96%; }
+.case-emplacement {
+  border-radius: var(--rayon); padding: 10px 12px; gap: 3px;
+  background: color-mix(in srgb, var(--carte) 80%, transparent); backdrop-filter: blur(1.5px);
+  transition: border-color var(--transition), opacity var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+.case-emplacement:hover { border-color: var(--bord-fort); transform: translateY(-1px); }
+.case-emplacement .zone { font-size: 13px; font-family: var(--police-titre); font-weight: 600; color: var(--or); }
+:root[data-theme="carnet"] .case-emplacement .zone { font-variant: small-caps; letter-spacing: 0.05em; font-size: 15px; }
+.case-emplacement .nom-slot { font-size: 12.5px; color: var(--texte-doux); }
+.case-emplacement .vide-slot { border: 1px dashed var(--bord-fort); border-radius: var(--rayon-petit); padding: 4px 8px; text-align: center; margin-top: 3px; }
+.case-emplacement .occupant { margin-top: 3px; padding: 4px 4px 4px 9px; border-radius: var(--rayon-petit); background: color-mix(in srgb, var(--or) 12%, transparent); font-weight: 600; }
+.case-emplacement.garnie { border-color: color-mix(in srgb, var(--or) 50%, var(--bord)); box-shadow: inset 3px 0 0 var(--or); }
+:root[data-theme="neon"] .case-emplacement.garnie { box-shadow: inset 3px 0 0 var(--or), 0 0 18px -9px var(--or); }
+.case-emplacement.compatible { animation: slot-appel 1.4s ease-in-out infinite; }
+@keyframes slot-appel { 50% { box-shadow: 0 0 0 4px color-mix(in srgb, var(--vert) 28%, transparent); } }
+.indicateur { margin-top: 2px; }
+.barre-charge { height: 16px; border-radius: 999px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.25); }
+.barre-charge .remplissage { border-radius: 999px; }
+.reserve-equipable { border-radius: var(--rayon); }
+.objet.a-equiper { height: 100%; overflow: hidden; padding: 6px 12px; }
+.objet.a-equiper .nom-objet { font-family: var(--police-titre); font-weight: 600; }
+.boutons-slots { max-height: 52px; overflow-y: auto; }

@@ -78,7 +78,7 @@ export function Equipement(props: {
     return (
       <div
         key={slot.id}
-        className={"case-emplacement " + (indicateur?.classe ?? "")}
+        className={"case-emplacement " + (indicateur?.classe ?? "") + (ici.length > 0 ? " garnie" : "")}
         style={PLACES[slot.id] ? { gridColumn: PLACES[slot.id][0], gridRow: PLACES[slot.id][1] } : undefined}
         onDragOver={(e) => indicateur?.classe === "compatible" && e.preventDefault()}
         onDrop={(e) => deposer(e, slot)}
@@ -128,7 +128,7 @@ export function Equipement(props: {
           <input className="champ large" type="search" placeholder="Rechercher…" aria-label="Rechercher un objet à équiper" value={recherche} onChange={(e) => setRecherche(e.target.value)} />
           <ListeVirtuelle
             elements={candidats}
-            hauteurLigne={64}
+            hauteurLigne={88}
             cle={(o) => o.id}
             vide="Aucun objet à équiper."
             rendu={(o) => (
