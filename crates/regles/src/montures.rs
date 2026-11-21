@@ -226,10 +226,7 @@ mod tests {
     #[test]
     fn barde_table_6_8() {
         assert_eq!(vitesse_avec_barde(12, None), Some(12.0));
-        assert_eq!(
-            vitesse_avec_barde(15, Some(Barde::Intermediaire)),
-            Some(10.5)
-        );
+        assert_eq!(vitesse_avec_barde(15, Some(Barde::Intermediaire)), Some(10.5));
         assert_eq!(vitesse_avec_barde(18, Some(Barde::Lourde)), Some(12.0));
         assert_eq!(vitesse_avec_barde(9, Some(Barde::Lourde)), None);
     }
@@ -259,22 +256,10 @@ mod tests_charge {
 
     #[test]
     fn categories_et_depassement() {
-        assert_eq!(
-            categorie_charge(Some(20), 50.0, false),
-            Some(CategorieCharge::Legere)
-        );
-        assert_eq!(
-            categorie_charge(Some(20), 100.0, false),
-            Some(CategorieCharge::Intermediaire)
-        );
-        assert_eq!(
-            categorie_charge(Some(20), 150.0, false),
-            Some(CategorieCharge::Lourde)
-        );
+        assert_eq!(categorie_charge(Some(20), 50.0, false), Some(CategorieCharge::Legere));
+        assert_eq!(categorie_charge(Some(20), 100.0, false), Some(CategorieCharge::Intermediaire));
+        assert_eq!(categorie_charge(Some(20), 150.0, false), Some(CategorieCharge::Lourde));
         assert_eq!(categorie_charge(Some(20), 250.0, false), None);
-        assert_eq!(
-            categorie_charge(Some(20), 250.0, true),
-            Some(CategorieCharge::Depassement)
-        );
+        assert_eq!(categorie_charge(Some(20), 250.0, true), Some(CategorieCharge::Depassement));
     }
 }
