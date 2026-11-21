@@ -489,6 +489,32 @@ export type ChoixCible = { cible: CibleBien; libelle: string };
 export type ModeleBien = { id: string; nom: string; resume: string; prix: Somme | null };
 export type JaugeEquipage = { recrutes: number; enCours: number; requisMin: number; requisMax: number; complete: boolean };
 
+export type ChargeBien = { poidsKg: number; limitesKg: number[]; categorie: string; depassement: boolean };
+export type AmelioreeVue = { index: number; nom: string; quantite: number; prix: Somme; effets: string };
+export type AmeliorationPossibleVue = {
+  id: string;
+  nom: string;
+  prerequis: string;
+  cout: string;
+  prix: Somme | null;
+  cumulable: boolean;
+  aLaConstruction: boolean;
+  unite: string | null;
+  effets: string;
+  texte: string;
+};
+export type BardeVue = {
+  nom: string;
+  genre: string;
+  bonusCa: number;
+  dexMax: number | null;
+  malusArmure: number;
+  prix: Somme;
+  poidsKg: number | null;
+  vitesse: string | null;
+};
+export type BardePossibleVue = { nomEn: string; libelle: string; prix: Somme | null };
+
 export type FicheVehicule = {
   id: number;
   nom: string;
@@ -501,6 +527,15 @@ export type FicheVehicule = {
   equipesPossibles: ChoixCible[];
   gestionnaires: Choix[];
   gestionnairesPossibles: Choix[];
+  /** Inventaire (cargaison) lié ; null : pas encore créé. */
+  inventaire: number | null;
+  charge: ChargeBien | null;
+  passagers: number;
+  passagersMax: number | null;
+  ameliorations: AmelioreeVue[];
+  ameliorationsPossibles: AmeliorationPossibleVue[];
+  vitesseAjustee: string | null;
+  bonusNavigation: number;
 };
 
 export type FicheMonture = {
@@ -512,6 +547,11 @@ export type FicheMonture = {
   detenteur: ChoixCible | null;
   prix: Somme;
   details: string[];
+  inventaire: number | null;
+  charge: ChargeBien | null;
+  barde: BardeVue | null;
+  bardesPossibles: BardePossibleVue[];
+  notes: string[];
 };
 
 export type PageBiens = {
@@ -534,7 +574,13 @@ export type ActionBien =
   | { type: "retirerVehicule"; id: number }
   | { type: "acheterMonture"; modele: string; nom: string; proprietaire: CibleBien; detenteur: CibleBien | null; payeur: CibleBien; prix: string | null }
   | { type: "modifierMonture"; id: number; nom: string; proprietaire: CibleBien; detenteur: CibleBien | null }
-  | { type: "retirerMonture"; id: number };
+  | { type: "retirerMonture"; id: number }
+  | { type: "creerInventaire"; genre: "vehicule" | "monture"; id: number }
+  | { type: "installerAmelioration"; id: number; amelioration: string; quantite: number | null; payeur: CibleBien; prix: string | null }
+  | { type: "retirerAmelioration"; id: number; index: number }
+  | { type: "passagers"; id: number; nombre: number }
+  | { type: "equiperBarde"; id: number; armure: string; payeur: CibleBien; prix: string | null }
+  | { type: "retirerBarde"; id: number };
 
 // ------------------------------------------------------------------ historique, points, paramètres
 
