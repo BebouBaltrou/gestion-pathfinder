@@ -4,6 +4,7 @@
 pub mod actions_batiments;
 pub mod aventure;
 pub mod batiments;
+pub mod biens;
 pub mod courbes;
 pub mod gestionnaires;
 pub mod historique;

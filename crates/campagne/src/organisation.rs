@@ -99,7 +99,12 @@ impl Etat {
     }
 
     /// Nombre de personnes d'une équipe : la taille de son profil (GC p. 95 « Taille »).
+    /// Un membre de la suite (partisan du don Prestige) est une seule personne, quelle que soit la
+    /// taille de son équipe équivalente.
     pub fn effectif_equipe(&self, e: &Equipe, r: &Referentiel) -> u32 {
+        if self.suite_de(e.id).is_some() {
+            return 1;
+        }
         match r.equipe(&e.reference).and_then(|u| u.taille.as_ref()) {
             Some(domaine::fiches::Taille::Personnes { nombre }) => *nombre,
             _ => 0,
@@ -134,11 +139,23 @@ impl Etat {
     }
 
     pub fn nom_equipe(&self, e: &Equipe, r: &Referentiel) -> String {
-        e.nom
+        let nom = e
+            .nom
             .clone()
             .filter(|n| !n.trim().is_empty())
             .or_else(|| r.equipe(&e.reference).map(|u| u.nom.clone()))
-            .unwrap_or_else(|| e.reference.clone())
+            .unwrap_or_else(|| e.reference.clone());
+        // Un membre de la suite reste toujours reconnaissable.
+        match self.suite_de(e.id) {
+            Some(m) => {
+                let maitre = self
+                    .personnages
+                    .get(&m)
+                    .map_or_else(|| m.to_string(), |p| p.nom.clone());
+                format!("{nom} (suite de {maitre})")
+            }
+            None => nom,
+        }
     }
 
     /// Salaire versé chaque jour par un gestionnaire actif (une fois par jour par défaut,

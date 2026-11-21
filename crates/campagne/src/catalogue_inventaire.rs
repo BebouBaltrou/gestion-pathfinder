@@ -24,7 +24,7 @@ fn identifiant(nom_en: &str) -> String {
 }
 
 /// Prix du catalogue (pp, po, pa, pc) en pièces de cuivre.
-fn montant(cout: &Option<Cout>) -> Option<Montant> {
+pub(crate) fn montant(cout: &Option<Cout>) -> Option<Montant> {
     let c = cout.as_ref()?;
     let facteur = match c.unite.as_str() {
         "cp" => 1.0,

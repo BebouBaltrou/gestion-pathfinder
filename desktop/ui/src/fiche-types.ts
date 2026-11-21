@@ -655,6 +655,8 @@ export type PrestigeDonVue = {
   niveauMaxAcolyte: number;
   modificateurs: ModificateurPrestige[];
   candidats: [number, string][];
-  partisans: { index: number; niveau: number; nom: string }[];
+  partisans: { index: number; niveau: number; nom: string; equipe: number | null; equipeLibelle: string | null; note: string }[];
   places: { niveau: number; permis: number; pris: number }[];
+  /** Équipes du livre qui peuvent représenter un partisan. */
+  equivalents: { id: string; libelle: string }[];
 };

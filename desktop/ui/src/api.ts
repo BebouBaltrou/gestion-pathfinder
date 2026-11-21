@@ -113,7 +113,7 @@ export type CartePersonnage = {
 export type PartPatrimoine = { cle: string; nom: string; valeur: Somme };
 export type StatPersonnage = { id: number; nom: string; composantes: PartPatrimoine[]; total: Somme };
 export type StatLocalite = { id: number; nom: string; composantes: PartPatrimoine[]; total: Somme };
-export type StatOrganisation = { id: number; nom: string; localite: string; equipes: number; effectif: number; effectifAVenir: number; gestionnaires: number; valeurEquipes: Somme };
+export type StatOrganisation = { id: number; nom: string; localite: string; equipes: number; effectif: number; effectifAVenir: number; effectifSuite: number; gestionnaires: number; valeurEquipes: Somme };
 export type PageStatistiques = {
   repartition: PartPatrimoine[];
   patrimoineTotal: Somme;
@@ -128,6 +128,8 @@ export type PageStatistiques = {
   organisations: StatOrganisation[];
   effectifTotal: number;
   effectifAVenirTotal: number;
+  /** Membres de la suite (don Prestige), comptés à part. */
+  effectifSuiteTotal: number;
   valeurEquipes: Somme;
 };
 
@@ -479,6 +481,113 @@ export type ActionGestionnaire =
   | { type: "affecter"; id: number; cible: CibleAffectation }
   | { type: "desaffecter"; id: number; cible: CibleAffectation };
 
+// ------------------------------------------------------------------ biens (véhicules et montures)
+
+export type GenreCible = "localite" | "organisation" | "personnage" | "equipe" | "partisan";
+export type CibleBien = { genre: GenreCible; id: number };
+export type ChoixCible = { cible: CibleBien; libelle: string };
+export type ModeleBien = { id: string; nom: string; resume: string; prix: Somme | null };
+export type JaugeEquipage = { recrutes: number; enCours: number; requisMin: number; requisMax: number; complete: boolean };
+
+export type ChargeBien = { poidsKg: number; limitesKg: number[]; categorie: string; depassement: boolean };
+export type AmelioreeVue = { index: number; nom: string; quantite: number; prix: Somme; effets: string };
+export type AmeliorationPossibleVue = {
+  id: string;
+  nom: string;
+  prerequis: string;
+  cout: string;
+  prix: Somme | null;
+  cumulable: boolean;
+  aLaConstruction: boolean;
+  unite: string | null;
+  effets: string;
+  texte: string;
+};
+export type BardeVue = {
+  nom: string;
+  genre: string;
+  bonusCa: number;
+  dexMax: number | null;
+  malusArmure: number;
+  prix: Somme;
+  poidsKg: number | null;
+  vitesse: string | null;
+  /** La moitié du prix payé (Manuel, « La revente du butin »). */
+  prixRevente: Somme;
+};
+export type BardeRangeeVue = { objet: number; libelle: string };
+export type BardePossibleVue = { nomEn: string; libelle: string; prix: Somme | null };
+
+export type FicheVehicule = {
+  id: number;
+  nom: string;
+  modele: string;
+  proprietaire: ChoixCible;
+  prix: Somme;
+  details: string[];
+  jauge: JaugeEquipage | null;
+  equipes: ChoixCible[];
+  equipesPossibles: ChoixCible[];
+  gestionnaires: Choix[];
+  gestionnairesPossibles: Choix[];
+  /** Inventaire (cargaison) lié ; null : pas encore créé. */
+  inventaire: number | null;
+  charge: ChargeBien | null;
+  passagers: number;
+  passagersMax: number | null;
+  ameliorations: AmelioreeVue[];
+  ameliorationsPossibles: AmeliorationPossibleVue[];
+  vitesseAjustee: string | null;
+  bonusNavigation: number;
+};
+
+export type FicheMonture = {
+  id: number;
+  nom: string;
+  modele: string;
+  proprietaire: ChoixCible;
+  /** À qui elle est confiée ; null : à l'écurie du propriétaire. */
+  detenteur: ChoixCible | null;
+  prix: Somme;
+  details: string[];
+  inventaire: number | null;
+  charge: ChargeBien | null;
+  barde: BardeVue | null;
+  bardesPossibles: BardePossibleVue[];
+  bardesRangees: BardeRangeeVue[];
+  notes: string[];
+};
+
+export type PageBiens = {
+  modelesVehicules: ModeleBien[];
+  modelesMontures: ModeleBien[];
+  proprietaires: ChoixCible[];
+  detenteurs: ChoixCible[];
+  payeurs: ChoixCible[];
+  vehicules: FicheVehicule[];
+  montures: FicheMonture[];
+};
+
+export type ActionBien =
+  | { type: "acheterVehicule"; modele: string; nom: string; proprietaire: CibleBien; payeur: CibleBien; prix: string | null }
+  | { type: "modifierVehicule"; id: number; nom: string; proprietaire: CibleBien }
+  | { type: "affecterEquipe"; id: number; equipe: number }
+  | { type: "retirerEquipe"; id: number; equipe: number }
+  | { type: "affecterGestionnaire"; id: number; gestionnaire: number }
+  | { type: "retirerGestionnaire"; id: number; gestionnaire: number }
+  | { type: "retirerVehicule"; id: number }
+  | { type: "acheterMonture"; modele: string; nom: string; proprietaire: CibleBien; detenteur: CibleBien | null; payeur: CibleBien; prix: string | null }
+  | { type: "modifierMonture"; id: number; nom: string; proprietaire: CibleBien; detenteur: CibleBien | null }
+  | { type: "retirerMonture"; id: number }
+  | { type: "creerInventaire"; genre: "vehicule" | "monture"; id: number }
+  | { type: "installerAmelioration"; id: number; amelioration: string; quantite: number | null; payeur: CibleBien; prix: string | null }
+  | { type: "retirerAmelioration"; id: number; index: number }
+  | { type: "passagers"; id: number; nombre: number }
+  | { type: "equiperBarde"; id: number; armure: string; payeur: CibleBien; prix: string | null }
+  | { type: "retirerBarde"; id: number }
+  | { type: "vendreBarde"; id: number; beneficiaire: CibleBien; prix: string | null }
+  | { type: "equiperBardeRangee"; id: number; objet: number };
+
 // ------------------------------------------------------------------ historique, points, paramètres
 
 export type LigneJournal = { numero: number; jour: number; date: string; texte: string };
@@ -733,6 +842,9 @@ export const api = {
   pageGestionnaires: () => appeler<PageGestionnaires | null>("page_gestionnaires"),
   actionGestionnaire: (action: ActionGestionnaire) => appeler<Retour>("action_gestionnaire", { action }),
 
+  pageBiens: () => appeler<PageBiens | null>("page_biens"),
+  actionBien: (action: ActionBien) => appeler<Retour>("action_bien", { action }),
+
   pageHistorique: () => appeler<PageHistorique | null>("page_historique"),
   pagePoints: () => appeler<PagePoints>("page_points"),
   pageReferentiel: () => appeler<PageReferentiel>("page_referentiel"),
@@ -757,6 +869,8 @@ export const api = {
   prestigeDon: (pj: number) => appeler<PrestigeDonVue | null>("prestige_don", { pj }),
   prestigeEvenement: (evenement: unknown) => appeler<Retour>("prestige_evenement", { evenement }),
   recruterAcolyte: (maitre: number, nom: string) => appeler<Retour>("recruter_acolyte", { maitre, nom }),
+  recruterPartisan: (maitre: number, niveau: number, nom: string, equipeReference: string | null, note: string) =>
+    appeler<Retour>("recruter_partisan", { maitre, niveau, nom, equipeReference, note }),
   accorderNiveauDeDepart: (pj: number, niveau: number) => appeler<Retour>("accorder_niveau_de_depart", { pj, niveau }),
   evenementFiche: (pj: number, evenement: EvenementFiche) =>
     appeler<Retour>("evenement_fiche", { pj, evenement }),
@@ -932,11 +1046,12 @@ function statistiquesExemple(): { stats: PageStatistiques; courbes: CourbesPatri
     ],
     totalBatiments: s(9100),
     organisations: [
-      { id: 1, nom: "Guilde des marchands", localite: "Sandpoint", equipes: 3, effectif: 12, effectifAVenir: 3, gestionnaires: 1, valeurEquipes: s(18000) },
-      { id: 2, nom: "Garde de Sandpoint", localite: "Sandpoint", equipes: 2, effectif: 8, effectifAVenir: 2, gestionnaires: 1, valeurEquipes: s(9000) },
+      { id: 1, nom: "Guilde des marchands", localite: "Sandpoint", equipes: 3, effectif: 12, effectifAVenir: 3, effectifSuite: 0, gestionnaires: 1, valeurEquipes: s(18000) },
+      { id: 2, nom: "Garde de Sandpoint", localite: "Sandpoint", equipes: 2, effectif: 8, effectifAVenir: 2, effectifSuite: 0, gestionnaires: 1, valeurEquipes: s(9000) },
     ],
     effectifTotal: 20,
     effectifAVenirTotal: 5,
+    effectifSuiteTotal: 0,
     valeurEquipes: s(27000),
   };
   return { stats, courbes };

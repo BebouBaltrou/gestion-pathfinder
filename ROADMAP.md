@@ -37,10 +37,10 @@ Le plan et l'état d'avancement sont dans `docs/PLAN_AVENTURE_COMBAT.md`.
 
 À faire plus tard, sans être implémenté en v1 (décision d'Antoine, 25/10/2026) :
 
-1. Inventaire des montures (capacité de charge, sacoches, barde, effet du poids sur la vitesse).
-2. Véhicules (soutes, passagers, équipage, vitesse, entretien).
+1. ~~Inventaire des montures~~ : fait (page Biens : charge d'après la table 7-9, sacoches, barde, vitesse). Voir `docs/POINTS_A_CONFIRMER_BIENS.md`.
+2. ~~Véhicules~~ : fait (page Biens : cargaison, passagers, équipage, vitesse, améliorations de bateau). **Entretien** : reporté.
 3. Durabilité et réparation d'objets.
-4. Marchands, boutiques, taux de vente régionaux.
+4. Marchands, boutiques, taux de vente régionaux (retirés du périmètre de la page Biens).
 5. Fabrication d'objets magiques détaillée (liée à l'intermède).
 6. Silhouettes personnalisées par race ou taille.
 7. Icônes et images d'objets personnalisées.

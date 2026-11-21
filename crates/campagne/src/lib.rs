@@ -4,6 +4,7 @@
 //! qui valide l'événement, l'ajoute au journal et met l'état à jour.
 
 pub mod aventure;
+pub mod biens;
 pub mod calendrier;
 pub mod catalogue_inventaire;
 pub mod construction;
@@ -206,6 +207,22 @@ impl Campagne {
             }),
         )
     }
+    pub fn nouvel_id_vehicule(&self) -> IdVehicule {
+        IdVehicule(
+            1 + self.max_id(|e| match e {
+                Evenement::VehiculeAchete { id, .. } => Some(id.0),
+                _ => None,
+            }),
+        )
+    }
+    pub fn nouvel_id_monture(&self) -> IdMonture {
+        IdMonture(
+            1 + self.max_id(|e| match e {
+                Evenement::MontureAchetee { id, .. } => Some(id.0),
+                _ => None,
+            }),
+        )
+    }
     pub fn nouvel_id_transfert(&self) -> IdTransfert {
         IdTransfert(
             1 + self.max_id(|e| match e {
@@ -292,7 +309,9 @@ impl Campagne {
                 maitre,
                 niveau,
                 nom,
+                ..
             } => format!("{} recrute le partisan {nom} (niveau {niveau})", pj(maitre)),
+            PartisanNote { maitre, .. } => format!("Note d'un partisan de {}", pj(maitre)),
             PartisanRetire { maitre, .. } => format!("{} retire un partisan", pj(maitre)),
             Inventaire(_) => "Opération sur l'inventaire".to_string(),
             Notes(c) => match c {
@@ -591,6 +610,35 @@ impl Campagne {
             ),
             GestionnaireModifie { nom, .. } => format!("Gestionnaire {nom} modifié"),
             GestionnaireRenvoye { id } => format!("Gestionnaire {} renvoyé", ges(id)),
+            VehiculeAchete { nom, prix, payeur, .. } => {
+                format!("Achat du véhicule {nom} ({prix} payés par {})", qui(payeur))
+            }
+            VehiculeModifie { nom, .. } => format!("Véhicule {nom} modifié"),
+            VehiculeRetire { id } => format!("Véhicule {id} retiré"),
+            MontureAchetee { nom, prix, payeur, .. } => {
+                format!("Achat de la monture {nom} ({prix} payés par {})", qui(payeur))
+            }
+            MontureModifiee { nom, .. } => format!("Monture {nom} modifiée"),
+            MontureRetiree { id } => format!("Monture {id} retirée"),
+            VehiculeAmelioree {
+                id,
+                amelioration,
+                prix,
+                ..
+            } => format!("Véhicule {id} : amélioration « {amelioration} » installée ({prix})"),
+            VehiculeAmeliorationRetiree { id, .. } => {
+                format!("Véhicule {id} : amélioration retirée")
+            }
+            VehiculePassagers { id, nombre } => {
+                format!("Véhicule {id} : {nombre} passager(s) à bord")
+            }
+            MontureBardee { id, armure, prix, .. } => {
+                format!("Monture {id} : barde « {armure} » équipée ({prix})")
+            }
+            MontureDebardee { id } => format!("Monture {id} : barde retirée"),
+            MontureBardeVendue { id, prix, .. } => {
+                format!("Monture {id} : barde vendue ({prix})")
+            }
             AbandonActif { cible } => format!("Abandon : {}", etat.libelle_actif(*cible, r)),
             VenteLancee {
                 cible,

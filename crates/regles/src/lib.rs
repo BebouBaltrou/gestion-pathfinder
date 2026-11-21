@@ -10,6 +10,7 @@
 pub mod calculs;
 pub mod controles;
 mod donnees_officielles;
+pub mod montures;
 pub mod niveaux_equipes;
 pub mod options;
 pub mod personnalisation;

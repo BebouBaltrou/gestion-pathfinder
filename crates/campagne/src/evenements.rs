@@ -30,6 +30,16 @@ pub enum Evenement {
         maitre: IdPersonnage,
         niveau: u32,
         nom: String,
+        /// Équipe qui représente le partisan (créée juste avant, dans le même groupe).
+        #[cfg_attr(feature = "serde", serde(default))]
+        equipe: Option<IdEquipe>,
+        #[cfg_attr(feature = "serde", serde(default))]
+        note: String,
+    },
+    PartisanNote {
+        maitre: IdPersonnage,
+        index: usize,
+        note: String,
     },
     PartisanRetire {
         maitre: IdPersonnage,
@@ -318,6 +328,85 @@ pub enum Evenement {
     },
     GestionnaireRenvoye {
         id: IdGestionnaire,
+    },
+    /// Achat d'un véhicule du Manuel ; `payeur` paie `prix`.
+    VehiculeAchete {
+        id: IdVehicule,
+        modele: String,
+        nom: String,
+        proprietaire: crate::biens::ProprietaireBien,
+        payeur: Payeur,
+        prix: Montant,
+    },
+    /// Nom, propriétaire, équipes et gestionnaires d'un véhicule.
+    VehiculeModifie {
+        id: IdVehicule,
+        nom: String,
+        proprietaire: crate::biens::ProprietaireBien,
+        equipes: Vec<IdEquipe>,
+        gestionnaires: Vec<IdGestionnaire>,
+    },
+    VehiculeRetire {
+        id: IdVehicule,
+    },
+    /// Achat d'une monture ; `payeur` paie `prix`.
+    MontureAchetee {
+        id: IdMonture,
+        modele: String,
+        nom: String,
+        /// Absent dans les anciennes sauvegardes : déduit de qui la détient.
+        #[cfg_attr(feature = "serde", serde(default))]
+        proprietaire: Option<crate::biens::ProprietaireBien>,
+        detenteur: Option<crate::biens::DetenteurMonture>,
+        payeur: Payeur,
+        prix: Montant,
+    },
+    MontureModifiee {
+        id: IdMonture,
+        nom: String,
+        /// Absent : le propriétaire ne change pas.
+        #[cfg_attr(feature = "serde", serde(default))]
+        proprietaire: Option<crate::biens::ProprietaireBien>,
+        detenteur: Option<crate::biens::DetenteurMonture>,
+    },
+    MontureRetiree {
+        id: IdMonture,
+    },
+    /// Installation d'une amélioration de bateau (données hors Manuel) ; `payeur` paie `prix`.
+    VehiculeAmelioree {
+        id: IdVehicule,
+        amelioration: String,
+        quantite: u32,
+        payeur: Payeur,
+        prix: Montant,
+    },
+    VehiculeAmeliorationRetiree {
+        id: IdVehicule,
+        index: usize,
+    },
+    /// Nombre de passagers à bord (suivi).
+    VehiculePassagers {
+        id: IdVehicule,
+        nombre: u32,
+    },
+    /// Équipement d'une barde (armure de monture) ; `armure` est le nom anglais du catalogue.
+    MontureBardee {
+        id: IdMonture,
+        armure: String,
+        payeur: Payeur,
+        prix: Montant,
+        /// Barde sortie de l'inventaire : rien n'est débité, `prix` reste son prix pour une revente.
+        #[cfg_attr(feature = "serde", serde(default))]
+        gratuite: bool,
+    },
+    MontureDebardee {
+        id: IdMonture,
+    },
+    /// Vente de la barde portée : `beneficiaire` reçoit `prix` (la moitié du prix, GC/Manuel p. 159).
+    MontureBardeVendue {
+        id: IdMonture,
+        beneficiaire: Payeur,
+        prix: Montant,
     },
     /// Réglage du salaire d'un gestionnaire affecté à plusieurs établissements :
     /// `false` = payé une fois par jour (défaut, PC-06), `true` = une fois par affectation.

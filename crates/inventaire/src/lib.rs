@@ -244,6 +244,23 @@ impl Registre {
         self.proprietaires.get(&racine)
     }
 
+    /// Supprime l'inventaire racine d'un propriétaire disparu (véhicule, monture…) et tout son
+    /// contenu. Les identifiants ne sont jamais réutilisés.
+    pub fn supprimer_inventaire(&mut self, racine: Id) {
+        let ids: Vec<Id> = self
+            .exemplaires
+            .keys()
+            .copied()
+            .filter(|id| self.racine_de(*id) == Ok(racine))
+            .collect();
+        for id in &ids {
+            self.retirer_des_emplacements(*id);
+            self.exemplaires.remove(id);
+        }
+        self.proprietaires.remove(&racine);
+        self.jeux.remove(&racine);
+    }
+
     /// Crée l'inventaire racine d'un propriétaire (non supprimable).
     pub fn creer_inventaire(&mut self, proprietaire: Proprietaire, conteneur: Conteneur) -> Id {
         let id = self.nouvel_id();

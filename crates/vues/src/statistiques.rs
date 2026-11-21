@@ -41,6 +41,8 @@ pub const CATEGORIES: &[(&str, &str)] = &[
     ("batiments", "Bâtiments"),
     ("tresoreries", "Trésoreries"),
     ("capitaux", "Capitaux"),
+    ("vehicules", "Véhicules"),
+    ("montures", "Montures"),
 ];
 
 /// Sources du patrimoine : une fonction par sorte de patrimoine.
@@ -50,6 +52,8 @@ pub const SOURCES: &[SourcePatrimoine] = &[
     source_batiments,
     source_tresoreries,
     source_capitaux,
+    source_vehicules,
+    source_montures,
 ];
 
 #[derive(Debug, Clone, PartialEq)]
@@ -71,6 +75,8 @@ pub struct PageStatistiques {
     pub organisations: Vec<StatOrganisation>,
     pub effectif_total: u32,
     pub effectif_a_venir_total: u32,
+    /// Membres de la suite (partisans du don Prestige), comptés à part des autres effectifs.
+    pub effectif_suite_total: u32,
     pub valeur_equipes: Somme,
 }
 
@@ -131,6 +137,8 @@ pub struct StatOrganisation {
     pub effectif: u32,
     /// Personnes à recruter ou en recrutement.
     pub effectif_a_venir: u32,
+    /// Membres de la suite en place, comptés à part.
+    pub effectif_suite: u32,
     pub gestionnaires: u32,
     /// Somme des prix imprimés (`prix_po`, référentiel) des équipes de l'organisation.
     pub valeur_equipes: Somme,
@@ -229,6 +237,54 @@ fn source_capitaux(etat: &Etat, r: &Referentiel) -> Vec<ElementPatrimoine> {
             proprietaire: None,
             localite: Some(l.id),
             pc: i64::from(valeur_achat(r, &l.capitaux)) * 100,
+        })
+        .collect()
+}
+
+/// Véhicules, à leur prix d'achat : chez le PJ propriétaire, ou dans la ville de la localité
+/// ou du siège de l'organisation propriétaire.
+fn source_vehicules(etat: &Etat, _r: &Referentiel) -> Vec<ElementPatrimoine> {
+    use campagne::biens::ProprietaireBien;
+    etat.vehicules
+        .values()
+        .map(|v| {
+            let (proprietaire, localite) = match v.proprietaire {
+                ProprietaireBien::Localite(l) => (None, Some(l)),
+                ProprietaireBien::Organisation(o) => {
+                    (None, etat.organisations.get(&o).map(|o| o.localite))
+                }
+                ProprietaireBien::Personnage(p) => (Some(p), None),
+            };
+            ElementPatrimoine {
+                categorie: "vehicules",
+                proprietaire,
+                localite,
+                pc: v.prix.pc,
+            }
+        })
+        .collect()
+}
+
+/// Montures, à leur prix d'achat : chez leur propriétaire (PJ, ou ville de la localité ou du siège
+/// de l'organisation), même quand elles sont confiées à quelqu'un d'autre.
+fn source_montures(etat: &Etat, _r: &Referentiel) -> Vec<ElementPatrimoine> {
+    use campagne::biens::ProprietaireBien;
+    etat.montures
+        .values()
+        .map(|m| {
+            let (proprietaire, localite) = match m.proprietaire {
+                ProprietaireBien::Localite(l) => (None, Some(l)),
+                ProprietaireBien::Organisation(o) => {
+                    (None, etat.organisations.get(&o).map(|o| o.localite))
+                }
+                ProprietaireBien::Personnage(p) => (Some(p), None),
+            };
+            ElementPatrimoine {
+                categorie: "montures",
+                proprietaire,
+                localite,
+                pc: m.prix.pc,
+            }
         })
         .collect()
 }
@@ -335,8 +391,12 @@ pub fn page_statistiques_avec(
         .organisations
         .values()
         .map(|o| {
-            let equipes: Vec<&Equipe> = etat.equipes_organisation(o.id).collect();
+            // Les membres de la suite (don Prestige) sont comptés à part et sans valeur d'achat.
+            let (suite, equipes): (Vec<&Equipe>, Vec<&Equipe>) = etat
+                .equipes_organisation(o.id)
+                .partition(|e| etat.suite_de(e.id).is_some());
             let (effectif, effectif_a_venir) = etat.effectif(equipes.iter().copied(), r);
+            let effectif_suite = etat.effectif(suite.iter().copied(), r).0;
             let gestionnaires = etat
                 .gestionnaires_de(Affectation::Organisation(o.id))
                 .filter(|g| g.actif)
@@ -360,6 +420,7 @@ pub fn page_statistiques_avec(
                 equipes: equipes.len() as u32,
                 effectif,
                 effectif_a_venir,
+                effectif_suite,
                 gestionnaires: gestionnaires as u32,
                 valeur_equipes: somme(valeur),
             }
@@ -380,6 +441,7 @@ pub fn page_statistiques_avec(
         total_batiments: somme(total_batiments),
         effectif_total: organisations.iter().map(|o| o.effectif).sum(),
         effectif_a_venir_total: organisations.iter().map(|o| o.effectif_a_venir).sum(),
+        effectif_suite_total: organisations.iter().map(|o| o.effectif_suite).sum(),
         organisations,
         valeur_equipes: somme(valeur_totale),
     }

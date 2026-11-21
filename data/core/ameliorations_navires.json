@@ -1,0 +1,190 @@
+{
+  "source": "Hors Manuel : Ultimate Equipment (Équipement), « Améliorations des navires », d'après le wiki collé par Antoine le 21/11/2026. Le Manuel des joueurs ne décrit aucune amélioration de bateau.",
+  "regles": "Le coût en pourcentage porte sur le prix de base du bateau. Un échec au jet d'Artisanat coûte la moitié du coût de l'amélioration et il faut changer de constructeur navale (DD +2 si une autre amélioration a déjà été faite par un autre) : non suivi par l'application. Les effets en pourcentage de la cargaison, des passagers et de la vitesse sont additionnés (lecture à valider).",
+  "ameliorations": [
+    {
+      "id": "capacite_de_chargement",
+      "nom": "Augmentation de la capacité de chargement",
+      "nom_en": "Increased Cargo Capacity",
+      "prerequis": "Artisanat (bateaux) DD 22",
+      "cout": { "type": "pourcent", "valeur": 15 },
+      "effets": { "cargaison_pct": 10 },
+      "texte": "Réagencement du navire pour plus de place dans les réserves : la capacité de chargement augmente de 10 %."
+    },
+    {
+      "id": "belier",
+      "nom": "Bélier",
+      "nom_en": "Ram",
+      "prerequis": "Artisanat (bateaux) DD 10",
+      "cout": { "type": "taille", "valeurs": { "G": 100, "TG": 100, "Gig": 300, "C": 1000 } },
+      "effets": {},
+      "texte": "Un bélier à la proue : +2d8 dégâts lors d'un éperonnage ; le navire ignore les dégâts de pénétration dans la première case d'un objet solide et tous les dégâts d'éperonnage infligés par une créature ou un autre objet."
+    },
+    {
+      "id": "blindage",
+      "nom": "Blindage",
+      "nom_en": "Armor plating",
+      "prerequis": "Artisanat (bateaux) DD 28",
+      "cout": { "type": "pourcent", "valeur": 30 },
+      "effets": { "cargaison_pct": -15, "vitesse_pct": -20, "bonus_navigation": -1 },
+      "texte": "Plaques de métal : pv de la coque +15 %, solidité +4. Capacité de chargement −15 %, −1 à tous les jets de navigation, vitesse de déplacement −20 % (la vitesse tactique en combat bord à bord n'est pas affectée)."
+    },
+    {
+      "id": "blindage_bois",
+      "nom": "Blindage en bois",
+      "nom_en": "Wooden plating",
+      "prerequis": "Artisanat (bateau) DD 25",
+      "cout": { "type": "pourcent", "valeur": 20 },
+      "effets": { "cargaison_pct": -10, "vitesse_pct": -10 },
+      "texte": "Planches clouées sur la coque : pv +5 %, solidité +2. Capacité de chargement −10 %, vitesse en pleine mer −10 % (la vitesse tactique n'est pas affectée)."
+    },
+    {
+      "id": "compartiments_secrets",
+      "nom": "Compartiments secrets",
+      "nom_en": "Smuggling compartments",
+      "prerequis": "Artisanat (bateau) DD 19",
+      "cout": { "type": "par_unite", "valeur": 500, "unite": "cube de 27 dm³" },
+      "cumulable": true,
+      "effets": {},
+      "texte": "Zones de stockage cachées, sans effet sur la capacité de chargement. Un compartiment contient un cube d'une case de côté (30 dm³). Perception DD 20 pour en trouver. En règle générale, deux compartiments donnent 1 point de butin (règles de butin de l'Adventure Path #55)."
+    },
+    {
+      "id": "coque_effilee",
+      "nom": "Coque effilée",
+      "nom_en": "Narrow hull",
+      "prerequis": "Artisanat (bateaux) DD 22",
+      "cout": { "type": "pourcent", "valeur": 15 },
+      "effets": { "cargaison_pct": -10, "bonus_navigation": 2 },
+      "a_la_construction": true,
+      "texte": "Coque plus fine pour les chenaux étroits : largeur −20 %, capacité de chargement −10 %, +2 aux jets de navigation. À installer à la construction du bateau, pas après."
+    },
+    {
+      "id": "coque_robuste",
+      "nom": "Coque robuste",
+      "nom_en": "Sturdy hull",
+      "prerequis": "Artisanat (bateau) DD 16",
+      "cout": { "type": "pourcent", "valeur": 10 },
+      "effets": { "cargaison_pct": -10 },
+      "texte": "Supports et couches de bois supplémentaires : solidité de la coque +2, capacité de chargement −10 %."
+    },
+    {
+      "id": "coque_magique",
+      "nom": "Coque traitée magiquement",
+      "nom_en": "Magically treated hull",
+      "prerequis": "Création d'objets magiques, Artisanat (bateaux) DD 15",
+      "cout": { "type": "par_unite", "valeur": 4500, "unite": "case de bateau (6 m × 6 m)", "compteur": "cases" },
+      "effets": {},
+      "texte": "Pv et solidité de la coque doublés. Seulement par un lanceur de sorts qui a le don Création d'objets magiques."
+    },
+    {
+      "id": "figure_de_proue",
+      "nom": "Figure de proue",
+      "nom_en": "Figurehead",
+      "prerequis": "Artisanat (sculpture) DD 10",
+      "cout": { "type": "libre", "min": 100, "max": 1000 },
+      "effets": {},
+      "texte": "Sculpture décorative sur le beaupré, sans effet sur le jeu. Prix de 100 à 1 000 po suivant le port et l'artisan : à saisir."
+    },
+    {
+      "id": "fond_de_verre",
+      "nom": "Fond de verre",
+      "nom_en": "Glass bottom",
+      "prerequis": "Artisanat (verre) DD 19",
+      "cout": { "type": "pourcent", "valeur": 5 },
+      "effets": {},
+      "texte": "Vitres au fond du navire pour observer le fond de l'océan. Sans effet sur les performances ; le fond de la coque est aussi solide que du verre épais (solidité 1, pv 3, DD pour casser 8)."
+    },
+    {
+      "id": "grand_safran",
+      "nom": "Grand safran",
+      "nom_en": "Broad rudder",
+      "prerequis": "Artisanat (bateaux) DD 16",
+      "cout": { "type": "fixe", "valeur": 500 },
+      "effets": { "bonus_navigation": 1 },
+      "texte": "Un safran plus grand rend le navire plus maniable : +1 à tous les jets de navigation."
+    },
+    {
+      "id": "gouverne_magique",
+      "nom": "Gouverne traitée magiquement",
+      "nom_en": "Magically Treated Control Device",
+      "prerequis": "Création d'objets magiques, Artisanat (bateaux) DD 15",
+      "cout": { "type": "fixe", "valeur": 1000 },
+      "effets": {},
+      "texte": "La barre (barre à roue ou timon) voit ses pv et sa solidité doublés. Seulement par un lanceur de sorts qui a le don Création d'objets magiques."
+    },
+    {
+      "id": "pont_mobile",
+      "nom": "Pont mobile",
+      "nom_en": "Movable deck",
+      "prerequis": "Artisanat (bateaux) DD 28",
+      "cout": { "type": "pourcent", "valeur": 40 },
+      "effets": {},
+      "texte": "Éléments du pont mobiles pour déguiser le bateau en un autre (château arrière sur rails masqués, mâts, plat-bord, figure de proue, couleur des voiles). Les chevilles, leviers et rails se découvrent par un test de Perception DD 20 sur un examen précis."
+    },
+    {
+      "id": "quartier_equipage",
+      "nom": "Quartier d'équipage supplémentaire",
+      "nom_en": "Additional crew quarters",
+      "prerequis": "Artisanat (bateaux) DD 22",
+      "cout": { "type": "pourcent", "valeur": 20 },
+      "effets": { "passagers_pct": 10, "cargaison_pct": -10 },
+      "texte": "Les marins ont plus d'espace pour dormir et manger : 10 % de passagers en plus, capacité de chargement −10 %."
+    },
+    {
+      "id": "quille_allongee",
+      "nom": "Quille allongée",
+      "nom_en": "Extended keel",
+      "prerequis": "Artisanat (bateaux) DD 19",
+      "cout": { "type": "pourcent", "valeur": 10 },
+      "effets": { "bonus_navigation": 1 },
+      "a_la_construction": true,
+      "texte": "Longueur totale +10 % sans effet sur la capacité de chargement ; navire plus stable : +1 aux jets de navigation. À installer à la construction, pas après."
+    },
+    {
+      "id": "rames_magiques",
+      "nom": "Rames traitées magiquement",
+      "nom_en": "Magically treated oars",
+      "prerequis": "Création d'objets magiques, Artisanat (bateaux) ou Artisanat (charpenterie) DD 15",
+      "cout": { "type": "par_unite", "valeur": 100, "unite": "rame", "compteur": "rames" },
+      "effets": {},
+      "texte": "Pv et solidité des rames doublés. Seulement par un lanceur de sorts qui a le don Création d'objets magiques."
+    },
+    {
+      "id": "sabord_masque",
+      "nom": "Sabord masqué",
+      "nom_en": "Concealed weapon port",
+      "prerequis": "Artisanat (bateaux) DD 16",
+      "cout": { "type": "par_unite", "valeur": 100, "unite": "sabord (en plus du coût de l'arme)" },
+      "cumulable": true,
+      "effets": { "cargaison_kg": -5000 },
+      "texte": "Le pont inférieur accueille un engin de siège à tir direct de taille G. Perception DD 15 pour le remarquer. Chaque sabord réduit la capacité de chargement de 5 tonnes, en plus de l'espace de l'arme."
+    },
+    {
+      "id": "voiles_rapides",
+      "nom": "Voiles à déploiement rapide",
+      "nom_en": "Rapid-deploy sails",
+      "prerequis": "Artisanat (voiles) ou Connaissances (ingénierie) DD 25",
+      "cout": { "type": "pourcent", "valeur": 10 },
+      "effets": { "bonus_navigation": 1 },
+      "texte": "Chaque réglage de voile demande moitié moins de temps : +1 à tous les jets de navigation."
+    },
+    {
+      "id": "voiles_soie",
+      "nom": "Voiles en soie",
+      "nom_en": "Silk sails",
+      "prerequis": "Artisanat (voiles) DD 16",
+      "cout": { "type": "pourcent", "valeur": 15 },
+      "effets": { "vitesse_pct": 10, "bonus_navigation": 1 },
+      "texte": "Voiles de soie teintées à volonté, souvent brodées. Elles captent mieux l'air : +1 au test de navigation opposé qui détermine l'avantage, vitesse de déplacement en pleine mer +10 % (la vitesse tactique en combat n'est pas affectée)."
+    },
+    {
+      "id": "voiles_magiques",
+      "nom": "Voiles traitées magiquement",
+      "nom_en": "Magically treated sails",
+      "prerequis": "Création d'objets magiques, Artisanat (voiles) DD 15",
+      "cout": { "type": "par_unite", "valeur": 500, "unite": "case de voile (2,25 m²)", "compteur": "cases_voiles" },
+      "effets": {},
+      "texte": "Pv et solidité des voiles doublés. Seulement par un lanceur de sorts qui a le don Création d'objets magiques."
+    }
+  ]
+}

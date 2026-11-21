@@ -12,6 +12,9 @@ export function PrestigeDon({ outils, pj }: { outils: Outils; pj: LignePersonnag
   const [nomAcolyte, setNomAcolyte] = useState("");
   const [nomPartisan, setNomPartisan] = useState("");
   const [niveauPartisan, setNiveauPartisan] = useState<number | null>(1);
+  const [equivalent, setEquivalent] = useState("");
+  const [notePartisan, setNotePartisan] = useState("");
+  const [notes, setNotes] = useState<Record<number, string>>({});
   useEffect(() => {
     api.prestigeDon(pj.id).then(setV);
   }, [pj.id, outils.version]);
@@ -181,13 +184,34 @@ export function PrestigeDon({ outils, pj }: { outils: Outils; pj: LignePersonnag
           </tbody>
         </table>
         {v.partisans.map((p) => (
-          <div className="ligne-objet" key={p.index}>
-            <span className="nom">
-              {p.nom || "(sans nom)"} <span className="doux">niveau {p.niveau}</span>
-            </span>
-            <button className="bouton mini danger" onClick={() => outils.agir(api.prestigeEvenement({ PartisanRetire: { maitre: pj.id, index: p.index } }))}>
-              Retirer
-            </button>
+          <div className="pile" key={p.index} style={{ gap: 6, padding: "6px 0" }}>
+            <div className="ligne-objet">
+              <span className="nom">
+                {p.nom || "(sans nom)"} <span className="doux">niveau {p.niveau}</span>{" "}
+                <span className="badge" style={{ border: "1px solid var(--bord-fort)" }} title="Membre de la suite de ce personnage">suite de {pj.nom}</span>
+                {p.equipeLibelle && <span className="doux"> · équipe : {p.equipeLibelle}</span>}
+              </span>
+              <button className="bouton mini danger" onClick={() => outils.agir(api.prestigeEvenement({ PartisanRetire: { maitre: pj.id, index: p.index } }))}>
+                Retirer
+              </button>
+            </div>
+            <div className="ligne" style={{ gap: 8 }}>
+              <input
+                className="champ-jeu"
+                style={{ flex: 1 }}
+                aria-label={`Note de ${p.nom || "ce partisan"}`}
+                placeholder="Note (ce qu'il fait, d'où il vient…)"
+                value={notes[p.index] ?? p.note}
+                onChange={(e) => setNotes({ ...notes, [p.index]: e.target.value })}
+              />
+              <button
+                className="bouton mini"
+                disabled={(notes[p.index] ?? p.note) === p.note}
+                onClick={() => outils.agir(api.prestigeEvenement({ PartisanNote: { maitre: pj.id, index: p.index, note: notes[p.index] ?? "" } }))}
+              >
+                Enregistrer la note
+              </button>
+            </div>
           </div>
         ))}
         <div className="champs">
@@ -196,14 +220,30 @@ export function PrestigeDon({ outils, pj }: { outils: Outils; pj: LignePersonnag
             <span>Nom (facultatif)</span>
             <input className="champ-jeu" value={nomPartisan} onChange={(e) => setNomPartisan(e.target.value)} />
           </label>
+          <label className="champ-g">
+            <span>Équipe équivalente (production, lieu de travail, équipage)</span>
+            <select className="champ-jeu" value={equivalent} onChange={(e) => setEquivalent(e.target.value)}>
+              <option value="">aucune : simple effectif, avec une note</option>
+              {v.equivalents.map((x) => (
+                <option key={x.id} value={x.id}>{x.libelle}</option>
+              ))}
+            </select>
+            <span className="doux">Il produit sa part du bonus de l'équipe : une personne sur la taille de l'équipe. Règle personnalisée.</span>
+          </label>
+          <label className="champ-g">
+            <span>Note (facultative)</span>
+            <input className="champ-jeu" value={notePartisan} onChange={(e) => setNotePartisan(e.target.value)} />
+          </label>
           <button
             className="bouton principal"
             disabled={niveauPartisan === null}
             onClick={async () => {
-              const r = await outils.agir(
-                api.prestigeEvenement({ PartisanAjoute: { maitre: pj.id, niveau: niveauPartisan ?? 1, nom: nomPartisan.trim() } }),
-              );
-              if (r?.ok) setNomPartisan("");
+              const r = await outils.agir(api.recruterPartisan(pj.id, niveauPartisan ?? 1, nomPartisan.trim(), equivalent || null, notePartisan.trim()));
+              if (r?.ok) {
+                setNomPartisan("");
+                setNotePartisan("");
+                setEquivalent("");
+              }
             }}
           >
             Ajouter un partisan
