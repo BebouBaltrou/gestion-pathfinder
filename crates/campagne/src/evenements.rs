@@ -314,6 +314,43 @@ pub enum Evenement {
     GestionnaireRenvoye {
         id: IdGestionnaire,
     },
+    /// Achat d'un véhicule du Manuel ; `payeur` paie `prix`.
+    VehiculeAchete {
+        id: IdVehicule,
+        modele: String,
+        nom: String,
+        proprietaire: crate::biens::ProprietaireVehicule,
+        payeur: Payeur,
+        prix: Montant,
+    },
+    /// Nom, propriétaire, équipes et gestionnaires d'un véhicule.
+    VehiculeModifie {
+        id: IdVehicule,
+        nom: String,
+        proprietaire: crate::biens::ProprietaireVehicule,
+        equipes: Vec<IdEquipe>,
+        gestionnaires: Vec<IdGestionnaire>,
+    },
+    VehiculeRetire {
+        id: IdVehicule,
+    },
+    /// Achat d'une monture ; `payeur` paie `prix`.
+    MontureAchetee {
+        id: IdMonture,
+        modele: String,
+        nom: String,
+        detenteur: crate::biens::DetenteurMonture,
+        payeur: Payeur,
+        prix: Montant,
+    },
+    MontureModifiee {
+        id: IdMonture,
+        nom: String,
+        detenteur: crate::biens::DetenteurMonture,
+    },
+    MontureRetiree {
+        id: IdMonture,
+    },
     /// Réglage du salaire d'un gestionnaire affecté à plusieurs établissements :
     /// `false` = payé une fois par jour (défaut, PC-06), `true` = une fois par affectation.
     ReglageSalaireGestionnaire {

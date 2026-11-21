@@ -69,6 +69,8 @@ pub enum Erreur {
     OrganisationInconnue(IdOrganisation),
     EquipeInconnue(IdEquipe),
     GestionnaireInconnu(IdGestionnaire),
+    VehiculeInconnu(IdVehicule),
+    MontureInconnue(IdMonture),
     EquipeReferentielInconnue(String),
     /// Le lieu de travail doit se trouver dans la localité de l'équipe.
     LieuHorsLocalite {
@@ -171,6 +173,8 @@ impl std::fmt::Display for Erreur {
             Erreur::OrganisationInconnue(id) => write!(f, "organisation inconnue ({id})"),
             Erreur::EquipeInconnue(id) => write!(f, "équipe inconnue ({id})"),
             Erreur::GestionnaireInconnu(id) => write!(f, "gestionnaire inconnu ({id})"),
+            Erreur::VehiculeInconnu(id) => write!(f, "véhicule inconnu ({id})"),
+            Erreur::MontureInconnue(id) => write!(f, "monture inconnue ({id})"),
             Erreur::EquipeReferentielInconnue(id) => {
                 write!(f, "équipe absente du référentiel ({id})")
             }
@@ -202,6 +206,10 @@ pub struct Etat {
     pub organisations: BTreeMap<IdOrganisation, Organisation>,
     pub equipes: BTreeMap<IdEquipe, Equipe>,
     pub gestionnaires: BTreeMap<IdGestionnaire, GestionnaireEmploye>,
+    /// Véhicules de la campagne (biens d'une localité, d'une organisation ou d'un PJ).
+    pub vehicules: BTreeMap<IdVehicule, crate::biens::Vehicule>,
+    /// Montures (détenues par un PJ, un PNJ du don Prestige ou une équipe).
+    pub montures: BTreeMap<IdMonture, crate::biens::Monture>,
     /// Salaire d'un gestionnaire versé une fois par affectation (réglage ; défaut : une fois par jour).
     pub salaire_par_affectation: bool,
     // ---- présence, usure, recettes ----
@@ -770,8 +778,15 @@ impl Etat {
             | AcolyteDelie { .. }
             | PartisanAjoute { .. }
             | PartisanRetire { .. } => self.appliquer_prestige(ev)?,
+            VehiculeAchete { .. }
+            | VehiculeModifie { .. }
+            | VehiculeRetire { .. }
+            | MontureAchetee { .. }
+            | MontureModifiee { .. }
+            | MontureRetiree { .. } => self.appliquer_biens(ev)?,
             Note { .. } => {}
         }
+        self.purger_biens();
         Ok(out)
     }
 

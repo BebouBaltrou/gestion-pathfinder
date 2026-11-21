@@ -248,6 +248,8 @@ pub struct Batiment {
 identifiant!(IdOrganisation, "O-");
 identifiant!(IdEquipe, "Q-");
 identifiant!(IdGestionnaire, "G-");
+identifiant!(IdVehicule, "V-");
+identifiant!(IdMonture, "M-");
 
 /// Organisation : un ensemble d'équipes d'employés (GC p. 92-93). L'appartenance d'une équipe
 /// (son organisation) est distincte de son lieu de travail (un bâtiment, ou aucun).

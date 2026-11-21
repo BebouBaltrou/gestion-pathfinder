@@ -4,6 +4,7 @@
 //! qui valide l'événement, l'ajoute au journal et met l'état à jour.
 
 pub mod aventure;
+pub mod biens;
 pub mod calendrier;
 pub mod catalogue_inventaire;
 pub mod construction;
@@ -202,6 +203,22 @@ impl Campagne {
         IdGestionnaire(
             1 + self.max_id(|e| match e {
                 Evenement::GestionnaireEmbauche { id, .. } => Some(id.0),
+                _ => None,
+            }),
+        )
+    }
+    pub fn nouvel_id_vehicule(&self) -> IdVehicule {
+        IdVehicule(
+            1 + self.max_id(|e| match e {
+                Evenement::VehiculeAchete { id, .. } => Some(id.0),
+                _ => None,
+            }),
+        )
+    }
+    pub fn nouvel_id_monture(&self) -> IdMonture {
+        IdMonture(
+            1 + self.max_id(|e| match e {
+                Evenement::MontureAchetee { id, .. } => Some(id.0),
                 _ => None,
             }),
         )
@@ -587,6 +604,16 @@ impl Campagne {
             ),
             GestionnaireModifie { nom, .. } => format!("Gestionnaire {nom} modifié"),
             GestionnaireRenvoye { id } => format!("Gestionnaire {} renvoyé", ges(id)),
+            VehiculeAchete { nom, prix, payeur, .. } => {
+                format!("Achat du véhicule {nom} ({prix} payés par {})", qui(payeur))
+            }
+            VehiculeModifie { nom, .. } => format!("Véhicule {nom} modifié"),
+            VehiculeRetire { id } => format!("Véhicule {id} retiré"),
+            MontureAchetee { nom, prix, payeur, .. } => {
+                format!("Achat de la monture {nom} ({prix} payés par {})", qui(payeur))
+            }
+            MontureModifiee { nom, .. } => format!("Monture {nom} modifiée"),
+            MontureRetiree { id } => format!("Monture {id} retirée"),
             AbandonActif { cible } => format!("Abandon : {}", etat.libelle_actif(*cible, r)),
             VenteLancee {
                 cible,
