@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { api, EtatApp, Retour } from "./api";
-import { chercherMiseAJour, miseAJourActive, Nouvelle } from "./composants/MiseAJour";
+import { BarreProgression, chercherMiseAJour, miseAJourActive, Nouvelle, Progression, VERSION } from "./composants/MiseAJour";
+import { NotesVersion, notesDepuisDerniereVersion } from "./changelog";
 import { icones } from "./icones";
 import { LimiteErreur } from "./composants/LimiteErreur";
 import { Campagnes } from "./pages/Campagnes";
@@ -98,8 +99,15 @@ export function App() {
 
   // Mise à jour : une seule vérification au lancement, si l'option est active
   const [maj, setMaj] = useState<Nouvelle | null>(null);
+  const [progressionMaj, setProgressionMaj] = useState<Progression | null>(null);
   useEffect(() => {
     if (miseAJourActive()) chercherMiseAJour().then(setMaj);
+  }, []);
+
+  // Résumé des changements, une seule fois après une mise à jour
+  const [notesMaj, setNotesMaj] = useState<NotesVersion[]>([]);
+  useEffect(() => {
+    setNotesMaj(notesDepuisDerniereVersion(VERSION));
   }, []);
 
   // Ctrl+Z / Ctrl+Y (hors des champs de saisie)
@@ -253,10 +261,47 @@ export function App() {
         {maj && (
           <div className="doux" role="status" style={{ padding: "6px 12px" }}>
             Version {maj.version} disponible.{" "}
-            <button className="bouton principal" onClick={() => maj.installer().catch((erreur) => window.alert(`Échec de la mise à jour : ${String(erreur)}`))}>Mettre à jour</button>{" "}
-            <button className="bouton discret" onClick={() => setMaj(null)}>
-              Masquer
-            </button>
+            {progressionMaj ? (
+              <BarreProgression p={progressionMaj} />
+            ) : (
+              <>
+                <button
+                  className="bouton principal"
+                  onClick={() => {
+                    setProgressionMaj({ recu: 0, total: null, fini: false });
+                    maj.installer(setProgressionMaj).catch((erreur) => {
+                      setProgressionMaj(null);
+                      window.alert(`Échec de la mise à jour : ${String(erreur)}`);
+                    });
+                  }}
+                >
+                  Mettre à jour
+                </button>{" "}
+                <button className="bouton discret" onClick={() => setMaj(null)}>
+                  Masquer
+                </button>
+              </>
+            )}
+          </div>
+        )}
+        {notesMaj.length > 0 && (
+          <div className="maj-voile" role="dialog" aria-modal="true" aria-label="Nouveautés de la mise à jour">
+            <div className="maj-fenetre carte">
+              <h2>Mise à jour installée : version {VERSION}</h2>
+              {notesMaj.map((n) => (
+                <section key={n.version}>
+                  <h3>Version {n.version}</h3>
+                  <ul>
+                    {n.changements.map((c) => (
+                      <li key={c}>{c}</li>
+                    ))}
+                  </ul>
+                </section>
+              ))}
+              <button className="bouton principal" onClick={() => setNotesMaj([])}>
+                Fermer
+              </button>
+            </div>
           </div>
         )}
         <main className="contenu">
