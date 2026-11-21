@@ -224,6 +224,96 @@ impl Etat {
     }
 }
 
+// ------------------------------------------------------------------ catalogue des modèles
+
+/// Prix du catalogue d'équipement (livre anglais : mêmes valeurs que le Manuel pour ces objets).
+#[cfg(feature = "serde")]
+fn prix_catalogue(nom_en: &str) -> Option<Montant> {
+    let materiel = &fiches::Referentiel::partage().equipement.materiel;
+    materiel
+        .iter()
+        .find(|o| o.nom_en == nom_en)
+        .and_then(|o| crate::catalogue_inventaire::montant(&o.cout))
+}
+
+/// Modèle de véhicule du Manuel (`data/core/vehicules_manuel.json`).
+#[cfg(feature = "serde")]
+#[derive(Debug, Clone, PartialEq)]
+pub struct ModeleVehicule {
+    pub id: String,
+    pub nom: String,
+    pub terrestre: bool,
+    pub equipage: Option<String>,
+    pub equipage_min: Option<u32>,
+    pub equipage_max: Option<u32>,
+    pub passagers: Option<String>,
+    pub cargaison: Option<String>,
+    pub tracte_par: Option<String>,
+    pub vitesse_km_h: Option<f64>,
+    pub vitesse_km_jour: Option<f64>,
+    pub prix: Option<Montant>,
+}
+
+#[cfg(feature = "serde")]
+pub fn modeles_vehicules() -> &'static [ModeleVehicule] {
+    use serde_json::Value;
+    static MODELES: std::sync::OnceLock<Vec<ModeleVehicule>> = std::sync::OnceLock::new();
+    MODELES.get_or_init(|| {
+        let j: Value =
+            serde_json::from_str(include_str!("../../../data/core/vehicules_manuel.json"))
+                .expect("vehicules_manuel.json valide");
+        j["vehicules"]
+            .as_array()
+            .expect("liste de véhicules")
+            .iter()
+            .map(|v| {
+                let texte = |k: &str| match &v[k] {
+                    Value::String(s) => Some(s.clone()),
+                    Value::Number(n) => Some(n.to_string()),
+                    _ => None,
+                };
+                let cargaison = match &v["cargaison_t"] {
+                    Value::Number(n) if n.as_f64() == Some(0.0) => {
+                        Some("aucune cargaison".to_string())
+                    }
+                    Value::Number(n) => Some(format!("{n} t")),
+                    Value::String(s) => Some(match s.find(" (") {
+                        Some(i) => format!("{} t{}", &s[..i], &s[i..]),
+                        None => format!("{s} t"),
+                    }),
+                    _ => None,
+                };
+                ModeleVehicule {
+                    id: v["id"].as_str().expect("id").to_string(),
+                    nom: v["nom"].as_str().expect("nom").to_string(),
+                    terrestre: v["terrestre"].as_bool().unwrap_or(false),
+                    equipage: texte("equipage"),
+                    equipage_min: v["equipage_min"].as_u64().map(|n| n as u32),
+                    equipage_max: v["equipage_max"].as_u64().map(|n| n as u32),
+                    passagers: texte("passagers"),
+                    cargaison,
+                    tracte_par: texte("tracte_par"),
+                    vitesse_km_h: v["vitesse_km_h"].as_f64(),
+                    vitesse_km_jour: v["vitesse_km_jour"].as_f64(),
+                    prix: v["nom_en"].as_str().and_then(prix_catalogue),
+                }
+            })
+            .collect()
+    })
+}
+
+/// Prix d'une monture du catalogue (le chien de selle n'y figure pas : prix à saisir).
+#[cfg(feature = "serde")]
+pub fn prix_monture(nom: &str) -> Option<Montant> {
+    let nom_en = match nom {
+        "Cheval léger" => "Horse (light)",
+        "Cheval lourd" => "Horse (heavy)",
+        "Poney" => "Horse (pony)",
+        _ => return None,
+    };
+    prix_catalogue(nom_en)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

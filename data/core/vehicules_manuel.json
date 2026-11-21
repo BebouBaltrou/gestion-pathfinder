@@ -1,5 +1,5 @@
 {
-  "source": "Manuel des joueurs (VF), chapitre 6 : moyens de transport (p. 163) et table 7-9 Montures et véhicules (p. 173-174, à vérifier). Les prix sont à vérifier : la table 6-9 du PDF est décalée, ils sont laissés vides.",
+  "source": "Manuel des joueurs (VF), chapitre 6 : moyens de transport (p. 163) et table 7-9 Montures et véhicules (p. 173-174, à vérifier). Les prix sont à vérifier : la table 6-9 du PDF est décalée, ils sont laissés vides. Équipage minimal et maximal : nombres lus dans le texte du Manuel (vide quand le Manuel n'en donne pas).",
   "hors_manuel": "Les valeurs marquées « hors Manuel » viennent du wiki (Ultimate Equipment). Le Manuel prime en cas de conflit.",
   "vehicules": [
     {
@@ -11,7 +11,10 @@
       "cargaison_t": null,
       "tracte_par": "2 chevaux (ou autres bêtes de somme)",
       "vitesse_km_h": null,
-      "prix_po": null
+      "prix_po": null,
+      "equipage_min": 2,
+      "equipage_max": 2,
+      "nom_en": "Carriage"
     },
     {
       "id": "chariot",
@@ -23,7 +26,10 @@
       "tracte_par": "2 chevaux (ou autres bêtes de somme)",
       "vitesse_km_h": 3,
       "vitesse_km_jour": 24,
-      "prix_po": null
+      "prix_po": null,
+      "equipage_min": null,
+      "equipage_max": null,
+      "nom_en": "Wagon (light)"
     },
     {
       "id": "charrette",
@@ -35,7 +41,10 @@
       "tracte_par": "1 cheval (ou autre bête de somme)",
       "vitesse_km_h": 3,
       "vitesse_km_jour": 24,
-      "prix_po": null
+      "prix_po": null,
+      "equipage_min": null,
+      "equipage_max": null,
+      "nom_en": "Cart"
     },
     {
       "id": "traineau",
@@ -46,7 +55,10 @@
       "cargaison_t": null,
       "tracte_par": "2 chevaux (ou autres bêtes de somme)",
       "vitesse_km_h": null,
-      "prix_po": null
+      "prix_po": null,
+      "equipage_min": null,
+      "equipage_max": null,
+      "nom_en": "Sled"
     },
     {
       "id": "barque",
@@ -58,7 +70,10 @@
       "tracte_par": null,
       "vitesse_km_h": 2.25,
       "vitesse_km_jour": 22.5,
-      "prix_po": null
+      "prix_po": null,
+      "equipage_min": null,
+      "equipage_max": null,
+      "nom_en": "Rowboat"
     },
     {
       "id": "bateau_fond_plat",
@@ -70,7 +85,10 @@
       "tracte_par": null,
       "vitesse_km_h": 1.5,
       "vitesse_km_jour": 15,
-      "prix_po": null
+      "prix_po": null,
+      "equipage_min": 8,
+      "equipage_max": 15,
+      "nom_en": "Keelboat"
     },
     {
       "id": "drakkar",
@@ -82,7 +100,10 @@
       "tracte_par": null,
       "vitesse_km_h": 4.5,
       "vitesse_km_jour": 108,
-      "prix_po": null
+      "prix_po": null,
+      "equipage_min": 50,
+      "equipage_max": 50,
+      "nom_en": "Longship"
     },
     {
       "id": "navire_haute_mer",
@@ -94,7 +115,10 @@
       "tracte_par": null,
       "vitesse_km_h": 3,
       "vitesse_km_jour": 72,
-      "prix_po": null
+      "prix_po": null,
+      "equipage_min": 20,
+      "equipage_max": 20,
+      "nom_en": "Sailing ship"
     },
     {
       "id": "trireme",
@@ -106,7 +130,10 @@
       "tracte_par": null,
       "vitesse_km_h": 6,
       "vitesse_km_jour": 144,
-      "prix_po": null
+      "prix_po": null,
+      "equipage_min": 200,
+      "equipage_max": 200,
+      "nom_en": "Galley"
     },
     {
       "id": "vaisseau_de_guerre",
@@ -118,7 +145,10 @@
       "tracte_par": null,
       "vitesse_km_h": 3.75,
       "vitesse_km_jour": 90,
-      "prix_po": null
+      "prix_po": null,
+      "equipage_min": 60,
+      "equipage_max": 80,
+      "nom_en": "Warship"
     }
   ]
 }

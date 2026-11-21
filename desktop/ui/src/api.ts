@@ -449,6 +449,59 @@ export type ActionGestionnaire =
   | { type: "affecter"; id: number; cible: CibleAffectation }
   | { type: "desaffecter"; id: number; cible: CibleAffectation };
 
+// ------------------------------------------------------------------ biens (véhicules et montures)
+
+export type GenreCible = "localite" | "organisation" | "personnage" | "equipe";
+export type CibleBien = { genre: GenreCible; id: number };
+export type ChoixCible = { cible: CibleBien; libelle: string };
+export type ModeleBien = { id: string; nom: string; resume: string; prix: Somme | null };
+export type JaugeEquipage = { recrutes: number; enCours: number; requisMin: number; requisMax: number; complete: boolean };
+
+export type FicheVehicule = {
+  id: number;
+  nom: string;
+  modele: string;
+  proprietaire: ChoixCible;
+  prix: Somme;
+  details: string[];
+  jauge: JaugeEquipage | null;
+  equipes: ChoixCible[];
+  equipesPossibles: ChoixCible[];
+  gestionnaires: Choix[];
+  gestionnairesPossibles: Choix[];
+};
+
+export type FicheMonture = {
+  id: number;
+  nom: string;
+  modele: string;
+  detenteur: ChoixCible;
+  prix: Somme;
+  details: string[];
+};
+
+export type PageBiens = {
+  modelesVehicules: ModeleBien[];
+  modelesMontures: ModeleBien[];
+  proprietaires: ChoixCible[];
+  detenteurs: ChoixCible[];
+  payeurs: ChoixCible[];
+  vehicules: FicheVehicule[];
+  montures: FicheMonture[];
+};
+
+export type ActionBien =
+  | { type: "acheterVehicule"; modele: string; nom: string; proprietaire: CibleBien; payeur: CibleBien; prix: string | null }
+  | { type: "modifierVehicule"; id: number; nom: string; proprietaire: CibleBien }
+  | { type: "affecterEquipe"; id: number; equipe: number }
+  | { type: "retirerEquipe"; id: number; equipe: number }
+  | { type: "affecterGestionnaire"; id: number; gestionnaire: number }
+  | { type: "retirerGestionnaire"; id: number; gestionnaire: number }
+  | { type: "retirerVehicule"; id: number }
+  | { type: "acheterMonture"; modele: string; nom: string; detenteur: CibleBien; payeur: CibleBien; prix: string | null }
+  | { type: "modifierMonture"; id: number; nom: string; detenteur: CibleBien }
+  | { type: "retirerMonture"; id: number };
+
 // ------------------------------------------------------------------ historique, points, paramètres
 
 export type LigneJournal = { numero: number; jour: number; date: string; texte: string };
@@ -700,6 +753,9 @@ export const api = {
 
   pageGestionnaires: () => appeler<PageGestionnaires | null>("page_gestionnaires"),
   actionGestionnaire: (action: ActionGestionnaire) => appeler<Retour>("action_gestionnaire", { action }),
+
+  pageBiens: () => appeler<PageBiens | null>("page_biens"),
+  actionBien: (action: ActionBien) => appeler<Retour>("action_bien", { action }),
 
   pageHistorique: () => appeler<PageHistorique | null>("page_historique"),
   pagePoints: () => appeler<PagePoints>("page_points"),
