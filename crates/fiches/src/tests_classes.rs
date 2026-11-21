@@ -2836,3 +2836,17 @@ fn sauvegardes_et_competences_du_familier() {
         "{l:?}"
     );
 }
+
+#[test]
+fn la_fiche_de_combat_du_familier_est_construite() {
+    let r = Referentiel::core();
+    let mut f = de_classe("magicien", 1);
+    f.pacte_magique = Some("familier".into());
+    f.familier = Some("Chat".into());
+    let c = crate::choix_classe::creature_familier(&f, &r).expect("fiche de combat du familier");
+    assert_eq!(c.nom, "Chat (familier)");
+    assert!(c.pv >= 1, "{c:?}");
+    assert!(c.attaques.contains("griffes"), "{c:?}");
+    assert_eq!(c.init, 2);
+    assert!(c.lignes.iter().any(|l| l.libelle == "Pouvoirs du familier"));
+}
