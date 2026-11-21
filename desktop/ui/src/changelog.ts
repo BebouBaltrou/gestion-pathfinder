@@ -5,12 +5,15 @@ export type NotesVersion = { version: string; changements: string[] };
 
 export const NOTES: NotesVersion[] = [
   {
-    version: "1.2.32",
+    version: "1.2.33",
     changements: [
-      "Mise à jour automatique corrigée : les erreurs s'affichent et la bonne version est installée.",
-      "Barre de progression du téléchargement aux couleurs du thème choisi.",
-      "Résumé des changements affiché après chaque mise à jour.",
+      "Barre de progression du téléchargement de la mise à jour, aux couleurs du thème choisi.",
+      "Résumé des changements affiché une fois après chaque mise à jour.",
     ],
+  },
+  {
+    version: "1.2.32",
+    changements: ["Mise à jour automatique corrigée : les erreurs s'affichent et la bonne version est installée."],
   },
 ];
 
