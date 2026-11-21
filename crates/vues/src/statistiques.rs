@@ -51,6 +51,8 @@ pub struct PatrimoineLocalite {
     pub tresorerie: Somme,
     /// Valeur d'achat des capitaux en réserve (Table 2-1, GC p. 78).
     pub capitaux: Somme,
+    /// Valeur des bâtiments de la localité.
+    pub batiments: Somme,
     pub total: Somme,
 }
 
@@ -119,23 +121,6 @@ pub fn page_statistiques(etat: &Etat, r: &Referentiel) -> PageStatistiques {
         .collect();
     let total_personnages: i64 = personnages.iter().map(|p| p.total.pc).sum();
 
-    let localites: Vec<PatrimoineLocalite> = etat
-        .localites
-        .values()
-        .map(|l| {
-            let capitaux = i64::from(valeur_achat(r, &l.capitaux)) * 100;
-            let total = l.tresorerie.pc + capitaux;
-            PatrimoineLocalite {
-                id: l.id.0,
-                nom: l.nom.clone(),
-                tresorerie: somme(l.tresorerie.pc),
-                capitaux: somme(capitaux),
-                total: somme(total),
-            }
-        })
-        .collect();
-    let total_localites: i64 = localites.iter().map(|l| l.total.pc).sum();
-
     let objets_autres: i64 = inventaires
         .iter()
         .filter(|i| i.type_proprietaire != PROPRIETAIRE_PERSONNAGE)
@@ -177,6 +162,32 @@ pub fn page_statistiques(etat: &Etat, r: &Referentiel) -> PageStatistiques {
         .collect();
     let total_batiments: i64 = batiments.iter().map(|b| b.valeur.pc).sum();
 
+    // Un bâtiment compte dans le patrimoine de sa localité.
+    let mut batiments_par_localite: std::collections::BTreeMap<IdLocalite, i64> =
+        std::collections::BTreeMap::new();
+    for (b, v) in etat.batiments.values().zip(&batiments) {
+        *batiments_par_localite.entry(b.localite).or_insert(0) += v.valeur.pc;
+    }
+
+    let localites: Vec<PatrimoineLocalite> = etat
+        .localites
+        .values()
+        .map(|l| {
+            let capitaux = i64::from(valeur_achat(r, &l.capitaux)) * 100;
+            let bats = batiments_par_localite.get(&l.id).copied().unwrap_or(0);
+            let total = l.tresorerie.pc + capitaux + bats;
+            PatrimoineLocalite {
+                id: l.id.0,
+                nom: l.nom.clone(),
+                tresorerie: somme(l.tresorerie.pc),
+                capitaux: somme(capitaux),
+                batiments: somme(bats),
+                total: somme(total),
+            }
+        })
+        .collect();
+    let total_localites: i64 = localites.iter().map(|l| l.total.pc).sum();
+
     let organisations: Vec<StatOrganisation> = etat
         .organisations
         .values()
@@ -215,9 +226,8 @@ pub fn page_statistiques(etat: &Etat, r: &Referentiel) -> PageStatistiques {
     let valeur_totale: i64 = organisations.iter().map(|o| o.valeur_equipes.pc).sum();
 
     PageStatistiques {
-        patrimoine_total: somme(
-            total_personnages + total_localites + total_batiments + objets_autres,
-        ),
+        // Les bâtiments sont déjà dans le total des localités.
+        patrimoine_total: somme(total_personnages + total_localites + objets_autres),
         personnages,
         total_personnages: somme(total_personnages),
         localites,

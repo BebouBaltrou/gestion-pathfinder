@@ -109,7 +109,7 @@ export function Statistiques({ outils }: { outils: Outils }) {
         <div className="carte chiffre">
           <span className="etiquette">Localités</span>
           <span className="valeur">{texte(s.totalLocalites)}</span>
-          <span className="detail">Trésoreries et capitaux</span>
+          <span className="detail">Trésoreries, capitaux et bâtiments</span>
         </div>
         <div className="carte chiffre">
           <span className="etiquette">Bâtiments</span>
@@ -151,6 +151,7 @@ export function Statistiques({ outils }: { outils: Outils }) {
           series: [
             { nom: "Trésorerie", couleur: "var(--po)", valeur: l.tresorerie.pc },
             { nom: "Capitaux", couleur: "var(--travail)", valeur: l.capitaux.pc },
+            { nom: "Bâtiments", couleur: "var(--marchandises)", valeur: l.batiments.pc },
           ],
         }))}
       />
@@ -187,11 +188,11 @@ export function Statistiques({ outils }: { outils: Outils }) {
         <h2>Détail des localités</h2>
         <table className="tableau">
           <thead>
-            <tr><th>Nom</th><th>Trésorerie</th><th>Capitaux</th><th>Total</th></tr>
+            <tr><th>Nom</th><th>Trésorerie</th><th>Capitaux</th><th>Bâtiments</th><th>Total</th></tr>
           </thead>
           <tbody>
             {s.localites.map((l) => (
-              <tr key={l.id}><td>{l.nom}</td><td>{texte(l.tresorerie)}</td><td>{texte(l.capitaux)}</td><td>{texte(l.total)}</td></tr>
+              <tr key={l.id}><td>{l.nom}</td><td>{texte(l.tresorerie)}</td><td>{texte(l.capitaux)}</td><td>{texte(l.batiments)}</td><td>{texte(l.total)}</td></tr>
             ))}
           </tbody>
         </table>
