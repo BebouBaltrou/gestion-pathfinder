@@ -117,6 +117,15 @@ fn statistiques(s: S) -> Option<vues::statistiques::PageStatistiques> {
         .map(|c| vues::statistiques::page_statistiques(c.etat(&r), &r))
 }
 
+#[tauri::command]
+fn courbes_patrimoine(s: S) -> Option<vues::courbes::CourbesPatrimoine> {
+    let x = session(&s);
+    let r = x.r.clone();
+    x.campagne
+        .as_ref()
+        .map(|c| vues::courbes::courbes_patrimoine(c, &r))
+}
+
 // ---------------------------------------------------------------- localités
 
 #[tauri::command]
@@ -713,6 +722,7 @@ fn main() {
             ouvrir_dossier,
             tableau_de_bord,
             statistiques,
+            courbes_patrimoine,
             page_localites,
             categorie_suggeree,
             lire_montant,

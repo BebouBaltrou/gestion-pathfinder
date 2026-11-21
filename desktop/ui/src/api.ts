@@ -127,6 +127,9 @@ export type PageStatistiques = {
   valeurEquipes: Somme;
 };
 
+export type SerieCourbe = { cle: string; nom: string; groupe: string; valeurs: number[] };
+export type CourbesPatrimoine = { jours: number[]; dates: string[]; series: SerieCourbe[] };
+
 export type TableauDeBord = {
   date: string;
   jour: number;
@@ -665,6 +668,7 @@ export const api = {
   ouvrirDossier: () => appeler<Retour>("ouvrir_dossier"),
   tableauDeBord: () => appeler<TableauDeBord | null>("tableau_de_bord"),
   statistiques: () => appeler<PageStatistiques | null>("statistiques"),
+  courbesPatrimoine: () => appeler<CourbesPatrimoine | null>("courbes_patrimoine"),
   avancer: (jours: number) => appeler<Retour>("avancer", { jours }),
   annuler: () => appeler<Retour>("annuler"),
   retablir: () => appeler<Retour>("retablir"),

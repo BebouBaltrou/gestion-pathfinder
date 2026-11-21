@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Outils } from "../App";
-import { api, PageStatistiques, Somme } from "../api";
+import { api, CourbesPatrimoine, PageStatistiques, Somme } from "../api";
+import { GraphiqueCourbes } from "../composants/CourbesPatrimoine";
 
 const texte = (s: Somme) => s?.texte ?? "—";
 
@@ -31,7 +32,7 @@ function GraphiqueEmpile({ titre, barres }: { titre: string; barres: Barre[] }) 
           <svg viewBox={`0 0 ${W} ${H}`} width="100%" role="img" aria-label={titre}>
             {graduations.map((g) => (
               <g key={g}>
-                <line x1={M.gauche} x2={W - M.droite} y1={y(g)} y2={y(g)} stroke="var(--bordure, #444)" strokeDasharray="3 3" />
+                <line x1={M.gauche} x2={W - M.droite} y1={y(g)} y2={y(g)} stroke="var(--bord-fort)" strokeDasharray="3 3" />
                 <text x={M.gauche - 8} y={y(g) + 4} textAnchor="end" fontSize="11" fill="currentColor">
                   {Math.round(g / 100).toLocaleString("fr-FR")} po
                 </text>
@@ -78,9 +79,11 @@ function GraphiqueEmpile({ titre, barres }: { titre: string; barres: Barre[] }) 
 
 export function Statistiques({ outils }: { outils: Outils }) {
   const [s, setS] = useState<PageStatistiques | null>(null);
+  const [courbes, setCourbes] = useState<CourbesPatrimoine | null>(null);
 
   useEffect(() => {
     api.statistiques().then((r) => setS(r && Array.isArray(r.personnages) ? r : null));
+    api.courbesPatrimoine().then((r) => setCourbes(r && Array.isArray(r.series) && r.series.length > 0 ? r : null));
   }, [outils.version]);
 
   if (!s) return null;
@@ -130,6 +133,7 @@ export function Statistiques({ outils }: { outils: Outils }) {
         </div>
       </section>
 
+      {courbes && <GraphiqueCourbes key={courbes.series.length} courbes={courbes} />}
       <GraphiqueEmpile
         titre="Patrimoine par personnage (po)"
         barres={s.personnages.map((p) => ({
