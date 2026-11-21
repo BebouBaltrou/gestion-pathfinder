@@ -1,7 +1,8 @@
 //! Courbes d'évolution des patrimoines : le journal est rejoué, et le patrimoine est mesuré
-//! à la fin de chaque jour où quelque chose s'est passé.
+//! à la fin de chaque jour où quelque chose s'est passé. Les catégories viennent de
+//! `statistiques::CATEGORIES` : une nouvelle sorte de patrimoine apparaît donc ici sans rien changer.
 
-use crate::statistiques::page_statistiques;
+use crate::statistiques::{page_statistiques, PageStatistiques};
 use campagne::etat::Etat;
 use campagne::Campagne;
 use regles::Referentiel;
@@ -24,10 +25,17 @@ pub struct CourbesPatrimoine {
 pub struct CompositionPersonnage {
     pub id: u32,
     pub nom: String,
-    /// En pièces de cuivre, 0 avant l'apparition du personnage.
-    pub compte: Vec<i64>,
-    pub objets: Vec<i64>,
-    pub batiments: Vec<i64>,
+    /// Une série par catégorie, en pièces de cuivre (0 avant l'apparition du personnage).
+    pub composantes: Vec<SerieCategorie>,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize))]
+#[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
+pub struct SerieCategorie {
+    pub cle: String,
+    pub nom: String,
+    pub valeurs: Vec<i64>,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -36,38 +44,24 @@ pub struct CompositionPersonnage {
 pub struct SerieCourbe {
     pub cle: String,
     pub nom: String,
-    /// « Total », « Personnages », « Localités » ou « Autres ».
+    /// « Total », « Personnages », « Localités » ou « Catégories ».
     pub groupe: String,
     /// Valeur en pièces de cuivre à chaque jour de `jours` (0 avant l'apparition de l'élément).
     pub valeurs: Vec<i64>,
 }
 
 type Instantane = Vec<(String, String, String, i64)>;
-/// (id, nom, compte, objets, bâtiments) d'un personnage.
-type Composition = (u32, String, i64, i64, i64);
+/// (id, nom, [(clé de catégorie, nom, valeur)]) d'un personnage.
+type Composition = (u32, String, Vec<(String, String, i64)>);
 
 fn instantane(etat: &Etat, r: &Referentiel) -> (Instantane, Vec<Composition>) {
-    let s = page_statistiques(etat, r);
-    let mut v: Instantane = vec![
-        (
-            "total".into(),
-            "Patrimoine total".into(),
-            "Total".into(),
-            s.patrimoine_total.pc,
-        ),
-        (
-            "batiments".into(),
-            "Bâtiments".into(),
-            "Autres".into(),
-            s.total_batiments.pc,
-        ),
-        (
-            "objets".into(),
-            "Objets hors PJ".into(),
-            "Autres".into(),
-            s.objets_autres.pc,
-        ),
-    ];
+    let s: PageStatistiques = page_statistiques(etat, r);
+    let mut v: Instantane = vec![(
+        "total".into(),
+        "Patrimoine total".into(),
+        "Total".into(),
+        s.patrimoine_total.pc,
+    )];
     for p in &s.personnages {
         v.push((
             format!("pj-{}", p.id),
@@ -84,6 +78,14 @@ fn instantane(etat: &Etat, r: &Referentiel) -> (Instantane, Vec<Composition>) {
             l.total.pc,
         ));
     }
+    for part in &s.repartition {
+        v.push((
+            format!("cat-{}", part.cle),
+            part.nom.clone(),
+            "Catégories".into(),
+            part.valeur.pc,
+        ));
+    }
     let compositions = s
         .personnages
         .iter()
@@ -91,9 +93,10 @@ fn instantane(etat: &Etat, r: &Referentiel) -> (Instantane, Vec<Composition>) {
             (
                 p.id,
                 p.nom.clone(),
-                p.compte.pc,
-                p.objets.pc,
-                p.batiments.pc,
+                p.composantes
+                    .iter()
+                    .map(|c| (c.cle.clone(), c.nom.clone(), c.valeur.pc))
+                    .collect(),
             )
         })
         .collect();
@@ -146,11 +149,12 @@ pub fn courbes_patrimoine(c: &Campagne, r: &Referentiel) -> CourbesPatrimoine {
             }
         })
         .collect();
-    // Composition par personnage : (nom, valeurs par jour) dans l'ordre d'apparition.
+
+    // Composition par personnage, dans l'ordre d'apparition.
     let mut ids: Vec<u32> = Vec::new();
     let mut noms: BTreeMap<u32, String> = BTreeMap::new();
     for (_, comps) in points.values() {
-        for (id, nom, ..) in comps {
+        for (id, nom, _) in comps {
             if !noms.contains_key(id) {
                 ids.push(*id);
             }
@@ -160,21 +164,37 @@ pub fn courbes_patrimoine(c: &Campagne, r: &Referentiel) -> CourbesPatrimoine {
     let compositions = ids
         .into_iter()
         .map(|id| {
-            let par_jour: Vec<(i64, i64, i64)> = points
-                .values()
-                .map(|(_, comps)| {
-                    comps
-                        .iter()
-                        .find(|(i, ..)| *i == id)
-                        .map_or((0, 0, 0), |(_, _, c, o, b)| (*c, *o, *b))
+            // catégories (clé, nom) dans l'ordre où elles apparaissent
+            let mut categories: Vec<(String, String)> = Vec::new();
+            for (_, comps) in points.values() {
+                if let Some((_, _, parts)) = comps.iter().find(|(i, ..)| *i == id) {
+                    for (cle, nom, _) in parts {
+                        if !categories.iter().any(|(k, _)| k == cle) {
+                            categories.push((cle.clone(), nom.clone()));
+                        }
+                    }
+                }
+            }
+            let composantes = categories
+                .into_iter()
+                .map(|(cle, nom)| {
+                    let valeurs = points
+                        .values()
+                        .map(|(_, comps)| {
+                            comps
+                                .iter()
+                                .find(|(i, ..)| *i == id)
+                                .and_then(|(_, _, parts)| parts.iter().find(|(k, ..)| *k == cle))
+                                .map_or(0, |(_, _, pc)| *pc)
+                        })
+                        .collect();
+                    SerieCategorie { cle, nom, valeurs }
                 })
                 .collect();
             CompositionPersonnage {
                 id,
                 nom: noms[&id].clone(),
-                compte: par_jour.iter().map(|x| x.0).collect(),
-                objets: par_jour.iter().map(|x| x.1).collect(),
-                batiments: par_jour.iter().map(|x| x.2).collect(),
+                composantes,
             }
         })
         .collect();
@@ -219,10 +239,25 @@ mod tests {
         assert_eq!(pj.nom, "Lia");
         assert_eq!(*pj.valeurs.last().unwrap(), 10_000);
         assert_eq!(courbes.dates.len(), courbes.jours.len());
+        // une série par catégorie : une nouvelle sorte de patrimoine apparaît sans rien changer
+        let cats = courbes
+            .series
+            .iter()
+            .filter(|s| s.groupe == "Catégories")
+            .count();
+        assert_eq!(cats, crate::statistiques::CATEGORIES.len());
         let compo = &courbes.compositions[0];
         assert_eq!(compo.nom, "Lia");
-        assert_eq!(*compo.compte.last().unwrap(), 10_000);
-        assert_eq!(*compo.objets.last().unwrap(), 0);
-        assert_eq!(compo.compte.len(), courbes.jours.len());
+        assert_eq!(
+            compo.composantes.len(),
+            crate::statistiques::CATEGORIES.len()
+        );
+        let comptes = compo
+            .composantes
+            .iter()
+            .find(|x| x.cle == "comptes")
+            .unwrap();
+        assert_eq!(*comptes.valeurs.last().unwrap(), 10_000);
+        assert_eq!(comptes.valeurs.len(), courbes.jours.len());
     }
 }

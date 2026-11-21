@@ -1,7 +1,7 @@
 import { CSSProperties, useEffect, useState } from "react";
 import type { Outils } from "../App";
 import { api, CourbesPatrimoine, PageStatistiques, Somme } from "../api";
-import { Anneau, Compteur, GraphiqueComposition, GraphiqueCourbes, PALETTE, Spark, fmt, useMonte } from "../composants/GraphiquesStats";
+import { Anneau, Compteur, GraphiqueComposition, GraphiqueCourbes, PALETTE, Spark, couleurCategorie, fmt, useMonte } from "../composants/GraphiquesStats";
 import "../statistiques.css";
 
 const texte = (s: Somme) => s?.texte ?? "—";
@@ -42,7 +42,14 @@ export function Statistiques({ outils }: { outils: Outils }) {
   const evol = variation(courbes, "total");
   const maxBat = Math.max(1, ...s.batiments.map((b) => b.valeur.pc));
   const maxOrg = Math.max(1, ...s.organisations.map((o) => o.valeurEquipes.pc));
-  const maxVille = Math.max(1, ...s.localites.map((l) => Math.max(0, l.tresorerie.pc) + Math.max(0, l.capitaux.pc) + Math.max(0, l.batiments.pc)));
+  const maxVille = Math.max(1, ...s.localites.map((l) => l.composantes.reduce((a, c) => a + Math.max(0, c.valeur.pc), 0)));
+  // catégories présentes quelque part (les autres restent masquées) ; leur rang fixe leur couleur
+  const rang = (cle: string) => s.repartition.findIndex((c) => c.cle === cle);
+  const presentes = (liste: { composantes: { cle: string; valeur: Somme }[] }[]) =>
+    s.repartition.filter((c) => liste.some((e) => e.composantes.some((x) => x.cle === c.cle && x.valeur.pc !== 0)));
+  const catsPersonnages = presentes(s.personnages);
+  const catsVilles = presentes(s.localites);
+  const valeurDe = (comp: { cle: string; valeur: Somme }[], cle: string) => comp.find((x) => x.cle === cle)?.valeur;
 
   // plus fortes hausses : personnages et villes, depuis 30 jours
   const hausses = (() => {
@@ -58,7 +65,7 @@ export function Statistiques({ outils }: { outils: Outils }) {
       .slice(0, 4);
   })();
   const maxHausse = Math.max(1, ...hausses.map((h) => h.d));
-  const serieBat = courbes?.series.find((x) => x.cle === "batiments")?.valeurs ?? [];
+  const serieBat = courbes?.series.find((x) => x.cle === "cat-batiments")?.valeurs ?? [];
 
   return (
     <div className="page">
@@ -126,22 +133,22 @@ export function Statistiques({ outils }: { outils: Outils }) {
           </div>
           {s.localites.length === 0 && <p className="st-vide">Aucune localité.</p>}
           {s.localites.map((l) => {
-            const parts: [string, number][] = [["var(--po)", l.tresorerie.pc], ["var(--magie)", l.capitaux.pc], ["var(--marchandises)", l.batiments.pc]];
             return (
               <div className="st-ville" key={l.id}>
                 <div className="t"><b>{l.nom}</b><span>{texte(l.total)}</span></div>
                 <div className="st-pile">
-                  {parts.map(([c, v]) => (
-                    <span key={c} style={{ background: c, color: c, width: monte ? `${(Math.max(0, v) / maxVille) * 100}%` : "0%" }} title={`${fmt(v / 100)} po`} />
-                  ))}
+                  {l.composantes.filter((c) => c.valeur.pc > 0).map((c) => {
+                    const couleur = couleurCategorie(c.cle, rang(c.cle));
+                    return <span key={c.cle} style={{ background: couleur, color: couleur, width: monte ? `${(c.valeur.pc / maxVille) * 100}%` : "0%" }} title={`${c.nom} : ${fmt(c.valeur.pc / 100)} po`} />;
+                  })}
                 </div>
               </div>
             );
           })}
           <div className="st-mini">
-            <span><i style={{ background: "var(--po)" }} />Trésorerie</span>
-            <span><i style={{ background: "var(--magie)" }} />Capitaux</span>
-            <span><i style={{ background: "var(--marchandises)" }} />Bâtiments</span>
+            {catsVilles.map((c) => (
+              <span key={c.cle}><i style={{ background: couleurCategorie(c.cle, rang(c.cle)) }} />{c.nom}</span>
+            ))}
           </div>
           {hausses.length > 0 && (
             <>
@@ -222,23 +229,23 @@ export function Statistiques({ outils }: { outils: Outils }) {
       <details className="carte st-carte st-details" style={{ marginTop: 18 }}>
         <summary>Voir les chiffres détaillés</summary>
         <table className="st-table">
-          <thead><tr><th>Personnage</th><th className="n">Compte</th><th className="n">Objets</th><th className="n">Bâtiments</th><th className="n">Total</th></tr></thead>
+          <thead><tr><th>Personnage</th>{catsPersonnages.map((c) => <th key={c.cle} className="n">{c.nom}</th>)}<th className="n">Total</th></tr></thead>
           <tbody>
             {s.personnages.map((p) => (
-              <tr key={p.id}><td>{p.nom}</td><td className="n">{texte(p.compte)}</td><td className="n">{texte(p.objets)}</td><td className="n">{texte(p.batiments)}</td><td className="n">{texte(p.total)}</td></tr>
+              <tr key={p.id}><td>{p.nom}</td>{catsPersonnages.map((c) => <td key={c.cle} className="n">{texte(valeurDe(p.composantes, c.cle) as Somme)}</td>)}<td className="n">{texte(p.total)}</td></tr>
             ))}
           </tbody>
         </table>
         <table className="st-table" style={{ marginTop: 18 }}>
-          <thead><tr><th>Localité</th><th className="n">Trésorerie</th><th className="n">Capitaux</th><th className="n">Bâtiments</th><th className="n">Total</th></tr></thead>
+          <thead><tr><th>Localité</th>{catsVilles.map((c) => <th key={c.cle} className="n">{c.nom}</th>)}<th className="n">Total</th></tr></thead>
           <tbody>
             {s.localites.map((l) => (
-              <tr key={l.id}><td>{l.nom}</td><td className="n">{texte(l.tresorerie)}</td><td className="n">{texte(l.capitaux)}</td><td className="n">{texte(l.batiments)}</td><td className="n">{texte(l.total)}</td></tr>
+              <tr key={l.id}><td>{l.nom}</td>{catsVilles.map((c) => <td key={c.cle} className="n">{texte(valeurDe(l.composantes, c.cle) as Somme)}</td>)}<td className="n">{texte(l.total)}</td></tr>
             ))}
           </tbody>
         </table>
         <p className="st-det" style={{ marginTop: 12, fontSize: 12.5, color: "var(--texte-doux)" }}>
-          Objets hors personnages : {texte(s.objetsAutres)}. Un bâtiment possédé compte chez son propriétaire et dans sa ville, mais une seule fois dans le total.
+          Sans propriétaire ni ville : {texte(s.nonAttribue)}. Un élément possédé compte chez son propriétaire et dans sa ville, mais une seule fois dans le total.
         </p>
       </details>
     </div>

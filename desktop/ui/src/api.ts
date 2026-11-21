@@ -109,17 +109,20 @@ export type CartePersonnage = {
   meilleureCompetence: string | null;
 };
 
-export type StatPersonnage = { id: number; nom: string; compte: Somme; objets: Somme; batiments: Somme; total: Somme };
-export type StatLocalite = { id: number; nom: string; tresorerie: Somme; capitaux: Somme; batiments: Somme; total: Somme };
+/** Une part du patrimoine (une catégorie : comptes, objets, bâtiments, et celles qu'on ajoutera). */
+export type PartPatrimoine = { cle: string; nom: string; valeur: Somme };
+export type StatPersonnage = { id: number; nom: string; composantes: PartPatrimoine[]; total: Somme };
+export type StatLocalite = { id: number; nom: string; composantes: PartPatrimoine[]; total: Somme };
 export type StatOrganisation = { id: number; nom: string; localite: string; equipes: number; effectif: number; effectifAVenir: number; gestionnaires: number; valeurEquipes: Somme };
 export type PageStatistiques = {
-  repartition: { cle: string; nom: string; valeur: Somme }[];
+  repartition: PartPatrimoine[];
   patrimoineTotal: Somme;
   personnages: StatPersonnage[];
   totalPersonnages: Somme;
   localites: StatLocalite[];
   totalLocalites: Somme;
-  objetsAutres: Somme;
+  /** Éléments sans propriétaire ni ville. */
+  nonAttribue: Somme;
   batiments: { id: number; nom: string; localite: string; proprietaire: string | null; salles: number; valeur: Somme }[];
   totalBatiments: Somme;
   organisations: StatOrganisation[];
@@ -129,7 +132,8 @@ export type PageStatistiques = {
 };
 
 export type SerieCourbe = { cle: string; nom: string; groupe: string; valeurs: number[] };
-export type CompositionPersonnage = { id: number; nom: string; compte: number[]; objets: number[]; batiments: number[] };
+export type SerieCategorie = { cle: string; nom: string; valeurs: number[] };
+export type CompositionPersonnage = { id: number; nom: string; composantes: SerieCategorie[] };
 export type CourbesPatrimoine = { jours: number[]; dates: string[]; series: SerieCourbe[]; compositions: CompositionPersonnage[] };
 
 export type TableauDeBord = {
@@ -861,28 +865,51 @@ function statistiquesExemple(): { stats: PageStatistiques; courbes: CourbesPatri
   const possedes = somme(pj.seoni.batiments, pj.valeros.batiments, pj.kyra.batiments);
   const total = somme(totPj(pj.seoni), totPj(pj.valeros), totPj(pj.kyra), totVille(ville.sandpoint), totVille(ville.magnimar)).map((v, i) => v - possedes[i]);
   const dates = jours.map((j) => `jour ${j}`);
+  const compoPj = (p: { compte: number[]; objets: number[]; batiments: number[] }) => [
+    { cle: "comptes", nom: "Comptes des PJ", valeurs: p.compte },
+    { cle: "objets", nom: "Objets", valeurs: p.objets },
+    { cle: "batiments", nom: "Bâtiments", valeurs: p.batiments },
+    { cle: "tresoreries", nom: "Trésoreries", valeurs: jours.map(() => 0) },
+    { cle: "capitaux", nom: "Capitaux", valeurs: jours.map(() => 0) },
+  ];
   const courbes: CourbesPatrimoine = {
     jours,
     dates,
     series: [
       { cle: "total", nom: "Patrimoine total", groupe: "Total", valeurs: total },
-      { cle: "batiments", nom: "Bâtiments", groupe: "Autres", valeurs: somme(ville.sandpoint.bat, ville.magnimar.bat) },
       { cle: "pj-1", nom: "Seoni", groupe: "Personnages", valeurs: totPj(pj.seoni) },
       { cle: "pj-2", nom: "Valeros", groupe: "Personnages", valeurs: totPj(pj.valeros) },
       { cle: "pj-3", nom: "Kyra", groupe: "Personnages", valeurs: totPj(pj.kyra) },
       { cle: "loc-1", nom: "Sandpoint", groupe: "Localités", valeurs: totVille(ville.sandpoint) },
       { cle: "loc-2", nom: "Magnimar", groupe: "Localités", valeurs: totVille(ville.magnimar) },
+      { cle: "cat-comptes", nom: "Comptes des PJ", groupe: "Catégories", valeurs: somme(pj.seoni.compte, pj.valeros.compte, pj.kyra.compte) },
+      { cle: "cat-objets", nom: "Objets", groupe: "Catégories", valeurs: somme(pj.seoni.objets, pj.valeros.objets, pj.kyra.objets) },
+      { cle: "cat-batiments", nom: "Bâtiments", groupe: "Catégories", valeurs: somme(ville.sandpoint.bat, ville.magnimar.bat) },
+      { cle: "cat-tresoreries", nom: "Trésoreries", groupe: "Catégories", valeurs: somme(ville.sandpoint.tre, ville.magnimar.tre) },
+      { cle: "cat-capitaux", nom: "Capitaux", groupe: "Catégories", valeurs: somme(ville.sandpoint.cap, ville.magnimar.cap) },
     ],
     compositions: [
-      { id: 1, nom: "Seoni", ...pj.seoni },
-      { id: 2, nom: "Valeros", ...pj.valeros },
-      { id: 3, nom: "Kyra", ...pj.kyra },
+      { id: 1, nom: "Seoni", composantes: compoPj(pj.seoni) },
+      { id: 2, nom: "Valeros", composantes: compoPj(pj.valeros) },
+      { id: 3, nom: "Kyra", composantes: compoPj(pj.kyra) },
     ],
   };
   const L = N - 1;
   const s = (pc: number): Somme => ({ pc, texte: formaterPo(pc) });
-  const perso = (id: number, nom: string, p: typeof pj.seoni) => ({ id, nom, compte: s(p.compte[L]), objets: s(p.objets[L]), batiments: s(p.batiments[L]), total: s(totPj(p)[L]) });
-  const loc = (id: number, nom: string, v: typeof ville.sandpoint) => ({ id, nom, tresorerie: s(v.tre[L]), capitaux: s(v.cap[L]), batiments: s(v.bat[L]), total: s(totVille(v)[L]) });
+  const perso = (id: number, nom: string, p: typeof pj.seoni) => ({
+    id, nom, total: s(totPj(p)[L]),
+    composantes: compoPj(p).map((c) => ({ cle: c.cle, nom: c.nom, valeur: s(c.valeurs[L]) })),
+  });
+  const loc = (id: number, nom: string, v: typeof ville.sandpoint) => ({
+    id, nom, total: s(totVille(v)[L]),
+    composantes: [
+      { cle: "comptes", nom: "Comptes des PJ", valeur: s(0) },
+      { cle: "objets", nom: "Objets", valeur: s(0) },
+      { cle: "batiments", nom: "Bâtiments", valeur: s(v.bat[L]) },
+      { cle: "tresoreries", nom: "Trésoreries", valeur: s(v.tre[L]) },
+      { cle: "capitaux", nom: "Capitaux", valeur: s(v.cap[L]) },
+    ],
+  });
   const sumL = (...a: number[][]) => a.reduce((x, y) => x + y[L], 0);
   const stats: PageStatistiques = {
     repartition: [
@@ -897,7 +924,7 @@ function statistiquesExemple(): { stats: PageStatistiques; courbes: CourbesPatri
     totalPersonnages: s(totPj(pj.seoni)[L] + totPj(pj.valeros)[L] + totPj(pj.kyra)[L]),
     localites: [loc(1, "Sandpoint", ville.sandpoint), loc(2, "Magnimar", ville.magnimar)],
     totalLocalites: s(totVille(ville.sandpoint)[L] + totVille(ville.magnimar)[L]),
-    objetsAutres: s(0),
+    nonAttribue: s(0),
     batiments: [
       { id: 1, nom: "Temple d'Abadar", localite: "Sandpoint", proprietaire: "Seoni", salles: 3, valeur: s(4200) },
       { id: 2, nom: "Auberge du Lac", localite: "Sandpoint", proprietaire: "Valeros", salles: 2, valeur: s(3100) },

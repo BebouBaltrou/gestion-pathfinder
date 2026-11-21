@@ -1,6 +1,17 @@
-//! Statistiques : patrimoine des personnages et des localités, valeur des objets, effectif et
-//! valeur des équipes des organisations (prix imprimés, GC). Les valeurs de capitaux suivent la Table 2-1 (GC p. 78),
-//! en valeur d'achat.
+//! Statistiques : patrimoine des personnages et des localités, effectif et valeur des équipes des
+//! organisations (prix imprimés, GC). Les capitaux sont comptés à leur valeur d'achat
+//! (Table 2-1, GC p. 78).
+//!
+//! # Ajouter une nouvelle sorte de patrimoine (montures, véhicules…)
+//!
+//! Le patrimoine est une liste d'`ElementPatrimoine`, produite par des *sources*. Tout le reste
+//! (total, répartition, personnages, villes, courbes dans le temps, graphiques) s'en déduit.
+//! Pour ajouter une sorte de patrimoine :
+//! 1. écrire une fonction `fn source_xxx(&Etat, &Referentiel) -> Vec<ElementPatrimoine>` ;
+//! 2. la déclarer dans `SOURCES` et sa catégorie dans `CATEGORIES`.
+//!
+//! Un élément indique son propriétaire (personnage) et/ou sa ville ; il compte une seule fois dans
+//! le total, et chez chacun de ses rattachements dans les détails.
 
 use crate::inventaire::page_inventaire;
 use crate::Somme;
@@ -11,20 +22,50 @@ use domaine::Montant;
 use regles::calculs::valeur_achat;
 use regles::Referentiel;
 
+/// Une valeur de patrimoine, en pièces de cuivre.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ElementPatrimoine {
+    /// Clé d'une catégorie de `CATEGORIES`.
+    pub categorie: &'static str,
+    pub proprietaire: Option<IdPersonnage>,
+    pub localite: Option<IdLocalite>,
+    pub pc: i64,
+}
+
+pub type SourcePatrimoine = fn(&Etat, &Referentiel) -> Vec<ElementPatrimoine>;
+
+/// Catégories affichées, dans l'ordre : (clé, nom).
+pub const CATEGORIES: &[(&str, &str)] = &[
+    ("comptes", "Comptes des PJ"),
+    ("objets", "Objets"),
+    ("batiments", "Bâtiments"),
+    ("tresoreries", "Trésoreries"),
+    ("capitaux", "Capitaux"),
+];
+
+/// Sources du patrimoine : une fonction par sorte de patrimoine.
+pub const SOURCES: &[SourcePatrimoine] = &[
+    source_comptes,
+    source_objets,
+    source_batiments,
+    source_tresoreries,
+    source_capitaux,
+];
+
 #[derive(Debug, Clone, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize))]
 #[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
 pub struct PageStatistiques {
-    /// Parts du patrimoine total : comptes, objets, bâtiments, trésoreries, capitaux.
+    /// Parts du patrimoine total, une par catégorie.
     pub repartition: Vec<PartPatrimoine>,
-    /// Patrimoine total : comptes des PJ, objets des PJ, trésoreries et capitaux des localités,
-    /// objets des autres inventaires.
+    /// Patrimoine total : chaque élément compte une seule fois.
     pub patrimoine_total: Somme,
     pub personnages: Vec<PatrimoinePersonnage>,
     pub total_personnages: Somme,
     pub localites: Vec<PatrimoineLocalite>,
     pub total_localites: Somme,
-    pub objets_autres: Somme,
+    /// Éléments sans propriétaire ni ville (par exemple les objets d'un inventaire sans PJ).
+    pub non_attribue: Somme,
     pub batiments: Vec<PatrimoineBatiment>,
     pub total_batiments: Somme,
     pub organisations: Vec<StatOrganisation>,
@@ -48,10 +89,8 @@ pub struct PartPatrimoine {
 pub struct PatrimoinePersonnage {
     pub id: u32,
     pub nom: String,
-    pub compte: Somme,
-    pub objets: Somme,
-    /// Valeur des bâtiments dont il est propriétaire.
-    pub batiments: Somme,
+    /// Une part par catégorie (comptes, objets, bâtiments possédés…).
+    pub composantes: Vec<PartPatrimoine>,
     pub total: Somme,
 }
 
@@ -61,11 +100,8 @@ pub struct PatrimoinePersonnage {
 pub struct PatrimoineLocalite {
     pub id: u32,
     pub nom: String,
-    pub tresorerie: Somme,
-    /// Valeur d'achat des capitaux en réserve (Table 2-1, GC p. 78).
-    pub capitaux: Somme,
-    /// Valeur des bâtiments de la localité.
-    pub batiments: Somme,
+    /// Une part par catégorie (trésorerie, capitaux, bâtiments de la ville…).
+    pub composantes: Vec<PartPatrimoine>,
     pub total: Somme,
 }
 
@@ -104,40 +140,177 @@ fn somme(pc: i64) -> Somme {
     Somme::from(Montant::pc(pc))
 }
 
-pub fn page_statistiques(etat: &Etat, r: &Referentiel) -> PageStatistiques {
-    let inventaires = page_inventaire(etat).inventaires;
+// ---------------------------------------------------------------- sources
 
-    let objets_de = |id: IdPersonnage| -> i64 {
-        inventaires
-            .iter()
-            .filter(|i| {
-                i.type_proprietaire == PROPRIETAIRE_PERSONNAGE
-                    && personnage_de_ref(&i.ref_proprietaire) == Some(id)
-            })
-            .map(|i| i.valeur.pc)
-            .sum()
-    };
+fn source_comptes(etat: &Etat, _r: &Referentiel) -> Vec<ElementPatrimoine> {
+    etat.personnages
+        .values()
+        .map(|p| ElementPatrimoine {
+            categorie: "comptes",
+            proprietaire: Some(p.id),
+            localite: None,
+            pc: p.compte.pc,
+        })
+        .collect()
+}
+
+fn source_objets(etat: &Etat, _r: &Referentiel) -> Vec<ElementPatrimoine> {
+    page_inventaire(etat)
+        .inventaires
+        .iter()
+        .map(|i| ElementPatrimoine {
+            categorie: "objets",
+            proprietaire: if i.type_proprietaire == PROPRIETAIRE_PERSONNAGE {
+                personnage_de_ref(&i.ref_proprietaire).filter(|p| etat.personnages.contains_key(p))
+            } else {
+                None
+            },
+            localite: None,
+            pc: i.valeur.pc,
+        })
+        .collect()
+}
+
+/// Prix d'achat des salles et extensions construites d'un bâtiment, et nombre de salles construites.
+fn valeur_batiment(etat: &Etat, r: &Referentiel, b: IdBatiment) -> (i64, u32) {
+    let mut valeur = 0i64;
+    let mut salles = 0u32;
+    for s in etat.salles_batiment(b) {
+        if matches!(s.statut, StatutSalle::Construite) {
+            salles += 1;
+            valeur += r
+                .salle(&s.reference)
+                .and_then(|u| u.prix_po)
+                .map_or(0, |po| i64::from(po) * 100);
+        }
+        for x in &s.extensions {
+            if matches!(x.statut, StatutExtension::Construite) {
+                valeur += i64::from(x.prix_po) * 100;
+            }
+        }
+    }
+    (valeur, salles)
+}
+
+fn source_batiments(etat: &Etat, r: &Referentiel) -> Vec<ElementPatrimoine> {
+    etat.batiments
+        .values()
+        .map(|b| ElementPatrimoine {
+            categorie: "batiments",
+            // un propriétaire disparu ne compte plus
+            proprietaire: etat
+                .proprietaires_batiments
+                .get(&b.id)
+                .copied()
+                .filter(|p| etat.personnages.contains_key(p)),
+            localite: Some(b.localite),
+            pc: valeur_batiment(etat, r, b.id).0,
+        })
+        .collect()
+}
+
+fn source_tresoreries(etat: &Etat, _r: &Referentiel) -> Vec<ElementPatrimoine> {
+    etat.localites
+        .values()
+        .map(|l| ElementPatrimoine {
+            categorie: "tresoreries",
+            proprietaire: None,
+            localite: Some(l.id),
+            pc: l.tresorerie.pc,
+        })
+        .collect()
+}
+
+fn source_capitaux(etat: &Etat, r: &Referentiel) -> Vec<ElementPatrimoine> {
+    etat.localites
+        .values()
+        .map(|l| ElementPatrimoine {
+            categorie: "capitaux",
+            proprietaire: None,
+            localite: Some(l.id),
+            pc: i64::from(valeur_achat(r, &l.capitaux)) * 100,
+        })
+        .collect()
+}
+
+// ---------------------------------------------------------------- agrégation
+
+/// Une part par catégorie, dans l'ordre de `CATEGORIES`.
+fn parts<'a>(elements: impl Iterator<Item = &'a ElementPatrimoine>) -> Vec<PartPatrimoine> {
+    let elements: Vec<&ElementPatrimoine> = elements.collect();
+    CATEGORIES
+        .iter()
+        .map(|(cle, nom)| PartPatrimoine {
+            cle: (*cle).into(),
+            nom: (*nom).into(),
+            valeur: somme(
+                elements
+                    .iter()
+                    .filter(|e| e.categorie == *cle)
+                    .map(|e| e.pc)
+                    .sum(),
+            ),
+        })
+        .collect()
+}
+
+fn total_parts(parts: &[PartPatrimoine]) -> i64 {
+    parts.iter().map(|p| p.valeur.pc).sum()
+}
+
+pub fn page_statistiques(etat: &Etat, r: &Referentiel) -> PageStatistiques {
+    page_statistiques_avec(etat, r, SOURCES)
+}
+
+/// Comme `page_statistiques`, avec une liste de sources donnée (utile pour les tests).
+pub fn page_statistiques_avec(
+    etat: &Etat,
+    r: &Referentiel,
+    sources: &[SourcePatrimoine],
+) -> PageStatistiques {
+    let elements: Vec<ElementPatrimoine> = sources.iter().flat_map(|s| s(etat, r)).collect();
+
+    let personnages: Vec<PatrimoinePersonnage> = etat
+        .personnages
+        .values()
+        .map(|p| {
+            let composantes = parts(elements.iter().filter(|e| e.proprietaire == Some(p.id)));
+            PatrimoinePersonnage {
+                id: p.id.0,
+                nom: p.nom.clone(),
+                total: somme(total_parts(&composantes)),
+                composantes,
+            }
+        })
+        .collect();
+    let total_personnages: i64 = personnages.iter().map(|p| p.total.pc).sum();
+
+    let localites: Vec<PatrimoineLocalite> = etat
+        .localites
+        .values()
+        .map(|l| {
+            let composantes = parts(elements.iter().filter(|e| e.localite == Some(l.id)));
+            PatrimoineLocalite {
+                id: l.id.0,
+                nom: l.nom.clone(),
+                total: somme(total_parts(&composantes)),
+                composantes,
+            }
+        })
+        .collect();
+    let total_localites: i64 = localites.iter().map(|l| l.total.pc).sum();
+
+    let non_attribue: i64 = elements
+        .iter()
+        .filter(|e| e.proprietaire.is_none() && e.localite.is_none())
+        .map(|e| e.pc)
+        .sum();
 
     let batiments: Vec<PatrimoineBatiment> = etat
         .batiments
         .values()
         .map(|b| {
-            let mut valeur = 0i64;
-            let mut salles = 0u32;
-            for s in etat.salles_batiment(b.id) {
-                if matches!(s.statut, StatutSalle::Construite) {
-                    salles += 1;
-                    valeur += r
-                        .salle(&s.reference)
-                        .and_then(|u| u.prix_po)
-                        .map_or(0, |po| i64::from(po) * 100);
-                }
-                for x in &s.extensions {
-                    if matches!(x.statut, StatutExtension::Construite) {
-                        valeur += i64::from(x.prix_po) * 100;
-                    }
-                }
-            }
+            let (valeur, salles) = valeur_batiment(etat, r, b.id);
             PatrimoineBatiment {
                 id: b.id.0,
                 nom: b.nom.clone(),
@@ -158,81 +331,16 @@ pub fn page_statistiques(etat: &Etat, r: &Referentiel) -> PageStatistiques {
         .collect();
     let total_batiments: i64 = batiments.iter().map(|b| b.valeur.pc).sum();
 
-    // Valeur des bâtiments possédés, par personnage (un propriétaire disparu ne compte plus).
-    let mut batiments_par_pj: std::collections::BTreeMap<IdPersonnage, i64> =
-        std::collections::BTreeMap::new();
-    for (b, v) in etat.batiments.values().zip(&batiments) {
-        if let Some(p) = etat
-            .proprietaires_batiments
-            .get(&b.id)
-            .filter(|p| etat.personnages.contains_key(*p))
-        {
-            *batiments_par_pj.entry(*p).or_insert(0) += v.valeur.pc;
-        }
-    }
-    let batiments_possedes: i64 = batiments_par_pj.values().sum();
-
-    let personnages: Vec<PatrimoinePersonnage> = etat
-        .personnages
-        .values()
-        .map(|p| {
-            let objets = objets_de(p.id);
-            let bats = batiments_par_pj.get(&p.id).copied().unwrap_or(0);
-            let total = p.compte.pc + objets + bats;
-            PatrimoinePersonnage {
-                id: p.id.0,
-                nom: p.nom.clone(),
-                compte: somme(p.compte.pc),
-                objets: somme(objets),
-                batiments: somme(bats),
-                total: somme(total),
-            }
-        })
-        .collect();
-    let total_personnages: i64 = personnages.iter().map(|p| p.total.pc).sum();
-
-    let objets_autres: i64 = inventaires
-        .iter()
-        .filter(|i| i.type_proprietaire != PROPRIETAIRE_PERSONNAGE)
-        .map(|i| i.valeur.pc)
-        .sum();
-
-    // Un bâtiment compte dans le patrimoine de sa localité.
-    let mut batiments_par_localite: std::collections::BTreeMap<IdLocalite, i64> =
-        std::collections::BTreeMap::new();
-    for (b, v) in etat.batiments.values().zip(&batiments) {
-        *batiments_par_localite.entry(b.localite).or_insert(0) += v.valeur.pc;
-    }
-
-    let localites: Vec<PatrimoineLocalite> = etat
-        .localites
-        .values()
-        .map(|l| {
-            let capitaux = i64::from(valeur_achat(r, &l.capitaux)) * 100;
-            let bats = batiments_par_localite.get(&l.id).copied().unwrap_or(0);
-            let total = l.tresorerie.pc + capitaux + bats;
-            PatrimoineLocalite {
-                id: l.id.0,
-                nom: l.nom.clone(),
-                tresorerie: somme(l.tresorerie.pc),
-                capitaux: somme(capitaux),
-                batiments: somme(bats),
-                total: somme(total),
-            }
-        })
-        .collect();
-    let total_localites: i64 = localites.iter().map(|l| l.total.pc).sum();
-
     let organisations: Vec<StatOrganisation> = etat
         .organisations
         .values()
         .map(|o| {
             let equipes: Vec<&Equipe> = etat.equipes_organisation(o.id).collect();
             let (effectif, effectif_a_venir) = etat.effectif(equipes.iter().copied(), r);
-            let gestionnaires: Vec<&GestionnaireEmploye> = etat
+            let gestionnaires = etat
                 .gestionnaires_de(Affectation::Organisation(o.id))
                 .filter(|g| g.actif)
-                .collect();
+                .count();
             let valeur: i64 = equipes
                 .iter()
                 .map(|e| {
@@ -252,56 +360,22 @@ pub fn page_statistiques(etat: &Etat, r: &Referentiel) -> PageStatistiques {
                 equipes: equipes.len() as u32,
                 effectif,
                 effectif_a_venir,
-                gestionnaires: gestionnaires.len() as u32,
+                gestionnaires: gestionnaires as u32,
                 valeur_equipes: somme(valeur),
             }
         })
         .collect();
-
     let valeur_totale: i64 = organisations.iter().map(|o| o.valeur_equipes.pc).sum();
 
-    // Répartition du patrimoine total, sans double compte (la somme des parts vaut le total).
-    let part = |cle: &str, nom: &str, pc: i64| PartPatrimoine {
-        cle: cle.into(),
-        nom: nom.into(),
-        valeur: somme(pc),
-    };
-    let repartition = vec![
-        part(
-            "comptes",
-            "Comptes des PJ",
-            personnages.iter().map(|p| p.compte.pc).sum(),
-        ),
-        part(
-            "objets",
-            "Objets",
-            personnages.iter().map(|p| p.objets.pc).sum::<i64>() + objets_autres,
-        ),
-        part("batiments", "Bâtiments", total_batiments),
-        part(
-            "tresoreries",
-            "Trésoreries",
-            localites.iter().map(|l| l.tresorerie.pc).sum(),
-        ),
-        part(
-            "capitaux",
-            "Capitaux",
-            localites.iter().map(|l| l.capitaux.pc).sum(),
-        ),
-    ];
-
+    let repartition = parts(elements.iter());
     PageStatistiques {
+        patrimoine_total: somme(total_parts(&repartition)),
         repartition,
-        // Tous les bâtiments sont dans le total des localités ; ceux qui ont un propriétaire sont
-        // aussi dans le total des personnages : on les retire une fois pour ne pas les compter deux fois.
-        patrimoine_total: somme(
-            total_personnages + total_localites + objets_autres - batiments_possedes,
-        ),
         personnages,
         total_personnages: somme(total_personnages),
         localites,
         total_localites: somme(total_localites),
-        objets_autres: somme(objets_autres),
+        non_attribue: somme(non_attribue),
         batiments,
         total_batiments: somme(total_batiments),
         effectif_total: organisations.iter().map(|o| o.effectif).sum(),
@@ -316,6 +390,10 @@ mod tests {
     use super::*;
     use campagne::evenements::Evenement;
     use campagne::Campagne;
+
+    fn part<'a>(parts: &'a [PartPatrimoine], cle: &str) -> &'a PartPatrimoine {
+        parts.iter().find(|p| p.cle == cle).unwrap()
+    }
 
     #[test]
     fn patrimoine_d_un_pj_et_total() {
@@ -335,11 +413,16 @@ mod tests {
         let etat = c.etat(&r);
         let p = page_statistiques(etat, &r);
         assert_eq!(p.personnages.len(), 1);
-        assert_eq!(p.personnages[0].compte.pc, 10_000);
+        assert_eq!(
+            part(&p.personnages[0].composantes, "comptes").valeur.pc,
+            10_000
+        );
         assert_eq!(p.personnages[0].total.pc, 10_000);
         assert_eq!(p.total_personnages.pc, 10_000);
         assert_eq!(p.patrimoine_total.pc, 10_000);
         assert!(p.organisations.is_empty());
+        // une part par catégorie, même vide
+        assert_eq!(p.repartition.len(), CATEGORIES.len());
     }
 
     #[test]
@@ -398,8 +481,14 @@ mod tests {
         }
         // Sans propriétaire : le bâtiment ne compte que dans sa ville.
         let p = page_statistiques(c.etat(&r), &r);
-        assert_eq!(p.personnages[0].batiments.pc, 0);
-        assert_eq!(p.localites[0].batiments.pc, prix);
+        assert_eq!(
+            part(&p.personnages[0].composantes, "batiments").valeur.pc,
+            0
+        );
+        assert_eq!(
+            part(&p.localites[0].composantes, "batiments").valeur.pc,
+            prix
+        );
         assert_eq!(p.patrimoine_total.pc, 5_000 + prix);
 
         c.executer(
@@ -411,16 +500,21 @@ mod tests {
         )
         .unwrap();
         let p = page_statistiques(c.etat(&r), &r);
-        assert_eq!(p.personnages[0].batiments.pc, prix);
+        assert_eq!(
+            part(&p.personnages[0].composantes, "batiments").valeur.pc,
+            prix
+        );
         assert_eq!(p.personnages[0].total.pc, 5_000 + prix);
-        assert_eq!(p.localites[0].batiments.pc, prix);
+        assert_eq!(
+            part(&p.localites[0].composantes, "batiments").valeur.pc,
+            prix
+        );
         // Le total ne compte le bâtiment qu'une fois.
         assert_eq!(p.patrimoine_total.pc, 5_000 + prix);
+        assert_eq!(p.batiments[0].proprietaire.as_deref(), Some("Seoni"));
         // La répartition recompose exactement le total.
         let parts: i64 = p.repartition.iter().map(|x| x.valeur.pc).sum();
         assert_eq!(parts, p.patrimoine_total.pc);
-        assert_eq!(p.repartition.len(), 5);
-        assert_eq!(p.batiments[0].proprietaire.as_deref(), Some("Seoni"));
 
         // Un propriétaire inconnu est refusé.
         assert!(c
@@ -432,5 +526,42 @@ mod tests {
                 &r,
             )
             .is_err());
+    }
+
+    /// Une nouvelle source (montures, véhicules…) est prise en compte partout sans autre changement.
+    #[test]
+    fn une_source_ajoutee_entre_dans_le_total_et_chez_son_proprietaire() {
+        fn source_test(_: &Etat, _: &Referentiel) -> Vec<ElementPatrimoine> {
+            vec![ElementPatrimoine {
+                categorie: "comptes",
+                proprietaire: Some(IdPersonnage(1)),
+                localite: None,
+                pc: 700,
+            }]
+        }
+        let r = regles::referentiel_officiel();
+        let mut c = Campagne::nouvelle("Test");
+        let id = c.nouvel_id_personnage();
+        c.executer(
+            Evenement::PersonnageCree {
+                id,
+                nom: "Lia".into(),
+                compte_initial: Montant::po(1),
+                prestige: None,
+            },
+            &r,
+        )
+        .unwrap();
+        let etat = c.etat(&r).clone();
+        let avant = page_statistiques(&etat, &r);
+        let mut sources = SOURCES.to_vec();
+        sources.push(source_test);
+        let apres = page_statistiques_avec(&etat, &r, &sources);
+        assert_eq!(apres.patrimoine_total.pc, avant.patrimoine_total.pc + 700);
+        assert_eq!(
+            apres.personnages[0].total.pc,
+            avant.personnages[0].total.pc + 700
+        );
+        assert_eq!(apres.total_personnages.pc, avant.total_personnages.pc + 700);
     }
 }

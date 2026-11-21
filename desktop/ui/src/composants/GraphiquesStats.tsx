@@ -11,6 +11,11 @@ export const COULEUR_PART: Record<string, string> = {
   tresoreries: "var(--travail)", capitaux: "var(--magie)",
 };
 
+/** Couleur d'une catégorie de patrimoine ; une catégorie ajoutée plus tard reçoit une teinte de la palette. */
+export function couleurCategorie(cle: string, rang: number): string {
+  return COULEUR_PART[cle] ?? PALETTE[(5 + rang) % PALETTE.length];
+}
+
 export const fmt = (n: number) => Math.round(n).toLocaleString("fr-FR");
 const enPo = (po: number) => `${fmt(po)} po`;
 const sansDeuxPoints = (s: string) => s.replace(/:/g, "_");
@@ -127,7 +132,7 @@ export function Anneau({ parts, centre }: { parts: { cle: string; nom: string; p
             key={a.cle}
             className="st-tranche"
             cx="100" cy="100" r={R} fill="none" strokeWidth="22"
-            style={{ stroke: COULEUR_PART[a.cle] ?? PALETTE[i], color: COULEUR_PART[a.cle] ?? PALETTE[i], opacity: actif === null || actif === i ? 1 : 0.25 }}
+            style={{ stroke: couleurCategorie(a.cle, i), color: couleurCategorie(a.cle, i), opacity: actif === null || actif === i ? 1 : 0.25 }}
             strokeDasharray={monte ? `${Math.max(0, a.part - 2)} ${C}` : `0 ${C}`}
             strokeDashoffset={-a.decalage}
             transform="rotate(-90 100 100)"
@@ -143,7 +148,7 @@ export function Anneau({ parts, centre }: { parts: { cle: string; nom: string; p
       <div className="st-legende">
         {arcs.map((a, i) => (
           <div key={a.cle} className={actif === i ? "act" : ""} onMouseEnter={() => setActif(i)} onMouseLeave={() => setActif(null)}>
-            <i style={{ background: COULEUR_PART[a.cle] ?? PALETTE[i] }} />
+            <i style={{ background: couleurCategorie(a.cle, i) }} />
             {a.nom}
             <span>{total > 0 ? Math.round((a.v / total) * 100) : 0} %</span>
           </div>
@@ -329,12 +334,6 @@ export function GraphiqueCourbes({ courbes }: { courbes: CourbesPatrimoine }) {
   );
 }
 
-const COMPOSANTES: { cle: "compte" | "objets" | "batiments"; nom: string; couleur: string }[] = [
-  { cle: "compte", nom: "Compte", couleur: "var(--po)" },
-  { cle: "objets", nom: "Objets", couleur: "var(--influence)" },
-  { cle: "batiments", nom: "Bâtiments", couleur: "var(--marchandises)" },
-];
-
 /** Aires empilées : composition du patrimoine du personnage choisi, dans le temps. */
 export function GraphiqueComposition({ courbes }: { courbes: CourbesPatrimoine }) {
   const [choix, setChoix] = useState<number | null>(null);
@@ -342,16 +341,20 @@ export function GraphiqueComposition({ courbes }: { courbes: CourbesPatrimoine }
   const perso = courbes.compositions.find((p) => p.id === choix) ?? courbes.compositions[0];
   if (!perso) return null;
   const dernier = courbes.jours.length - 1;
-  const valeurs = COMPOSANTES.map((c) => ({ ...c, pc: Math.max(0, perso[c.cle][dernier] ?? 0) }));
+  // toutes les catégories de patrimoine, y compris celles qu'on ajoutera plus tard ; les vides sont masquées
+  const composantes = perso.composantes
+    .map((c, rang) => ({ ...c, couleur: couleurCategorie(c.cle, rang) }))
+    .filter((c) => c.valeurs.some((v) => v !== 0));
+  const valeurs = composantes.map((c) => ({ cle: c.cle, nom: c.nom, couleur: c.couleur, pc: Math.max(0, c.valeurs[dernier] ?? 0) }));
   const total = valeurs.reduce((a, c) => a + c.pc, 0);
-  const series: SerieGraphe[] = COMPOSANTES.map((c) => ({ cle: c.cle, nom: c.nom, couleur: c.couleur, v: perso[c.cle].map((pc) => pc / 100) }));
+  const series: SerieGraphe[] = composantes.map((c) => ({ cle: c.cle, nom: c.nom, couleur: c.couleur, v: c.valeurs.map((pc) => pc / 100) }));
 
   return (
     <section className="carte st-carte">
       <div className="st-entete">
         <div>
           <h2>Composition du patrimoine d'un personnage</h2>
-          <p>Aires empilées : compte, objets, bâtiments</p>
+          <p>Aires empilées, une par catégorie de patrimoine</p>
         </div>
       </div>
       <div className="st-persos">

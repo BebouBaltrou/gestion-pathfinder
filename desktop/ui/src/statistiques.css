@@ -81,8 +81,7 @@
 .st-perso .av { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--carte-2); border: 1px solid var(--bord-fort); font-family: var(--police-titre); font-weight: 700; font-size: 13px; }
 .st-perso.on { background: color-mix(in srgb, var(--or) 14%, transparent); border-color: var(--or); color: var(--texte-fort); }
 .st-perso.on .av { background: var(--or); color: var(--or-sombre); border-color: var(--or); }
-.st-compo { display: grid; gap: 14px 22px; grid-template-columns: repeat(4, 1fr); align-items: end; margin-top: 12px; }
-@media (max-width: 760px) { .st-compo { grid-template-columns: 1fr 1fr; } }
+.st-compo { display: grid; gap: 14px 22px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); align-items: end; margin-top: 12px; }
 .st-ligne-c .t { display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 5px; }
 .st-ligne-c .t b { font-variant-numeric: tabular-nums; color: var(--texte-fort); }
 .st-barre { height: 8px; border-radius: 99px; background: var(--carte-2); overflow: hidden; border: 1px solid var(--bord); }
