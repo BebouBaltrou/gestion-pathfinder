@@ -1,67 +1,151 @@
-/* Refonte visuelle des onglets anciens : aspect seulement, aucune règle de calcul.
-   Plan : chaque page garde ses fonctions ; ici on ne change que les jetons de présentation.
-   Carnet = registre de campagne (filets doubles, chiffres en encre) ; Néon = tableau de bord nocturne
-   (filets lumineux, chiffres nets) ; Sombre d'origine = lecture calme (filets fins dorés). */
+/* Refonte visuelle des onglets (hors Statistiques, déjà refait) : ASPECT SEULEMENT.
+   Aucune règle, aucun calcul, aucune mise en page déplacée : seuls des habillages sont ajoutés
+   sur les classes existantes, dans les trois thèmes.
+   Idée directrice : le carnet du maître de campagne.
+   - Carnet de voyage : registre de papier (filets doubles, sceau de cire, onglets-signets, encre).
+   - Néon nocturne    : écran de contrôle (filets lumineux, angles de visée, lueurs par capital).
+   - Sombre d'origine : édition calme (filet doré fin, rien de plus). */
 
-/* ---------------------------------------------------------------- en-tête de page */
-.titre-page h1 {
-  font-size: 30px; font-weight: 700; letter-spacing: -0.015em; line-height: 1.15;
-  padding-bottom: 10px; margin-bottom: 2px;
-  border-bottom: 1px solid var(--bord);
+::selection { background: color-mix(in srgb, var(--or) 30%, transparent); }
+* { scrollbar-width: thin; scrollbar-color: var(--bord-fort) transparent; }
+
+/* ================================================================ en-tête de page
+   Un filet se trace à l'arrivée de la page ; c'est le moment fort de chaque onglet. */
+.titre-page h1 { position: relative; padding-bottom: 14px; border-bottom: none; box-shadow: none; }
+.titre-page h1::before, .titre-page h1::after { content: ""; position: absolute; pointer-events: none; }
+.titre-page h1::before { left: 0; right: 0; bottom: 0; height: 1px; background: var(--bord-fort); transform-origin: left; animation: trace-filet 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.titre-page h1::after { left: 0; bottom: -1px; width: 64px; height: 3px; background: var(--or); transform-origin: left; animation: trace-filet 0.55s 0.15s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.titre-page p { font-size: 16px; margin-top: 10px; }
+@keyframes trace-filet { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+:root[data-theme="carnet"] .titre-page h1 { padding-bottom: 16px; }
+:root[data-theme="carnet"] .titre-page h1::before { height: 5px; background: none; border-top: 1px solid var(--bord-fort); border-bottom: 1px solid var(--bord-fort); }
+:root[data-theme="carnet"] .titre-page h1::after { left: 50%; bottom: -4px; width: 11px; height: 11px; margin-left: -5px; background: var(--or); transform: rotate(45deg); animation: pose-losange 0.5s 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+:root[data-theme="carnet"] .titre-page p { font-style: italic; }
+@keyframes pose-losange { from { opacity: 0; transform: rotate(45deg) scale(0); } to { opacity: 1; transform: rotate(45deg) scale(1); } }
+
+:root[data-theme="neon"] .titre-page h1::before { height: 1px; background: linear-gradient(90deg, var(--or), color-mix(in srgb, var(--influence) 70%, transparent) 55%, transparent); box-shadow: 0 0 12px var(--or); }
+:root[data-theme="neon"] .titre-page h1::after { width: 10px; height: 10px; bottom: -5px; background: var(--or); box-shadow: 0 0 14px var(--or); animation-duration: 0.3s; }
+
+/* ================================================================ barre du haut et navigation */
+:root[data-theme="carnet"] .barre-haut { border-bottom: 3px double var(--bord-fort); background: linear-gradient(180deg, #efe3c8, #ead9b6); }
+:root[data-theme="neon"] .barre-haut { border-bottom-color: color-mix(in srgb, var(--or) 35%, var(--bord)); box-shadow: 0 8px 22px -18px var(--or); }
+:root[data-theme="carnet"] .groupe-nav-titre { text-transform: none; font-variant: small-caps; letter-spacing: 0.08em; font-size: 15px; font-family: var(--police-titre); font-weight: 600; }
+:root[data-theme="carnet"] .groupe-nav + .groupe-nav { border-top: 1px dashed var(--bord-fort); }
+.lien-nav { border-radius: var(--rayon-petit); }
+:root[data-theme="carnet"] .lien-nav.actif { background: color-mix(in srgb, var(--carte) 85%, transparent); box-shadow: inset 4px 0 0 var(--or), 0 1px 0 rgba(255, 255, 255, 0.5); }
+:root[data-theme="neon"] .lien-nav.actif { background: color-mix(in srgb, var(--or) 10%, transparent); box-shadow: inset 3px 0 0 var(--or), 0 0 18px -8px var(--or); }
+:root[data-theme="neon"] .lien-nav.actif svg { filter: drop-shadow(0 0 5px var(--or)); }
+
+/* ================================================================ cartes : une teinte de capital par carte de chiffres */
+.chiffre, .carte-localite, .carte-perso, .prestige { position: relative; }
+.chiffre::before { content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 4px; border-radius: 0 3px 3px 0; background: var(--c, var(--po)); }
+.grille-chiffres > .chiffre:nth-child(2) { --c: var(--magie); }
+.grille-chiffres > .chiffre:nth-child(3) { --c: var(--travail); }
+.grille-chiffres > .chiffre:nth-child(4) { --c: var(--marchandises); }
+:root[data-theme="neon"] .chiffre::before { box-shadow: 0 0 14px var(--c, var(--po)); }
+:root[data-theme="neon"] .chiffre .valeur { text-shadow: 0 0 22px color-mix(in srgb, var(--c, var(--po)) 45%, transparent); }
+:root[data-theme="carnet"] .chiffre::after { content: ""; position: absolute; right: 0; top: 0; width: 20px; height: 20px; background: linear-gradient(225deg, transparent 50%, color-mix(in srgb, var(--bord-fort) 70%, var(--carte)) 50%); border-radius: 0 var(--rayon) 0 0; }
+
+.carte-localite { box-shadow: inset 0 3px 0 color-mix(in srgb, var(--po) 55%, transparent); }
+.carte-perso { box-shadow: inset 0 3px 0 color-mix(in srgb, var(--influence) 45%, transparent); }
+:root[data-theme="carnet"] .carte { background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.35), transparent 45%); }
+:root[data-theme="neon"] .carte-localite:hover, :root[data-theme="neon"] .carte-perso:hover { box-shadow: inset 0 3px 0 color-mix(in srgb, var(--po) 55%, transparent), 0 0 24px -10px var(--or); }
+
+/* angles de visée du thème Néon sur les cartes principales */
+:root[data-theme="neon"] .chiffre, :root[data-theme="neon"] .carte-localite, :root[data-theme="neon"] .fiche-localite {
+  background-image:
+    linear-gradient(var(--or), var(--or)) top left / 12px 1px no-repeat,
+    linear-gradient(var(--or), var(--or)) top left / 1px 12px no-repeat,
+    linear-gradient(var(--or), var(--or)) bottom right / 12px 1px no-repeat,
+    linear-gradient(var(--or), var(--or)) bottom right / 1px 12px no-repeat;
 }
-.titre-page p { font-size: 16px; }
-:root[data-theme="carnet"] .titre-page h1 { border-bottom: 3px double var(--bord-fort); }
-:root[data-theme="neon"] .titre-page h1 {
-  border-bottom: 1px solid color-mix(in srgb, var(--or) 60%, transparent);
-  box-shadow: 0 10px 18px -14px var(--or);
+
+.section-tete { padding-bottom: 8px; border-bottom: 1px solid var(--bord); }
+:root[data-theme="carnet"] .section-tete { border-bottom: 1px dashed var(--bord-fort); }
+:root[data-theme="carnet"] .section-tete h2::before { content: "◆"; font-size: 0.6em; color: var(--or); margin-right: 10px; vertical-align: 0.18em; }
+.puces .puce, .puce { border-radius: 999px; }
+.alerte { border-left: 3px solid var(--orange); }
+.alerte.grave { border-left-color: var(--rouge); }
+
+/* ================================================================ jauges */
+.jauge { height: 6px; background: color-mix(in srgb, var(--bord) 80%, transparent); }
+.barre { height: 8px; background: color-mix(in srgb, var(--bord) 80%, transparent); }
+.barre > div { background: linear-gradient(90deg, color-mix(in srgb, var(--travail) 70%, var(--carte)), var(--travail)); }
+:root[data-theme="neon"] .jauge > div, :root[data-theme="neon"] .barre > div { box-shadow: 0 0 10px currentColor; }
+
+/* ================================================================ boutons */
+.bouton { transition: background var(--transition), border-color var(--transition), transform var(--transition), box-shadow var(--transition); }
+.bouton:hover:not(:disabled) { transform: translateY(-1px); }
+.bouton:active:not(:disabled) { transform: translateY(1px); }
+:root[data-theme="carnet"] .bouton.principal {
+  background: radial-gradient(circle at 30% 25%, #b9462f, var(--or) 62%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -2px 0 rgba(0, 0, 0, 0.22), 0 3px 8px -4px rgba(90, 28, 18, 0.7);
 }
+:root[data-theme="carnet"] .bouton { border-bottom-width: 2px; }
+:root[data-theme="neon"] .bouton.principal { box-shadow: 0 0 18px -5px var(--or); }
+:root[data-theme="neon"] .bouton:hover:not(:disabled) { border-color: var(--or); box-shadow: 0 0 14px -6px var(--or); }
+.bouton.discret:hover:not(:disabled) { text-decoration: underline; text-underline-offset: 3px; transform: none; }
 
-/* ---------------------------------------------------------------- cartes et sections */
-.carte { padding: 22px 24px; }
-.section-tete { align-items: baseline; padding-bottom: 6px; border-bottom: 1px solid var(--bord); }
-.section-tete h2 { font-size: 19px; }
-:root[data-theme="carnet"] .carte { background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.35), transparent 40%); }
-
-/* ---------------------------------------------------------------- boutons */
-.bouton { height: 40px; border-radius: var(--rayon-petit); }
-.bouton.principal { box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25) inset, 0 4px 14px -8px var(--or); }
-:root[data-theme="neon"] .bouton.principal { box-shadow: 0 0 18px -6px var(--or); }
-.bouton.discret:hover:not(:disabled) { text-decoration: underline; text-underline-offset: 3px; }
-
-/* ---------------------------------------------------------------- champs */
-.champ { border-radius: var(--rayon-petit); }
+/* ================================================================ champs */
 .champ:focus { border-color: var(--or); box-shadow: 0 0 0 3px color-mix(in srgb, var(--or) 22%, transparent); }
+:root[data-theme="carnet"] .champ { background: color-mix(in srgb, var(--carte) 55%, transparent); border-width: 0 0 2px; border-color: var(--bord-fort); border-radius: 3px 3px 0 0; }
+:root[data-theme="carnet"] .champ.zone, :root[data-theme="carnet"] textarea.champ { border-width: 1px 1px 2px; }
+:root[data-theme="carnet"] .champ:focus { background: var(--carte); border-color: var(--or); box-shadow: 0 2px 0 var(--or); }
+:root[data-theme="neon"] .champ { background: #080a12; }
+:root[data-theme="neon"] .champ:focus { box-shadow: 0 0 0 1px var(--or), 0 0 18px -6px var(--or); }
 
-/* ---------------------------------------------------------------- tableaux : registre */
-.tableau th { font-size: 13px; font-weight: 600; color: var(--texte-doux); padding: 8px 12px; border-bottom: 2px solid var(--bord-fort); }
-.tableau td { padding: 10px 12px; border-top: 1px solid var(--bord); }
-.tableau td.num { font-variant-numeric: tabular-nums; font-weight: 600; }
-.tableau tr.cliquable:hover td { background: color-mix(in srgb, var(--or) 7%, var(--carte)); }
-:root[data-theme="carnet"] .tableau tr:nth-child(even) td { background: color-mix(in srgb, var(--bord) 14%, transparent); }
+/* ================================================================ listes maître-détail (localités, bâtiments…) */
+.element-liste { border-radius: var(--rayon); transition: border-color var(--transition), background var(--transition), transform var(--transition), box-shadow var(--transition); }
+.element-liste:hover { transform: translateX(3px); }
+.element-liste.actif { transform: translateX(6px); box-shadow: inset 4px 0 0 var(--or); }
+:root[data-theme="neon"] .element-liste.actif { box-shadow: inset 3px 0 0 var(--or), 0 0 20px -10px var(--or); }
+.groupe-liste .titre-groupe { font-size: 13px; text-transform: none; letter-spacing: 0.03em; font-family: var(--police-titre); }
+:root[data-theme="carnet"] .groupe-liste .titre-groupe { font-variant: small-caps; font-size: 15px; letter-spacing: 0.07em; }
 
-/* ---------------------------------------------------------------- onglets de page */
-.onglets { border-bottom: 1px solid var(--bord); gap: 6px; }
-.onglet { font-size: 15px; border-radius: var(--rayon-petit) var(--rayon-petit) 0 0; }
+/* ================================================================ onglets et segments */
+.onglets { gap: 6px; }
+.onglet { font-size: 15px; border-radius: var(--rayon-petit) var(--rayon-petit) 0 0; transition: color var(--transition), background var(--transition); }
 .onglet.actif { background: color-mix(in srgb, var(--or) 10%, transparent); }
+:root[data-theme="carnet"] .onglet.actif { background: var(--carte); border: 1px solid var(--bord-fort); border-bottom: 2px solid var(--carte); margin-bottom: -1px; box-shadow: 0 -2px 6px -4px rgba(80, 50, 20, 0.35); }
+:root[data-theme="neon"] .onglet.actif { box-shadow: 0 6px 14px -10px var(--or); text-shadow: 0 0 10px var(--or); }
+.segments { border-radius: var(--rayon); }
+:root[data-theme="neon"] .segments button.actif { box-shadow: inset 0 -2px 0 var(--or), 0 0 12px -6px var(--or); }
+.etapes li button { transition: all var(--transition); }
 
-/* ---------------------------------------------------------------- pastilles et badges */
-.badge, .pastille { border-radius: 999px; }
-:root[data-theme="neon"] .badge.confirmer, :root[data-theme="neon"] .pastille { box-shadow: 0 0 10px -3px var(--or); }
+/* ================================================================ tableaux : registre */
+.tableau th { font-size: 13px; padding: 8px 12px; border-bottom: 2px solid var(--bord-fort); }
+.tableau td { padding: 10px 12px; }
+.tableau td.num { font-variant-numeric: tabular-nums; font-weight: 600; }
+.tableau tr.cliquable:hover td { background: color-mix(in srgb, var(--or) 8%, var(--carte)); }
+:root[data-theme="carnet"] .tableau tbody tr:nth-child(even) td { background: color-mix(in srgb, var(--bord) 14%, transparent); }
+.ligne-ref.entete { border-bottom: 2px solid var(--bord-fort); }
+.ligne-journal { transition: background var(--transition); }
+.ligne-journal:hover { background: color-mix(in srgb, var(--or) 6%, transparent); }
+.ligne-repartition .nom { font-family: var(--police-titre); font-size: 17px; }
+.tableau-repartition .jauge, .ligne-repartition .jauge { height: 8px; }
 
-/* ---------------------------------------------------------------- navigation */
-.lien-nav { border-radius: var(--rayon-petit); min-height: 42px; }
-.lien-nav.actif { background: color-mix(in srgb, var(--or) 16%, var(--carte)); }
-:root[data-theme="carnet"] .lien-nav.actif { box-shadow: inset 4px 0 0 var(--or); }
+/* ================================================================ organigramme */
+.noeud { border-radius: var(--rayon-petit); transition: box-shadow var(--transition), transform var(--transition); }
+.noeud:hover { transform: translateY(-1px); box-shadow: 0 6px 14px -8px rgba(0, 0, 0, 0.5); }
+:root[data-theme="carnet"] .arbre li::before, :root[data-theme="carnet"] .arbre li::after { border-style: dashed; }
+:root[data-theme="neon"] .noeud:hover { box-shadow: 0 0 16px -6px var(--or); }
+:root[data-theme="neon"] .arbre li::before, :root[data-theme="neon"] .arbre li::after { border-color: color-mix(in srgb, var(--or) 40%, var(--bord-fort)); }
 
-/* ---------------------------------------------------------------- jauges */
-.jauge { height: 6px; }
-:root[data-theme="neon"] .jauge > div { box-shadow: 0 0 10px currentColor; }
-
-/* ---------------------------------------------------------------- arrivée sobre */
-@media (prefers-reduced-motion: no-preference) {
-  .page > .carte:first-child { animation: arrivee-page 360ms ease-out both; }
-}
-@keyframes arrivee-page {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: none; }
-}
+/* ================================================================ portraits, vide, repli, fenêtres */
+.portrait { box-shadow: 0 0 0 3px var(--carte), 0 0 0 4px color-mix(in srgb, var(--or) 70%, transparent); font-family: var(--police-titre); }
+.vide { border: 1px dashed var(--bord-fort); border-radius: var(--rayon); }
+.categorie > summary { transition: background var(--transition); }
+.categorie > summary:hover { background: color-mix(in srgb, var(--or) 6%, transparent); }
+:root[data-theme="carnet"] .categorie > summary::before, :root[data-theme="carnet"] .categorie[open] > summary::before { content: "◆"; font-size: 11px; color: var(--or); }
+:root[data-theme="carnet"] .categorie[open] > summary::before { transform: rotate(90deg); }
+.fond-modal { backdrop-filter: blur(3px); }
+:root[data-theme="carnet"] .modal { border: 3px double var(--bord-fort); box-shadow: 0 24px 60px -18px rgba(60, 35, 10, 0.55); }
+:root[data-theme="carnet"] .fond-modal { background: rgba(60, 40, 20, 0.45); }
+:root[data-theme="neon"] .modal { border-color: color-mix(in srgb, var(--or) 55%, var(--bord)); box-shadow: 0 0 40px -14px var(--or); }
+:root[data-theme="carnet"] .notification { background: var(--carte); border: 1px solid var(--bord-fort); border-left: 4px solid var(--vert); box-shadow: 0 10px 26px -12px rgba(60, 35, 10, 0.5); }
+:root[data-theme="carnet"] .notification.erreur { border-left-color: var(--rouge); }
+:root[data-theme="carnet"] .notification.alerte { border-left-color: var(--orange); }
+:root[data-theme="neon"] .notification { box-shadow: 0 0 24px -10px var(--or); }
+.ligne-campagne { transition: border-color var(--transition), background var(--transition), transform var(--transition); }
+.ligne-campagne:hover { transform: translateX(3px); }
