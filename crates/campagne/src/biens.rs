@@ -24,6 +24,16 @@ pub fn ref_monture(id: IdMonture) -> String {
     id.to_string()
 }
 
+/// Le véhicule dont l'inventaire porte cette référence (« V-3 »).
+pub fn vehicule_de_ref(r: &str) -> Option<IdVehicule> {
+    r.strip_prefix("V-")?.parse().ok().map(IdVehicule)
+}
+
+/// La monture dont l'inventaire porte cette référence (« M-2 »).
+pub fn monture_de_ref(r: &str) -> Option<IdMonture> {
+    r.strip_prefix("M-")?.parse().ok().map(IdMonture)
+}
+
 /// À qui appartient un véhicule.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]

@@ -134,7 +134,8 @@ fn charge_du_proprietaire(
     grammes: i64,
 ) -> Option<ChargeVue> {
     if type_id != PROPRIETAIRE_PERSONNAGE {
-        return None;
+        // véhicule (cargaison) ou monture (sacoches)
+        return crate::biens::charge_vue_inventaire(etat, type_id, ref_id);
     }
     let pj = personnage_de_ref(ref_id)?;
     let fiche = etat.fiche_de(pj)?;
@@ -154,6 +155,20 @@ fn proprietaire_lisible(etat: &Etat, type_id: &str, ref_id: &str) -> String {
     if type_id == PROPRIETAIRE_PERSONNAGE {
         if let Some(pj) = personnage_de_ref(ref_id).and_then(|id| etat.pj(id).ok()) {
             return pj.nom.clone();
+        }
+    }
+    if type_id == campagne::biens::PROPRIETAIRE_MONTURE {
+        if let Some(m) =
+            campagne::biens::monture_de_ref(ref_id).and_then(|id| etat.montures.get(&id))
+        {
+            return format!("Sacoches de {}", m.nom);
+        }
+    }
+    if type_id == campagne::biens::PROPRIETAIRE_VEHICULE {
+        if let Some(v) =
+            campagne::biens::vehicule_de_ref(ref_id).and_then(|id| etat.vehicules.get(&id))
+        {
+            return format!("Cargaison de {}", v.nom);
         }
     }
     format!("{type_id} {ref_id}")
