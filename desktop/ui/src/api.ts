@@ -512,7 +512,10 @@ export type BardeVue = {
   prix: Somme;
   poidsKg: number | null;
   vitesse: string | null;
+  /** La moitié du prix payé (Manuel, « La revente du butin »). */
+  prixRevente: Somme;
 };
+export type BardeRangeeVue = { objet: number; libelle: string };
 export type BardePossibleVue = { nomEn: string; libelle: string; prix: Somme | null };
 
 export type FicheVehicule = {
@@ -551,6 +554,7 @@ export type FicheMonture = {
   charge: ChargeBien | null;
   barde: BardeVue | null;
   bardesPossibles: BardePossibleVue[];
+  bardesRangees: BardeRangeeVue[];
   notes: string[];
 };
 
@@ -580,7 +584,9 @@ export type ActionBien =
   | { type: "retirerAmelioration"; id: number; index: number }
   | { type: "passagers"; id: number; nombre: number }
   | { type: "equiperBarde"; id: number; armure: string; payeur: CibleBien; prix: string | null }
-  | { type: "retirerBarde"; id: number };
+  | { type: "retirerBarde"; id: number }
+  | { type: "vendreBarde"; id: number; beneficiaire: CibleBien; prix: string | null }
+  | { type: "equiperBardeRangee"; id: number; objet: number };
 
 // ------------------------------------------------------------------ historique, points, paramètres
 

@@ -238,6 +238,8 @@ function SuiviMonture({ m, payeurs, agir, outils }: { m: FicheMonture; payeurs: 
   const [armure, setArmure] = useState("");
   const [prix, setPrix] = useState("");
   const [payeurCle, setPayeurCle] = useState("");
+  const [vente, setVente] = useState(false);
+  const [prixVente, setPrixVente] = useState("");
   const payeur = trouver(payeurs, payeurCle) ?? payeurs[0]?.cible;
   const choisie = m.bardesPossibles.find((b) => b.nomEn === armure);
   return (
@@ -256,9 +258,35 @@ function SuiviMonture({ m, payeurs, agir, outils }: { m: FicheMonture; payeurs: 
               {m.barde.poidsKg !== null ? ` — ${nombre(m.barde.poidsKg)} kg` : ""}
             </span>
             {m.barde.vitesse && <span>Vitesse de la monture : <strong>{m.barde.vitesse}</strong></span>}
-            <div><button className="bouton discret" onClick={() => agir({ type: "retirerBarde", id: m.id })}>Retirer la barde</button></div>
+            <div className="ligne" style={{ gap: 8 }}>
+              <button className="bouton" title="La barde va dans l'inventaire de la monture, où elle peut être déplacée ou rééquipée sans la repayer" onClick={() => agir({ type: "retirerBarde", id: m.id })}>Ranger dans l'inventaire</button>
+              <button className="bouton discret" onClick={() => setVente(!vente)}>Vendre…</button>
+            </div>
+            {vente && (
+              <div className="ligne" style={{ gap: 8 }}>
+                <span className="doux">Revente à la moitié du prix payé ({formaterPo(m.barde.prixRevente.pc)}).</span>
+                <label htmlFor={`vprix-${m.id}`}>Prix</label>
+                <ChampMontant id={`vprix-${m.id}`} valeur={prixVente} changer={setPrixVente} />
+                <label htmlFor={`vpay-${m.id}`}>Versé à</label>
+                <select id={`vpay-${m.id}`} className="champ" style={{ maxWidth: 280 }} value={payeur ? cle(payeur) : ""} onChange={(e) => setPayeurCle(e.target.value)}>
+                  {payeurs.map((x) => <option key={cle(x.cible)} value={cle(x.cible)}>{x.libelle}</option>)}
+                </select>
+                <button className="bouton principal" disabled={!payeur} onClick={async () => {
+                  if (!payeur) return;
+                  const r = await agir({ type: "vendreBarde", id: m.id, beneficiaire: payeur, prix: prixVente.trim() || null });
+                  if (r?.ok) { setVente(false); setPrixVente(""); }
+                }}>Vendre</button>
+              </div>
+            )}
           </>
         ) : (
+          <>
+            {m.bardesRangees.map((b) => (
+              <div className="ligne" style={{ gap: 8 }} key={b.objet}>
+                <span>{b.libelle} <span className="doux">(dans l'inventaire)</span></span>
+                <button className="bouton" onClick={() => agir({ type: "equiperBardeRangee", id: m.id, objet: b.objet })}>Équiper sans payer</button>
+              </div>
+            ))}
           <div className="ligne" style={{ gap: 8 }}>
             <select className="champ" style={{ maxWidth: 420 }} aria-label="Équiper une barde" value={armure} onChange={(e) => { setArmure(e.target.value); setPrix(""); }}>
               <option value="">Équiper une barde…</option>
@@ -280,6 +308,7 @@ function SuiviMonture({ m, payeurs, agir, outils }: { m: FicheMonture; payeurs: 
               </>
             )}
           </div>
+          </>
         )}
       </div>
       {m.notes.length > 0 && (

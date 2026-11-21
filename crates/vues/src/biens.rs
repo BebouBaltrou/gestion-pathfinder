@@ -210,6 +210,17 @@ pub struct BardeVue {
     pub poids_kg: Option<f64>,
     /// Vitesse avec la barde, quand elle ralentit.
     pub vitesse: Option<String>,
+    /// Prix de revente : la moitié du prix payé (Manuel, « La revente du butin »).
+    pub prix_revente: Somme,
+}
+
+/// Une barde rangée dans l'inventaire de la monture, qu'on peut rééquiper sans la repayer.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize))]
+#[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
+pub struct BardeRangeeVue {
+    pub objet: u64,
+    pub libelle: String,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -265,6 +276,7 @@ pub struct FicheMonture {
     pub charge: Option<ChargeBien>,
     pub barde: Option<BardeVue>,
     pub bardes_possibles: Vec<BardePossibleVue>,
+    pub bardes_rangees: Vec<BardeRangeeVue>,
     pub notes: Vec<String>,
 }
 
@@ -586,7 +598,44 @@ fn barde_vue(m: &campagne::biens::Monture, modele: Option<&Monture>) -> Option<B
         prix: b.prix.into(),
         poids_kg: armure.poids_kg(mo.grande),
         vitesse,
+        prix_revente: Montant::pc(b.prix.pc / 2).into(),
     })
+}
+
+/// Modèle d'inventaire d'une barde rangée : « barde:Chainmail:G » (nom anglais de l'armure, taille).
+fn id_modele_barde(nom_en: &str, grande: bool) -> String {
+    format!("barde:{nom_en}:{}", if grande { "G" } else { "M" })
+}
+
+fn lire_modele_barde(id: &str) -> Option<(String, bool)> {
+    let (nom, taille) = id.strip_prefix("barde:")?.rsplit_once(':')?;
+    Some((nom.to_string(), taille == "G"))
+}
+
+/// Les bardes de la bonne taille rangées dans l'inventaire de la monture.
+fn bardes_rangees(
+    etat: &Etat,
+    m: &campagne::biens::Monture,
+    modele: Option<&Monture>,
+) -> Vec<BardeRangeeVue> {
+    let (Some(racine), Some(mo)) = (etat.inventaire_de_la_monture(m.id), modele) else {
+        return Vec::new();
+    };
+    let registre = &etat.inventaire;
+    registre
+        .exemplaires()
+        .filter(|e| registre.racine_de(e.id) == Ok(racine))
+        .filter_map(|e| {
+            let id = e.modele.as_ref()?;
+            let (_, grande) = lire_modele_barde(id)?;
+            (grande == mo.grande).then(|| BardeRangeeVue {
+                objet: e.id,
+                libelle: registre
+                    .modele(id)
+                    .map_or_else(|| id.clone(), |x| x.nom.clone()),
+            })
+        })
+        .collect()
 }
 
 fn bardes_possibles(modele: Option<&Monture>) -> Vec<BardePossibleVue> {
@@ -842,6 +891,7 @@ pub fn page_biens(c: &mut campagne::Campagne, r: &Referentiel) -> PageBiens {
                     charge: charge_monture(&etat, m, modele),
                     barde: barde_vue(m, modele),
                     bardes_possibles: bardes_possibles(modele),
+                    bardes_rangees: bardes_rangees(&etat, m, modele),
                     notes: notes_monture(m),
                 }
             })
@@ -919,8 +969,19 @@ pub enum ActionBien {
         payeur: Cible,
         prix: Option<String>,
     },
+    /// Range la barde dans l'inventaire de la monture.
     #[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
     RetirerBarde { id: u32 },
+    /// Vend la barde portée ; `prix` vide : la moitié du prix payé.
+    #[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
+    VendreBarde {
+        id: u32,
+        beneficiaire: Cible,
+        prix: Option<String>,
+    },
+    /// Rééquipe une barde rangée dans l'inventaire, sans la repayer.
+    #[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
+    EquiperBardeRangee { id: u32, objet: u64 },
 }
 
 /// L'achat d'un bien, avec la création de son inventaire dans le même geste (annulable d'un coup).
@@ -1232,6 +1293,7 @@ pub fn action(
                     armure,
                     payeur: payeur(&pay)?,
                     prix: prix_choisi(prix, b.prix(modele.grande))?,
+                    gratuite: false,
                 },
                 format!("Barde équipée sur {}", m.nom),
             )
@@ -1241,9 +1303,125 @@ pub fn action(
                 .montures
                 .get(&IdMonture(id))
                 .ok_or("Monture introuvable")?;
+            let b = m
+                .barde
+                .as_ref()
+                .ok_or("Cette monture ne porte pas de barde")?;
+            let racine = etat
+                .inventaire_de_la_monture(m.id)
+                .ok_or("Créez d'abord l'inventaire de la monture : la barde y sera rangée")?;
+            let modele = MONTURES
+                .iter()
+                .find(|x| x.nom == m.modele)
+                .ok_or("Modèle de monture introuvable")?;
+            let armure = modeles_barde()
+                .iter()
+                .find(|x| x.nom_en == b.armure)
+                .ok_or("Armure introuvable pour la barde")?;
+            let modele_id = id_modele_barde(&b.armure, modele.grande);
             (
-                Evenement::MontureDebardee { id: m.id },
-                format!("Barde retirée de {}", m.nom),
+                Evenement::Groupe {
+                    libelle: format!("Barde rangée dans l'inventaire de {}", m.nom),
+                    evenements: vec![
+                        Evenement::MontureDebardee { id: m.id },
+                        Evenement::Inventaire(Commande::AjouterModele(inventaire::Modele {
+                            id: modele_id.clone(),
+                            nom: format!(
+                                "Barde : {} (taille {})",
+                                armure.nom,
+                                if modele.grande { "G" } else { "M" }
+                            ),
+                            type_objet: "barde".to_string(),
+                            valeur: armure.prix(modele.grande),
+                            poids: armure
+                                .poids_kg(modele.grande)
+                                .map(|kg| inventaire::Poids((kg * 1000.0).round() as i64)),
+                            source: "Manuel des joueurs (VF), p. 162".to_string(),
+                            proprietes: std::collections::BTreeMap::new(),
+                        })),
+                        Evenement::Inventaire(Commande::Ajouter {
+                            modele: modele_id,
+                            quantite: 1,
+                            dans: racine,
+                        }),
+                    ],
+                },
+                format!("Barde rangée dans l'inventaire de {}", m.nom),
+            )
+        }
+        A::VendreBarde {
+            id,
+            beneficiaire,
+            prix,
+        } => {
+            let m = etat
+                .montures
+                .get(&IdMonture(id))
+                .ok_or("Monture introuvable")?;
+            let b = m
+                .barde
+                .as_ref()
+                .ok_or("Cette monture ne porte pas de barde")?;
+            (
+                Evenement::MontureBardeVendue {
+                    id: m.id,
+                    beneficiaire: payeur(&beneficiaire)?,
+                    prix: prix_choisi(prix, Some(Montant::pc(b.prix.pc / 2)))?,
+                },
+                format!("Barde de {} vendue", m.nom),
+            )
+        }
+        A::EquiperBardeRangee { id, objet } => {
+            let m = etat
+                .montures
+                .get(&IdMonture(id))
+                .ok_or("Monture introuvable")?;
+            if m.barde.is_some() {
+                return Err("Rangez ou vendez d'abord la barde actuelle".into());
+            }
+            let racine = etat
+                .inventaire_de_la_monture(m.id)
+                .ok_or("Cette monture n'a pas d'inventaire")?;
+            let modele = MONTURES
+                .iter()
+                .find(|x| x.nom == m.modele)
+                .ok_or("Modèle de monture introuvable")?;
+            let registre = &etat.inventaire;
+            if registre.racine_de(objet) != Ok(racine) {
+                return Err("Cette barde n'est pas dans l'inventaire de la monture".into());
+            }
+            let modele_id = registre
+                .exemplaire(objet)
+                .ok()
+                .and_then(|e| e.modele.clone())
+                .ok_or("Objet introuvable")?;
+            let (armure, grande) =
+                lire_modele_barde(&modele_id).ok_or("Cet objet n'est pas une barde")?;
+            if grande != modele.grande {
+                return Err("Cette barde n'est pas de la bonne taille pour cette monture".into());
+            }
+            // son prix (pour une revente) : celui de l'armure pour cette taille
+            let valeur = modeles_barde()
+                .iter()
+                .find(|x| x.nom_en == armure)
+                .and_then(|x| x.prix(grande))
+                .unwrap_or(Montant::ZERO);
+            (
+                Evenement::Groupe {
+                    libelle: format!("Barde rééquipée sur {}", m.nom),
+                    evenements: vec![
+                        Evenement::MontureBardee {
+                            id: m.id,
+                            armure,
+                            // rien à payer : le prix est nul, le payeur n'est pas débité
+                            payeur: Payeur::Localite(IdLocalite(0)),
+                            prix: valeur,
+                            gratuite: true,
+                        },
+                        Evenement::Inventaire(Commande::Retirer { id: objet }),
+                    ],
+                },
+                format!("Barde rééquipée sur {}", m.nom),
             )
         }
     })
@@ -1593,5 +1771,117 @@ mod tests_patrimoine {
             let v = &page_biens(&mut c, &r).vehicules[0];
             assert_eq!((v.passagers, v.passagers_max), (2, Some(4)));
         }
+    }
+}
+
+#[cfg(test)]
+mod tests_barde {
+    use super::tests::monde;
+    use super::*;
+
+    fn cible_pj(pj: IdPersonnage) -> Cible {
+        Cible {
+            genre: GenreCible::Personnage,
+            id: pj.0,
+        }
+    }
+
+    fn jouer(c: &mut campagne::Campagne, r: &Referentiel, a: ActionBien) -> Result<(), String> {
+        let (ev, _) = action(c, r, a)?;
+        c.executer(ev, r).map(|_| ()).map_err(|e| e.to_string())
+    }
+
+    #[test]
+    fn la_barde_retiree_est_rangee_puis_rééquipée_ou_vendue() {
+        let (mut c, r, _, pj) = monde();
+        jouer(
+            &mut c,
+            &r,
+            ActionBien::AcheterMonture {
+                modele: "Cheval léger".into(),
+                nom: "Éclair".into(),
+                proprietaire: cible_pj(pj),
+                detenteur: None,
+                payeur: cible_pj(pj),
+                prix: None,
+            },
+        )
+        .unwrap();
+        let id = page_biens(&mut c, &r).montures[0].id;
+        let compte = |c: &mut campagne::Campagne| c.etat(&r).personnages[&pj].compte;
+        jouer(
+            &mut c,
+            &r,
+            ActionBien::EquiperBarde {
+                id,
+                armure: "Chainmail".into(),
+                payeur: cible_pj(pj),
+                prix: None,
+            },
+        )
+        .unwrap();
+        let apres_achat = compte(&mut c);
+        // retirer = ranger dans l'inventaire (40 kg), rien n'est perdu
+        jouer(&mut c, &r, ActionBien::RetirerBarde { id }).unwrap();
+        let page = page_biens(&mut c, &r);
+        let m = &page.montures[0];
+        assert!(m.barde.is_none());
+        assert_eq!(m.bardes_rangees.len(), 1);
+        assert_eq!(m.charge.as_ref().unwrap().poids_kg, 40.0);
+        // rééquiper sans payer
+        let objet = m.bardes_rangees[0].objet;
+        jouer(&mut c, &r, ActionBien::EquiperBardeRangee { id, objet }).unwrap();
+        assert_eq!(compte(&mut c), apres_achat);
+        let page = page_biens(&mut c, &r);
+        assert!(page.montures[0].barde.is_some());
+        assert!(page.montures[0].bardes_rangees.is_empty());
+        // vendre : la moitié du prix payé (600 po) va au bénéficiaire
+        jouer(
+            &mut c,
+            &r,
+            ActionBien::VendreBarde {
+                id,
+                beneficiaire: cible_pj(pj),
+                prix: None,
+            },
+        )
+        .unwrap();
+        assert_eq!(compte(&mut c), apres_achat + Montant::po(300));
+        assert!(page_biens(&mut c, &r).montures[0].barde.is_none());
+        // plus rien à vendre ni à ranger
+        assert!(jouer(&mut c, &r, ActionBien::RetirerBarde { id }).is_err());
+    }
+
+    #[test]
+    fn ranger_la_barde_demande_un_inventaire() {
+        let (mut c, r, _, pj) = monde();
+        // monture sans inventaire (ancien achat) : événements joués à la main
+        let id = c.nouvel_id_monture();
+        c.executer(
+            Evenement::MontureAchetee {
+                id,
+                modele: "Poney".into(),
+                nom: "Pip".into(),
+                proprietaire: Some(ProprietaireBien::Personnage(pj)),
+                detenteur: None,
+                payeur: Payeur::Personnage(pj),
+                prix: Montant::po(30),
+            },
+            &r,
+        )
+        .unwrap();
+        c.executer(
+            Evenement::MontureBardee {
+                id,
+                armure: "Padded".into(),
+                payeur: Payeur::Personnage(pj),
+                prix: Montant::po(10),
+                gratuite: false,
+            },
+            &r,
+        )
+        .unwrap();
+        let err = action(&mut c, &r, ActionBien::RetirerBarde { id: id.0 }).unwrap_err();
+        assert!(err.contains("Créez d'abord l'inventaire"), "{err}");
     }
 }

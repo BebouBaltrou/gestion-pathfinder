@@ -636,6 +636,9 @@ impl Campagne {
                 format!("Monture {id} : barde « {armure} » équipée ({prix})")
             }
             MontureDebardee { id } => format!("Monture {id} : barde retirée"),
+            MontureBardeVendue { id, prix, .. } => {
+                format!("Monture {id} : barde vendue ({prix})")
+            }
             AbandonActif { cible } => format!("Abandon : {}", etat.libelle_actif(*cible, r)),
             VenteLancee {
                 cible,

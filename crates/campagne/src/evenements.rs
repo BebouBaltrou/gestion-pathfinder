@@ -395,9 +395,18 @@ pub enum Evenement {
         armure: String,
         payeur: Payeur,
         prix: Montant,
+        /// Barde sortie de l'inventaire : rien n'est débité, `prix` reste son prix pour une revente.
+        #[cfg_attr(feature = "serde", serde(default))]
+        gratuite: bool,
     },
     MontureDebardee {
         id: IdMonture,
+    },
+    /// Vente de la barde portée : `beneficiaire` reçoit `prix` (la moitié du prix, GC/Manuel p. 159).
+    MontureBardeVendue {
+        id: IdMonture,
+        beneficiaire: Payeur,
+        prix: Montant,
     },
     /// Réglage du salaire d'un gestionnaire affecté à plusieurs établissements :
     /// `false` = payé une fois par jour (défaut, PC-06), `true` = une fois par affectation.

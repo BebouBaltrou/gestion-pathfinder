@@ -140,6 +140,25 @@ impl Etat {
         }
     }
 
+    /// Verse `montant` au compte ou à la trésorerie de `beneficiaire`.
+    pub(crate) fn crediter(
+        &mut self,
+        beneficiaire: Payeur,
+        montant: Montant,
+    ) -> Result<(), Erreur> {
+        match beneficiaire {
+            Payeur::Localite(id) => {
+                let l = self.localite_mut(id)?;
+                l.tresorerie = l.tresorerie + montant;
+            }
+            Payeur::Personnage(id) => {
+                let p = self.pj_mut(id)?;
+                p.compte = p.compte + montant;
+            }
+        }
+        Ok(())
+    }
+
     fn verifier_proprietaire(&self, p: &ProprietaireBien) -> Result<(), Erreur> {
         match p {
             ProprietaireBien::Localite(l) => self.localite(*l).map(|_| ()),
@@ -375,6 +394,7 @@ impl Etat {
                 armure,
                 payeur,
                 prix,
+                gratuite,
             } => {
                 if armure.trim().is_empty() {
                     return Err(Erreur::Actif("choisissez une armure pour la barde".into()));
@@ -383,13 +403,28 @@ impl Etat {
                     return Err(Erreur::MontantNonPositif);
                 }
                 self.montures.get(id).ok_or(Erreur::MontureInconnue(*id))?;
-                if prix.pc > 0 {
+                if prix.pc > 0 && !*gratuite {
                     self.debiter(*payeur, *prix)?;
                 }
                 self.montures.get_mut(id).expect("vérifié").barde = Some(BardeMonture {
                     armure: armure.clone(),
                     prix: *prix,
                 });
+            }
+            MontureBardeVendue {
+                id,
+                beneficiaire,
+                prix,
+            } => {
+                if prix.est_negatif() {
+                    return Err(Erreur::MontantNonPositif);
+                }
+                let m = self.montures.get(id).ok_or(Erreur::MontureInconnue(*id))?;
+                if m.barde.is_none() {
+                    return Err(Erreur::Actif("cette monture ne porte pas de barde".into()));
+                }
+                self.crediter(*beneficiaire, *prix)?;
+                self.montures.get_mut(id).expect("vérifié").barde = None;
             }
             MontureDebardee { id } => {
                 let m = self
@@ -1297,6 +1332,7 @@ mod tests {
                 armure: "Padded".into(),
                 payeur: Payeur::Personnage(pj),
                 prix: Montant::po(10),
+                gratuite: false,
             },
             &r,
         )

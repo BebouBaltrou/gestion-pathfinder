@@ -47,6 +47,10 @@ le Manuel l'emporte.
 8. **Vitesse ajustée** par une amélioration : appliquée à la vitesse de déplacement du Manuel. La
    vitesse tactique en combat bord à bord n'est pas modélisée.
 
+9. **Retirer une barde** : elle est rangée dans l'inventaire de la monture (poids compté, rééquipable sans
+   la repayer, déplaçable vers une autre monture de même taille). **La vendre** : la moitié du prix payé
+   (Manuel, « La revente du butin »), modifiable, versée à un compte de PJ ou à une trésorerie.
+
 ## Suite du don Prestige (partisans)
 
 Le don ne dit rien de la production des partisans. Choix d'Antoine (21/11/2026) :

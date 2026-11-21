@@ -805,7 +805,8 @@ impl Etat {
             | VehiculeAmeliorationRetiree { .. }
             | VehiculePassagers { .. }
             | MontureBardee { .. }
-            | MontureDebardee { .. } => self.appliquer_biens(ev)?,
+            | MontureDebardee { .. }
+            | MontureBardeVendue { .. } => self.appliquer_biens(ev)?,
             Note { .. } => {}
         }
         self.purger_biens();
