@@ -1851,7 +1851,10 @@ pub fn creature_familier(fiche: &Fiche, r: &Referentiel) -> Option<crate::convoc
         },
         Ligne {
             libelle: "Armure naturelle".into(),
-            valeur: format!("{} (créature) + {armure_table} (niveau du maître)", c.armure_naturelle),
+            valeur: format!(
+                "{} (créature) + {armure_table} (niveau du maître)",
+                c.armure_naturelle
+            ),
         },
     ];
     if let Some(f) = r
@@ -1885,7 +1888,8 @@ pub fn creature_familier(fiche: &Fiche, r: &Referentiel) -> Option<crate::convoc
         niveau,
         type_creature: "Créature magique (familier)".into(),
         taille: c.taille.clone(),
-        source: "Bestiaire Pathfinder (wiki legacy.aonprd.com) et règles des familiers du Core".into(),
+        source: "Bestiaire Pathfinder (wiki legacy.aonprd.com) et règles des familiers du Core"
+            .into(),
         pv: v.pv_max.total / 2,
         ca: 10 + taille + c.dexterite + armure,
         ca_contact: 10 + taille + c.dexterite,

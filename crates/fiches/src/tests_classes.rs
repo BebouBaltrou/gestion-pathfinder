@@ -2831,10 +2831,7 @@ fn sauvegardes_et_competences_du_familier() {
             .any(|x| x.contains("Réflexes +4, Vigueur +1, Volonté +3")),
         "{l:?}"
     );
-    assert!(
-        l.iter().any(|x| x.contains("Discrétion +14")),
-        "{l:?}"
-    );
+    assert!(l.iter().any(|x| x.contains("Discrétion +14")), "{l:?}");
 }
 
 #[test]

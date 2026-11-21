@@ -450,7 +450,8 @@ fn un_familier_entre_dans_l_ordre_d_initiative() {
     let ctx = ctx_avec(11, 0);
     let mut e = EtatAventure::nouveau(Instant::depuis(1, 8, 0).unwrap(), false);
     for pj in [1, 2] {
-        e.appliquer(&EvenementAventure::Entree { pj }, &ctx).unwrap();
+        e.appliquer(&EvenementAventure::Entree { pj }, &ctx)
+            .unwrap();
     }
     let chat = fiches::convocation::Creature {
         nom: "Chat (familier)".into(),
