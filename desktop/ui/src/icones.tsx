@@ -31,6 +31,14 @@ export const icones: Record<string, (p: P) => ReactElement> = {
       <path d="M13 19 15 21" />
     </Icone>
   ),
+  statistiques: (p) => (
+    <Icone {...p}>
+      <path d="M4 20V11" />
+      <path d="M10 20V5" />
+      <path d="M16 20v-7" />
+      <path d="M22 20H2" />
+    </Icone>
+  ),
   tableau: (p) => (
     <Icone {...p}>
       <rect x="3" y="3" width="7" height="9" rx="1.5" />
