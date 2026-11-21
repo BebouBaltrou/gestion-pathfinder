@@ -30,6 +30,16 @@ pub enum Evenement {
         maitre: IdPersonnage,
         niveau: u32,
         nom: String,
+        /// Équipe qui représente le partisan (créée juste avant, dans le même groupe).
+        #[cfg_attr(feature = "serde", serde(default))]
+        equipe: Option<IdEquipe>,
+        #[cfg_attr(feature = "serde", serde(default))]
+        note: String,
+    },
+    PartisanNote {
+        maitre: IdPersonnage,
+        index: usize,
+        note: String,
     },
     PartisanRetire {
         maitre: IdPersonnage,

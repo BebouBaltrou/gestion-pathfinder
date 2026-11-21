@@ -113,7 +113,7 @@ export type CartePersonnage = {
 export type PartPatrimoine = { cle: string; nom: string; valeur: Somme };
 export type StatPersonnage = { id: number; nom: string; composantes: PartPatrimoine[]; total: Somme };
 export type StatLocalite = { id: number; nom: string; composantes: PartPatrimoine[]; total: Somme };
-export type StatOrganisation = { id: number; nom: string; localite: string; equipes: number; effectif: number; effectifAVenir: number; gestionnaires: number; valeurEquipes: Somme };
+export type StatOrganisation = { id: number; nom: string; localite: string; equipes: number; effectif: number; effectifAVenir: number; effectifSuite: number; gestionnaires: number; valeurEquipes: Somme };
 export type PageStatistiques = {
   repartition: PartPatrimoine[];
   patrimoineTotal: Somme;
@@ -128,6 +128,8 @@ export type PageStatistiques = {
   organisations: StatOrganisation[];
   effectifTotal: number;
   effectifAVenirTotal: number;
+  /** Membres de la suite (don Prestige), comptés à part. */
+  effectifSuiteTotal: number;
   valeurEquipes: Somme;
 };
 
@@ -815,6 +817,8 @@ export const api = {
   prestigeDon: (pj: number) => appeler<PrestigeDonVue | null>("prestige_don", { pj }),
   prestigeEvenement: (evenement: unknown) => appeler<Retour>("prestige_evenement", { evenement }),
   recruterAcolyte: (maitre: number, nom: string) => appeler<Retour>("recruter_acolyte", { maitre, nom }),
+  recruterPartisan: (maitre: number, niveau: number, nom: string, equipeReference: string | null, note: string) =>
+    appeler<Retour>("recruter_partisan", { maitre, niveau, nom, equipeReference, note }),
   accorderNiveauDeDepart: (pj: number, niveau: number) => appeler<Retour>("accorder_niveau_de_depart", { pj, niveau }),
   evenementFiche: (pj: number, evenement: EvenementFiche) =>
     appeler<Retour>("evenement_fiche", { pj, evenement }),
@@ -990,11 +994,12 @@ function statistiquesExemple(): { stats: PageStatistiques; courbes: CourbesPatri
     ],
     totalBatiments: s(9100),
     organisations: [
-      { id: 1, nom: "Guilde des marchands", localite: "Sandpoint", equipes: 3, effectif: 12, effectifAVenir: 3, gestionnaires: 1, valeurEquipes: s(18000) },
-      { id: 2, nom: "Garde de Sandpoint", localite: "Sandpoint", equipes: 2, effectif: 8, effectifAVenir: 2, gestionnaires: 1, valeurEquipes: s(9000) },
+      { id: 1, nom: "Guilde des marchands", localite: "Sandpoint", equipes: 3, effectif: 12, effectifAVenir: 3, effectifSuite: 0, gestionnaires: 1, valeurEquipes: s(18000) },
+      { id: 2, nom: "Garde de Sandpoint", localite: "Sandpoint", equipes: 2, effectif: 8, effectifAVenir: 2, effectifSuite: 0, gestionnaires: 1, valeurEquipes: s(9000) },
     ],
     effectifTotal: 20,
     effectifAVenirTotal: 5,
+    effectifSuiteTotal: 0,
     valeurEquipes: s(27000),
   };
   return { stats, courbes };

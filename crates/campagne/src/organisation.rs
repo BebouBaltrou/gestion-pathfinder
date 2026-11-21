@@ -134,11 +134,23 @@ impl Etat {
     }
 
     pub fn nom_equipe(&self, e: &Equipe, r: &Referentiel) -> String {
-        e.nom
+        let nom = e
+            .nom
             .clone()
             .filter(|n| !n.trim().is_empty())
             .or_else(|| r.equipe(&e.reference).map(|u| u.nom.clone()))
-            .unwrap_or_else(|| e.reference.clone())
+            .unwrap_or_else(|| e.reference.clone());
+        // Un membre de la suite reste toujours reconnaissable.
+        match self.suite_de(e.id) {
+            Some(m) => {
+                let maitre = self
+                    .personnages
+                    .get(&m)
+                    .map_or_else(|| m.to_string(), |p| p.nom.clone());
+                format!("{nom} (suite de {maitre})")
+            }
+            None => nom,
+        }
     }
 
     /// Salaire versé chaque jour par un gestionnaire actif (une fois par jour par défaut,

@@ -129,6 +129,15 @@ impl Etat {
         }
         self.personnages.remove(&id);
         self.fiches.remove(&id);
+        // les équipes de sa suite disparaissent avec lui
+        let suite: Vec<IdEquipe> = self
+            .prestige_don
+            .get(&id)
+            .map(|d| d.partisans.iter().filter_map(|p| p.equipe).collect())
+            .unwrap_or_default();
+        for e in suite {
+            self.retirer_actif(Actif::Equipe(e));
+        }
         self.prestige_don.remove(&id);
         // lien d'acolyte, dans un sens comme dans l'autre
         self.acolytes.retain(|a, m| *a != id && *m != id);

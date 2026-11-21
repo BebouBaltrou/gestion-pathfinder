@@ -309,7 +309,9 @@ impl Campagne {
                 maitre,
                 niveau,
                 nom,
+                ..
             } => format!("{} recrute le partisan {nom} (niveau {niveau})", pj(maitre)),
+            PartisanNote { maitre, .. } => format!("Note d'un partisan de {}", pj(maitre)),
             PartisanRetire { maitre, .. } => format!("{} retire un partisan", pj(maitre)),
             Inventaire(_) => "Opération sur l'inventaire".to_string(),
             Notes(c) => match c {

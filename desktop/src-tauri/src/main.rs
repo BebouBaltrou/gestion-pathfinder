@@ -554,6 +554,25 @@ fn action_bien(s: S, action: vues::biens::ActionBien) -> Retour {
     executer_construit(&mut x, ev)
 }
 
+/// Recrute un partisan du don Prestige, avec une équipe équivalente du livre (facultative).
+#[tauri::command]
+fn recruter_partisan(
+    s: S,
+    maitre: u32,
+    niveau: u32,
+    nom: String,
+    equipe_reference: Option<String>,
+    note: String,
+) -> Retour {
+    let mut x = session(&s);
+    let r = x.r.clone();
+    let Some(c) = x.campagne.as_mut() else {
+        return Retour::erreur("Aucune campagne ouverte");
+    };
+    let ev = vues::prestige_don::recruter_partisan(c, &r, maitre, niveau, nom, equipe_reference, note);
+    executer_construit(&mut x, ev)
+}
+
 // ---------------------------------------------------------------- historique, points, paramètres
 
 #[tauri::command]
@@ -780,6 +799,7 @@ fn main() {
             action_gestionnaire,
             page_biens,
             action_bien,
+            recruter_partisan,
             page_historique,
             page_points,
             page_referentiel,

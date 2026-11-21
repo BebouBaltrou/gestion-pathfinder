@@ -360,8 +360,11 @@ pub fn page_biens(c: &mut campagne::Campagne, r: &Referentiel) -> PageBiens {
             .values()
             .map(|p| choix_personnage(&etat, p.id))
             .chain(toutes_equipes.iter().map(|e| choix_equipe(&etat, r, *e)))
+            // un partisan qui a une équipe est déjà dans la liste des équipes
             .chain(etat.prestige_don.iter().flat_map(|(maitre, d)| {
-                (0..d.partisans.len()).map(|i| choix_partisan(&etat, *maitre, i))
+                (0..d.partisans.len())
+                    .filter(|i| d.partisans[*i].equipe.is_none())
+                    .map(|i| choix_partisan(&etat, *maitre, i))
             }))
             .collect(),
         payeurs: etat

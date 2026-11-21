@@ -322,6 +322,7 @@ impl Etat {
                     brisee: s.brisee,
                     delocalisation: false,
                     bonus_extensions,
+                    part: None,
                     affectation: Vec::new(),
                 })
             }
@@ -355,6 +356,12 @@ impl Etat {
                 if u.recettes.is_none() {
                     return refus(format!("{nom} ne produit aucune recette"));
                 }
+                // Un membre de la suite (don Prestige) produit sa part du bonus de l'équipe
+                // équivalente : une personne sur la taille de cette équipe (règle personnalisée).
+                let part = self.suite_de(e.id).map(|_| match &u.taille {
+                    Some(domaine::fiches::Taille::Personnes { nombre }) => (1, (*nombre).max(1)),
+                    _ => (1, 1),
+                });
                 Ok(Contribution {
                     libelle: nom,
                     unite: u,
@@ -363,6 +370,7 @@ impl Etat {
                     brisee: false,
                     delocalisation,
                     bonus_extensions: 0,
+                    part,
                     affectation: Vec::new(),
                 })
             }

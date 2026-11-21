@@ -793,6 +793,7 @@ impl Etat {
             | AcolyteLie { .. }
             | AcolyteDelie { .. }
             | PartisanAjoute { .. }
+            | PartisanNote { .. }
             | PartisanRetire { .. } => self.appliquer_prestige(ev)?,
             VehiculeAchete { .. }
             | VehiculeModifie { .. }

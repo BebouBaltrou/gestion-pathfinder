@@ -635,6 +635,8 @@ mod tests {
             don.partisans.push(Partisan {
                 niveau: 1,
                 nom: nom.into(),
+                equipe: None,
+                note: String::new(),
             });
         }
         let id = IdMonture(1);

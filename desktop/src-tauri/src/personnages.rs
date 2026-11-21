@@ -173,7 +173,9 @@ pub fn changer_regle(s: S, id: String, valeur: String) -> Retour {
 /// Le don Prestige d'un personnage : score, tableau, acolyte et partisans.
 #[tauri::command]
 pub fn prestige_don(s: S, pj: u32) -> Option<vues::prestige_don::PrestigeDonVue> {
-    session(&s).avec_etat(|e| vues::prestige_don::prestige_don(e, IdPersonnage(pj)))
+    let mut x = session(&s);
+    let r = x.r.clone();
+    x.avec_etat(|e| vues::prestige_don::prestige_don(e, IdPersonnage(pj), &r))
 }
 
 /// Un événement du don (modificateurs, acolyte, partisans) : le cœur contrôle tout.
@@ -186,6 +188,7 @@ pub fn prestige_evenement(s: S, evenement: Evenement) -> Retour {
             | AcolyteLie { .. }
             | AcolyteDelie { .. }
             | PartisanAjoute { .. }
+            | PartisanNote { .. }
             | PartisanRetire { .. }
     ) {
         return Retour::erreur("Événement non autorisé ici");

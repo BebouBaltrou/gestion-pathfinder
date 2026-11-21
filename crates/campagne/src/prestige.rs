@@ -5,7 +5,7 @@
 //! dans `data/core/fr/dons_04.json`. Proposition validée : `docs/PRESTIGE_DON.md`.
 
 use crate::etat::{Erreur, Etat};
-use crate::modele::IdPersonnage;
+use crate::modele::{Actif, IdEquipe, IdPersonnage};
 use fiches::journal::EvenementFiche;
 use fiches::progression::{xp_requis, Vitesse};
 use fiches::Referentiel as ReferentielFiches;
@@ -162,6 +162,12 @@ pub fn ligne_du_tableau(score: i32) -> LigneTableau {
 pub struct Partisan {
     pub niveau: u32,
     pub nom: String,
+    /// Équipe du référentiel qui le représente (production, lieu de travail, équipage…), dans
+    /// l'organisation « Suite de … ». Sans équipe : un simple effectif, avec sa note.
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub equipe: Option<IdEquipe>,
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub note: String,
 }
 
 /// État du don pour un personnage : modificateurs cochés et partisans.
@@ -177,6 +183,16 @@ fn modificateur(id: &str) -> Option<&'static Modificateur> {
 }
 
 impl Etat {
+    /// Maître dont l'équipe est un membre de la suite (partisan du don Prestige), s'il y en a un.
+    pub fn suite_de(&self, equipe: IdEquipe) -> Option<IdPersonnage> {
+        self.prestige_don.iter().find_map(|(maitre, d)| {
+            d.partisans
+                .iter()
+                .any(|p| p.equipe == Some(equipe))
+                .then_some(*maitre)
+        })
+    }
+
     /// Le personnage possède-t-il le don (d'après sa fiche) ?
     pub fn a_le_don_prestige(&self, pj: IdPersonnage) -> bool {
         self.fiches.get(&pj).is_some_and(|j| {
@@ -327,8 +343,22 @@ impl Etat {
                 maitre,
                 niveau,
                 nom,
+                equipe,
+                note,
             } => {
                 self.exiger_le_don(*maitre)?;
+                if let Some(e) = equipe {
+                    self.equipe(*e)?;
+                    if self
+                        .prestige_don
+                        .values()
+                        .any(|d| d.partisans.iter().any(|p| p.equipe == Some(*e)))
+                    {
+                        return Err(Erreur::Prestige(
+                            "cette équipe représente déjà un partisan".into(),
+                        ));
+                    }
+                }
                 if !(1..=6).contains(niveau) {
                     return Err(Erreur::Prestige(
                         "le niveau d'un partisan va de 1 à 6".into(),
@@ -353,7 +383,21 @@ impl Etat {
                     .push(Partisan {
                         niveau: *niveau,
                         nom: nom.clone(),
+                        equipe: *equipe,
+                        note: note.clone(),
                     });
+            }
+            PartisanNote {
+                maitre,
+                index,
+                note,
+            } => {
+                let p = self
+                    .prestige_don
+                    .get_mut(maitre)
+                    .and_then(|d| d.partisans.get_mut(*index))
+                    .ok_or_else(|| Erreur::Prestige("partisan inconnu".into()))?;
+                p.note = note.clone();
             }
             PartisanRetire { maitre, index } => {
                 let d = self
@@ -361,7 +405,11 @@ impl Etat {
                     .get_mut(maitre)
                     .filter(|d| *index < d.partisans.len())
                     .ok_or_else(|| Erreur::Prestige("partisan inconnu".into()))?;
-                d.partisans.remove(*index);
+                let retire = d.partisans.remove(*index);
+                // Son équipe disparaît avec lui.
+                if let Some(e) = retire.equipe {
+                    self.retirer_actif(Actif::Equipe(e));
+                }
                 // Le partisan retiré rend ses montures à l'écurie ; les suivants prennent un rang de moins.
                 for m in self.montures.values_mut() {
                     if let Some(crate::biens::DetenteurMonture::Partisan {
@@ -595,6 +643,8 @@ mod essais {
                     maitre,
                     niveau: 1,
                     nom: format!("garde {i}"),
+                    equipe: None,
+                    note: String::new(),
                 },
                 &r,
             )
@@ -605,7 +655,9 @@ mod essais {
                 Evenement::PartisanAjoute {
                     maitre,
                     niveau: 1,
-                    nom: "de trop".into()
+                    nom: "de trop".into(),
+                    equipe: None,
+                    note: String::new(),
                 },
                 &r
             )
@@ -615,7 +667,9 @@ mod essais {
                 Evenement::PartisanAjoute {
                     maitre,
                     niveau: 2,
-                    nom: "niveau 2".into()
+                    nom: "niveau 2".into(),
+                    equipe: None,
+                    note: String::new(),
                 },
                 &r
             )
@@ -693,5 +747,122 @@ mod essais {
         let r = ReferentielFiches::partage();
         let p = maitre_fiche().valider(r);
         assert!(p.is_empty(), "{p:?}");
+    }
+
+    /// Le maître est dans une localité avec une organisation « Suite de … » ; chaque partisan qui a
+    /// une équipe équivalente produit sa part de la taille de cette équipe.
+    #[test]
+    fn la_suite_produit_sa_part_et_reste_identifiable() {
+        use crate::modele::*;
+        let r = regles::referentiel_officiel();
+        let mut c = Campagne::nouvelle("Test");
+        let l = c.nouvel_id_localite();
+        c.executer(
+            Evenement::LocaliteCreee {
+                id: l,
+                nom: "Fort".into(),
+                genre: "ville".into(),
+                population: None,
+                categorie: CategorieLocalite::Officielle {
+                    id: "petite-bourgade".into(),
+                },
+                notes: String::new(),
+            },
+            &r,
+        )
+        .unwrap();
+        let maitre = pj(&mut c, &r, "Seoni");
+        c.executer(fiche(maitre, maitre_fiche()), &r).unwrap();
+        c.executer(
+            Evenement::PersonnageDeplace {
+                id: maitre,
+                vers: Some(l),
+            },
+            &r,
+        )
+        .unwrap();
+        let org = c.nouvel_id_organisation();
+        let eq = c.nouvel_id_equipe();
+        c.executer(
+            Evenement::Groupe {
+                libelle: "Partisan avec équipe".into(),
+                evenements: vec![
+                    Evenement::OrganisationCreee {
+                        id: org,
+                        localite: l,
+                        nom: "Suite de Seoni".into(),
+                        classement: String::new(),
+                        notes: String::new(),
+                        modele: None,
+                    },
+                    Evenement::EquipeAjoutee {
+                        id: eq,
+                        organisation: org,
+                        reference: "archers".into(),
+                        nom: Some("Garde Ada".into()),
+                        lieu: None,
+                        deja_recrutee: true,
+                    },
+                    Evenement::PartisanAjoute {
+                        maitre,
+                        niveau: 1,
+                        nom: "Ada".into(),
+                        equipe: Some(eq),
+                        note: "garde du corps".into(),
+                    },
+                ],
+            },
+            &r,
+        )
+        .unwrap();
+        let e = c.etat(&r).clone();
+        assert_eq!(e.suite_de(eq), Some(maitre));
+        assert_eq!(
+            e.nom_equipe(&e.equipes[&eq], &r),
+            "Garde Ada (suite de Seoni)"
+        );
+        // des archers : bonus 6 pour 5 personnes → part de 1/5 = 1 (arrondi à l'inférieur)
+        let u = e
+            .unites_productrices(
+                l,
+                &r,
+                ReglesTest {
+                    moitie_equipe_sans_batiment: false,
+                    ..ReglesTest::officielles()
+                },
+                false,
+            )
+            .find(|u| u.cle == CleUnite::Equipe(eq))
+            .expect("la suite produit");
+        assert_eq!(u.bonus, 1);
+        // un partisan sans équipe : un simple effectif avec sa note
+        c.executer(
+            Evenement::PartisanAjoute {
+                maitre,
+                niveau: 1,
+                nom: "Bob".into(),
+                equipe: None,
+                note: "messager".into(),
+            },
+            &r,
+        )
+        .unwrap();
+        c.executer(
+            Evenement::PartisanNote {
+                maitre,
+                index: 1,
+                note: "messager de la ville".into(),
+            },
+            &r,
+        )
+        .unwrap();
+        assert_eq!(
+            c.etat(&r).prestige_don[&maitre].partisans[1].note,
+            "messager de la ville"
+        );
+        // retirer Ada retire aussi son équipe
+        c.executer(Evenement::PartisanRetire { maitre, index: 0 }, &r)
+            .unwrap();
+        assert!(!c.etat(&r).equipes.contains_key(&eq));
     }
 }

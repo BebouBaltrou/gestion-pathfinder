@@ -27,6 +27,10 @@ pub struct Contribution<'a> {
     pub delocalisation: bool,
     /// Bonus des extensions de la salle (ameublement : +5 au test de la salle, GC p. 108).
     pub bonus_extensions: u32,
+    /// Membre de la suite (don Prestige) : sa part du bonus de l'équipe équivalente, en
+    /// (numérateur, dénominateur), par exemple (1, 5) pour une équipe de 5 personnes. Règle
+    /// personnalisée : le don ne dit rien de la production des partisans.
+    pub part: Option<(u32, u32)>,
     /// Points affectés à chaque ressource. Somme = bonus effectif.
     pub affectation: Vec<(Ressource, u32)>,
 }
@@ -89,7 +93,11 @@ pub fn admises(u: &Unite, types_du_batiment: &BTreeSet<Ressource>) -> BTreeSet<R
 
 /// Bonus après réductions. Chaque division par 2 arrondit à l'inférieur (PC-12, validé).
 pub fn bonus_effectif(c: &Contribution, options: &OptionsRegles) -> u32 {
-    let mut b = c.unite.recettes.as_ref().map(|r| r.bonus).unwrap_or(0) + c.bonus_extensions;
+    let mut b = c.unite.recettes.as_ref().map(|r| r.bonus).unwrap_or(0);
+    if let Some((numerateur, denominateur)) = c.part {
+        b = b * numerateur / denominateur.max(1);
+    }
+    b += c.bonus_extensions;
     if c.sans_batiment && options.moitie_equipe_sans_batiment {
         b /= 2;
     }
@@ -211,6 +219,7 @@ mod tests {
             brisee: false,
             delocalisation: false,
             bonus_extensions: 0,
+            part: None,
             affectation: aff,
         }
     }
@@ -261,6 +270,7 @@ mod tests {
             brisee: false,
             delocalisation: false,
             bonus_extensions: 0,
+            part: None,
             affectation: vec![(Ressource::Po, 5), (Ressource::Marchandises, 5)],
         }];
         let jets = BTreeMap::new();
@@ -300,6 +310,7 @@ mod tests {
             brisee: false,
             delocalisation: false,
             bonus_extensions: 0,
+            part: None,
             affectation: vec![(Ressource::Travail, 2)],
         };
         assert_eq!(
@@ -320,6 +331,7 @@ mod tests {
             brisee: false,
             delocalisation: false,
             bonus_extensions: 0,
+            part: None,
             affectation: vec![(Ressource::Travail, 5)],
         };
         assert_eq!(
@@ -336,6 +348,7 @@ mod tests {
             brisee: false,
             delocalisation: false,
             bonus_extensions: 0,
+            part: None,
             affectation: vec![(Ressource::Magie, 5)],
         };
         assert!(tests_du_jour(&[e], &BTreeMap::new(), &opt).is_err());

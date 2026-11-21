@@ -112,7 +112,7 @@ export function Statistiques({ outils }: { outils: Outils }) {
         <div className="carte st-kpi" style={css({ "--c": "var(--influence)" })}>
           <div className="st-etq">Équipes</div>
           <div className="st-gros"><Compteur valeur={s.effectifTotal} suffixe=" employés" /></div>
-          <div className="st-det">+{s.effectifAVenirTotal} à venir · valeur {texte(s.valeurEquipes)}</div>
+          <div className="st-det">+{s.effectifAVenirTotal} à venir · valeur {texte(s.valeurEquipes)}{s.effectifSuiteTotal > 0 && ` · suite : ${s.effectifSuiteTotal} (comptés à part)`}</div>
         </div>
       </section>
 
