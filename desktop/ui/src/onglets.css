@@ -181,33 +181,3 @@
 .mini { border-radius: 999px; padding: 0 9px; line-height: 18px; background: color-mix(in srgb, var(--bord) 40%, transparent); }
 .mini.equipe { background: color-mix(in srgb, var(--vert) 14%, transparent); border-color: color-mix(in srgb, var(--vert) 50%, var(--bord)); }
 .mini.maudit { background: color-mix(in srgb, var(--orange) 14%, transparent); border-color: color-mix(in srgb, var(--orange) 50%, var(--bord)); }
-
-/* ================================================================ équipement : mannequin et cases
-   Cases remplies = liseré doré et plaque de l'objet ; cases vides = cadre pointillé. */
-.schema-corps {
-  gap: 12px; grid-auto-rows: minmax(98px, auto); padding: 20px 16px; border: 1px solid var(--bord); border-radius: var(--rayon);
-  background: radial-gradient(ellipse at 50% 42%, color-mix(in srgb, var(--or) 9%, transparent), transparent 62%), var(--panneau);
-}
-.silhouette { opacity: 1; fill: color-mix(in srgb, var(--or) 14%, transparent); stroke: color-mix(in srgb, var(--or) 50%, transparent); stroke-width: 1.6; top: 2%; height: 96%; }
-.case-emplacement {
-  border-radius: var(--rayon); padding: 10px 12px; gap: 3px;
-  background: color-mix(in srgb, var(--carte) 80%, transparent); backdrop-filter: blur(1.5px);
-  transition: border-color var(--transition), opacity var(--transition), box-shadow var(--transition), transform var(--transition);
-}
-.case-emplacement:hover { border-color: var(--bord-fort); transform: translateY(-1px); }
-.case-emplacement .zone { font-size: 13px; font-family: var(--police-titre); font-weight: 600; color: var(--or); }
-:root[data-theme="carnet"] .case-emplacement .zone { font-variant: small-caps; letter-spacing: 0.05em; font-size: 15px; }
-.case-emplacement .nom-slot { font-size: 12.5px; color: var(--texte-doux); }
-.case-emplacement .vide-slot { border: 1px dashed var(--bord-fort); border-radius: var(--rayon-petit); padding: 4px 8px; text-align: center; margin-top: 3px; }
-.case-emplacement .occupant { margin-top: 3px; padding: 4px 4px 4px 9px; border-radius: var(--rayon-petit); background: color-mix(in srgb, var(--or) 12%, transparent); font-weight: 600; }
-.case-emplacement.garnie { border-color: color-mix(in srgb, var(--or) 50%, var(--bord)); box-shadow: inset 3px 0 0 var(--or); }
-:root[data-theme="neon"] .case-emplacement.garnie { box-shadow: inset 3px 0 0 var(--or), 0 0 18px -9px var(--or); }
-.case-emplacement.compatible { animation: slot-appel 1.4s ease-in-out infinite; }
-@keyframes slot-appel { 50% { box-shadow: 0 0 0 4px color-mix(in srgb, var(--vert) 28%, transparent); } }
-.indicateur { margin-top: 2px; }
-.barre-charge { height: 16px; border-radius: 999px; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.25); }
-.barre-charge .remplissage { border-radius: 999px; }
-.reserve-equipable { border-radius: var(--rayon); }
-.objet.a-equiper { height: 100%; overflow: hidden; padding: 6px 12px; }
-.objet.a-equiper .nom-objet { font-family: var(--police-titre); font-weight: 600; }
-.boutons-slots { max-height: 52px; overflow-y: auto; }

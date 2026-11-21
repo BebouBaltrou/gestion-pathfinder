@@ -1,0 +1,149 @@
+/* Onglet Équipement : mannequin entouré de cases. Couleurs et polices viennent des jetons des thèmes. */
+
+.eq { display: flex; flex-direction: column; gap: 18px; }
+.eq-haut { display: grid; grid-template-columns: minmax(0, 1fr) 350px; gap: 18px; align-items: start; }
+@media (max-width: 1150px) { .eq-haut { grid-template-columns: 1fr; } }
+
+/* ---------------------------------------------------------------- scène */
+.eq-scene {
+  position: relative; border: 1px solid var(--bord); border-radius: var(--rayon); padding: 16px 18px 20px;
+  background: radial-gradient(ellipse at 50% 38%, color-mix(in srgb, var(--or) 10%, transparent), transparent 60%), var(--panneau);
+}
+:root[data-theme="carnet"] .eq-scene { border: 2px double var(--bord-fort); background: radial-gradient(ellipse at 50% 38%, rgba(255, 250, 235, 0.8), transparent 65%), var(--carte-2); }
+:root[data-theme="neon"] .eq-scene {
+  border-color: color-mix(in srgb, var(--or) 40%, var(--bord));
+  background:
+    linear-gradient(var(--or), var(--or)) top left / 16px 2px no-repeat, linear-gradient(var(--or), var(--or)) top left / 2px 16px no-repeat,
+    linear-gradient(var(--or), var(--or)) top right / 16px 2px no-repeat, linear-gradient(var(--or), var(--or)) top right / 2px 16px no-repeat,
+    linear-gradient(var(--or), var(--or)) bottom left / 16px 2px no-repeat, linear-gradient(var(--or), var(--or)) bottom left / 2px 16px no-repeat,
+    linear-gradient(var(--or), var(--or)) bottom right / 16px 2px no-repeat, linear-gradient(var(--or), var(--or)) bottom right / 2px 16px no-repeat,
+    radial-gradient(ellipse at 50% 38%, color-mix(in srgb, var(--or) 12%, transparent), transparent 60%), var(--panneau);
+}
+.eq-bandeau { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; font-size: 14px; color: var(--texte-doux); }
+.eq-bandeau b { color: var(--or); font-size: 18px; font-family: var(--police-titre); }
+.eq-conseil { color: var(--vert); font-weight: 600; }
+
+.eq-plateau { display: grid; grid-template-columns: minmax(0, 1fr) minmax(150px, 230px) minmax(0, 1fr); gap: 0 30px; align-items: stretch; }
+.eq-colonne { display: flex; flex-direction: column; justify-content: space-between; gap: 10px; }
+.eq-bas { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 260px)); justify-content: center; gap: 14px; margin-top: 16px; }
+.eq-autres { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--bord-fort); }
+@media (max-width: 900px) {
+  .eq-plateau { grid-template-columns: 1fr 1fr; }
+  .eq-corps { display: none; }
+  .eq-bas { grid-template-columns: 1fr; }
+}
+
+/* ---------------------------------------------------------------- mannequin */
+.eq-corps { position: relative; display: grid; place-items: center; min-height: 420px; }
+.eq-mannequin { width: 100%; height: 100%; max-height: 540px; fill: color-mix(in srgb, var(--or) 13%, transparent); stroke: color-mix(in srgb, var(--or) 48%, transparent); stroke-width: 1.6; filter: drop-shadow(0 0 18px color-mix(in srgb, var(--or) 22%, transparent)); }
+.eq-ca {
+  position: absolute; left: 50%; top: 38%; transform: translateX(-50%); width: 76px; padding: 8px 0 14px; text-align: center;
+  background: var(--carte); border: 2px solid var(--or); border-radius: 8px 8px 50% 50% / 8px 8px 60% 60%;
+  box-shadow: 0 6px 16px -8px rgba(0, 0, 0, 0.5);
+}
+.eq-ca b { display: block; font-family: var(--police-titre); font-size: 28px; line-height: 1; color: var(--or); }
+.eq-ca small { display: block; font-size: 10.5px; line-height: 1.1; color: var(--texte-doux); padding: 0 6px; margin-top: 2px; }
+:root[data-theme="neon"] .eq-ca { box-shadow: 0 0 22px -6px var(--or); }
+
+/* ---------------------------------------------------------------- cases (médaillons) */
+.eq-slot {
+  position: relative; display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 4px 10px; align-items: center;
+  padding: 10px 12px; background: color-mix(in srgb, var(--carte) 90%, transparent); border: 1px solid var(--bord); border-radius: var(--rayon);
+  transition: border-color var(--transition), box-shadow var(--transition), opacity var(--transition), transform var(--transition);
+}
+.eq-slot:hover { border-color: var(--bord-fort); transform: translateY(-1px); }
+.eq-slot.gauche::after, .eq-slot.droite::after { content: ""; position: absolute; top: 50%; width: 30px; border-top: 1px dashed var(--bord-fort); }
+.eq-slot.gauche::after { left: 100%; }
+.eq-slot.droite::after { right: 100%; }
+.eq-slot.garnie.gauche::after, .eq-slot.garnie.droite::after { border-top: 2px solid var(--or); }
+.eq-ico {
+  width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; color: var(--texte-doux);
+  background: var(--carte-2); border: 1px dashed var(--bord-fort); transition: all var(--transition);
+}
+.eq-pict { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.eq-texte { min-width: 0; }
+.eq-zone { font-family: var(--police-titre); font-weight: 600; font-size: 15px; color: var(--texte-fort); line-height: 1.2; }
+:root[data-theme="carnet"] .eq-zone { font-variant: small-caps; letter-spacing: 0.04em; font-size: 16px; }
+.eq-nom { font-size: 12.5px; color: var(--texte-doux); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.eq-pions { display: inline-flex; gap: 4px; }
+.eq-pions i { width: 9px; height: 9px; border-radius: 50%; border: 1px solid var(--bord-fort); }
+.eq-pions i.plein { background: var(--or); border-color: var(--or); }
+.eq-vide { grid-column: 1 / -1; border: 1px dashed var(--bord-fort); border-radius: var(--rayon-petit); padding: 3px 8px; text-align: center; font-size: 13px; font-style: italic; color: var(--texte-doux); }
+.eq-objet {
+  grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 4px 4px 4px 10px;
+  border-radius: var(--rayon-petit); background: color-mix(in srgb, var(--or) 13%, transparent); font-weight: 600; font-size: 14px; color: var(--texte-fort);
+}
+.eq-objet span { overflow: hidden; text-overflow: ellipsis; }
+.eq-retirer { width: 26px; height: 26px; flex: none; border-radius: 50%; border: none; background: transparent; color: var(--texte-doux); cursor: pointer; transition: all var(--transition); }
+.eq-retirer:hover:not(:disabled) { background: color-mix(in srgb, var(--rouge) 18%, transparent); color: var(--rouge); }
+.eq-retirer:disabled { opacity: 0.35; cursor: default; }
+.eq-etat { grid-column: 1 / -1; font-size: 12px; font-weight: 600; }
+.eq-etat.compatible { color: var(--vert); }
+.eq-etat.occupe { color: var(--orange); }
+.eq-etat.incompatible { color: var(--texte-doux); }
+
+/* case garnie : médaillon plein, liseré doré */
+.eq-slot.garnie { border-color: color-mix(in srgb, var(--or) 55%, var(--bord)); box-shadow: inset 3px 0 0 var(--or); }
+.eq-slot.garnie .eq-ico { background: var(--or); color: var(--or-sombre); border: 1px solid var(--or); }
+:root[data-theme="carnet"] .eq-slot.garnie .eq-ico { background: radial-gradient(circle at 30% 25%, #b9462f, var(--or) 62%); box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.22), 0 2px 6px -3px rgba(90, 28, 18, 0.7); }
+:root[data-theme="neon"] .eq-slot.garnie { box-shadow: inset 3px 0 0 var(--or), 0 0 20px -9px var(--or); }
+:root[data-theme="neon"] .eq-slot.garnie .eq-ico { box-shadow: 0 0 14px -2px var(--or); }
+:root[data-theme="neon"] .eq-ico { border-radius: 4px; clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px); }
+
+/* pendant un glisser-déposer */
+.eq-slot.incompatible { opacity: 0.45; }
+.eq-slot.incompatible .eq-ico { border-style: solid; }
+.eq-slot.compatible { border-color: var(--vert); animation: eq-appel 1.3s ease-in-out infinite; }
+.eq-slot.compatible .eq-ico { border-color: var(--vert); color: var(--vert); }
+.eq-slot.occupe { border-color: var(--orange); }
+@keyframes eq-appel { 50% { box-shadow: 0 0 0 5px color-mix(in srgb, var(--vert) 26%, transparent); } }
+
+/* ---------------------------------------------------------------- réserve */
+.eq-reserve { position: sticky; top: 0; display: flex; flex-direction: column; gap: 8px; padding: 16px; background: var(--carte); border: 1px solid var(--bord); border-radius: var(--rayon); }
+.eq-reserve h3 { font-size: 19px; }
+.eq-reserve .liste-virtuelle { height: 470px; min-height: 260px; }
+.eq-compte { font-size: 13px; color: var(--texte-doux); }
+.eq-carte {
+  height: 100%; box-sizing: border-box; padding: 8px 10px; display: flex; flex-direction: column; justify-content: center; gap: 6px; overflow: hidden;
+  background: var(--carte); border: 1px solid var(--bord); border-radius: var(--rayon-petit); cursor: grab; transition: border-color var(--transition), box-shadow var(--transition);
+}
+.eq-carte:hover { border-color: var(--or); }
+.eq-carte:active { cursor: grabbing; }
+.eq-carte-nom { display: flex; align-items: center; gap: 8px; font-family: var(--police-titre); font-weight: 600; color: var(--texte-fort); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.eq-prise { font-style: normal; letter-spacing: -3px; color: var(--texte-doux); font-size: 14px; }
+.eq-chips { display: flex; flex-wrap: wrap; gap: 4px; max-height: 50px; overflow-y: auto; }
+.eq-chip {
+  display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px 2px 6px; border-radius: 999px; font-size: 12.5px; cursor: pointer;
+  background: var(--carte-2); border: 1px solid var(--bord-fort); color: var(--texte-moyen); transition: all var(--transition);
+}
+.eq-chip .eq-pict { width: 15px; height: 15px; }
+.eq-chip:hover { background: var(--or); border-color: var(--or); color: var(--or-sombre); }
+
+/* ---------------------------------------------------------------- panneaux du bas */
+.eq-bas-panneaux { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 16px; }
+.eq-panneau { display: flex; flex-direction: column; gap: 10px; padding: 18px 20px; background: var(--carte); border: 1px solid var(--bord); border-radius: var(--rayon); }
+.eq-panneau h3 { font-size: 19px; padding-bottom: 6px; border-bottom: 1px dashed var(--bord-fort); }
+
+.eq-jauge { position: relative; display: flex; height: 18px; border-radius: 999px; overflow: visible; margin: 8px 0 2px; }
+.eq-jauge .seg { height: 100%; opacity: 0.85; }
+.eq-jauge .seg:first-child { border-radius: 999px 0 0 999px; }
+.eq-jauge .seg:nth-child(3) { border-radius: 0 999px 999px 0; }
+.eq-jauge .legere, .eq-legende .legere, .eq-charge-nom.légère { background: var(--vert); color: var(--vert); }
+.eq-jauge .intermediaire, .eq-legende .intermediaire, .eq-charge-nom.intermédiaire { background: var(--orange); color: var(--orange); }
+.eq-jauge .lourde, .eq-legende .lourde, .eq-charge-nom.lourde, .eq-charge-nom.surcharge { background: var(--rouge); color: var(--rouge); }
+.eq-legende span, .eq-charge-nom { background: none !important; }
+.eq-marqueur { position: absolute; top: -5px; bottom: -5px; width: 4px; margin-left: -2px; border-radius: 2px; background: var(--texte-fort); box-shadow: 0 0 0 2px var(--carte); }
+:root[data-theme="neon"] .eq-jauge .seg { box-shadow: 0 0 10px currentColor; }
+.eq-legende { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12.5px; }
+
+.eq-bonus { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.eq-bonus li { display: grid; grid-template-columns: 1fr auto; gap: 0 10px; align-items: baseline; padding-bottom: 7px; border-bottom: 1px solid var(--bord); font-size: 14.5px; }
+.eq-bonus li:last-child { border-bottom: none; }
+.eq-bonus strong { font-family: var(--police-titre); font-size: 20px; color: var(--or); }
+.eq-bonus small { grid-column: 1 / -1; font-size: 12.5px; }
+.eq-bonus li.alerte-texte { display: block; }
+
+.eq-jeux { display: flex; flex-wrap: wrap; gap: 8px; }
+.eq-jeu { padding: 6px 14px; border-radius: 999px; cursor: pointer; background: var(--carte-2); border: 1px solid var(--bord-fort); color: var(--texte-moyen); transition: all var(--transition); }
+.eq-jeu:hover { border-color: var(--or); color: var(--texte-fort); }
+.eq-jeu.choisi { background: color-mix(in srgb, var(--or) 18%, var(--carte)); border-color: var(--or); color: var(--or); font-weight: 600; }
