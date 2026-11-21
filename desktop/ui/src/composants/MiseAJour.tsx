@@ -5,7 +5,7 @@ import { useState } from "react";
 import { check } from "@tauri-apps/plugin-updater";
 import { relaunch } from "@tauri-apps/plugin-process";
 
-export const VERSION = "1.2.32";
+export const VERSION = "1.2.33";
 const CLE = "gestion-pathfinder.maj-auto";
 
 export type Progression = { recu: number; total: number | null; fini: boolean };

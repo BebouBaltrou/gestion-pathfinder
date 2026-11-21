@@ -9,6 +9,8 @@ export const NOTES: NotesVersion[] = [
     changements: [
       "Barre de progression du téléchargement de la mise à jour, aux couleurs du thème choisi.",
       "Résumé des changements affiché une fois après chaque mise à jour.",
+      "Familiers : choix du familier supérieur au don, profil du familier (PV, attaques, sauvegardes, compétences) et familier dans l'ordre d'initiative du combat.",
+      "Biens : montures, véhicules et navires, pris en compte dans les statistiques.",
     ],
   },
   {
