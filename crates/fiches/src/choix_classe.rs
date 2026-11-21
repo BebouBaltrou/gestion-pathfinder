@@ -1669,6 +1669,12 @@ pub struct CreatureFamilier {
     pub attaques: String,
     #[cfg_attr(feature = "serde", serde(default))]
     pub statut: String,
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub con: Option<i32>,
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub sag: i32,
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub competences: String,
 }
 
 #[cfg_attr(feature = "serde", derive(serde::Deserialize))]
@@ -1723,12 +1729,19 @@ pub fn profil_familier(fiche: &Fiche, r: &Referentiel) -> Vec<String> {
         })
         .collect();
     l.push(format!("Familier ({nom}) : {} points de vie", pv));
+    let modif = |score: i32| (score - 10).div_euclid(2);
     let ref_t = v.base_reflexes.max(2) + c.dexterite;
-    let vig_b = v.base_vigueur.max(2);
-    let vol_b = v.base_volonte.max(0);
+    let vig_t = v.base_vigueur.max(2) + c.con.map_or(0, modif);
+    let vol_t = v.base_volonte.max(0) + modif(c.sag);
     l.push(format!(
-        "Familier ({nom}) : Réflexes {ref_t:+}, Vigueur base {vig_b:+} (+ Constitution du familier, à compléter), Volonté base {vol_b:+} (+ Sagesse du familier, à compléter)"
+        "Familier ({nom}) : Réflexes {ref_t:+}, Vigueur {vig_t:+}, Volonté {vol_t:+}"
     ));
+    if !c.competences.is_empty() {
+        l.push(format!(
+            "Familier ({nom}) : compétences {} (valeurs du Bestiaire ; le degré de maîtrise du maître s'applique s'il est plus élevé, à compléter)",
+            c.competences
+        ));
+    }
     if attaques.is_empty() {
         l.push(format!("Familier ({nom}) : aucune attaque"));
     } else {

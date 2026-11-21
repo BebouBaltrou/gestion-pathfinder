@@ -2817,3 +2817,22 @@ fn profil_du_familier_moitie_des_pv_et_bonus_d_attaque() {
         "{lignes:?}"
     );
 }
+
+#[test]
+fn sauvegardes_et_competences_du_familier() {
+    let r = Referentiel::core();
+    let mut f = de_classe("magicien", 1);
+    f.pacte_magique = Some("familier".into());
+    f.familier = Some("Chat".into());
+    let l = crate::choix_classe::profil_familier(&f, &r);
+    // Chat : Con 8 (-1), Sag 12 (+1), Dex +2 ; bases du familier Réf +2, Vig +2, Vol +0 (magicien 1 : 0, 0, 2).
+    assert!(
+        l.iter()
+            .any(|x| x.contains("Réflexes +4, Vigueur +1, Volonté +3")),
+        "{l:?}"
+    );
+    assert!(
+        l.iter().any(|x| x.contains("Discrétion +14")),
+        "{l:?}"
+    );
+}
