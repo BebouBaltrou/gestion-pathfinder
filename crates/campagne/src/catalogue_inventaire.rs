@@ -101,6 +101,13 @@ pub fn modeles(catalogue: &CatalogueEquipement, traductions: &Traductions) -> Ve
         });
     }
     for o in &catalogue.materiel {
+        let mut proprietes = proprietes(&[
+            ("nom_en", Some(o.nom_en.clone())),
+            ("categorie", o.categorie_en.clone()),
+            ("note_livre", traductions.note_livre("materiel", &o.nom_en)),
+        ]);
+        proprietes.extend(caracteristiques_vehicule(&o.nom_en));
+        proprietes.extend(caracteristiques_monture(&o.nom_en));
         modeles.push(Modele {
             id: identifiant(&o.nom_en),
             nom: o.nom.clone(),
@@ -108,14 +115,110 @@ pub fn modeles(catalogue: &CatalogueEquipement, traductions: &Traductions) -> Ve
             valeur: montant(&o.cout),
             poids: poids(o.poids_lb),
             source: format!("{}, p. {}", o.source.livre, o.source.page.unwrap_or(0)),
-            proprietes: proprietes(&[
-                ("nom_en", Some(o.nom_en.clone())),
-                ("categorie", o.categorie_en.clone()),
-                ("note_livre", traductions.note_livre("materiel", &o.nom_en)),
-            ]),
+            proprietes,
         });
     }
     modeles
+}
+
+/// Nom anglais du catalogue d'équipement -> identifiant dans `vehicules_manuel.json`.
+const VEHICULES_DU_CATALOGUE: [(&str, &str); 10] = [
+    ("Carriage", "carrosse"),
+    ("Wagon (light)", "chariot"),
+    ("Cart", "charrette"),
+    ("Sled", "traineau"),
+    ("Rowboat", "barque"),
+    ("Keelboat", "bateau_fond_plat"),
+    ("Longship", "drakkar"),
+    ("Sailing ship", "navire_haute_mer"),
+    ("Galley", "trireme"),
+    ("Warship", "vaisseau_de_guerre"),
+];
+
+/// Caractéristiques du Manuel (passagers, équipage, cargaison, vitesse) d'un véhicule du
+/// catalogue, issues de `data/core/vehicules_manuel.json`. Vide pour les autres objets.
+#[cfg(feature = "serde")]
+fn caracteristiques_vehicule(nom_en: &str) -> BTreeMap<String, String> {
+    use std::sync::OnceLock;
+    static DONNEES: OnceLock<serde_json::Value> = OnceLock::new();
+    let mut resultat = BTreeMap::new();
+    let Some((_, id)) = VEHICULES_DU_CATALOGUE.iter().find(|(n, _)| *n == nom_en) else {
+        return resultat;
+    };
+    let donnees = DONNEES.get_or_init(|| {
+        serde_json::from_str(include_str!("../../../data/core/vehicules_manuel.json"))
+            .expect("vehicules_manuel.json valide")
+    });
+    let Some(v) = donnees["vehicules"]
+        .as_array()
+        .and_then(|l| l.iter().find(|v| v["id"] == *id))
+    else {
+        return resultat;
+    };
+    let champs = [
+        ("equipage", "équipage", ""),
+        ("passagers", "passagers", ""),
+        ("cargaison_t", "cargaison", " t"),
+        ("tracte_par", "tracté par", ""),
+        ("vitesse_km_h", "vitesse", " km/h"),
+        ("vitesse_km_jour", "vitesse par jour", " km"),
+    ];
+    for (cle, libelle, suffixe) in champs {
+        let texte = match &v[cle] {
+            serde_json::Value::String(s) => Some(s.clone()),
+            serde_json::Value::Number(n) => Some(format!("{n}{suffixe}")),
+            _ => None,
+        };
+        if let Some(t) = texte {
+            resultat.insert(libelle.replace(' ', "_"), t);
+        }
+    }
+    resultat.insert(
+        "source_vehicule".to_string(),
+        "Manuel des joueurs (VF), p. 163 et table 7-9".to_string(),
+    );
+    resultat
+}
+
+#[cfg(not(feature = "serde"))]
+fn caracteristiques_vehicule(_nom_en: &str) -> BTreeMap<String, String> {
+    BTreeMap::new()
+}
+
+/// Vitesses d'un cheval léger, d'un cheval lourd ou d'un poney, d'après la table 7-9 du Manuel
+/// (`regles::montures`). Vide pour les autres objets.
+fn caracteristiques_monture(nom_en: &str) -> BTreeMap<String, String> {
+    let nom = if nom_en.starts_with("Horse (light") {
+        "Cheval léger"
+    } else if nom_en.starts_with("Horse (heavy") {
+        "Cheval lourd"
+    } else if nom_en.starts_with("Horse (pony") {
+        "Poney"
+    } else {
+        return BTreeMap::new();
+    };
+    let Some(m) = regles::montures::MONTURES.iter().find(|m| m.nom == nom) else {
+        return BTreeMap::new();
+    };
+    BTreeMap::from([
+        (
+            "vitesse".to_string(),
+            format!(
+                "{} km/h ({} km par jour)",
+                m.vitesse_km_h, m.vitesse_km_jour
+            ),
+        ),
+        (
+            "vitesse_chargée".to_string(),
+            format!(
+                "{} km/h ({} km par jour) avec une charge de {} à {} kg",
+                m.vitesse_reduite_km_h,
+                m.vitesse_reduite_km_jour,
+                m.plage_reduite_kg.0,
+                m.plage_reduite_kg.1
+            ),
+        ),
+    ])
 }
 
 /// Fichiers du catalogue des objets magiques (`data/core/objets_magiques/`) qui décrivent de
@@ -222,6 +325,33 @@ mod tests {
             .iter()
             .find(|m| m.nom == nom)
             .unwrap_or_else(|| panic!("« {nom} » absent"))
+    }
+
+    #[cfg(feature = "serde")]
+    #[test]
+    fn les_vehicules_portent_les_caracteristiques_du_manuel() {
+        let c = catalogue();
+        let m = modeles(&c, Traductions::partage());
+        let drakkar = trouver(&m, "Drakkar");
+        assert_eq!(drakkar.proprietes["équipage"], "50 marins");
+        assert_eq!(drakkar.proprietes["cargaison"], "50 (ou 120 soldats)");
+        assert_eq!(drakkar.proprietes["vitesse"], "4.5 km/h");
+        let navire = trouver(&m, "Navire de haute mer");
+        assert_eq!(navire.proprietes["cargaison"], "15 t");
+        // Un objet qui n'est pas un véhicule n'a pas ces propriétés.
+        assert!(!trouver(&m, "Fontes").proprietes.contains_key("équipage"));
+    }
+
+    #[test]
+    fn les_montures_portent_leurs_vitesses_du_manuel() {
+        let c = catalogue();
+        let m = modeles(&c, Traductions::partage());
+        let poney = trouver(&m, "Cheval — Poney");
+        assert_eq!(poney.proprietes["vitesse"], "6 km/h (48 km par jour)");
+        assert_eq!(
+            poney.proprietes["vitesse_chargée"],
+            "4.5 km/h (36 km par jour) avec une charge de 75.5 à 225 kg"
+        );
     }
 
     #[test]
