@@ -119,6 +119,8 @@ export type PageStatistiques = {
   localites: StatLocalite[];
   totalLocalites: Somme;
   objetsAutres: Somme;
+  batiments: { id: number; nom: string; localite: string; salles: number; valeur: Somme }[];
+  totalBatiments: Somme;
   organisations: StatOrganisation[];
   effectifTotal: number;
   effectifAVenirTotal: number;

@@ -23,6 +23,8 @@ pub struct PageStatistiques {
     pub localites: Vec<PatrimoineLocalite>,
     pub total_localites: Somme,
     pub objets_autres: Somme,
+    pub batiments: Vec<PatrimoineBatiment>,
+    pub total_batiments: Somme,
     pub organisations: Vec<StatOrganisation>,
     pub effectif_total: u32,
     pub effectif_a_venir_total: u32,
@@ -50,6 +52,19 @@ pub struct PatrimoineLocalite {
     /// Valeur d'achat des capitaux en réserve (Table 2-1, GC p. 78).
     pub capitaux: Somme,
     pub total: Somme,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize))]
+#[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
+pub struct PatrimoineBatiment {
+    pub id: u32,
+    pub nom: String,
+    pub localite: String,
+    /// Salles construites.
+    pub salles: u32,
+    /// Prix d'achat des salles et extensions construites (référentiel, GC).
+    pub valeur: Somme,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -127,6 +142,41 @@ pub fn page_statistiques(etat: &Etat, r: &Referentiel) -> PageStatistiques {
         .map(|i| i.valeur.pc)
         .sum();
 
+    let batiments: Vec<PatrimoineBatiment> = etat
+        .batiments
+        .values()
+        .map(|b| {
+            let mut valeur = 0i64;
+            let mut salles = 0u32;
+            for s in etat.salles_batiment(b.id) {
+                if matches!(s.statut, StatutSalle::Construite) {
+                    salles += 1;
+                    valeur += r
+                        .salle(&s.reference)
+                        .and_then(|u| u.prix_po)
+                        .map_or(0, |po| i64::from(po) * 100);
+                }
+                for x in &s.extensions {
+                    if matches!(x.statut, StatutExtension::Construite) {
+                        valeur += i64::from(x.prix_po) * 100;
+                    }
+                }
+            }
+            PatrimoineBatiment {
+                id: b.id.0,
+                nom: b.nom.clone(),
+                localite: etat
+                    .localites
+                    .get(&b.localite)
+                    .map(|l| l.nom.clone())
+                    .unwrap_or_default(),
+                salles,
+                valeur: somme(valeur),
+            }
+        })
+        .collect();
+    let total_batiments: i64 = batiments.iter().map(|b| b.valeur.pc).sum();
+
     let organisations: Vec<StatOrganisation> = etat
         .organisations
         .values()
@@ -165,12 +215,16 @@ pub fn page_statistiques(etat: &Etat, r: &Referentiel) -> PageStatistiques {
     let valeur_totale: i64 = organisations.iter().map(|o| o.valeur_equipes.pc).sum();
 
     PageStatistiques {
-        patrimoine_total: somme(total_personnages + total_localites + objets_autres),
+        patrimoine_total: somme(
+            total_personnages + total_localites + total_batiments + objets_autres,
+        ),
         personnages,
         total_personnages: somme(total_personnages),
         localites,
         total_localites: somme(total_localites),
         objets_autres: somme(objets_autres),
+        batiments,
+        total_batiments: somme(total_batiments),
         effectif_total: organisations.iter().map(|o| o.effectif).sum(),
         effectif_a_venir_total: organisations.iter().map(|o| o.effectif_a_venir).sum(),
         organisations,

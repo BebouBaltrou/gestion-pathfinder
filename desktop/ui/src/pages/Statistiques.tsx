@@ -109,6 +109,11 @@ export function Statistiques({ outils }: { outils: Outils }) {
           <span className="detail">Trésoreries et capitaux</span>
         </div>
         <div className="carte chiffre">
+          <span className="etiquette">Bâtiments</span>
+          <span className="valeur">{texte(s.totalBatiments)}</span>
+          <span className="detail">Salles et extensions construites</span>
+        </div>
+        <div className="carte chiffre">
           <span className="etiquette">Objets hors PJ</span>
           <span className="valeur">{texte(s.objetsAutres)}</span>
           <span className="detail">Autres inventaires</span>
@@ -143,6 +148,13 @@ export function Statistiques({ outils }: { outils: Outils }) {
             { nom: "Trésorerie", couleur: "var(--po)", valeur: l.tresorerie.pc },
             { nom: "Capitaux", couleur: "var(--travail)", valeur: l.capitaux.pc },
           ],
+        }))}
+      />
+      <GraphiqueEmpile
+        titre="Valeur des bâtiments (po)"
+        barres={s.batiments.map((b) => ({
+          label: b.nom,
+          series: [{ nom: "Salles et extensions", couleur: "var(--marchandises)", valeur: b.valeur.pc }],
         }))}
       />
       <GraphiqueEmpile
