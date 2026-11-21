@@ -4,21 +4,74 @@ import { api, PageStatistiques, Somme } from "../api";
 
 const texte = (s: Somme) => s?.texte ?? "—";
 
-function BarresComparatives({ lignes, titre }: { lignes: { nom: string; valeur: number; texte: string }[]; titre: string }) {
-  const max = Math.max(1, ...lignes.map((l) => l.valeur));
+type Serie = { nom: string; couleur: string; valeur: number };
+type Barre = { label: string; series: Serie[] };
+
+/** Barres verticales empilées, avec axes : une colonne par élément, les séries empilées (sans chevauchement). */
+function GraphiqueEmpile({ titre, barres }: { titre: string; barres: Barre[] }) {
+  const W = 680, H = 280;
+  const M = { haut: 16, droite: 16, bas: 64, gauche: 72 };
+  const largeur = W - M.gauche - M.droite;
+  const hauteur = H - M.haut - M.bas;
+  const totaux = barres.map((b) => b.series.reduce((s, x) => s + Math.max(0, x.valeur), 0));
+  const max = Math.max(1, ...totaux);
+  const y = (v: number) => M.haut + hauteur - (v / max) * hauteur;
+  const graduations = [0, 0.25, 0.5, 0.75, 1].map((f) => f * max);
+  const slot = barres.length ? largeur / barres.length : largeur;
+  const largeurBarre = Math.min(56, slot * 0.6);
+  const legende = barres[0]?.series ?? [];
+
   return (
     <section className="carte">
       <h2>{titre}</h2>
-      {lignes.length === 0 && <p className="detail">Aucune donnée.</p>}
-      {lignes.map((l) => (
-        <div key={l.nom} className="ligne-barre">
-          <span className="nom-barre">{l.nom}</span>
-          <div className="jauge">
-            <div style={{ width: `${(Math.max(0, l.valeur) / max) * 100}%`, background: "var(--po)" }} />
+      {barres.length === 0 ? (
+        <p className="detail">Aucune donnée.</p>
+      ) : (
+        <>
+          <svg viewBox={`0 0 ${W} ${H}`} width="100%" role="img" aria-label={titre}>
+            {graduations.map((g) => (
+              <g key={g}>
+                <line x1={M.gauche} x2={W - M.droite} y1={y(g)} y2={y(g)} stroke="var(--bordure, #444)" strokeDasharray="3 3" />
+                <text x={M.gauche - 8} y={y(g) + 4} textAnchor="end" fontSize="11" fill="currentColor">
+                  {Math.round(g / 100).toLocaleString("fr-FR")} po
+                </text>
+              </g>
+            ))}
+            <line x1={M.gauche} x2={M.gauche} y1={M.haut} y2={M.haut + hauteur} stroke="currentColor" />
+            <line x1={M.gauche} x2={W - M.droite} y1={M.haut + hauteur} y2={M.haut + hauteur} stroke="currentColor" />
+            {barres.map((b, i) => {
+              const cx = M.gauche + slot * i + slot / 2;
+              let cumul = 0;
+              return (
+                <g key={b.label + i}>
+                  {b.series.map((s) => {
+                    const v = Math.max(0, s.valeur);
+                    const haut = y(cumul + v);
+                    const bas = y(cumul);
+                    cumul += v;
+                    return (
+                      <rect key={s.nom} x={cx - largeurBarre / 2} y={haut} width={largeurBarre} height={Math.max(0, bas - haut)} fill={s.couleur}>
+                        <title>{`${b.label} — ${s.nom} : ${Math.round(v / 100).toLocaleString("fr-FR")} po`}</title>
+                      </rect>
+                    );
+                  })}
+                  <text x={cx} y={M.haut + hauteur + 16} textAnchor="end" fontSize="11" fill="currentColor" transform={`rotate(-30 ${cx} ${M.haut + hauteur + 16})`}>
+                    {b.label.length > 14 ? `${b.label.slice(0, 13)}…` : b.label}
+                  </text>
+                </g>
+              );
+            })}
+          </svg>
+          <div className="legende-graphique" style={{ display: "flex", gap: 16, flexWrap: "wrap", fontSize: 13 }}>
+            {legende.map((s) => (
+              <span key={s.nom}>
+                <span style={{ display: "inline-block", width: 12, height: 12, background: s.couleur, marginRight: 6, borderRadius: 2 }} />
+                {s.nom}
+              </span>
+            ))}
           </div>
-          <span className="nombre">{l.texte}</span>
-        </div>
-      ))}
+        </>
+      )}
     </section>
   );
 }
@@ -72,13 +125,32 @@ export function Statistiques({ outils }: { outils: Outils }) {
         </div>
       </section>
 
-      <BarresComparatives
-        titre="Patrimoine par personnage"
-        lignes={s.personnages.map((p) => ({ nom: p.nom, valeur: p.total.pc, texte: texte(p.total) }))}
+      <GraphiqueEmpile
+        titre="Patrimoine par personnage (po)"
+        barres={s.personnages.map((p) => ({
+          label: p.nom,
+          series: [
+            { nom: "Compte", couleur: "var(--po)", valeur: p.compte.pc },
+            { nom: "Objets", couleur: "var(--influence)", valeur: p.objets.pc },
+          ],
+        }))}
       />
-      <BarresComparatives
-        titre="Patrimoine par localité"
-        lignes={s.localites.map((l) => ({ nom: l.nom, valeur: l.total.pc, texte: texte(l.total) }))}
+      <GraphiqueEmpile
+        titre="Patrimoine par localité (po)"
+        barres={s.localites.map((l) => ({
+          label: l.nom,
+          series: [
+            { nom: "Trésorerie", couleur: "var(--po)", valeur: l.tresorerie.pc },
+            { nom: "Capitaux", couleur: "var(--travail)", valeur: l.capitaux.pc },
+          ],
+        }))}
+      />
+      <GraphiqueEmpile
+        titre="Valeur des équipes par organisation (po)"
+        barres={s.organisations.map((o) => ({
+          label: o.nom,
+          series: [{ nom: "Équipes", couleur: "var(--travail)", valeur: o.valeurEquipes.pc }],
+        }))}
       />
 
       <section className="carte">
