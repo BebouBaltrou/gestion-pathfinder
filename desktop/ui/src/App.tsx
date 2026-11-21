@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { api, EtatApp, Retour } from "./api";
 import { BarreProgression, chercherMiseAJour, miseAJourActive, Nouvelle, Progression, VERSION } from "./composants/MiseAJour";
-import { NOTES, NotesVersion, notesDepuisDerniereVersion } from "./changelog";
+import { NotesVersion, notesDepuisDerniereVersion } from "./changelog";
 import { icones } from "./icones";
 import { LimiteErreur } from "./composants/LimiteErreur";
 import { Campagnes } from "./pages/Campagnes";
@@ -108,10 +108,6 @@ export function App() {
   const [notesMaj, setNotesMaj] = useState<NotesVersion[]>([]);
   useEffect(() => {
     setNotesMaj(notesDepuisDerniereVersion(VERSION));
-    // TEMPORAIRE : bouton de test des Paramètres (à retirer avant la publication)
-    const test = () => setNotesMaj(NOTES.slice(0, 2));
-    window.addEventListener("maj-test-notes", test);
-    return () => window.removeEventListener("maj-test-notes", test);
   }, []);
 
   // Ctrl+Z / Ctrl+Y (hors des champs de saisie)

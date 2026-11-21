@@ -132,32 +132,6 @@ export function MiseAJour() {
         </button>
       )}
       {progression && <BarreProgression p={progression} />}
-      {/* TEMPORAIRE : simule une mise à jour pour voir le rendu (à retirer avant la publication) */}
-      {!progression && (
-        <button
-          className="bouton discret"
-          onClick={() => {
-            const total = 48 * 1048576;
-            let recu = 0;
-            setProgression({ recu, total, fini: false });
-            const minuterie = window.setInterval(() => {
-              recu = Math.min(total, recu + total / 40);
-              if (recu >= total) {
-                window.clearInterval(minuterie);
-                setProgression({ recu, total, fini: true });
-                window.setTimeout(() => {
-                  setProgression(null);
-                  window.dispatchEvent(new Event("maj-test-notes"));
-                }, 1500);
-              } else {
-                setProgression({ recu, total, fini: false });
-              }
-            }, 200);
-          }}
-        >
-          Test : simuler une mise à jour
-        </button>
-      )}
       {etat && <p className="doux">{etat}</p>}
     </section>
   );
