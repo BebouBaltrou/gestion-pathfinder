@@ -104,7 +104,7 @@ export function Statistiques({ outils }: { outils: Outils }) {
         <div className="carte chiffre">
           <span className="etiquette">Personnages</span>
           <span className="valeur">{texte(s.totalPersonnages)}</span>
-          <span className="detail">Comptes et objets des PJ</span>
+          <span className="detail">Comptes, objets et bâtiments possédés</span>
         </div>
         <div className="carte chiffre">
           <span className="etiquette">Localités</span>
@@ -141,6 +141,7 @@ export function Statistiques({ outils }: { outils: Outils }) {
           series: [
             { nom: "Compte", couleur: "var(--po)", valeur: p.compte.pc },
             { nom: "Objets", couleur: "var(--influence)", valeur: p.objets.pc },
+            { nom: "Bâtiments", couleur: "var(--marchandises)", valeur: p.batiments.pc },
           ],
         }))}
       />
@@ -174,11 +175,11 @@ export function Statistiques({ outils }: { outils: Outils }) {
         <h2>Détail des personnages</h2>
         <table className="tableau">
           <thead>
-            <tr><th>Nom</th><th>Compte</th><th>Objets</th><th>Total</th></tr>
+            <tr><th>Nom</th><th>Compte</th><th>Objets</th><th>Bâtiments</th><th>Total</th></tr>
           </thead>
           <tbody>
             {s.personnages.map((p) => (
-              <tr key={p.id}><td>{p.nom}</td><td>{texte(p.compte)}</td><td>{texte(p.objets)}</td><td>{texte(p.total)}</td></tr>
+              <tr key={p.id}><td>{p.nom}</td><td>{texte(p.compte)}</td><td>{texte(p.objets)}</td><td>{texte(p.batiments)}</td><td>{texte(p.total)}</td></tr>
             ))}
           </tbody>
         </table>

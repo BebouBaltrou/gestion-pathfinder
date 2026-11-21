@@ -39,6 +39,8 @@ pub struct PatrimoinePersonnage {
     pub nom: String,
     pub compte: Somme,
     pub objets: Somme,
+    /// Valeur des bâtiments dont il est propriétaire.
+    pub batiments: Somme,
     pub total: Somme,
 }
 
@@ -63,6 +65,7 @@ pub struct PatrimoineBatiment {
     pub id: u32,
     pub nom: String,
     pub localite: String,
+    pub proprietaire: Option<String>,
     /// Salles construites.
     pub salles: u32,
     /// Prix d'achat des salles et extensions construites (référentiel, GC).
@@ -104,29 +107,6 @@ pub fn page_statistiques(etat: &Etat, r: &Referentiel) -> PageStatistiques {
             .sum()
     };
 
-    let personnages: Vec<PatrimoinePersonnage> = etat
-        .personnages
-        .values()
-        .map(|p| {
-            let objets = objets_de(p.id);
-            let total = p.compte.pc + objets;
-            PatrimoinePersonnage {
-                id: p.id.0,
-                nom: p.nom.clone(),
-                compte: somme(p.compte.pc),
-                objets: somme(objets),
-                total: somme(total),
-            }
-        })
-        .collect();
-    let total_personnages: i64 = personnages.iter().map(|p| p.total.pc).sum();
-
-    let objets_autres: i64 = inventaires
-        .iter()
-        .filter(|i| i.type_proprietaire != PROPRIETAIRE_PERSONNAGE)
-        .map(|i| i.valeur.pc)
-        .sum();
-
     let batiments: Vec<PatrimoineBatiment> = etat
         .batiments
         .values()
@@ -155,12 +135,56 @@ pub fn page_statistiques(etat: &Etat, r: &Referentiel) -> PageStatistiques {
                     .get(&b.localite)
                     .map(|l| l.nom.clone())
                     .unwrap_or_default(),
+                proprietaire: etat
+                    .proprietaires_batiments
+                    .get(&b.id)
+                    .and_then(|p| etat.personnages.get(p))
+                    .map(|p| p.nom.clone()),
                 salles,
                 valeur: somme(valeur),
             }
         })
         .collect();
     let total_batiments: i64 = batiments.iter().map(|b| b.valeur.pc).sum();
+
+    // Valeur des bâtiments possédés, par personnage (un propriétaire disparu ne compte plus).
+    let mut batiments_par_pj: std::collections::BTreeMap<IdPersonnage, i64> =
+        std::collections::BTreeMap::new();
+    for (b, v) in etat.batiments.values().zip(&batiments) {
+        if let Some(p) = etat
+            .proprietaires_batiments
+            .get(&b.id)
+            .filter(|p| etat.personnages.contains_key(*p))
+        {
+            *batiments_par_pj.entry(*p).or_insert(0) += v.valeur.pc;
+        }
+    }
+    let batiments_possedes: i64 = batiments_par_pj.values().sum();
+
+    let personnages: Vec<PatrimoinePersonnage> = etat
+        .personnages
+        .values()
+        .map(|p| {
+            let objets = objets_de(p.id);
+            let bats = batiments_par_pj.get(&p.id).copied().unwrap_or(0);
+            let total = p.compte.pc + objets + bats;
+            PatrimoinePersonnage {
+                id: p.id.0,
+                nom: p.nom.clone(),
+                compte: somme(p.compte.pc),
+                objets: somme(objets),
+                batiments: somme(bats),
+                total: somme(total),
+            }
+        })
+        .collect();
+    let total_personnages: i64 = personnages.iter().map(|p| p.total.pc).sum();
+
+    let objets_autres: i64 = inventaires
+        .iter()
+        .filter(|i| i.type_proprietaire != PROPRIETAIRE_PERSONNAGE)
+        .map(|i| i.valeur.pc)
+        .sum();
 
     // Un bâtiment compte dans le patrimoine de sa localité.
     let mut batiments_par_localite: std::collections::BTreeMap<IdLocalite, i64> =
@@ -226,8 +250,11 @@ pub fn page_statistiques(etat: &Etat, r: &Referentiel) -> PageStatistiques {
     let valeur_totale: i64 = organisations.iter().map(|o| o.valeur_equipes.pc).sum();
 
     PageStatistiques {
-        // Les bâtiments sont déjà dans le total des localités.
-        patrimoine_total: somme(total_personnages + total_localites + objets_autres),
+        // Tous les bâtiments sont dans le total des localités ; ceux qui ont un propriétaire sont
+        // aussi dans le total des personnages : on les retire une fois pour ne pas les compter deux fois.
+        patrimoine_total: somme(
+            total_personnages + total_localites + objets_autres - batiments_possedes,
+        ),
         personnages,
         total_personnages: somme(total_personnages),
         localites,
@@ -271,5 +298,93 @@ mod tests {
         assert_eq!(p.total_personnages.pc, 10_000);
         assert_eq!(p.patrimoine_total.pc, 10_000);
         assert!(p.organisations.is_empty());
+    }
+
+    #[test]
+    fn batiment_compte_chez_son_proprietaire_et_dans_sa_ville_sans_double_compte() {
+        let r = regles::referentiel_officiel();
+        let prix = i64::from(r.salle("bar").unwrap().prix_po.unwrap()) * 100;
+        assert!(prix > 0);
+        let mut c = Campagne::nouvelle("Test");
+        let pj = c.nouvel_id_personnage();
+        let l = c.nouvel_id_localite();
+        let b = c.nouvel_id_batiment();
+        let e = c.nouvel_id_etage();
+        let s = c.nouvel_id_salle();
+        for ev in [
+            Evenement::PersonnageCree {
+                id: pj,
+                nom: "Seoni".into(),
+                compte_initial: Montant::po(50),
+                prestige: None,
+            },
+            Evenement::LocaliteCreee {
+                id: l,
+                nom: "Sandpoint".into(),
+                genre: "ville".into(),
+                population: None,
+                categorie: CategorieLocalite::Officielle {
+                    id: "petite-bourgade".into(),
+                },
+                notes: String::new(),
+            },
+            Evenement::BatimentCree {
+                id: b,
+                localite: l,
+                nom: "Le Dragon vert".into(),
+                classement: "taverne".into(),
+                notes: String::new(),
+                etages_successifs: false,
+                modele: None,
+            },
+            Evenement::EtageAjoute {
+                batiment: b,
+                id: e,
+                nom: "RDC".into(),
+                mode: ModeChantier::Parallele,
+            },
+            Evenement::SalleAjoutee {
+                id: s,
+                batiment: b,
+                etage: e,
+                reference: "bar".into(),
+                nom: None,
+                deja_construite: true,
+            },
+        ] {
+            c.executer(ev, &r).unwrap();
+        }
+        // Sans propriétaire : le bâtiment ne compte que dans sa ville.
+        let p = page_statistiques(c.etat(&r), &r);
+        assert_eq!(p.personnages[0].batiments.pc, 0);
+        assert_eq!(p.localites[0].batiments.pc, prix);
+        assert_eq!(p.patrimoine_total.pc, 5_000 + prix);
+
+        c.executer(
+            Evenement::BatimentProprietaire {
+                id: b,
+                proprietaire: Some(pj),
+            },
+            &r,
+        )
+        .unwrap();
+        let p = page_statistiques(c.etat(&r), &r);
+        assert_eq!(p.personnages[0].batiments.pc, prix);
+        assert_eq!(p.personnages[0].total.pc, 5_000 + prix);
+        assert_eq!(p.localites[0].batiments.pc, prix);
+        // Le total ne compte le bâtiment qu'une fois.
+        assert_eq!(p.patrimoine_total.pc, 5_000 + prix);
+        assert_eq!(p.batiments[0].proprietaire.as_deref(), Some("Seoni"));
+
+        // Un propriétaire inconnu est refusé.
+        assert!(c
+            .executer(
+                Evenement::BatimentProprietaire {
+                    id: b,
+                    proprietaire: Some(IdPersonnage(99)),
+                },
+                &r,
+            )
+            .is_err());
     }
 }

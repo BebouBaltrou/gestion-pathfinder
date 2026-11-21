@@ -477,6 +477,18 @@ function Detail({ id, p, outils }: { id: number; p: PageBatiments; outils: Outil
         <button className="bouton discret" onClick={() => agir({ type: "favori", batiment: b.id, actif: !b.favori })}>
           {b.favori ? "★ Retirer des favoris" : "☆ Mettre en favori"}
         </button>
+        <label className="choix-radio" title="Le bâtiment compte dans le patrimoine de son propriétaire">
+          Propriétaire{" "}
+          <select
+            value={b.proprietaire ?? ""}
+            onChange={(e) => agir({ type: "proprietaire", batiment: b.id, personnage: e.target.value === "" ? null : Number(e.target.value) })}
+          >
+            <option value="">Aucun</option>
+            {b.personnages.map((p) => (
+              <option key={p.id} value={p.id}>{p.libelle}</option>
+            ))}
+          </select>
+        </label>
         <label className="choix-radio" title="Option personnalisée : sinon, les étages avancent en même temps">
           <input type="checkbox" checked={b.etagesSuccessifs} onChange={(e) => agir({ type: "etagesSuccessifs", batiment: b.id, actif: e.target.checked })} />
           Étages construits l'un après l'autre <span className="badge perso">Personnalisé</span>

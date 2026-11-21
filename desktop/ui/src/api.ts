@@ -109,7 +109,7 @@ export type CartePersonnage = {
   meilleureCompetence: string | null;
 };
 
-export type StatPersonnage = { id: number; nom: string; compte: Somme; objets: Somme; total: Somme };
+export type StatPersonnage = { id: number; nom: string; compte: Somme; objets: Somme; batiments: Somme; total: Somme };
 export type StatLocalite = { id: number; nom: string; tresorerie: Somme; capitaux: Somme; batiments: Somme; total: Somme };
 export type StatOrganisation = { id: number; nom: string; localite: string; equipes: number; effectif: number; effectifAVenir: number; gestionnaires: number; valeurEquipes: Somme };
 export type PageStatistiques = {
@@ -119,7 +119,7 @@ export type PageStatistiques = {
   localites: StatLocalite[];
   totalLocalites: Somme;
   objetsAutres: Somme;
-  batiments: { id: number; nom: string; localite: string; salles: number; valeur: Somme }[];
+  batiments: { id: number; nom: string; localite: string; proprietaire: string | null; salles: number; valeur: Somme }[];
   totalBatiments: Somme;
   organisations: StatOrganisation[];
   effectifTotal: number;
@@ -339,6 +339,8 @@ export type FicheBatiment = {
   gestionnaires: string;
   etagesSuccessifs: boolean;
   favori: boolean;
+  proprietaire: number | null;
+  personnages: Choix[];
   vente: EtatVente;
   etages: FicheEtage[];
   tresorerie: string;
@@ -349,6 +351,7 @@ export type FicheBatiment = {
 export type ActionBatiment =
   | { type: "etagesSuccessifs"; batiment: number; actif: boolean }
   | { type: "favori"; batiment: number; actif: boolean }
+  | { type: "proprietaire"; batiment: number; personnage: number | null }
   | { type: "modeEtage"; batiment: number; etage: number; sequentiel: boolean }
   | { type: "ajouterEtage"; batiment: number; nom: string }
   | { type: "ajouterSalle"; batiment: number; etage: number; reference: string; deja: boolean }
